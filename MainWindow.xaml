@@ -1,0 +1,110 @@
+﻿<Window x:Class="Eos.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Eos"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:vm="clr-namespace:Eos.ViewModels"
+        xmlns:view="clr-namespace:Eos.Views"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <vm:MainViewModel x:Name="viewModel"/>
+    </Window.DataContext>
+    
+    <Window.Resources>
+        <!-- TreeViewItem Datatemplates -->
+        <DataTemplate x:Key="RaceItemTemplate">
+            <ContentControl>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding Path=OpenRaceCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <TextBlock Text="{Binding Path=Name}"/>
+            </ContentControl>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ClassItemTemplate">
+            <ContentControl>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding Path=OpenRaceCommand, ElementName=viewModel}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <TextBlock Text="{Binding Path=Name}"/>
+            </ContentControl>
+        </DataTemplate>
+
+        <DataTemplate x:Key="SpellItemTemplate">
+            <ContentControl>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding Path=OpenRaceCommand, ElementName=viewModel}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <TextBlock Text="{Binding Path=Name}"/>
+            </ContentControl>
+        </DataTemplate>
+
+        <DataTemplate x:Key="FeatItemTemplate">
+            <ContentControl>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding Path=OpenRaceCommand, ElementName=viewModel}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <TextBlock Text="{Binding Path=Name}"/>
+            </ContentControl>
+        </DataTemplate>
+
+        <DataTemplate x:Key="SkillItemTemplate">
+            <ContentControl>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding Path=OpenRaceCommand, ElementName=viewModel}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <TextBlock Text="{Binding Path=Name}"/>
+            </ContentControl>
+        </DataTemplate>
+
+        <!-- Tab Content Datatemplates -->
+        <DataTemplate DataType="{x:Type vm:RaceViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted">
+                <Frame.Content>
+                    <view:RaceView DataContext="{Binding}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <TreeView Grid.Column="0" FontSize="16" Margin="5">
+            <TreeViewItem Header="Races" ItemsSource="{Binding RaceList}" ItemTemplate="{StaticResource RaceItemTemplate}"/>
+            <TreeViewItem Header="Classes" ItemTemplate="{StaticResource ClassItemTemplate}"/>
+            <TreeViewItem Header="Spells" ItemTemplate="{StaticResource SpellItemTemplate}"/>
+            <TreeViewItem Header="Feats" ItemTemplate="{StaticResource FeatItemTemplate}"/>
+            <TreeViewItem Header="Skills" ItemTemplate="{StaticResource SkillItemTemplate}"/>
+        </TreeView>
+
+        <Grid Grid.Column="1">
+            <TabControl ItemsSource="{Binding DetailViewList}">
+                <TabControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Header}"/>
+                            <Button Content="x" Command="{Binding Path=CloseDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
+            </TabControl>
+        </Grid>
+    </Grid>
+</Window>
