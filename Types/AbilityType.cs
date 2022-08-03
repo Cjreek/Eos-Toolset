@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Eos.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,17 @@ namespace Eos.Types
 {
     internal enum AbilityType
     {
-        Strength,
-        Dexterity,
-        Intelligence,
-        Charisma,
-        Wisdom,
-        Constitution
+        [DisplayName("Strength")]
+        STR,
+        [DisplayName("Dexterity")]
+        DEX,
+        [DisplayName("Intelligence")]
+        INT,
+        [DisplayName("Charisma")]
+        CHA,
+        [DisplayName("Wisdom")]
+        WIS,
+        [DisplayName("Constitution")]
+        CON
     }
 }

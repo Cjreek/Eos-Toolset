@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class RaceViewModel : DataDetailViewModel<Race>
+    internal class SkillViewModel : DataDetailViewModel<Skill>
     {
-        public RaceViewModel() : base()
+        public SkillViewModel() : base()
         {
         }
 
-        public RaceViewModel(Race race) : base(race)
+        public SkillViewModel(Skill skill) : base(skill)
         {
         }
 

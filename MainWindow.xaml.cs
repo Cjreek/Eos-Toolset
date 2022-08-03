@@ -25,11 +25,21 @@ namespace Eos
             InitializeComponent();
         }
 
+        private void SetFrameContentDataContext(Frame frame)
+        {
+            var content = frame.Content as FrameworkElement;
+            if (content != null)
+                content.DataContext = frame.DataContext;
+        }
+
         private void Frame_LoadCompleted(object sender, NavigationEventArgs e)
         {
-            var content = ((Frame)sender).Content as FrameworkElement;
-            if (content != null)
-                content.DataContext = ((Frame)sender).DataContext;
+            SetFrameContentDataContext((Frame)sender);
+        }
+
+        private void Frame_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            SetFrameContentDataContext((Frame)sender);
         }
     }
 }

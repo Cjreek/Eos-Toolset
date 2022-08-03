@@ -5,13 +5,211 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Eos.Views"
       xmlns:vm="clr-namespace:Eos.ViewModels"
+      xmlns:wpftk="clr-namespace:Xceed.Wpf.Toolkit;assembly=DotNetProjects.Wpf.Extended.Toolkit"
+      xmlns:ext="clr-namespace:Eos.Extensions"
+      xmlns:types="clr-namespace:Eos.Types"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="520" d:DesignWidth="800"
       Title="RaceView">
     <Page.DataContext>
         <vm:RaceViewModel/>
     </Page.DataContext>
-    <Grid>
-        <TextBlock Text="{Binding Data.Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-    </Grid>
+
+    <TabControl TabStripPlacement="Left" BorderThickness="1,0,0,0">
+        <TabControl.Resources>
+            <Style TargetType="{x:Type TabItem}">
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <TranslateTransform Y="-2"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="2,0,0,3"/>
+            </Style>
+            <Style TargetType="{x:Type ComboBox}">
+                <Setter Property="Margin" Value="2,0,0,3"/>
+            </Style>
+            <Style TargetType="{x:Type wpftk:IntegerUpDown}">
+                <Setter Property="Margin" Value="2,0,0,3"/>
+            </Style>
+            <Style TargetType="{x:Type wpftk:DoubleUpDown}">
+                <Setter Property="Margin" Value="2,0,0,3"/>
+            </Style>
+            <Style TargetType="{x:Type CheckBox}">
+                <Setter Property="Margin" Value="1,0,0,3"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+        </TabControl.Resources>
+        <TabItem Header="Info" Width="100" Height="30">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Race Info" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+                <Grid Grid.Row="1" Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="22"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!--Name-->
+                    <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                    <TextBox Text="{Binding Data.Name}" Grid.Row="1" Grid.Column="1"/>
+
+                    <!--Name (Plural)-->
+                    <TextBlock Text="Name (Plural)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+                    <TextBox Text="{Binding Data.NamePlural}" Grid.Row="2" Grid.Column="1"/>
+
+                    <!--Adjective-->
+                    <TextBlock Text="Adjective" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+                    <TextBox Text="{Binding Data.Adjective}" Grid.Row="3" Grid.Column="1"/>
+
+                    <!--Description-->
+                    <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="4" Grid.Column="0"/>
+                    <TextBox Text="{Binding Data.Description}" AcceptsReturn="True" Height="120" Grid.Row="4" Grid.Column="1"/>
+
+                    <TextBlock Text="Appearance" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+                    <ComboBox Grid.Row="5" Grid.Column="1"/>
+
+                    <TextBlock Text="Default values for character creation" HorizontalAlignment="Center" 
+                               Margin="0,0,0,10" Grid.Row="7" Grid.Column="1"
+                               FontWeight="Bold" FontSize="16"/>
+
+                    <TextBlock Text="Name Generator 1" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="8" Grid.Column="0"/>
+                    <ComboBox Grid.Row="8" Grid.Column="1"/>
+
+                    <TextBlock Text="Name Generator 2" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="9" Grid.Column="0"/>
+                    <ComboBox Grid.Row="9" Grid.Column="1"/>
+
+                    <TextBlock Text="Age" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="10" Grid.Column="0"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.DefaultAge}" Grid.Row="10" Grid.Column="1"/>
+
+                    <!--Biography-->
+                    <TextBlock Text="Biography" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="11" Grid.Column="0"/>
+                    <TextBox Text="{Binding Data.Biography}" AcceptsReturn="True" Height="120" Grid.Row="11" Grid.Column="1"/>
+                </Grid>
+
+                <!--Icon-->
+                <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">
+                    <Border BorderThickness="1" BorderBrush="Black" Width="120" Height="120" HorizontalAlignment="Center" VerticalAlignment="Top">
+
+                    </Border>
+                    <Button Content="Load Icon" HorizontalAlignment="Center" Margin="0,5,0,0" Width="120"/>
+                </StackPanel>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Properties" Width="100" Height="30">
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto" MinHeight="22"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="22"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="22"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Race Properties" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+                <TextBlock Text="Playable" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                <CheckBox IsChecked="{Binding Data.Playable}" Grid.Row="1" Grid.Column="1"/>
+
+                <TextBlock Text="Favored Class" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+                <ComboBox Grid.Row="2" Grid.Column="1"/>
+
+                <TextBlock Text="Default Toolset Class" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
+                <ComboBox Grid.Row="2" Grid.Column="3"/>
+
+                <TextBlock Text="Skill Point Modifier" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+                <ComboBox ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.SkillPointModifierAbility}" SelectedValuePath="Value" DisplayMemberPath="DisplayName" Grid.Row="3" Grid.Column="1"/>
+
+                <TextBlock Text="Extra Skill Points per Level" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+                <wpftk:IntegerUpDown Value="{Binding Data.ExtraSkillPointsPerLevel}" Grid.Row="3" Grid.Column="3"/>
+
+                <TextBlock Text="Feats every Nth Level" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+                <wpftk:IntegerUpDown Value="{Binding Data.FeatEveryNthLevel}" Grid.Row="4" Grid.Column="1"/>
+                
+                <TextBlock Text="Feat count every Nth Level" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
+                <wpftk:IntegerUpDown Value="{Binding Data.FeatEveryNthLevelCount}" Grid.Row="4" Grid.Column="3"/>
+
+                <TextBlock Text="CR Modifier" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+                <wpftk:DoubleUpDown Value="{Binding Data.CRModifier}" FormatString="N2" Increment="0.1" Grid.Row="5" Grid.Column="1"/>
+
+                <TextBlock Text="Ability Modifiers" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="7" Grid.Column="0" FontWeight="Bold" FontSize="16" Grid.ColumnSpan="4"/>
+                
+                <!--Strength-->
+                <TextBlock Text="Strength" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
+                <wpftk:IntegerUpDown Value="{Binding Data.StrAdjustment}" Grid.Row="8" Grid.Column="1"/>
+
+                <TextBlock Text="Dexterity" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
+                <wpftk:IntegerUpDown Value="{Binding Data.DexAdjustment}" Grid.Row="9" Grid.Column="1"/>
+
+                <TextBlock Text="Constitution" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
+                <wpftk:IntegerUpDown Value="{Binding Data.ConAdjustment}" Grid.Row="10" Grid.Column="1"/>
+
+                <TextBlock Text="Intelligence" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2"/>
+                <wpftk:IntegerUpDown Value="{Binding Data.IntAdjustment}" Grid.Row="8" Grid.Column="3"/>
+
+                <TextBlock Text="Wisdom" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
+                <wpftk:IntegerUpDown Value="{Binding Data.WisAdjustment}" Grid.Row="9" Grid.Column="3"/>
+
+                <TextBlock Text="Charisma" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
+                <wpftk:IntegerUpDown Value="{Binding Data.ChaAdjustment}" Grid.Row="10" Grid.Column="3"/>
+
+                <TextBlock Text="At Level 1" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="12" Grid.Column="0" FontWeight="Bold" FontSize="16" Grid.ColumnSpan="4"/>
+
+                <TextBlock Text="Extra Feats" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="0"/>
+                <wpftk:IntegerUpDown Value="{Binding Data.FirstLevelExtraFeats}" Grid.Row="13" Grid.Column="1"/>
+
+                <TextBlock Text="Skill Point Multiplier" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="2"/>
+                <wpftk:IntegerUpDown Value="{Binding Data.FirstLevelSkillPointsMultiplier}" Grid.Row="13" Grid.Column="3"/>
+
+                <TextBlock Text="Ability Points" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="0"/>
+                <wpftk:IntegerUpDown Value="{Binding Data.FirstLevelAbilityPoints}" Grid.Row="14" Grid.Column="1"/>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Feats" Width="100" Height="30">
+
+        </TabItem>
+    </TabControl>
+    
 </Page>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal abstract class DataDetailViewModelBase
+    internal abstract class DataDetailViewModelBase : ViewModelBase
     {
         protected abstract String GetHeader();
         public abstract object GetDataObject();
