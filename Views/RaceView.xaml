@@ -167,7 +167,7 @@
 
                 <TextBlock Text="Feats every Nth Level" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
                 <wpftk:IntegerUpDown Value="{Binding Data.FeatEveryNthLevel}" Grid.Row="4" Grid.Column="1"/>
-                
+
                 <TextBlock Text="Feat count every Nth Level" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
                 <wpftk:IntegerUpDown Value="{Binding Data.FeatEveryNthLevelCount}" Grid.Row="4" Grid.Column="3"/>
 
@@ -175,7 +175,7 @@
                 <wpftk:DoubleUpDown Value="{Binding Data.CRModifier}" FormatString="N2" Increment="0.1" Grid.Row="5" Grid.Column="1"/>
 
                 <TextBlock Text="Ability Modifiers" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="7" Grid.Column="0" FontWeight="Bold" FontSize="16" Grid.ColumnSpan="4"/>
-                
+
                 <!--Strength-->
                 <TextBlock Text="Strength" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
                 <wpftk:IntegerUpDown Value="{Binding Data.StrAdjustment}" Grid.Row="8" Grid.Column="1"/>
@@ -211,5 +211,4 @@
 
         </TabItem>
     </TabControl>
-    
 </Page>

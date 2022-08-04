@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace Eos.ViewModels
 {
@@ -11,6 +12,8 @@ namespace Eos.ViewModels
         private T data;
 
         public string Header { get { return GetHeader(); } }
+        public Brush Color { get { return GetColor(); } }
+
         public T Data { get { return data; } }
 
         public override object GetDataObject()

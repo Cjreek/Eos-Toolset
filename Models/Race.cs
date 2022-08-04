@@ -21,11 +21,11 @@ namespace Eos.Models
         public int ChaAdjustment { get; set; } = 0;
         public int WisAdjustment { get; set; } = 0;
         public int ConAdjustment { get; set; } = 0;
-        public IntPtr FavoredClass { get; set; }
+        public CharacterClass? FavoredClass { get; set; }
         public string Biography { get; set; } = "";
         public bool? Playable { get; set; } = false;
         public int? DefaultAge { get; set; }
-        public IntPtr ToolsetDefaultClass { get; set; }
+        public CharacterClass? ToolsetDefaultClass { get; set; }
         public double? CRModifier { get; set; } = 1;
         public IntPtr NameGenTableA { get; set; }
         public IntPtr NameGenTableB { get; set; }

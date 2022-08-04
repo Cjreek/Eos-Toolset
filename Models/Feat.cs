@@ -9,8 +9,8 @@ namespace Eos.Models
 {
     internal class Feat : BaseModel
     {
-        public String? Name { get; set; }
-        public String? Description { get; set; }
+        public string Name { get; set; } = "";
+        public string Description { get; set; } = "";
         public IntPtr Icon { get; set; }
         public int? MinAttackBonus { get; set; }
         public int? MinStr { get; set; }

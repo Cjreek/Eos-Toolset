@@ -8,13 +8,13 @@ using System.Windows.Media;
 
 namespace Eos.ViewModels
 {
-    internal class RaceViewModel : DataDetailViewModel<Race>
+    internal class SpellViewModel : DataDetailViewModel<Spell>
     {
-        public RaceViewModel() : base()
+        public SpellViewModel() : base()
         {
         }
 
-        public RaceViewModel(Race race) : base(race)
+        public SpellViewModel(Spell spell) : base(spell)
         {
         }
 
@@ -25,7 +25,7 @@ namespace Eos.ViewModels
 
         protected override Brush GetColor()
         {
-            return Brushes.BurlyWood;
+            return Brushes.PaleVioletRed;
         }
     }
 }

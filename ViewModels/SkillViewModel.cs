@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace Eos.ViewModels
 {
@@ -20,6 +21,11 @@ namespace Eos.ViewModels
         protected override string GetHeader()
         {
             return Data.Name;
+        }
+
+        protected override Brush GetColor()
+        {
+            return Brushes.DarkSeaGreen;
         }
     }
 }

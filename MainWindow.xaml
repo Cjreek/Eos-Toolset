@@ -10,7 +10,7 @@
         xmlns:conv="clr-namespace:Eos.Extensions"
         mc:Ignorable="d"
         MinHeight="600" MinWidth="1000"
-        Title="MainWindow" Height="600" Width="1000" FontSize="16">
+        Title="Eos Toolset" Height="600" Width="1000" FontSize="16">
     <Window.DataContext>
         <vm:MainViewModel x:Name="viewModel"/>
     </Window.DataContext>
@@ -30,10 +30,25 @@
                 <TextBlock Text="{Binding Path=Name}"/>
             </ContentControl>
         </DataTemplate>
-        
+
+        <Style TargetType="TreeViewItem">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="ItemTemplate" Value="{StaticResource TreeViewItemTemplate}"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ItemsSource}" Value="{x:Null}">
+                    <Setter Property="FontWeight" Value="Normal"/>
+                    <Setter Property="ItemTemplate" Value="{x:Null}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="TabItem">
+            <Setter Property="Background" Value="{Binding Color}"/>
+        </Style>
+
         <!-- TabControl ItemTemplate -->
         <DataTemplate x:Key="TabItemTemplate">
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Margin="0">
                 <TextBlock Text="{Binding Header}" MinWidth="50"/>
                 <Button Content="x" Command="{Binding Path=CloseDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}" 
                                 Visibility="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}, Converter={StaticResource Bool2Vis}}" Margin="5,0,0,0" >
@@ -69,6 +84,38 @@
             </Frame>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vm:ClassViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                <Frame.Content>
+                    <view:ClassView DataContext="{Binding}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:DomainViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                <Frame.Content>
+                    <view:DomainView DataContext="{Binding}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:SpellViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                <Frame.Content>
+                    <view:SpellView DataContext="{Binding}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:FeatViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                <Frame.Content>
+                    <view:FeatView DataContext="{Binding}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type vm:SkillViewModel}">
             <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
                 <Frame.Content>
@@ -86,11 +133,12 @@
         </Grid.ColumnDefinitions>
 
         <TreeView Grid.Column="0" Margin="5">
-            <TreeViewItem Header="Races" ItemsSource="{Binding RaceList}" ItemTemplate="{StaticResource TreeViewItemTemplate}"/>
-            <TreeViewItem Header="Classes" ItemTemplate="{StaticResource TreeViewItemTemplate}"/>
-            <TreeViewItem Header="Spells" ItemTemplate="{StaticResource TreeViewItemTemplate}"/>
-            <TreeViewItem Header="Feats" ItemTemplate="{StaticResource TreeViewItemTemplate}"/>
-            <TreeViewItem Header="Skills" ItemsSource="{Binding SkillList}" ItemTemplate="{StaticResource TreeViewItemTemplate}"/>
+            <TreeViewItem Header="Races" ItemsSource="{Binding RaceRepository}"/>
+            <TreeViewItem Header="Classes" ItemsSource="{Binding ClassRepository}"/>
+            <TreeViewItem Header="Domains" ItemsSource="{Binding DomainRepository}"/>
+            <TreeViewItem Header="Spells" ItemsSource="{Binding SpellRepository}"/>
+            <TreeViewItem Header="Feats" ItemsSource="{Binding FeatRepository}"/>
+            <TreeViewItem Header="Skills" ItemsSource="{Binding SkillRepository}"/>
         </TreeView>
 
         <TabControl Grid.Column="1" Margin="0,3,5,5" Padding="0"
