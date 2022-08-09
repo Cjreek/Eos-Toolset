@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Models
 {
-    internal class Feat : BaseModel
+    public class Feat : BaseModel
     {
         public string Name { get; set; } = "";
         public string Description { get; set; } = "";
@@ -27,7 +27,7 @@ namespace Eos.Models
         public Spell? OnUseEffect { get; set; }
         public Feat? SuccessorFeat { get; set; }
         public double? CRModifier { get; set; } = 1;
-        public int? UsesPerDay { get; set; }
+        public int? UsesPerDay { get; set; } = 0;
         public Feat? MasterFeat { get; set; }
         public bool? TargetSelf { get; set; } = false;
         public Feat? RequiredFeatSelection1 { get; set; }

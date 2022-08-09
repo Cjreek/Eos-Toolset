@@ -18,7 +18,7 @@ namespace Eos.Views
     /// <summary>
     /// Interaktionslogik für FeatView.xaml
     /// </summary>
-    public partial class FeatView : Page
+    public partial class FeatView : LanguageAwarePage
     {
         public FeatView()
         {

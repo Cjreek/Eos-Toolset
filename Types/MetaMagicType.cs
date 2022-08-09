@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Eos.Types
 {
     [Flags]
-    internal enum MetaMagicType
+    public enum MetaMagicType
     {
         None = 0x00,
         Empower = 0x01,

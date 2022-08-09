@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Types
 {
-    internal enum ProjectileSource
+    public enum ProjectileSource
     {
         Hand,
         BeholderEye1,

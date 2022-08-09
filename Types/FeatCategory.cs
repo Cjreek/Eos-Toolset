@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Types
 {
-    internal enum FeatCategory
+    public enum FeatCategory
     {
         [DisplayName("Combat")]
         Combat = 1,

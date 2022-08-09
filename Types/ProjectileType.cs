@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Types
 {
-    internal enum ProjectileType
+    public enum ProjectileType
     {
         Homing,
         Ballistic,

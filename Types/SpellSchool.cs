@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Types
 {
-    internal enum SpellSchool
+    public enum SpellSchool
     {
         [DisplayName("General")]
         G,

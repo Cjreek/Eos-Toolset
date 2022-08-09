@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Types
 {
-    internal enum SpellType
+    public enum SpellType
     {
         Spell = 1,
         CreaturePower = 2,

@@ -18,7 +18,7 @@ namespace Eos.Views
     /// <summary>
     /// Interaktionslogik für RaceView.xaml
     /// </summary>
-    public partial class RaceView : Page
+    public partial class RaceView : LanguageAwarePage
     {
         public RaceView()
         {

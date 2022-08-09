@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Types
 {
-    internal enum AbilityType
+    public enum AbilityType
     {
         [DisplayName("Strength")]
         STR,

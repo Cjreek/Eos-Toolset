@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Models
 {
-    internal class Spell : BaseModel
+    public class Spell : BaseModel
     {
         public string Name { get; set; } = "";
         public string Description { get; set; } = "";

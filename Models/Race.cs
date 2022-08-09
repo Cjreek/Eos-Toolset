@@ -9,10 +9,10 @@ namespace Eos.Models
 {
     internal class Race : BaseModel
     {
-        public string Name { get; set; } = "";
-        public string NamePlural { get; set; } = "";
-        public string Adjective { get; set; } = "";
-        public string Description { get; set; } = "";
+        public TLKStringSet Name { get; set; } = new TLKStringSet();
+        public TLKStringSet NamePlural { get; set; } = new TLKStringSet();
+        public TLKStringSet Adjective { get; set; } = new TLKStringSet();
+        public TLKStringSet Description { get; set; } = new TLKStringSet();
         public IntPtr Icon { get; set; }
         public IntPtr Appearance { get; set; }
         public int StrAdjustment { get; set; } = 0;
@@ -22,7 +22,7 @@ namespace Eos.Models
         public int WisAdjustment { get; set; } = 0;
         public int ConAdjustment { get; set; } = 0;
         public CharacterClass? FavoredClass { get; set; }
-        public string Biography { get; set; } = "";
+        public TLKStringSet Biography { get; set; } = new TLKStringSet();
         public bool? Playable { get; set; } = false;
         public int? DefaultAge { get; set; }
         public CharacterClass? ToolsetDefaultClass { get; set; }

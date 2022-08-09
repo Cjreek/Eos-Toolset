@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="Eos.Usercontrols.TLKTextbox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Eos.Usercontrols"
+             xmlns:ext="clr-namespace:Eos.Extensions"
+             xmlns:types="clr-namespace:Eos.Types"
+             mc:Ignorable="d"
+             x:Name="ucTLKTextbox"
+             d:DesignHeight="22" d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:TLKConverter x:Key="tlkConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <TextBox Grid.Column="0" AcceptsReturn="{Binding ElementName=ucTLKTextbox, Path=AcceptsReturn}"
+                 Text="{Binding ElementName=ucTLKTextbox, Path=ChangedTrigger, Converter={StaticResource tlkConverter}, ConverterParameter={x:Reference selfParam}}"/>
+        <FrameworkElement x:Name="selfParam" Visibility="Collapsed" Tag="{Binding ElementName=ucTLKTextbox}"/>
+    </Grid>
+</UserControl>

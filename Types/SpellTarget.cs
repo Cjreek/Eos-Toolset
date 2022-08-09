@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Eos.Types
 {
     [Flags]
-    internal enum SpellTarget
+    public enum SpellTarget
     {
         Self = 0x01,
         Creature = 0x02,

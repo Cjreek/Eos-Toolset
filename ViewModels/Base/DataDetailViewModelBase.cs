@@ -12,7 +12,7 @@ namespace Eos.ViewModels
         protected abstract String GetHeader();
         public abstract object GetDataObject();
 
-        protected virtual Brush GetColor()
+        protected virtual Brush GetEntityColor()
         {
             return Brushes.White;
         }

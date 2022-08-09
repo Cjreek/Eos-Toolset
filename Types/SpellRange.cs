@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Types
 {
-    internal enum SpellRange
+    public enum SpellRange
     {
         [DisplayName("Personal (0m)")]
         P,

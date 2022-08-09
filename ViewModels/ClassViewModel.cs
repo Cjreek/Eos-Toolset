@@ -18,9 +18,9 @@ namespace Eos.ViewModels
         {
         }
 
-        protected override Brush GetColor()
+        protected override Brush GetEntityColor()
         {
-            return Brushes.Gainsboro;
+            return new SolidColorBrush(Color.FromArgb(100, 218, 165, 32));
         }
 
         protected override string GetHeader()

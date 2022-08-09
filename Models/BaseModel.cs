@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Models
 {
-    internal class BaseModel
+    public class BaseModel
     {
         public Guid ID { get; set; }
     }

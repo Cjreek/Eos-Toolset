@@ -9,57 +9,112 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Eos.ViewModels.Base;
+using System.Windows;
+using Eos.Models.Base;
+using Eos.Types;
 
 namespace Eos.ViewModels
 {
     internal class MainViewModel : ViewModelBase
     {
-        private DataDetailViewModelBase? currentView;
-
         private ObservableCollection<DataDetailViewModelBase> detailViewList = new ObservableCollection<DataDetailViewModelBase>();
         private Dictionary<object, DataDetailViewModelBase> detailViewDict = new Dictionary<object, DataDetailViewModelBase>();
 
-        private ModelRepository<Race> raceRepository = new ModelRepository<Race>();
-        private ModelRepository<CharacterClass> classRepository = new ModelRepository<CharacterClass>();
-        private ModelRepository<Domain> domainRepository = new ModelRepository<Domain>();
-        private ModelRepository<Spell> spellRepository = new ModelRepository<Spell>();
-        private ModelRepository<Feat> featRepository = new ModelRepository<Feat>();
-        private ModelRepository<Skill> skillRepository = new ModelRepository<Skill>();
+        private DataDetailViewModelBase? currentView;
+        private TLKLanguage currentLanguage;
+        private bool currentGender;
 
-        public MainViewModel()
+        public ObservableCollection<DataDetailViewModelBase> DetailViewList { get { return detailViewList; } }
+
+        public TLKLanguage CurrentLanguage
+        {
+            get { return currentLanguage; }
+            set
+            {
+                if (currentLanguage != value)
+                {
+                    currentLanguage = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public bool CurrentGender
+        {
+            get { return currentGender; }
+            set
+            {
+                if (currentGender != value)
+                {
+                    currentGender = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public DataDetailViewModelBase? CurrentView
+        {
+            get { return currentView; }
+            set
+            {
+                if (currentView != value)
+                {
+                    currentView = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        // Commands
+        public DelegateCommand<object> OpenDetailCommand { get; set; }
+        public DelegateCommand<DataDetailViewModelBase> CloseDetailCommand { get; set; }
+
+        private void GenerateDebugData()
         {
             Race testRace = new Race();
-            testRace.Name = "Orc";
-            raceRepository.Add(testRace);
+            testRace.Name.SetDefault("Orc");
+            MasterRepository.Races.Add(testRace);
 
             testRace = new Race();
-            testRace.Name = "Elf";
-            raceRepository.Add(testRace);
+            testRace.Name.SetDefault("Elf");
+            MasterRepository.Races.Add(testRace);
 
             Skill testSkill = new Skill();
             testSkill.Name = "Lumbering";
-            skillRepository.Add(testSkill);
+            MasterRepository.Skills.Add(testSkill);
 
             testSkill = new Skill();
             testSkill.Name = "Harvesting";
-            skillRepository.Add(testSkill);
+            MasterRepository.Skills.Add(testSkill);
 
             CharacterClass testClass = new CharacterClass();
-            testClass.Name = "Fighter";
-            classRepository.Add(testClass);
+            testClass.Name.SetDefault("Fighter");
+            MasterRepository.Classes.Add(testClass);
 
             Domain testDomain = new Domain();
             testDomain.Name = "Death & Decay";
-            domainRepository.Add(testDomain);
+            MasterRepository.Domains.Add(testDomain);
 
             Spell testSpell = new Spell();
             testSpell.Name = "Iceball";
-            spellRepository.Add(testSpell);
+            MasterRepository.Spells.Add(testSpell);
 
             Feat testFeat = new Feat();
             testFeat.Name = "Tooth Punch";
-            featRepository.Add(testFeat);
+            MasterRepository.Feats.Add(testFeat);
+
+            Disease testDisease = new Disease();
+            testDisease.Name = "Gehung";
+            MasterRepository.Diseases.Add(testDisease);
+
+            Poison testPoison = new Poison();
+            testPoison.Name = "Poison of Death";
+            MasterRepository.Poisons.Add(testPoison);
+        }
+
+        public MainViewModel()
+        {
+            GenerateDebugData();
 
             OpenDetailCommand = new DelegateCommand<object>(detailModel =>
             {
@@ -81,33 +136,6 @@ namespace Eos.ViewModels
                     detailViewDict.Remove(vm.GetDataObject());
                 }
             });
-        }
-
-        public ObservableCollection<DataDetailViewModelBase> DetailViewList { get { return detailViewList; } }
-
-        // Model Repositories
-        public ModelRepository<Race> RaceRepository { get { return raceRepository; } }
-        public ModelRepository<CharacterClass> ClassRepository { get { return classRepository; } }
-        public ModelRepository<Domain> DomainRepository { get { return domainRepository; } }
-        public ModelRepository<Spell> SpellRepository { get { return spellRepository; } }
-        public ModelRepository<Feat> FeatRepository { get { return featRepository; } }
-        public ModelRepository<Skill> SkillRepository { get { return skillRepository; } }
-
-        // Commands
-        public DelegateCommand<object> OpenDetailCommand { get; set; }
-        public DelegateCommand<DataDetailViewModelBase> CloseDetailCommand { get; set; }
-
-        public DataDetailViewModelBase? CurrentView
-        {
-            get { return currentView; }
-            set
-            {
-                if (currentView != value)
-                {
-                    currentView = value;
-                    NotifyPropertyChanged();
-                }
-            }
         }
     }
 }

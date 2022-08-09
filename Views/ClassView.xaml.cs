@@ -18,7 +18,7 @@ namespace Eos.Views
     /// <summary>
     /// Interaktionslogik für ClassView.xaml
     /// </summary>
-    public partial class ClassView : Page
+    public partial class ClassView : LanguageAwarePage
     {
         public ClassView()
         {

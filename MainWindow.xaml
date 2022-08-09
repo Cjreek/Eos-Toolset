@@ -4,11 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Eos"
+        xmlns:wpftk="clr-namespace:Xceed.Wpf.Toolkit;assembly=DotNetProjects.Wpf.Extended.Toolkit"
         xmlns:i="clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors"
         xmlns:vm="clr-namespace:Eos.ViewModels"
         xmlns:view="clr-namespace:Eos.Views"
         xmlns:conv="clr-namespace:Eos.Extensions"
+        xmlns:repo="clr-namespace:Eos.Models.Base"
+        xmlns:ext="clr-namespace:Eos.Extensions"
+        xmlns:types="clr-namespace:Eos.Types"
+        xmlns:uc="clr-namespace:Eos.Usercontrols"
         mc:Ignorable="d"
+        x:Name="mainWindow"
         MinHeight="600" MinWidth="1000"
         Title="Eos Toolset" Height="600" Width="1000" FontSize="16">
     <Window.DataContext>
@@ -17,6 +23,7 @@
 
     <Window.Resources>
         <conv:BoolToVisibilityConverterEx FalseValue="Hidden" x:Key="Bool2Vis"/>
+        <conv:TLKStringSetConverter x:Key="tlkConverter" AlwaysUseDefaultLanguage="True"/>
 
         <!-- TreeViewItem Datatemplates -->
         <DataTemplate x:Key="TreeViewItemTemplate">
@@ -26,8 +33,16 @@
                         <i:InvokeCommandAction Command="{Binding Path=OpenDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                
-                <TextBlock Text="{Binding Path=Name}"/>
+
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource tlkConverter}">
+                            <Binding Path="Name"/>
+                            <Binding ElementName="viewModel" Path="CurrentLanguage"/>
+                            <Binding ElementName="viewModel" Path="CurrentGender"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
             </ContentControl>
         </DataTemplate>
 
@@ -43,7 +58,7 @@
         </Style>
 
         <Style TargetType="TabItem">
-            <Setter Property="Background" Value="{Binding Color}"/>
+            <Setter Property="Background" Value="{Binding EntityColor}"/>
         </Style>
 
         <!-- TabControl ItemTemplate -->
@@ -79,7 +94,9 @@
         <DataTemplate DataType="{x:Type vm:RaceViewModel}">
             <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
                 <Frame.Content>
-                    <view:RaceView DataContext="{Binding}"/>
+                    <view:RaceView DataContext="{Binding}" 
+                                   TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                   Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
                 </Frame.Content>
             </Frame>
         </DataTemplate>
@@ -87,7 +104,9 @@
         <DataTemplate DataType="{x:Type vm:ClassViewModel}">
             <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
                 <Frame.Content>
-                    <view:ClassView DataContext="{Binding}"/>
+                    <view:ClassView DataContext="{Binding}" 
+                                    TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                    Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
                 </Frame.Content>
             </Frame>
         </DataTemplate>
@@ -95,7 +114,9 @@
         <DataTemplate DataType="{x:Type vm:DomainViewModel}">
             <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
                 <Frame.Content>
-                    <view:DomainView DataContext="{Binding}"/>
+                    <view:DomainView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
                 </Frame.Content>
             </Frame>
         </DataTemplate>
@@ -103,7 +124,9 @@
         <DataTemplate DataType="{x:Type vm:SpellViewModel}">
             <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
                 <Frame.Content>
-                    <view:SpellView DataContext="{Binding}"/>
+                    <view:SpellView DataContext="{Binding}" 
+                                    TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                    Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
                 </Frame.Content>
             </Frame>
         </DataTemplate>
@@ -111,7 +134,9 @@
         <DataTemplate DataType="{x:Type vm:FeatViewModel}">
             <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
                 <Frame.Content>
-                    <view:FeatView DataContext="{Binding}"/>
+                    <view:FeatView DataContext="{Binding}" 
+                                   TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                   Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
                 </Frame.Content>
             </Frame>
         </DataTemplate>
@@ -119,7 +144,29 @@
         <DataTemplate DataType="{x:Type vm:SkillViewModel}">
             <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
                 <Frame.Content>
-                    <view:SkillView DataContext="{Binding}"/>
+                    <view:SkillView DataContext="{Binding}" 
+                                    TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                    Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:DiseaseViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                <Frame.Content>
+                    <view:DiseaseView DataContext="{Binding}" 
+                                      TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                      Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:PoisonViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                <Frame.Content>
+                    <view:PoisonView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
                 </Frame.Content>
             </Frame>
         </DataTemplate>
@@ -127,22 +174,52 @@
     
     <!-- Window Content -->
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="4*"/>
-        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <TreeView Grid.Column="0" Margin="5">
-            <TreeViewItem Header="Races" ItemsSource="{Binding RaceRepository}"/>
-            <TreeViewItem Header="Classes" ItemsSource="{Binding ClassRepository}"/>
-            <TreeViewItem Header="Domains" ItemsSource="{Binding DomainRepository}"/>
-            <TreeViewItem Header="Spells" ItemsSource="{Binding SpellRepository}"/>
-            <TreeViewItem Header="Feats" ItemsSource="{Binding FeatRepository}"/>
-            <TreeViewItem Header="Skills" ItemsSource="{Binding SkillRepository}"/>
-        </TreeView>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+            
+            <uc:EnumComboBox Grid.Column="0" ItemsSource="{ext:EnumSource {x:Type types:TLKLanguage}}" SelectedValue="{Binding CurrentLanguage, Mode=TwoWay}"/>
+            <ToggleButton Margin="2,0,0,0" Grid.Column="1" IsChecked="{Binding CurrentGender, Mode=TwoWay}">
+                <ToggleButton.Style>
+                    <Style TargetType="ToggleButton">
+                        <Setter Property="Content" Value="M"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}" Value="True">
+                                <Setter Property="Content" Value="F"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ToggleButton.Style>
+            </ToggleButton>
+        </Grid>
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
 
-        <TabControl Grid.Column="1" Margin="0,3,5,5" Padding="0"
-                    ItemsSource="{Binding DetailViewList}" ItemTemplate="{StaticResource TabItemTemplate}" 
-                    SelectedItem="{Binding CurrentView}"/>
+            <TreeView Grid.Column="0" Margin="5">
+                <TreeViewItem Header="Races" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Races}}"/>
+                <TreeViewItem Header="Classes" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Classes}}"/>
+                <TreeViewItem Header="Domains" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Domains}}"/>
+                <TreeViewItem Header="Spells" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Spells}}"/>
+                <TreeViewItem Header="Feats" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Feats}}"/>
+                <TreeViewItem Header="Skills" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Skills}}"/>
+                <TreeViewItem Header="Diseases" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Diseases}}"/>
+                <TreeViewItem Header="Poisons" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Poisons}}"/>
+            </TreeView>
+
+            <TabControl Grid.Column="1" Margin="0,3,5,5" Padding="0"
+                        ItemsSource="{Binding DetailViewList}" ItemTemplate="{StaticResource TabItemTemplate}" 
+                        SelectedItem="{Binding CurrentView}"/>
+        </Grid>
     </Grid>
 </Window>

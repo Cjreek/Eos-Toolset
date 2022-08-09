@@ -18,7 +18,7 @@ namespace Eos.Views
     /// <summary>
     /// Interaktionslogik für SkillView.xaml
     /// </summary>
-    public partial class SkillView : Page
+    public partial class SkillView : LanguageAwarePage
     {
         public SkillView()
         {

@@ -18,7 +18,7 @@ namespace Eos.Views
     /// <summary>
     /// Interaktionslogik für SpellView.xaml
     /// </summary>
-    public partial class SpellView : Page
+    public partial class SpellView : LanguageAwarePage
     {
         public SpellView()
         {

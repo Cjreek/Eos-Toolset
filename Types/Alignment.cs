@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 namespace Eos.Types
 {
     [Flags]
-    internal enum Alignment
+    public enum Alignment
     {
         LawfulGood, NeutralGood, ChaoticGood,
         LawfulNeutral, Neutral, ChaoticNeutral,
         LawfulEvil, NeutralEvil, ChaoticEvil
     }
 
-    internal static class Alignments
+    public static class Alignments
     {
         public const Alignment Good = Alignment.LawfulGood | Alignment.NeutralGood | Alignment.ChaoticGood;
         public const Alignment Neutral = Alignment.LawfulNeutral | Alignment.Neutral | Alignment.ChaoticNeutral;

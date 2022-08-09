@@ -18,7 +18,7 @@ namespace Eos.Views
     /// <summary>
     /// Interaktionslogik für DomainView.xaml
     /// </summary>
-    public partial class DomainView : Page
+    public partial class DomainView : LanguageAwarePage
     {
         public DomainView()
         {

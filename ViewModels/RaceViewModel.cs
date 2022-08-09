@@ -23,9 +23,9 @@ namespace Eos.ViewModels
             return Data.Name;
         }
 
-        protected override Brush GetColor()
+        protected override Brush GetEntityColor()
         {
-            return Brushes.BurlyWood;
+            return new SolidColorBrush(Color.FromArgb(100, 175, 175, 175));
         }
     }
 }

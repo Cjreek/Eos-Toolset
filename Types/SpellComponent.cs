@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Eos.Types
 {
     [Flags]
-    internal enum SpellComponent
+    public enum SpellComponent
     {
         [DisplayName("Verbal")]
         V,

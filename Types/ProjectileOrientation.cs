@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Types
 {
-    internal enum ProjectileOrientation
+    public enum ProjectileOrientation
     {
         Path,
         Target
