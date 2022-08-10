@@ -5,14 +5,97 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Eos.Views"
       xmlns:vm="clr-namespace:Eos.ViewModels"
-      mc:Ignorable="d" 
+      xmlns:uc="clr-namespace:Eos.Usercontrols"
+      xmlns:ext="clr-namespace:Eos.Extensions"
+      xmlns:types="clr-namespace:Eos.Types"
+      mc:Ignorable="d" Background="White"
+      x:Name="page"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SpellView">
     <Page.DataContext>
         <vm:SpellViewModel/>
     </Page.DataContext>
-    
-    <Grid>
-        <TextBlock Text="{Binding Data.Name}"/>
+
+    <Grid Margin="10">
+        <Grid.Resources>
+            <Style TargetType="{x:Type TabItem}">
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <TranslateTransform Y="-2"/>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="{x:Type uc:FlagListbox}">
+                <Setter Property="Margin" Value="2,0,0,3"/>
+            </Style>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="2,0,0,3"/>
+            </Style>
+            <Style TargetType="{x:Type ComboBox}">
+                <Setter Property="Margin" Value="2,0,0,3"/>
+            </Style>
+            <Style TargetType="{x:Type CheckBox}">
+                <Setter Property="Margin" Value="1,0,0,3"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="150"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="Spell" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+        <Grid Grid.Row="1" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="22"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!--Name-->
+            <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4"/>
+
+            <!--Description-->
+            <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="2" Grid.Column="0"/>
+            <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4"/>
+
+            <!--Spell Type-->
+            <TextBlock Text="Spell Type" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+            <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:SpellType}}" SelectedValue="{Binding Data.Type}" Grid.Row="3" Grid.Column="1"/>
+
+            <TextBlock Text="Spell School" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+            <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:SpellSchool}}" SelectedValue="{Binding Data.School}" Grid.Row="3" Grid.Column="3"/>
+
+            <TextBlock Text="Valid Targets" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+            <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:SpellTarget}}" Flags="{Binding Data.TargetTypes}" Grid.Row="4" Grid.Column="1"/>
+
+            <TextBlock Text="Available Metamagic" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
+            <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:MetaMagicType}}" Flags="{Binding Data.AvailableMetaMagic}" Grid.Row="4" Grid.Column="3"/>
+        </Grid>
+
+        <!--Icon-->
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">
+            <Border BorderThickness="1" BorderBrush="Black" Width="120" Height="120" HorizontalAlignment="Center" VerticalAlignment="Top">
+
+            </Border>
+            <Button Content="Load Icon" HorizontalAlignment="Center" Margin="0,5,0,0" Width="120"/>
+        </StackPanel>
     </Grid>
 </local:LanguageAwarePage>

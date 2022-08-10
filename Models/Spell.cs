@@ -9,13 +9,13 @@ namespace Eos.Models
 {
     public class Spell : BaseModel
     {
-        public string Name { get; set; } = "";
-        public string Description { get; set; } = "";
+        public TLKStringSet Name { get; set; } = new TLKStringSet();
+        public TLKStringSet Description { get; set; } = new TLKStringSet();
         public IntPtr Icon { get; set; }
         public SpellSchool School { get; set; } = SpellSchool.G;
         public SpellRange Range { get; set; } = SpellRange.P;
         public SpellComponent Components { get; set; } = SpellComponent.V | SpellComponent.S;
-        public MetaMagicType AvailableMetaMagic { get; set; } = MetaMagicType.None;
+        public MetaMagicType AvailableMetaMagic { get; set; } = (MetaMagicType)0;
         public SpellTarget TargetTypes { get; set; } = SpellTarget.Self;
         public IntPtr ImpactScript { get; set; }
         public int ConjurationTime { get; set; } = 1500;

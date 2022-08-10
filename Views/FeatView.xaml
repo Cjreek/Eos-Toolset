@@ -10,6 +10,7 @@
       xmlns:types="clr-namespace:Eos.Types"
       xmlns:uc="clr-namespace:Eos.Usercontrols"
       mc:Ignorable="d" 
+      x:Name="page" 
       d:DesignHeight="550" d:DesignWidth="800"
       Title="FeatView">
     <Page.DataContext>
@@ -77,11 +78,11 @@
 
                     <!--Name-->
                     <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-                    <TextBox Text="{Binding Data.Name}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+                    <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
 
                     <!--Description-->
                     <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="2" Grid.Column="0"/>
-                    <TextBox Text="{Binding Data.Description}" AcceptsReturn="True" Height="120" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
+                    <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
 
                     <!--Parent Feat-->
                     <TextBlock Text="Parent Feat" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>

@@ -9,8 +9,8 @@ namespace Eos.Models
 {
     public class Skill : BaseModel
     {
-        public String Name { get; set; } = "";
-        public String Description { get; set; } = "";
+        public TLKStringSet Name { get; set; } = new TLKStringSet();
+        public TLKStringSet Description { get; set; } = new TLKStringSet();
         public IntPtr Icon { get; set; }
         public bool CanUseUntrained { get; set; }
         public AbilityType KeyAbility { get; set; }

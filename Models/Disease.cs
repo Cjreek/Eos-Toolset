@@ -9,7 +9,7 @@ namespace Eos.Models
 {
     internal class Disease : BaseModel
     {
-        public string Name { get; set; } = "";
+        public TLKStringSet Name { get; set; } = new TLKStringSet();
         public int FirstSaveDC { get; set; } = 15;
         public int SecondSaveDC { get; set; } = 10;
         public int IncubationHours { get; set; } = 1;

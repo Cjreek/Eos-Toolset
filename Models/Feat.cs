@@ -9,8 +9,8 @@ namespace Eos.Models
 {
     public class Feat : BaseModel
     {
-        public string Name { get; set; } = "";
-        public string Description { get; set; } = "";
+        public TLKStringSet Name { get; set; } = new TLKStringSet();
+        public TLKStringSet Description { get; set; } = new TLKStringSet();
         public IntPtr Icon { get; set; }
         public int? MinAttackBonus { get; set; }
         public int? MinStr { get; set; }

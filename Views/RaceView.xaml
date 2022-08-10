@@ -157,10 +157,10 @@
                 <CheckBox IsChecked="{Binding Data.Playable}" Grid.Row="1" Grid.Column="1"/>
 
                 <TextBlock Text="Favored Class" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
-                <uc:ClassComboBox Grid.Row="2" Grid.Column="1" SelectedValue="{Binding Data.FavoredClass}"/>
+                <uc:ClassComboBox Grid.Row="2" Grid.Column="1" SelectedValue="{Binding Data.FavoredClass}" IsNullable="False"/>
 
                 <TextBlock Text="Default Toolset Class" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
-                <uc:ClassComboBox Grid.Row="2" Grid.Column="3" SelectedValue="{Binding Data.ToolsetDefaultClass}"/>
+                <uc:ClassComboBox Grid.Row="2" Grid.Column="3" SelectedValue="{Binding Data.ToolsetDefaultClass}" IsNullable="False"/>
 
                 <TextBlock Text="Skill Point Modifier" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
                 <ComboBox ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.SkillPointModifierAbility}" SelectedValuePath="Value" DisplayMemberPath="DisplayName" Grid.Row="3" Grid.Column="1"/>

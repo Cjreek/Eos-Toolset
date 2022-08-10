@@ -26,12 +26,19 @@ namespace Eos.Usercontrols
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register("SelectedValue", typeof(Skill), typeof(SkillComboBox));
+        public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register("SelectedValue", typeof(Skill), typeof(SkillComboBox), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        public static readonly DependencyProperty IsNullableProperty = DependencyProperty.Register("IsNullable", typeof(bool), typeof(SkillComboBox), new PropertyMetadata(true));
 
         public Skill? SelectedValue
         {
             get { return (Skill)GetValue(SelectedValueProperty); }
             set { SetValue(SelectedValueProperty, value); }
+        }
+
+        public bool IsNullable
+        {
+            get { return (bool)GetValue(IsNullableProperty); }
+            set { SetValue(IsNullableProperty, value); }
         }
 
         private void btClear_Click(object sender, RoutedEventArgs e)

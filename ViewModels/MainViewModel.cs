@@ -80,11 +80,11 @@ namespace Eos.ViewModels
             MasterRepository.Races.Add(testRace);
 
             Skill testSkill = new Skill();
-            testSkill.Name = "Lumbering";
+            testSkill.Name.SetDefault("Lumbering");
             MasterRepository.Skills.Add(testSkill);
 
             testSkill = new Skill();
-            testSkill.Name = "Harvesting";
+            testSkill.Name.SetDefault("Harvesting");
             MasterRepository.Skills.Add(testSkill);
 
             CharacterClass testClass = new CharacterClass();
@@ -92,23 +92,23 @@ namespace Eos.ViewModels
             MasterRepository.Classes.Add(testClass);
 
             Domain testDomain = new Domain();
-            testDomain.Name = "Death & Decay";
+            testDomain.Name.SetDefault("Death & Decay");
             MasterRepository.Domains.Add(testDomain);
 
             Spell testSpell = new Spell();
-            testSpell.Name = "Iceball";
+            testSpell.Name.SetDefault("Iceball");
             MasterRepository.Spells.Add(testSpell);
 
             Feat testFeat = new Feat();
-            testFeat.Name = "Tooth Punch";
+            testFeat.Name.SetDefault("Tooth Punch");
             MasterRepository.Feats.Add(testFeat);
 
             Disease testDisease = new Disease();
-            testDisease.Name = "Gehung";
+            testDisease.Name.SetDefault("Gehung");
             MasterRepository.Diseases.Add(testDisease);
 
             Poison testPoison = new Poison();
-            testPoison.Name = "Poison of Death";
+            testPoison.Name.SetDefault("Poison of Death");
             MasterRepository.Poisons.Add(testPoison);
         }
 

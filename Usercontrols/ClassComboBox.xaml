@@ -5,16 +5,35 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Eos.Usercontrols"
              xmlns:repo="clr-namespace:Eos.Models.Base"
+             xmlns:ext="clr-namespace:Eos.Extensions"
              mc:Ignorable="d" 
              x:Name="ucClassComboBox"
              d:DesignHeight="22" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ext:TLKStringSetConverter x:Key="tlkConverter" AlwaysUseDefaultLanguage="True"/>
+        <ext:BoolToVisibilityConverterEx x:Key="bool2Vis" FalseValue="Collapsed"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
-        <ComboBox x:Name="cbClasses" Grid.Column="0" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Classes}}" DisplayMemberPath="Name" SelectedValue="{Binding ElementName=ucClassComboBox, Path=SelectedValue}"/>
-        <Button x:Name="btClear" Grid.Column="1" Margin="2,-2,0,0" Height="{Binding ElementName=cbClasses, Path=ActualHeight}" Width="{Binding ElementName=cbClasses, Path=ActualHeight}" Content="X" Click="btClear_Click"/>
+        <ComboBox x:Name="cbClasses" Grid.Column="0" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Classes}}" SelectedValue="{Binding ElementName=ucClassComboBox, Path=SelectedValue}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource tlkConverter}">
+                                <Binding Path="Name"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Button x:Name="btClear" Grid.Column="1" Margin="2,-2,0,0" Content="X" Click="btClear_Click"
+                Height="{Binding ElementName=cbClasses, Path=ActualHeight}" Width="{Binding ElementName=cbClasses, Path=ActualHeight}" 
+                Visibility="{Binding ElementName=ucClassComboBox, Path=IsNullable, Converter={StaticResource bool2Vis}}"/>
     </Grid>
 </UserControl>

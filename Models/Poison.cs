@@ -9,7 +9,7 @@ namespace Eos.Models
 {
     public class Poison : BaseModel
     {
-        public String Name { get; set; } = "";
+        public TLKStringSet Name { get; set; } = new TLKStringSet();
         public int SaveDC { get; set; } = 10;
         public int HandleDC { get; set; } = 0; // Unused?
         public int InitialAbilityDamageDiceCount { get; set; } = 1;

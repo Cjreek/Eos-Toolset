@@ -6,21 +6,20 @@
              xmlns:local="clr-namespace:Eos.Usercontrols"
              xmlns:ext="clr-namespace:Eos.Extensions"
              xmlns:types="clr-namespace:Eos.Types"
-             mc:Ignorable="d" 
-             x:Name="ucEnumComboBox"
+             mc:Ignorable="d" x:Name="ucEnumComboBox"
              d:DesignHeight="22" d:DesignWidth="800">
     <UserControl.Resources>
         <ext:BoolToVisibilityConverterEx x:Key="bool2Vis" FalseValue="Collapsed"/>
     </UserControl.Resources>
-    <Grid>
+    <Grid DataContext="{x:Reference ucEnumComboBox}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
-        <ComboBox x:Name="cbEnum" Grid.Column="0" ItemsSource="{Binding ElementName=ucEnumComboBox, Path=ItemsSource}" SelectedValue="{Binding ElementName=ucEnumComboBox, Path=SelectedValue}" SelectedValuePath="Value" DisplayMemberPath="DisplayName"/>
+        <ComboBox x:Name="cbEnum" Grid.Column="0" ItemsSource="{Binding Path=ItemsSource}" SelectedValue="{Binding Path=SelectedValue, Mode=TwoWay}" SelectedValuePath="Value" DisplayMemberPath="DisplayName"/>
         <Button x:Name="btClear" Grid.Column="1" Margin="2,-2,0,0" Content="X" Click="btClear_Click" 
                 Height="{Binding ElementName=cbEnum, Path=ActualHeight}" Width="{Binding ElementName=cbEnum, Path=ActualHeight}"
-                Visibility="{Binding ElementName=ucEnumComboBox, Path=IsNullable, Converter={StaticResource bool2Vis}}"/>
+                Visibility="{Binding Path=IsNullable, Converter={StaticResource bool2Vis}}"/>
     </Grid>
 </UserControl>

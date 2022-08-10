@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Eos.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,8 @@ namespace Eos.Models
 {
     internal class Domain : BaseModel
     {
-        public string Name { get; set; } = "";
-        public string Description { get; set; } = "";
+        public TLKStringSet Name { get; set; } = new TLKStringSet();
+        public TLKStringSet Description { get; set; } = new TLKStringSet();
         public IntPtr Icon { get; set; }
         public Spell? Level0Spell { get; set; }
         public Spell? Level1Spell { get; set; }

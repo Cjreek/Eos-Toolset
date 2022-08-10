@@ -9,7 +9,6 @@ namespace Eos.Types
     [Flags]
     public enum MetaMagicType
     {
-        None = 0x00,
         Empower = 0x01,
         Extend = 0x02,
         Maximize = 0x04,

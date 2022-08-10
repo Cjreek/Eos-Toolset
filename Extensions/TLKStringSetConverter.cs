@@ -18,11 +18,12 @@ namespace Eos.Extensions
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values.Length == 3)
+            if ((values.Length == 1) && (values[0] is TLKStringSet defaultStrings))
             {
-                if (values[0] is string)
-                    return values[0];
-
+                return defaultStrings[DefaultLanguage].Text;
+            }
+            else if (values.Length == 3)
+            {
                 if ((values[0] is TLKStringSet strings) && (values[1] is TLKLanguage lang) && (values[2] is bool gender))
                 {
                     lang = AlwaysUseDefaultLanguage ? DefaultLanguage : lang;
