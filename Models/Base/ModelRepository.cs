@@ -11,6 +11,12 @@ namespace Eos.Models.Base
     public class ModelRepository<T> : Repository<T> where T : BaseModel, new()
     {
         private Dictionary<Guid, T?> modelLookup = new Dictionary<Guid, T?>();
+        private bool isReadonly;
+
+        public ModelRepository(bool isReadonly)
+        {
+            this.isReadonly = isReadonly;
+        }
 
         public T? GetByID(Guid id)
         {
@@ -27,6 +33,8 @@ namespace Eos.Models.Base
         {
             if (model.ID == Guid.Empty)
                 model.ID = Guid.NewGuid();
+
+            model.IsReadonly = isReadonly;
 
             if (!modelLookup.ContainsKey(model.ID))
             {

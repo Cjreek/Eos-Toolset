@@ -64,7 +64,18 @@
         <!-- TabControl ItemTemplate -->
         <DataTemplate x:Key="TabItemTemplate">
             <StackPanel Orientation="Horizontal" Margin="0">
-                <TextBlock Text="{Binding Header}" MinWidth="50"/>
+                <TextBlock Text="{Binding Header}" MinWidth="50">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Data.IsReadonly}" Value="True">
+                                    <Setter Property="Foreground" Value="DimGray"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
                 <Button Content="x" Command="{Binding Path=CloseDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}" 
                                 Visibility="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}, Converter={StaticResource Bool2Vis}}" Margin="5,0,0,0" >
                     <Button.Style>
@@ -206,16 +217,32 @@
                 <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
 
-            <TreeView Grid.Column="0" Margin="5">
-                <TreeViewItem Header="Races" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Races}}"/>
-                <TreeViewItem Header="Classes" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Classes}}"/>
-                <TreeViewItem Header="Domains" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Domains}}"/>
-                <TreeViewItem Header="Spells" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Spells}}"/>
-                <TreeViewItem Header="Feats" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Feats}}"/>
-                <TreeViewItem Header="Skills" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Skills}}"/>
-                <TreeViewItem Header="Diseases" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Diseases}}"/>
-                <TreeViewItem Header="Poisons" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Poisons}}"/>
-            </TreeView>
+            <TabControl Grid.Column="0" Margin="5" TabStripPlacement="Top" SelectedItem="{x:Reference tabCustom}">
+                <TabItem x:Name="tabStandard" Header="Standard">
+                    <TreeView>
+                        <TreeViewItem Header="Races" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Races}"/>
+                        <TreeViewItem Header="Classes" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Classes}"/>
+                        <TreeViewItem Header="Domains" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Domains}"/>
+                        <TreeViewItem Header="Spells" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells}"/>
+                        <TreeViewItem Header="Feats" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats}"/>
+                        <TreeViewItem Header="Skills" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Skills}"/>
+                        <TreeViewItem Header="Diseases" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Diseases}"/>
+                        <TreeViewItem Header="Poisons" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Poisons}"/>
+                    </TreeView>
+                </TabItem>
+                <TabItem x:Name="tabCustom" Header="Custom">
+                    <TreeView>
+                        <TreeViewItem Header="Races" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Races}"/>
+                        <TreeViewItem Header="Classes" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Classes}"/>
+                        <TreeViewItem Header="Domains" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Domains}"/>
+                        <TreeViewItem Header="Spells" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells}"/>
+                        <TreeViewItem Header="Feats" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Feats}"/>
+                        <TreeViewItem Header="Skills" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Skills}"/>
+                        <TreeViewItem Header="Diseases" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Diseases}"/>
+                        <TreeViewItem Header="Poisons" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Poisons}"/>
+                    </TreeView>
+                </TabItem>
+            </TabControl>
 
             <TabControl Grid.Column="1" Margin="0,3,5,5" Padding="0"
                         ItemsSource="{Binding DetailViewList}" ItemTemplate="{StaticResource TabItemTemplate}" 

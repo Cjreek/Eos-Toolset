@@ -13,9 +13,12 @@
       x:Name="page"
       d:DesignHeight="520" d:DesignWidth="800"
       Title="RaceView">
-    <local:LanguageAwarePage.DataContext>
+    <Page.Resources>
+        <ext:NotConverter x:Key="inverter"/>
+    </Page.Resources>
+    <Page.DataContext>
         <vm:RaceViewModel/>
-    </local:LanguageAwarePage.DataContext>
+    </Page.DataContext>
 
     <TabControl TabStripPlacement="Left" BorderThickness="1,0,0,0">
         <TabControl.Resources>
@@ -44,7 +47,7 @@
             </Style>
         </TabControl.Resources>
         <TabItem Header="Info" Width="100" Height="30">
-            <Grid Margin="10">
+            <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
@@ -125,7 +128,7 @@
             </Grid>
         </TabItem>
         <TabItem Header="Properties" Width="100" Height="30">
-            <Grid Margin="10">
+            <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="*"/>
@@ -211,7 +214,9 @@
             </Grid>
         </TabItem>
         <TabItem Header="Racial Feats" Width="100" Height="30">
-
+            <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
+                
+            </Grid>
         </TabItem>
     </TabControl>
 </local:LanguageAwarePage>

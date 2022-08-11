@@ -15,7 +15,11 @@
     <Page.DataContext>
         <vm:SkillViewModel/>
     </Page.DataContext>
-    <Grid>
+    <Page.Resources>
+        <ext:NotConverter x:Key="inverter"/>
+    </Page.Resources>
+
+    <Grid IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
         <Grid.Resources>
             <Style TargetType="{x:Type TextBox}">
                 <Setter Property="Margin" Value="2,0,0,3"/>

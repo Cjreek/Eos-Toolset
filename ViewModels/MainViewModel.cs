@@ -73,43 +73,43 @@ namespace Eos.ViewModels
         {
             Race testRace = new Race();
             testRace.Name.SetDefault("Orc");
-            MasterRepository.Races.Add(testRace);
+            MasterRepository.Standard.Races.Add(testRace);
 
             testRace = new Race();
             testRace.Name.SetDefault("Elf");
-            MasterRepository.Races.Add(testRace);
+            MasterRepository.Standard.Races.Add(testRace);
 
             Skill testSkill = new Skill();
             testSkill.Name.SetDefault("Lumbering");
-            MasterRepository.Skills.Add(testSkill);
+            MasterRepository.Custom.Skills.Add(testSkill);
 
             testSkill = new Skill();
             testSkill.Name.SetDefault("Harvesting");
-            MasterRepository.Skills.Add(testSkill);
+            MasterRepository.Standard.Skills.Add(testSkill);
 
             CharacterClass testClass = new CharacterClass();
             testClass.Name.SetDefault("Fighter");
-            MasterRepository.Classes.Add(testClass);
+            MasterRepository.Standard.Classes.Add(testClass);
 
             Domain testDomain = new Domain();
             testDomain.Name.SetDefault("Death & Decay");
-            MasterRepository.Domains.Add(testDomain);
+            MasterRepository.Standard.Domains.Add(testDomain);
 
             Spell testSpell = new Spell();
             testSpell.Name.SetDefault("Iceball");
-            MasterRepository.Spells.Add(testSpell);
+            MasterRepository.Standard.Spells.Add(testSpell);
 
             Feat testFeat = new Feat();
             testFeat.Name.SetDefault("Tooth Punch");
-            MasterRepository.Feats.Add(testFeat);
+            MasterRepository.Standard.Feats.Add(testFeat);
 
             Disease testDisease = new Disease();
             testDisease.Name.SetDefault("Gehung");
-            MasterRepository.Diseases.Add(testDisease);
+            MasterRepository.Standard.Diseases.Add(testDisease);
 
             Poison testPoison = new Poison();
             testPoison.Name.SetDefault("Poison of Death");
-            MasterRepository.Poisons.Add(testPoison);
+            MasterRepository.Standard.Poisons.Add(testPoison);
         }
 
         public MainViewModel()

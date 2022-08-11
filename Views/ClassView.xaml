@@ -17,7 +17,7 @@
         <vm:ClassViewModel/>
     </Page.DataContext>
     <Page.Resources>
-        <ext:NotConverter x:Key="notConverter"/>
+        <ext:NotConverter x:Key="inverter"/>
     </Page.Resources>
 
     <TabControl TabStripPlacement="Left" BorderThickness="1,0,0,0">
@@ -47,7 +47,7 @@
             </Style>
         </TabControl.Resources>
         <TabItem Header="Info" Width="100" Height="30">
-            <Grid Margin="10">
+            <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
@@ -96,7 +96,7 @@
             </Grid>
         </TabItem>
         <TabItem Header="Properties" Width="100" Height="30">
-            <Grid Margin="10">
+            <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="*"/>
@@ -185,7 +185,7 @@
             </Grid>
         </TabItem>
         <TabItem Header="Spell Casting" Width="100" Height="30">
-            <Grid Margin="10">
+            <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="*"/>
@@ -257,10 +257,10 @@
                 <TextBlock Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Non-Caster Casterlevels" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
 
                 <TextBlock Text="Arcane Caster Level Mod" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0"/>
-                <wpftk:IntegerUpDown Value="{Binding Data.ArcaneCasterLevelMod}" Grid.Row="12" Grid.Column="1" IsEnabled="{Binding Path=Data.IsSpellCaster, Converter={StaticResource notConverter}}"/>
+                <wpftk:IntegerUpDown Value="{Binding Data.ArcaneCasterLevelMod}" Grid.Row="12" Grid.Column="1" IsEnabled="{Binding Path=Data.IsSpellCaster, Converter={StaticResource inverter}}"/>
 
                 <TextBlock Text="Divine Caster Level Mod" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="2"/>
-                <wpftk:IntegerUpDown Value="{Binding Data.DivineCasterLevelMod}" Grid.Row="12" Grid.Column="3" IsEnabled="{Binding Path=Data.IsSpellCaster, Converter={StaticResource notConverter}}"/>
+                <wpftk:IntegerUpDown Value="{Binding Data.DivineCasterLevelMod}" Grid.Row="12" Grid.Column="3" IsEnabled="{Binding Path=Data.IsSpellCaster, Converter={StaticResource inverter}}"/>
             </Grid>
         </TabItem>
     </TabControl>

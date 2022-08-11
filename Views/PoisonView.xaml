@@ -13,11 +13,14 @@
       x:Name="page"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PoisonView">
+    <Page.Resources>
+        <ext:NotConverter x:Key="inverter"/>
+    </Page.Resources>
     <Page.DataContext>
         <vm:PoisonViewModel/>
     </Page.DataContext>
 
-    <Grid Margin="10">
+    <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
         <Grid.Resources>
             <Style TargetType="{x:Type TabItem}">
                 <Setter Property="RenderTransform">

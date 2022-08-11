@@ -27,12 +27,19 @@ namespace Eos.Usercontrols
         }
 
         public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register("ItemsSource", typeof(object), typeof(FlagListbox));
+        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(FlagListbox), new PropertyMetadata(Orientation.Vertical));
         public static readonly DependencyProperty FlagsProperty = DependencyProperty.Register("Flags", typeof(object), typeof(FlagListbox), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public object Flags
         {
             get { return GetValue(FlagsProperty); }
             set { SetValue(FlagsProperty, value); }
+        }
+
+        public Orientation Orientation
+        {
+            get { return (Orientation)GetValue(OrientationProperty); }
+            set { SetValue(OrientationProperty, value); }
         }
 
         public object ItemsSource

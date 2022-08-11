@@ -13,6 +13,11 @@
         <ext:FlagToBoolConverter x:Key="flagsToBool"/>
     </UserControl.Resources>
     <ListBox ItemsSource="{Binding ElementName=ucFlagListbox, Path=ItemsSource}">
+        <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+                <VirtualizingStackPanel IsItemsHost="True" Orientation="{Binding ElementName=ucFlagListbox, Path=Orientation}"/>
+            </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <Grid>

@@ -13,6 +13,9 @@
       x:Name="page" 
       d:DesignHeight="550" d:DesignWidth="800"
       Title="FeatView">
+    <Page.Resources>
+        <ext:NotConverter x:Key="inverter"/>
+    </Page.Resources>
     <Page.DataContext>
         <vm:FeatViewModel/>
     </Page.DataContext>
@@ -44,7 +47,7 @@
             </Style>
         </TabControl.Resources>
         <TabItem Header="Info" Width="100" Height="30">
-            <Grid Margin="10">
+            <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
@@ -58,9 +61,9 @@
 
                 <Grid Grid.Row="1" Grid.Column="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="130"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
@@ -139,7 +142,7 @@
             </Grid>
         </TabItem>
         <TabItem Header="Requirements" Width="100" Height="30">
-            <Grid Margin="10">
+            <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="150"/>
                     <ColumnDefinition Width="*"/>

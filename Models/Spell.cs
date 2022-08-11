@@ -46,10 +46,10 @@ namespace Eos.Models
         public Spell? SubSpell6 { get; set; }
         public Spell? SubSpell7 { get; set; }
         public Spell? SubSpell8 { get; set; }
-        public AICategory Category { get; set; }
+        public AICategory? Category { get; set; }
         public Spell? ParentSpell { get; set; }
         public SpellType Type { get; set; } = SpellType.Spell;
-        public Feat? FeatReference { get; set; }
+        //public Feat? FeatReference { get; set; } // Deprecated? Determine dynamically
         public Spell? CounterSpell1 { get; set; }
         public Spell? CounterSpell2 { get; set; }
     }

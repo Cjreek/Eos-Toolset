@@ -4,20 +4,24 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Eos.Views"
+      xmlns:wpftk="clr-namespace:Xceed.Wpf.Toolkit;assembly=DotNetProjects.Wpf.Extended.Toolkit"
       xmlns:vm="clr-namespace:Eos.ViewModels"
       xmlns:uc="clr-namespace:Eos.Usercontrols"
       xmlns:ext="clr-namespace:Eos.Extensions"
       xmlns:types="clr-namespace:Eos.Types"
       mc:Ignorable="d" Background="White"
       x:Name="page"
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="500" d:DesignWidth="800"
       Title="SpellView">
+    <Page.Resources>
+        <ext:NotConverter x:Key="inverter"/>
+    </Page.Resources>
     <Page.DataContext>
         <vm:SpellViewModel/>
     </Page.DataContext>
 
-    <Grid Margin="10">
-        <Grid.Resources>
+    <TabControl TabStripPlacement="Left" BorderThickness="1,0,0,0">
+        <TabControl.Resources>
             <Style TargetType="{x:Type TabItem}">
                 <Setter Property="RenderTransform">
                     <Setter.Value>
@@ -31,6 +35,9 @@
             <Style TargetType="{x:Type TextBox}">
                 <Setter Property="Margin" Value="2,0,0,3"/>
             </Style>
+            <Style TargetType="{x:Type wpftk:IntegerUpDown}">
+                <Setter Property="Margin" Value="2,0,0,3"/>
+            </Style>
             <Style TargetType="{x:Type ComboBox}">
                 <Setter Property="Margin" Value="2,0,0,3"/>
             </Style>
@@ -38,64 +45,238 @@
                 <Setter Property="Margin" Value="1,0,0,3"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
-        </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="150"/>
-        </Grid.ColumnDefinitions>
+        </TabControl.Resources>
+        <TabItem Header="Info" Width="100" Height="30">
+            <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Spell" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+                <TextBlock Text="Spell" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-        <Grid Grid.Row="1" Grid.Column="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="150"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="22"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+                <Grid Grid.Row="1" Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-            <!--Name-->
-            <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-            <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4"/>
+                    <!--Name-->
+                    <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                    <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4"/>
 
-            <!--Description-->
-            <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="2" Grid.Column="0"/>
-            <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4"/>
+                    <!--Description-->
+                    <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="2" Grid.Column="0"/>
+                    <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4"/>
 
-            <!--Spell Type-->
-            <TextBlock Text="Spell Type" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
-            <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:SpellType}}" SelectedValue="{Binding Data.Type}" Grid.Row="3" Grid.Column="1"/>
+                    <!--Spell Type-->
+                    <TextBlock Text="Type" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+                    <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:SpellType}}" SelectedValue="{Binding Data.Type}" Grid.Row="3" Grid.Column="1"/>
 
-            <TextBlock Text="Spell School" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
-            <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:SpellSchool}}" SelectedValue="{Binding Data.School}" Grid.Row="3" Grid.Column="3"/>
+                    <TextBlock Text="School" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+                    <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:SpellSchool}}" SelectedValue="{Binding Data.School}" Grid.Row="3" Grid.Column="3"/>
 
-            <TextBlock Text="Valid Targets" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
-            <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:SpellTarget}}" Flags="{Binding Data.TargetTypes}" Grid.Row="4" Grid.Column="1"/>
+                    <TextBlock Text="AI Category" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+                    <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:AICategory}}" SelectedValue="{Binding Data.Category}" Grid.Row="4" Grid.Column="1" IsNullable="True"/>
 
-            <TextBlock Text="Available Metamagic" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
-            <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:MetaMagicType}}" Flags="{Binding Data.AvailableMetaMagic}" Grid.Row="4" Grid.Column="3"/>
-        </Grid>
+                    <TextBlock Text="Impact Script" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
+                    <ComboBox Grid.Row="4" Grid.Column="3"/>
 
-        <!--Icon-->
-        <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">
-            <Border BorderThickness="1" BorderBrush="Black" Width="120" Height="120" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <TextBlock Text="Range" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+                    <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:SpellRange}}" SelectedValue="{Binding Data.Range}" Grid.Row="5" Grid.Column="1" VerticalAlignment="Top"/>
 
-            </Border>
-            <Button Content="Load Icon" HorizontalAlignment="Center" Margin="0,5,0,0" Width="120"/>
-        </StackPanel>
-    </Grid>
+                    <TextBlock Text="Components" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
+                    <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:SpellComponent}}" Flags="{Binding Data.Components}" Orientation="Horizontal" Grid.Row="5" Grid.Column="3"/>
+
+                    <TextBlock Text="Valid Targets" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
+                    <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:SpellTarget}}" Flags="{Binding Data.TargetTypes}" Grid.Row="6" Grid.Column="1"/>
+
+                    <TextBlock Text="Metamagic" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="2"/>
+                    <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:MetaMagicType}}" Flags="{Binding Data.AvailableMetaMagic}" Grid.Row="6" Grid.Column="3" VerticalAlignment="Top"/>
+
+                    <TextBlock Text="Counterspell 1" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
+                    <uc:SpellComboBox SelectedValue="{Binding Data.CounterSpell1}" Grid.Row="7" Grid.Column="1"/>
+
+                    <TextBlock Text="Counterspell 2" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="2"/>
+                    <uc:SpellComboBox SelectedValue="{Binding Data.CounterSpell2}" Grid.Row="7" Grid.Column="3"/>
+                </Grid>
+
+                <!--Icon-->
+                <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">
+                    <Border BorderThickness="1" BorderBrush="Black" Width="120" Height="120" HorizontalAlignment="Center" VerticalAlignment="Top">
+
+                    </Border>
+                    <Button Content="Load Icon" HorizontalAlignment="Center" Margin="0,5,0,0" Width="120"/>
+                </StackPanel>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Visuals" Width="100" Height="30">
+            <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto" MinHeight="22"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="22"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="22"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Spell Visuals" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Projectiles" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
+
+                <!--Has Projectile-->
+                <TextBlock Text="Has Projectile" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+                <CheckBox IsChecked="{Binding Data.HasProjectile}" Grid.Row="2" Grid.Column="1"/>
+
+                <TextBlock Text="Type" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+                <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:ProjectileType}}" SelectedValue="{Binding Data.ProjectileType}" Grid.Row="3" Grid.Column="1" IsEnabled="{Binding Data.HasProjectile}"/>
+
+                <TextBlock Text="Spawn Point" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+                <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:ProjectileSource}}" SelectedValue="{Binding Data.ProjectileSpawnPoint}" Grid.Row="3" Grid.Column="3" IsEnabled="{Binding Data.HasProjectile}"/>
+
+                <TextBlock Text="Model" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+                <ComboBox Grid.Row="4" Grid.Column="1" IsEnabled="{Binding Data.HasProjectile}"/>
+                
+                <TextBlock Text="Orientation" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
+                <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:ProjectileOrientation}}" SelectedValue="{Binding Data.ProjectileOrientation}" Grid.Row="4" Grid.Column="3" IsEnabled="{Binding Data.HasProjectile}"/>
+
+                <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Conjuration" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
+
+                <TextBlock Text="Time (ms)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
+                <wpftk:IntegerUpDown Value="{Binding Data.ConjurationTime}" Grid.Row="7" Grid.Column="1"/>
+
+                <TextBlock Text="Animation" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
+                <ComboBox Grid.Row="8" Grid.Column="1"/>
+
+                <TextBlock Text="Sound" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2"/>
+                <ComboBox Grid.Row="8" Grid.Column="3"/>
+
+                <TextBlock Text="Male Sound" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
+                <ComboBox Grid.Row="9" Grid.Column="1"/>
+
+                <TextBlock Text="Female Sound" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
+                <ComboBox Grid.Row="9" Grid.Column="3"/>
+
+                <TextBlock Text="Head Effect" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
+                <ComboBox Grid.Row="10" Grid.Column="1"/>
+
+                <TextBlock Text="Hand Effect" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
+                <ComboBox Grid.Row="10" Grid.Column="3"/>
+
+                <TextBlock Text="Ground Effect" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="0"/>
+                <ComboBox Grid.Row="11" Grid.Column="1"/>
+
+                <TextBlock Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Casting" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
+
+                <TextBlock Text="Time (ms)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="0"/>
+                <wpftk:IntegerUpDown Value="{Binding Data.CastTime}" Grid.Row="14" Grid.Column="1"/>
+
+                <TextBlock Text="Animation" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="0"/>
+                <ComboBox Grid.Row="15" Grid.Column="1"/>
+
+                <TextBlock Text="Sound" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="2"/>
+                <ComboBox Grid.Row="15" Grid.Column="3"/>
+
+                <TextBlock Text="Head Effect" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="16" Grid.Column="0"/>
+                <ComboBox Grid.Row="16" Grid.Column="1"/>
+
+                <TextBlock Text="Hand Effect" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="16" Grid.Column="2"/>
+                <ComboBox Grid.Row="16" Grid.Column="3"/>
+
+                <TextBlock Text="Ground Effect" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="17" Grid.Column="0"/>
+                <ComboBox Grid.Row="17" Grid.Column="1"/>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Subspells" Width="100" Height="30">
+            <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="22"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Subspells" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+                <TextBlock Text="Parent Spell" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.ParentSpell}" Grid.Row="1" Grid.Column="1"/>
+
+                <TextBlock Text="Subspell 1" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.SubSpell1}" Grid.Row="3" Grid.Column="1"/>
+
+                <TextBlock Text="Subspell 5" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.SubSpell5}" Grid.Row="3" Grid.Column="3"/>
+
+                <TextBlock Text="Subspell 2" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.SubSpell2}" Grid.Row="4" Grid.Column="1"/>
+
+                <TextBlock Text="Subspell 6" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.SubSpell6}" Grid.Row="4" Grid.Column="3"/>
+
+                <TextBlock Text="Subspell 3" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.SubSpell3}" Grid.Row="5" Grid.Column="1"/>
+
+                <TextBlock Text="Subspell 7" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.SubSpell7}" Grid.Row="5" Grid.Column="3"/>
+
+                <TextBlock Text="Subspell 4" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.SubSpell4}" Grid.Row="6" Grid.Column="1"/>
+
+                <TextBlock Text="Subspell 8" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="2"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.SubSpell8}" Grid.Row="6" Grid.Column="3"/>
+            </Grid>
+        </TabItem>
+    </TabControl>
 </local:LanguageAwarePage>

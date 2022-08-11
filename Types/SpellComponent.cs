@@ -11,8 +11,8 @@ namespace Eos.Types
     public enum SpellComponent
     {
         [DisplayName("Verbal")]
-        V,
+        V = 1,
         [DisplayName("Somatic")]
-        S
+        S = 2
     }
 }

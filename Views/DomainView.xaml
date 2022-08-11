@@ -6,15 +6,19 @@
       xmlns:local="clr-namespace:Eos.Views"
       xmlns:vm="clr-namespace:Eos.ViewModels"
       xmlns:uc="clr-namespace:Eos.Usercontrols"
+      xmlns:ext="clr-namespace:Eos.Extensions"
       mc:Ignorable="d" 
       x:Name="page"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="DomainView">
+    <Page.Resources>
+        <ext:NotConverter x:Key="inverter"/>
+    </Page.Resources>
     <Page.DataContext>
         <vm:DomainViewModel/>
     </Page.DataContext>
 
-    <Grid Margin="10">
+    <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
         <Grid.Resources>
             <Style TargetType="{x:Type TabItem}">
                 <Setter Property="RenderTransform">
