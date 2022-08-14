@@ -44,6 +44,8 @@ namespace Eos.Types
             }
         }
 
+        public int? OriginalIndex { get; set; }
+
         public static implicit operator string(TLKStringSet tlkSet) => tlkSet[TLKLanguage.English].Text;
     }
 }

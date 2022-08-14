@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Eos.Nwn.Bif
+namespace Eos.Nwn
 {
-    internal enum ResourceType : UInt16
+    public enum NWNResourceType : ushort
     {
         BMP = 1, TGA = 3, WAV = 4, PLT = 6, INI = 7, TXT = 10,
         MDL = 2002, NSS = 2009, NCS = 2010, ARE = 2012, SET = 2013, IFO = 2014, BIC = 2015, WOK = 2016,

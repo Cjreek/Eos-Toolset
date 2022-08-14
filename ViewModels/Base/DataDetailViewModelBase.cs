@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Eos.ViewModels.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +17,8 @@ namespace Eos.ViewModels
         {
             return Brushes.White;
         }
+
+        public string Header { get { return GetHeader(); } }
+        public Brush EntityColor { get { return GetEntityColor(); } }
     }
 }

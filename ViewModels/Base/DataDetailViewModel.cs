@@ -11,9 +11,6 @@ namespace Eos.ViewModels
     {
         private T data;
 
-        public string Header { get { return GetHeader(); } }
-        public Brush EntityColor { get { return GetEntityColor(); } }
-
         public T Data { get { return data; } }
 
         public override object GetDataObject()

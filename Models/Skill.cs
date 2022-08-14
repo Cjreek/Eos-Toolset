@@ -11,12 +11,12 @@ namespace Eos.Models
     {
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
-        public IntPtr Icon { get; set; }
         public bool CanUseUntrained { get; set; }
         public AbilityType KeyAbility { get; set; }
         public bool UseArmorPenalty { get; set; }
         public bool AllClassesCanUse { get; set; }
-        public AICategory AIBehaviour { get; set; }
+        public AICategory? AIBehaviour { get; set; }
         public bool IsHostile { get; set; }
+        public bool HideFromLevelUp { get; set; } = false;
     }
 }

@@ -11,15 +11,19 @@ namespace Eos.Types
     {
         [DisplayName("Hand")]
         Hand,
+        [DisplayName("Head")]
+        Head,
         [DisplayName("Beholder Eye 1")]
-        BeholderEye1,
+        Monster0,
         [DisplayName("Beholder Eye 2")]
-        BeholderEye2,
+        Monster1,
         [DisplayName("Beholder Eye 3")]
-        BeholderEye3,
+        Monster2,
         [DisplayName("Beholder Eye 4")]
-        BeholderEye4,
+        Monster3,
         [DisplayName("Beholder Eye 5")]
-        BeholderEye5,
+        Monster4,
+        [DisplayName("Root")]
+        Root,
     }
 }

@@ -4,14 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Eos.Usercontrols"
-             xmlns:repo="clr-namespace:Eos.Models.Base"
+             xmlns:repo="clr-namespace:Eos.Repositories"
              xmlns:ext="clr-namespace:Eos.Extensions"
+             xmlns:nwn="clr-namespace:Eos.Nwn"
              mc:Ignorable="d" 
              x:Name="ucSpellComboBox"
              d:DesignHeight="22" d:DesignWidth="800">
     <UserControl.Resources>
         <ext:TLKStringSetConverter x:Key="tlkConverter" AlwaysUseDefaultLanguage="True"/>
         <ext:BoolToVisibilityConverterEx x:Key="bool2Vis" FalseValue="Collapsed"/>
+        <ext:ResRefConverter x:Key="resRefConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -22,13 +24,16 @@
         <ComboBox x:Name="cbSpells" Grid.Column="0" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Spells}}" SelectedValue="{Binding ElementName=ucSpellComboBox, Path=SelectedValue}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock>
-                        <TextBlock.Text>
-                            <MultiBinding Converter="{StaticResource tlkConverter}">
-                                <Binding Path="Name"/>
-                            </MultiBinding>
-                        </TextBlock.Text>
-                    </TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Source="{Binding Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}" Margin="0,0,3,0"/>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource tlkConverter}">
+                                    <Binding Path="Name"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>

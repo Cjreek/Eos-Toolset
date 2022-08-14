@@ -39,7 +39,7 @@ namespace Eos.Nwn.Bif
     {
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         public char[] ResRef;
-        public ResourceType ResourceType;
+        public NWNResourceType ResourceType;
         public UInt32 ResID;
     }
 
@@ -47,13 +47,13 @@ namespace Eos.Nwn.Bif
     {
         public String SourceBif { get; set; } = "";
         public String ResRef { get; set; } = "";
-        public ResourceType ResourceType { get; set; }
+        public NWNResourceType ResourceType { get; set; }
         public UInt32 BifIndex { get; set; }
     }
 
     internal class KeyFile
     {
-        private Dictionary<String, BifResourceKey> _resourceKeys = new Dictionary<String, BifResourceKey>();
+        private Dictionary<(String? resRef, NWNResourceType type), BifResourceKey> _resourceKeys = new Dictionary<(String? resRef, NWNResourceType type), BifResourceKey>();
 
         public void Load(String filename)
         {
@@ -102,16 +102,23 @@ namespace Eos.Nwn.Bif
                 resKey.BifIndex = keyEntry.ResID & 0xFFFFF;
                 resKey.SourceBif = filenames[(int)(keyEntry.ResID >> 20)];
 
-                if (!_resourceKeys.ContainsKey(resKey.ResRef))
-                    _resourceKeys.Add(resKey.ResRef, resKey);
+                if (!_resourceKeys.ContainsKey((resKey.ResRef, resKey.ResourceType)))
+                    _resourceKeys.Add((resKey.ResRef, resKey.ResourceType), resKey);
+            }
+        }
+        public BifResourceKey this[String? resRef, NWNResourceType type]
+        {
+            get
+            {
+                resRef = resRef?.ToLower();
+                return _resourceKeys[(resRef, type)];
             }
         }
 
-        public BifResourceKey this[String index] => _resourceKeys[index.ToLower()];
-
-        public bool Contains(String resRef)
+        public bool Contains(String? resRef, NWNResourceType type)
         {
-            return _resourceKeys.ContainsKey(resRef.ToLower());
+            resRef = resRef?.ToLower();
+            return _resourceKeys.ContainsKey((resRef, type));
         }
     }
 }

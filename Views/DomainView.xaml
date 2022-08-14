@@ -7,87 +7,56 @@
       xmlns:vm="clr-namespace:Eos.ViewModels"
       xmlns:uc="clr-namespace:Eos.Usercontrols"
       xmlns:ext="clr-namespace:Eos.Extensions"
+      xmlns:nwn="clr-namespace:Eos.Nwn"
       mc:Ignorable="d" 
       x:Name="page"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="DomainView">
     <Page.Resources>
         <ext:NotConverter x:Key="inverter"/>
+        <ext:ResRefConverter x:Key="resRefConverter"/>
     </Page.Resources>
     <Page.DataContext>
         <vm:DomainViewModel/>
     </Page.DataContext>
 
-    <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
-        <Grid.Resources>
-            <Style TargetType="{x:Type TabItem}">
-                <Setter Property="RenderTransform">
-                    <Setter.Value>
-                        <TranslateTransform Y="-2"/>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="2,0,0,3"/>
-            </Style>
-            <Style TargetType="{x:Type ComboBox}">
-                <Setter Property="Margin" Value="2,0,0,3"/>
-            </Style>
-            <Style TargetType="{x:Type CheckBox}">
-                <Setter Property="Margin" Value="1,0,0,3"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-            </Style>
-        </Grid.Resources>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="150"/>
-        </Grid.ColumnDefinitions>
-
-        <TextBlock Text="Domain" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
-
-        <Grid Grid.Row="1" Grid.Column="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <!--IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}"-->
+        <Grid Margin="10"> 
+            <Grid.Resources>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <TranslateTransform Y="-2"/>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="Margin" Value="2,0,0,3"/>
+                </Style>
+                <Style TargetType="{x:Type ComboBox}">
+                    <Setter Property="Margin" Value="2,0,0,3"/>
+                </Style>
+                <Style TargetType="{x:Type CheckBox}">
+                    <Setter Property="Margin" Value="1,0,0,3"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+            </Grid.Resources>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="22"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
 
-            <!--Name-->
-            <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-            <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1"/>
+            <TextBlock Text="Domain" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-            <!--Description-->
-            <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="2" Grid.Column="0"/>
-            <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" Grid.Row="2" Grid.Column="1"/>
-
-            <!--Granted Feat-->
-            <TextBlock Text="Granted Feat" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
-            <uc:FeatComboBox SelectedValue="{Binding Data.GrantedFeat}" IsNullable="False" Grid.Row="3" Grid.Column="1"/>
-
-            <!--Granted Feat is active-->
-            <TextBlock Text="Granted Feat is castable" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
-            <CheckBox IsChecked="{Binding Data.FeatIsActive}" Grid.Row="4" Grid.Column="1"/>
-
-            <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Granted Spells" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
-            <Grid Grid.Row="7" Grid.ColumnSpan="2">
+            <Grid Grid.Row="1" Grid.Column="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" MinWidth="300"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -95,47 +64,83 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
+                    <RowDefinition Height="22"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                
+
+                <!--Name-->
+                <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1"/>
+
+                <!--Description-->
+                <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="2" Grid.Column="0"/>
+                <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" Grid.Row="2" Grid.Column="1"/>
+
                 <!--Granted Feat-->
-                <TextBlock Text="Spell (Level 0)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level0Spell}" Grid.Row="0" Grid.Column="1"/>
+                <TextBlock Text="Granted Feat" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+                <uc:FeatComboBox SelectedValue="{Binding Data.GrantedFeat}" IsNullable="False" Grid.Row="3" Grid.Column="1"/>
 
-                <TextBlock Text="Spell (Level 1)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level1Spell}" Grid.Row="1" Grid.Column="1"/>
+                <!--Granted Feat is active-->
+                <TextBlock Text="Granted Feat is castable" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+                <CheckBox IsChecked="{Binding Data.FeatIsActive}" Grid.Row="4" Grid.Column="1"/>
 
-                <TextBlock Text="Spell (Level 2)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level2Spell}" Grid.Row="2" Grid.Column="1"/>
+                <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Granted Spells" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
+                <Grid Grid.Row="7" Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*" MinWidth="150"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*" MinWidth="150"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
 
-                <TextBlock Text="Spell (Level 3)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level3Spell}" Grid.Row="3" Grid.Column="1"/>
-                
-                <TextBlock Text="Spell (Level 4)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level4Spell}" Grid.Row="4" Grid.Column="1"/>
+                    <!--Granted Feat-->
+                    <TextBlock Text="Spell (Level 0)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                    <uc:SpellComboBox SelectedValue="{Binding Data.Level0Spell}" Grid.Row="0" Grid.Column="1"/>
 
-                <TextBlock Text="Spell (Level 5)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level5Spell}" Grid.Row="0" Grid.Column="3"/>
+                    <TextBlock Text="Spell (Level 1)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                    <uc:SpellComboBox SelectedValue="{Binding Data.Level1Spell}" Grid.Row="1" Grid.Column="1"/>
 
-                <TextBlock Text="Spell (Level 6)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level6Spell}" Grid.Row="1" Grid.Column="3"/>
+                    <TextBlock Text="Spell (Level 2)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+                    <uc:SpellComboBox SelectedValue="{Binding Data.Level2Spell}" Grid.Row="2" Grid.Column="1"/>
 
-                <TextBlock Text="Spell (Level 7)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level7Spell}" Grid.Row="2" Grid.Column="3"/>
-                
-                <TextBlock Text="Spell (Level 8)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level8Spell}" Grid.Row="3" Grid.Column="3"/>
+                    <TextBlock Text="Spell (Level 3)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+                    <uc:SpellComboBox SelectedValue="{Binding Data.Level3Spell}" Grid.Row="3" Grid.Column="1"/>
 
-                <TextBlock Text="Spell (Level 9)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level9Spell}" Grid.Row="4" Grid.Column="3"/>
+                    <TextBlock Text="Spell (Level 4)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+                    <uc:SpellComboBox SelectedValue="{Binding Data.Level4Spell}" Grid.Row="4" Grid.Column="1"/>
+
+                    <TextBlock Text="Spell (Level 5)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"/>
+                    <uc:SpellComboBox SelectedValue="{Binding Data.Level5Spell}" Grid.Row="0" Grid.Column="3"/>
+
+                    <TextBlock Text="Spell (Level 6)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2"/>
+                    <uc:SpellComboBox SelectedValue="{Binding Data.Level6Spell}" Grid.Row="1" Grid.Column="3"/>
+
+                    <TextBlock Text="Spell (Level 7)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
+                    <uc:SpellComboBox SelectedValue="{Binding Data.Level7Spell}" Grid.Row="2" Grid.Column="3"/>
+
+                    <TextBlock Text="Spell (Level 8)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+                    <uc:SpellComboBox SelectedValue="{Binding Data.Level8Spell}" Grid.Row="3" Grid.Column="3"/>
+
+                    <TextBlock Text="Spell (Level 9)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
+                    <uc:SpellComboBox SelectedValue="{Binding Data.Level9Spell}" Grid.Row="4" Grid.Column="3"/>
+                </Grid>
             </Grid>
+
+            <!--Icon-->
+            <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">
+                <Border BorderThickness="1" BorderBrush="Black" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <Image Source="{Binding Data.Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}"/>
+                </Border>
+                <Button Content="Load Icon" HorizontalAlignment="Center" Margin="0,5,0,0" Width="80"/>
+            </StackPanel>
         </Grid>
-
-        <!--Icon-->
-        <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">
-            <Border BorderThickness="1" BorderBrush="Black" Width="120" Height="120" HorizontalAlignment="Center" VerticalAlignment="Top">
-
-            </Border>
-            <Button Content="Load Icon" HorizontalAlignment="Center" Margin="0,5,0,0" Width="120"/>
-        </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </local:LanguageAwarePage>

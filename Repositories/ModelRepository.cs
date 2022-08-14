@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 using System.Collections;
 using Eos.Models;
 
-namespace Eos.Models.Base
+namespace Eos.Repositories
 {
     public class ModelRepository<T> : Repository<T> where T : BaseModel, new()
     {
         private Dictionary<Guid, T?> modelLookup = new Dictionary<Guid, T?>();
+        private Dictionary<int, T?> modelIndexLookup = new Dictionary<int, T?>();
         private bool isReadonly;
 
-        public ModelRepository(bool isReadonly)
+        public ModelRepository(bool isReadonly) : base()
         {
             this.isReadonly = isReadonly;
         }
@@ -24,9 +25,20 @@ namespace Eos.Models.Base
             return result;
         }
 
+        public T? GetByIndex(int index)
+        {
+            modelIndexLookup.TryGetValue(index, out T? result);
+            return result;
+        }
+
         public bool Contains(Guid id)
         {
             return modelLookup.ContainsKey(id);
+        }
+
+        public bool Contains(int index)
+        {
+            return modelIndexLookup.ContainsKey(index);
         }
 
         public override void Add(T model)
@@ -40,7 +52,22 @@ namespace Eos.Models.Base
             {
                 base.Add(model);
                 modelLookup.Add(model.ID, model);
+                if (model.Index != null)
+                    modelIndexLookup.Add(model.Index ?? 0, model);
             }
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+            modelLookup.Clear();
+        }
+
+        public void Sort<U>(Func<T?,U> compareFunc)
+        {
+            var list = internalList.OrderBy(compareFunc).ToList();
+            internalList.Clear();
+            foreach (var item in list) internalList.Add(item);
         }
     }
 }

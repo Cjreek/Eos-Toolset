@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Eos.Nwn;
+using Eos.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +12,7 @@ namespace Eos.Models
     {
         public Guid ID { get; set; }
         public bool IsReadonly { get; set; } = false;
+        public int? Index { get; set; }
+        public String? Icon { get; set; }
     }
 }

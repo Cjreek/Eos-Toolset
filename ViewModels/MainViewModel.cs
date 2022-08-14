@@ -10,8 +10,9 @@ using System.Windows.Data;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using Eos.Models.Base;
 using Eos.Types;
+using Eos.Repositories;
+using Eos.ViewModels.Base;
 
 namespace Eos.ViewModels
 {
@@ -65,10 +66,6 @@ namespace Eos.ViewModels
             }
         }
 
-        // Commands
-        public DelegateCommand<object> OpenDetailCommand { get; set; }
-        public DelegateCommand<DataDetailViewModelBase> CloseDetailCommand { get; set; }
-
         private void GenerateDebugData()
         {
             Race testRace = new Race();
@@ -112,30 +109,53 @@ namespace Eos.ViewModels
             MasterRepository.Standard.Poisons.Add(testPoison);
         }
 
+        private void OpenDetail(BaseModel model, bool changeView)
+        {
+            if (!detailViewDict.ContainsKey(model))
+            {
+                var detailView = ViewModelFactory.CreateViewModel(model);
+                detailViewList.Add(detailView);
+                detailViewDict.Add(model, detailView);
+            }
+
+            if (changeView) CurrentView = detailViewDict[model];
+        }
+
+        private void CloseDetail(BaseModel model)
+        {
+            if (detailViewDict.TryGetValue(model, out DataDetailViewModelBase? viewModel))
+            {
+                detailViewList.Remove(viewModel);
+                detailViewDict.Remove(model);
+            }
+        }
+
+        private void MessageHandler(MessageType type, object param)
+        {
+            if (param is BaseModel model)
+            {
+                switch (type)
+                {
+                    case MessageType.OpenDetail:
+                        OpenDetail(model, true);
+                        break;
+                    case MessageType.OpenDetailSilent:
+                        OpenDetail(model, false);
+                        break;
+                    case MessageType.CloseDetail:
+                        CloseDetail(model);
+                        break;
+                }
+            }
+        }
+
         public MainViewModel()
         {
-            GenerateDebugData();
+           // GenerateDebugData();
 
-            OpenDetailCommand = new DelegateCommand<object>(detailModel =>
-            {
-                if (!detailViewDict.ContainsKey(detailModel))
-                {
-                    var detailView = ViewModelFactory.CreateViewModel(detailModel);
-                    detailViewList.Add(detailView);
-                    detailViewDict.Add(detailModel, detailView);
-                }
-
-                CurrentView = detailViewDict[detailModel];
-            });
-
-            CloseDetailCommand = new DelegateCommand<DataDetailViewModelBase>(vm =>
-            {
-                if (detailViewDict.ContainsKey(vm.GetDataObject()))
-                {
-                    detailViewList.Remove(vm);
-                    detailViewDict.Remove(vm.GetDataObject());
-                }
-            });
+            MessageDispatcher.Subscribe(MessageType.OpenDetail, MessageHandler);
+            MessageDispatcher.Subscribe(MessageType.OpenDetailSilent, MessageHandler);
+            MessageDispatcher.Subscribe(MessageType.CloseDetail, MessageHandler);
         }
     }
 }

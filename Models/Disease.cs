@@ -22,7 +22,7 @@ namespace Eos.Models
         public int AbilityDamage3DiceCount { get; set; } = 0;
         public int AbilityDamage3Dice { get; set; } = 0;
         public AbilityType? AbilityDamage3Type { get; set; } = null;
-        public IntPtr IncubationEndScript { get; set; }
-        public IntPtr DailyEffectScript { get; set; }
+        public String? IncubationEndScript { get; set; }
+        public String? DailyEffectScript { get; set; }
     }
 }

@@ -54,7 +54,7 @@ namespace Eos.Types
         TalentEnhancementPotion = 21,
         [DisplayName("Harmful Melee")]
         TalentHarmfulMelee = 22,
-        [DisplayName("Dispel")]
-        TalentDispel = 23
+        //[DisplayName("Dispel")]
+        //TalentDispel = 23
     }
 }

@@ -7,7 +7,20 @@ using System.Threading.Tasks;
 
 namespace Eos.Nwn.Bif
 {
-    internal class BifCollection
+
+    public class RawResourceData
+    {
+        public NWNResourceType Type { get; set; }
+        public Stream RawData { get; set; }
+
+        public RawResourceData(NWNResourceType type, Stream rawData)
+        {
+            Type = type;
+            RawData = rawData;
+        }
+    }
+
+    public class BifCollection
     {
         private static readonly String BASE_KEY_FILE = @"data\nwn_base.key";
 
@@ -26,19 +39,29 @@ namespace Eos.Nwn.Bif
             _keyFile.Load(_nwnBasePath + BASE_KEY_FILE);
         }
 
-        public Stream ReadResource(String resRef)
+        public bool ContainsResource(String? resRef, NWNResourceType type)
         {
-            if (!_keyFile.Contains(resRef))
-                throw new Exception();
+            return _keyFile.Contains(resRef, type);
+        }
 
-            var resKey = _keyFile[resRef];
+        public RawResourceData ReadResource(String? resRef, NWNResourceType type, bool throwExceptionOnMissingResource = false)
+        {
+            if (resRef == null || !_keyFile.Contains(resRef, type))
+            {
+                if (throwExceptionOnMissingResource)
+                    throw new Exception();
+                else
+                    return new RawResourceData(NWNResourceType.INVALID_RESOURCE_TYPE, new MemoryStream());
+            }
+
+            var resKey = _keyFile[resRef, type];
             if (!bifCache.TryGetValue(resKey.SourceBif, out BifFile? bif))
             {
                 bif = new BifFile();
                 bif.Load(_nwnBasePath + resKey.SourceBif);
             }
           
-            return bif.Read((int)resKey.BifIndex);
+            return new RawResourceData(resKey.ResourceType, bif.Read((int)resKey.BifIndex));
         }
 
         public void ClearCache()

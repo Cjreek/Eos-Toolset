@@ -8,6 +8,7 @@
       xmlns:ext="clr-namespace:Eos.Extensions"
       xmlns:types="clr-namespace:Eos.Types"
       xmlns:uc="clr-namespace:Eos.Usercontrols"
+      xmlns:nwn="clr-namespace:Eos.Nwn"
       mc:Ignorable="d" 
       x:Name="page"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -17,75 +18,88 @@
     </Page.DataContext>
     <Page.Resources>
         <ext:NotConverter x:Key="inverter"/>
+        <ext:ResRefConverter x:Key="resRefConverter"/>
     </Page.Resources>
 
-    <Grid IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
-        <Grid.Resources>
-            <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="2,0,0,3"/>
-            </Style>
-            <Style TargetType="{x:Type ComboBox}">
-                <Setter Property="Margin" Value="2,0,0,3"/>
-            </Style>
-        </Grid.Resources>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="150"/>
-        </Grid.ColumnDefinitions>
-        
-        <Grid Grid.Column="0">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
+            <Grid.Resources>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="Margin" Value="2,0,0,3"/>
+                </Style>
+                <Style TargetType="{x:Type ComboBox}">
+                    <Setter Property="Margin" Value="2,0,0,3"/>
+                </Style>
+            </Grid.Resources>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <TextBlock Text="Skill" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-            <!--Name-->
-            <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-            <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1"/>
+            <Grid Grid.Row="1" Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*" MinWidth="300"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto" MinHeight="22"/>
+                    <RowDefinition Height="auto" MinHeight="22"/>
+                    <RowDefinition Height="auto" MinHeight="22"/>
+                    <RowDefinition Height="auto" MinHeight="22"/>
+                    <RowDefinition Height="auto" MinHeight="22"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <!--Description-->
-            <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="2" Grid.Column="0"/>
-            <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" Grid.Row="2" Grid.Column="1"/>
+                <!--Name-->
+                <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1"/>
 
-            <!--Ability-->
-            <TextBlock Text="Key Ability" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="3" Grid.Column="0"/>
-            <ComboBox ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.KeyAbility}" SelectedValuePath="Value" DisplayMemberPath="DisplayName" Grid.Row="3" Grid.Column="1"/>
+                <!--Description-->
+                <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="2" Grid.Column="0"/>
+                <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" Grid.Row="2" Grid.Column="1"/>
 
-            <!--Untrained Usage-->
-            <TextBlock Text="Untrained Usage" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
-            <CheckBox IsChecked="{Binding Data.CanUseUntrained}" Grid.Row="4" Grid.Column="1"/>
+                <!--Ability-->
+                <TextBlock Text="Key Ability" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="3" Grid.Column="0"/>
+                <ComboBox ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.KeyAbility}" SelectedValuePath="Value" DisplayMemberPath="DisplayName" Grid.Row="3" Grid.Column="1"/>
 
-            <!--Armor Penalty-->
-            <TextBlock Text="Armor Penalty" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
-            <CheckBox IsChecked="{Binding Data.UseArmorPenalty}" Grid.Row="5" Grid.Column="1"/>
+                <!--Untrained Usage-->
+                <TextBlock Text="Untrained Usage" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+                <CheckBox IsChecked="{Binding Data.CanUseUntrained}" Grid.Row="4" Grid.Column="1"/>
 
-            <!--Usable by every class-->
-            <TextBlock Text="Usable by every Class" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
-            <CheckBox IsChecked="{Binding Data.AllClassesCanUse}" Grid.Row="6" Grid.Column="1"/>
+                <!--Armor Penalty-->
+                <TextBlock Text="Armor Penalty" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+                <CheckBox IsChecked="{Binding Data.UseArmorPenalty}" Grid.Row="5" Grid.Column="1"/>
 
-            <!--Hostile?-->
-            <TextBlock Text="Is Hostile" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
-            <CheckBox IsChecked="{Binding Data.IsHostile}" Grid.Row="7" Grid.Column="1"/>
+                <!--Usable by every class-->
+                <TextBlock Text="Usable by every Class" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
+                <CheckBox IsChecked="{Binding Data.AllClassesCanUse}" Grid.Row="6" Grid.Column="1"/>
+
+                <!--Hostile?-->
+                <TextBlock Text="Is Hostile" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
+                <CheckBox IsChecked="{Binding Data.IsHostile}" Grid.Row="7" Grid.Column="1"/>
+
+                <!--Hide from Level up?-->
+                <TextBlock Text="Hide from LevelUp" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
+                <CheckBox IsChecked="{Binding Data.HideFromLevelUp}" Grid.Row="8" Grid.Column="1"/>
+            </Grid>
+
+            <!--Icon-->
+            <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">
+                <Border BorderThickness="1" BorderBrush="Black" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <Image Source="{Binding Data.Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}"/>
+                </Border>
+                <Button Content="Load Icon" HorizontalAlignment="Center" Margin="0,5,0,0" Width="80"/>
+            </StackPanel>
         </Grid>
-
-        <!--Icon-->
-        <StackPanel Grid.Row="0" Grid.Column="1" Margin="5,0,0,0">
-            <Border BorderThickness="1" BorderBrush="Black" Width="120" Height="120" HorizontalAlignment="Center" VerticalAlignment="Top">
-
-            </Border>
-            <Button Content="Load Icon" HorizontalAlignment="Center" Margin="0,5,0,0" Width="120"/>
-        </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </local:LanguageAwarePage>

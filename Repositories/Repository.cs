@@ -9,13 +9,19 @@ using System.Collections.Specialized;
 using System.Collections;
 using System.Runtime.CompilerServices;
 
-namespace Eos.Models.Base
+namespace Eos.Repositories
 {
     public class Repository<T> : INotifyCollectionChanged, INotifyPropertyChanged, IReadOnlyCollection<T?>, IReadOnlyList<T?>, IEnumerable<T?> where T : new()
     {
-        private ObservableCollection<T?> internalList = new ObservableCollection<T?>();
+        protected ObservableCollection<T?> internalList = new ObservableCollection<T?>();
+        private bool fireChangedEvent = true;
 
-        protected void OnPropertyChanged([CallerMemberName] string? name = null)
+        public Repository()
+        {
+            CollectionChanged += InternalListChanged;
+        }
+
+        protected void RaisePropertyChanged(string? name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
@@ -32,6 +38,17 @@ namespace Eos.Models.Base
             }
         }
 
+        private void InternalListChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (fireChangedEvent)
+                Changed();
+        }
+
+        protected virtual void Changed()
+        {
+
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public IEnumerator<T?> GetEnumerator()
@@ -42,6 +59,17 @@ namespace Eos.Models.Base
         IEnumerator IEnumerable.GetEnumerator()
         {
             return internalList.GetEnumerator();
+        }
+
+        public void BeginUpdate()
+        {
+            fireChangedEvent = false;
+        }
+
+        public void EndUpdate()
+        {
+            fireChangedEvent = true;
+            Changed();
         }
 
         public int Count => internalList.Count;
@@ -57,6 +85,9 @@ namespace Eos.Models.Base
             internalList.Add(model);
         }
 
-        
+        public virtual void Clear()
+        {
+            internalList.Clear();
+        }
     }
 }

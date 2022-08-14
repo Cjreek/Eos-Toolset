@@ -13,7 +13,7 @@
         <local:TLKConverter x:Key="tlkConverter"/>
     </UserControl.Resources>
     <Grid>
-        <TextBox Grid.Column="0" AcceptsReturn="{Binding ElementName=ucTLKTextbox, Path=AcceptsReturn}"
+        <TextBox Grid.Column="0" AcceptsReturn="{Binding ElementName=ucTLKTextbox, Path=AcceptsReturn}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
                  Text="{Binding ElementName=ucTLKTextbox, Path=ChangedTrigger, Converter={StaticResource tlkConverter}, ConverterParameter={x:Reference selfParam}}"/>
         <FrameworkElement x:Name="selfParam" Visibility="Collapsed" Tag="{Binding ElementName=ucTLKTextbox}"/>
     </Grid>

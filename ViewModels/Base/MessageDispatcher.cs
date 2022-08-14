@@ -1,0 +1,44 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Eos.ViewModels.Base
+{
+    public enum MessageType
+    {
+        OpenDetail,
+        OpenDetailSilent,
+        CloseDetail
+    }
+
+    public delegate void MessageHandler(MessageType type, object param);
+
+    public static class MessageDispatcher
+    {
+        private static Dictionary<MessageType, List<MessageHandler>> messageSubscriptions = new Dictionary<MessageType, List<MessageHandler>>();
+
+        static MessageDispatcher()
+        {
+            foreach (var type in Enum.GetValues<MessageType>())
+                messageSubscriptions[type] = new List<MessageHandler>();
+        }
+
+        public static void Subscribe(MessageType messageType, MessageHandler handler)
+        {
+            messageSubscriptions[messageType].Add(handler);
+        }
+
+        public static void Unsubscribe(MessageType messageType, MessageHandler handler)
+        {
+            messageSubscriptions[messageType].Remove(handler);
+        }
+
+        public static void Send(MessageType messageType, object message)
+        {
+            foreach (var handler in messageSubscriptions[messageType])
+                handler(messageType, message);
+        }
+    }
+}

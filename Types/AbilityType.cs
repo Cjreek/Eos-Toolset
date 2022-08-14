@@ -10,16 +10,16 @@ namespace Eos.Types
     public enum AbilityType
     {
         [DisplayName("Strength")]
-        STR,
+        STR = 0,
         [DisplayName("Dexterity")]
-        DEX,
+        DEX = 1,
         [DisplayName("Intelligence")]
-        INT,
+        INT = 3,
         [DisplayName("Charisma")]
-        CHA,
+        CHA = 5,
         [DisplayName("Wisdom")]
-        WIS,
+        WIS = 4,
         [DisplayName("Constitution")]
-        CON
+        CON = 2,
     }
 }

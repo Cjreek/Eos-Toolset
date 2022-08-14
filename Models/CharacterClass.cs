@@ -13,7 +13,6 @@ namespace Eos.Models
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet NamePlural { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
-        public IntPtr Icon { get; set; }
         public int HitDie { get; set; } = 8;
         public AttackBonusTable? AttackBonusTable { get; set; }
         public FeatsTable? Feats { get; set; }
@@ -53,5 +52,6 @@ namespace Eos.Models
         public int MinCastingLevel { get; set; }
         public int MinAssociateLevel { get; set; }
         public bool CanCastSpontaneously { get; set; } = false;
+        public bool SkipSpellSelection { get; set; } = false;
     }
 }

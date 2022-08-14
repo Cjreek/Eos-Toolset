@@ -20,82 +20,84 @@
         <vm:PoisonViewModel/>
     </Page.DataContext>
 
-    <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
-        <Grid.Resources>
-            <Style TargetType="{x:Type TabItem}">
-                <Setter Property="RenderTransform">
-                    <Setter.Value>
-                        <TranslateTransform Y="-2"/>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="2,0,0,3"/>
-            </Style>
-            <Style TargetType="{x:Type wpftk:IntegerUpDown}">
-                <Setter Property="Margin" Value="2,0,0,3"/>
-            </Style>
-            <Style TargetType="{x:Type ComboBox}">
-                <Setter Property="Margin" Value="2,0,0,3"/>
-            </Style>
-            <Style TargetType="{x:Type CheckBox}">
-                <Setter Property="Margin" Value="1,0,0,3"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-            </Style>
-        </Grid.Resources>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
+            <Grid.Resources>
+                <Style TargetType="{x:Type TabItem}">
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <TranslateTransform Y="-2"/>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="Margin" Value="2,0,0,3"/>
+                </Style>
+                <Style TargetType="{x:Type wpftk:IntegerUpDown}">
+                    <Setter Property="Margin" Value="2,0,0,3"/>
+                </Style>
+                <Style TargetType="{x:Type ComboBox}">
+                    <Setter Property="Margin" Value="2,0,0,3"/>
+                </Style>
+                <Style TargetType="{x:Type CheckBox}">
+                    <Setter Property="Margin" Value="1,0,0,3"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                </Style>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*" MinWidth="150"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*" MinWidth="150"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
 
-        <TextBlock Text="Poison" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+            <TextBlock Text="Poison" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-        <!--Name-->
-        <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-        <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+            <!--Name-->
+            <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
 
-        <TextBlock Text="Save DC" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
-        <wpftk:IntegerUpDown Text="{Binding Data.SaveDC}" Grid.Row="2" Grid.Column="1"/>
+            <TextBlock Text="Save DC" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+            <wpftk:IntegerUpDown Text="{Binding Data.SaveDC}" Grid.Row="2" Grid.Column="1"/>
 
-        <TextBlock Text="Handle DC" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
-        <wpftk:IntegerUpDown Text="{Binding Data.HandleDC}" Grid.Row="2" Grid.Column="3"/>
+            <TextBlock Text="Handle DC" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
+            <wpftk:IntegerUpDown Text="{Binding Data.HandleDC}" Grid.Row="2" Grid.Column="3"/>
 
-        <TextBlock Text="Initial Ability Damage" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
-        <DockPanel Grid.Row="3" Grid.Column="1">
-            <wpftk:IntegerUpDown Text="{Binding Data.InitialAbilityDamageDiceCount}"/>
-            <TextBlock Text="d" Margin="2,0,0,0" VerticalAlignment="Center"/>
-            <wpftk:IntegerUpDown Text="{Binding Data.InitialAbilityDamageDice}"/>
-            <ComboBox ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.InitialAbilityDamageType}" SelectedValuePath="Value" DisplayMemberPath="DisplayName"/>
-        </DockPanel>
+            <TextBlock Text="Initial Ability Damage" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+            <DockPanel Grid.Row="3" Grid.Column="1">
+                <wpftk:IntegerUpDown Text="{Binding Data.InitialAbilityDamageDiceCount}"/>
+                <TextBlock Text="d" Margin="2,0,0,0" VerticalAlignment="Center"/>
+                <wpftk:IntegerUpDown Text="{Binding Data.InitialAbilityDamageDice}"/>
+                <ComboBox ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.InitialAbilityDamageType}" SelectedValuePath="Value" DisplayMemberPath="DisplayName"/>
+            </DockPanel>
 
-        <TextBlock Text="Initial Effect Script" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
-        <ComboBox Grid.Row="3" Grid.Column="3"/>
+            <TextBlock Text="Initial Effect Script" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+            <uc:ScriptResourceTextbox ResRef="{Binding Data.InitialEffectScript}" Grid.Row="3" Grid.Column="3"/>
 
-        <TextBlock Text="Secondary Ability Damage" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
-        <DockPanel Grid.Row="4" Grid.Column="1">
-            <wpftk:IntegerUpDown Text="{Binding Data.SecondaryAbilityDamageDiceCount}"/>
-            <TextBlock Text="d" Margin="2,0,0,0" VerticalAlignment="Center"/>
-            <wpftk:IntegerUpDown Text="{Binding Data.SecondaryAbilityDamageDice}"/>
-            <ComboBox ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.SecondaryAbilityDamageType}" SelectedValuePath="Value" DisplayMemberPath="DisplayName"/>
-        </DockPanel>
+            <TextBlock Text="Secondary Ability Damage" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+            <DockPanel Grid.Row="4" Grid.Column="1">
+                <wpftk:IntegerUpDown Text="{Binding Data.SecondaryAbilityDamageDiceCount}"/>
+                <TextBlock Text="d" Margin="2,0,0,0" VerticalAlignment="Center"/>
+                <wpftk:IntegerUpDown Text="{Binding Data.SecondaryAbilityDamageDice}"/>
+                <ComboBox ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.SecondaryAbilityDamageType}" SelectedValuePath="Value" DisplayMemberPath="DisplayName"/>
+            </DockPanel>
 
-        <TextBlock Text="Secondary Effect Script" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
-        <ComboBox Grid.Row="4" Grid.Column="3"/>
+            <TextBlock Text="Secondary Effect Script" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
+            <uc:ScriptResourceTextbox ResRef="{Binding Data.SecondaryEffectScript}" Grid.Row="4" Grid.Column="3"/>
 
-        <TextBlock Text="Impact VFX" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
-        <ComboBox Grid.Row="5" Grid.Column="1"/>
-    </Grid>
+            <TextBlock Text="Impact VFX" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+            <ComboBox Grid.Row="5" Grid.Column="1"/>
+        </Grid>
+    </ScrollViewer>
 </local:LanguageAwarePage>

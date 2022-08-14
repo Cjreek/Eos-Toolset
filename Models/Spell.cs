@@ -11,33 +11,33 @@ namespace Eos.Models
     {
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
-        public IntPtr Icon { get; set; }
+        public TLKStringSet AlternativeCastMessage { get; set; } = new TLKStringSet();
         public SpellSchool School { get; set; } = SpellSchool.G;
         public SpellRange Range { get; set; } = SpellRange.P;
         public SpellComponent Components { get; set; } = SpellComponent.V | SpellComponent.S;
         public MetaMagicType AvailableMetaMagic { get; set; } = (MetaMagicType)0;
         public SpellTarget TargetTypes { get; set; } = SpellTarget.Self;
-        public IntPtr ImpactScript { get; set; }
+        public String? ImpactScript { get; set; }
         public int ConjurationTime { get; set; } = 1500;
-        public SpellConjureAnimation ConjuringAnimation { get; set; } = SpellConjureAnimation.Hand;
-        public IntPtr ConjurationHeadEffect { get; set; }
-        public IntPtr ConjurationHandEffect { get; set; }
-        public IntPtr ConjurationGroundEffect { get; set; }
-        public IntPtr ConjurationSound { get; set; }
-        public IntPtr ConjurationMaleSound { get; set; }
-        public IntPtr ConjurationFemaleSound { get; set; }
-        public SpellCastAnimation CastingAnimation { get; set; } = SpellCastAnimation.Out;
+        public SpellConjureAnimation? ConjuringAnimation { get; set; } = SpellConjureAnimation.Hand;
+        public String? ConjurationHeadEffect { get; set; }
+        public String? ConjurationHandEffect { get; set; }
+        public String? ConjurationGroundEffect { get; set; }
+        public String? ConjurationSound { get; set; }
+        public String? ConjurationMaleSound { get; set; }
+        public String? ConjurationFemaleSound { get; set; }
+        public SpellCastAnimation? CastingAnimation { get; set; } = SpellCastAnimation.Out;
         public int CastTime { get; set; } = 1000;
-        public IntPtr CastingHeadEffect { get; set; }
-        public IntPtr CastingHandEffect { get; set; }
-        public IntPtr CastingGroundEffect { get; set; }
-        public IntPtr CastingSound { get; set; }
+        public String? CastingHeadEffect { get; set; }
+        public String? CastingHandEffect { get; set; }
+        public String? CastingGroundEffect { get; set; }
+        public String? CastingSound { get; set; }
         public bool HasProjectile { get; set; } = false;
-        public IntPtr ProjectileModel { get; set; }
-        public ProjectileType ProjectileType { get; set; } = ProjectileType.Homing;
-        public ProjectileSource ProjectileSpawnPoint { get; set; } = ProjectileSource.Hand;
-        public IntPtr ProjectileSound { get; set; }
-        public ProjectileOrientation ProjectileOrientation { get; set; } = ProjectileOrientation.Path;
+        public String? ProjectileModel { get; set; }
+        public ProjectileType? ProjectileType { get; set; } = Types.ProjectileType.Homing;
+        public ProjectileSource? ProjectileSpawnPoint { get; set; } = ProjectileSource.Hand;
+        public String? ProjectileSound { get; set; }
+        public ProjectileOrientation? ProjectileOrientation { get; set; } = Types.ProjectileOrientation.Path;
         public Spell? SubSpell1 { get; set; }
         public Spell? SubSpell2 { get; set; }
         public Spell? SubSpell3 { get; set; }
@@ -49,8 +49,15 @@ namespace Eos.Models
         public AICategory? Category { get; set; }
         public Spell? ParentSpell { get; set; }
         public SpellType Type { get; set; } = SpellType.Spell;
-        //public Feat? FeatReference { get; set; } // Deprecated? Determine dynamically
+        public bool UseConcentration { get; set; } = true;
+        public bool IsCastSpontaneously { get; set; } = false;
+        public bool IsHostile { get; set; }
         public Spell? CounterSpell1 { get; set; }
         public Spell? CounterSpell2 { get; set; }
+
+        public TargetShape? TargetShape { get; set; }
+        public int? TargetSizeX { get; set; }
+        public int? TargetSizeY { get; set; }
+        public int? TargetingFlags { get; set; }
     }
 }

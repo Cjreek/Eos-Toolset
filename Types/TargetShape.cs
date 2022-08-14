@@ -6,14 +6,11 @@ using System.Threading.Tasks;
 
 namespace Eos.Types
 {
-    public enum SpellCastAnimation
+    public enum TargetShape
     {
-        Area,
-        Attack,
-        Out,
-        Self,
-        Touch,
-        Up,
-        Creature
+        Sphere = 1,
+        Rectangle = 2,
+        Cone = 3,
+        HSphere = 4,
     }
 }

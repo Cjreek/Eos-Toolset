@@ -11,7 +11,6 @@ namespace Eos.Models
     {
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
-        public IntPtr Icon { get; set; }
         public int? MinAttackBonus { get; set; }
         public int? MinStr { get; set; }
         public int? MinDex { get; set; }
@@ -23,7 +22,7 @@ namespace Eos.Models
         public Feat? RequiredFeat1 { get; set; }
         public Feat? RequiredFeat2 { get; set; }
         public bool UseableByAllClasses { get; set; } = true;
-        public AICategory Category { get; set; }
+        public AICategory? Category { get; set; }
         public Spell? OnUseEffect { get; set; }
         public Feat? SuccessorFeat { get; set; }
         public double? CRModifier { get; set; } = 1;

@@ -11,7 +11,6 @@ namespace Eos.Models
     {
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
-        public IntPtr Icon { get; set; }
         public Spell? Level0Spell { get; set; }
         public Spell? Level1Spell { get; set; }
         public Spell? Level2Spell { get; set; }

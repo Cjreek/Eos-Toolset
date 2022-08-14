@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Eos.Import;
+using Eos.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,15 @@ namespace Eos
         public MainWindow()
         {
             InitializeComponent();
+            MasterRepository.Initialize(@"D:\Steam\steamapps\common\Neverwinter Nights");
+
+            var import = new GameDataImport();
+            import.Import(@"D:\Steam\steamapps\common\Neverwinter Nights");
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            MasterRepository.Cleanup();
         }
 
         private void SetFrameContentDataContext(Frame frame)

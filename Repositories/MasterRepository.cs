@@ -1,12 +1,17 @@
 ﻿using Eos.Models;
+using Eos.Nwn.Bif;
+using Eos.Nwn.Tlk;
+using Eos.Nwn.TwoDimensionalArray;
+using Eos.Types;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Eos.Models.Base
+namespace Eos.Repositories
 {
     internal class VirtualList<T> : IReadOnlyList<T?>
     {
@@ -14,7 +19,7 @@ namespace Eos.Models.Base
 
         public VirtualList(params IReadOnlyList<T?>[] list)
         {
-            this.lists = list;
+            lists = list;
         }
 
         public T? this[int index]
@@ -22,7 +27,7 @@ namespace Eos.Models.Base
             get
             {
                 int tmpIndex = index;
-                for (int i=0; i < lists.Length; i++)
+                for (int i = 0; i < lists.Length; i++)
                 {
                     if (tmpIndex >= lists[i].Count)
                         tmpIndex -= lists[i].Count;
@@ -52,8 +57,8 @@ namespace Eos.Models.Base
         private readonly ModelRepository<Race> raceRepository;
         private readonly ModelRepository<CharacterClass> classRepository;
         private readonly ModelRepository<Domain> domainRepository;
-        private readonly ModelRepository<Spell> spellRepository;
-        private readonly ModelRepository<Feat> featRepository;
+        private readonly SpellRepository spellRepository;
+        private readonly FeatRepository featRepository;
         private readonly ModelRepository<Skill> skillRepository;
         private readonly ModelRepository<Disease> diseaseRepository;
         private readonly ModelRepository<Poison> poisonRepository;
@@ -63,8 +68,8 @@ namespace Eos.Models.Base
             raceRepository = new ModelRepository<Race>(isReadonly);
             classRepository = new ModelRepository<CharacterClass>(isReadonly);
             domainRepository = new ModelRepository<Domain>(isReadonly);
-            spellRepository = new ModelRepository<Spell>(isReadonly);
-            featRepository = new ModelRepository<Feat>(isReadonly);
+            spellRepository = new SpellRepository(isReadonly);
+            featRepository = new FeatRepository(isReadonly);
             skillRepository = new ModelRepository<Skill>(isReadonly);
             diseaseRepository = new ModelRepository<Disease>(isReadonly);
             poisonRepository = new ModelRepository<Poison>(isReadonly);
@@ -74,8 +79,8 @@ namespace Eos.Models.Base
         public ModelRepository<Race> Races { get { return raceRepository; } }
         public ModelRepository<CharacterClass> Classes { get { return classRepository; } }
         public ModelRepository<Domain> Domains { get { return domainRepository; } }
-        public ModelRepository<Spell> Spells { get { return spellRepository; } }
-        public ModelRepository<Feat> Feats { get { return featRepository; } }
+        public SpellRepository Spells { get { return spellRepository; } }
+        public FeatRepository Feats { get { return featRepository; } }
         public ModelRepository<Skill> Skills { get { return skillRepository; } }
         public ModelRepository<Disease> Diseases { get { return diseaseRepository; } }
         public ModelRepository<Poison> Poisons { get { return poisonRepository; } }
@@ -83,6 +88,8 @@ namespace Eos.Models.Base
 
     internal static class MasterRepository
     {
+        private static readonly ResourceRepository resources;
+
         private static readonly MasterRepositoryCategory standardCategory;
         private static readonly MasterRepositoryCategory customCategory;
 
@@ -97,6 +104,8 @@ namespace Eos.Models.Base
 
         static MasterRepository()
         {
+            resources = new ResourceRepository();
+
             standardCategory = new MasterRepositoryCategory(true);
             customCategory = new MasterRepositoryCategory(false);
 
@@ -109,6 +118,18 @@ namespace Eos.Models.Base
             diseaseVirtualList = new VirtualList<Disease>(standardCategory.Diseases, customCategory.Diseases);
             poisonVirtualList = new VirtualList<Poison>(standardCategory.Poisons, customCategory.Poisons);
         }
+
+        public static void Initialize(String nwnBasePath)
+        {
+            resources.Initialize(nwnBasePath);
+        }
+
+        public static void Cleanup()
+        {
+            resources.Cleanup();
+        }
+
+        public static ResourceRepository Resources { get { return resources; } }
 
         public static MasterRepositoryCategory Standard { get { return standardCategory; } }
         public static MasterRepositoryCategory Custom { get { return customCategory; } }
