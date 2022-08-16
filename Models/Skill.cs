@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace Eos.Models
@@ -18,5 +19,49 @@ namespace Eos.Models
         public AICategory? AIBehaviour { get; set; }
         public bool IsHostile { get; set; }
         public bool HideFromLevelUp { get; set; } = false;
+
+        protected override String GetLabel()
+        {
+            return Name;
+        }
+
+        public override void ResolveReferences()
+        {
+        }
+
+        public override void FromJson(JsonObject json)
+        {
+            this.ID = ParseGuid(json["ID"]?.GetValue<String>());
+            this.Index = json["Index"]?.GetValue<int?>();
+            this.Name.FromJson(json["Name"]?.AsObject());
+            this.Description.FromJson(json["Description"]?.AsObject());
+            this.Icon = json["Icon"]?.GetValue<String>();
+            this.CanUseUntrained = json["CanUseUntrained"]?.GetValue<bool>() ?? true;
+            this.KeyAbility = JsonToEnum<AbilityType>(json["KeyAbility"]) ?? AbilityType.DEX;
+            this.UseArmorPenalty = json["UseArmorPenalty"]?.GetValue<bool>() ?? false;
+            this.AllClassesCanUse = json["AllClassesCanUse"]?.GetValue<bool>() ?? true;
+            this.AIBehaviour = JsonToEnum<AICategory>(json["AIBehaviour"]);
+            this.IsHostile = json["IsHostile"]?.GetValue<bool>() ?? false;
+            this.HideFromLevelUp = json["HideFromLevelUp"]?.GetValue<bool>() ?? false;
+        }
+
+        public override JsonObject ToJson()
+        {
+            var skillJson = new JsonObject();
+            skillJson.Add("ID", this.ID.ToString());
+            skillJson.Add("Index", this.Index);
+            skillJson.Add("Name", this.Name.ToJson());
+            skillJson.Add("Description", this.Description.ToJson());
+            skillJson.Add("Icon", this.Icon);
+            skillJson.Add("CanUseUntrained", this.CanUseUntrained);
+            skillJson.Add("KeyAbility", EnumToJson(this.KeyAbility));
+            skillJson.Add("UseArmorPenalty", this.UseArmorPenalty);
+            skillJson.Add("AllClassesCanUse", this.AllClassesCanUse);
+            skillJson.Add("AIBehaviour", EnumToJson(this.AIBehaviour));
+            skillJson.Add("IsHostile", this.IsHostile);
+            skillJson.Add("HideFromLevelUp", this.HideFromLevelUp);
+
+            return skillJson;
+        }
     }
 }

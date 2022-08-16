@@ -13,13 +13,13 @@ using System.Threading.Tasks;
 
 namespace Eos.Repositories
 {
-    internal class VirtualList<T> : IReadOnlyList<T?>
+    public class VirtualModelRepository<T> : IReadOnlyList<T?> where T : BaseModel, new()
     {
-        private readonly IReadOnlyList<T?>[] lists;
+        private readonly ModelRepository<T>[] repositories;
 
-        public VirtualList(params IReadOnlyList<T?>[] list)
+        public VirtualModelRepository(params ModelRepository<T>[] repositories)
         {
-            lists = list;
+            this.repositories = repositories;
         }
 
         public T? this[int index]
@@ -27,28 +27,76 @@ namespace Eos.Repositories
             get
             {
                 int tmpIndex = index;
-                for (int i = 0; i < lists.Length; i++)
+                for (int i = 0; i < repositories.Length; i++)
                 {
-                    if (tmpIndex >= lists[i].Count)
-                        tmpIndex -= lists[i].Count;
+                    if (tmpIndex >= repositories[i].Count)
+                        tmpIndex -= repositories[i].Count;
                     else
-                        return lists[i][tmpIndex];
+                        return repositories[i][tmpIndex];
                 }
 
                 throw new IndexOutOfRangeException();
             }
         }
 
-        int IReadOnlyCollection<T?>.Count => lists.Sum(list => list.Count);
+        int IReadOnlyCollection<T?>.Count => repositories.Sum(list => list.Count);
 
         public IEnumerator<T?> GetEnumerator()
         {
-            return lists.SelectMany(list => list).GetEnumerator();
+            return repositories.SelectMany(list => list).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return lists.SelectMany(list => list).GetEnumerator();
+            return repositories.SelectMany(list => list).GetEnumerator();
+        }
+
+        public T? GetByID(Guid id)
+        {
+            T? result = null;
+            foreach (var repo in repositories)
+            {
+                result = repo.GetByID(id);
+                if (result != null) break;
+            }
+
+            return result;
+        }
+
+        public T? GetByIndex(int index)
+        {
+            T? result = null;
+            foreach (var repo in repositories)
+            {
+                result = repo.GetByIndex(index);
+                if (result != null) break;
+            }
+
+            return result;
+        }
+
+        public bool Contains(Guid id)
+        {
+            var result = false;
+            foreach (var repo in repositories)
+            {
+                result = repo.Contains(id);
+                if (result) break;
+            }
+
+            return result;
+        }
+
+        public bool Contains(int index)
+        {
+            var result = false;
+            foreach (var repo in repositories)
+            {
+                result = repo.Contains(index);
+                if (result) break;
+            }
+
+            return result;
         }
     }
 
@@ -84,6 +132,18 @@ namespace Eos.Repositories
         public ModelRepository<Skill> Skills { get { return skillRepository; } }
         public ModelRepository<Disease> Diseases { get { return diseaseRepository; } }
         public ModelRepository<Poison> Poisons { get { return poisonRepository; } }
+
+        public void Clear()
+        {
+            Races.Clear();
+            Classes.Clear();
+            Domains.Clear();
+            Spells.Clear();
+            Feats.Clear();
+            Skills.Clear();
+            Diseases.Clear();
+            Poisons.Clear();
+        }
     }
 
     internal static class MasterRepository
@@ -93,14 +153,14 @@ namespace Eos.Repositories
         private static readonly MasterRepositoryCategory standardCategory;
         private static readonly MasterRepositoryCategory customCategory;
 
-        private static readonly VirtualList<Race> raceVirtualList;
-        private static readonly VirtualList<CharacterClass> classVirtualList;
-        private static readonly VirtualList<Domain> domainVirtualList;
-        private static readonly VirtualList<Spell> spellVirtualList;
-        private static readonly VirtualList<Feat> featVirtualList;
-        private static readonly VirtualList<Skill> skillVirtualList;
-        private static readonly VirtualList<Disease> diseaseVirtualList;
-        private static readonly VirtualList<Poison> poisonVirtualList;
+        private static readonly VirtualModelRepository<Race> raceVirtualRepository;
+        private static readonly VirtualModelRepository<CharacterClass> classVirtualRepository;
+        private static readonly VirtualModelRepository<Domain> domainVirtualRepository;
+        private static readonly VirtualModelRepository<Spell> spellVirtualRepository;
+        private static readonly VirtualModelRepository<Feat> featVirtualRepository;
+        private static readonly VirtualModelRepository<Skill> skillVirtualRepository;
+        private static readonly VirtualModelRepository<Disease> diseaseVirtualRepository;
+        private static readonly VirtualModelRepository<Poison> poisonVirtualRepository;
 
         static MasterRepository()
         {
@@ -109,14 +169,14 @@ namespace Eos.Repositories
             standardCategory = new MasterRepositoryCategory(true);
             customCategory = new MasterRepositoryCategory(false);
 
-            raceVirtualList = new VirtualList<Race>(standardCategory.Races, customCategory.Races);
-            classVirtualList = new VirtualList<CharacterClass>(standardCategory.Classes, customCategory.Classes);
-            domainVirtualList = new VirtualList<Domain>(standardCategory.Domains, customCategory.Domains);
-            spellVirtualList = new VirtualList<Spell>(standardCategory.Spells, customCategory.Spells);
-            featVirtualList = new VirtualList<Feat>(standardCategory.Feats, customCategory.Feats);
-            skillVirtualList = new VirtualList<Skill>(standardCategory.Skills, customCategory.Skills);
-            diseaseVirtualList = new VirtualList<Disease>(standardCategory.Diseases, customCategory.Diseases);
-            poisonVirtualList = new VirtualList<Poison>(standardCategory.Poisons, customCategory.Poisons);
+            raceVirtualRepository = new VirtualModelRepository<Race>(standardCategory.Races, customCategory.Races);
+            classVirtualRepository = new VirtualModelRepository<CharacterClass>(standardCategory.Classes, customCategory.Classes);
+            domainVirtualRepository = new VirtualModelRepository<Domain>(standardCategory.Domains, customCategory.Domains);
+            spellVirtualRepository = new VirtualModelRepository<Spell>(standardCategory.Spells, customCategory.Spells);
+            featVirtualRepository = new VirtualModelRepository<Feat>(standardCategory.Feats, customCategory.Feats);
+            skillVirtualRepository = new VirtualModelRepository<Skill>(standardCategory.Skills, customCategory.Skills);
+            diseaseVirtualRepository = new VirtualModelRepository<Disease>(standardCategory.Diseases, customCategory.Diseases);
+            poisonVirtualRepository = new VirtualModelRepository<Poison>(standardCategory.Poisons, customCategory.Poisons);
         }
 
         public static void Initialize(String nwnBasePath)
@@ -134,13 +194,40 @@ namespace Eos.Repositories
         public static MasterRepositoryCategory Standard { get { return standardCategory; } }
         public static MasterRepositoryCategory Custom { get { return customCategory; } }
 
-        public static VirtualList<Race> Races { get { return raceVirtualList; } }
-        public static VirtualList<CharacterClass> Classes { get { return classVirtualList; } }
-        public static VirtualList<Domain> Domains { get { return domainVirtualList; } }
-        public static VirtualList<Spell> Spells { get { return spellVirtualList; } }
-        public static VirtualList<Feat> Feats { get { return featVirtualList; } }
-        public static VirtualList<Skill> Skills { get { return skillVirtualList; } }
-        public static VirtualList<Disease> Diseases { get { return diseaseVirtualList; } }
-        public static VirtualList<Poison> Poisons { get { return poisonVirtualList; } }
+        public static VirtualModelRepository<Race> Races { get { return raceVirtualRepository; } }
+        public static VirtualModelRepository<CharacterClass> Classes { get { return classVirtualRepository; } }
+        public static VirtualModelRepository<Domain> Domains { get { return domainVirtualRepository; } }
+        public static VirtualModelRepository<Spell> Spells { get { return spellVirtualRepository; } }
+        public static VirtualModelRepository<Feat> Feats { get { return featVirtualRepository; } }
+        public static VirtualModelRepository<Skill> Skills { get { return skillVirtualRepository; } }
+        public static VirtualModelRepository<Disease> Diseases { get { return diseaseVirtualRepository; } }
+        public static VirtualModelRepository<Poison> Poisons { get { return poisonVirtualRepository; } }
+
+        public static void Clear()
+        {
+            Standard.Clear();
+            Custom.Clear();
+        }
+
+        public static void Load()
+        {
+            Standard.Races.LoadFromFile(Constants.RacesFile);
+            Standard.Classes.LoadFromFile(Constants.ClassesFile);
+            Standard.Domains.LoadFromFile(Constants.DomainsFile);
+            Standard.Spells.LoadFromFile(Constants.SpellsFile);
+            Standard.Feats.LoadFromFile(Constants.FeatsFile);
+            Standard.Skills.LoadFromFile(Constants.SkillsFile);
+            Standard.Diseases.LoadFromFile(Constants.DiseasesFile);
+            Standard.Poisons.LoadFromFile(Constants.PoisonsFile);
+
+            Standard.Races.ResolveReferences();
+            Standard.Classes.ResolveReferences();
+            Standard.Domains.ResolveReferences();
+            Standard.Spells.ResolveReferences();
+            Standard.Feats.ResolveReferences();
+            Standard.Skills.ResolveReferences();
+            Standard.Diseases.ResolveReferences();
+            Standard.Poisons.ResolveReferences();
+        }
     }
 }

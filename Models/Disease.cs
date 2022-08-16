@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace Eos.Models
@@ -24,5 +25,60 @@ namespace Eos.Models
         public AbilityType? AbilityDamage3Type { get; set; } = null;
         public String? IncubationEndScript { get; set; }
         public String? DailyEffectScript { get; set; }
+
+        protected override String GetLabel()
+        {
+            return Name;
+        }
+
+        public override void ResolveReferences()
+        {
+
+        }
+
+        public override void FromJson(JsonObject json)
+        {
+            this.ID = ParseGuid(json["ID"]?.GetValue<String>());
+            this.Index = json["Index"]?.GetValue<int?>();
+            this.Name.FromJson(json["Name"]?.AsObject());
+            this.FirstSaveDC = json["FirstSaveDC"]?.GetValue<int>() ?? 15;
+            this.SecondSaveDC = json["SecondSaveDC"]?.GetValue<int>() ?? 10;
+            this.IncubationHours = json["IncubationHours"]?.GetValue<int>() ?? 1;
+            this.AbilityDamage1DiceCount = json["AbilityDamage1DiceCount"]?.GetValue<int>() ?? 1;
+            this.AbilityDamage1Dice = json["AbilityDamage1Dice"]?.GetValue<int>() ?? 4;
+            this.AbilityDamage1Type = JsonToEnum<AbilityType>(json["AbilityDamage1Type"]);
+            this.AbilityDamage2DiceCount = json["AbilityDamage2DiceCount"]?.GetValue<int>() ?? 0;
+            this.AbilityDamage2Dice = json["AbilityDamage2Dice"]?.GetValue<int>() ?? 0;
+            this.AbilityDamage2Type = JsonToEnum<AbilityType>(json["AbilityDamage2Type"]);
+            this.AbilityDamage3DiceCount = json["AbilityDamage3DiceCount"]?.GetValue<int>() ?? 0;
+            this.AbilityDamage3Dice = json["AbilityDamage3Dice"]?.GetValue<int>() ?? 0;
+            this.AbilityDamage3Type = JsonToEnum<AbilityType>(json["AbilityDamage3Type"]);
+            this.IncubationEndScript = json["IncubationEndScript"]?.GetValue<String>();
+            this.DailyEffectScript = json["DailyEffectScript"]?.GetValue<String>();
+        }
+
+        public override JsonObject ToJson()
+        {
+            var diseaseJson = new JsonObject();
+            diseaseJson.Add("ID", this.ID.ToString());
+            diseaseJson.Add("Index", this.Index);
+            diseaseJson.Add("Name", this.Name.ToJson());
+            diseaseJson.Add("FirstSaveDC", this.FirstSaveDC);
+            diseaseJson.Add("SecondSaveDC", this.SecondSaveDC);
+            diseaseJson.Add("IncubationHours", this.IncubationHours);
+            diseaseJson.Add("AbilityDamage1DiceCount", this.AbilityDamage1DiceCount);
+            diseaseJson.Add("AbilityDamage1Dice", this.AbilityDamage1Dice);
+            diseaseJson.Add("AbilityDamage1Type", EnumToJson(this.AbilityDamage1Type));
+            diseaseJson.Add("AbilityDamage2DiceCount", this.AbilityDamage1DiceCount);
+            diseaseJson.Add("AbilityDamage2Dice", this.AbilityDamage1Dice);
+            diseaseJson.Add("AbilityDamage2Type", EnumToJson(this.AbilityDamage1Type));
+            diseaseJson.Add("AbilityDamage3DiceCount", this.AbilityDamage1DiceCount);
+            diseaseJson.Add("AbilityDamage3Dice", this.AbilityDamage1Dice);
+            diseaseJson.Add("AbilityDamage3Type", EnumToJson(this.AbilityDamage1Type));
+            diseaseJson.Add("IncubationEndScript", this.IncubationEndScript);
+            diseaseJson.Add("DailyEffectScript", this.DailyEffectScript);
+
+            return diseaseJson;
+        }
     }
 }

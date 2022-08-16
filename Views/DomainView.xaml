@@ -21,8 +21,7 @@
     </Page.DataContext>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-        <!--IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}"-->
-        <Grid Margin="10"> 
+        <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}"> 
             <Grid.Resources>
                 <Style TargetType="{x:Type TabItem}">
                     <Setter Property="RenderTransform">
@@ -60,12 +59,12 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto" MinHeight="25"/>
+                    <RowDefinition Height="auto" MinHeight="25"/>
+                    <RowDefinition Height="auto" MinHeight="25"/>
+                    <RowDefinition Height="auto" MinHeight="25"/>
                     <RowDefinition Height="22"/>
-                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto" MinHeight="25"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
@@ -94,11 +93,11 @@
                         <ColumnDefinition Width="*" MinWidth="150"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
                     </Grid.RowDefinitions>
 
                     <!--Granted Feat-->

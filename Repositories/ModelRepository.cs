@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
 using Eos.Models;
+using System.IO;
+using System.Text.Json.Nodes;
 
 namespace Eos.Repositories
 {
@@ -66,8 +68,40 @@ namespace Eos.Repositories
         public void Sort<U>(Func<T?,U> compareFunc)
         {
             var list = internalList.OrderBy(compareFunc).ToList();
+
             internalList.Clear();
-            foreach (var item in list) internalList.Add(item);
+            foreach (var item in list)
+                internalList.Add(item);
+        }
+
+        public void LoadFromFile(String filename)
+        {
+            var fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+            try
+            {
+                Clear();
+                if (JsonNode.Parse(fs) is JsonArray jsonRepository)
+                {
+                    for (int i = 0; i < jsonRepository.Count; i++)
+                    {
+                        if (jsonRepository[i] is JsonObject jsonObj)
+                        {
+                            var newModel = BaseModel.CreateFromJson<T>(jsonObj);
+                            Add(newModel);
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                fs.Close();
+            }
+        }
+
+        public void ResolveReferences()
+        {
+            foreach (var item in internalList)
+                item?.ResolveReferences();
         }
     }
 }

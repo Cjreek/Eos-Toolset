@@ -71,16 +71,16 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto" MinHeight="25"/>
+                            <RowDefinition Height="auto" MinHeight="25"/>
+                            <RowDefinition Height="auto" MinHeight="25"/>
+                            <RowDefinition Height="auto" MinHeight="25"/>
+                            <RowDefinition Height="auto" MinHeight="25"/>
+                            <RowDefinition Height="auto" MinHeight="25"/>
+                            <RowDefinition Height="auto" MinHeight="25"/>
                             <RowDefinition Height="auto" MinHeight="22"/>
                             <RowDefinition Height="auto" MinHeight="22"/>
-                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto" MinHeight="22"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
@@ -157,25 +157,25 @@
                         <ColumnDefinition Width="*" MinWidth="150"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="22"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="22"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="22"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
@@ -200,7 +200,7 @@
                     <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:ProjectileOrientation}}" SelectedValue="{Binding Data.ProjectileOrientation}" Grid.Row="4" Grid.Column="3" IsEnabled="{Binding Data.HasProjectile}"/>
 
                     <TextBlock Text="Sound" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
-                    <ComboBox Grid.Row="5" Grid.Column="1" IsEnabled="{Binding Data.HasProjectile}"/>
+                    <uc:SoundResourceTextbox ResRef="{Binding Data.ProjectileSound}" Grid.Row="5" Grid.Column="1" IsEnabled="{Binding Data.HasProjectile}"/>
 
                     <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Conjuration" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
 
@@ -211,13 +211,13 @@
                     <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:SpellConjureAnimation}}" SelectedValue="{Binding Data.ConjuringAnimation}" IsNullable="True" Grid.Row="9" Grid.Column="1"/>
 
                     <TextBlock Text="Sound" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
-                    <ComboBox Grid.Row="9" Grid.Column="3"/>
+                    <uc:SoundResourceTextbox ResRef="{Binding Data.ConjurationSound}" Grid.Row="9" Grid.Column="3"/>
 
                     <TextBlock Text="Male Sound" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
-                    <ComboBox Grid.Row="10" Grid.Column="1"/>
+                    <uc:SoundResourceTextbox ResRef="{Binding Data.ConjurationMaleSound}" Grid.Row="10" Grid.Column="1"/>
 
                     <TextBlock Text="Female Sound" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
-                    <ComboBox Grid.Row="10" Grid.Column="3"/>
+                    <uc:SoundResourceTextbox ResRef="{Binding Data.ConjurationFemaleSound}" Grid.Row="10" Grid.Column="3"/>
 
                     <TextBlock Text="Head Effect" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="0"/>
                     <uc:ModelResourceTextbox ResRef="{Binding Data.ConjurationHeadEffect}" Grid.Row="11" Grid.Column="1"/>
@@ -237,7 +237,7 @@
                     <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:SpellCastAnimation}}" SelectedValue="{Binding Data.CastingAnimation}" IsNullable="True" Grid.Row="16" Grid.Column="1"/>
 
                     <TextBlock Text="Sound" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="16" Grid.Column="2"/>
-                    <ComboBox Grid.Row="16" Grid.Column="3"/>
+                    <uc:SoundResourceTextbox ResRef="{Binding Data.CastingSound}" Grid.Row="16" Grid.Column="3"/>
 
                     <TextBlock Text="Head Effect" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="17" Grid.Column="0"/>
                     <uc:ModelResourceTextbox ResRef="{Binding Data.CastingHeadEffect}" Grid.Row="17" Grid.Column="1"/>
@@ -260,18 +260,18 @@
                         <ColumnDefinition Width="*" MinWidth="150"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="22"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 

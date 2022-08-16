@@ -71,14 +71,14 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto" MinHeight="25"/>
+                            <RowDefinition Height="auto" MinHeight="25"/>
+                            <RowDefinition Height="auto" MinHeight="25"/>
+                            <RowDefinition Height="auto" MinHeight="25"/>
+                            <RowDefinition Height="auto" MinHeight="25"/>
+                            <RowDefinition Height="auto" MinHeight="25"/>
+                            <RowDefinition Height="auto" MinHeight="25"/>
+                            <RowDefinition Height="auto" MinHeight="25"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
@@ -155,25 +155,25 @@
                         <ColumnDefinition Width="*" MinWidth="150"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="22"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="22"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="22"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="22"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace Eos.Models
@@ -53,5 +54,118 @@ namespace Eos.Models
         public int MinAssociateLevel { get; set; }
         public bool CanCastSpontaneously { get; set; } = false;
         public bool SkipSpellSelection { get; set; } = false;
+
+        protected override String GetLabel()
+        {
+            return Name;
+        }
+
+        public override void ResolveReferences()
+        {
+
+        }
+
+        public override void FromJson(JsonObject json)
+        {
+            this.ID = ParseGuid(json["ID"]?.GetValue<String>());
+            this.Index = json["Index"]?.GetValue<int?>();
+            this.Name.FromJson(json["Name"]?.AsObject());
+            this.NamePlural.FromJson(json["NamePlural"]?.AsObject());
+            this.Description.FromJson(json["Description"]?.AsObject());
+            this.Icon = json["Icon"]?.GetValue<String>();
+            this.HitDie = json["HitDie"]?.GetValue<int>() ?? 1;
+            //this.AttackBonusTable
+            //this.Feats
+            //this.SavingThrows
+            //this.Skills
+            //this.BonusFeats
+            //this.SpellSlots
+            //this.KnownSpells
+            this.Playable = json["Playable"]?.GetValue<bool>() ?? false;
+            this.IsSpellCaster = json["IsSpellCaster"]?.GetValue<bool>() ?? false;
+            this.RecommendedStr = json["RecommendedStr"]?.GetValue<int>() ?? 10;
+            this.RecommendedDex = json["RecommendedDex"]?.GetValue<int>() ?? 10;
+            this.RecommendedCon = json["RecommendedCon"]?.GetValue<int>() ?? 10;
+            this.RecommendedWis = json["RecommendedWis"]?.GetValue<int>() ?? 10;
+            this.RecommendedInt = json["RecommendedInt"]?.GetValue<int>() ?? 10;
+            this.RecommendedCha = json["RecommendedCha"]?.GetValue<int>() ?? 10;
+            this.PrimaryAbility = JsonToEnum<AbilityType>(json["PrimaryAbility"]) ?? AbilityType.STR;
+            this.AllowedAlignments = JsonToEnum<Alignment>(json["AllowedAlignments"]) ?? (Alignment)0;
+            this.Requirements = IntPtr.Zero; // !
+            this.MaxLevel = json["MaxLevel"]?.GetValue<int>() ?? 0;
+            this.MulticlassXPPenalty = json["MulticlassXPPenalty"]?.GetValue<bool>() ?? false;
+            this.ArcaneCasterLevelMod = json["ArcaneCasterLevelMod"]?.GetValue<int>() ?? 0;
+            this.DivineCasterLevelMod = json["DivineCasterLevelMod"]?.GetValue<int>() ?? 0;
+            this.PreEpicMaxLevel = json["PreEpicMaxLevel"]?.GetValue<int>() ?? -1;
+            this.Package = IntPtr.Zero; // !
+            this.StatGainTable = IntPtr.Zero; // !
+            this.MemorizesSpells = json["MemorizesSpells"]?.GetValue<bool>() ?? false;
+            this.SpellbookRestricted = json["SpellbookRestricted"]?.GetValue<bool>() ?? false;
+            this.PicksDomain = json["PicksDomain"]?.GetValue<bool>() ?? false;
+            this.PicksSchool = json["PicksSchool"]?.GetValue<bool>() ?? false;
+            this.CanLearnFromScrolls = json["CanLearnFromScrolls"]?.GetValue<bool>() ?? false;
+            this.IsArcaneCaster = json["IsArcaneCaster"]?.GetValue<bool>() ?? false;
+            this.HasSpellFailure = json["HasSpellFailure"]?.GetValue<bool>() ?? false;
+            this.SpellcastingAbility = JsonToEnum<AbilityType>(json["SpellcastingAbility"]) ?? AbilityType.INT;
+            this.Spellbook = IntPtr.Zero; // !
+            this.CasterLevelMultiplier = json["CasterLevelMultiplier"]?.GetValue<double>() ?? 1.0;
+            this.MinCastingLevel = json["MinCastingLevel"]?.GetValue<int>() ?? 1;
+            this.MinAssociateLevel = json["MinAssociateLevel"]?.GetValue<int>() ?? 255;
+            this.CanCastSpontaneously = json["CanCastSpontaneously"]?.GetValue<bool>() ?? false;
+            this.SkipSpellSelection = json["SkipSpellSelection"]?.GetValue<bool>() ?? false;
+        }
+
+        public override JsonObject ToJson()
+        {
+            var classJson = new JsonObject();
+            classJson.Add("ID", this.ID.ToString());
+            classJson.Add("Index", this.Index);
+            classJson.Add("Name", this.Name.ToJson());
+            classJson.Add("NamePlural", this.NamePlural.ToJson());
+            classJson.Add("Description", this.Description.ToJson());
+            classJson.Add("Icon", this.Icon);
+            classJson.Add("HitDie", this.HitDie);
+            classJson.Add("AttackBonusTable", null); // !
+            classJson.Add("Feats", null); // !
+            classJson.Add("SavingThrows", null); // !
+            classJson.Add("Skills", null); // !
+            classJson.Add("BonusFeats", null); // !
+            classJson.Add("SpellSlots", null); // !
+            classJson.Add("KnownSpells", null); // !
+            classJson.Add("Playable", this.Playable);
+            classJson.Add("IsSpellCaster", this.IsSpellCaster);
+            classJson.Add("RecommendedStr", this.RecommendedStr);
+            classJson.Add("RecommendedDex", this.RecommendedDex);
+            classJson.Add("RecommendedCon", this.RecommendedCon);
+            classJson.Add("RecommendedWis", this.RecommendedWis);
+            classJson.Add("RecommendedInt", this.RecommendedInt);
+            classJson.Add("RecommendedCha", this.RecommendedCha);
+            classJson.Add("PrimaryAbility", EnumToJson(this.PrimaryAbility));
+            classJson.Add("AllowedAlignments", EnumToJson(this.AllowedAlignments));
+            classJson.Add("Requirements", null); // !
+            classJson.Add("MaxLevel", this.MaxLevel);
+            classJson.Add("MulticlassXPPenalty", this.MulticlassXPPenalty);
+            classJson.Add("ArcaneCasterLevelMod", this.ArcaneCasterLevelMod);
+            classJson.Add("DivineCasterLevelMod", this.DivineCasterLevelMod);
+            classJson.Add("PreEpicMaxLevel", this.PreEpicMaxLevel);
+            classJson.Add("Package", null); // !
+            classJson.Add("StatGainTable", null); // !
+            classJson.Add("MemorizesSpells", this.MemorizesSpells);
+            classJson.Add("SpellbookRestricted", this.SpellbookRestricted);
+            classJson.Add("PicksDomain", this.PicksDomain);
+            classJson.Add("PicksSchool", this.PicksSchool);
+            classJson.Add("CanLearnFromScrolls", this.CanLearnFromScrolls);
+            classJson.Add("IsArcaneCaster", this.IsArcaneCaster);
+            classJson.Add("HasSpellFailure", this.HasSpellFailure);
+            classJson.Add("SpellcastingAbility", EnumToJson(this.SpellcastingAbility));
+            classJson.Add("Spellbook", null); // !
+            classJson.Add("CasterLevelMultiplier", this.CasterLevelMultiplier);
+            classJson.Add("MinCastingLevel", this.MinCastingLevel);
+            classJson.Add("MinAssociateLevel", this.MinAssociateLevel);
+            classJson.Add("CanCastSpontaneously", this.CanCastSpontaneously);
+            classJson.Add("SkipSpellSelection", this.SkipSpellSelection);
+
+            return classJson;
+        }
     }
 }

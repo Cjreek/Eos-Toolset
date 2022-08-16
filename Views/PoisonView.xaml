@@ -51,15 +51,13 @@
                 <ColumnDefinition Width="*" MinWidth="150"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
             </Grid.RowDefinitions>
 
             <TextBlock Text="Poison" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>

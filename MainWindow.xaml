@@ -28,7 +28,6 @@
         <conv:TLKStringSetConverter x:Key="tlkConverter" AlwaysUseDefaultLanguage="True"/>
         <conv:ResRefConverter x:Key="resRefConverter"/>
 
-        <!-- TreeViewItem Datatemplates -->
         <DataTemplate x:Key="TreeViewItemTemplate">
             <ContentControl>
                 <i:Interaction.Triggers>
@@ -65,12 +64,11 @@
         </DataTemplate>
 
         <Style TargetType="TreeViewItem">
-            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontWeight" Value="Normal"/>
             <Setter Property="ItemTemplate" Value="{StaticResource TreeViewItemTemplate}"/>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ItemsSource}" Value="{x:Null}">
-                    <Setter Property="FontWeight" Value="Normal"/>
-                    <Setter Property="ItemTemplate" Value="{x:Null}"/>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Tag}" Value="CATEGORY">
+                    <Setter Property="FontWeight" Value="Bold"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -214,34 +212,44 @@
     </Window.Resources>
     
     <!-- Window Content -->
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" FontSize="16">
+            <MenuItem Header="File">
+                <MenuItem Header="New Project"/>
+                <MenuItem Header="Open Project"/>
+                <MenuItem Header="Save"/>
+                <Separator/>
+                <MenuItem Header="Exit"/>
+            </MenuItem>
+        </Menu>
 
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="30"/>
-            </Grid.ColumnDefinitions>
-            
-            <uc:EnumComboBox Grid.Column="0" ItemsSource="{ext:EnumSource {x:Type types:TLKLanguage}}" SelectedValue="{Binding CurrentLanguage, Mode=TwoWay}"/>
-            <ToggleButton Margin="2,0,0,0" Grid.Column="1" IsChecked="{Binding CurrentGender, Mode=TwoWay}">
-                <ToggleButton.Style>
-                    <Style TargetType="ToggleButton">
-                        <Setter Property="Content" Value="M"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}" Value="True">
-                                <Setter Property="Content" Value="F"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ToggleButton.Style>
-            </ToggleButton>
-        </Grid>
-        
-        <Grid Grid.Row="1">
+        <Border Height="38" DockPanel.Dock="Top" BorderThickness="0,1,0,1" BorderBrush="Gray">
+            <Grid Margin="10,0,10,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <TextBlock Text="Language" VerticalAlignment="Center"/>
+                    <uc:EnumComboBox Margin="3,0,0,0" Width="150" ItemsSource="{ext:EnumSource {x:Type types:TLKLanguage}}" SelectedValue="{Binding CurrentLanguage, Mode=TwoWay}" VerticalAlignment="Center"/>
+                    <ToggleButton Margin="3,0,0,0" IsChecked="{Binding CurrentGender, Mode=TwoWay}" VerticalAlignment="Center" Width="24">
+                        <ToggleButton.Style>
+                            <Style TargetType="ToggleButton">
+                                <Setter Property="Content" Value="M"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsChecked}" Value="True">
+                                        <Setter Property="Content" Value="F"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                    </ToggleButton>
+                </StackPanel>
+            </Grid>
+        </Border>
+    
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="5"/>
@@ -251,70 +259,70 @@
             <TabControl Grid.Column="0" Margin="5,5,0,5" TabStripPlacement="Top" SelectedItem="{x:Reference tabCustom}">
                 <TabItem x:Name="tabStandard" Header="Standard">
                     <TreeView ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                        <TreeViewItem Header="Races" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Races}"/>
-                        <TreeViewItem Header="Classes" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Classes}"/>
-                        <TreeViewItem Header="Domains" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Domains}"/>
-                        <TreeViewItem Header="Spells">
-                            <TreeViewItem Header="Spells">
-                                <TreeViewItem Header="Abjuration" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.AbjurationSpells}"/>
-                                <TreeViewItem Header="Conjuration" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.ConjurationSpells}"/>
-                                <TreeViewItem Header="Divination" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.DivinationSpells}"/>
-                                <TreeViewItem Header="Enchantment" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.EnchantmentSpells}"/>
-                                <TreeViewItem Header="Evocation" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.EvocationSpells}"/>
-                                <TreeViewItem Header="Illusion" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.IllusionSpells}"/>
-                                <TreeViewItem Header="Necromancy" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.NecromancySpells}"/>
-                                <TreeViewItem Header="Transmutation" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.TransmutationSpells}"/>
-                                <TreeViewItem Header="General" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.GeneralSpells}"/>
+                        <TreeViewItem Header="Races" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Races}"/>
+                        <TreeViewItem Header="Classes" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Classes}"/>
+                        <TreeViewItem Header="Domains" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Domains}"/>
+                        <TreeViewItem Header="Spells" Tag="CATEGORY">
+                            <TreeViewItem Header="Spell" Tag="CATEGORY">
+                                <TreeViewItem Header="Abjuration" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.AbjurationSpells}"/>
+                                <TreeViewItem Header="Conjuration" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.ConjurationSpells}"/>
+                                <TreeViewItem Header="Divination" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.DivinationSpells}"/>
+                                <TreeViewItem Header="Enchantment" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.EnchantmentSpells}"/>
+                                <TreeViewItem Header="Evocation" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.EvocationSpells}"/>
+                                <TreeViewItem Header="Illusion" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.IllusionSpells}"/>
+                                <TreeViewItem Header="Necromancy" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.NecromancySpells}"/>
+                                <TreeViewItem Header="Transmutation" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.TransmutationSpells}"/>
+                                <TreeViewItem Header="General" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.GeneralSpells}"/>
                             </TreeViewItem>
-                            <TreeViewItem Header="Creature Powers" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.CreaturePowers}"/>
-                            <TreeViewItem Header="Feat Spells" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.FeatSpells}"/>
-                            <TreeViewItem Header="Other Spells" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.OtherSpells}"/>
+                            <TreeViewItem Header="Creature Power" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.CreaturePowers}"/>
+                            <TreeViewItem Header="Feat Spell" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.FeatSpells}"/>
+                            <TreeViewItem Header="Other Spell" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.OtherSpells}"/>
                         </TreeViewItem>
-                        <TreeViewItem Header="Feats">
-                            <TreeViewItem Header="Class/Racial" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.ClassOrRacial}"/>
-                            <TreeViewItem Header="Combat (Active)" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.CombatActive}"/>
-                            <TreeViewItem Header="Combat (Passive)" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Combat}"/>
-                            <TreeViewItem Header="Defensive" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Defensive}"/>
-                            <TreeViewItem Header="Magical" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Magical}"/>
-                            <TreeViewItem Header="Other" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Other}"/>
+                        <TreeViewItem Header="Feats" Tag="CATEGORY">
+                            <TreeViewItem Header="Class/Racial" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.ClassOrRacial}"/>
+                            <TreeViewItem Header="Combat (Active)" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.CombatActive}"/>
+                            <TreeViewItem Header="Combat (Passive)" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Combat}"/>
+                            <TreeViewItem Header="Defensive" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Defensive}"/>
+                            <TreeViewItem Header="Magical" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Magical}"/>
+                            <TreeViewItem Header="Other" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Other}"/>
                         </TreeViewItem>
-                        <TreeViewItem Header="Skills" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Skills}"/>
-                        <TreeViewItem Header="Diseases" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Diseases}"/>
-                        <TreeViewItem Header="Poisons" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Poisons}"/>
+                        <TreeViewItem Header="Skills" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Skills}"/>
+                        <TreeViewItem Header="Diseases" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Diseases}"/>
+                        <TreeViewItem Header="Poisons" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Poisons}"/>
                     </TreeView>
                 </TabItem>
                 <TabItem x:Name="tabCustom" Header="Custom">
                     <TreeView>
-                        <TreeViewItem Header="Races" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Races}"/>
-                        <TreeViewItem Header="Classes" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Classes}"/>
-                        <TreeViewItem Header="Domains" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Domains}"/>
-                        <TreeViewItem Header="Spells">
-                            <TreeViewItem Header="Spells">
-                                <TreeViewItem Header="Abjuration" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.AbjurationSpells}"/>
-                                <TreeViewItem Header="Conjuration" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.ConjurationSpells}"/>
-                                <TreeViewItem Header="Divination" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.DivinationSpells}"/>
-                                <TreeViewItem Header="Enchantment" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.EnchantmentSpells}"/>
-                                <TreeViewItem Header="Evocation" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.EvocationSpells}"/>
-                                <TreeViewItem Header="Illusion" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.IllusionSpells}"/>
-                                <TreeViewItem Header="Necromancy" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.NecromancySpells}"/>
-                                <TreeViewItem Header="Transmutation" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.TransmutationSpells}"/>
-                                <TreeViewItem Header="General" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.GeneralSpells}"/>
+                        <TreeViewItem Header="Races" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Races}"/>
+                        <TreeViewItem Header="Classes" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Classes}"/>
+                        <TreeViewItem Header="Domains" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Domains}"/>
+                        <TreeViewItem Header="Spells" Tag="CATEGORY">
+                            <TreeViewItem Header="Spell" Tag="CATEGORY">
+                                <TreeViewItem Header="Abjuration" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.AbjurationSpells}"/>
+                                <TreeViewItem Header="Conjuration" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.ConjurationSpells}"/>
+                                <TreeViewItem Header="Divination" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.DivinationSpells}"/>
+                                <TreeViewItem Header="Enchantment" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.EnchantmentSpells}"/>
+                                <TreeViewItem Header="Evocation" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.EvocationSpells}"/>
+                                <TreeViewItem Header="Illusion" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.IllusionSpells}"/>
+                                <TreeViewItem Header="Necromancy" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.NecromancySpells}"/>
+                                <TreeViewItem Header="Transmutation" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.TransmutationSpells}"/>
+                                <TreeViewItem Header="General" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.GeneralSpells}"/>
                             </TreeViewItem>
-                            <TreeViewItem Header="Creature Powers" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.CreaturePowers}"/>
-                            <TreeViewItem Header="Feat Spells" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.FeatSpells}"/>
-                            <TreeViewItem Header="Other Spells" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.OtherSpells}"/>
+                            <TreeViewItem Header="Creature Power" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.CreaturePowers}"/>
+                            <TreeViewItem Header="Feat Spell" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.FeatSpells}"/>
+                            <TreeViewItem Header="Other Spell" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Spells.OtherSpells}"/>
                         </TreeViewItem>
-                        <TreeViewItem Header="Feats">
-                            <TreeViewItem Header="Class/Racial" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Feats.ClassOrRacial}"/>
-                            <TreeViewItem Header="Combat (Active)" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Feats.CombatActive}"/>
-                            <TreeViewItem Header="Combat (Passive)" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Feats.Combat}"/>
-                            <TreeViewItem Header="Defensive" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Feats.Defensive}"/>
-                            <TreeViewItem Header="Magical" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Feats.Magical}"/>
-                            <TreeViewItem Header="Other" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Feats.Other}"/>
+                        <TreeViewItem Header="Feats" Tag="CATEGORY">
+                            <TreeViewItem Header="Class/Racial" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Feats.ClassOrRacial}"/>
+                            <TreeViewItem Header="Combat (Active)" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Feats.CombatActive}"/>
+                            <TreeViewItem Header="Combat (Passive)" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Feats.Combat}"/>
+                            <TreeViewItem Header="Defensive" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Feats.Defensive}"/>
+                            <TreeViewItem Header="Magical" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Feats.Magical}"/>
+                            <TreeViewItem Header="Other" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Feats.Other}"/>
                         </TreeViewItem>
-                        <TreeViewItem Header="Skills" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Skills}"/>
-                        <TreeViewItem Header="Diseases" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Diseases}"/>
-                        <TreeViewItem Header="Poisons" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Poisons}"/>
+                        <TreeViewItem Header="Skills" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Skills}"/>
+                        <TreeViewItem Header="Diseases" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Diseases}"/>
+                        <TreeViewItem Header="Poisons" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Custom}, Path=Poisons}"/>
                     </TreeView>
                 </TabItem>
             </TabControl>
@@ -325,5 +333,5 @@
                         ItemsSource="{Binding DetailViewList}" ItemTemplate="{StaticResource TabItemTemplate}" 
                         SelectedItem="{Binding CurrentView}"/>
         </Grid>
-    </Grid>
+    </DockPanel>
 </Window>

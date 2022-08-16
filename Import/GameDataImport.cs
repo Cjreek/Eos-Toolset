@@ -9,7 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace Eos.Import
@@ -23,6 +25,13 @@ namespace Eos.Import
         private ResourceRepository Resources = MasterRepository.Resources;
 
         private List<KeyValuePair<TLKStringSet, int?>> tlkBuffer = new List<KeyValuePair<TLKStringSet, int?>>();
+
+        private Guid GenerateGuid(string prefix, int index)
+        {
+            var data = prefix + "###" + index.ToString();
+            var guidBytes = MD5.HashData(Encoding.Unicode.GetBytes(data));
+            return new Guid(guidBytes);
+        }
 
         private bool SetText(TLKStringSet str, int? strRef)
         {
@@ -64,6 +73,7 @@ namespace Eos.Import
             for (int i = 0; i < races2da.Count; i++)
             {
                 var tmpRace = new Race();
+                tmpRace.ID = GenerateGuid("racialtypes", i);
                 tmpRace.Index = i;
 
                 if (!SetText(tmpRace.Name, races2da[i].AsInteger("Name"))) continue;
@@ -120,6 +130,7 @@ namespace Eos.Import
             for (int i = 0; i < classes2da.Count; i++)
             {
                 var tmpClass = new CharacterClass();
+                tmpClass.ID = GenerateGuid("classes", i);
                 tmpClass.Index = i;
 
                 if (!SetText(tmpClass.Name, classes2da[i].AsInteger("Name"))) continue;
@@ -194,6 +205,7 @@ namespace Eos.Import
             for (int i = 0; i < domains2da.Count; i++)
             {
                 var tmpDomain = new Domain();
+                tmpDomain.ID = GenerateGuid("domains", i);
                 tmpDomain.Index = i;
 
                 if (!SetText(tmpDomain.Name, domains2da[i].AsInteger("Name"))) continue;
@@ -227,6 +239,7 @@ namespace Eos.Import
             for (int i = 0; i < skills2da.Count; i++)
             {
                 var tmpSkill = new Skill();
+                tmpSkill.ID = GenerateGuid("skills", i);
                 tmpSkill.Index = i;
 
                 if (!SetText(tmpSkill.Name, skills2da[i].AsInteger("Name"))) continue;
@@ -253,6 +266,7 @@ namespace Eos.Import
             for (int i = 0; i < feat2da.Count; i++)
             {
                 var tmpFeat = new Feat();
+                tmpFeat.ID = GenerateGuid("feat", i);
                 tmpFeat.Index = i;
 
                 if (!SetText(tmpFeat.Name, feat2da[i].AsInteger("FEAT"))) continue;
@@ -271,11 +285,11 @@ namespace Eos.Import
                 tmpFeat.RequiredFeat2 = CreateRef<Feat>(feat2da[i].AsInteger("PREREQFEAT2"));
                 tmpFeat.UseableByAllClasses = feat2da[i].AsBoolean("ALLCLASSESCANUSE");
                 tmpFeat.Category = (!feat2da[i].IsNull("CATEGORY")) ? (AICategory)Enum.ToObject(typeof(AICategory), feat2da[i].AsInteger("CATEGORY") ?? 0) : null;
-                //tmpFeat.OnUseEffect
+                tmpFeat.OnUseEffect = CreateRef<Spell>(feat2da[i].AsInteger("SPELLID"));
                 tmpFeat.SuccessorFeat = CreateRef<Feat>(feat2da[i].AsInteger("SUCCESSOR"));
                 tmpFeat.CRModifier = feat2da[i].AsFloat("CRValue");
                 tmpFeat.UsesPerDay = feat2da[i].AsInteger("USESPERDAY");
-                //tmpFeat.MasterFeat
+                tmpFeat.MasterFeat = CreateRef<Feat>(feat2da[i].AsInteger("MASTERFEAT"));
                 tmpFeat.TargetSelf = feat2da[i].AsBoolean("TARGETSELF");
                 tmpFeat.RequiredFeatSelection1 = CreateRef<Feat>(feat2da[i].AsInteger("OrReqFeat0"));
                 tmpFeat.RequiredFeatSelection2 = CreateRef<Feat>(feat2da[i].AsInteger("OrReqFeat1"));
@@ -309,6 +323,7 @@ namespace Eos.Import
             for (int i = 0; i < spells2da.Count; i++)
             {
                 var tmpSpell = new Spell();
+                tmpSpell.ID = GenerateGuid("spells", i);
                 tmpSpell.Index = i;
 
                 if (!SetText(tmpSpell.Name, spells2da[i].AsInteger("Name"))) continue;
@@ -384,6 +399,7 @@ namespace Eos.Import
             for (int i = 0; i < disease2da.Count; i++)
             {
                 var tmpDisease = new Disease();
+                tmpDisease.ID = GenerateGuid("disease", i);
                 tmpDisease.Index = i;
 
                 if (!SetText(tmpDisease.Name, disease2da[i].AsInteger("Name"))) continue;
@@ -416,6 +432,7 @@ namespace Eos.Import
             for (int i = 0; i < poison2da.Count; i++)
             {
                 var tmpPoison = new Poison();
+                tmpPoison.ID = GenerateGuid("poison", i);
                 tmpPoison.Index = i;
 
                 if (!SetText(tmpPoison.Name, poison2da[i].AsInteger("Name"))) continue;
@@ -446,7 +463,7 @@ namespace Eos.Import
                 return repository.GetByIndex(instance.Index ?? -1);
         }
 
-        private void SolveDependencies()
+        private void ResolveDependencies()
         {
             // Races
             foreach (var race in Standard.Races)
@@ -503,6 +520,7 @@ namespace Eos.Import
             foreach (var feat in Standard.Feats)
             {
                 if (feat == null) continue;
+                feat.OnUseEffect = SolveInstance(feat.OnUseEffect, Standard.Spells);
                 feat.MasterFeat = SolveInstance(feat.MasterFeat, Standard.Feats);
                 feat.RequiredFeat1 = SolveInstance(feat.RequiredFeat1, Standard.Feats);
                 feat.RequiredFeat2 = SolveInstance(feat.RequiredFeat2, Standard.Feats);
@@ -512,10 +530,36 @@ namespace Eos.Import
                 feat.RequiredFeatSelection4 = SolveInstance(feat.RequiredFeatSelection4, Standard.Feats);
                 feat.RequiredFeatSelection5 = SolveInstance(feat.RequiredFeatSelection5, Standard.Feats);
                 feat.RequiredSkill1 = SolveInstance(feat.RequiredSkill1, Standard.Skills);
-                feat.RequiredSkill1 = SolveInstance(feat.RequiredSkill2, Standard.Skills);
+                feat.RequiredSkill2 = SolveInstance(feat.RequiredSkill2, Standard.Skills);
                 feat.SuccessorFeat = SolveInstance(feat.SuccessorFeat, Standard.Feats);
                 feat.MinLevelClass = SolveInstance(feat.MinLevelClass, Standard.Classes);
             }
+        }
+        
+        private void SaveRepository<T>(ModelRepository<T> repository, String filename) where T : BaseModel, new()
+        {
+            var jsonArr = new JsonArray();
+            foreach (var entity in repository)
+            {
+                if (entity != null)
+                    jsonArr.Add(entity.ToJson());
+            }
+            File.WriteAllText(filename, jsonArr.ToJsonString());
+        }
+
+        private void SaveToJson()
+        {
+            if (!Directory.Exists(Constants.BaseDataPath))
+                Directory.CreateDirectory(Constants.BaseDataPath);
+
+            SaveRepository(Standard.Races, Constants.RacesFile);
+            SaveRepository(Standard.Classes, Constants.ClassesFile);
+            SaveRepository(Standard.Domains, Constants.DomainsFile);
+            SaveRepository(Standard.Skills, Constants.SkillsFile);
+            SaveRepository(Standard.Feats, Constants.FeatsFile);
+            SaveRepository(Standard.Spells, Constants.SpellsFile);
+            SaveRepository(Standard.Diseases, Constants.DiseasesFile);
+            SaveRepository(Standard.Poisons, Constants.PoisonsFile);
         }
 
         public void Import(String nwnBasePath)
@@ -535,16 +579,16 @@ namespace Eos.Import
 
             ImportText();
 
-            SolveDependencies();
+            ResolveDependencies();
 
-            //Standard.Races.Sort(r => r?.Name[TLKLanguage.English].Text);
-            //Standard.Classes.Sort(c => c?.Name[TLKLanguage.English].Text);
             Standard.Domains.Sort(d => d?.Name[TLKLanguage.English].Text);
             Standard.Skills.Sort(s => s?.Name[TLKLanguage.English].Text);
             Standard.Feats.Sort(f => f?.Name[TLKLanguage.English].Text);
             Standard.Spells.Sort(s => s?.Name[TLKLanguage.English].Text);
             Standard.Diseases.Sort(d => d?.Name[TLKLanguage.English].Text);
             Standard.Poisons.Sort(p => p?.Name[TLKLanguage.English].Text);
+
+            SaveToJson();
         }
     }
 }
