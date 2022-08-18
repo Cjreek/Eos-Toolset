@@ -1,4 +1,5 @@
-﻿using Eos.Types;
+﻿using Eos.Nwn.Tlk;
+using Eos.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Models
 {
-    internal class Disease : BaseModel
+    public class Disease : BaseModel
     {
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public int FirstSaveDC { get; set; } = 15;

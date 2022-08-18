@@ -100,8 +100,10 @@ namespace Eos.Repositories
         }
     }
 
-    internal class MasterRepositoryCategory
+    public class MasterRepositoryCategory
     {
+        private readonly Dictionary<Type, IRepository> repositoryDict = new Dictionary<Type, IRepository>();
+
         private readonly ModelRepository<Race> raceRepository;
         private readonly ModelRepository<CharacterClass> classRepository;
         private readonly ModelRepository<Domain> domainRepository;
@@ -121,6 +123,15 @@ namespace Eos.Repositories
             skillRepository = new ModelRepository<Skill>(isReadonly);
             diseaseRepository = new ModelRepository<Disease>(isReadonly);
             poisonRepository = new ModelRepository<Poison>(isReadonly);
+
+            repositoryDict.Add(typeof(Race), raceRepository);
+            repositoryDict.Add(typeof(CharacterClass), classRepository);
+            repositoryDict.Add(typeof(Domain), domainRepository);
+            repositoryDict.Add(typeof(Spell), spellRepository);
+            repositoryDict.Add(typeof(Feat), featRepository);
+            repositoryDict.Add(typeof(Skill), skillRepository);
+            repositoryDict.Add(typeof(Disease), diseaseRepository);
+            repositoryDict.Add(typeof(Poison), poisonRepository);
         }
 
         // Model Repositories
@@ -132,6 +143,19 @@ namespace Eos.Repositories
         public ModelRepository<Skill> Skills { get { return skillRepository; } }
         public ModelRepository<Disease> Diseases { get { return diseaseRepository; } }
         public ModelRepository<Poison> Poisons { get { return poisonRepository; } }
+
+        public BaseModel New(Type modelType)
+        {
+            var constructor = modelType.GetConstructor(new Type[] { });
+            if (constructor != null)
+            {
+                var newModel = (BaseModel)constructor.Invoke(new object[] { });
+                repositoryDict[modelType].AddBase(newModel);
+                return newModel;
+            }
+            else
+                throw new Exception();
+        }
 
         public void Clear()
         {
@@ -151,7 +175,7 @@ namespace Eos.Repositories
         private static readonly ResourceRepository resources;
 
         private static readonly MasterRepositoryCategory standardCategory;
-        private static readonly MasterRepositoryCategory customCategory;
+        private static readonly EosProject project;
 
         private static readonly VirtualModelRepository<Race> raceVirtualRepository;
         private static readonly VirtualModelRepository<CharacterClass> classVirtualRepository;
@@ -167,16 +191,16 @@ namespace Eos.Repositories
             resources = new ResourceRepository();
 
             standardCategory = new MasterRepositoryCategory(true);
-            customCategory = new MasterRepositoryCategory(false);
+            project = new EosProject();
 
-            raceVirtualRepository = new VirtualModelRepository<Race>(standardCategory.Races, customCategory.Races);
-            classVirtualRepository = new VirtualModelRepository<CharacterClass>(standardCategory.Classes, customCategory.Classes);
-            domainVirtualRepository = new VirtualModelRepository<Domain>(standardCategory.Domains, customCategory.Domains);
-            spellVirtualRepository = new VirtualModelRepository<Spell>(standardCategory.Spells, customCategory.Spells);
-            featVirtualRepository = new VirtualModelRepository<Feat>(standardCategory.Feats, customCategory.Feats);
-            skillVirtualRepository = new VirtualModelRepository<Skill>(standardCategory.Skills, customCategory.Skills);
-            diseaseVirtualRepository = new VirtualModelRepository<Disease>(standardCategory.Diseases, customCategory.Diseases);
-            poisonVirtualRepository = new VirtualModelRepository<Poison>(standardCategory.Poisons, customCategory.Poisons);
+            raceVirtualRepository = new VirtualModelRepository<Race>(standardCategory.Races, project.Races);
+            classVirtualRepository = new VirtualModelRepository<CharacterClass>(standardCategory.Classes, project.Classes);
+            domainVirtualRepository = new VirtualModelRepository<Domain>(standardCategory.Domains, project.Domains);
+            spellVirtualRepository = new VirtualModelRepository<Spell>(standardCategory.Spells, project.Spells);
+            featVirtualRepository = new VirtualModelRepository<Feat>(standardCategory.Feats, project.Feats);
+            skillVirtualRepository = new VirtualModelRepository<Skill>(standardCategory.Skills, project.Skills);
+            diseaseVirtualRepository = new VirtualModelRepository<Disease>(standardCategory.Diseases, project.Diseases);
+            poisonVirtualRepository = new VirtualModelRepository<Poison>(standardCategory.Poisons, project.Poisons);
         }
 
         public static void Initialize(String nwnBasePath)
@@ -189,10 +213,15 @@ namespace Eos.Repositories
             resources.Cleanup();
         }
 
+        public static BaseModel New(Type modelType)
+        {
+            return Project.New(modelType);
+        }
+
         public static ResourceRepository Resources { get { return resources; } }
 
         public static MasterRepositoryCategory Standard { get { return standardCategory; } }
-        public static MasterRepositoryCategory Custom { get { return customCategory; } }
+        public static EosProject Project { get { return project; } }
 
         public static VirtualModelRepository<Race> Races { get { return raceVirtualRepository; } }
         public static VirtualModelRepository<CharacterClass> Classes { get { return classVirtualRepository; } }
@@ -206,19 +235,19 @@ namespace Eos.Repositories
         public static void Clear()
         {
             Standard.Clear();
-            Custom.Clear();
+            Project.Clear();
         }
 
         public static void Load()
         {
-            Standard.Races.LoadFromFile(Constants.RacesFile);
-            Standard.Classes.LoadFromFile(Constants.ClassesFile);
-            Standard.Domains.LoadFromFile(Constants.DomainsFile);
-            Standard.Spells.LoadFromFile(Constants.SpellsFile);
-            Standard.Feats.LoadFromFile(Constants.FeatsFile);
-            Standard.Skills.LoadFromFile(Constants.SkillsFile);
-            Standard.Diseases.LoadFromFile(Constants.DiseasesFile);
-            Standard.Poisons.LoadFromFile(Constants.PoisonsFile);
+            Standard.Races.LoadFromFile(Constants.RacesFilePath);
+            Standard.Classes.LoadFromFile(Constants.ClassesFilePath);
+            Standard.Domains.LoadFromFile(Constants.DomainsFilePath);
+            Standard.Spells.LoadFromFile(Constants.SpellsFilePath);
+            Standard.Feats.LoadFromFile(Constants.FeatsFilePath);
+            Standard.Skills.LoadFromFile(Constants.SkillsFilePath);
+            Standard.Diseases.LoadFromFile(Constants.DiseasesFilePath);
+            Standard.Poisons.LoadFromFile(Constants.PoisonsFilePath);
 
             Standard.Races.ResolveReferences();
             Standard.Classes.ResolveReferences();

@@ -1,4 +1,4 @@
-﻿using Eos.Types;
+﻿using Eos.Nwn.Tlk;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

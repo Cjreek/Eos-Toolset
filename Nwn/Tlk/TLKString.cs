@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Eos.Types
+namespace Eos.Nwn.Tlk
 {
     public class TLKString
     {
-        public String Text { get; set; } = "";
-        public String TextF { get; set; } = "";
+        public string Text { get; set; } = "";
+        public string TextF { get; set; } = "";
     }
 }

@@ -1,4 +1,5 @@
-﻿using Eos.Repositories;
+﻿using Eos.Nwn.Tlk;
+using Eos.Repositories;
 using Eos.Types;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Models
 {
-    internal class Race : BaseModel
+    public class Race : BaseModel
     {
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet NamePlural { get; set; } = new TLKStringSet();

@@ -1,4 +1,5 @@
 ﻿using Eos.Models.Tables;
+using Eos.Nwn.Tlk;
 using Eos.Types;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,5 @@
-﻿using Eos.Repositories;
+﻿using Eos.Nwn.Tlk;
+using Eos.Repositories;
 using Eos.Types;
 using System;
 using System.Collections.Generic;

@@ -8,12 +8,17 @@ namespace Eos.ViewModels.Base
 {
     public enum MessageType
     {
+        ChangeLanguage,
+        NewProject,
+        OpenProject,
+        SaveProject,
+        NewDetail,
         OpenDetail,
         OpenDetailSilent,
         CloseDetail
     }
 
-    public delegate void MessageHandler(MessageType type, object param);
+    public delegate void MessageHandler(MessageType type, object? param);
 
     public static class MessageDispatcher
     {
@@ -35,7 +40,7 @@ namespace Eos.ViewModels.Base
             messageSubscriptions[messageType].Remove(handler);
         }
 
-        public static void Send(MessageType messageType, object message)
+        public static void Send(MessageType messageType, object? message)
         {
             foreach (var handler in messageSubscriptions[messageType])
                 handler(messageType, message);

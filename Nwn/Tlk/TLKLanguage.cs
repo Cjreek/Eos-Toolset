@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Eos.Types
+namespace Eos.Nwn.Tlk
 {
     internal class ISOAttribute : Attribute
     {
         public ISOAttribute(string isoCode)
         {
-            this.ISOCode = isoCode;
+            ISOCode = isoCode;
         }
-        public String ISOCode { get; set; }
+        public string ISOCode { get; set; }
     }
 
-    public enum TLKLanguage : UInt32
+    public enum TLKLanguage : uint
     {
         [ISO("EN")]
         English = 0,

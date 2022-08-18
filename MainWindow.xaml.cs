@@ -1,5 +1,7 @@
 ﻿using Eos.Import;
 using Eos.Repositories;
+using Eos.ViewModels.Base;
+using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,6 +54,24 @@ namespace Eos
         private void Frame_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             SetFrameContentDataContext((Frame)sender);
+        }
+
+        private void miOpenProject_Click(object sender, RoutedEventArgs e)
+        {
+            VistaFolderBrowserDialog dlg = new VistaFolderBrowserDialog();
+            dlg.ShowNewFolderButton = true;
+            if (dlg.ShowDialog() ?? false)
+                MessageDispatcher.Send(MessageType.OpenProject, dlg.SelectedPath);
+        }
+
+        private void miExit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void miSaveProject_Click(object sender, RoutedEventArgs e)
+        {
+            MessageDispatcher.Send(MessageType.SaveProject, null);
         }
     }
 }

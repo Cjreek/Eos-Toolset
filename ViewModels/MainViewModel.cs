@@ -10,9 +10,10 @@ using System.Windows.Data;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using Eos.Types;
 using Eos.Repositories;
 using Eos.ViewModels.Base;
+using Eos.Nwn.Tlk;
+using Eos.Services;
 
 namespace Eos.ViewModels
 {
@@ -66,49 +67,6 @@ namespace Eos.ViewModels
             }
         }
 
-        private void GenerateDebugData()
-        {
-            Race testRace = new Race();
-            testRace.Name.SetDefault("Orc");
-            MasterRepository.Standard.Races.Add(testRace);
-
-            testRace = new Race();
-            testRace.Name.SetDefault("Elf");
-            MasterRepository.Standard.Races.Add(testRace);
-
-            Skill testSkill = new Skill();
-            testSkill.Name.SetDefault("Lumbering");
-            MasterRepository.Custom.Skills.Add(testSkill);
-
-            testSkill = new Skill();
-            testSkill.Name.SetDefault("Harvesting");
-            MasterRepository.Standard.Skills.Add(testSkill);
-
-            CharacterClass testClass = new CharacterClass();
-            testClass.Name.SetDefault("Fighter");
-            MasterRepository.Standard.Classes.Add(testClass);
-
-            Domain testDomain = new Domain();
-            testDomain.Name.SetDefault("Death & Decay");
-            MasterRepository.Standard.Domains.Add(testDomain);
-
-            Spell testSpell = new Spell();
-            testSpell.Name.SetDefault("Iceball");
-            MasterRepository.Standard.Spells.Add(testSpell);
-
-            Feat testFeat = new Feat();
-            testFeat.Name.SetDefault("Tooth Punch");
-            MasterRepository.Standard.Feats.Add(testFeat);
-
-            Disease testDisease = new Disease();
-            testDisease.Name.SetDefault("Gehung");
-            MasterRepository.Standard.Diseases.Add(testDisease);
-
-            Poison testPoison = new Poison();
-            testPoison.Name.SetDefault("Poison of Death");
-            MasterRepository.Standard.Poisons.Add(testPoison);
-        }
-
         private void OpenDetail(BaseModel model, bool changeView)
         {
             if (!detailViewDict.ContainsKey(model))
@@ -130,7 +88,7 @@ namespace Eos.ViewModels
             }
         }
 
-        private void MessageHandler(MessageType type, object param)
+        private void MessageHandler(MessageType type, object? param)
         {
             if (param is BaseModel model)
             {
@@ -147,15 +105,61 @@ namespace Eos.ViewModels
                         break;
                 }
             }
+            else
+            {
+                switch(type)
+                {
+                    case MessageType.NewDetail:
+                        var newModel = MasterRepository.New((Type?)param ?? typeof(BaseModel));
+                        MessageDispatcher.Send(MessageType.OpenDetail, newModel);
+                        break;
+
+                    case MessageType.NewProject:
+                        WindowService.OpenDialog<NewProjectViewModel>();
+                        break;
+
+                    case MessageType.OpenProject:
+                        MasterRepository.Project.Load((String?)param ?? "");
+                        MessageDispatcher.Send(MessageType.ChangeLanguage, MasterRepository.Project.DefaultLanguage);
+                        break;
+
+                    case MessageType.SaveProject:
+                        MasterRepository.Project.Save();
+                        break;
+
+                    case MessageType.ChangeLanguage:
+                        CurrentLanguage = (TLKLanguage?)param ?? CurrentLanguage;
+                        break;
+                }
+            }
         }
 
         public MainViewModel()
         {
-           // GenerateDebugData();
+            MessageDispatcher.Subscribe(MessageType.NewProject, MessageHandler);
+            MessageDispatcher.Subscribe(MessageType.OpenProject, MessageHandler);
+            MessageDispatcher.Subscribe(MessageType.SaveProject, MessageHandler);
 
+            MessageDispatcher.Subscribe(MessageType.NewDetail, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.OpenDetail, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.OpenDetailSilent, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.CloseDetail, MessageHandler);
+
+            MessageDispatcher.Subscribe(MessageType.ChangeLanguage, MessageHandler);
+        }
+
+        ~MainViewModel()
+        {
+            MessageDispatcher.Unsubscribe(MessageType.NewProject, MessageHandler);
+            MessageDispatcher.Unsubscribe(MessageType.OpenProject, MessageHandler);
+            MessageDispatcher.Unsubscribe(MessageType.SaveProject, MessageHandler);
+
+            MessageDispatcher.Unsubscribe(MessageType.NewDetail, MessageHandler);
+            MessageDispatcher.Unsubscribe(MessageType.OpenDetail, MessageHandler);
+            MessageDispatcher.Unsubscribe(MessageType.OpenDetailSilent, MessageHandler);
+            MessageDispatcher.Unsubscribe(MessageType.CloseDetail, MessageHandler);
+
+            MessageDispatcher.Unsubscribe(MessageType.ChangeLanguage, MessageHandler);
         }
     }
 }

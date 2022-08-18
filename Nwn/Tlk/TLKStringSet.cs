@@ -1,28 +1,29 @@
-﻿using System;
+﻿using Eos.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace Eos.Types
+namespace Eos.Nwn.Tlk
 {
     public class TLKStringSet
     {
         private Dictionary<TLKLanguage, TLKString> strings;
         public TLKStringSet()
         {
-            this.strings = new Dictionary<TLKLanguage, TLKString>();
-            this.strings.Add(TLKLanguage.English, new TLKString());
-            this.strings.Add(TLKLanguage.French, new TLKString());
-            this.strings.Add(TLKLanguage.German, new TLKString());
-            this.strings.Add(TLKLanguage.Italian, new TLKString());
-            this.strings.Add(TLKLanguage.Spanish, new TLKString());
-            this.strings.Add(TLKLanguage.Polish, new TLKString());
-            this.strings.Add(TLKLanguage.Korean, new TLKString());
-            this.strings.Add(TLKLanguage.ChineseTraditional, new TLKString());
-            this.strings.Add(TLKLanguage.ChineseSimplified, new TLKString());
-            this.strings.Add(TLKLanguage.Japanese, new TLKString());
+            strings = new Dictionary<TLKLanguage, TLKString>();
+            strings.Add(TLKLanguage.English, new TLKString());
+            strings.Add(TLKLanguage.French, new TLKString());
+            strings.Add(TLKLanguage.German, new TLKString());
+            strings.Add(TLKLanguage.Italian, new TLKString());
+            strings.Add(TLKLanguage.Spanish, new TLKString());
+            strings.Add(TLKLanguage.Polish, new TLKString());
+            strings.Add(TLKLanguage.Korean, new TLKString());
+            strings.Add(TLKLanguage.ChineseTraditional, new TLKString());
+            strings.Add(TLKLanguage.ChineseSimplified, new TLKString());
+            strings.Add(TLKLanguage.Japanese, new TLKString());
         }
 
         public TLKString this[TLKLanguage index]
@@ -30,26 +31,11 @@ namespace Eos.Types
             get { return strings[index]; }
         }
 
-        public void SetDefault(String value, String? valueFemale = null)
-        {
-            strings[TLKLanguage.English].Text = value;
-            strings[TLKLanguage.English].TextF = valueFemale ?? value;
-        }
-
-        public void SetAll(String value, String? valueFemale = null)
-        {
-            foreach (TLKLanguage lng in Enum.GetValues(typeof(TLKLanguage)))
-            {
-                strings[lng].Text = value;
-                strings[lng].TextF = valueFemale ?? value;
-            }
-        }
-
         public int? OriginalIndex { get; set; }
 
-        public static implicit operator string(TLKStringSet tlkSet) => tlkSet[TLKLanguage.English].Text;
+        public static implicit operator string(TLKStringSet tlkSet) => tlkSet[MasterRepository.Project.DefaultLanguage].Text;
 
-        private String GetIsoName(TLKLanguage lang)
+        private string GetIsoName(TLKLanguage lang)
         {
             var name = Enum.GetName(lang);
             if (name == null) throw new MissingFieldException();
@@ -59,7 +45,7 @@ namespace Eos.Types
         public JsonObject? ToJson()
         {
             var tlkJson = new JsonObject();
-            tlkJson.Add("Index", this.OriginalIndex);
+            tlkJson.Add("Index", OriginalIndex);
             foreach (var lang in Enum.GetValues<TLKLanguage>())
             {
                 if (this[lang].Text != "")
@@ -80,14 +66,14 @@ namespace Eos.Types
         {
             if (tlkJson == null) tlkJson = new JsonObject();
 
-            this.OriginalIndex = tlkJson["Index"]?.GetValue<int?>();
+            OriginalIndex = tlkJson["Index"]?.GetValue<int?>();
             foreach (var lang in Enum.GetValues<TLKLanguage>())
             {
                 var iso = GetIsoName(lang);
                 if (tlkJson.ContainsKey(iso))
                 {
-                    this[lang].Text = tlkJson[iso]?.AsObject()?["M"]?.GetValue<String>() ?? "";
-                    this[lang].TextF = tlkJson[iso]?.AsObject()?["F"]?.GetValue<String>() ?? this[lang].Text;
+                    this[lang].Text = tlkJson[iso]?.AsObject()?["M"]?.GetValue<string>() ?? "";
+                    this[lang].TextF = tlkJson[iso]?.AsObject()?["F"]?.GetValue<string>() ?? this[lang].Text;
                 }
                 else
                 {

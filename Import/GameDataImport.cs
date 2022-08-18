@@ -535,31 +535,20 @@ namespace Eos.Import
                 feat.MinLevelClass = SolveInstance(feat.MinLevelClass, Standard.Classes);
             }
         }
-        
-        private void SaveRepository<T>(ModelRepository<T> repository, String filename) where T : BaseModel, new()
-        {
-            var jsonArr = new JsonArray();
-            foreach (var entity in repository)
-            {
-                if (entity != null)
-                    jsonArr.Add(entity.ToJson());
-            }
-            File.WriteAllText(filename, jsonArr.ToJsonString());
-        }
 
         private void SaveToJson()
         {
             if (!Directory.Exists(Constants.BaseDataPath))
                 Directory.CreateDirectory(Constants.BaseDataPath);
 
-            SaveRepository(Standard.Races, Constants.RacesFile);
-            SaveRepository(Standard.Classes, Constants.ClassesFile);
-            SaveRepository(Standard.Domains, Constants.DomainsFile);
-            SaveRepository(Standard.Skills, Constants.SkillsFile);
-            SaveRepository(Standard.Feats, Constants.FeatsFile);
-            SaveRepository(Standard.Spells, Constants.SpellsFile);
-            SaveRepository(Standard.Diseases, Constants.DiseasesFile);
-            SaveRepository(Standard.Poisons, Constants.PoisonsFile);
+            Standard.Races.SaveToFile(Constants.RacesFilePath);
+            Standard.Classes.SaveToFile(Constants.ClassesFilePath);
+            Standard.Domains.SaveToFile(Constants.DomainsFilePath);
+            Standard.Skills.SaveToFile(Constants.SkillsFilePath);
+            Standard.Feats.SaveToFile(Constants.FeatsFilePath);
+            Standard.Spells.SaveToFile(Constants.SpellsFilePath);
+            Standard.Diseases.SaveToFile(Constants.DiseasesFilePath);
+            Standard.Poisons.SaveToFile(Constants.PoisonsFilePath);
         }
 
         public void Import(String nwnBasePath)

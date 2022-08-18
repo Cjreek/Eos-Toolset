@@ -1,4 +1,5 @@
-﻿using Eos.Types;
+﻿using Eos.Nwn.Tlk;
+using Eos.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;

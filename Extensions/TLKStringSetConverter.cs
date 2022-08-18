@@ -1,4 +1,5 @@
-﻿using Eos.Types;
+﻿using Eos.Nwn.Tlk;
+using Eos.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,7 +13,7 @@ namespace Eos.Extensions
     [ValueConversion(typeof(TLKStringSet), typeof(String))]
     internal class TLKStringSetConverter : IMultiValueConverter
     {
-        private static TLKLanguage DefaultLanguage = TLKLanguage.English;
+        private static TLKLanguage DefaultLanguage = MasterRepository.Project.DefaultLanguage;
 
         public bool AlwaysUseDefaultLanguage { get; set; } = false;
 

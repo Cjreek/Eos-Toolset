@@ -10,7 +10,7 @@ using System.Text.Json.Nodes;
 
 namespace Eos.Repositories
 {
-    public class ModelRepository<T> : Repository<T> where T : BaseModel, new()
+    public class ModelRepository<T> : Repository<T>, IRepository where T : BaseModel, new()
     {
         private Dictionary<Guid, T?> modelLookup = new Dictionary<Guid, T?>();
         private Dictionary<int, T?> modelIndexLookup = new Dictionary<int, T?>();
@@ -76,32 +76,55 @@ namespace Eos.Repositories
 
         public void LoadFromFile(String filename)
         {
-            var fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
-            try
+            Clear();
+
+            if (File.Exists(filename))
             {
-                Clear();
-                if (JsonNode.Parse(fs) is JsonArray jsonRepository)
+                var fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+                try
                 {
-                    for (int i = 0; i < jsonRepository.Count; i++)
+                    if (JsonNode.Parse(fs) is JsonArray jsonRepository)
                     {
-                        if (jsonRepository[i] is JsonObject jsonObj)
+                        for (int i = 0; i < jsonRepository.Count; i++)
                         {
-                            var newModel = BaseModel.CreateFromJson<T>(jsonObj);
-                            Add(newModel);
+                            if (jsonRepository[i] is JsonObject jsonObj)
+                            {
+                                var newModel = BaseModel.CreateFromJson<T>(jsonObj);
+                                Add(newModel);
+                            }
                         }
                     }
                 }
+                finally
+                {
+                    fs.Close();
+                }
             }
-            finally
+        }
+
+        public void SaveToFile(String filename)
+        {
+            var jsonArr = new JsonArray();
+            foreach (var entity in this)
             {
-                fs.Close();
+                if (entity != null)
+                    jsonArr.Add(entity.ToJson());
             }
+            File.WriteAllText(filename, jsonArr.ToJsonString());
         }
 
         public void ResolveReferences()
         {
             foreach (var item in internalList)
                 item?.ResolveReferences();
+        }
+
+        public void AddBase(BaseModel model)
+        {
+            if (model is T notNullModel)
+                Add((T)notNullModel);
+            else
+                throw new InvalidCastException();
         }
     }
 }
