@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Models.Tables
 {
-    public class SavingThrowTableModel
+    public class SavingThrowTableItem : TableItem
     {
         public int Level { get; set; }
         public int FortitudeSave { get; set; }

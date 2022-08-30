@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Models.Tables
 {
-    public class KnownSpellsTableModel
+    public class KnownSpellsTableItem : TableItem
     {
         public int Level { get; set; }
         public int SpellLevel0 { get; set; }

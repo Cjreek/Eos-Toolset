@@ -12,7 +12,7 @@ using System.Text.Json.Nodes;
 
 namespace Eos.Repositories
 {
-    public class EosProject : MasterRepositoryCategory, INotifyPropertyChanged
+    public class EosProject : RepositoryCollection, INotifyPropertyChanged
     {
         private string _projectFolder = "";
         private string _name = "";

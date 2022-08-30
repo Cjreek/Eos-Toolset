@@ -1,4 +1,5 @@
 ﻿using Eos.Models;
+using Eos.Models.Tables;
 using Eos.Nwn;
 using Eos.Nwn.Bif;
 using Eos.Nwn.Tlk;
@@ -21,7 +22,7 @@ namespace Eos.Import
         private String nwnBasePath = "";
         private TlkCollection tlk = new TlkCollection();
         private BifCollection bif = new BifCollection();
-        private MasterRepositoryCategory Standard = MasterRepository.Standard;
+        private RepositoryCollection Standard = MasterRepository.Standard;
         private ResourceRepository Resources = MasterRepository.Resources;
 
         private List<KeyValuePair<TLKStringSet, int?>> tlkBuffer = new List<KeyValuePair<TLKStringSet, int?>>();
@@ -121,6 +122,115 @@ namespace Eos.Import
             }
         }
 
+        private void ImportAttackBonusTable(String tablename, Guid guid)
+        {
+            var tmpAttackBonusTable = new AttackBonusTable();
+            tmpAttackBonusTable.ID = guid;
+            tmpAttackBonusTable.Name = tablename;
+
+            var abTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
+            var abTable2da = new TwoDimensionalArrayFile(abTableResource.RawData);
+
+            tmpAttackBonusTable.Clear();
+            for (int i = 0; i < abTable2da.Count; i++)
+            {
+                var tmpItem = new AttackBonusTableItem();
+                tmpItem.Level = i + 1;
+                tmpItem.AttackBonus = abTable2da[i].AsInteger("BAB") ?? 0;
+                tmpAttackBonusTable.Add(tmpItem);
+            }
+
+            Standard.AttackBonusTables.Add(tmpAttackBonusTable);
+        }
+
+        private void ImportFeatsTable(String tablename, Guid guid)
+        {
+            var tmpFeatsTable = new FeatsTable();
+            tmpFeatsTable.ID = guid;
+            tmpFeatsTable.Name = tablename;
+
+            var featTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
+            var featTable2da = new TwoDimensionalArrayFile(featTableResource.RawData);
+
+            tmpFeatsTable.Clear();
+            for (int i = 0; i < featTable2da.Count; i++)
+            {
+                var tmpItem = new FeatsTableItem();
+                tmpItem.Feat = CreateRef<Feat>(featTable2da[i].AsInteger("FeatIndex"));
+                tmpItem.FeatList = (FeatListType)Enum.ToObject(typeof(FeatListType), featTable2da[i].AsInteger("List") ?? 0);
+                tmpItem.GrantedOnLevel = featTable2da[i].AsInteger("GrantedOnLevel") ?? -1;
+                tmpItem.Menu = (FeatMenu)Enum.ToObject(typeof(FeatMenu), featTable2da[i].AsInteger("OnMenu") ?? 0);
+                tmpFeatsTable.Add(tmpItem);
+            }
+
+            Standard.FeatTables.Add(tmpFeatsTable);
+        }
+
+        private void ImportSavingThrowTable(String tablename, Guid guid)
+        {
+            var tmpSavesTable = new SavingThrowTable();
+            tmpSavesTable.ID = guid;
+            tmpSavesTable.Name = tablename;
+
+            var savesTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
+            var savesTable2da = new TwoDimensionalArrayFile(savesTableResource.RawData);
+
+            tmpSavesTable.Clear();
+            for (int i = 0; i < savesTable2da.Count; i++)
+            {
+                var tmpItem = new SavingThrowTableItem();
+                tmpItem.Level = savesTable2da[i].AsInteger("Level") ?? 0;
+                tmpItem.FortitudeSave = savesTable2da[i].AsInteger("FortSave") ?? 0;
+                tmpItem.ReflexSave = savesTable2da[i].AsInteger("RefSave") ?? 0;
+                tmpItem.WillpowerSave = savesTable2da[i].AsInteger("WillSave") ?? 0;
+                tmpSavesTable.Add(tmpItem);
+            }
+
+            Standard.SavingThrowTables.Add(tmpSavesTable);
+        }
+
+        private void ImportBonusFeatsTable(String tablename, Guid guid)
+        {
+            var tmpBFeatTable = new BonusFeatsTable();
+            tmpBFeatTable.ID = guid;
+            tmpBFeatTable.Name = tablename;
+
+            var bfeatTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
+            var bfeatTable2da = new TwoDimensionalArrayFile(bfeatTableResource.RawData);
+
+            tmpBFeatTable.Clear();
+            for (int i = 0; i < bfeatTable2da.Count; i++)
+            {
+                var tmpItem = new BonusFeatsTableItem();
+                tmpItem.Level = i + 1;
+                tmpItem.BonusFeatCount = bfeatTable2da[i].AsInteger("Bonus") ?? 0;
+                tmpBFeatTable.Add(tmpItem);
+            }
+
+            Standard.BonusFeatTables.Add(tmpBFeatTable);
+        }
+
+        private void ImportSkillTable(String tablename, Guid guid)
+        {
+            var skillTable = new SkillsTable();
+            skillTable.ID = guid;
+            skillTable.Name = tablename;
+
+            var skillTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
+            var skillTable2da = new TwoDimensionalArrayFile(skillTableResource.RawData);
+
+            skillTable.Clear();
+            for (int i = 0; i < skillTable2da.Count; i++)
+            {
+                var tmpItem = new SkillsTableItem();
+                tmpItem.Skill = CreateRef<Skill>(skillTable2da[i].AsInteger("SkillIndex"));
+                tmpItem.IsClassSkill = skillTable2da[i].AsBoolean("ClassSkill");
+                skillTable.Add(tmpItem);
+            }
+
+            Standard.SkillTables.Add(skillTable);
+        }
+
         private void ImportClasses()
         {
             var classResource = bif.ReadResource("classes", NWNResourceType.TWODA);
@@ -137,14 +247,58 @@ namespace Eos.Import
                 SetText(tmpClass.NamePlural, classes2da[i].AsInteger("Plural"));
                 SetText(tmpClass.Description, classes2da[i].AsInteger("Description"));
 
-                tmpClass.Icon = Resources.AddResource(classes2da[i].AsString("Icon"), Nwn.NWNResourceType.TGA);
+                tmpClass.Icon = Resources.AddResource(classes2da[i].AsString("Icon"), NWNResourceType.TGA);
                 tmpClass.HitDie = classes2da[i].AsInteger("HitDie") ?? 0;
 
                 // AttackBonusTable
+                var abTable = classes2da[i].AsString("AttackBonusTable");
+                if (abTable != null)
+                {
+                    var abTableGuid = GenerateGuid(abTable.ToLower(), 0);
+                    if (!Standard.AttackBonusTables.Contains(abTableGuid))
+                        ImportAttackBonusTable(abTable, abTableGuid);
+                    tmpClass.AttackBonusTable = Standard.AttackBonusTables.GetByID(abTableGuid);
+                }
+
                 // FeatsTable
+                var featsTable = classes2da[i].AsString("FeatsTable");
+                if (featsTable != null)
+                {
+                    var featsTableGuid = GenerateGuid(featsTable.ToLower(), 0);
+                    if (!Standard.FeatTables.Contains(featsTableGuid))
+                        ImportFeatsTable(featsTable, featsTableGuid);
+                    tmpClass.Feats = Standard.FeatTables.GetByID(featsTableGuid);
+                }
+
                 // SavingThrowTable
+                var savingThrowTable = classes2da[i].AsString("SavingThrowTable");
+                if (savingThrowTable != null)
+                {
+                    var savingThrowTableGuid = GenerateGuid(savingThrowTable.ToLower(), 0);
+                    if (!Standard.SavingThrowTables.Contains(savingThrowTableGuid))
+                        ImportSavingThrowTable(savingThrowTable, savingThrowTableGuid);
+                    tmpClass.SavingThrows = Standard.SavingThrowTables.GetByID(savingThrowTableGuid);
+                }
+
                 // SkillsTable
+                var skillTable = classes2da[i].AsString("SkillsTable");
+                if (skillTable != null)
+                {
+                    var skillTableGuid = GenerateGuid(skillTable.ToLower(), 0);
+                    if (!Standard.SkillTables.Contains(skillTableGuid))
+                        ImportSkillTable(skillTable, skillTableGuid);
+                    tmpClass.Skills = Standard.SkillTables.GetByID(skillTableGuid);
+                }
+
                 // BonusFeatsTable
+                var bonusFeatTable = classes2da[i].AsString("BonusFeatsTable");
+                if (bonusFeatTable != null)
+                {
+                    var bonusFeatTableGuid = GenerateGuid(bonusFeatTable.ToLower(), 0);
+                    if (!Standard.BonusFeatTables.Contains(bonusFeatTableGuid))
+                        ImportBonusFeatsTable(bonusFeatTable, bonusFeatTableGuid);
+                    tmpClass.BonusFeats = Standard.BonusFeatTables.GetByID(bonusFeatTableGuid);
+                }
 
                 // SkillPointBase ??
 
@@ -212,7 +366,7 @@ namespace Eos.Import
                 SetText(tmpDomain.Description, domains2da[i].AsInteger("Description"));
 
                 tmpDomain.Icon = Resources.AddResource(domains2da[i].AsString("Icon"), Nwn.NWNResourceType.TGA);
-                //tmpDomain.Level0Spell = CreateRef<Spell>(domains2da[i].AsInteger("Level_0"));
+                tmpDomain.Level0Spell = CreateRef<Spell>(domains2da[i].AsInteger("Level_0", -1));
                 tmpDomain.Level1Spell = CreateRef<Spell>(domains2da[i].AsInteger("Level_1"));
                 tmpDomain.Level2Spell = CreateRef<Spell>(domains2da[i].AsInteger("Level_2"));
                 tmpDomain.Level3Spell = CreateRef<Spell>(domains2da[i].AsInteger("Level_3"));
@@ -251,7 +405,7 @@ namespace Eos.Import
                 tmpSkill.UseArmorPenalty = skills2da[i].AsBoolean("ArmorCheckPenalty");
                 tmpSkill.AllClassesCanUse = skills2da[i].AsBoolean("AllClassesCanUse");
                 tmpSkill.IsHostile = skills2da[i].AsBoolean("HostileSkill");
-                //tmpSkill.HideFromLevelUp = skills2da[i].AsBoolean("HideFromLevelUp");
+                tmpSkill.HideFromLevelUp = skills2da[i].AsBoolean("HideFromLevelUp", false);
 
                 Standard.Skills.Add(tmpSkill);
             }
@@ -371,10 +525,9 @@ namespace Eos.Import
                 tmpSpell.SubSpell3 = CreateRef<Spell>(spells2da[i].AsInteger("SubRadSpell3"));
                 tmpSpell.SubSpell4 = CreateRef<Spell>(spells2da[i].AsInteger("SubRadSpell4"));
                 tmpSpell.SubSpell5 = CreateRef<Spell>(spells2da[i].AsInteger("SubRadSpell5"));
-
-                //tmpSpell.SubSpell6 = CreateRef<Spell>(spells2da[i].AsInteger("SubRadSpell6"));
-                //tmpSpell.SubSpell7 = CreateRef<Spell>(spells2da[i].AsInteger("SubRadSpell7"));
-                //tmpSpell.SubSpell8 = CreateRef<Spell>(spells2da[i].AsInteger("SubRadSpell8"));
+                tmpSpell.SubSpell6 = CreateRef<Spell>(spells2da[i].AsInteger("SubRadSpell6", -1));
+                tmpSpell.SubSpell7 = CreateRef<Spell>(spells2da[i].AsInteger("SubRadSpell7", -1));
+                tmpSpell.SubSpell8 = CreateRef<Spell>(spells2da[i].AsInteger("SubRadSpell8", -1));
 
                 tmpSpell.Category = (!spells2da[i].IsNull("Category")) ? (AICategory)Enum.ToObject(typeof(AICategory), spells2da[i].AsInteger("Category") ?? 0) : null;
                 tmpSpell.ParentSpell = CreateRef<Spell>(spells2da[i].AsInteger("Master"));
@@ -534,6 +687,30 @@ namespace Eos.Import
                 feat.SuccessorFeat = SolveInstance(feat.SuccessorFeat, Standard.Feats);
                 feat.MinLevelClass = SolveInstance(feat.MinLevelClass, Standard.Classes);
             }
+
+            // FeatsTable
+            foreach (var featTable in Standard.FeatTables)
+            {
+                if (featTable == null) continue;
+                for (int i=0; i < featTable.Count; i++)
+                {
+                    var item = featTable[i];
+                    if (item == null) continue;
+                    item.Feat = SolveInstance(item.Feat, Standard.Feats);
+                }
+            }
+
+            // SkillsTable
+            foreach (var skillTable in Standard.SkillTables)
+            {
+                if (skillTable == null) continue;
+                for (int i = 0; i < skillTable.Count; i++)
+                {
+                    var item = skillTable[i];
+                    if (item == null) continue;
+                    item.Skill = SolveInstance(item.Skill, Standard.Skills);
+                }
+            }
         }
 
         private void SaveToJson()
@@ -551,11 +728,21 @@ namespace Eos.Import
             Standard.Poisons.SaveToFile(Constants.PoisonsFilePath);
         }
 
+        private void ClearTables()
+        {
+            Standard.AttackBonusTables.Clear();
+            Standard.BonusFeatTables.Clear();
+            Standard.FeatTables.Clear();
+            Standard.SavingThrowTables.Clear();
+        }
+
         public void Import(String nwnBasePath)
         {
             this.nwnBasePath = nwnBasePath;
             tlk.Load(nwnBasePath);
             bif.Load(nwnBasePath);
+
+            ClearTables();
 
             ImportRaces();
             ImportClasses();

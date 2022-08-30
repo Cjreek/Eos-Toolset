@@ -73,7 +73,11 @@ namespace Eos.Repositories
         }
 
         public int Count => internalList.Count;
-        public T? this[int index] => internalList[index];
+        public T? this[int index]
+        {
+            get { return internalList[index]; }
+            set { internalList[index] = value; }
+        }
 
         public bool Contains(T model)
         {

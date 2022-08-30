@@ -1,5 +1,4 @@
-﻿using Eos.Models.Base;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -8,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Eos.Models.Tables
 {
-    public class SavingThrowTable : BaseTable<SavingThrowTableModel>
+    public class SavingThrowTable : BaseTable<SavingThrowTableItem>
     {
         protected override void InitializeData()
         {
             for (int i = 0; i < GetMaximumItems(); i++)
             {
-                Add(new SavingThrowTableModel()
+                Add(new SavingThrowTableItem()
                 {
                     Level = i + 1,
                     FortitudeSave = 0,

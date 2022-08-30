@@ -1,5 +1,4 @@
-﻿using Eos.Models.Base;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Models.Tables
 {
-    public class FeatsTable : BaseTable<FeatsTableModel>
+    public class FeatsTable : BaseTable<FeatsTableItem>
     {
         protected override int GetMaximumItems()
         {

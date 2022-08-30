@@ -52,7 +52,7 @@ namespace Eos.Nwn.Tlk
                 {
                     var lngObj = new JsonObject();
                     lngObj.Add("M", this[lang].Text);
-                    if (this[lang].Text != this[lang].TextF)
+                    if ((this[lang].Text != this[lang].TextF) && (this[lang].TextF != ""))
                         lngObj.Add("F", this[lang].TextF);
 
                     tlkJson.Add(GetIsoName(lang), lngObj);

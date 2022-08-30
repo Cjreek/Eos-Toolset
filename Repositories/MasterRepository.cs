@@ -13,168 +13,11 @@ using System.Threading.Tasks;
 
 namespace Eos.Repositories
 {
-    public class VirtualModelRepository<T> : IReadOnlyList<T?> where T : BaseModel, new()
-    {
-        private readonly ModelRepository<T>[] repositories;
-
-        public VirtualModelRepository(params ModelRepository<T>[] repositories)
-        {
-            this.repositories = repositories;
-        }
-
-        public T? this[int index]
-        {
-            get
-            {
-                int tmpIndex = index;
-                for (int i = 0; i < repositories.Length; i++)
-                {
-                    if (tmpIndex >= repositories[i].Count)
-                        tmpIndex -= repositories[i].Count;
-                    else
-                        return repositories[i][tmpIndex];
-                }
-
-                throw new IndexOutOfRangeException();
-            }
-        }
-
-        int IReadOnlyCollection<T?>.Count => repositories.Sum(list => list.Count);
-
-        public IEnumerator<T?> GetEnumerator()
-        {
-            return repositories.SelectMany(list => list).GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return repositories.SelectMany(list => list).GetEnumerator();
-        }
-
-        public T? GetByID(Guid id)
-        {
-            T? result = null;
-            foreach (var repo in repositories)
-            {
-                result = repo.GetByID(id);
-                if (result != null) break;
-            }
-
-            return result;
-        }
-
-        public T? GetByIndex(int index)
-        {
-            T? result = null;
-            foreach (var repo in repositories)
-            {
-                result = repo.GetByIndex(index);
-                if (result != null) break;
-            }
-
-            return result;
-        }
-
-        public bool Contains(Guid id)
-        {
-            var result = false;
-            foreach (var repo in repositories)
-            {
-                result = repo.Contains(id);
-                if (result) break;
-            }
-
-            return result;
-        }
-
-        public bool Contains(int index)
-        {
-            var result = false;
-            foreach (var repo in repositories)
-            {
-                result = repo.Contains(index);
-                if (result) break;
-            }
-
-            return result;
-        }
-    }
-
-    public class MasterRepositoryCategory
-    {
-        private readonly Dictionary<Type, IRepository> repositoryDict = new Dictionary<Type, IRepository>();
-
-        private readonly ModelRepository<Race> raceRepository;
-        private readonly ModelRepository<CharacterClass> classRepository;
-        private readonly ModelRepository<Domain> domainRepository;
-        private readonly SpellRepository spellRepository;
-        private readonly FeatRepository featRepository;
-        private readonly ModelRepository<Skill> skillRepository;
-        private readonly ModelRepository<Disease> diseaseRepository;
-        private readonly ModelRepository<Poison> poisonRepository;
-
-        public MasterRepositoryCategory(bool isReadonly)
-        {
-            raceRepository = new ModelRepository<Race>(isReadonly);
-            classRepository = new ModelRepository<CharacterClass>(isReadonly);
-            domainRepository = new ModelRepository<Domain>(isReadonly);
-            spellRepository = new SpellRepository(isReadonly);
-            featRepository = new FeatRepository(isReadonly);
-            skillRepository = new ModelRepository<Skill>(isReadonly);
-            diseaseRepository = new ModelRepository<Disease>(isReadonly);
-            poisonRepository = new ModelRepository<Poison>(isReadonly);
-
-            repositoryDict.Add(typeof(Race), raceRepository);
-            repositoryDict.Add(typeof(CharacterClass), classRepository);
-            repositoryDict.Add(typeof(Domain), domainRepository);
-            repositoryDict.Add(typeof(Spell), spellRepository);
-            repositoryDict.Add(typeof(Feat), featRepository);
-            repositoryDict.Add(typeof(Skill), skillRepository);
-            repositoryDict.Add(typeof(Disease), diseaseRepository);
-            repositoryDict.Add(typeof(Poison), poisonRepository);
-        }
-
-        // Model Repositories
-        public ModelRepository<Race> Races { get { return raceRepository; } }
-        public ModelRepository<CharacterClass> Classes { get { return classRepository; } }
-        public ModelRepository<Domain> Domains { get { return domainRepository; } }
-        public SpellRepository Spells { get { return spellRepository; } }
-        public FeatRepository Feats { get { return featRepository; } }
-        public ModelRepository<Skill> Skills { get { return skillRepository; } }
-        public ModelRepository<Disease> Diseases { get { return diseaseRepository; } }
-        public ModelRepository<Poison> Poisons { get { return poisonRepository; } }
-
-        public BaseModel New(Type modelType)
-        {
-            var constructor = modelType.GetConstructor(new Type[] { });
-            if (constructor != null)
-            {
-                var newModel = (BaseModel)constructor.Invoke(new object[] { });
-                repositoryDict[modelType].AddBase(newModel);
-                return newModel;
-            }
-            else
-                throw new Exception();
-        }
-
-        public void Clear()
-        {
-            Races.Clear();
-            Classes.Clear();
-            Domains.Clear();
-            Spells.Clear();
-            Feats.Clear();
-            Skills.Clear();
-            Diseases.Clear();
-            Poisons.Clear();
-        }
-    }
-
     internal static class MasterRepository
     {
         private static readonly ResourceRepository resources;
 
-        private static readonly MasterRepositoryCategory standardCategory;
+        private static readonly RepositoryCollection standardCategory;
         private static readonly EosProject project;
 
         private static readonly VirtualModelRepository<Race> raceVirtualRepository;
@@ -190,7 +33,7 @@ namespace Eos.Repositories
         {
             resources = new ResourceRepository();
 
-            standardCategory = new MasterRepositoryCategory(true);
+            standardCategory = new RepositoryCollection(true);
             project = new EosProject();
 
             raceVirtualRepository = new VirtualModelRepository<Race>(standardCategory.Races, project.Races);
@@ -220,7 +63,7 @@ namespace Eos.Repositories
 
         public static ResourceRepository Resources { get { return resources; } }
 
-        public static MasterRepositoryCategory Standard { get { return standardCategory; } }
+        public static RepositoryCollection Standard { get { return standardCategory; } }
         public static EosProject Project { get { return project; } }
 
         public static VirtualModelRepository<Race> Races { get { return raceVirtualRepository; } }

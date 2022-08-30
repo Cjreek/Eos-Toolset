@@ -1,5 +1,4 @@
-﻿using Eos.Models.Base;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Eos.Models.Tables
 {
-    public class BonusFeatsTable : BaseTable<BonusFeatsTableModel>
+    public class BonusFeatsTable : BaseTable<BonusFeatsTableItem>
     {
         protected override void InitializeData()
         {
             for (int i = 0; i < GetMaximumItems(); i++)
             {
-                Add(new BonusFeatsTableModel()
+                Add(new BonusFeatsTableItem()
                 {
                     Level = i + 1,
                     BonusFeatCount = 0,

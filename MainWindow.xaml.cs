@@ -28,10 +28,10 @@ namespace Eos
         {
             InitializeComponent();
             MasterRepository.Initialize(@"D:\Steam\steamapps\common\Neverwinter Nights");
-            MasterRepository.Load();
+            //MasterRepository.Load();
 
-            //var import = new GameDataImport();
-            //import.Import(@"D:\Steam\steamapps\common\Neverwinter Nights");
+            var import = new GameDataImport();
+            import.Import(@"D:\Steam\steamapps\common\Neverwinter Nights");
         }
 
         protected override void OnClosed(EventArgs e)

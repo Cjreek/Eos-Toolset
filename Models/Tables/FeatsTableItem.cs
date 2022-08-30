@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Models.Tables
 {
-    public class FeatsTableModel
+    public class FeatsTableItem : TableItem
     {
         public Feat? Feat { get; set; }
         public FeatListType FeatList { get; set; } = FeatListType.GeneralFeat;

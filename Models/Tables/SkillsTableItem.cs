@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Eos.Models.Tables
 {
-    public class BonusFeatsTableModel
+    public class SkillsTableItem : TableItem
     {
-        public int Level { get; set; } = 1;
-        public int BonusFeatCount { get; set; } = 0; 
+        public Skill? Skill { get; set; }
+        public bool IsClassSkill { get; set; }
     }
 }
