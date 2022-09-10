@@ -63,6 +63,16 @@ namespace Eos.Repositories
         {
             base.Clear();
             modelLookup.Clear();
+            modelIndexLookup.Clear();
+        }
+
+        public override void Remove(T item)
+        {
+            if (item.Index != null && modelIndexLookup.ContainsKey(item.Index ?? 0))
+                modelIndexLookup.Remove(item.Index ?? 0);
+            if (modelLookup.ContainsKey(item.ID))
+                modelLookup.Remove(item.ID);
+            base.Remove(item);
         }
 
         public void LoadFromFile(String filename)

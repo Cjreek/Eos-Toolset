@@ -11,6 +11,7 @@
       xmlns:wpftkg="clr-namespace:Xceed.Wpf.DataGrid;assembly=DotNetProjects.Wpf.DataGrid"
       xmlns:wpftkv="clr-namespace:Xceed.Wpf.DataGrid.Views;assembly=DotNetProjects.Wpf.DataGrid"
       xmlns:types="clr-namespace:Eos.Types"
+      x:Name="page"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="FeatsTableView">
@@ -19,9 +20,50 @@
     </Page.DataContext>
     <Page.Resources>
         <ext:NotConverter x:Key="inverter"/>
+
+        <Style TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        </Style>
+
+        <DataTemplate x:Key="grantedCellTemplate">
+            <wpftk:IntegerUpDown Maximum="60" Minimum="1" VerticalAlignment="Top" Value="{Binding Path=GrantedOnLevel, UpdateSourceTrigger=LostFocus}" Margin="-6,-5,-6,-5"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="featCellTemplate">
+            <uc:FeatComboBox SelectedValue="{Binding Path=Feat}" IsNullable="False" Margin="-6,-1,-6,-5"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="menuCellTemplate">
+            <uc:EnumComboBox ItemsSource="{ext:EnumSource types:FeatMenu}" SelectedValue="{Binding Path=Menu}" Margin="-6,-1,-6,-5"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="deleteCellTemplate">
+            <Button Content="X" Margin="-4,-4,-6,-4" Background="Transparent" Command="{Binding ElementName=page, Path=DataContext.DeleteFeatItemCommand}" CommandParameter="{Binding}">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Foreground" Value="Gray"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="DarkRed"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </DataTemplate>
     </Page.Resources>
     <TabControl TabStripPlacement="Left" BorderThickness="1,0,0,0">
         <TabControl.Resources>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="2,0,0,3"/>
+            </Style>
+            <Style TargetType="{x:Type ComboBox}">
+                <Setter Property="Margin" Value="2,0,0,3"/>
+            </Style>
+            <Style TargetType="{x:Type CheckBox}">
+                <Setter Property="Margin" Value="1,0,0,3"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
             <Style TargetType="{x:Type TabItem}">
                 <Setter Property="RenderTransform">
                     <Setter.Value>
@@ -32,25 +74,6 @@
         </TabControl.Resources>
         <TabItem Header="General" Width="150" Height="30">
             <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
-                <Grid.Resources>
-                    <Style TargetType="{x:Type TabItem}">
-                        <Setter Property="RenderTransform">
-                            <Setter.Value>
-                                <TranslateTransform Y="-2"/>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                    <Style TargetType="{x:Type TextBox}">
-                        <Setter Property="Margin" Value="2,0,0,3"/>
-                    </Style>
-                    <Style TargetType="{x:Type ComboBox}">
-                        <Setter Property="Margin" Value="2,0,0,3"/>
-                    </Style>
-                    <Style TargetType="{x:Type CheckBox}">
-                        <Setter Property="Margin" Value="1,0,0,3"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                    </Style>
-                </Grid.Resources>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
@@ -79,28 +102,10 @@
         </TabItem>
         <TabItem Header="Granted Feats" Width="150" Height="30">
             <Grid Margin="10">
-                <Grid.Resources>
-                    <Style TargetType="{x:Type TabItem}">
-                        <Setter Property="RenderTransform">
-                            <Setter.Value>
-                                <TranslateTransform Y="-2"/>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                    <Style TargetType="{x:Type TextBox}">
-                        <Setter Property="Margin" Value="2,0,0,3"/>
-                    </Style>
-                    <Style TargetType="{x:Type ComboBox}">
-                        <Setter Property="Margin" Value="2,0,0,3"/>
-                    </Style>
-                    <Style TargetType="{x:Type CheckBox}">
-                        <Setter Property="Margin" Value="1,0,0,3"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                    </Style>
-                </Grid.Resources>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -109,63 +114,25 @@
                 <TextBlock Text="Granted Feats" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
                 <ListView Grid.Row="1" ItemsSource="{Binding Data.GrantedFeats}">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Level" Width="50">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding Path=GrantedOnLevel}" Margin="-6,-5,-6,-5"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Feat" Width="300">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <uc:FeatComboBox SelectedValue="{Binding Path=Feat}" IsNullable="False" Margin="-6,-1,-6,-5"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Menu" Width="120">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <uc:EnumComboBox ItemsSource="{ext:EnumSource types:FeatMenu}" SelectedValue="{Binding Path=Menu}" Margin="-6,-1,-6,-5"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                            <GridViewColumn Header="Level" Width="50" CellTemplate="{StaticResource grantedCellTemplate}"/>
+                            <GridViewColumn Header="Feat" Width="300" CellTemplate="{StaticResource featCellTemplate}"/>
+                            <GridViewColumn Header="Menu" Width="120" CellTemplate="{StaticResource menuCellTemplate}"/>
+                            <GridViewColumn Header="" Width="25" CellTemplate="{StaticResource deleteCellTemplate}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
+
+                <Button Grid.Row="2" Content="Add Feat" Width="150" Margin="0,5,0,0" HorizontalAlignment="Left" Command="{Binding AddFeatItemCommand}" CommandParameter="{x:Static types:FeatListType.AutomaticallyGranted}"/>
             </Grid>
         </TabItem>
         <TabItem Header="General Feats" Width="150" Height="30">
             <Grid Margin="10">
-                <Grid.Resources>
-                    <Style TargetType="{x:Type TabItem}">
-                        <Setter Property="RenderTransform">
-                            <Setter.Value>
-                                <TranslateTransform Y="-2"/>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                    <Style TargetType="{x:Type TextBox}">
-                        <Setter Property="Margin" Value="2,0,0,3"/>
-                    </Style>
-                    <Style TargetType="{x:Type ComboBox}">
-                        <Setter Property="Margin" Value="2,0,0,3"/>
-                    </Style>
-                    <Style TargetType="{x:Type CheckBox}">
-                        <Setter Property="Margin" Value="1,0,0,3"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                    </Style>
-                </Grid.Resources>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -173,57 +140,25 @@
 
                 <TextBlock Text="Available General Feats" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
                 <ListView Grid.Row="1" ItemsSource="{Binding Data.GeneralFeats}">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Feat" Width="300">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <uc:FeatComboBox SelectedValue="{Binding Path=Feat}" IsNullable="False" Margin="-6,-1,-6,-5"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Menu" Width="120">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <uc:EnumComboBox ItemsSource="{ext:EnumSource types:FeatMenu}" SelectedValue="{Binding Path=Menu}" Margin="-6,-1,-6,-5"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                            <GridViewColumn Header="Feat" Width="300" CellTemplate="{StaticResource featCellTemplate}"/>
+                            <GridViewColumn Header="Menu" Width="120" CellTemplate="{StaticResource menuCellTemplate}"/>
+                            <GridViewColumn Header="" Width="25" CellTemplate="{StaticResource deleteCellTemplate}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
+
+                <Button Grid.Row="2" Content="Add Feat" Width="150" Margin="0,5,0,0" HorizontalAlignment="Left" Command="{Binding AddFeatItemCommand}" CommandParameter="{x:Static types:FeatListType.GeneralFeat}"/>
             </Grid>
         </TabItem>
         
         <TabItem Header="General &amp; Bonus Feats" Width="150" Height="30">
             <Grid Margin="10">
-                <Grid.Resources>
-                    <Style TargetType="{x:Type TabItem}">
-                        <Setter Property="RenderTransform">
-                            <Setter.Value>
-                                <TranslateTransform Y="-2"/>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                    <Style TargetType="{x:Type TextBox}">
-                        <Setter Property="Margin" Value="2,0,0,3"/>
-                    </Style>
-                    <Style TargetType="{x:Type ComboBox}">
-                        <Setter Property="Margin" Value="2,0,0,3"/>
-                    </Style>
-                    <Style TargetType="{x:Type CheckBox}">
-                        <Setter Property="Margin" Value="1,0,0,3"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                    </Style>
-                </Grid.Resources>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -231,57 +166,25 @@
 
                 <TextBlock Text="Available General &amp; Bonus Feats" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
                 <ListView Grid.Row="1" ItemsSource="{Binding Data.GeneralOrBonusFeats}">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Feat" Width="300">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <uc:FeatComboBox SelectedValue="{Binding Path=Feat}" IsNullable="False" Margin="-6,-1,-6,-5"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Menu" Width="120">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <uc:EnumComboBox ItemsSource="{ext:EnumSource types:FeatMenu}" SelectedValue="{Binding Path=Menu}" Margin="-6,-1,-6,-5"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                            <GridViewColumn Header="Feat" Width="300" CellTemplate="{StaticResource featCellTemplate}"/>
+                            <GridViewColumn Header="Menu" Width="120" CellTemplate="{StaticResource menuCellTemplate}"/>
+                            <GridViewColumn Header="" Width="25" CellTemplate="{StaticResource deleteCellTemplate}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
+
+                <Button Grid.Row="2" Content="Add Feat" Width="150" Margin="0,5,0,0" HorizontalAlignment="Left" Command="{Binding AddFeatItemCommand}" CommandParameter="{x:Static types:FeatListType.GeneralFeatOrBonusFeat}"/>
             </Grid>
         </TabItem>
 
-        <TabItem Header="Bonus Feats" Width="150" Height="30">
+        <TabItem Header="Bonus Feats Only" Width="150" Height="30">
             <Grid Margin="10">
-                <Grid.Resources>
-                    <Style TargetType="{x:Type TabItem}">
-                        <Setter Property="RenderTransform">
-                            <Setter.Value>
-                                <TranslateTransform Y="-2"/>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                    <Style TargetType="{x:Type TextBox}">
-                        <Setter Property="Margin" Value="2,0,0,3"/>
-                    </Style>
-                    <Style TargetType="{x:Type ComboBox}">
-                        <Setter Property="Margin" Value="2,0,0,3"/>
-                    </Style>
-                    <Style TargetType="{x:Type CheckBox}">
-                        <Setter Property="Margin" Value="1,0,0,3"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                    </Style>
-                </Grid.Resources>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -289,30 +192,16 @@
 
                 <TextBlock Text="Available Bonus Feats" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
                 <ListView Grid.Row="1" ItemsSource="{Binding Data.BonusFeats}">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Feat" Width="300">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <uc:FeatComboBox SelectedValue="{Binding Path=Feat}" IsNullable="False" Margin="-6,-1,-6,-5"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Menu" Width="120">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <uc:EnumComboBox ItemsSource="{ext:EnumSource types:FeatMenu}" SelectedValue="{Binding Path=Menu}" Margin="-6,-1,-6,-5"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                            <GridViewColumn Header="Feat" Width="300" CellTemplate="{StaticResource featCellTemplate}"/>
+                            <GridViewColumn Header="Menu" Width="120" CellTemplate="{StaticResource menuCellTemplate}"/>
+                            <GridViewColumn Header="" Width="25" CellTemplate="{StaticResource deleteCellTemplate}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
+
+                <Button Grid.Row="2" Content="Add Feat" Width="150" Margin="0,5,0,0" HorizontalAlignment="Left" Command="{Binding AddFeatItemCommand}" CommandParameter="{x:Static types:FeatListType.BonusFeat}"/>
             </Grid>
         </TabItem>
     </TabControl>

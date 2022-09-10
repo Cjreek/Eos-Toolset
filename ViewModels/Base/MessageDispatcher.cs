@@ -15,7 +15,9 @@ namespace Eos.ViewModels.Base
         NewDetail,
         OpenDetail,
         OpenDetailSilent,
-        CloseDetail
+        CloseDetail,
+
+        FeatTableItemChanged,
     }
 
     public delegate void MessageHandler(MessageType type, object? param);

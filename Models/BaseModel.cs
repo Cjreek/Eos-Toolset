@@ -3,18 +3,22 @@ using Eos.Repositories;
 using Eos.Types;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
 namespace Eos.Models
 {
-    public class BaseModel
+    public class BaseModel : INotifyPropertyChanged
     {
         public Guid ID { get; set; }
         public bool IsReadonly { get; set; } = false;
         public int? Index { get; set; }
         public String? Icon { get; set; }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual String GetLabel()
         {
@@ -62,6 +66,14 @@ namespace Eos.Models
         public virtual void ResolveReferences()
         {
 
+        }
+
+        public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

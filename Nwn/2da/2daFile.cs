@@ -35,12 +35,12 @@ namespace Eos.Nwn.TwoDimensionalArray
 
         public object? this[int index] => values[index];
 
-        public object? AsObject(String columnName, int? defaultValue = null)
+        public object? AsObject(String columnName, int? defaultValue = null, bool throwException = true)
         {
             var index = columns.IndexOf(columnName);
             if ((index >= values.Count) || (index < 0))
             {
-                if (defaultValue == null)
+                if ((defaultValue == null) && (throwException))
                     throw new IndexOutOfRangeException();
                 return defaultValue;
             }
@@ -48,18 +48,18 @@ namespace Eos.Nwn.TwoDimensionalArray
             return this[index];
         }
 
-        public int? AsInteger(int columnIndex, int? defaultValue = null)
+        public int? AsInteger(int columnIndex, int? defaultValue = null, bool throwException = true)
         {
             if ((columnIndex >= values.Count) || (columnIndex < 0))
             {
-                if (defaultValue == null)
+                if ((defaultValue == null) && (throwException))
                     throw new IndexOutOfRangeException();
                 return defaultValue;
             }
 
             if ((values[columnIndex] is string) || (values[columnIndex] is double))
             {
-                if (defaultValue == null)
+                if ((defaultValue == null) && (throwException))
                     throw new InvalidCastException();
                 return defaultValue;
             }
@@ -67,34 +67,44 @@ namespace Eos.Nwn.TwoDimensionalArray
             return (int?)values[columnIndex];
         }
 
-        public int? AsInteger(String columnName, int? defaultValue = null)
+        public int? AsInteger(String columnName, int? defaultValue)
         {
-            return AsInteger(columns.IndexOf(columnName), defaultValue);
+            return AsInteger(columns.IndexOf(columnName), defaultValue, false);
         }
 
-        public bool AsBoolean(int columnIndex, bool? defaultValue = null)
+        public int? AsInteger(String columnName)
+        {
+            return AsInteger(columns.IndexOf(columnName));
+        }
+
+        public bool AsBoolean(int columnIndex, bool? defaultValue = null, bool throwException = true)
         {
             int? intDefaultValue = defaultValue == null ? null : ((defaultValue ?? false) ? 1 : 0);
-            return (AsInteger(columnIndex, intDefaultValue) ?? 0) != 0;
+            return (AsInteger(columnIndex, intDefaultValue, throwException) ?? 0) != 0;
         }
 
-        public bool AsBoolean(String columnName, bool? defaultValue = null)
+        public bool AsBoolean(String columnName, bool? defaultValue)
         {
-            return AsBoolean(columns.IndexOf(columnName), defaultValue);
+            return AsBoolean(columns.IndexOf(columnName), defaultValue, false);
         }
 
-        public double? AsFloat(int columnIndex, double? defaultValue = null)
+        public bool AsBoolean(String columnName)
+        {
+            return AsBoolean(columns.IndexOf(columnName));
+        }
+
+        public double? AsFloat(int columnIndex, double? defaultValue = null, bool throwException = true)
         {
             if ((columnIndex >= values.Count) || (columnIndex < 0))
             {
-                if (defaultValue == null)
+                if ((defaultValue == null) && (throwException))
                     throw new IndexOutOfRangeException();
                 return defaultValue;
             }
 
             if (values[columnIndex] is string)
             {
-                if (defaultValue == null)
+                if ((defaultValue == null) && (throwException))
                     throw new InvalidCastException();
                 return defaultValue;
             }
@@ -105,23 +115,28 @@ namespace Eos.Nwn.TwoDimensionalArray
             return (double?)Convert.ChangeType(values[columnIndex], typeof(double));
         }
 
-        public double? AsFloat(String columnName, double? defaultValue = null)
+        public double? AsFloat(String columnName, double? defaultValue)
         {
-            return AsFloat(columns.IndexOf(columnName), defaultValue);
+            return AsFloat(columns.IndexOf(columnName), defaultValue, false);
         }
 
-        public string? AsString(int columnIndex, string? defaultValue = null)
+        public double? AsFloat(String columnName)
+        {
+            return AsFloat(columns.IndexOf(columnName));
+        }
+
+        public string? AsString(int columnIndex, string? defaultValue = null, bool throwException = true)
         {
             if ((columnIndex >= values.Count) || (columnIndex < 0))
             {
-                if (defaultValue == null)
+                if ((defaultValue == null) && (throwException))
                     throw new IndexOutOfRangeException();
                 return defaultValue;
             }
 
             if (values[columnIndex] is int)
             {
-                if (defaultValue == null)
+                if ((defaultValue == null) && (throwException))
                     throw new InvalidCastException();
                 return defaultValue;
             }
@@ -129,15 +144,24 @@ namespace Eos.Nwn.TwoDimensionalArray
             return (string?)values[columnIndex];
         }
 
-        public string? AsString(String columnName, string? defaultValue = null)
+        public string? AsString(String columnName, string? defaultValue)
         {
-            return AsString(columns.IndexOf(columnName), defaultValue);
+            return AsString(columns.IndexOf(columnName), defaultValue, false);
         }
 
-        public bool IsNull(int columnIndex)
+        public string? AsString(String columnName)
+        {
+            return AsString(columns.IndexOf(columnName));
+        }
+
+        public bool IsNull(int columnIndex, bool throwException = true)
         {
             if ((columnIndex >= values.Count) || (columnIndex < 0))
-                throw new IndexOutOfRangeException();
+            {
+                if (throwException)
+                    throw new IndexOutOfRangeException();
+                return true;
+            }
 
             return values[columnIndex] == null;
         }

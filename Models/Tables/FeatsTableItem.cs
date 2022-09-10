@@ -1,5 +1,6 @@
 ﻿using Eos.Repositories;
 using Eos.Types;
+using Eos.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,36 @@ namespace Eos.Models.Tables
 {
     public class FeatsTableItem : TableItem
     {
-        public Feat? Feat { get; set; }
+        private Feat? _feat;
+        private int _grantedOnLevel;
+
+        public Feat? Feat
+        {
+            get { return _feat; }
+            set
+            {
+                if (_feat != value)
+                {
+                    _feat = value;
+                    MessageDispatcher.Send(MessageType.FeatTableItemChanged, this);
+                }
+            }
+        }
+
         public FeatListType FeatList { get; set; } = FeatListType.GeneralFeat;
-        public int GrantedOnLevel { get; set; } = -1;
+        public int GrantedOnLevel
+        {
+            get { return _grantedOnLevel; }
+            set 
+            {
+                if (_grantedOnLevel != value)
+                {
+                    _grantedOnLevel = value;
+                    MessageDispatcher.Send(MessageType.FeatTableItemChanged, this);
+                }
+            }
+        }
+
         public FeatMenu Menu { get; set; } = FeatMenu.NoMenuEntry;
 
         public override void ResolveReferences()

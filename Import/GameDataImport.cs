@@ -231,6 +231,66 @@ namespace Eos.Import
             Standard.SkillTables.Add(skillTable);
         }
 
+        private void ImportSpellSlotTable(String tablename, Guid guid)
+        {
+            var spellSlotTable = new SpellSlotTable();
+            spellSlotTable.ID = guid;
+            spellSlotTable.Name = tablename;
+
+            var spellSlotTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
+            var spellSlotTable2da = new TwoDimensionalArrayFile(spellSlotTableResource.RawData);
+
+            spellSlotTable.Clear();
+            for (int i = 0; i < spellSlotTable2da.Count; i++)
+            {
+                var tmpItem = new SpellSlotTableItem();
+                tmpItem.Level = spellSlotTable2da[i].AsInteger("Level") ?? 0;
+                tmpItem.SpellLevel0 = spellSlotTable2da[i].AsInteger("SpellLevel0", null);
+                tmpItem.SpellLevel1 = spellSlotTable2da[i].AsInteger("SpellLevel1", null);
+                tmpItem.SpellLevel2 = spellSlotTable2da[i].AsInteger("SpellLevel2", null);
+                tmpItem.SpellLevel3 = spellSlotTable2da[i].AsInteger("SpellLevel3", null);
+                tmpItem.SpellLevel4 = spellSlotTable2da[i].AsInteger("SpellLevel4", null);
+                tmpItem.SpellLevel5 = spellSlotTable2da[i].AsInteger("SpellLevel5", null);
+                tmpItem.SpellLevel6 = spellSlotTable2da[i].AsInteger("SpellLevel6", null);
+                tmpItem.SpellLevel7 = spellSlotTable2da[i].AsInteger("SpellLevel7", null);
+                tmpItem.SpellLevel8 = spellSlotTable2da[i].AsInteger("SpellLevel8", null);
+                tmpItem.SpellLevel9 = spellSlotTable2da[i].AsInteger("SpellLevel9", null);
+                spellSlotTable.Add(tmpItem);
+            }
+
+            Standard.SpellSlotTables.Add(spellSlotTable);
+        }
+
+        private void ImportKnownSpellsTable(String tablename, Guid guid)
+        {
+            var knownSpellsTable = new KnownSpellsTable();
+            knownSpellsTable.ID = guid;
+            knownSpellsTable.Name = tablename;
+
+            var knownSpellsTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
+            var knownSpellsTable2da = new TwoDimensionalArrayFile(knownSpellsTableResource.RawData);
+
+            knownSpellsTable.Clear();
+            for (int i = 0; i < knownSpellsTable2da.Count; i++)
+            {
+                var tmpItem = new KnownSpellsTableItem();
+                tmpItem.Level = knownSpellsTable2da[i].AsInteger("Level") ?? 0;
+                tmpItem.SpellLevel0 = knownSpellsTable2da[i].AsInteger("SpellLevel0", null);
+                tmpItem.SpellLevel1 = knownSpellsTable2da[i].AsInteger("SpellLevel1", null);
+                tmpItem.SpellLevel2 = knownSpellsTable2da[i].AsInteger("SpellLevel2", null);
+                tmpItem.SpellLevel3 = knownSpellsTable2da[i].AsInteger("SpellLevel3", null);
+                tmpItem.SpellLevel4 = knownSpellsTable2da[i].AsInteger("SpellLevel4", null);
+                tmpItem.SpellLevel5 = knownSpellsTable2da[i].AsInteger("SpellLevel5", null);
+                tmpItem.SpellLevel6 = knownSpellsTable2da[i].AsInteger("SpellLevel6", null);
+                tmpItem.SpellLevel7 = knownSpellsTable2da[i].AsInteger("SpellLevel7", null);
+                tmpItem.SpellLevel8 = knownSpellsTable2da[i].AsInteger("SpellLevel8", null);
+                tmpItem.SpellLevel9 = knownSpellsTable2da[i].AsInteger("SpellLevel9", null);
+                knownSpellsTable.Add(tmpItem);
+            }
+
+            Standard.KnownSpellsTables.Add(knownSpellsTable);
+        }
+
         private void ImportPrerequisiteTable(String tablename, Guid guid)
         {
             var preRequTable = new PrerequisiteTable();
@@ -350,7 +410,24 @@ namespace Eos.Import
                 // SkillPointBase ??
 
                 // SpellGainTable
+                var spellGainTable = classes2da[i].AsString("SpellGainTable");
+                if (spellGainTable != null)
+                {
+                    var spellGainTableGuid = GenerateGuid(spellGainTable.ToLower(), 0);
+                    if (!Standard.SpellSlotTables.Contains(spellGainTableGuid))
+                        ImportSpellSlotTable(spellGainTable, spellGainTableGuid);
+                    tmpClass.SpellSlots = Standard.SpellSlotTables.GetByID(spellGainTableGuid);
+                }
+
                 // SpellKnownTable
+                var spellKnownTable = classes2da[i].AsString("SpellKnownTable");
+                if (spellKnownTable != null)
+                {
+                    var spellKnownTableGuid = GenerateGuid(spellKnownTable.ToLower(), 0);
+                    if (!Standard.KnownSpellsTables.Contains(spellKnownTableGuid))
+                        ImportKnownSpellsTable(spellKnownTable, spellKnownTableGuid);
+                    tmpClass.KnownSpells = Standard.KnownSpellsTables.GetByID(spellKnownTableGuid);
+                }
 
                 tmpClass.Playable = classes2da[i].AsBoolean("PlayerClass");
                 tmpClass.IsSpellCaster = classes2da[i].AsBoolean("SpellCaster");
@@ -395,7 +472,7 @@ namespace Eos.Import
                 if (spellAbilityStr != "")
                     tmpClass.SpellcastingAbility = Enum.Parse<AbilityType>(spellAbilityStr, true);
 
-                // Spellbook
+                //tmpClass.Spellbook
 
                 tmpClass.CasterLevelMultiplier = classes2da[i].AsFloat("CLMultiplier") ?? 1.0;
                 tmpClass.MinCastingLevel = classes2da[i].AsInteger("MinCastingLevel") ?? 0;
@@ -823,6 +900,8 @@ namespace Eos.Import
             Standard.SavingThrowTables.SaveToFile(Constants.SavingThrowTablesFilePath);
             Standard.PrerequisiteTables.SaveToFile(Constants.PrerequisiteTablesFilePath);
             Standard.SkillTables.SaveToFile(Constants.SkillTablesFilePath);
+            Standard.SpellSlotTables.SaveToFile(Constants.SpellSlotTablesFilePath);
+            Standard.KnownSpellsTables.SaveToFile(Constants.KnownSpellsTablesFilePath);
         }
 
         private void ClearTables()
@@ -833,6 +912,8 @@ namespace Eos.Import
             Standard.SavingThrowTables.Clear();
             Standard.PrerequisiteTables.Clear();
             Standard.SkillTables.Clear();
+            Standard.SpellSlotTables.Clear();
+            Standard.KnownSpellsTables.Clear();
         }
 
         public void Import(String nwnBasePath)

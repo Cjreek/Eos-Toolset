@@ -94,6 +94,11 @@ namespace Eos.Repositories
             internalList.Clear();
         }
 
+        public virtual void Remove(T item)
+        {
+            internalList.Remove(item);
+        }
+
         public void Sort<U>(Func<T?, U> compareFunc)
         {
             var list = internalList.OrderBy(compareFunc).ToList();

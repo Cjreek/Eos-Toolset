@@ -62,6 +62,11 @@ namespace Eos.Models.Tables
                 _items.Add(item);
         }
 
+        public void Remove(T item)
+        {
+            _items.Remove(item);
+        }
+
         public void Clear()
         {
             _items.Clear();
