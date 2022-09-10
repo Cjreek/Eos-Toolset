@@ -172,7 +172,7 @@
                     <uc:ClassComboBox Grid.Row="2" Grid.Column="3" SelectedValue="{Binding Data.ToolsetDefaultClass}" IsNullable="False"/>
 
                     <TextBlock Text="Skill Point Modifier" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
-                    <ComboBox ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.SkillPointModifierAbility}" SelectedValuePath="Value" DisplayMemberPath="DisplayName" Grid.Row="3" Grid.Column="1"/>
+                    <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.SkillPointModifierAbility}" IsNullable="True" Grid.Row="3" Grid.Column="1"/>
 
                     <TextBlock Text="Extra Skill Points per Level" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
                     <wpftk:IntegerUpDown Value="{Binding Data.ExtraSkillPointsPerLevel}" Grid.Row="3" Grid.Column="3"/>

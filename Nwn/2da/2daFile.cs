@@ -35,6 +35,19 @@ namespace Eos.Nwn.TwoDimensionalArray
 
         public object? this[int index] => values[index];
 
+        public object? AsObject(String columnName, int? defaultValue = null)
+        {
+            var index = columns.IndexOf(columnName);
+            if ((index >= values.Count) || (index < 0))
+            {
+                if (defaultValue == null)
+                    throw new IndexOutOfRangeException();
+                return defaultValue;
+            }
+
+            return this[index];
+        }
+
         public int? AsInteger(int columnIndex, int? defaultValue = null)
         {
             if ((columnIndex >= values.Count) || (columnIndex < 0))

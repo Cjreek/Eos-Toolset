@@ -231,6 +231,53 @@ namespace Eos.Import
             Standard.SkillTables.Add(skillTable);
         }
 
+        private void ImportPrerequisiteTable(String tablename, Guid guid)
+        {
+            var preRequTable = new PrerequisiteTable();
+            preRequTable.ID = guid;
+            preRequTable.Name = tablename;
+
+            var preRequTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
+            var preRequTable2da = new TwoDimensionalArrayFile(preRequTableResource.RawData);
+
+            preRequTable.Clear();
+            for (int i = 0; i < preRequTable2da.Count; i++)
+            {
+                var tmpItem = new PrerequisiteTableItem();
+                tmpItem.RequirementType = Enum.Parse<RequirementType>(preRequTable2da[i].AsString("ReqType") ?? "", true);
+
+                switch (tmpItem.RequirementType)
+                {
+                    case RequirementType.CLASSOR:
+                    case RequirementType.CLASSNOT:
+                        tmpItem.RequirementParam1 = CreateRef<CharacterClass>(preRequTable2da[i].AsInteger("ReqParam1"));
+                        break;
+
+                    case RequirementType.FEAT:
+                    case RequirementType.FEATOR:
+                        tmpItem.RequirementParam1 = CreateRef<Feat>(preRequTable2da[i].AsInteger("ReqParam1"));
+                        break;
+
+                    case RequirementType.RACE:
+                        tmpItem.RequirementParam1 = CreateRef<Race>(preRequTable2da[i].AsInteger("ReqParam1"));
+                        break;
+
+                    case RequirementType.SKILL:
+                        tmpItem.RequirementParam1 = CreateRef<Skill>(preRequTable2da[i].AsInteger("ReqParam1"));
+                        break;
+
+                    default:
+                        tmpItem.RequirementParam1 = preRequTable2da[i].AsObject("ReqParam1");
+                        break;
+                }
+                
+                tmpItem.RequirementParam2 = preRequTable2da[i].AsObject("ReqParam2");
+                preRequTable.Add(tmpItem);
+            }
+
+            Standard.PrerequisiteTables.Add(preRequTable);
+        }
+
         private void ImportClasses()
         {
             var classResource = bif.ReadResource("classes", NWNResourceType.TWODA);
@@ -316,7 +363,16 @@ namespace Eos.Import
                 tmpClass.PrimaryAbility = Enum.Parse<AbilityType>(classes2da[i].AsString("PrimaryAbil") ?? "", true);
 
                 // Alignment
+
                 // Prerequesites
+                var preRequTable = classes2da[i].AsString("PreReqTable");
+                if (preRequTable != null)
+                {
+                    var preRequTableGuid = GenerateGuid(preRequTable.ToLower(), 0);
+                    if (!Standard.PrerequisiteTables.Contains(preRequTableGuid))
+                        ImportPrerequisiteTable(preRequTable, preRequTableGuid);
+                    tmpClass.Requirements = Standard.PrerequisiteTables.GetByID(preRequTableGuid);
+                }
 
                 tmpClass.MaxLevel = classes2da[i].AsInteger("MaxLevel") ?? 0;
                 tmpClass.MulticlassXPPenalty = classes2da[i].AsBoolean("XPPenalty");
@@ -692,6 +748,8 @@ namespace Eos.Import
             foreach (var featTable in Standard.FeatTables)
             {
                 if (featTable == null) continue;
+
+                featTable.Items.Sort(p => p?.GrantedOnLevel == -1 ? int.MaxValue : p?.GrantedOnLevel);
                 for (int i=0; i < featTable.Count; i++)
                 {
                     var item = featTable[i];
@@ -711,6 +769,38 @@ namespace Eos.Import
                     item.Skill = SolveInstance(item.Skill, Standard.Skills);
                 }
             }
+
+            // Prerequisites Table
+            foreach (var preRequTable in Standard.PrerequisiteTables)
+            {
+                if (preRequTable == null) continue;
+                for (int i = 0; i < preRequTable.Count; i++)
+                {
+                    var item = preRequTable[i];
+                    if (item == null) continue;
+
+                    switch (item.RequirementType)
+                    {
+                        case RequirementType.CLASSNOT:
+                        case RequirementType.CLASSOR:
+                            item.RequirementParam1 = SolveInstance((CharacterClass?)item.RequirementParam1, Standard.Classes);
+                            break;
+
+                        case RequirementType.FEAT:
+                        case RequirementType.FEATOR:
+                            item.RequirementParam1 = SolveInstance((Feat?)item.RequirementParam1, Standard.Feats);
+                            break;
+
+                        case RequirementType.RACE:
+                            item.RequirementParam1 = SolveInstance((Race?)item.RequirementParam1, Standard.Races);
+                            break;
+
+                        case RequirementType.SKILL:
+                            item.RequirementParam1 = SolveInstance((Skill?)item.RequirementParam1, Standard.Skills);
+                            break;
+                    }
+                }
+            }
         }
 
         private void SaveToJson()
@@ -726,6 +816,13 @@ namespace Eos.Import
             Standard.Spells.SaveToFile(Constants.SpellsFilePath);
             Standard.Diseases.SaveToFile(Constants.DiseasesFilePath);
             Standard.Poisons.SaveToFile(Constants.PoisonsFilePath);
+
+            Standard.AttackBonusTables.SaveToFile(Constants.AttackBonusTablesFilePath);
+            Standard.BonusFeatTables.SaveToFile(Constants.BonusFeatTablesFilePath);
+            Standard.FeatTables.SaveToFile(Constants.FeatTablesFilePath);
+            Standard.SavingThrowTables.SaveToFile(Constants.SavingThrowTablesFilePath);
+            Standard.PrerequisiteTables.SaveToFile(Constants.PrerequisiteTablesFilePath);
+            Standard.SkillTables.SaveToFile(Constants.SkillTablesFilePath);
         }
 
         private void ClearTables()
@@ -734,6 +831,8 @@ namespace Eos.Import
             Standard.BonusFeatTables.Clear();
             Standard.FeatTables.Clear();
             Standard.SavingThrowTables.Clear();
+            Standard.PrerequisiteTables.Clear();
+            Standard.SkillTables.Clear();
         }
 
         public void Import(String nwnBasePath)

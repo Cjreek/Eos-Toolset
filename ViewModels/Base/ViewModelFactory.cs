@@ -1,4 +1,5 @@
 ﻿using Eos.Models;
+using Eos.Models.Tables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,10 @@ namespace Eos.ViewModels
                 return new DiseaseViewModel(disease);
             if (model is Poison poison)
                 return new PoisonViewModel(poison);
+
+            if (model is FeatsTable featsTable)
+                return new FeatsTableViewModel(featsTable);
+
             else
                 throw new ArgumentException("No viewmodel found", "model");
         }

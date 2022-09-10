@@ -26,6 +26,9 @@ namespace Eos.Repositories
         private readonly ModelRepository<FeatsTable> featTableRepository;
         private readonly ModelRepository<SavingThrowTable> savingThrowTableRepository;
         private readonly ModelRepository<SkillsTable> skillTableRepository;
+        private readonly ModelRepository<PrerequisiteTable> prerequisiteTableRepository;
+        private readonly ModelRepository<SpellSlotTable> spellSlotTableRepository;
+        private readonly ModelRepository<KnownSpellsTable> knownSpellsTableRepository;
 
         public RepositoryCollection(bool isReadonly)
         {
@@ -43,6 +46,9 @@ namespace Eos.Repositories
             featTableRepository = new ModelRepository<FeatsTable>(isReadonly); // Always writeable?
             savingThrowTableRepository = new ModelRepository<SavingThrowTable>(isReadonly); // Always writeable?
             skillTableRepository = new ModelRepository<SkillsTable>(isReadonly); // Always writeable?
+            prerequisiteTableRepository = new ModelRepository<PrerequisiteTable>(isReadonly); // Always writeable?
+            spellSlotTableRepository = new ModelRepository<SpellSlotTable>(isReadonly); // Always writeable?
+            knownSpellsTableRepository = new ModelRepository<KnownSpellsTable>(isReadonly); // Always writeable?
 
             repositoryDict.Add(typeof(Race), raceRepository);
             repositoryDict.Add(typeof(CharacterClass), classRepository);
@@ -58,6 +64,9 @@ namespace Eos.Repositories
             repositoryDict.Add(typeof(FeatsTable), featTableRepository);
             repositoryDict.Add(typeof(SavingThrowTable), savingThrowTableRepository);
             repositoryDict.Add(typeof(SkillsTable), skillTableRepository);
+            repositoryDict.Add(typeof(PrerequisiteTable), prerequisiteTableRepository);
+            repositoryDict.Add(typeof(SpellSlotTable), prerequisiteTableRepository);
+            repositoryDict.Add(typeof(KnownSpellsTable), knownSpellsTableRepository);
         }
 
         // Model Repositories
@@ -75,6 +84,9 @@ namespace Eos.Repositories
         public ModelRepository<FeatsTable> FeatTables { get { return featTableRepository; } }
         public ModelRepository<SavingThrowTable> SavingThrowTables { get { return savingThrowTableRepository; } }
         public ModelRepository<SkillsTable> SkillTables { get { return skillTableRepository; } }
+        public ModelRepository<PrerequisiteTable> PrerequisiteTables { get { return prerequisiteTableRepository; } }
+        public ModelRepository<SpellSlotTable> SpellSlotTables { get { return spellSlotTableRepository; } }
+        public ModelRepository<KnownSpellsTable> KnownSpellsTables { get { return knownSpellsTableRepository; } }
 
         public BaseModel New(Type modelType)
         {
@@ -105,6 +117,9 @@ namespace Eos.Repositories
             FeatTables.Clear();
             SavingThrowTables.Clear();
             SkillTables.Clear();
+            PrerequisiteTables.Clear();
+            SpellSlotTables.Clear();
+            KnownSpellsTables.Clear();
         }
     }
 }

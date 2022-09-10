@@ -8,6 +8,8 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
+using static Eos.Models.JsonUtils;
+
 namespace Eos.Models
 {
     public class Race : BaseModel
@@ -37,7 +39,7 @@ namespace Eos.Models
         public int? FirstLevelAbilityPoints { get; set; } = 30;
         public int? FeatEveryNthLevel { get; set; } = 3;
         public int? FeatEveryNthLevelCount { get; set; } = 1;
-        public AbilityType SkillPointModifierAbility { get; set; } = AbilityType.INT;
+        public AbilityType? SkillPointModifierAbility { get; set; } = AbilityType.INT;
         public List<Feat> Feats { get; } = new List<Feat>();
 
         protected override String GetLabel()

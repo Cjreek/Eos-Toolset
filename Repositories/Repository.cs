@@ -93,5 +93,14 @@ namespace Eos.Repositories
         {
             internalList.Clear();
         }
+
+        public void Sort<U>(Func<T?, U> compareFunc)
+        {
+            var list = internalList.OrderBy(compareFunc).ToList();
+
+            internalList.Clear();
+            foreach (var item in list)
+                internalList.Add(item);
+        }
     }
 }

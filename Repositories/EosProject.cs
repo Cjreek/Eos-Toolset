@@ -1,4 +1,5 @@
-﻿using Eos.Nwn.Tlk;
+﻿using Eos.Models.Tables;
+using Eos.Nwn.Tlk;
 using Eos.Types;
 using System;
 using System.Collections.Generic;
@@ -97,6 +98,15 @@ namespace Eos.Repositories
             Skills.LoadFromFile(ProjectFolder + Constants.SkillsFilename);
             Diseases.LoadFromFile(ProjectFolder + Constants.DiseasesFilename);
             Poisons.LoadFromFile(ProjectFolder + Constants.PoisonsFilename);
+
+            AttackBonusTables.LoadFromFile(ProjectFolder + Constants.AttackBonusTablesFilename);
+            BonusFeatTables.LoadFromFile(ProjectFolder + Constants.BonusFeatTablesFilename);
+            FeatTables.LoadFromFile(ProjectFolder + Constants.FeatTablesFilename);
+            SavingThrowTables.LoadFromFile(ProjectFolder + Constants.SavingThrowTablesFilename);
+            SkillTables.LoadFromFile(ProjectFolder + Constants.SkillTablesFilename);
+            PrerequisiteTables.LoadFromFile(ProjectFolder + Constants.PrerequisiteTablesFilename);
+            SpellSlotTables.LoadFromFile(ProjectFolder + Constants.SpellSlotTablesFilename);
+            KnownSpellsTables.LoadFromFile(ProjectFolder + Constants.KnownSpellsTablesFilename);
         }
 
         public void Save()
@@ -110,6 +120,15 @@ namespace Eos.Repositories
             Skills.SaveToFile(ProjectFolder + Constants.SkillsFilename);
             Diseases.SaveToFile(ProjectFolder + Constants.DiseasesFilename);
             Poisons.SaveToFile(ProjectFolder + Constants.PoisonsFilename);
+
+            AttackBonusTables.SaveToFile(ProjectFolder + Constants.AttackBonusTablesFilename);
+            BonusFeatTables.SaveToFile(ProjectFolder + Constants.BonusFeatTablesFilename);
+            FeatTables.SaveToFile(ProjectFolder + Constants.FeatTablesFilename);
+            SavingThrowTables.SaveToFile(ProjectFolder + Constants.SavingThrowTablesFilename);
+            SkillTables.SaveToFile(ProjectFolder + Constants.SkillTablesFilename);
+            PrerequisiteTables.SaveToFile(ProjectFolder + Constants.PrerequisiteTablesFilename);
+            SpellSlotTables.SaveToFile(ProjectFolder + Constants.SpellSlotTablesFilename);
+            KnownSpellsTables.SaveToFile(ProjectFolder + Constants.KnownSpellsTablesFilename);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

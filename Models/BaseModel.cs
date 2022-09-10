@@ -31,71 +31,9 @@ namespace Eos.Models
             return result;
         }
 
-        private bool EnumIsFlags<T>() where T : struct, Enum
+        public JsonObject? ToJsonRef()
         {
-            return typeof(T).GetCustomAttributes(typeof(FlagsAttribute), false).Any();
-        }
-
-        protected JsonNode? EnumToJson<T>(T value) where T : struct, Enum
-        {
-            return EnumToJson((T?)value);
-        }
-
-        protected JsonNode? EnumToJson<T>(T? value) where T : struct, Enum
-        {
-            if (EnumIsFlags<T>())
-            {
-                var flagArr = new JsonArray();
-                if (Convert.ToInt32(value) != 0)
-                {
-                    foreach (var flag in Enum.GetValues<T>())
-                    {
-                        if ((Convert.ToInt32(value) & Convert.ToInt32(flag)) != 0)
-                            flagArr.Add(Enum.GetName(flag));
-                    }
-                }
-
-                return flagArr;
-            }
-
-            return Enum.GetName(value ?? default(T));
-        }
-
-        protected T? JsonToEnum<T>(JsonNode? node) where T : struct, Enum
-        {
-            if (node == null) return null;
-
-            if ((node is JsonArray arr) && (EnumIsFlags<T>()))
-            {
-                Int32 result = 0;
-                for (int i = 0; i < arr.Count; i++)
-                    result = result | Convert.ToInt32(Enum.Parse<T>(arr[i]?.GetValue<String>() ?? ""));
-
-                return (T)Enum.ToObject(typeof(T), result);
-            }
-
-            return Enum.Parse<T>(node.GetValue<String>());
-
-        }
-
-        protected static Guid ParseGuid(String? value)
-        {
-            if (value == null) return Guid.Empty;
-            return Guid.Parse(value);
-        }
-
-        public static T CreateRef<T>(Guid guid) where T : BaseModel, new()
-        {
-            T result = new T();
-            result.ID = guid;
-            return result;
-        }
-
-        public static T? CreateRefFromJson<T>(JsonObject? jsonRef) where T : BaseModel, new()
-        {
-            if (jsonRef == null) return default(T);
-
-            return CreateRef<T>(ParseGuid(jsonRef["ID"]?.GetValue<String>()));
+            return CreateJsonRef(this);
         }
 
         public virtual JsonObject ToJson()
@@ -115,7 +53,7 @@ namespace Eos.Models
             
         }
 
-        protected M? Resolve<M>(M? modelRef, VirtualModelRepository<M> repository) where M : BaseModel, new()
+        public static M? Resolve<M>(M? modelRef, VirtualModelRepository<M> repository) where M : BaseModel, new()
         {
             if (modelRef == null) return null;
             return repository.GetByID(modelRef.ID);

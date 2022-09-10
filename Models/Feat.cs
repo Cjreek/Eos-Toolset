@@ -8,6 +8,8 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
+using static Eos.Models.JsonUtils;
+
 namespace Eos.Models
 {
     public class Feat : BaseModel

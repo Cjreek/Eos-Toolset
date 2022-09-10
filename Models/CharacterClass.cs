@@ -1,5 +1,6 @@
 ﻿using Eos.Models.Tables;
 using Eos.Nwn.Tlk;
+using Eos.Repositories;
 using Eos.Types;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+
+using static Eos.Models.JsonUtils;
 
 namespace Eos.Models
 {
@@ -33,7 +36,7 @@ namespace Eos.Models
         public int RecommendedCha { get; set; } = 10;
         public AbilityType PrimaryAbility { get; set; } = AbilityType.STR;
         public Alignment AllowedAlignments { get; set; } = Alignments.All;
-        public IntPtr Requirements { get; set; }
+        public PrerequisiteTable? Requirements { get; set; }
         public int MaxLevel { get; set; } = 0;
         public bool MulticlassXPPenalty { get; set; } = true;
         public int ArcaneCasterLevelMod { get; set; } = 0;
@@ -63,7 +66,14 @@ namespace Eos.Models
 
         public override void ResolveReferences()
         {
-
+            AttackBonusTable = Resolve(AttackBonusTable, MasterRepository.AttackBonusTables);
+            Feats = Resolve(Feats, MasterRepository.FeatTables);
+            SavingThrows = Resolve(SavingThrows, MasterRepository.SavingThrowTables);
+            Skills = Resolve(Skills, MasterRepository.SkillTables);
+            BonusFeats = Resolve(BonusFeats, MasterRepository.BonusFeatTables);
+            SpellSlots = Resolve(SpellSlots, MasterRepository.SpellSlotTables);
+            KnownSpells = Resolve(KnownSpells, MasterRepository.KnownSpellsTables);
+            Requirements = Resolve(Requirements, MasterRepository.PrerequisiteTables);
         }
 
         public override void FromJson(JsonObject json)
@@ -75,13 +85,13 @@ namespace Eos.Models
             this.Description.FromJson(json["Description"]?.AsObject());
             this.Icon = json["Icon"]?.GetValue<String>();
             this.HitDie = json["HitDie"]?.GetValue<int>() ?? 1;
-            //this.AttackBonusTable
-            //this.Feats
-            //this.SavingThrows
-            //this.Skills
-            //this.BonusFeats
-            //this.SpellSlots
-            //this.KnownSpells
+            this.AttackBonusTable = CreateRefFromJson<AttackBonusTable>(json["AttackBonusTable"]?.AsObject());
+            this.Feats = CreateRefFromJson<FeatsTable>(json["Feats"]?.AsObject());
+            this.SavingThrows = CreateRefFromJson<SavingThrowTable>(json["SavingThrows"]?.AsObject());
+            this.Skills = CreateRefFromJson<SkillsTable>(json["Skills"]?.AsObject());
+            this.BonusFeats = CreateRefFromJson<BonusFeatsTable>(json["BonusFeats"]?.AsObject());
+            this.SpellSlots = CreateRefFromJson<SpellSlotTable>(json["SpellSlots"]?.AsObject());
+            this.KnownSpells = CreateRefFromJson<KnownSpellsTable>(json["KnownSpells"]?.AsObject());
             this.Playable = json["Playable"]?.GetValue<bool>() ?? false;
             this.IsSpellCaster = json["IsSpellCaster"]?.GetValue<bool>() ?? false;
             this.RecommendedStr = json["RecommendedStr"]?.GetValue<int>() ?? 10;
@@ -92,7 +102,7 @@ namespace Eos.Models
             this.RecommendedCha = json["RecommendedCha"]?.GetValue<int>() ?? 10;
             this.PrimaryAbility = JsonToEnum<AbilityType>(json["PrimaryAbility"]) ?? AbilityType.STR;
             this.AllowedAlignments = JsonToEnum<Alignment>(json["AllowedAlignments"]) ?? (Alignment)0;
-            this.Requirements = IntPtr.Zero; // !
+            this.Requirements = CreateRefFromJson<PrerequisiteTable>(json["Requirements"]?.AsObject());
             this.MaxLevel = json["MaxLevel"]?.GetValue<int>() ?? 0;
             this.MulticlassXPPenalty = json["MulticlassXPPenalty"]?.GetValue<bool>() ?? false;
             this.ArcaneCasterLevelMod = json["ArcaneCasterLevelMod"]?.GetValue<int>() ?? 0;
@@ -126,13 +136,13 @@ namespace Eos.Models
             classJson.Add("Description", this.Description.ToJson());
             classJson.Add("Icon", this.Icon);
             classJson.Add("HitDie", this.HitDie);
-            classJson.Add("AttackBonusTable", null); // !
-            classJson.Add("Feats", null); // !
-            classJson.Add("SavingThrows", null); // !
-            classJson.Add("Skills", null); // !
-            classJson.Add("BonusFeats", null); // !
-            classJson.Add("SpellSlots", null); // !
-            classJson.Add("KnownSpells", null); // !
+            classJson.Add("AttackBonusTable", CreateJsonRef(this.AttackBonusTable));
+            classJson.Add("Feats", CreateJsonRef(this.Feats));
+            classJson.Add("SavingThrows", CreateJsonRef(this.SavingThrows));
+            classJson.Add("Skills", CreateJsonRef(this.Skills));
+            classJson.Add("BonusFeats", CreateJsonRef(this.BonusFeats));
+            classJson.Add("SpellSlots", CreateJsonRef(this.SpellSlots));
+            classJson.Add("KnownSpells", CreateJsonRef(this.KnownSpells));
             classJson.Add("Playable", this.Playable);
             classJson.Add("IsSpellCaster", this.IsSpellCaster);
             classJson.Add("RecommendedStr", this.RecommendedStr);
@@ -143,7 +153,7 @@ namespace Eos.Models
             classJson.Add("RecommendedCha", this.RecommendedCha);
             classJson.Add("PrimaryAbility", EnumToJson(this.PrimaryAbility));
             classJson.Add("AllowedAlignments", EnumToJson(this.AllowedAlignments));
-            classJson.Add("Requirements", null); // !
+            classJson.Add("Requirements", CreateJsonRef(this.Requirements));
             classJson.Add("MaxLevel", this.MaxLevel);
             classJson.Add("MulticlassXPPenalty", this.MulticlassXPPenalty);
             classJson.Add("ArcaneCasterLevelMod", this.ArcaneCasterLevelMod);

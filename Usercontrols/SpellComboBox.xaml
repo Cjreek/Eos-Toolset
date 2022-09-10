@@ -22,6 +22,11 @@
         </Grid.ColumnDefinitions>
 
         <ComboBox x:Name="cbSpells" Grid.Column="0" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Spells}}" SelectedValue="{Binding ElementName=ucSpellComboBox, Path=SelectedValue}">
+            <ComboBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </ComboBox.ItemsPanel>
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">

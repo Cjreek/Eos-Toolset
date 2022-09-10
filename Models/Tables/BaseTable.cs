@@ -8,7 +8,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+
+using static Eos.Models.JsonUtils;
 
 namespace Eos.Models.Tables
 {
@@ -17,6 +20,8 @@ namespace Eos.Models.Tables
         private Repository<T> _items = new Repository<T>();
         public string Name { get; set; } = "";
         
+        public Repository<T> Items => _items;
+
         public T? this[int index]
         {
             get
@@ -60,6 +65,55 @@ namespace Eos.Models.Tables
         public void Clear()
         {
             _items.Clear();
+        }
+
+        public override void ResolveReferences()
+        {
+            for (int i=0; i < Count; i++)
+            {
+                var item = this[i];
+                if (item != null)
+                    item.ResolveReferences();
+            }
+        }
+
+        public override void FromJson(JsonObject json)
+        {
+            Clear();
+
+            this.ID = ParseGuid(json["ID"]?.GetValue<String>());
+            this.Name = json["Name"]?.GetValue<String>() ?? "";
+            var itemArr = json["Items"]?.AsArray();
+            if (itemArr != null)
+            {
+                foreach (var jsonItemValue in itemArr)
+                {
+                    if (jsonItemValue is JsonObject jsonItem)
+                    {
+                        var item = new T();
+                        item.FromJson(jsonItem);
+                        Add(item);
+                    }
+                }
+            }
+        }
+
+        public override JsonObject ToJson()
+        {
+            var tableJson = new JsonObject();
+            tableJson.Add("ID", this.ID.ToString());
+            tableJson.Add("Name", this.Name);
+
+            var itemArr = new JsonArray();
+            for (int i = 0; i < Count; i++)
+            {
+                var item = this[i];
+                if (item != null)
+                    itemArr.Add(item.ToJson());
+            }
+            tableJson.Add("Items", itemArr);
+
+            return tableJson;
         }
     }
 }

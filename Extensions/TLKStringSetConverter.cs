@@ -19,6 +19,10 @@ namespace Eos.Extensions
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
+            if ((values.Length > 0) && (values[0] is String text))
+            {
+                return text;
+            }
             if ((values.Length == 1) && (values[0] is TLKStringSet defaultStrings))
             {
                 return defaultStrings[DefaultLanguage].Text;

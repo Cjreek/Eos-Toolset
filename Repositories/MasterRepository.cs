@@ -1,4 +1,5 @@
 ﻿using Eos.Models;
+using Eos.Models.Tables;
 using Eos.Nwn.Bif;
 using Eos.Nwn.Tlk;
 using Eos.Nwn.TwoDimensionalArray;
@@ -29,6 +30,16 @@ namespace Eos.Repositories
         private static readonly VirtualModelRepository<Disease> diseaseVirtualRepository;
         private static readonly VirtualModelRepository<Poison> poisonVirtualRepository;
 
+        private static readonly VirtualModelRepository<AttackBonusTable> babTableVirtualRepository;
+        private static readonly VirtualModelRepository<BonusFeatsTable> bonusFeatTableVirtualRepository;
+        private static readonly VirtualModelRepository<FeatsTable> featsTableVirtualRepository;
+        private static readonly VirtualModelRepository<SavingThrowTable> savesTableVirtualRepository;
+        private static readonly VirtualModelRepository<SkillsTable> skillsTableVirtualRepository;
+        private static readonly VirtualModelRepository<PrerequisiteTable> requTableVirtualRepository;
+
+        private static readonly VirtualModelRepository<SpellSlotTable> spellSlotTableVirtualRepository;
+        private static readonly VirtualModelRepository<KnownSpellsTable> knownSpellsTableVirtualRepository;
+
         static MasterRepository()
         {
             resources = new ResourceRepository();
@@ -44,6 +55,15 @@ namespace Eos.Repositories
             skillVirtualRepository = new VirtualModelRepository<Skill>(standardCategory.Skills, project.Skills);
             diseaseVirtualRepository = new VirtualModelRepository<Disease>(standardCategory.Diseases, project.Diseases);
             poisonVirtualRepository = new VirtualModelRepository<Poison>(standardCategory.Poisons, project.Poisons);
+
+            babTableVirtualRepository = new VirtualModelRepository<AttackBonusTable>(standardCategory.AttackBonusTables, project.AttackBonusTables);
+            bonusFeatTableVirtualRepository = new VirtualModelRepository<BonusFeatsTable>(standardCategory.BonusFeatTables, project.BonusFeatTables);
+            featsTableVirtualRepository = new VirtualModelRepository<FeatsTable>(standardCategory.FeatTables, project.FeatTables);
+            savesTableVirtualRepository = new VirtualModelRepository<SavingThrowTable>(standardCategory.SavingThrowTables, project.SavingThrowTables);
+            skillsTableVirtualRepository = new VirtualModelRepository<SkillsTable>(standardCategory.SkillTables, project.SkillTables);
+            requTableVirtualRepository = new VirtualModelRepository<PrerequisiteTable>(standardCategory.PrerequisiteTables, project.PrerequisiteTables);
+            spellSlotTableVirtualRepository = new VirtualModelRepository<SpellSlotTable>(standardCategory.SpellSlotTables, project.SpellSlotTables);
+            knownSpellsTableVirtualRepository = new VirtualModelRepository<KnownSpellsTable>(standardCategory.KnownSpellsTables, project.KnownSpellsTables);
         }
 
         public static void Initialize(String nwnBasePath)
@@ -75,6 +95,15 @@ namespace Eos.Repositories
         public static VirtualModelRepository<Disease> Diseases { get { return diseaseVirtualRepository; } }
         public static VirtualModelRepository<Poison> Poisons { get { return poisonVirtualRepository; } }
 
+        public static VirtualModelRepository<AttackBonusTable> AttackBonusTables { get { return babTableVirtualRepository; } }
+        public static VirtualModelRepository<BonusFeatsTable> BonusFeatTables { get { return bonusFeatTableVirtualRepository; } }
+        public static VirtualModelRepository<FeatsTable> FeatTables { get { return featsTableVirtualRepository; } }
+        public static VirtualModelRepository<SavingThrowTable> SavingThrowTables { get { return savesTableVirtualRepository; } }
+        public static VirtualModelRepository<SkillsTable> SkillTables { get { return skillsTableVirtualRepository; } }
+        public static VirtualModelRepository<PrerequisiteTable> PrerequisiteTables { get { return requTableVirtualRepository; } }
+        public static VirtualModelRepository<SpellSlotTable> SpellSlotTables { get { return spellSlotTableVirtualRepository; } }
+        public static VirtualModelRepository<KnownSpellsTable> KnownSpellsTables { get { return knownSpellsTableVirtualRepository; } }
+
         public static void Clear()
         {
             Standard.Clear();
@@ -92,6 +121,15 @@ namespace Eos.Repositories
             Standard.Diseases.LoadFromFile(Constants.DiseasesFilePath);
             Standard.Poisons.LoadFromFile(Constants.PoisonsFilePath);
 
+            Standard.AttackBonusTables.LoadFromFile(Constants.AttackBonusTablesFilePath);
+            Standard.BonusFeatTables.LoadFromFile(Constants.BonusFeatTablesFilePath);
+            Standard.FeatTables.LoadFromFile(Constants.FeatTablesFilePath);
+            Standard.SavingThrowTables.LoadFromFile(Constants.SavingThrowTablesFilePath);
+            Standard.SkillTables.LoadFromFile(Constants.SkillTablesFilePath);
+            Standard.PrerequisiteTables.LoadFromFile(Constants.PrerequisiteTablesFilePath);
+            Standard.SpellSlotTables.LoadFromFile(Constants.SpellSlotTablesFilePath);
+            Standard.KnownSpellsTables.LoadFromFile(Constants.KnownSpellsTablesFilePath);
+
             Standard.Races.ResolveReferences();
             Standard.Classes.ResolveReferences();
             Standard.Domains.ResolveReferences();
@@ -100,6 +138,15 @@ namespace Eos.Repositories
             Standard.Skills.ResolveReferences();
             Standard.Diseases.ResolveReferences();
             Standard.Poisons.ResolveReferences();
+
+            Standard.AttackBonusTables.ResolveReferences();
+            Standard.BonusFeatTables.ResolveReferences();
+            Standard.FeatTables.ResolveReferences();
+            Standard.SavingThrowTables.ResolveReferences();
+            Standard.SkillTables.ResolveReferences();
+            Standard.PrerequisiteTables.ResolveReferences();
+            Standard.SpellSlotTables.ResolveReferences();
+            Standard.KnownSpellsTables.ResolveReferences();
         }
     }
 }

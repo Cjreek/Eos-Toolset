@@ -217,6 +217,18 @@
                 </Frame.Content>
             </Frame>
         </DataTemplate>
+        
+        <!--Tables-->
+
+        <DataTemplate DataType="{x:Type vm:FeatsTableViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                <Frame.Content>
+                    <view:FeatsTableView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
     </Window.Resources>
     
     <!-- Window Content -->
@@ -297,6 +309,15 @@
                         <TreeViewItem Header="Skills" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Skills}"/>
                         <TreeViewItem Header="Diseases" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Diseases}"/>
                         <TreeViewItem Header="Poisons" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Poisons}"/>
+
+                        <TreeViewItem Header="Tables" Tag="CATEGORY">
+                            <TreeViewItem Header="Feats" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=FeatTables}"/>
+                            <TreeViewItem Header="Bonus Feats" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=BonusFeatTables}"/>
+                            <TreeViewItem Header="Skills" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=SkillTables}"/>
+                            <TreeViewItem Header="BAB" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=AttackBonusTables}"/>
+                            <TreeViewItem Header="Saving Throws" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=SavingThrowTables}"/>
+                            <TreeViewItem Header="Prerequisites" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=PrerequisiteTables}"/>
+                        </TreeViewItem>
                     </TreeView>
                 </TabItem>
                 <TabItem x:Name="tabCustom" Header="Custom">
