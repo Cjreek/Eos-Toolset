@@ -32,6 +32,7 @@ namespace Eos.Types
         public static readonly String SkillTablesFilename;
         public static readonly String SpellSlotTablesFilename;
         public static readonly String KnownSpellsTablesFilename;
+        public static readonly String StatGainTablesFilename;
 
         public static readonly String RacesFilePath;
         public static readonly String ClassesFilePath;
@@ -50,6 +51,7 @@ namespace Eos.Types
         public static readonly String SkillTablesFilePath;
         public static readonly String SpellSlotTablesFilePath;
         public static readonly String KnownSpellsTablesFilePath;
+        public static readonly String StatGainTablesFilePath;
 
         static Constants()
         {
@@ -81,6 +83,7 @@ namespace Eos.Types
             SkillTablesFilename = "tables_skills.json";
             SpellSlotTablesFilename = "tables_spellslots.json";
             KnownSpellsTablesFilename = "tables_knownspells.json";
+            StatGainTablesFilename = "tables_statgain.json";
 
             RacesFilePath = BaseDataPath + RacesFilename;
             ClassesFilePath = BaseDataPath + ClassesFilename;
@@ -99,6 +102,7 @@ namespace Eos.Types
             SkillTablesFilePath = BaseDataPath + SkillTablesFilename;
             SpellSlotTablesFilePath = BaseDataPath + SpellSlotTablesFilename;
             KnownSpellsTablesFilePath = BaseDataPath + KnownSpellsTablesFilename;
+            StatGainTablesFilePath = BaseDataPath + StatGainTablesFilename;
         }
     }
 }

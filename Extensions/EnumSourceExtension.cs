@@ -9,7 +9,12 @@ namespace Eos.Extensions
 {
     public class EnumSourceExtension : MarkupExtension
     {
-        private Type enumType;
+        private Type? enumType;
+
+        public EnumSourceExtension()
+        {
+            enumType = null;
+        }
 
         public EnumSourceExtension(Type enumType)
         {
@@ -18,22 +23,32 @@ namespace Eos.Extensions
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            var enumValues = Enum.GetValues(enumType);
-            var result = enumValues.Cast<int>().Select(e => new EnumSourceItem()
+            if (enumType != null)
             {
-                Value = Enum.Parse(enumType, Enum.GetName(enumType, e) ?? "INVALID_ENUM_VALUE"),
-                DisplayName = GetDisplayName(e)
-            }
-            ).ToArray();
+                var enumValues = Enum.GetValues(enumType);
+                var result = enumValues.Cast<int>().Select(e => new EnumSourceItem()
+                {
+                    Value = Enum.Parse(enumType, Enum.GetName(enumType, e) ?? "INVALID_ENUM_VALUE"),
+                    DisplayName = GetDisplayName(e)
+                }
+                ).ToArray();
 
-            return result;
+                return result;
+            }
+
+            return new object { };
         }
 
         private String GetDisplayName(int value)
         {
-            var enumName = Enum.GetName(enumType, value) ?? "INVALID_ENUM_VALUE";
-            var attr = enumType.GetField(enumName)?.GetCustomAttributes(typeof(DisplayNameAttribute), false).FirstOrDefault() as DisplayNameAttribute;
-            return attr?.DisplayName ?? enumName ?? String.Empty;
+            if (enumType != null)
+            {
+                var enumName = Enum.GetName(enumType, value) ?? "INVALID_ENUM_VALUE";
+                var attr = enumType.GetField(enumName)?.GetCustomAttributes(typeof(DisplayNameAttribute), false).FirstOrDefault() as DisplayNameAttribute;
+                return attr?.DisplayName ?? enumName ?? String.Empty;
+            }
+
+            return String.Empty;
         }
 
         public class EnumSourceItem

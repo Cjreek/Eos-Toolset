@@ -33,6 +33,18 @@ namespace Eos.ViewModels
 
             if (model is FeatsTable featsTable)
                 return new FeatsTableViewModel(featsTable);
+            if (model is AttackBonusTable abTable)
+                return new AttackBonusTableViewModel(abTable);
+            if (model is BonusFeatsTable bonusFeatsTable)
+                return new BonusFeatTableViewModel(bonusFeatsTable);
+            if (model is SkillsTable skillTable)
+                return new SkillTableViewModel(skillTable);
+            if (model is SavingThrowTable savesTable)
+                return new SavingThrowTableViewModel(savesTable);
+            if (model is PrerequisiteTable requTable)
+                return new PrerequisiteTableViewModel(requTable);
+            if (model is StatGainTable statGainTable)
+                return new StatGainTableViewModel(statGainTable);
 
             else
                 throw new ArgumentException("No viewmodel found", "model");

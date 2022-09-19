@@ -338,6 +338,33 @@ namespace Eos.Import
             Standard.PrerequisiteTables.Add(preRequTable);
         }
 
+        private void ImportStatGainTable(String tablename, Guid guid)
+        {
+            var statGainTable = new StatGainTable();
+            statGainTable.ID = guid;
+            statGainTable.Name = tablename;
+
+            var statGainTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
+            var statGainTable2da = new TwoDimensionalArrayFile(statGainTableResource.RawData);
+
+            statGainTable.Clear();
+            for (int i = 0; i < statGainTable2da.Count; i++)
+            {
+                var tmpItem = new StatGainTableItem();
+                tmpItem.Level = statGainTable2da[i].AsInteger("Level") ?? 0;
+                tmpItem.Strength = statGainTable2da[i].AsInteger("Str", null);
+                tmpItem.Dexterity = statGainTable2da[i].AsInteger("Dex", null);
+                tmpItem.Constitution = statGainTable2da[i].AsInteger("Con", null);
+                tmpItem.Wisdom = statGainTable2da[i].AsInteger("Wis", null);
+                tmpItem.Intelligence = statGainTable2da[i].AsInteger("Int", null);
+                tmpItem.Charisma = statGainTable2da[i].AsInteger("Cha", null);
+                tmpItem.NaturalAC = statGainTable2da[i].AsInteger("NaturalAC", null);
+                statGainTable.Add(tmpItem);
+            }
+
+            Standard.StatGainTables.Add(statGainTable);
+        }
+
         private void ImportClasses()
         {
             var classResource = bif.ReadResource("classes", NWNResourceType.TWODA);
@@ -458,7 +485,16 @@ namespace Eos.Import
                 tmpClass.PreEpicMaxLevel = classes2da[i].AsInteger("EpicLevel") ?? 0;
 
                 // Package
+
                 // StatGainTable
+                var statGainTable = classes2da[i].AsString("StatGainTable");
+                if (statGainTable != null)
+                {
+                    var statGainTableGuid = GenerateGuid(statGainTable.ToLower(), 0);
+                    if (!Standard.StatGainTables.Contains(statGainTableGuid))
+                        ImportStatGainTable(statGainTable, statGainTableGuid);
+                    tmpClass.StatGainTable = Standard.StatGainTables.GetByID(statGainTableGuid);
+                }
 
                 tmpClass.MemorizesSpells = classes2da[i].AsBoolean("MemorizesSpells");
                 tmpClass.SpellbookRestricted = classes2da[i].AsBoolean("SpellbookRestricted");
@@ -902,6 +938,7 @@ namespace Eos.Import
             Standard.SkillTables.SaveToFile(Constants.SkillTablesFilePath);
             Standard.SpellSlotTables.SaveToFile(Constants.SpellSlotTablesFilePath);
             Standard.KnownSpellsTables.SaveToFile(Constants.KnownSpellsTablesFilePath);
+            Standard.StatGainTables.SaveToFile(Constants.StatGainTablesFilePath);
         }
 
         private void ClearTables()
@@ -914,6 +951,7 @@ namespace Eos.Import
             Standard.SkillTables.Clear();
             Standard.SpellSlotTables.Clear();
             Standard.KnownSpellsTables.Clear();
+            Standard.StatGainTables.Clear();
         }
 
         public void Import(String nwnBasePath)

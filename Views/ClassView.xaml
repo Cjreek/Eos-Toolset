@@ -150,22 +150,22 @@
                     <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Tables" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
 
                     <TextBlock Text="Attack Bonus Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
-                    <ComboBox Grid.Row="7" Grid.Column="1"/>
+                    <uc:AttackBonusTableComboBox Grid.Row="7" Grid.Column="1" SelectedValue="{Binding Data.AttackBonusTable}" IsNullable="False"/>
 
                     <TextBlock Text="Saving Throws Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="2"/>
-                    <ComboBox Grid.Row="7" Grid.Column="3"/>
+                    <uc:SavingThrowTableComboBox Grid.Row="7" Grid.Column="3" SelectedValue="{Binding Data.SavingThrows}" IsNullable="False"/>
 
                     <TextBlock Text="Skills Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
-                    <ComboBox Grid.Row="8" Grid.Column="1"/>
+                    <uc:SkillTableComboBox Grid.Row="8" Grid.Column="1" SelectedValue="{Binding Data.Skills}" IsNullable="False"/>
 
                     <TextBlock Text="Stat Gain Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2"/>
-                    <ComboBox Grid.Row="8" Grid.Column="3"/>
+                    <uc:StatGainTableComboBox Grid.Row="8" Grid.Column="3" SelectedValue="{Binding Data.StatGainTable}" IsNullable="True"/>
 
                     <TextBlock Text="Feats Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
-                    <ComboBox Grid.Row="9" Grid.Column="1"/>
+                    <uc:FeatTableComboBox Grid.Row="9" Grid.Column="1" SelectedValue="{Binding Data.Feats}" IsNullable="False"/>
 
                     <TextBlock Text="Bonus Feats Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
-                    <ComboBox Grid.Row="9" Grid.Column="3"/>
+                    <uc:BonusFeatTableComboBox Grid.Row="9" Grid.Column="3" SelectedValue="{Binding Data.BonusFeats}" IsNullable="False"/>
 
                     <TextBlock Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Recommended Abilities" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
 

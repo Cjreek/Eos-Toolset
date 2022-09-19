@@ -217,13 +217,73 @@
                 </Frame.Content>
             </Frame>
         </DataTemplate>
-        
+
         <!--Tables-->
 
         <DataTemplate DataType="{x:Type vm:FeatsTableViewModel}">
             <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
                 <Frame.Content>
                     <view:FeatsTableView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:AttackBonusTableViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                <Frame.Content>
+                    <view:AttackBonusTableView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:BonusFeatTableViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                <Frame.Content>
+                    <view:BonusFeatTableView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:SkillTableViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                <Frame.Content>
+                    <view:SkillTableView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:SavingThrowTableViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                <Frame.Content>
+                    <view:SavingThrowTableView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:PrerequisiteTableViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                <Frame.Content>
+                    <view:PrerequisiteTableView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:StatGainTableViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                <Frame.Content>
+                    <view:StatGainTableView DataContext="{Binding}" 
                                      TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
                                      Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
                 </Frame.Content>
@@ -295,8 +355,8 @@
                                 <TreeViewItem Header="General" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.GeneralSpells}"/>
                             </TreeViewItem>
                             <TreeViewItem Header="Creature Power" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.CreaturePowers}"/>
-                            <TreeViewItem Header="Feat Spell" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.FeatSpells}"/>
-                            <TreeViewItem Header="Other Spell" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.OtherSpells}"/>
+                            <TreeViewItem Header="Feat" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.FeatSpells}"/>
+                            <TreeViewItem Header="Other" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.OtherSpells}"/>
                         </TreeViewItem>
                         <TreeViewItem Header="Feats" Tag="CATEGORY">
                             <TreeViewItem Header="Class/Racial" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.ClassOrRacial}"/>
@@ -317,6 +377,7 @@
                             <TreeViewItem Header="BAB" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=AttackBonusTables}"/>
                             <TreeViewItem Header="Saving Throws" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=SavingThrowTables}"/>
                             <TreeViewItem Header="Prerequisites" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=PrerequisiteTables}"/>
+                            <TreeViewItem Header="StatGain" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=StatGainTables}"/>
                         </TreeViewItem>
                     </TreeView>
                 </TabItem>
@@ -344,8 +405,8 @@
                                 <TreeViewItem Header="General" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.GeneralSpells}"/>
                             </TreeViewItem>
                             <TreeViewItem Header="Creature Power" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.CreaturePowers}"/>
-                            <TreeViewItem Header="Feat Spell" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.FeatSpells}"/>
-                            <TreeViewItem Header="Other Spell" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.OtherSpells}"/>
+                            <TreeViewItem Header="Feat" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.FeatSpells}"/>
+                            <TreeViewItem Header="Other" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.OtherSpells}"/>
                         </TreeViewItem>
                         <TreeViewItem Header="Feats" Tag="CATEGORY">
                             <TreeViewItem Header="Class/Racial" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.ClassOrRacial}"/>
@@ -358,6 +419,16 @@
                         <TreeViewItem Header="Skills" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Skills}"/>
                         <TreeViewItem Header="Diseases" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Diseases}"/>
                         <TreeViewItem Header="Poisons" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Poisons}"/>
+
+                        <TreeViewItem Header="Tables" Tag="CATEGORY">
+                            <TreeViewItem Header="Feats" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=FeatTables}"/>
+                            <TreeViewItem Header="Bonus Feats" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=BonusFeatTables}"/>
+                            <TreeViewItem Header="Skills" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=SkillTables}"/>
+                            <TreeViewItem Header="BAB" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=AttackBonusTables}"/>
+                            <TreeViewItem Header="Saving Throws" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=SavingThrowTables}"/>
+                            <TreeViewItem Header="Prerequisites" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=PrerequisiteTables}"/>
+                            <TreeViewItem Header="StatGain" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=StatGainTables}"/>
+                        </TreeViewItem>
                     </TreeView>
                 </TabItem>
             </TabControl>

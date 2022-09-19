@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Eos.Usercontrols.FeatComboBox"
+﻿<UserControl x:Class="Eos.Usercontrols.RaceComboBox"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,7 +8,7 @@
              xmlns:ext="clr-namespace:Eos.Extensions"
              xmlns:nwn="clr-namespace:Eos.Nwn"
              mc:Ignorable="d" 
-             x:Name="ucFeatComboBox"
+             x:Name="ucRaceComboBox"
              d:DesignHeight="22" d:DesignWidth="800">
     <UserControl.Resources>
         <ext:TLKStringSetConverter x:Key="tlkConverter" AlwaysUseDefaultLanguage="True"/>
@@ -16,13 +16,13 @@
         <ext:ResRefConverter x:Key="resRefConverter"/>
     </UserControl.Resources>
 
-    <Grid DataContext="{x:Reference ucFeatComboBox}">
+    <Grid DataContext="{x:Reference ucRaceComboBox}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
-        <ComboBox x:Name="cbFeats" Grid.Column="0" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Feats}}" SelectedValue="{Binding SelectedValue}">
+        <ComboBox x:Name="cbRaces" Grid.Column="0" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Races}}" SelectedValue="{Binding SelectedValue}">
             <ComboBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel />
@@ -44,7 +44,7 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         <Button x:Name="btClear" Grid.Column="1" Margin="2,-2,0,0" Content="X" Click="btClear_Click"
-                Height="{Binding ElementName=cbFeats, Path=ActualHeight}" Width="{Binding ElementName=cbFeats, Path=ActualHeight}" 
+                Height="{Binding ElementName=cbRaces, Path=ActualHeight}" Width="{Binding ElementName=cbRaces, Path=ActualHeight}" 
                 Visibility="{Binding IsNullable, Converter={StaticResource bool2Vis}}"/>
     </Grid>
 </UserControl>

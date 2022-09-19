@@ -107,6 +107,7 @@ namespace Eos.Repositories
             PrerequisiteTables.LoadFromFile(ProjectFolder + Constants.PrerequisiteTablesFilename);
             SpellSlotTables.LoadFromFile(ProjectFolder + Constants.SpellSlotTablesFilename);
             KnownSpellsTables.LoadFromFile(ProjectFolder + Constants.KnownSpellsTablesFilename);
+            StatGainTables.LoadFromFile(ProjectFolder + Constants.StatGainTablesFilename);
         }
 
         public void Save()
@@ -129,6 +130,7 @@ namespace Eos.Repositories
             PrerequisiteTables.SaveToFile(ProjectFolder + Constants.PrerequisiteTablesFilename);
             SpellSlotTables.SaveToFile(ProjectFolder + Constants.SpellSlotTablesFilename);
             KnownSpellsTables.SaveToFile(ProjectFolder + Constants.KnownSpellsTablesFilename);
+            StatGainTables.SaveToFile(ProjectFolder + Constants.StatGainTablesFilename);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

@@ -8,8 +8,6 @@
       xmlns:ext="clr-namespace:Eos.Extensions"
       xmlns:uc="clr-namespace:Eos.Usercontrols"
       xmlns:wpftk="clr-namespace:Xceed.Wpf.Toolkit;assembly=DotNetProjects.Wpf.Extended.Toolkit"
-      xmlns:wpftkg="clr-namespace:Xceed.Wpf.DataGrid;assembly=DotNetProjects.Wpf.DataGrid"
-      xmlns:wpftkv="clr-namespace:Xceed.Wpf.DataGrid.Views;assembly=DotNetProjects.Wpf.DataGrid"
       xmlns:types="clr-namespace:Eos.Types"
       x:Name="page"
       mc:Ignorable="d" 

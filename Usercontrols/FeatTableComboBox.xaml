@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="Eos.Usercontrols.FeatTableComboBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Eos.Usercontrols"
+             xmlns:repo="clr-namespace:Eos.Repositories"
+             xmlns:ext="clr-namespace:Eos.Extensions"
+             x:Name="ucFeatTableComboBox"
+             mc:Ignorable="d" 
+             d:DesignHeight="20" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ext:BoolToVisibilityConverterEx x:Key="bool2Vis" FalseValue="Collapsed"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+
+        <ComboBox x:Name="cbFeatTables" Grid.Column="0" ItemsSource="{Binding Source={x:Static repo:MasterRepository.FeatTables}}" SelectedValue="{Binding ElementName=ucFeatTableComboBox, Path=SelectedValue}" DisplayMemberPath="Name">
+            <ComboBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel/>
+                </ItemsPanelTemplate>
+            </ComboBox.ItemsPanel>
+        </ComboBox>
+        <Button x:Name="btClear" Grid.Column="1" Margin="2,-2,0,0" Content="X" Click="btClear_Click"
+                Height="{Binding ElementName=cbFeatTables, Path=ActualHeight}" Width="{Binding ElementName=cbFeatTables, Path=ActualHeight}" 
+                Visibility="{Binding ElementName=ucFeatTableComboBox, Path=IsNullable, Converter={StaticResource bool2Vis}}"/>
+    </Grid>
+</UserControl>

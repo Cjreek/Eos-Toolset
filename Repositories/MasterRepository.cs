@@ -39,6 +39,7 @@ namespace Eos.Repositories
 
         private static readonly VirtualModelRepository<SpellSlotTable> spellSlotTableVirtualRepository;
         private static readonly VirtualModelRepository<KnownSpellsTable> knownSpellsTableVirtualRepository;
+        private static readonly VirtualModelRepository<StatGainTable> statGainTableVirtualRepository;
 
         static MasterRepository()
         {
@@ -64,6 +65,7 @@ namespace Eos.Repositories
             requTableVirtualRepository = new VirtualModelRepository<PrerequisiteTable>(standardCategory.PrerequisiteTables, project.PrerequisiteTables);
             spellSlotTableVirtualRepository = new VirtualModelRepository<SpellSlotTable>(standardCategory.SpellSlotTables, project.SpellSlotTables);
             knownSpellsTableVirtualRepository = new VirtualModelRepository<KnownSpellsTable>(standardCategory.KnownSpellsTables, project.KnownSpellsTables);
+            statGainTableVirtualRepository = new VirtualModelRepository<StatGainTable>(standardCategory.StatGainTables, project.StatGainTables);
         }
 
         public static void Initialize(String nwnBasePath)
@@ -103,6 +105,7 @@ namespace Eos.Repositories
         public static VirtualModelRepository<PrerequisiteTable> PrerequisiteTables { get { return requTableVirtualRepository; } }
         public static VirtualModelRepository<SpellSlotTable> SpellSlotTables { get { return spellSlotTableVirtualRepository; } }
         public static VirtualModelRepository<KnownSpellsTable> KnownSpellsTables { get { return knownSpellsTableVirtualRepository; } }
+        public static VirtualModelRepository<StatGainTable> StatGainTables { get { return statGainTableVirtualRepository; } }
 
         public static void Clear()
         {
@@ -129,6 +132,7 @@ namespace Eos.Repositories
             Standard.PrerequisiteTables.LoadFromFile(Constants.PrerequisiteTablesFilePath);
             Standard.SpellSlotTables.LoadFromFile(Constants.SpellSlotTablesFilePath);
             Standard.KnownSpellsTables.LoadFromFile(Constants.KnownSpellsTablesFilePath);
+            Standard.StatGainTables.LoadFromFile(Constants.StatGainTablesFilePath);
 
             Standard.Races.ResolveReferences();
             Standard.Classes.ResolveReferences();
@@ -147,6 +151,7 @@ namespace Eos.Repositories
             Standard.PrerequisiteTables.ResolveReferences();
             Standard.SpellSlotTables.ResolveReferences();
             Standard.KnownSpellsTables.ResolveReferences();
+            Standard.StatGainTables.ResolveReferences();
         }
     }
 }

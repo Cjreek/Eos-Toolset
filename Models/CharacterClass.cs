@@ -43,7 +43,7 @@ namespace Eos.Models
         public int DivineCasterLevelMod { get; set; } = 0;
         public int PreEpicMaxLevel { get; set; } = -1;
         public IntPtr Package { get; set; }
-        public IntPtr StatGainTable { get; set; }
+        public StatGainTable? StatGainTable { get; set; }
         public bool MemorizesSpells { get; set; } = true;
         public bool SpellbookRestricted { get; set; } = true;
         public bool PicksDomain { get; set; } = false;
@@ -74,6 +74,7 @@ namespace Eos.Models
             SpellSlots = Resolve(SpellSlots, MasterRepository.SpellSlotTables);
             KnownSpells = Resolve(KnownSpells, MasterRepository.KnownSpellsTables);
             Requirements = Resolve(Requirements, MasterRepository.PrerequisiteTables);
+            StatGainTable = Resolve(StatGainTable, MasterRepository.StatGainTables);
         }
 
         public override void FromJson(JsonObject json)
@@ -109,7 +110,7 @@ namespace Eos.Models
             this.DivineCasterLevelMod = json["DivineCasterLevelMod"]?.GetValue<int>() ?? 0;
             this.PreEpicMaxLevel = json["PreEpicMaxLevel"]?.GetValue<int>() ?? -1;
             this.Package = IntPtr.Zero; // !
-            this.StatGainTable = IntPtr.Zero; // !
+            this.StatGainTable = CreateRefFromJson<StatGainTable>(json["StatGainTable"]?.AsObject());
             this.MemorizesSpells = json["MemorizesSpells"]?.GetValue<bool>() ?? false;
             this.SpellbookRestricted = json["SpellbookRestricted"]?.GetValue<bool>() ?? false;
             this.PicksDomain = json["PicksDomain"]?.GetValue<bool>() ?? false;
@@ -160,7 +161,7 @@ namespace Eos.Models
             classJson.Add("DivineCasterLevelMod", this.DivineCasterLevelMod);
             classJson.Add("PreEpicMaxLevel", this.PreEpicMaxLevel);
             classJson.Add("Package", null); // !
-            classJson.Add("StatGainTable", null); // !
+            classJson.Add("StatGainTable", CreateJsonRef(this.StatGainTable));
             classJson.Add("MemorizesSpells", this.MemorizesSpells);
             classJson.Add("SpellbookRestricted", this.SpellbookRestricted);
             classJson.Add("PicksDomain", this.PicksDomain);

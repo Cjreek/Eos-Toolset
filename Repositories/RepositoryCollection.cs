@@ -29,6 +29,7 @@ namespace Eos.Repositories
         private readonly ModelRepository<PrerequisiteTable> prerequisiteTableRepository;
         private readonly ModelRepository<SpellSlotTable> spellSlotTableRepository;
         private readonly ModelRepository<KnownSpellsTable> knownSpellsTableRepository;
+        private readonly ModelRepository<StatGainTable> statGainTableRepository;
 
         public RepositoryCollection(bool isReadonly)
         {
@@ -49,6 +50,7 @@ namespace Eos.Repositories
             prerequisiteTableRepository = new ModelRepository<PrerequisiteTable>(isReadonly); // Always writeable?
             spellSlotTableRepository = new ModelRepository<SpellSlotTable>(isReadonly); // Always writeable?
             knownSpellsTableRepository = new ModelRepository<KnownSpellsTable>(isReadonly); // Always writeable?
+            statGainTableRepository = new ModelRepository<StatGainTable>(isReadonly); // Always writeable?
 
             repositoryDict.Add(typeof(Race), raceRepository);
             repositoryDict.Add(typeof(CharacterClass), classRepository);
@@ -67,6 +69,7 @@ namespace Eos.Repositories
             repositoryDict.Add(typeof(PrerequisiteTable), prerequisiteTableRepository);
             repositoryDict.Add(typeof(SpellSlotTable), prerequisiteTableRepository);
             repositoryDict.Add(typeof(KnownSpellsTable), knownSpellsTableRepository);
+            repositoryDict.Add(typeof(StatGainTable), statGainTableRepository);
         }
 
         // Model Repositories
@@ -87,6 +90,7 @@ namespace Eos.Repositories
         public ModelRepository<PrerequisiteTable> PrerequisiteTables { get { return prerequisiteTableRepository; } }
         public ModelRepository<SpellSlotTable> SpellSlotTables { get { return spellSlotTableRepository; } }
         public ModelRepository<KnownSpellsTable> KnownSpellsTables { get { return knownSpellsTableRepository; } }
+        public ModelRepository<StatGainTable> StatGainTables { get { return statGainTableRepository; } }
 
         public BaseModel New(Type modelType)
         {
@@ -120,6 +124,7 @@ namespace Eos.Repositories
             PrerequisiteTables.Clear();
             SpellSlotTables.Clear();
             KnownSpellsTables.Clear();
+            StatGainTables.Clear();
         }
     }
 }
