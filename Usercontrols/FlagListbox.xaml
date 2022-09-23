@@ -10,8 +10,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <ext:FlagToBoolConverter x:Key="flagsToBool"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
+    
     <ListBox ItemsSource="{Binding ElementName=ucFlagListbox, Path=ItemsSource}">
         <ListBox.ItemsPanel>
             <ItemsPanelTemplate>

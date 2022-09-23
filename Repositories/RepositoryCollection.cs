@@ -20,6 +20,7 @@ namespace Eos.Repositories
         private readonly ModelRepository<Skill> skillRepository;
         private readonly ModelRepository<Disease> diseaseRepository;
         private readonly ModelRepository<Poison> poisonRepository;
+        private readonly SpellbookRepository spellbookRepository;
 
         private readonly ModelRepository<AttackBonusTable> attackBonusTableRepository;
         private readonly ModelRepository<BonusFeatsTable> bonusFeatTableRepository;
@@ -30,6 +31,7 @@ namespace Eos.Repositories
         private readonly ModelRepository<SpellSlotTable> spellSlotTableRepository;
         private readonly ModelRepository<KnownSpellsTable> knownSpellsTableRepository;
         private readonly ModelRepository<StatGainTable> statGainTableRepository;
+        private readonly ModelRepository<RacialFeatsTable> racialFeatsTableRepository;
 
         public RepositoryCollection(bool isReadonly)
         {
@@ -41,6 +43,7 @@ namespace Eos.Repositories
             skillRepository = new ModelRepository<Skill>(isReadonly);
             diseaseRepository = new ModelRepository<Disease>(isReadonly);
             poisonRepository = new ModelRepository<Poison>(isReadonly);
+            spellbookRepository = new SpellbookRepository(isReadonly);
 
             attackBonusTableRepository = new ModelRepository<AttackBonusTable>(isReadonly); // Always writeable?
             bonusFeatTableRepository = new ModelRepository<BonusFeatsTable>(isReadonly); // Always writeable?
@@ -51,6 +54,7 @@ namespace Eos.Repositories
             spellSlotTableRepository = new ModelRepository<SpellSlotTable>(isReadonly); // Always writeable?
             knownSpellsTableRepository = new ModelRepository<KnownSpellsTable>(isReadonly); // Always writeable?
             statGainTableRepository = new ModelRepository<StatGainTable>(isReadonly); // Always writeable?
+            racialFeatsTableRepository = new ModelRepository<RacialFeatsTable>(isReadonly); // Always writeable?
 
             repositoryDict.Add(typeof(Race), raceRepository);
             repositoryDict.Add(typeof(CharacterClass), classRepository);
@@ -60,6 +64,7 @@ namespace Eos.Repositories
             repositoryDict.Add(typeof(Skill), skillRepository);
             repositoryDict.Add(typeof(Disease), diseaseRepository);
             repositoryDict.Add(typeof(Poison), poisonRepository);
+            repositoryDict.Add(typeof(Spellbook), spellbookRepository);
 
             repositoryDict.Add(typeof(AttackBonusTable), attackBonusTableRepository);
             repositoryDict.Add(typeof(BonusFeatsTable), bonusFeatTableRepository);
@@ -70,6 +75,7 @@ namespace Eos.Repositories
             repositoryDict.Add(typeof(SpellSlotTable), prerequisiteTableRepository);
             repositoryDict.Add(typeof(KnownSpellsTable), knownSpellsTableRepository);
             repositoryDict.Add(typeof(StatGainTable), statGainTableRepository);
+            repositoryDict.Add(typeof(RacialFeatsTable), racialFeatsTableRepository);
         }
 
         // Model Repositories
@@ -81,6 +87,7 @@ namespace Eos.Repositories
         public ModelRepository<Skill> Skills { get { return skillRepository; } }
         public ModelRepository<Disease> Diseases { get { return diseaseRepository; } }
         public ModelRepository<Poison> Poisons { get { return poisonRepository; } }
+        public SpellbookRepository Spellbooks { get { return spellbookRepository; } }
 
         public ModelRepository<AttackBonusTable> AttackBonusTables { get { return attackBonusTableRepository; } }
         public ModelRepository<BonusFeatsTable> BonusFeatTables { get { return bonusFeatTableRepository; } }
@@ -91,6 +98,7 @@ namespace Eos.Repositories
         public ModelRepository<SpellSlotTable> SpellSlotTables { get { return spellSlotTableRepository; } }
         public ModelRepository<KnownSpellsTable> KnownSpellsTables { get { return knownSpellsTableRepository; } }
         public ModelRepository<StatGainTable> StatGainTables { get { return statGainTableRepository; } }
+        public ModelRepository<RacialFeatsTable> RacialFeatsTables { get { return racialFeatsTableRepository; } }
 
         public BaseModel New(Type modelType)
         {
@@ -115,6 +123,7 @@ namespace Eos.Repositories
             Skills.Clear();
             Diseases.Clear();
             Poisons.Clear();
+            Spellbooks.Clear();
 
             AttackBonusTables.Clear();
             BonusFeatTables.Clear();
@@ -125,6 +134,7 @@ namespace Eos.Repositories
             SpellSlotTables.Clear();
             KnownSpellsTables.Clear();
             StatGainTables.Clear();
+            RacialFeatsTables.Clear();
         }
     }
 }

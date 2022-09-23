@@ -19,7 +19,7 @@
         mc:Ignorable="d"
         x:Name="mainWindow"
         MinHeight="300" MinWidth="500" Tag="Eos Toolset"
-        Height="650" Width="1000" FontSize="16">
+        Height="700" Width="1100" FontSize="16">
     <Window.Title>
         <MultiBinding StringFormat="{}{0} - {1}">
             <Binding ElementName="mainWindow" Path="Tag"/>
@@ -218,6 +218,16 @@
             </Frame>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vm:SpellbookViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                <Frame.Content>
+                    <view:SpellbookView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
+
         <!--Tables-->
 
         <DataTemplate DataType="{x:Type vm:FeatsTableViewModel}">
@@ -289,6 +299,16 @@
                 </Frame.Content>
             </Frame>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:RacialFeatsTableViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                <Frame.Content>
+                    <view:RacialFeatsTableView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
     </Window.Resources>
     
     <!-- Window Content -->
@@ -342,6 +362,7 @@
                         <TreeViewItem Header="Races" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Races}"/>
                         <TreeViewItem Header="Classes" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Classes}"/>
                         <TreeViewItem Header="Domains" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Domains}"/>
+                        <TreeViewItem Header="Spellbooks" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spellbooks}"/>
                         <TreeViewItem Header="Spells" Tag="CATEGORY">
                             <TreeViewItem Header="Spell" Tag="CATEGORY">
                                 <TreeViewItem Header="Abjuration" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.AbjurationSpells}"/>
@@ -371,6 +392,7 @@
                         <TreeViewItem Header="Poisons" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Poisons}"/>
 
                         <TreeViewItem Header="Tables" Tag="CATEGORY">
+                            <TreeViewItem Header="Racial Feats" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=RacialFeatsTables}"/>
                             <TreeViewItem Header="Feats" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=FeatTables}"/>
                             <TreeViewItem Header="Bonus Feats" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=BonusFeatTables}"/>
                             <TreeViewItem Header="Skills" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=SkillTables}"/>
@@ -392,6 +414,7 @@
                         </TreeViewItem>
                         <TreeViewItem Header="Classes" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Classes}"/>
                         <TreeViewItem Header="Domains" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Domains}"/>
+                        <TreeViewItem Header="Spellbooks" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spellbooks}"/>
                         <TreeViewItem Header="Spells" Tag="CATEGORY">
                             <TreeViewItem Header="Spell" Tag="CATEGORY">
                                 <TreeViewItem Header="Abjuration" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.AbjurationSpells}"/>
@@ -421,6 +444,7 @@
                         <TreeViewItem Header="Poisons" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Poisons}"/>
 
                         <TreeViewItem Header="Tables" Tag="CATEGORY">
+                            <TreeViewItem Header="Racial Feats" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=RacialFeatsTables}"/>
                             <TreeViewItem Header="Feats" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=FeatTables}"/>
                             <TreeViewItem Header="Bonus Feats" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=BonusFeatTables}"/>
                             <TreeViewItem Header="Skills" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=SkillTables}"/>

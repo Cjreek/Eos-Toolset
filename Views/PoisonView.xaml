@@ -14,36 +14,20 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="PoisonView">
     <Page.Resources>
-        <ext:NotConverter x:Key="inverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Resources\StyleResources.xaml"/>
+                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Page.Resources>
+    
     <Page.DataContext>
         <vm:PoisonViewModel/>
     </Page.DataContext>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
-            <Grid.Resources>
-                <Style TargetType="{x:Type TabItem}">
-                    <Setter Property="RenderTransform">
-                        <Setter.Value>
-                            <TranslateTransform Y="-2"/>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-                <Style TargetType="{x:Type TextBox}">
-                    <Setter Property="Margin" Value="2,0,0,3"/>
-                </Style>
-                <Style TargetType="{x:Type wpftk:IntegerUpDown}">
-                    <Setter Property="Margin" Value="2,0,0,3"/>
-                </Style>
-                <Style TargetType="{x:Type ComboBox}">
-                    <Setter Property="Margin" Value="2,0,0,3"/>
-                </Style>
-                <Style TargetType="{x:Type CheckBox}">
-                    <Setter Property="Margin" Value="1,0,0,3"/>
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                </Style>
-            </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="*" MinWidth="150"/>

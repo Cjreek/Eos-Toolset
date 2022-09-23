@@ -30,6 +30,8 @@ namespace Eos.ViewModels
                 return new DiseaseViewModel(disease);
             if (model is Poison poison)
                 return new PoisonViewModel(poison);
+            if (model is Spellbook spellbook)
+                return new SpellbookViewModel(spellbook);
 
             if (model is FeatsTable featsTable)
                 return new FeatsTableViewModel(featsTable);
@@ -45,6 +47,8 @@ namespace Eos.ViewModels
                 return new PrerequisiteTableViewModel(requTable);
             if (model is StatGainTable statGainTable)
                 return new StatGainTableViewModel(statGainTable);
+            if (model is RacialFeatsTable racialFeatsTable)
+                return new RacialFeatsTableViewModel(racialFeatsTable);
 
             else
                 throw new ArgumentException("No viewmodel found", "model");

@@ -16,60 +16,34 @@
     <Page.DataContext>
         <vm:FeatsTableViewModel/>
     </Page.DataContext>
+    
     <Page.Resources>
-        <ext:NotConverter x:Key="inverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Resources\StyleResources.xaml"/>
+                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
+                <ResourceDictionary>
+                    <DataTemplate x:Key="grantedCellTemplate">
+                        <wpftk:IntegerUpDown Maximum="60" Minimum="1" VerticalAlignment="Top" Value="{Binding Path=GrantedOnLevel, UpdateSourceTrigger=LostFocus}" Margin="-6,-5,-6,-5"/>
+                    </DataTemplate>
 
-        <Style TargetType="ListViewItem">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        </Style>
+                    <DataTemplate x:Key="featCellTemplate">
+                        <uc:FeatComboBox SelectedValue="{Binding Path=Feat}" IsNullable="False" Margin="-6,-1,-6,-5"/>
+                    </DataTemplate>
 
-        <DataTemplate x:Key="grantedCellTemplate">
-            <wpftk:IntegerUpDown Maximum="60" Minimum="1" VerticalAlignment="Top" Value="{Binding Path=GrantedOnLevel, UpdateSourceTrigger=LostFocus}" Margin="-6,-5,-6,-5"/>
-        </DataTemplate>
+                    <DataTemplate x:Key="menuCellTemplate">
+                        <uc:EnumComboBox ItemsSource="{ext:EnumSource types:FeatMenu}" SelectedValue="{Binding Path=Menu}" Margin="-6,-1,-6,-5"/>
+                    </DataTemplate>
 
-        <DataTemplate x:Key="featCellTemplate">
-            <uc:FeatComboBox SelectedValue="{Binding Path=Feat}" IsNullable="False" Margin="-6,-1,-6,-5"/>
-        </DataTemplate>
-
-        <DataTemplate x:Key="menuCellTemplate">
-            <uc:EnumComboBox ItemsSource="{ext:EnumSource types:FeatMenu}" SelectedValue="{Binding Path=Menu}" Margin="-6,-1,-6,-5"/>
-        </DataTemplate>
-
-        <DataTemplate x:Key="deleteCellTemplate">
-            <Button Content="X" Margin="-4,-4,-6,-4" Background="Transparent" Command="{Binding ElementName=page, Path=DataContext.DeleteFeatItemCommand}" CommandParameter="{Binding}">
-                <Button.Style>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Foreground" Value="Gray"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Foreground" Value="DarkRed"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-        </DataTemplate>
+                    <DataTemplate x:Key="deleteCellTemplate">
+                        <uc:DeleteButton Command="{Binding ElementName=page, Path=DataContext.DeleteFeatItemCommand}" CommandParameter="{Binding}" Margin="-4,-10,-6,-11"/>
+                    </DataTemplate>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Page.Resources>
+
     <TabControl TabStripPlacement="Left" BorderThickness="1,0,0,0">
-        <TabControl.Resources>
-            <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="2,0,0,3"/>
-            </Style>
-            <Style TargetType="{x:Type ComboBox}">
-                <Setter Property="Margin" Value="2,0,0,3"/>
-            </Style>
-            <Style TargetType="{x:Type CheckBox}">
-                <Setter Property="Margin" Value="1,0,0,3"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-            </Style>
-            <Style TargetType="{x:Type TabItem}">
-                <Setter Property="RenderTransform">
-                    <Setter.Value>
-                        <TranslateTransform Y="-2"/>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </TabControl.Resources>
         <TabItem Header="General" Width="150" Height="30">
             <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                 <Grid.RowDefinitions>

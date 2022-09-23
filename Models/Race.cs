@@ -1,4 +1,5 @@
-﻿using Eos.Nwn.Tlk;
+﻿using Eos.Models.Tables;
+using Eos.Nwn.Tlk;
 using Eos.Repositories;
 using Eos.Types;
 using System;
@@ -40,7 +41,7 @@ namespace Eos.Models
         public int? FeatEveryNthLevel { get; set; } = 3;
         public int? FeatEveryNthLevelCount { get; set; } = 1;
         public AbilityType? SkillPointModifierAbility { get; set; } = AbilityType.INT;
-        public List<Feat> Feats { get; } = new List<Feat>();
+        public RacialFeatsTable? Feats { get; set; }
 
         protected override String GetLabel()
         {
@@ -51,14 +52,7 @@ namespace Eos.Models
         {
             FavoredClass = Resolve(FavoredClass, MasterRepository.Classes);
             ToolsetDefaultClass = Resolve(ToolsetDefaultClass, MasterRepository.Classes);
-            for (int i = Feats.Count-1; i >= 0; i--)
-            {
-                var resolvedFeat = Resolve(Feats[i], MasterRepository.Feats);
-                if (resolvedFeat != null)
-                    Feats[i] = resolvedFeat;
-                else
-                    Feats.RemoveAt(i);
-            }
+            Feats = Resolve(Feats, MasterRepository.RacialFeatsTables);
         }
 
         public override JsonObject ToJson()
@@ -93,11 +87,7 @@ namespace Eos.Models
             raceJson.Add("FeatEveryNthLevel", this.FeatEveryNthLevel);
             raceJson.Add("FeatEveryNthLevelCount", this.FeatEveryNthLevelCount);
             raceJson.Add("SkillPointModifierAbility", EnumToJson(this.SkillPointModifierAbility));
-
-            var featArr = new JsonArray();
-            for (int i=0; i < this.Feats.Count; i++)
-                featArr.Add(CreateJsonRef(this.Feats[i]));
-            raceJson.Add("Feats", featArr);
+            raceJson.Add("Feats", CreateJsonRef(this.Feats));
 
             return raceJson;
         }
@@ -133,15 +123,7 @@ namespace Eos.Models
             this.FeatEveryNthLevel = json["FeatEveryNthLevel"]?.GetValue<int>();
             this.FeatEveryNthLevelCount = json["FeatEveryNthLevelCount"]?.GetValue<int>();
             this.SkillPointModifierAbility = JsonToEnum<AbilityType>(json["SkillPointModifierAbility"]) ?? AbilityType.INT;
-
-            this.Feats.Clear();
-            var featArr = json["Feats"]?.AsArray() ?? new JsonArray();
-            for (int i=0; i < featArr.Count; i++)
-            {
-                var feat = CreateRefFromJson<Feat>(featArr[i]?.AsObject());
-                if (feat != null)
-                    this.Feats.Add(feat);
-            }
+            this.Feats = CreateRefFromJson<RacialFeatsTable>(json["Feats"]?.AsObject());
         }
     }
 }

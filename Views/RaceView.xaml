@@ -15,40 +15,19 @@
       d:DesignHeight="520" d:DesignWidth="800"
       Title="RaceView">
     <Page.Resources>
-        <ext:NotConverter x:Key="inverter"/>
-        <ext:ResRefConverter x:Key="resRefConverter"/>
-        <ext:TLKStringSetConverter x:Key="tlkConverter" AlwaysUseDefaultLanguage="False"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Resources\StyleResources.xaml"/>
+                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Page.Resources>
+    
     <Page.DataContext>
         <vm:RaceViewModel/>
     </Page.DataContext>
 
     <TabControl TabStripPlacement="Left" BorderThickness="1,0,0,0">
-        <TabControl.Resources>
-            <Style TargetType="{x:Type TabItem}">
-                <Setter Property="RenderTransform">
-                    <Setter.Value>
-                        <TranslateTransform Y="-2"/>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="2,0,0,3"/>
-            </Style>
-            <Style TargetType="{x:Type ComboBox}">
-                <Setter Property="Margin" Value="2,0,0,3"/>
-            </Style>
-            <Style TargetType="{x:Type wpftk:IntegerUpDown}">
-                <Setter Property="Margin" Value="2,0,0,3"/>
-            </Style>
-            <Style TargetType="{x:Type wpftk:DoubleUpDown}">
-                <Setter Property="Margin" Value="2,0,0,3"/>
-            </Style>
-            <Style TargetType="{x:Type CheckBox}">
-                <Setter Property="Margin" Value="1,0,0,3"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-            </Style>
-        </TabControl.Resources>
         <TabItem Header="Info" Width="100" Height="30">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
@@ -87,7 +66,6 @@
                         <!--Name-->
                         <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
                         <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1"/>
-                        <!--<TextBox Text="{Binding Data.Name}" Grid.Row="1" Grid.Column="1"/>-->
 
                         <!--Name (Plural)-->
                         <TextBlock Text="Name (Plural)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
@@ -136,7 +114,7 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="130"/>
                         <ColumnDefinition Width="*" MinWidth="150"/>
                         <ColumnDefinition Width="150"/>
                         <ColumnDefinition Width="*" MinWidth="150"/>
@@ -183,8 +161,11 @@
                     <TextBlock Text="Feat count every Nth Level" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
                     <wpftk:IntegerUpDown Value="{Binding Data.FeatEveryNthLevelCount}" Grid.Row="4" Grid.Column="3"/>
 
-                    <TextBlock Text="CR Modifier" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
-                    <wpftk:DoubleUpDown Value="{Binding Data.CRModifier}" FormatString="N2" Increment="0.1" Grid.Row="5" Grid.Column="1"/>
+                    <TextBlock Text="Racial Feats" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+                    <uc:RacialFeatsTableComboBox SelectedValue="{Binding Data.Feats}" Grid.Row="5" Grid.Column="1" IsNullable="True"/>
+
+                    <TextBlock Text="CR Modifier" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
+                    <wpftk:DoubleUpDown Value="{Binding Data.CRModifier}" FormatString="N2" Increment="0.1" Grid.Row="5" Grid.Column="3"/>
 
                     <TextBlock Text="Ability Modifiers" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="7" Grid.Column="0" FontWeight="Bold" FontSize="16" Grid.ColumnSpan="4"/>
 
@@ -217,59 +198,6 @@
 
                     <TextBlock Text="Ability Points" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="0"/>
                     <wpftk:IntegerUpDown Value="{Binding Data.FirstLevelAbilityPoints}" Grid.Row="14" Grid.Column="1"/>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-        <TabItem Header="Racial Feats" Width="100" Height="30">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <!--IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}"-->
-                <Grid Margin="10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Text="Racial Feats" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
-
-                    <ListBox Grid.Row="1" ItemsSource="{Binding Data.Feats}" AlternationCount="2">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                <Style.Triggers>
-                                    <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                                        <Setter Property="Background" Value="White"></Setter>
-                                    </Trigger>
-                                    <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                                        <Setter Property="Background" Value="#FFF0F0F0"></Setter>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.InputBindings>
-                                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ElementName=page, Path=DataContext.OpenDetailCommand}" CommandParameter="{Binding}"/>
-                                    </Grid.InputBindings>
-                                    
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="24"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Image Source="{Binding Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}" Grid.Column="0" Width="24" Height="24"/>
-                                    <TextBlock Grid.Column="1" Margin="5,0,0,0" VerticalAlignment="Center" FontSize="16">
-                                        <TextBlock.Text>
-                                            <MultiBinding Converter="{StaticResource tlkConverter}">
-                                                <Binding Path="Name"/>
-                                                <Binding ElementName="page" Path="TLKLanguage"/>
-                                                <Binding ElementName="page" Path="Gender"/>
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
                 </Grid>
             </ScrollViewer>
         </TabItem>

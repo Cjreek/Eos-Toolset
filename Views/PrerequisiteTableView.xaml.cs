@@ -1,6 +1,7 @@
 ﻿using Eos.Models.Tables;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,53 +14,62 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Eos.Types;
+using System.Xml.Linq;
+using static Eos.Views.PrerequisiteTableView;
 
 namespace Eos.Views
 {
-    public class PrerequisiteTypeTemplateSelector : DataTemplateSelector
+    class Param1TemplateSelectorConverter : IValueConverter
     {
-        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (container is FrameworkElement element && item is PrerequisiteTableItem requTableItem)
+            if ((value is RequirementType requType) && (parameter is FrameworkElement element))
             {
-                object? resource = null; 
-                switch (requTableItem.RequirementType)
+                object? resource = null;
+                switch (requType)
                 {
-                    case Types.RequirementType.VAR:
+                    case RequirementType.SAVE:
+                        resource = element.FindResource("saveParamTemplate");
+                        if (resource is DataTemplate saveTemplate)
+                            return saveTemplate;
+                        break;
+
+                    case RequirementType.VAR:
                         resource = element.FindResource("strParamTemplate");
                         if (resource is DataTemplate strTemplate)
                             return strTemplate;
                         break;
 
-                    case Types.RequirementType.BAB:
-                    case Types.RequirementType.SPELL:
-                    case Types.RequirementType.ARCSPELL:
+                    case RequirementType.BAB:
+                    case RequirementType.SPELL:
+                    case RequirementType.ARCSPELL:
                         resource = element.FindResource("intParamTemplate");
                         if (resource is DataTemplate intTemplate)
                             return intTemplate;
                         break;
 
-                    case Types.RequirementType.RACE:
+                    case RequirementType.RACE:
                         resource = element.FindResource("raceParamTemplate");
                         if (resource is DataTemplate raceTemplate)
                             return raceTemplate;
                         break;
 
-                    case Types.RequirementType.CLASSNOT:
-                    case Types.RequirementType.CLASSOR:
+                    case RequirementType.CLASSNOT:
+                    case RequirementType.CLASSOR:
                         resource = element.FindResource("classParamTemplate");
                         if (resource is DataTemplate classTemplate)
                             return classTemplate;
                         break;
 
-                    case Types.RequirementType.FEAT:
-                    case Types.RequirementType.FEATOR:
+                    case RequirementType.FEAT:
+                    case RequirementType.FEATOR:
                         resource = element.FindResource("featParamTemplate");
                         if (resource is DataTemplate featTemplate)
                             return featTemplate;
                         break;
 
-                    case Types.RequirementType.SKILL:
+                    case RequirementType.SKILL:
                         resource = element.FindResource("skillParamTemplate");
                         if (resource is DataTemplate skillTemplate)
                             return skillTemplate;
@@ -67,22 +77,27 @@ namespace Eos.Views
                 }
             }
 
-            return base.SelectTemplate(item, container);
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 
-    public class PrerequisiteTypeParam2TemplateSelector : DataTemplateSelector
+    class Param2TemplateSelectorConverter : IValueConverter
     {
-        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (container is FrameworkElement element && item is PrerequisiteTableItem requTableItem)
+            if ((value is RequirementType requType) && (parameter is FrameworkElement element))
             {
                 object? resource = null;
-                switch (requTableItem.RequirementType)
+                switch (requType)
                 {
-                    case Types.RequirementType.SKILL:
-                    case Types.RequirementType.SAVE:
-                    case Types.RequirementType.VAR:
+                    case RequirementType.SKILL:
+                    case RequirementType.SAVE:
+                    case RequirementType.VAR:
                         resource = element.FindResource("intParam2Template");
                         if (resource is DataTemplate strTemplate)
                             return strTemplate;
@@ -96,7 +111,12 @@ namespace Eos.Views
                 }
             }
 
-            return base.SelectTemplate(item, container);
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -105,8 +125,32 @@ namespace Eos.Views
     /// </summary>
     public partial class PrerequisiteTableView : LanguageAwarePage
     {
+        public class SaveType
+        {
+            public string Name { get; set; } = "";
+            public int Value { get; set; }
+        }
+
+        public List<SaveType> SaveTypes { get; set; } = new List<SaveType>();
+
         public PrerequisiteTableView()
         {
+            SaveTypes.Add(new SaveType()
+            {
+                Name = "Fortitude",
+                Value = 1,
+            });
+            SaveTypes.Add(new SaveType()
+            {
+                Name = "Reflex",
+                Value = 2,
+            });
+            SaveTypes.Add(new SaveType()
+            {
+                Name = "Willpower",
+                Value = 3,
+            });
+
             InitializeComponent();
         }
     }

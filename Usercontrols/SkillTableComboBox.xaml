@@ -10,8 +10,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="20" d:DesignWidth="800">
     <UserControl.Resources>
-        <ext:BoolToVisibilityConverterEx x:Key="bool2Vis" FalseValue="Collapsed"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -27,6 +32,6 @@
         </ComboBox>
         <Button x:Name="btClear" Grid.Column="1" Margin="2,-2,0,0" Content="X" Click="btClear_Click"
                 Height="{Binding ElementName=cbSkillTables, Path=ActualHeight}" Width="{Binding ElementName=cbSkillTables, Path=ActualHeight}" 
-                Visibility="{Binding ElementName=ucSkillTableComboBox, Path=IsNullable, Converter={StaticResource bool2Vis}}"/>
+                Visibility="{Binding ElementName=ucSkillTableComboBox, Path=IsNullable, Converter={StaticResource bool2VisCollapsed}}"/>
     </Grid>
 </UserControl>

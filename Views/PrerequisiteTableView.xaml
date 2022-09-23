@@ -18,23 +18,15 @@
     </Page.DataContext>
 
     <Page.Resources>
-        <ext:NotConverter x:Key="inverter"/>
-
-        <Style TargetType="{x:Type ListViewItem}">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        </Style>
-
-        <Style TargetType="{x:Type TextBox}">
-            <Setter Property="Margin" Value="2,0,0,3"/>
-        </Style>
-
-        <Style TargetType="{x:Type ListView}">
-            <Setter Property="Margin" Value="2,0,0,3"/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Resources\StyleResources.xaml"/>
+                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Page.Resources>
 
-    <!--IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}"-->
-    <Grid Margin="10">
+    <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -51,33 +43,44 @@
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}"/>
 
-        <ListView Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Data.Items}">
+        <ListView x:Name="listView" Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Data.Items}">
             <ListView.Resources>
-                <local:PrerequisiteTypeTemplateSelector x:Key="templateSelector"/>
-                <local:PrerequisiteTypeParam2TemplateSelector x:Key="templateParam2Selector"/>
+                <local:Param1TemplateSelectorConverter x:Key="templateParam1Converter"/>
+                <local:Param2TemplateSelectorConverter x:Key="templateParam2Converter"/>
 
+                <DataTemplate x:Key="param1MetaTemplate">
+                    <ContentPresenter Content="{Binding}" ContentTemplate="{Binding RequirementType, Converter={StaticResource templateParam1Converter}, ConverterParameter={x:Reference listView}}"/>
+                </DataTemplate>
+                
                 <DataTemplate x:Key="strParamTemplate">
                     <TextBox Text="{Binding RequirementParam1}" Margin="-5,-8,-6,-8" VerticalAlignment="Stretch" AcceptsReturn="True"/>
                 </DataTemplate>
                 <DataTemplate x:Key="intParamTemplate">
-                    <wpftk:IntegerUpDown Value="{Binding RequirementParam1}" Margin="-5,-1,-6,-2"/>
+                    <wpftk:IntegerUpDown Value="{Binding RequirementParam1}" Margin="-5,-1,-6,-5"/>
                 </DataTemplate>
                 <DataTemplate x:Key="raceParamTemplate">
-                    <uc:RaceComboBox SelectedValue="{Binding RequirementParam1}" IsNullable="False" Margin="-5,-1,-6,-2"/>
+                    <uc:RaceComboBox SelectedValue="{Binding RequirementParam1}" IsNullable="False" Margin="-7,-1,-6,-5"/>
                 </DataTemplate>
                 <DataTemplate x:Key="classParamTemplate">
-                    <uc:ClassComboBox SelectedValue="{Binding RequirementParam1}" IsNullable="False" Margin="-5,-1,-6,-2"/>
+                    <uc:ClassComboBox SelectedValue="{Binding RequirementParam1}" IsNullable="False" Margin="-7,-1,-6,-5"/>
                 </DataTemplate>
                 <DataTemplate x:Key="featParamTemplate">
-                    <uc:FeatComboBox SelectedValue="{Binding RequirementParam1}" IsNullable="False" Margin="-5,-1,-6,-2"/>
+                    <uc:FeatComboBox SelectedValue="{Binding RequirementParam1}" IsNullable="False" Margin="-7,-1,-6,-5"/>
                 </DataTemplate>
                 <DataTemplate x:Key="skillParamTemplate">
-                    <uc:SkillComboBox SelectedValue="{Binding RequirementParam1}" IsNullable="False" Margin="-5,-1,-6,-2"/>
+                    <uc:SkillComboBox SelectedValue="{Binding RequirementParam1}" IsNullable="False" Margin="-7,-1,-6,-5"/>
+                </DataTemplate>
+                <DataTemplate x:Key="saveParamTemplate">
+                    <ComboBox ItemsSource="{Binding ElementName=page, Path=SaveTypes}" SelectedValue="{Binding RequirementParam1}" SelectedValuePath="Value" DisplayMemberPath="Name" Margin="-5,-1,-6,-1"/>
+                </DataTemplate>
+
+                <DataTemplate x:Key="param2MetaTemplate">
+                    <ContentPresenter Content="{Binding}" ContentTemplate="{Binding RequirementType, Converter={StaticResource templateParam2Converter}, ConverterParameter={x:Reference listView}}"/>
                 </DataTemplate>
 
                 <DataTemplate x:Key="emptyTemplate"/>
                 <DataTemplate x:Key="intParam2Template">
-                    <wpftk:IntegerUpDown Value="{Binding RequirementParam2}" Margin="-5,-1,-6,-2"/>
+                    <wpftk:IntegerUpDown Value="{Binding RequirementParam2}" Margin="-5,-6,-6,-6"/>
                 </DataTemplate>
             </ListView.Resources>
             <ListView.View>
@@ -85,29 +88,18 @@
                     <GridViewColumn Header="Requirement Type" Width="120">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <uc:EnumComboBox ItemsSource="{ext:EnumSource types:RequirementType}" SelectedValue="{Binding Path=RequirementType}" IsNullable="False" Margin="-6,-2,-6,-2"/>
+                                <uc:EnumComboBox ItemsSource="{ext:EnumSource types:RequirementType}" SelectedValue="{Binding Path=RequirementType}" IsNullable="False" Margin="-5,-1,-6,-5"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
 
-                    <GridViewColumn Header="Param 1" Width="250" CellTemplateSelector="{StaticResource templateSelector}"/>
-                    <GridViewColumn Header="Param 2" Width="75" CellTemplateSelector="{StaticResource templateParam2Selector}"/>
+                    <GridViewColumn Header="Param 1" Width="250" CellTemplate="{StaticResource param1MetaTemplate}"/>
+                    <GridViewColumn Header="Param 2" Width="75" CellTemplate="{StaticResource param2MetaTemplate}"/>
 
                     <GridViewColumn Header="" Width="25">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Content="X" Margin="-4,-4,-6,-4" Background="Transparent" Command="{Binding ElementName=page, Path=DataContext.DeleteSkillItemCommand}" CommandParameter="{Binding}">
-                                    <Button.Style>
-                                        <Style TargetType="{x:Type Button}">
-                                            <Setter Property="Foreground" Value="Gray"/>
-                                            <Style.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Foreground" Value="DarkRed"/>
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
-                                </Button>
+                                <uc:DeleteButton Margin="-4,-4,-6,-4" Command="{Binding ElementName=page, Path=DataContext.DeletePrerequisiteItemCommand}" CommandParameter="{Binding}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

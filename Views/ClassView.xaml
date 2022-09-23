@@ -17,37 +17,17 @@
     <Page.DataContext>
         <vm:ClassViewModel/>
     </Page.DataContext>
+    
     <Page.Resources>
-        <ext:NotConverter x:Key="inverter"/>
-        <ext:ResRefConverter x:Key="resRefConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Resources\StyleResources.xaml"/>
+                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Page.Resources>
 
     <TabControl TabStripPlacement="Left" BorderThickness="1,0,0,0">
-        <TabControl.Resources>
-            <Style TargetType="{x:Type TabItem}">
-                <Setter Property="RenderTransform">
-                    <Setter.Value>
-                        <TranslateTransform Y="-2"/>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="2,0,0,3"/>
-            </Style>
-            <Style TargetType="{x:Type ComboBox}">
-                <Setter Property="Margin" Value="2,0,0,3"/>
-            </Style>
-            <Style TargetType="{x:Type wpftk:IntegerUpDown}">
-                <Setter Property="Margin" Value="2,0,0,3"/>
-            </Style>
-            <Style TargetType="{x:Type wpftk:DoubleUpDown}">
-                <Setter Property="Margin" Value="2,0,0,3"/>
-            </Style>
-            <Style TargetType="{x:Type CheckBox}">
-                <Setter Property="Margin" Value="1,0,0,3"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-            </Style>
-        </TabControl.Resources>
         <TabItem Header="Info" Width="100" Height="30">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
@@ -102,7 +82,7 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="130"/>
                         <ColumnDefinition Width="*" MinWidth="150"/>
                         <ColumnDefinition Width="150"/>
                         <ColumnDefinition Width="*" MinWidth="150"/>
@@ -193,9 +173,9 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="140"/>
                         <ColumnDefinition Width="*" MinWidth="150"/>
-                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="140"/>
                         <ColumnDefinition Width="*" MinWidth="150"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>

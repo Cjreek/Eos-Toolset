@@ -23,6 +23,7 @@ namespace Eos.Types
         public static readonly String SkillsFilename;
         public static readonly String DiseasesFilename;
         public static readonly String PoisonsFilename;
+        public static readonly String SpellbooksFilename;
 
         public static readonly String AttackBonusTablesFilename;
         public static readonly String BonusFeatTablesFilename;
@@ -33,6 +34,7 @@ namespace Eos.Types
         public static readonly String SpellSlotTablesFilename;
         public static readonly String KnownSpellsTablesFilename;
         public static readonly String StatGainTablesFilename;
+        public static readonly String RacialFeatsTablesFilename;
 
         public static readonly String RacesFilePath;
         public static readonly String ClassesFilePath;
@@ -42,6 +44,7 @@ namespace Eos.Types
         public static readonly String SkillsFilePath;
         public static readonly String DiseasesFilePath;
         public static readonly String PoisonsFilePath;
+        public static readonly String SpellbooksFilePath;
 
         public static readonly String AttackBonusTablesFilePath;
         public static readonly String BonusFeatTablesFilePath;
@@ -52,6 +55,7 @@ namespace Eos.Types
         public static readonly String SpellSlotTablesFilePath;
         public static readonly String KnownSpellsTablesFilePath;
         public static readonly String StatGainTablesFilePath;
+        public static readonly String RacialFeatsTablesFilePath;
 
         static Constants()
         {
@@ -74,6 +78,7 @@ namespace Eos.Types
             SkillsFilename = "skills.json";
             DiseasesFilename = "diseases.json";
             PoisonsFilename = "poisons.json";
+            SpellbooksFilename = "spellbooks.json";
 
             AttackBonusTablesFilename = "tables_bab.json";
             BonusFeatTablesFilename = "tables_bonusfeats.json";
@@ -84,6 +89,7 @@ namespace Eos.Types
             SpellSlotTablesFilename = "tables_spellslots.json";
             KnownSpellsTablesFilename = "tables_knownspells.json";
             StatGainTablesFilename = "tables_statgain.json";
+            RacialFeatsTablesFilename = "tables_racialfeats.json";
 
             RacesFilePath = BaseDataPath + RacesFilename;
             ClassesFilePath = BaseDataPath + ClassesFilename;
@@ -93,6 +99,7 @@ namespace Eos.Types
             SkillsFilePath = BaseDataPath + SkillsFilename;
             DiseasesFilePath = BaseDataPath + DiseasesFilename;
             PoisonsFilePath = BaseDataPath + PoisonsFilename;
+            SpellbooksFilePath = BaseDataPath + SpellbooksFilename;
 
             AttackBonusTablesFilePath = BaseDataPath + AttackBonusTablesFilename;
             BonusFeatTablesFilePath = BaseDataPath + BonusFeatTablesFilename;
@@ -103,6 +110,7 @@ namespace Eos.Types
             SpellSlotTablesFilePath = BaseDataPath + SpellSlotTablesFilename;
             KnownSpellsTablesFilePath = BaseDataPath + KnownSpellsTablesFilename;
             StatGainTablesFilePath = BaseDataPath + StatGainTablesFilename;
+            RacialFeatsTablesFilePath = BaseDataPath + RacialFeatsTablesFilename;
         }
     }
 }

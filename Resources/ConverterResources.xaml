@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ext="clr-namespace:Eos.Extensions">
+    
+    <ext:NotConverter x:Key="inverter"/>
+    <ext:ResRefConverter x:Key="resRefConverter"/>
+    <ext:TLKStringSetConverter x:Key="tlkConverter" AlwaysUseDefaultLanguage="False"/>
+    <ext:TLKStringSetConverter x:Key="tlkConverterDefault" AlwaysUseDefaultLanguage="True"/>
+    <ext:BoolToVisibilityConverterEx x:Key="bool2VisCollapsed" FalseValue="Collapsed"/>
+    <ext:FlagToBoolConverter x:Key="flagsToBool"/>
+    
+</ResourceDictionary>

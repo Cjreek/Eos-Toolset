@@ -1,4 +1,4 @@
-﻿<local:LanguageAwarePage x:Class="Eos.Views.SkillTableView"
+﻿<local:LanguageAwarePage x:Class="Eos.Views.RacialFeatsTableView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -13,7 +13,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SkillTableView">
     <Page.DataContext>
-        <vm:SkillTableViewModel/>
+        <vm:RacialFeatsTableViewModel/>
     </Page.DataContext>
 
     <Page.Resources>
@@ -37,7 +37,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="Skill Table" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+        <TextBlock Text="Racial Feats Table" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}"/>
@@ -45,18 +45,10 @@
         <ListView Grid.Row="2" Grid.Column="1"  ItemsSource="{Binding Data.Items}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Skill" Width="300">
+                    <GridViewColumn Header="Feat" Width="300">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <uc:SkillComboBox SelectedValue="{Binding Path=Skill}" IsNullable="False" Margin="-6,-1,-6,-5"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-
-                    <GridViewColumn Header="Class?" Width="50">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox VerticalAlignment="Top" HorizontalAlignment="Center" IsChecked="{Binding IsClassSkill}" Margin="-6,-1,-6,-5"/>
+                                <uc:FeatComboBox SelectedValue="{Binding Path=Feat}" IsNullable="False" Margin="-6,-1,-6,-5"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -64,7 +56,7 @@
                     <GridViewColumn Header="" Width="25">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <uc:DeleteButton Command="{Binding ElementName=page, Path=DataContext.DeleteSkillItemCommand}" CommandParameter="{Binding}" Margin="-4,-10,-6,-11"/>
+                                <uc:DeleteButton Command="{Binding ElementName=page, Path=DataContext.DeleteRacialFeatItemCommand}" CommandParameter="{Binding}" Margin="-4,-10,-6,-11"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -72,6 +64,6 @@
             </ListView.View>
         </ListView>
 
-        <Button Grid.Row="3" Grid.Column="1" Content="Add Skill" Width="150" Margin="2,5,0,0" HorizontalAlignment="Left" Command="{Binding AddSkillItemCommand}"/>
+        <Button Grid.Row="3" Grid.Column="1" Content="Add Feat" Width="150" Margin="0,5,0,0" HorizontalAlignment="Left" Command="{Binding AddRacialFeatItemCommand}"/>
     </Grid>
 </local:LanguageAwarePage>

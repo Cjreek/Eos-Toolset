@@ -98,6 +98,7 @@ namespace Eos.Repositories
             Skills.LoadFromFile(ProjectFolder + Constants.SkillsFilename);
             Diseases.LoadFromFile(ProjectFolder + Constants.DiseasesFilename);
             Poisons.LoadFromFile(ProjectFolder + Constants.PoisonsFilename);
+            Spellbooks.LoadFromFile(ProjectFolder + Constants.SpellbooksFilename);
 
             AttackBonusTables.LoadFromFile(ProjectFolder + Constants.AttackBonusTablesFilename);
             BonusFeatTables.LoadFromFile(ProjectFolder + Constants.BonusFeatTablesFilename);
@@ -108,6 +109,7 @@ namespace Eos.Repositories
             SpellSlotTables.LoadFromFile(ProjectFolder + Constants.SpellSlotTablesFilename);
             KnownSpellsTables.LoadFromFile(ProjectFolder + Constants.KnownSpellsTablesFilename);
             StatGainTables.LoadFromFile(ProjectFolder + Constants.StatGainTablesFilename);
+            RacialFeatsTables.LoadFromFile(ProjectFolder + Constants.RacialFeatsTablesFilename);
         }
 
         public void Save()
@@ -121,6 +123,7 @@ namespace Eos.Repositories
             Skills.SaveToFile(ProjectFolder + Constants.SkillsFilename);
             Diseases.SaveToFile(ProjectFolder + Constants.DiseasesFilename);
             Poisons.SaveToFile(ProjectFolder + Constants.PoisonsFilename);
+            Spellbooks.SaveToFile(ProjectFolder + Constants.SpellbooksFilename);
 
             AttackBonusTables.SaveToFile(ProjectFolder + Constants.AttackBonusTablesFilename);
             BonusFeatTables.SaveToFile(ProjectFolder + Constants.BonusFeatTablesFilename);
@@ -131,6 +134,7 @@ namespace Eos.Repositories
             SpellSlotTables.SaveToFile(ProjectFolder + Constants.SpellSlotTablesFilename);
             KnownSpellsTables.SaveToFile(ProjectFolder + Constants.KnownSpellsTablesFilename);
             StatGainTables.SaveToFile(ProjectFolder + Constants.StatGainTablesFilename);
+            RacialFeatsTables.SaveToFile(ProjectFolder + Constants.RacialFeatsTablesFilename);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

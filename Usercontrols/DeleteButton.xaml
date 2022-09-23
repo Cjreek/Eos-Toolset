@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="Eos.Usercontrols.DeleteButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Eos.Usercontrols"
+             x:Name="ucDeleteButton"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Button Content="X" Background="Transparent" Command="{Binding ElementName=ucDeleteButton, Path=Command}" CommandParameter="{Binding ElementName=ucDeleteButton, Path=CommandParameter}">
+        <Button.Style>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Foreground" Value="Gray"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="DarkRed"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Button.Style>
+    </Button>
+</UserControl>

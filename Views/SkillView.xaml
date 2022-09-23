@@ -16,21 +16,18 @@
     <Page.DataContext>
         <vm:SkillViewModel/>
     </Page.DataContext>
+    
     <Page.Resources>
-        <ext:NotConverter x:Key="inverter"/>
-        <ext:ResRefConverter x:Key="resRefConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Resources\StyleResources.xaml"/>
+                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Page.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <Grid IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
-            <Grid.Resources>
-                <Style TargetType="{x:Type TextBox}">
-                    <Setter Property="Margin" Value="2,0,0,3"/>
-                </Style>
-                <Style TargetType="{x:Type ComboBox}">
-                    <Setter Property="Margin" Value="2,0,0,3"/>
-                </Style>
-            </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="100"/>

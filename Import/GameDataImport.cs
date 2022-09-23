@@ -65,6 +65,26 @@ namespace Eos.Import
             }
         }
 
+        private void ImportRacialFeatsTable(String tablename, Guid guid)
+        {
+            var tmpRacialFeatsTable = new RacialFeatsTable();
+            tmpRacialFeatsTable.ID = guid;
+            tmpRacialFeatsTable.Name = tablename;
+
+            var racialFeatTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
+            var racialFeatTable2da = new TwoDimensionalArrayFile(racialFeatTableResource.RawData);
+
+            tmpRacialFeatsTable.Clear();
+            for (int i = 0; i < racialFeatTable2da.Count; i++)
+            {
+                var tmpItem = new RacialFeatsTableItem();
+                tmpItem.Feat = CreateRef<Feat>(racialFeatTable2da[i].AsInteger("FeatIndex"));
+                tmpRacialFeatsTable.Add(tmpItem);
+            }
+
+            Standard.RacialFeatsTables.Add(tmpRacialFeatsTable);
+        }
+
         private void ImportRaces()
         {
             var raceResource = bif.ReadResource("racialtypes", NWNResourceType.TWODA);
@@ -110,12 +130,14 @@ namespace Eos.Import
                 tmpRace.FeatEveryNthLevelCount = races2da[i].AsInteger("NumberNormalFeatsEveryNthLevel");
                 tmpRace.SkillPointModifierAbility = Enum.Parse<AbilityType>(races2da[i].AsString("SkillPointModifierAbility") ?? "", true);
 
-                if (!races2da[i].IsNull("FeatsTable"))
+                // RacialFeatsTable
+                var racialFeatsTable = races2da[i].AsString("FeatsTable");
+                if (racialFeatsTable != null)
                 {
-                    var featsTableResource = bif.ReadResource(races2da[i].AsString("FeatsTable"), NWNResourceType.TWODA);
-                    var featsTable2da = new TwoDimensionalArrayFile(featsTableResource.RawData);
-                    for (int j = 0; j < featsTable2da.Count; j++)
-                        tmpRace.Feats.Add(CreateRef<Feat>(featsTable2da[j].AsInteger("FeatIndex")));
+                    var racialFeatsTableGuid = GenerateGuid(racialFeatsTable.ToLower(), 0);
+                    if (!Standard.RacialFeatsTables.Contains(racialFeatsTableGuid))
+                        ImportRacialFeatsTable(racialFeatsTable, racialFeatsTableGuid);
+                    tmpRace.Feats = Standard.RacialFeatsTables.GetByID(racialFeatsTableGuid);
                 }
 
                 Standard.Races.Add(tmpRace);
@@ -508,7 +530,20 @@ namespace Eos.Import
                 if (spellAbilityStr != "")
                     tmpClass.SpellcastingAbility = Enum.Parse<AbilityType>(spellAbilityStr, true);
 
-                //tmpClass.Spellbook
+                // Spellbook
+                var spellbookName = classes2da[i].AsString("SpellTableColumn");
+                if (spellbookName != null)
+                {
+                    if(!Standard.Spellbooks.Contains(spellbookName))
+                    {
+                        Spellbook tmpSpellbook = new Spellbook();
+                        tmpSpellbook.ID = GenerateGuid(spellbookName.ToLower(), 0);
+                        tmpSpellbook.Name = spellbookName;
+                        Standard.Spellbooks.Add(tmpSpellbook);
+                    }
+
+                    tmpClass.Spellbook = Standard.Spellbooks.GetByName(spellbookName);
+                }
 
                 tmpClass.CasterLevelMultiplier = classes2da[i].AsFloat("CLMultiplier") ?? 1.0;
                 tmpClass.MinCastingLevel = classes2da[i].AsInteger("MinCastingLevel") ?? 0;
@@ -707,6 +742,19 @@ namespace Eos.Import
                 tmpSpell.CounterSpell1 = CreateRef<Spell>(spells2da[i].AsInteger("Counter1"));
                 tmpSpell.CounterSpell2 = CreateRef<Spell>(spells2da[i].AsInteger("Counter2"));
 
+                // Spellbook entries:
+                for (int j=0; j < spells2da.Columns.Count; j++)
+                {
+                    var spellbook = Standard.Spellbooks.GetByName(spells2da.Columns[j]);
+                    if (spellbook != null)
+                    {
+                        var level = spells2da[i].AsInteger(j);
+                        if (level != null)
+                            spellbook.AddSpell(level ?? 99, tmpSpell);
+                    }
+                }
+
+
                 Standard.Spells.Add(tmpSpell);
             }
             Standard.Spells.EndUpdate();
@@ -793,15 +841,6 @@ namespace Eos.Import
                 if (race == null) continue;
                 race.FavoredClass = SolveInstance(race.FavoredClass, Standard.Classes);
                 race.ToolsetDefaultClass = SolveInstance(race.ToolsetDefaultClass, Standard.Classes);
-
-                for (var i = race.Feats.Count-1; i >= 0; i--)
-                {
-                    var feat = SolveInstance(race.Feats[i], Standard.Feats);
-                    if (feat == null)
-                        race.Feats.RemoveAt(i);
-                    else
-                        race.Feats[i] = feat;
-                }
             }
 
             // Domains
@@ -914,6 +953,18 @@ namespace Eos.Import
                     }
                 }
             }
+
+            // Racial Feats Table
+            foreach (var racialFeatsTable in Standard.RacialFeatsTables)
+            {
+                if (racialFeatsTable == null) continue;
+                for (int i = 0; i < racialFeatsTable.Count; i++)
+                {
+                    var item = racialFeatsTable[i];
+                    if (item == null) continue;
+                    item.Feat = SolveInstance(item.Feat, Standard.Feats);
+                }
+            }
         }
 
         private void SaveToJson()
@@ -929,6 +980,7 @@ namespace Eos.Import
             Standard.Spells.SaveToFile(Constants.SpellsFilePath);
             Standard.Diseases.SaveToFile(Constants.DiseasesFilePath);
             Standard.Poisons.SaveToFile(Constants.PoisonsFilePath);
+            Standard.Spellbooks.SaveToFile(Constants.SpellbooksFilePath);
 
             Standard.AttackBonusTables.SaveToFile(Constants.AttackBonusTablesFilePath);
             Standard.BonusFeatTables.SaveToFile(Constants.BonusFeatTablesFilePath);
@@ -939,10 +991,13 @@ namespace Eos.Import
             Standard.SpellSlotTables.SaveToFile(Constants.SpellSlotTablesFilePath);
             Standard.KnownSpellsTables.SaveToFile(Constants.KnownSpellsTablesFilePath);
             Standard.StatGainTables.SaveToFile(Constants.StatGainTablesFilePath);
+            Standard.RacialFeatsTables.SaveToFile(Constants.RacialFeatsTablesFilePath);
         }
 
         private void ClearTables()
         {
+            Standard.Spellbooks.Clear();
+
             Standard.AttackBonusTables.Clear();
             Standard.BonusFeatTables.Clear();
             Standard.FeatTables.Clear();
@@ -952,6 +1007,7 @@ namespace Eos.Import
             Standard.SpellSlotTables.Clear();
             Standard.KnownSpellsTables.Clear();
             Standard.StatGainTables.Clear();
+            Standard.RacialFeatsTables.Clear();
         }
 
         public void Import(String nwnBasePath)

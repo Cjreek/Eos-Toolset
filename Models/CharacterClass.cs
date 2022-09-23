@@ -52,7 +52,7 @@ namespace Eos.Models
         public bool IsArcaneCaster { get; set; } = true;
         public bool HasSpellFailure { get; set; } = true;
         public AbilityType SpellcastingAbility { get; set; } = AbilityType.INT;
-        public IntPtr Spellbook { get; set; }
+        public Spellbook? Spellbook { get; set; }
         public double CasterLevelMultiplier { get; set; } = 1.0;
         public int MinCastingLevel { get; set; }
         public int MinAssociateLevel { get; set; }
@@ -119,7 +119,7 @@ namespace Eos.Models
             this.IsArcaneCaster = json["IsArcaneCaster"]?.GetValue<bool>() ?? false;
             this.HasSpellFailure = json["HasSpellFailure"]?.GetValue<bool>() ?? false;
             this.SpellcastingAbility = JsonToEnum<AbilityType>(json["SpellcastingAbility"]) ?? AbilityType.INT;
-            this.Spellbook = IntPtr.Zero; // !
+            this.Spellbook = CreateRefFromJson<Spellbook>(json["Spellbook"]?.AsObject());
             this.CasterLevelMultiplier = json["CasterLevelMultiplier"]?.GetValue<double>() ?? 1.0;
             this.MinCastingLevel = json["MinCastingLevel"]?.GetValue<int>() ?? 1;
             this.MinAssociateLevel = json["MinAssociateLevel"]?.GetValue<int>() ?? 255;
@@ -170,7 +170,7 @@ namespace Eos.Models
             classJson.Add("IsArcaneCaster", this.IsArcaneCaster);
             classJson.Add("HasSpellFailure", this.HasSpellFailure);
             classJson.Add("SpellcastingAbility", EnumToJson(this.SpellcastingAbility));
-            classJson.Add("Spellbook", null); // !
+            classJson.Add("Spellbook", CreateJsonRef(this.Spellbook));
             classJson.Add("CasterLevelMultiplier", this.CasterLevelMultiplier);
             classJson.Add("MinCastingLevel", this.MinCastingLevel);
             classJson.Add("MinAssociateLevel", this.MinAssociateLevel);

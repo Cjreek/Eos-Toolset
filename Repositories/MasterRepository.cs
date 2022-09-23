@@ -29,6 +29,7 @@ namespace Eos.Repositories
         private static readonly VirtualModelRepository<Skill> skillVirtualRepository;
         private static readonly VirtualModelRepository<Disease> diseaseVirtualRepository;
         private static readonly VirtualModelRepository<Poison> poisonVirtualRepository;
+        private static readonly VirtualModelRepository<Spellbook> spellbookVirtualRepository;
 
         private static readonly VirtualModelRepository<AttackBonusTable> babTableVirtualRepository;
         private static readonly VirtualModelRepository<BonusFeatsTable> bonusFeatTableVirtualRepository;
@@ -36,16 +37,16 @@ namespace Eos.Repositories
         private static readonly VirtualModelRepository<SavingThrowTable> savesTableVirtualRepository;
         private static readonly VirtualModelRepository<SkillsTable> skillsTableVirtualRepository;
         private static readonly VirtualModelRepository<PrerequisiteTable> requTableVirtualRepository;
-
         private static readonly VirtualModelRepository<SpellSlotTable> spellSlotTableVirtualRepository;
         private static readonly VirtualModelRepository<KnownSpellsTable> knownSpellsTableVirtualRepository;
         private static readonly VirtualModelRepository<StatGainTable> statGainTableVirtualRepository;
+        private static readonly VirtualModelRepository<RacialFeatsTable> racialFeatsTableVirtualRepository;
 
         static MasterRepository()
         {
             resources = new ResourceRepository();
 
-            standardCategory = new RepositoryCollection(true);
+            standardCategory = new RepositoryCollection(false);
             project = new EosProject();
 
             raceVirtualRepository = new VirtualModelRepository<Race>(standardCategory.Races, project.Races);
@@ -56,6 +57,7 @@ namespace Eos.Repositories
             skillVirtualRepository = new VirtualModelRepository<Skill>(standardCategory.Skills, project.Skills);
             diseaseVirtualRepository = new VirtualModelRepository<Disease>(standardCategory.Diseases, project.Diseases);
             poisonVirtualRepository = new VirtualModelRepository<Poison>(standardCategory.Poisons, project.Poisons);
+            spellbookVirtualRepository = new VirtualModelRepository<Spellbook>(standardCategory.Spellbooks, project.Spellbooks);
 
             babTableVirtualRepository = new VirtualModelRepository<AttackBonusTable>(standardCategory.AttackBonusTables, project.AttackBonusTables);
             bonusFeatTableVirtualRepository = new VirtualModelRepository<BonusFeatsTable>(standardCategory.BonusFeatTables, project.BonusFeatTables);
@@ -66,6 +68,7 @@ namespace Eos.Repositories
             spellSlotTableVirtualRepository = new VirtualModelRepository<SpellSlotTable>(standardCategory.SpellSlotTables, project.SpellSlotTables);
             knownSpellsTableVirtualRepository = new VirtualModelRepository<KnownSpellsTable>(standardCategory.KnownSpellsTables, project.KnownSpellsTables);
             statGainTableVirtualRepository = new VirtualModelRepository<StatGainTable>(standardCategory.StatGainTables, project.StatGainTables);
+            racialFeatsTableVirtualRepository = new VirtualModelRepository<RacialFeatsTable>(standardCategory.RacialFeatsTables, project.RacialFeatsTables);
         }
 
         public static void Initialize(String nwnBasePath)
@@ -96,6 +99,7 @@ namespace Eos.Repositories
         public static VirtualModelRepository<Skill> Skills { get { return skillVirtualRepository; } }
         public static VirtualModelRepository<Disease> Diseases { get { return diseaseVirtualRepository; } }
         public static VirtualModelRepository<Poison> Poisons { get { return poisonVirtualRepository; } }
+        public static VirtualModelRepository<Spellbook> Spellbooks { get { return spellbookVirtualRepository; } }
 
         public static VirtualModelRepository<AttackBonusTable> AttackBonusTables { get { return babTableVirtualRepository; } }
         public static VirtualModelRepository<BonusFeatsTable> BonusFeatTables { get { return bonusFeatTableVirtualRepository; } }
@@ -106,6 +110,7 @@ namespace Eos.Repositories
         public static VirtualModelRepository<SpellSlotTable> SpellSlotTables { get { return spellSlotTableVirtualRepository; } }
         public static VirtualModelRepository<KnownSpellsTable> KnownSpellsTables { get { return knownSpellsTableVirtualRepository; } }
         public static VirtualModelRepository<StatGainTable> StatGainTables { get { return statGainTableVirtualRepository; } }
+        public static VirtualModelRepository<RacialFeatsTable> RacialFeatsTables { get { return racialFeatsTableVirtualRepository; } }
 
         public static void Clear()
         {
@@ -123,6 +128,7 @@ namespace Eos.Repositories
             Standard.Skills.LoadFromFile(Constants.SkillsFilePath);
             Standard.Diseases.LoadFromFile(Constants.DiseasesFilePath);
             Standard.Poisons.LoadFromFile(Constants.PoisonsFilePath);
+            Standard.Spellbooks.LoadFromFile(Constants.SpellbooksFilePath);
 
             Standard.AttackBonusTables.LoadFromFile(Constants.AttackBonusTablesFilePath);
             Standard.BonusFeatTables.LoadFromFile(Constants.BonusFeatTablesFilePath);
@@ -133,6 +139,7 @@ namespace Eos.Repositories
             Standard.SpellSlotTables.LoadFromFile(Constants.SpellSlotTablesFilePath);
             Standard.KnownSpellsTables.LoadFromFile(Constants.KnownSpellsTablesFilePath);
             Standard.StatGainTables.LoadFromFile(Constants.StatGainTablesFilePath);
+            Standard.RacialFeatsTables.LoadFromFile(Constants.RacialFeatsTablesFilePath);
 
             Standard.Races.ResolveReferences();
             Standard.Classes.ResolveReferences();
@@ -142,6 +149,7 @@ namespace Eos.Repositories
             Standard.Skills.ResolveReferences();
             Standard.Diseases.ResolveReferences();
             Standard.Poisons.ResolveReferences();
+            Standard.Spellbooks.ResolveReferences();
 
             Standard.AttackBonusTables.ResolveReferences();
             Standard.BonusFeatTables.ResolveReferences();
@@ -152,6 +160,7 @@ namespace Eos.Repositories
             Standard.SpellSlotTables.ResolveReferences();
             Standard.KnownSpellsTables.ResolveReferences();
             Standard.StatGainTables.ResolveReferences();
+            Standard.RacialFeatsTables.ResolveReferences();
         }
     }
 }

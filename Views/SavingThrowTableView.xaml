@@ -15,23 +15,15 @@
     </Page.DataContext>
 
     <Page.Resources>
-        <ext:NotConverter x:Key="inverter"/>
-
-        <Style TargetType="ListViewItem">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        </Style>
-
-        <Style TargetType="{x:Type TextBox}">
-            <Setter Property="Margin" Value="2,0,0,3"/>
-        </Style>
-
-        <Style TargetType="{x:Type ListView}">
-            <Setter Property="Margin" Value="2,0,0,3"/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Resources\StyleResources.xaml"/>
+                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Page.Resources>
 
-    <!--IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}"-->
-    <Grid Margin="10">
+    <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>

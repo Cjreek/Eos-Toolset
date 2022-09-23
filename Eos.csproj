@@ -24,6 +24,9 @@
     <Compile Update="Usercontrols\RaceComboBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Usercontrols\RacialFeatsTableComboBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Usercontrols\StatGainTableComboBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -48,6 +51,9 @@
     <Compile Update="Views\PrerequisiteTableView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\RacialFeatsTableView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\StatGainTableView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -55,6 +61,10 @@
 
   <ItemGroup>
     <Page Update="Usercontrols\RaceComboBox.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Usercontrols\RacialFeatsTableComboBox.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
@@ -87,6 +97,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\PrerequisiteTableView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\RacialFeatsTableView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

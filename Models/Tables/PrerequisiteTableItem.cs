@@ -13,7 +13,23 @@ namespace Eos.Models.Tables
 {
     public class PrerequisiteTableItem : TableItem
     {
-        public RequirementType RequirementType { get; set; }
+        private RequirementType requirementType;
+
+        public RequirementType RequirementType
+        {
+            get { return requirementType; }
+            set
+            {
+                if (requirementType != value)
+                {
+                    requirementType = value;
+                    RequirementParam1 = null;
+                    RequirementParam2 = null;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public object? RequirementParam1 { get; set; }
         public object? RequirementParam2 { get; set; }
 
