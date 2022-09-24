@@ -105,8 +105,8 @@ namespace Eos.Import
                 SetText(tmpRace.Description, races2da[i].AsInteger("Description"));
                 SetText(tmpRace.Biography, races2da[i].AsInteger("Biography"));
 
-                tmpRace.Icon = Resources.AddResource(races2da[i].AsString("Icon"), Nwn.NWNResourceType.TGA);
-                // Appearance
+                tmpRace.Icon = Resources.AddResource(races2da[i].AsString("Icon"), NWNResourceType.TGA);
+                tmpRace.Appearance = CreateRef<Appearance>(races2da[i].AsInteger("Appearance"));
                 tmpRace.StrAdjustment = races2da[i].AsInteger("StrAdjust") ?? 0;
                 tmpRace.DexAdjustment = races2da[i].AsInteger("DexAdjust") ?? 0;
                 tmpRace.IntAdjustment = races2da[i].AsInteger("IntAdjust") ?? 0;
@@ -121,8 +121,8 @@ namespace Eos.Import
                 tmpRace.ToolsetDefaultClass = CreateRef<CharacterClass>(races2da[i].AsInteger("ToolsetDefaultClass"));
                 tmpRace.CRModifier = races2da[i].AsFloat("CRModifier") ?? 1.0;
 
-                // NameGenTableA
-                // NameGenTableB
+                tmpRace.NameGenTableA = races2da[i].AsString("NameGenTableA");
+                tmpRace.NameGenTableB = races2da[i].AsString("NameGenTableB");
 
                 tmpRace.FirstLevelExtraFeats = races2da[i].AsInteger("ExtraFeatsAtFirstLevel") ?? 0;
                 tmpRace.ExtraSkillPointsPerLevel = races2da[i].AsInteger("ExtraSkillPointsPerLevel") ?? 0;
@@ -893,6 +893,24 @@ namespace Eos.Import
             }
         }
 
+        private void ImportAppearances()
+        {
+            var appearanceResource = bif.ReadResource("appearance", NWNResourceType.TWODA);
+            var appearance2da = new TwoDimensionalArrayFile(appearanceResource.RawData);
+
+            Standard.Appearances.Clear();
+            for (int i = 0; i < appearance2da.Count; i++)
+            {
+                var tmpAppearance = new Appearance();
+                tmpAppearance.ID = GenerateGuid("appearance", i);
+                tmpAppearance.Index = i;
+
+                if (!SetText(tmpAppearance.Name, appearance2da[i].AsInteger("STRING_REF"))) continue;
+
+                Standard.Appearances.Add(tmpAppearance);
+            }
+        }
+
         private T? SolveInstance<T>(T? instance, ModelRepository<T> repository) where T : BaseModel, new()
         {
             if (instance?.Index == null)
@@ -914,6 +932,7 @@ namespace Eos.Import
             foreach (var race in Standard.Races)
             {
                 if (race == null) continue;
+                race.Appearance = SolveInstance(race.Appearance, Standard.Appearances);
                 race.FavoredClass = SolveInstance(race.FavoredClass, Standard.Classes);
                 race.ToolsetDefaultClass = SolveInstance(race.ToolsetDefaultClass, Standard.Classes);
             }
@@ -1066,6 +1085,7 @@ namespace Eos.Import
             Standard.Poisons.SaveToFile(Constants.PoisonsFilePath);
             Standard.Spellbooks.SaveToFile(Constants.SpellbooksFilePath);
 
+            Standard.Appearances.SaveToFile(Constants.AppearancesFilePath);
             Standard.ClassPackages.SaveToFile(Constants.ClassPackagesFilePath);
             Standard.Soundsets.SaveToFile(Constants.SoundsetsFilePath);
 
@@ -1105,7 +1125,7 @@ namespace Eos.Import
 
             ClearTables();
 
-            ImportRaces();
+            ImportAppearances();
             ImportClasses();
             ImportDomains();
             ImportSkills();
@@ -1114,6 +1134,7 @@ namespace Eos.Import
             ImportDiseases();
             ImportPoisons();
 
+            ImportRaces();
             ImportClassPackages();
             ImportSoundsets();
 

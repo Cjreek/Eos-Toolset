@@ -21,6 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Usercontrols\AppearanceComboBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Usercontrols\DomainComboBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -75,6 +78,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Usercontrols\AppearanceComboBox.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Usercontrols\DomainComboBox.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>

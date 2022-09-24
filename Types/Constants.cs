@@ -25,6 +25,7 @@ namespace Eos.Types
         public static readonly String PoisonsFilename;
         public static readonly String SpellbooksFilename;
 
+        public static readonly String AppearancesFilename;
         public static readonly String ClassPackagesFilename;
         public static readonly String SoundsetsFilename;
 
@@ -49,6 +50,7 @@ namespace Eos.Types
         public static readonly String PoisonsFilePath;
         public static readonly String SpellbooksFilePath;
 
+        public static readonly String AppearancesFilePath;
         public static readonly String ClassPackagesFilePath;
         public static readonly String SoundsetsFilePath;
 
@@ -86,6 +88,7 @@ namespace Eos.Types
             PoisonsFilename = "poisons.json";
             SpellbooksFilename = "spellbooks.json";
 
+            AppearancesFilename = "appearances.json";
             ClassPackagesFilename = "packages.json";
             SoundsetsFilename = "soundsets.json";
 
@@ -110,6 +113,7 @@ namespace Eos.Types
             PoisonsFilePath = BaseDataPath + PoisonsFilename;
             SpellbooksFilePath = BaseDataPath + SpellbooksFilename;
 
+            AppearancesFilePath = BaseDataPath + AppearancesFilename;
             ClassPackagesFilePath = BaseDataPath + ClassPackagesFilename;
             SoundsetsFilePath = BaseDataPath + SoundsetsFilename;
 

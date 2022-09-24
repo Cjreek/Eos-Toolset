@@ -80,17 +80,17 @@
                         <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" Grid.Row="4" Grid.Column="1"/>
 
                         <TextBlock Text="Appearance" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
-                        <ComboBox Grid.Row="5" Grid.Column="1"/>
+                        <uc:AppearanceComboBox SelectedValue="{Binding Data.Appearance}" Grid.Row="5" Grid.Column="1"/>
 
                         <TextBlock Text="Default values for character creation" HorizontalAlignment="Center" 
                                Margin="0,0,0,10" Grid.Row="7" Grid.Column="1"
                                FontWeight="Bold" FontSize="16"/>
 
                         <TextBlock Text="Name Generator 1" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="8" Grid.Column="0"/>
-                        <ComboBox Grid.Row="8" Grid.Column="1"/>
+                        <TextBox Text="{Binding Data.NameGenTableA}" Grid.Row="8" Grid.Column="1"/>
 
                         <TextBlock Text="Name Generator 2" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="9" Grid.Column="0"/>
-                        <ComboBox Grid.Row="9" Grid.Column="1"/>
+                        <TextBox Text="{Binding Data.NameGenTableB}" Grid.Row="9" Grid.Column="1"/>
 
                         <TextBlock Text="Age" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="10" Grid.Column="0"/>
                         <wpftk:IntegerUpDown Value="{Binding Data.DefaultAge}" Grid.Row="10" Grid.Column="1"/>

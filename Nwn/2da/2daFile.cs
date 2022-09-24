@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -216,7 +217,35 @@ namespace Eos.Nwn.TwoDimensionalArray
 
         private String[] Split(String line)
         {
-            return line.Split(new[] { ' ', '\t' }, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            List<String> split = new List<String>();
+
+            int n = 0;
+            String tmpValue = "";
+            bool inQuotes = false;
+            while (n < line.Length)
+            {
+                if ((line[n] == ' ' || line[n] == '\t') && (!inQuotes))
+                {
+                    if (tmpValue != "")
+                    {
+                        split.Add(tmpValue);
+                        tmpValue = "";
+                    }
+
+                    while (n < line.Length && (line[n] == ' ' || line[n] == '\t')) n++;
+                    continue;
+                }
+                if (line[n] == '"')
+                    inQuotes = !inQuotes;
+                else
+                    tmpValue += line[n];
+
+                n++;
+            }
+
+            if (tmpValue != "") split.Add(tmpValue);
+
+            return split.ToArray();
         }
 
         public void Load(String filename)

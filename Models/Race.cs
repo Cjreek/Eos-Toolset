@@ -19,7 +19,7 @@ namespace Eos.Models
         public TLKStringSet NamePlural { get; set; } = new TLKStringSet();
         public TLKStringSet Adjective { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
-        public IntPtr Appearance { get; set; }
+        public Appearance? Appearance { get; set; }
         public int StrAdjustment { get; set; } = 0;
         public int DexAdjustment { get; set; } = 0;
         public int IntAdjustment { get; set; } = 0;
@@ -32,8 +32,8 @@ namespace Eos.Models
         public int? DefaultAge { get; set; }
         public CharacterClass? ToolsetDefaultClass { get; set; }
         public double? CRModifier { get; set; } = 1;
-        public IntPtr NameGenTableA { get; set; }
-        public IntPtr NameGenTableB { get; set; }
+        public String? NameGenTableA { get; set; }
+        public String? NameGenTableB { get; set; }
         public int FirstLevelExtraFeats { get; set; } = 0;
         public int ExtraSkillPointsPerLevel { get; set; } = 0;
         public int? FirstLevelSkillPointsMultiplier { get; set; } = 4;
@@ -55,6 +55,7 @@ namespace Eos.Models
             ToolsetDefaultClass = Resolve(ToolsetDefaultClass, MasterRepository.Classes);
             FavoredEnemyFeat = Resolve(FavoredEnemyFeat, MasterRepository.Feats);
             Feats = Resolve(Feats, MasterRepository.RacialFeatsTables);
+            Appearance = Resolve(Appearance, MasterRepository.Appearances);
         }
 
         public override JsonObject ToJson()
@@ -67,7 +68,7 @@ namespace Eos.Models
             raceJson.Add("Adjective", this.Adjective.ToJson());
             raceJson.Add("Description", this.Description.ToJson());
             raceJson.Add("Icon", this.Icon);
-            raceJson.Add("Appearance", null);
+            raceJson.Add("Appearance", CreateJsonRef(this.Appearance));
             raceJson.Add("StrAdjustment", this.StrAdjustment);
             raceJson.Add("DexAdjustment", this.DexAdjustment);
             raceJson.Add("IntAdjustment", this.IntAdjustment);
@@ -80,8 +81,8 @@ namespace Eos.Models
             raceJson.Add("DefaultAge", this.DefaultAge);
             raceJson.Add("ToolsetDefaultClass", CreateJsonRef(this.ToolsetDefaultClass));
             raceJson.Add("CRModifier", this.CRModifier);
-            raceJson.Add("NameGenTableA", null);
-            raceJson.Add("NameGenTableB", null);
+            raceJson.Add("NameGenTableA", this.NameGenTableA);
+            raceJson.Add("NameGenTableB", this.NameGenTableB);
             raceJson.Add("FirstLevelExtraFeats", this.FirstLevelExtraFeats);
             raceJson.Add("ExtraSkillPointsPerLevel", this.ExtraSkillPointsPerLevel);
             raceJson.Add("FirstLevelSkillPointsMultiplier", this.FirstLevelSkillPointsMultiplier);
@@ -104,7 +105,7 @@ namespace Eos.Models
             this.Adjective.FromJson(json["Adjective"]?.AsObject());
             this.Description.FromJson(json["Description"]?.AsObject());
             this.Icon = json["Icon"]?.GetValue<String>();
-            this.Appearance = IntPtr.Zero; // !
+            this.Appearance = CreateRefFromJson<Appearance>(json["Appearance"]?.AsObject());
             this.StrAdjustment = json["StrAdjustment"]?.GetValue<int>() ?? 0;
             this.DexAdjustment = json["DexAdjustment"]?.GetValue<int>() ?? 0;
             this.IntAdjustment = json["IntAdjustment"]?.GetValue<int>() ?? 0;
@@ -117,8 +118,8 @@ namespace Eos.Models
             this.DefaultAge = json["DefaultAge"]?.GetValue<int>();
             this.ToolsetDefaultClass = CreateRefFromJson<CharacterClass>(json["ToolsetDefaultClass"]?.AsObject());
             this.CRModifier = json["CRModifier"]?.GetValue<double>();
-            this.NameGenTableA = IntPtr.Zero; // !
-            this.NameGenTableB = IntPtr.Zero; // !
+            this.NameGenTableA = json["NameGenTableA"]?.GetValue<String>();
+            this.NameGenTableB = json["NameGenTableB"]?.GetValue<String>();
             this.FirstLevelExtraFeats = json["FirstLevelExtraFeats"]?.GetValue<int>() ?? 0;
             this.ExtraSkillPointsPerLevel = json["ExtraSkillPointsPerLevel"]?.GetValue<int>() ?? 0;
             this.FirstLevelSkillPointsMultiplier = json["FirstLevelSkillPointsMultiplier"]?.GetValue<int>();

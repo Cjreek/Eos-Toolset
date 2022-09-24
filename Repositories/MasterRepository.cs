@@ -31,6 +31,7 @@ namespace Eos.Repositories
         private static readonly VirtualModelRepository<Poison> poisonVirtualRepository;
         private static readonly VirtualModelRepository<Spellbook> spellbookVirtualRepository;
 
+        private static readonly VirtualModelRepository<Appearance> appearanceVirtualRepository;
         private static readonly VirtualModelRepository<ClassPackage> classPackageVirtualRepository;
         private static readonly VirtualModelRepository<Soundset> soundsetVirtualRepository;
 
@@ -62,6 +63,7 @@ namespace Eos.Repositories
             poisonVirtualRepository = new VirtualModelRepository<Poison>(standardCategory.Poisons, project.Poisons);
             spellbookVirtualRepository = new VirtualModelRepository<Spellbook>(standardCategory.Spellbooks, project.Spellbooks);
 
+            appearanceVirtualRepository = new VirtualModelRepository<Appearance>(standardCategory.Appearances, project.Appearances);
             classPackageVirtualRepository = new VirtualModelRepository<ClassPackage>(standardCategory.ClassPackages, project.ClassPackages);
             soundsetVirtualRepository = new VirtualModelRepository<Soundset>(standardCategory.Soundsets, project.Soundsets);
 
@@ -107,6 +109,7 @@ namespace Eos.Repositories
         public static VirtualModelRepository<Poison> Poisons { get { return poisonVirtualRepository; } }
         public static VirtualModelRepository<Spellbook> Spellbooks { get { return spellbookVirtualRepository; } }
 
+        public static VirtualModelRepository<Appearance> Appearances { get { return appearanceVirtualRepository; } }
         public static VirtualModelRepository<ClassPackage> ClassPackages { get { return classPackageVirtualRepository; } }
         public static VirtualModelRepository<Soundset> Soundsets { get { return soundsetVirtualRepository; } }
 
@@ -139,6 +142,7 @@ namespace Eos.Repositories
             Standard.Poisons.LoadFromFile(Constants.PoisonsFilePath);
             Standard.Spellbooks.LoadFromFile(Constants.SpellbooksFilePath);
 
+            Standard.Appearances.LoadFromFile(Constants.AppearancesFilePath);
             Standard.ClassPackages.LoadFromFile(Constants.ClassPackagesFilePath);
             Standard.Soundsets.LoadFromFile(Constants.SoundsetsFilePath);
 
@@ -163,6 +167,7 @@ namespace Eos.Repositories
             Standard.Poisons.ResolveReferences();
             Standard.Spellbooks.ResolveReferences();
 
+            Standard.Appearances.ResolveReferences();
             Standard.ClassPackages.ResolveReferences();
             Standard.Soundsets.ResolveReferences();
 

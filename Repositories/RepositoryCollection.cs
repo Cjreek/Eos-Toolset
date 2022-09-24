@@ -22,6 +22,7 @@ namespace Eos.Repositories
         private readonly ModelRepository<Poison> poisonRepository;
         private readonly SpellbookRepository spellbookRepository;
 
+        private readonly ModelRepository<Appearance> appearanceRepository;
         private readonly ModelRepository<ClassPackage> classPackageRepository;
         private readonly ModelRepository<Soundset> soundsetRepository;
 
@@ -48,6 +49,7 @@ namespace Eos.Repositories
             poisonRepository = new ModelRepository<Poison>(isReadonly);
             spellbookRepository = new SpellbookRepository(isReadonly);
 
+            appearanceRepository = new ModelRepository<Appearance>(isReadonly);
             classPackageRepository = new ModelRepository<ClassPackage>(isReadonly);
             soundsetRepository = new ModelRepository<Soundset>(isReadonly);
 
@@ -72,6 +74,7 @@ namespace Eos.Repositories
             repositoryDict.Add(typeof(Poison), poisonRepository);
             repositoryDict.Add(typeof(Spellbook), spellbookRepository);
 
+            repositoryDict.Add(typeof(Appearance), appearanceRepository);
             repositoryDict.Add(typeof(ClassPackage), classPackageRepository);
             repositoryDict.Add(typeof(Soundset), soundsetRepository);
 
@@ -98,6 +101,7 @@ namespace Eos.Repositories
         public ModelRepository<Poison> Poisons { get { return poisonRepository; } }
         public SpellbookRepository Spellbooks { get { return spellbookRepository; } }
 
+        public ModelRepository<Appearance> Appearances { get { return appearanceRepository; } }
         public ModelRepository<ClassPackage> ClassPackages { get { return classPackageRepository; } }
         public ModelRepository<Soundset> Soundsets { get { return soundsetRepository; } }
 
@@ -137,6 +141,7 @@ namespace Eos.Repositories
             Poisons.Clear();
             Spellbooks.Clear();
 
+            Appearances.Clear();
             ClassPackages.Clear();
             Soundsets.Clear();
 
