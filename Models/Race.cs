@@ -41,6 +41,7 @@ namespace Eos.Models
         public int? FeatEveryNthLevel { get; set; } = 3;
         public int? FeatEveryNthLevelCount { get; set; } = 1;
         public AbilityType? SkillPointModifierAbility { get; set; } = AbilityType.INT;
+        public Feat? FavoredEnemyFeat { get; set; }
         public RacialFeatsTable? Feats { get; set; }
 
         protected override String GetLabel()
@@ -52,6 +53,7 @@ namespace Eos.Models
         {
             FavoredClass = Resolve(FavoredClass, MasterRepository.Classes);
             ToolsetDefaultClass = Resolve(ToolsetDefaultClass, MasterRepository.Classes);
+            FavoredEnemyFeat = Resolve(FavoredEnemyFeat, MasterRepository.Feats);
             Feats = Resolve(Feats, MasterRepository.RacialFeatsTables);
         }
 
@@ -87,6 +89,7 @@ namespace Eos.Models
             raceJson.Add("FeatEveryNthLevel", this.FeatEveryNthLevel);
             raceJson.Add("FeatEveryNthLevelCount", this.FeatEveryNthLevelCount);
             raceJson.Add("SkillPointModifierAbility", EnumToJson(this.SkillPointModifierAbility));
+            raceJson.Add("FavoredEnemyFeat", CreateJsonRef(this.FavoredEnemyFeat));
             raceJson.Add("Feats", CreateJsonRef(this.Feats));
 
             return raceJson;
@@ -123,6 +126,7 @@ namespace Eos.Models
             this.FeatEveryNthLevel = json["FeatEveryNthLevel"]?.GetValue<int>();
             this.FeatEveryNthLevelCount = json["FeatEveryNthLevelCount"]?.GetValue<int>();
             this.SkillPointModifierAbility = JsonToEnum<AbilityType>(json["SkillPointModifierAbility"]) ?? AbilityType.INT;
+            this.FavoredEnemyFeat = CreateRefFromJson<Feat>(json["FavoredEnemyFeat"]?.AsObject());
             this.Feats = CreateRefFromJson<RacialFeatsTable>(json["Feats"]?.AsObject());
         }
     }

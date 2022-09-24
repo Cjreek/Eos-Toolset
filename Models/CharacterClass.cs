@@ -15,6 +15,8 @@ namespace Eos.Models
 {
     public class CharacterClass : BaseModel
     {
+        private bool _isSpellcaster = false;
+
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet NamePlural { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
@@ -27,7 +29,20 @@ namespace Eos.Models
         public SpellSlotTable? SpellSlots { get; set; }
         public KnownSpellsTable? KnownSpells { get; set; }
         public bool Playable { get; set; } = true;
-        public bool IsSpellCaster { get; set; }
+
+        public bool IsSpellCaster
+        {
+            get { return _isSpellcaster; }
+            set
+            {
+                if (_isSpellcaster != value)
+                {
+                    _isSpellcaster = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public int RecommendedStr { get; set; } = 10;
         public int RecommendedDex { get; set; } = 10;
         public int RecommendedCon { get; set; } = 10;
@@ -42,7 +57,7 @@ namespace Eos.Models
         public int ArcaneCasterLevelMod { get; set; } = 0;
         public int DivineCasterLevelMod { get; set; } = 0;
         public int PreEpicMaxLevel { get; set; } = -1;
-        public IntPtr Package { get; set; }
+        public ClassPackage? DefaultPackage { get; set; }
         public StatGainTable? StatGainTable { get; set; }
         public bool MemorizesSpells { get; set; } = true;
         public bool SpellbookRestricted { get; set; } = true;
@@ -75,6 +90,7 @@ namespace Eos.Models
             KnownSpells = Resolve(KnownSpells, MasterRepository.KnownSpellsTables);
             Requirements = Resolve(Requirements, MasterRepository.PrerequisiteTables);
             StatGainTable = Resolve(StatGainTable, MasterRepository.StatGainTables);
+            DefaultPackage = Resolve(DefaultPackage, MasterRepository.ClassPackages);
         }
 
         public override void FromJson(JsonObject json)
@@ -109,7 +125,7 @@ namespace Eos.Models
             this.ArcaneCasterLevelMod = json["ArcaneCasterLevelMod"]?.GetValue<int>() ?? 0;
             this.DivineCasterLevelMod = json["DivineCasterLevelMod"]?.GetValue<int>() ?? 0;
             this.PreEpicMaxLevel = json["PreEpicMaxLevel"]?.GetValue<int>() ?? -1;
-            this.Package = IntPtr.Zero; // !
+            this.DefaultPackage = CreateRefFromJson<ClassPackage>(json["DefaultPackage"]?.AsObject());
             this.StatGainTable = CreateRefFromJson<StatGainTable>(json["StatGainTable"]?.AsObject());
             this.MemorizesSpells = json["MemorizesSpells"]?.GetValue<bool>() ?? false;
             this.SpellbookRestricted = json["SpellbookRestricted"]?.GetValue<bool>() ?? false;
@@ -160,7 +176,7 @@ namespace Eos.Models
             classJson.Add("ArcaneCasterLevelMod", this.ArcaneCasterLevelMod);
             classJson.Add("DivineCasterLevelMod", this.DivineCasterLevelMod);
             classJson.Add("PreEpicMaxLevel", this.PreEpicMaxLevel);
-            classJson.Add("Package", null); // !
+            classJson.Add("DefaultPackage", CreateJsonRef(this.DefaultPackage));
             classJson.Add("StatGainTable", CreateJsonRef(this.StatGainTable));
             classJson.Add("MemorizesSpells", this.MemorizesSpells);
             classJson.Add("SpellbookRestricted", this.SpellbookRestricted);

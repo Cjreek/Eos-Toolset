@@ -228,6 +228,16 @@
             </Frame>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vm:ClassPackageViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                <Frame.Content>
+                    <view:ClassPackageView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
+
         <!--Tables-->
 
         <DataTemplate DataType="{x:Type vm:FeatsTableViewModel}">
@@ -361,6 +371,7 @@
                     <TreeView ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <TreeViewItem Header="Races" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Races}"/>
                         <TreeViewItem Header="Classes" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Classes}"/>
+                        <TreeViewItem Header="Class Packages" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=ClassPackages}"/>
                         <TreeViewItem Header="Domains" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Domains}"/>
                         <TreeViewItem Header="Spellbooks" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spellbooks}"/>
                         <TreeViewItem Header="Spells" Tag="CATEGORY">
@@ -413,6 +424,7 @@
                             </i:Interaction.Triggers>
                         </TreeViewItem>
                         <TreeViewItem Header="Classes" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Classes}"/>
+                        <TreeViewItem Header="Class Packages" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=ClassPackages}"/>
                         <TreeViewItem Header="Domains" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Domains}"/>
                         <TreeViewItem Header="Spellbooks" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spellbooks}"/>
                         <TreeViewItem Header="Spells" Tag="CATEGORY">

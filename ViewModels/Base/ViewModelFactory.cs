@@ -33,6 +33,9 @@ namespace Eos.ViewModels
             if (model is Spellbook spellbook)
                 return new SpellbookViewModel(spellbook);
 
+            if (model is ClassPackage classPackage)
+                return new ClassPackageViewModel(classPackage);
+
             if (model is FeatsTable featsTable)
                 return new FeatsTableViewModel(featsTable);
             if (model is AttackBonusTable abTable)

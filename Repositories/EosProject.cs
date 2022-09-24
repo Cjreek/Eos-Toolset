@@ -100,6 +100,8 @@ namespace Eos.Repositories
             Poisons.LoadFromFile(ProjectFolder + Constants.PoisonsFilename);
             Spellbooks.LoadFromFile(ProjectFolder + Constants.SpellbooksFilename);
 
+            ClassPackages.LoadFromFile(ProjectFolder + Constants.ClassPackagesFilename);
+
             AttackBonusTables.LoadFromFile(ProjectFolder + Constants.AttackBonusTablesFilename);
             BonusFeatTables.LoadFromFile(ProjectFolder + Constants.BonusFeatTablesFilename);
             FeatTables.LoadFromFile(ProjectFolder + Constants.FeatTablesFilename);
@@ -124,6 +126,8 @@ namespace Eos.Repositories
             Diseases.SaveToFile(ProjectFolder + Constants.DiseasesFilename);
             Poisons.SaveToFile(ProjectFolder + Constants.PoisonsFilename);
             Spellbooks.SaveToFile(ProjectFolder + Constants.SpellbooksFilename);
+
+            ClassPackages.SaveToFile(ProjectFolder + Constants.ClassPackagesFilename);
 
             AttackBonusTables.SaveToFile(ProjectFolder + Constants.AttackBonusTablesFilename);
             BonusFeatTables.SaveToFile(ProjectFolder + Constants.BonusFeatTablesFilename);

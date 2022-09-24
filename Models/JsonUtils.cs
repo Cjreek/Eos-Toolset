@@ -21,6 +21,8 @@ namespace Eos.Models
 
         public static JsonNode? EnumToJson<T>(T? value) where T : struct, Enum
         {
+            if (value == null) return null;
+
             if (EnumIsFlags<T>())
             {
                 var flagArr = new JsonArray();

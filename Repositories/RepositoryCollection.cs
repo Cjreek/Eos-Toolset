@@ -22,6 +22,8 @@ namespace Eos.Repositories
         private readonly ModelRepository<Poison> poisonRepository;
         private readonly SpellbookRepository spellbookRepository;
 
+        private readonly ModelRepository<ClassPackage> classPackageRepository;
+
         private readonly ModelRepository<AttackBonusTable> attackBonusTableRepository;
         private readonly ModelRepository<BonusFeatsTable> bonusFeatTableRepository;
         private readonly ModelRepository<FeatsTable> featTableRepository;
@@ -45,6 +47,8 @@ namespace Eos.Repositories
             poisonRepository = new ModelRepository<Poison>(isReadonly);
             spellbookRepository = new SpellbookRepository(isReadonly);
 
+            classPackageRepository = new ModelRepository<ClassPackage>(isReadonly);
+
             attackBonusTableRepository = new ModelRepository<AttackBonusTable>(isReadonly); // Always writeable?
             bonusFeatTableRepository = new ModelRepository<BonusFeatsTable>(isReadonly); // Always writeable?
             featTableRepository = new ModelRepository<FeatsTable>(isReadonly); // Always writeable?
@@ -65,6 +69,8 @@ namespace Eos.Repositories
             repositoryDict.Add(typeof(Disease), diseaseRepository);
             repositoryDict.Add(typeof(Poison), poisonRepository);
             repositoryDict.Add(typeof(Spellbook), spellbookRepository);
+
+            repositoryDict.Add(typeof(ClassPackage), classPackageRepository);
 
             repositoryDict.Add(typeof(AttackBonusTable), attackBonusTableRepository);
             repositoryDict.Add(typeof(BonusFeatsTable), bonusFeatTableRepository);
@@ -88,6 +94,8 @@ namespace Eos.Repositories
         public ModelRepository<Disease> Diseases { get { return diseaseRepository; } }
         public ModelRepository<Poison> Poisons { get { return poisonRepository; } }
         public SpellbookRepository Spellbooks { get { return spellbookRepository; } }
+
+        public ModelRepository<ClassPackage> ClassPackages { get { return classPackageRepository; } }
 
         public ModelRepository<AttackBonusTable> AttackBonusTables { get { return attackBonusTableRepository; } }
         public ModelRepository<BonusFeatsTable> BonusFeatTables { get { return bonusFeatTableRepository; } }
@@ -124,6 +132,8 @@ namespace Eos.Repositories
             Diseases.Clear();
             Poisons.Clear();
             Spellbooks.Clear();
+
+            ClassPackages.Clear();
 
             AttackBonusTables.Clear();
             BonusFeatTables.Clear();

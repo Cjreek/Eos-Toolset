@@ -10,10 +10,8 @@
       xmlns:types="clr-namespace:Eos.Types"
       xmlns:uc="clr-namespace:Eos.Usercontrols"
       xmlns:nwn="clr-namespace:Eos.Nwn"
-      mc:Ignorable="d" 
-      x:Name="page"
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="ClassView">
+      mc:Ignorable="d" d:DesignHeight="460" d:DesignWidth="800"
+      x:Name="page" Title="ClassView">
     <Page.DataContext>
         <vm:ClassViewModel/>
     </Page.DataContext>
@@ -101,6 +99,8 @@
                         <RowDefinition Height="22"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
+                        <RowDefinition Height="22"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
@@ -147,25 +147,28 @@
                     <TextBlock Text="Bonus Feats Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
                     <uc:BonusFeatTableComboBox Grid.Row="9" Grid.Column="3" SelectedValue="{Binding Data.BonusFeats}" IsNullable="False"/>
 
-                    <TextBlock Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Recommended Abilities" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
+                    <TextBlock Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Character Creation" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
 
-                    <TextBlock Text="Strength" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="12" Grid.Column="1"/>
-
-                    <TextBlock Text="Intelligence" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedInt}" Grid.Row="12" Grid.Column="3"/>
-
-                    <TextBlock Text="Dexterity" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="13" Grid.Column="1"/>
-
-                    <TextBlock Text="Wisdom" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedWis}" Grid.Row="13" Grid.Column="3"/>
-
-                    <TextBlock Text="Constitution" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="0"/>
+                    <TextBlock Text="Default Package" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0"/>
+                    <uc:PackageComboBox SelectedValue="{Binding Data.DefaultPackage}" Grid.Row="12" Grid.Column="1" IsNullable="False"/>
+                    
+                    <TextBlock Text="Strength" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="0"/>
                     <wpftk:IntegerUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="14" Grid.Column="1"/>
 
-                    <TextBlock Text="Charisma" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedCha}" Grid.Row="14" Grid.Column="3"/>
+                    <TextBlock Text="Intelligence" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="2"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedInt}" Grid.Row="14" Grid.Column="3"/>
+
+                    <TextBlock Text="Dexterity" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="0"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="15" Grid.Column="1"/>
+
+                    <TextBlock Text="Wisdom" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="2"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedWis}" Grid.Row="15" Grid.Column="3"/>
+
+                    <TextBlock Text="Constitution" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="16" Grid.Column="0"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="16" Grid.Column="1"/>
+
+                    <TextBlock Text="Charisma" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="16" Grid.Column="2"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedCha}" Grid.Row="16" Grid.Column="3"/>
                 </Grid>
             </ScrollViewer>
         </TabItem>
@@ -232,7 +235,7 @@
                           SelectedValuePath="Value" DisplayMemberPath="DisplayName" IsEnabled="{Binding Data.IsSpellCaster}"/>
 
                     <TextBlock Grid.Row="7" Grid.Column="2" Text="Spellbook" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-                    <ComboBox Grid.Row="7" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
+                    <uc:SpellbookComboBox SelectedValue="{Binding Data.Spellbook}" Grid.Row="7" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
 
                     <TextBlock Grid.Row="8" Grid.Column="0" Text="Minimum Casting Level" Margin="0,0,5,0" HorizontalAlignment="Right"/>
                     <wpftk:IntegerUpDown Grid.Row="8" Grid.Column="1" Value="{Binding Data.MinCastingLevel}" IsEnabled="{Binding Data.IsSpellCaster}"/>

@@ -8,6 +8,7 @@ using Eos.Repositories;
 using Eos.Types;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -129,6 +130,7 @@ namespace Eos.Import
                 tmpRace.FeatEveryNthLevel = races2da[i].AsInteger("NormalFeatEveryNthLevel");
                 tmpRace.FeatEveryNthLevelCount = races2da[i].AsInteger("NumberNormalFeatsEveryNthLevel");
                 tmpRace.SkillPointModifierAbility = Enum.Parse<AbilityType>(races2da[i].AsString("SkillPointModifierAbility") ?? "", true);
+                tmpRace.FavoredEnemyFeat = CreateRef<Feat>(races2da[i].AsInteger("FavoredEnemyFeat", null));
 
                 // RacialFeatsTable
                 var racialFeatsTable = races2da[i].AsString("FeatsTable");
@@ -505,8 +507,7 @@ namespace Eos.Import
                 tmpClass.ArcaneCasterLevelMod = classes2da[i].AsInteger("ArcSpellLvlMod") ?? 0;
                 tmpClass.DivineCasterLevelMod = classes2da[i].AsInteger("DivSpellLvlMod") ?? 0;
                 tmpClass.PreEpicMaxLevel = classes2da[i].AsInteger("EpicLevel") ?? 0;
-
-                // Package
+                tmpClass.DefaultPackage = CreateRef<ClassPackage>(classes2da[i].AsInteger("Package"));
 
                 // StatGainTable
                 var statGainTable = classes2da[i].AsString("StatGainTable");
@@ -702,7 +703,7 @@ namespace Eos.Import
                 tmpSpell.AvailableMetaMagic = (MetaMagicType)(spells2da[i].AsInteger("MetaMagic") ?? 0);
                 tmpSpell.TargetTypes = (SpellTarget)(spells2da[i].AsInteger("TargetType") ?? 0);
                 tmpSpell.ImpactScript = spells2da[i].AsString("ImpactScript");
-                // Spellbooks
+                
                 tmpSpell.ConjurationTime = spells2da[i].AsInteger("ConjTime") ?? 1500;
                 tmpSpell.ConjuringAnimation = (!spells2da[i].IsNull("ConjAnim")) ? Enum.Parse<SpellConjureAnimation>(spells2da[i].AsString("ConjAnim") ?? "", true) : null;
                 tmpSpell.ConjurationHeadEffect = spells2da[i].AsString("ConjHeadVisual");
@@ -825,6 +826,39 @@ namespace Eos.Import
             }
         }
 
+        private void ImportClassPackages()
+        {
+            var packagesResource = bif.ReadResource("packages", NWNResourceType.TWODA);
+            var packages2da = new TwoDimensionalArrayFile(packagesResource.RawData);
+
+            Standard.ClassPackages.Clear();
+            for (int i = 0; i < packages2da.Count; i++)
+            {
+                var tmpPackage = new ClassPackage();
+                tmpPackage.ID = GenerateGuid("packages", i);
+                tmpPackage.Index = i;
+
+                if (!SetText(tmpPackage.Name, packages2da[i].AsInteger("Name"))) continue;
+                SetText(tmpPackage.Description, packages2da[i].AsInteger("Description"));
+
+                tmpPackage.ForClass = CreateRef<CharacterClass>(packages2da[i].AsInteger("ClassID", -1));
+                tmpPackage.PreferredAbility = Enum.Parse<AbilityType>(packages2da[i].AsString("Attribute") ?? "", true);
+                tmpPackage.Gold = packages2da[i].AsInteger("Gold") ?? 0;
+                tmpPackage.SpellSchool = (!packages2da[i].IsNull("School")) ? (SpellSchool)Enum.ToObject(typeof(SpellSchool), packages2da[i].AsInteger("School") ?? 0) : null;
+                tmpPackage.Domain1 = CreateRef<Domain>(packages2da[i].AsInteger("Domain1", -1));
+                tmpPackage.Domain2 = CreateRef<Domain>(packages2da[i].AsInteger("Domain2", -1));
+                tmpPackage.Associate = IntPtr.Zero; // ! (Associate)
+                tmpPackage.SpellPreferences = IntPtr.Zero; // ! (SpellPref2DA)
+                tmpPackage.FeatPreferences = IntPtr.Zero; // ! (FeatPref2DA)
+                tmpPackage.SkillPreferences = IntPtr.Zero; // ! (SkillPref2DA)
+                tmpPackage.StartingEquipment = IntPtr.Zero; // ! (Equip2DA)
+                tmpPackage.Soundset = IntPtr.Zero; // ! (Soundset)
+                tmpPackage.Playable = packages2da[i].AsBoolean("PlayerClass");
+
+                Standard.ClassPackages.Add(tmpPackage);
+            }
+        }
+
         private T? SolveInstance<T>(T? instance, ModelRepository<T> repository) where T : BaseModel, new()
         {
             if (instance?.Index == null)
@@ -835,6 +869,13 @@ namespace Eos.Import
 
         private void ResolveDependencies()
         {
+            // Classes
+            foreach (var cls in Standard.Classes)
+            {
+                if (cls == null) continue;
+                cls.DefaultPackage = SolveInstance(cls.DefaultPackage, Standard.ClassPackages);
+            }
+
             // Races
             foreach (var race in Standard.Races)
             {
@@ -965,6 +1006,16 @@ namespace Eos.Import
                     item.Feat = SolveInstance(item.Feat, Standard.Feats);
                 }
             }
+
+            // Class Packages
+            foreach (var package in Standard.ClassPackages)
+            {
+                if (package == null) continue;
+                package.ForClass = SolveInstance(package.ForClass, Standard.Classes);
+                package.Domain1 = SolveInstance(package.Domain1, Standard.Domains);
+                package.Domain2 = SolveInstance(package.Domain2, Standard.Domains);
+                //package.Soundset = SolveInstance(package.Soundset, Standard.Soundsets);
+            }
         }
 
         private void SaveToJson()
@@ -981,6 +1032,8 @@ namespace Eos.Import
             Standard.Diseases.SaveToFile(Constants.DiseasesFilePath);
             Standard.Poisons.SaveToFile(Constants.PoisonsFilePath);
             Standard.Spellbooks.SaveToFile(Constants.SpellbooksFilePath);
+
+            Standard.ClassPackages.SaveToFile(Constants.ClassPackagesFilePath);
 
             Standard.AttackBonusTables.SaveToFile(Constants.AttackBonusTablesFilePath);
             Standard.BonusFeatTables.SaveToFile(Constants.BonusFeatTablesFilePath);
@@ -1027,6 +1080,8 @@ namespace Eos.Import
             ImportDiseases();
             ImportPoisons();
 
+            ImportClassPackages();
+
             ImportText();
 
             ResolveDependencies();
@@ -1037,6 +1092,8 @@ namespace Eos.Import
             Standard.Spells.Sort(s => s?.Name[TLKLanguage.English].Text);
             Standard.Diseases.Sort(d => d?.Name[TLKLanguage.English].Text);
             Standard.Poisons.Sort(p => p?.Name[TLKLanguage.English].Text);
+            Standard.Spellbooks.Sort(p => p?.Name);
+            Standard.ClassPackages.Sort(p => p?.Name[TLKLanguage.English].Text);
 
             SaveToJson();
         }

@@ -31,6 +31,8 @@ namespace Eos.Repositories
         private static readonly VirtualModelRepository<Poison> poisonVirtualRepository;
         private static readonly VirtualModelRepository<Spellbook> spellbookVirtualRepository;
 
+        private static readonly VirtualModelRepository<ClassPackage> classPackageVirtualRepository;
+
         private static readonly VirtualModelRepository<AttackBonusTable> babTableVirtualRepository;
         private static readonly VirtualModelRepository<BonusFeatsTable> bonusFeatTableVirtualRepository;
         private static readonly VirtualModelRepository<FeatsTable> featsTableVirtualRepository;
@@ -46,7 +48,7 @@ namespace Eos.Repositories
         {
             resources = new ResourceRepository();
 
-            standardCategory = new RepositoryCollection(false);
+            standardCategory = new RepositoryCollection(true);
             project = new EosProject();
 
             raceVirtualRepository = new VirtualModelRepository<Race>(standardCategory.Races, project.Races);
@@ -58,6 +60,8 @@ namespace Eos.Repositories
             diseaseVirtualRepository = new VirtualModelRepository<Disease>(standardCategory.Diseases, project.Diseases);
             poisonVirtualRepository = new VirtualModelRepository<Poison>(standardCategory.Poisons, project.Poisons);
             spellbookVirtualRepository = new VirtualModelRepository<Spellbook>(standardCategory.Spellbooks, project.Spellbooks);
+
+            classPackageVirtualRepository = new VirtualModelRepository<ClassPackage>(standardCategory.ClassPackages, project.ClassPackages);
 
             babTableVirtualRepository = new VirtualModelRepository<AttackBonusTable>(standardCategory.AttackBonusTables, project.AttackBonusTables);
             bonusFeatTableVirtualRepository = new VirtualModelRepository<BonusFeatsTable>(standardCategory.BonusFeatTables, project.BonusFeatTables);
@@ -101,6 +105,8 @@ namespace Eos.Repositories
         public static VirtualModelRepository<Poison> Poisons { get { return poisonVirtualRepository; } }
         public static VirtualModelRepository<Spellbook> Spellbooks { get { return spellbookVirtualRepository; } }
 
+        public static VirtualModelRepository<ClassPackage> ClassPackages { get { return classPackageVirtualRepository; } }
+
         public static VirtualModelRepository<AttackBonusTable> AttackBonusTables { get { return babTableVirtualRepository; } }
         public static VirtualModelRepository<BonusFeatsTable> BonusFeatTables { get { return bonusFeatTableVirtualRepository; } }
         public static VirtualModelRepository<FeatsTable> FeatTables { get { return featsTableVirtualRepository; } }
@@ -130,6 +136,8 @@ namespace Eos.Repositories
             Standard.Poisons.LoadFromFile(Constants.PoisonsFilePath);
             Standard.Spellbooks.LoadFromFile(Constants.SpellbooksFilePath);
 
+            Standard.ClassPackages.LoadFromFile(Constants.ClassPackagesFilePath);
+
             Standard.AttackBonusTables.LoadFromFile(Constants.AttackBonusTablesFilePath);
             Standard.BonusFeatTables.LoadFromFile(Constants.BonusFeatTablesFilePath);
             Standard.FeatTables.LoadFromFile(Constants.FeatTablesFilePath);
@@ -150,6 +158,8 @@ namespace Eos.Repositories
             Standard.Diseases.ResolveReferences();
             Standard.Poisons.ResolveReferences();
             Standard.Spellbooks.ResolveReferences();
+
+            Standard.ClassPackages.ResolveReferences();
 
             Standard.AttackBonusTables.ResolveReferences();
             Standard.BonusFeatTables.ResolveReferences();

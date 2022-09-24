@@ -21,6 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Usercontrols\DomainComboBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Usercontrols\PackageComboBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Usercontrols\RaceComboBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -48,6 +54,9 @@
     <Compile Update="Usercontrols\FeatComboBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\ClassPackageView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\PrerequisiteTableView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -60,6 +69,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Usercontrols\DomainComboBox.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Usercontrols\PackageComboBox.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Usercontrols\RaceComboBox.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
@@ -93,6 +110,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Usercontrols\FeatComboBox.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ClassPackageView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
