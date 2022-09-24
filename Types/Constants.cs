@@ -84,7 +84,7 @@ namespace Eos.Types
             PoisonsFilename = "poisons.json";
             SpellbooksFilename = "spellbooks.json";
 
-            ClassPackagesFilename = "classpackages.json";
+            ClassPackagesFilename = "packages.json";
 
             AttackBonusTablesFilename = "tables_bab.json";
             BonusFeatTablesFilename = "tables_bonusfeats.json";
