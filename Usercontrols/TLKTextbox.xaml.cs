@@ -9,13 +9,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Markup;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace Eos.Usercontrols
 {
@@ -70,6 +65,8 @@ namespace Eos.Usercontrols
         public static readonly DependencyProperty ChangedTriggerProperty = DependencyProperty.Register("ChangedTrigger", typeof(bool), typeof(TLKTextbox));
 
         public static readonly DependencyProperty AcceptsReturnProperty = DependencyProperty.Register("AcceptsReturn", typeof(bool), typeof(TLKTextbox));
+        public static readonly DependencyProperty InnerBorderThicknessProperty = DependencyProperty.Register("InnerBorderThickness", typeof(Thickness), typeof(TLKTextbox), new PropertyMetadata(new Thickness(1)));
+        public static readonly DependencyProperty InnerBorderBrushProperty = DependencyProperty.Register("InnerBorderBrush", typeof(Brush), typeof(TLKTextbox), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(0xFF, 0xAB, 0xAD, 0xB3))));
 
         public static readonly DependencyProperty TLKStringsProperty = DependencyProperty.Register("TLKStrings", typeof(TLKStringSet), typeof(TLKTextbox), new PropertyMetadata(null, UpdateTLK));
         public static readonly DependencyProperty TLKLanguageProperty = DependencyProperty.Register("TLKLanguage", typeof(TLKLanguage), typeof(TLKTextbox), new PropertyMetadata(TLKLanguage.English, UpdateTLK));
@@ -103,6 +100,18 @@ namespace Eos.Usercontrols
         {
             get { return (bool)GetValue(AcceptsReturnProperty); }
             set { SetValue(AcceptsReturnProperty, value); }
+        }
+
+        public Thickness InnerBorderThickness
+        {
+            get { return (Thickness)GetValue(InnerBorderThicknessProperty); }
+            set { SetValue(InnerBorderThicknessProperty, value); }
+        }
+
+        public Brush InnerBorderBrush
+        {
+            get { return (Brush)GetValue(InnerBorderBrushProperty); }
+            set { SetValue(InnerBorderBrushProperty, value); }
         }
 
         public static void UpdateTLK(DependencyObject d, DependencyPropertyChangedEventArgs e)

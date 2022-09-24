@@ -68,11 +68,8 @@
                     <TextBlock Text="Preferred Ability" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
                     <uc:EnumComboBox Grid.Row="4" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.PreferredAbility}"/>
 
-                    <TextBlock Text="Default Soundset" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
-                    <ComboBox Grid.Row="5" Grid.Column="1"/>
-
-                    <TextBlock Text="Starting Gold" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Grid.Row="5" Grid.Column="3" Value="{Binding Data.Gold}"/>
+                    <TextBlock Text="Starting Gold" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+                    <wpftk:IntegerUpDown Grid.Row="5" Grid.Column="1" Value="{Binding Data.Gold}"/>
 
                     <TextBlock Text="Domain 1" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
                     <uc:DomainComboBox Grid.Row="6" Grid.Column="1" SelectedValue="{Binding Data.Domain1}"/>

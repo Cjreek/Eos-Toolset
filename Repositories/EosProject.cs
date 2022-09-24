@@ -101,6 +101,7 @@ namespace Eos.Repositories
             Spellbooks.LoadFromFile(ProjectFolder + Constants.SpellbooksFilename);
 
             ClassPackages.LoadFromFile(ProjectFolder + Constants.ClassPackagesFilename);
+            Soundsets.LoadFromFile(ProjectFolder + Constants.SoundsetsFilename);
 
             AttackBonusTables.LoadFromFile(ProjectFolder + Constants.AttackBonusTablesFilename);
             BonusFeatTables.LoadFromFile(ProjectFolder + Constants.BonusFeatTablesFilename);
@@ -128,6 +129,7 @@ namespace Eos.Repositories
             Spellbooks.SaveToFile(ProjectFolder + Constants.SpellbooksFilename);
 
             ClassPackages.SaveToFile(ProjectFolder + Constants.ClassPackagesFilename);
+            Soundsets.SaveToFile(ProjectFolder + Constants.SoundsetsFilename);
 
             AttackBonusTables.SaveToFile(ProjectFolder + Constants.AttackBonusTablesFilename);
             BonusFeatTables.SaveToFile(ProjectFolder + Constants.BonusFeatTablesFilename);

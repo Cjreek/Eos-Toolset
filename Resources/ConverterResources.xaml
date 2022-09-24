@@ -8,5 +8,6 @@
     <ext:TLKStringSetConverter x:Key="tlkConverterDefault" AlwaysUseDefaultLanguage="True"/>
     <ext:BoolToVisibilityConverterEx x:Key="bool2VisCollapsed" FalseValue="Collapsed"/>
     <ext:FlagToBoolConverter x:Key="flagsToBool"/>
-    
+    <ext:EnumToStringConverter x:Key="enumToString"/>
+
 </ResourceDictionary>

@@ -27,7 +27,6 @@ namespace Eos.Models
         public IntPtr FeatPreferences { get; set; }
         public IntPtr SkillPreferences { get; set; }
         public IntPtr StartingEquipment { get; set; }
-        public IntPtr Soundset { get; set; }
         public bool Playable { get; set; }
 
         public override void ResolveReferences()
@@ -35,7 +34,6 @@ namespace Eos.Models
             ForClass = Resolve(ForClass, MasterRepository.Classes);
             Domain1 = Resolve(Domain1, MasterRepository.Domains);
             Domain2 = Resolve(Domain2, MasterRepository.Domains);
-            //Soundset = Resolve(Soundset, MasterRepository.Soundsets);
         }
 
         public override void FromJson(JsonObject json)
@@ -55,7 +53,6 @@ namespace Eos.Models
             this.FeatPreferences = IntPtr.Zero; // !
             this.SkillPreferences = IntPtr.Zero; // !
             this.StartingEquipment = IntPtr.Zero; // !
-            this.Soundset = IntPtr.Zero; // !
             this.Playable = json["Playable"]?.GetValue<bool>() ?? true;
         }
 
@@ -77,7 +74,6 @@ namespace Eos.Models
             packageJson.Add("FeatPreferences", null); // !
             packageJson.Add("SkillPreferences", null); // !
             packageJson.Add("StartingEquipment", null); // !
-            packageJson.Add("Soundset", null); // ! CreateJsonRef(this.Soundset)
             packageJson.Add("Playable", this.Playable);
 
             return packageJson;

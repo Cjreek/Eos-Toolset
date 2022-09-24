@@ -26,6 +26,7 @@ namespace Eos.Types
         public static readonly String SpellbooksFilename;
 
         public static readonly String ClassPackagesFilename;
+        public static readonly String SoundsetsFilename;
 
         public static readonly String AttackBonusTablesFilename;
         public static readonly String BonusFeatTablesFilename;
@@ -49,6 +50,7 @@ namespace Eos.Types
         public static readonly String SpellbooksFilePath;
 
         public static readonly String ClassPackagesFilePath;
+        public static readonly String SoundsetsFilePath;
 
         public static readonly String AttackBonusTablesFilePath;
         public static readonly String BonusFeatTablesFilePath;
@@ -85,6 +87,7 @@ namespace Eos.Types
             SpellbooksFilename = "spellbooks.json";
 
             ClassPackagesFilename = "packages.json";
+            SoundsetsFilename = "soundsets.json";
 
             AttackBonusTablesFilename = "tables_bab.json";
             BonusFeatTablesFilename = "tables_bonusfeats.json";
@@ -108,6 +111,7 @@ namespace Eos.Types
             SpellbooksFilePath = BaseDataPath + SpellbooksFilename;
 
             ClassPackagesFilePath = BaseDataPath + ClassPackagesFilename;
+            SoundsetsFilePath = BaseDataPath + SoundsetsFilename;
 
             AttackBonusTablesFilePath = BaseDataPath + AttackBonusTablesFilename;
             BonusFeatTablesFilePath = BaseDataPath + BonusFeatTablesFilename;

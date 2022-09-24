@@ -32,6 +32,7 @@ namespace Eos.Repositories
         private static readonly VirtualModelRepository<Spellbook> spellbookVirtualRepository;
 
         private static readonly VirtualModelRepository<ClassPackage> classPackageVirtualRepository;
+        private static readonly VirtualModelRepository<Soundset> soundsetVirtualRepository;
 
         private static readonly VirtualModelRepository<AttackBonusTable> babTableVirtualRepository;
         private static readonly VirtualModelRepository<BonusFeatsTable> bonusFeatTableVirtualRepository;
@@ -62,6 +63,7 @@ namespace Eos.Repositories
             spellbookVirtualRepository = new VirtualModelRepository<Spellbook>(standardCategory.Spellbooks, project.Spellbooks);
 
             classPackageVirtualRepository = new VirtualModelRepository<ClassPackage>(standardCategory.ClassPackages, project.ClassPackages);
+            soundsetVirtualRepository = new VirtualModelRepository<Soundset>(standardCategory.Soundsets, project.Soundsets);
 
             babTableVirtualRepository = new VirtualModelRepository<AttackBonusTable>(standardCategory.AttackBonusTables, project.AttackBonusTables);
             bonusFeatTableVirtualRepository = new VirtualModelRepository<BonusFeatsTable>(standardCategory.BonusFeatTables, project.BonusFeatTables);
@@ -106,6 +108,7 @@ namespace Eos.Repositories
         public static VirtualModelRepository<Spellbook> Spellbooks { get { return spellbookVirtualRepository; } }
 
         public static VirtualModelRepository<ClassPackage> ClassPackages { get { return classPackageVirtualRepository; } }
+        public static VirtualModelRepository<Soundset> Soundsets { get { return soundsetVirtualRepository; } }
 
         public static VirtualModelRepository<AttackBonusTable> AttackBonusTables { get { return babTableVirtualRepository; } }
         public static VirtualModelRepository<BonusFeatsTable> BonusFeatTables { get { return bonusFeatTableVirtualRepository; } }
@@ -137,6 +140,7 @@ namespace Eos.Repositories
             Standard.Spellbooks.LoadFromFile(Constants.SpellbooksFilePath);
 
             Standard.ClassPackages.LoadFromFile(Constants.ClassPackagesFilePath);
+            Standard.Soundsets.LoadFromFile(Constants.SoundsetsFilePath);
 
             Standard.AttackBonusTables.LoadFromFile(Constants.AttackBonusTablesFilePath);
             Standard.BonusFeatTables.LoadFromFile(Constants.BonusFeatTablesFilePath);
@@ -160,6 +164,7 @@ namespace Eos.Repositories
             Standard.Spellbooks.ResolveReferences();
 
             Standard.ClassPackages.ResolveReferences();
+            Standard.Soundsets.ResolveReferences();
 
             Standard.AttackBonusTables.ResolveReferences();
             Standard.BonusFeatTables.ResolveReferences();

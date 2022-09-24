@@ -23,6 +23,7 @@ namespace Eos.Repositories
         private readonly SpellbookRepository spellbookRepository;
 
         private readonly ModelRepository<ClassPackage> classPackageRepository;
+        private readonly ModelRepository<Soundset> soundsetRepository;
 
         private readonly ModelRepository<AttackBonusTable> attackBonusTableRepository;
         private readonly ModelRepository<BonusFeatsTable> bonusFeatTableRepository;
@@ -48,6 +49,7 @@ namespace Eos.Repositories
             spellbookRepository = new SpellbookRepository(isReadonly);
 
             classPackageRepository = new ModelRepository<ClassPackage>(isReadonly);
+            soundsetRepository = new ModelRepository<Soundset>(isReadonly);
 
             attackBonusTableRepository = new ModelRepository<AttackBonusTable>(isReadonly); // Always writeable?
             bonusFeatTableRepository = new ModelRepository<BonusFeatsTable>(isReadonly); // Always writeable?
@@ -71,6 +73,7 @@ namespace Eos.Repositories
             repositoryDict.Add(typeof(Spellbook), spellbookRepository);
 
             repositoryDict.Add(typeof(ClassPackage), classPackageRepository);
+            repositoryDict.Add(typeof(Soundset), soundsetRepository);
 
             repositoryDict.Add(typeof(AttackBonusTable), attackBonusTableRepository);
             repositoryDict.Add(typeof(BonusFeatsTable), bonusFeatTableRepository);
@@ -96,6 +99,7 @@ namespace Eos.Repositories
         public SpellbookRepository Spellbooks { get { return spellbookRepository; } }
 
         public ModelRepository<ClassPackage> ClassPackages { get { return classPackageRepository; } }
+        public ModelRepository<Soundset> Soundsets { get { return soundsetRepository; } }
 
         public ModelRepository<AttackBonusTable> AttackBonusTables { get { return attackBonusTableRepository; } }
         public ModelRepository<BonusFeatsTable> BonusFeatTables { get { return bonusFeatTableRepository; } }
@@ -134,6 +138,7 @@ namespace Eos.Repositories
             Spellbooks.Clear();
 
             ClassPackages.Clear();
+            Soundsets.Clear();
 
             AttackBonusTables.Clear();
             BonusFeatTables.Clear();

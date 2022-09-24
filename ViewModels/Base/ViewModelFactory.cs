@@ -35,6 +35,8 @@ namespace Eos.ViewModels
 
             if (model is ClassPackage classPackage)
                 return new ClassPackageViewModel(classPackage);
+            if (model is Soundset soundset)
+                return new SoundsetViewModel(soundset);
 
             if (model is FeatsTable featsTable)
                 return new FeatsTableViewModel(featsTable);

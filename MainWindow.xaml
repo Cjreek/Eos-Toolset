@@ -238,6 +238,16 @@
             </Frame>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vm:SoundsetViewModel}">
+            <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                <Frame.Content>
+                    <view:SoundsetView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                </Frame.Content>
+            </Frame>
+        </DataTemplate>
+
         <!--Tables-->
 
         <DataTemplate DataType="{x:Type vm:FeatsTableViewModel}">
@@ -401,6 +411,7 @@
                         <TreeViewItem Header="Skills" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Skills}"/>
                         <TreeViewItem Header="Diseases" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Diseases}"/>
                         <TreeViewItem Header="Poisons" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Poisons}"/>
+                        <TreeViewItem Header="Soundsets" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Soundsets}"/>
 
                         <TreeViewItem Header="Tables" Tag="CATEGORY">
                             <TreeViewItem Header="Racial Feats" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=RacialFeatsTables}"/>
@@ -454,6 +465,7 @@
                         <TreeViewItem Header="Skills" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Skills}"/>
                         <TreeViewItem Header="Diseases" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Diseases}"/>
                         <TreeViewItem Header="Poisons" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Poisons}"/>
+                        <TreeViewItem Header="Soundsets" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Soundsets}"/>
 
                         <TreeViewItem Header="Tables" Tag="CATEGORY">
                             <TreeViewItem Header="Racial Feats" Tag="CATEGORY" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=RacialFeatsTables}"/>

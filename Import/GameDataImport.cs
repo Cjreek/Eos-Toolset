@@ -2,6 +2,7 @@
 using Eos.Models.Tables;
 using Eos.Nwn;
 using Eos.Nwn.Bif;
+using Eos.Nwn.Ssf;
 using Eos.Nwn.Tlk;
 using Eos.Nwn.TwoDimensionalArray;
 using Eos.Repositories;
@@ -852,10 +853,43 @@ namespace Eos.Import
                 tmpPackage.FeatPreferences = IntPtr.Zero; // ! (FeatPref2DA)
                 tmpPackage.SkillPreferences = IntPtr.Zero; // ! (SkillPref2DA)
                 tmpPackage.StartingEquipment = IntPtr.Zero; // ! (Equip2DA)
-                tmpPackage.Soundset = IntPtr.Zero; // ! (Soundset)
                 tmpPackage.Playable = packages2da[i].AsBoolean("PlayerClass");
 
                 Standard.ClassPackages.Add(tmpPackage);
+            }
+        }
+
+        private void ImportSoundsets()
+        {
+            var soundsetResource = bif.ReadResource("soundset", NWNResourceType.TWODA);
+            var soundset2da = new TwoDimensionalArrayFile(soundsetResource.RawData);
+
+            Standard.Soundsets.Clear();
+            for (int i = 0; i < soundset2da.Count; i++)
+            {
+                var tmpSoundset = new Soundset();
+                tmpSoundset.ID = GenerateGuid("soundset", i);
+                tmpSoundset.Index = i;
+
+                if (!SetText(tmpSoundset.Name, soundset2da[i].AsInteger("STRREF"))) continue;
+
+                tmpSoundset.Gender = (!soundset2da[i].IsNull("GENDER")) ? (Gender)Enum.ToObject(typeof(Gender), soundset2da[i].AsInteger("GENDER") ?? 0) : Gender.Male;
+                tmpSoundset.Type = (!soundset2da[i].IsNull("TYPE")) ? (SoundsetType)Enum.ToObject(typeof(SoundsetType), soundset2da[i].AsInteger("TYPE") ?? 0) : SoundsetType.Player;
+                tmpSoundset.SoundsetResource = soundset2da[i].AsString("RESREF") ?? "";
+
+                var ssfResource = bif.ReadResource(tmpSoundset.SoundsetResource, NWNResourceType.SSF);
+                var ssf = new SsfFile(ssfResource.RawData);
+                for (int j=0; j < ssf.Data.Count; j++)
+                {
+                    var soundsetEntry = tmpSoundset.Entries.GetByType((SoundsetEntryType)j);
+                    if (soundsetEntry != null)
+                    {
+                        SetText(soundsetEntry.Text, ssf.Data[j].StringRef >= 0x01000000 ? null : (int)ssf.Data[j].StringRef);
+                        soundsetEntry.SoundFile = new String(ssf.Data[j].ResRef).Trim('\0');
+                    }
+                }
+
+                Standard.Soundsets.Add(tmpSoundset);
             }
         }
 
@@ -1014,7 +1048,6 @@ namespace Eos.Import
                 package.ForClass = SolveInstance(package.ForClass, Standard.Classes);
                 package.Domain1 = SolveInstance(package.Domain1, Standard.Domains);
                 package.Domain2 = SolveInstance(package.Domain2, Standard.Domains);
-                //package.Soundset = SolveInstance(package.Soundset, Standard.Soundsets);
             }
         }
 
@@ -1034,6 +1067,7 @@ namespace Eos.Import
             Standard.Spellbooks.SaveToFile(Constants.SpellbooksFilePath);
 
             Standard.ClassPackages.SaveToFile(Constants.ClassPackagesFilePath);
+            Standard.Soundsets.SaveToFile(Constants.SoundsetsFilePath);
 
             Standard.AttackBonusTables.SaveToFile(Constants.AttackBonusTablesFilePath);
             Standard.BonusFeatTables.SaveToFile(Constants.BonusFeatTablesFilePath);
@@ -1081,6 +1115,7 @@ namespace Eos.Import
             ImportPoisons();
 
             ImportClassPackages();
+            ImportSoundsets();
 
             ImportText();
 
@@ -1093,7 +1128,9 @@ namespace Eos.Import
             Standard.Diseases.Sort(d => d?.Name[TLKLanguage.English].Text);
             Standard.Poisons.Sort(p => p?.Name[TLKLanguage.English].Text);
             Standard.Spellbooks.Sort(p => p?.Name);
+
             Standard.ClassPackages.Sort(p => p?.Name[TLKLanguage.English].Text);
+            Standard.Soundsets.Sort(p => p?.Name[TLKLanguage.English].Text);
 
             SaveToJson();
         }

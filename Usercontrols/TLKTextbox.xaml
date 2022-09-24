@@ -8,13 +8,17 @@
              xmlns:types="clr-namespace:Eos.Types"
              mc:Ignorable="d"
              x:Name="ucTLKTextbox"
-             d:DesignHeight="22" d:DesignWidth="800">
+             d:DesignHeight="22" d:DesignWidth="800"
+             BorderThickness="0" BorderBrush="Transparent">
     <UserControl.Resources>
         <local:TLKConverter x:Key="tlkConverter"/>
     </UserControl.Resources>
-    
+
     <Grid>
-        <TextBox Grid.Column="0" AcceptsReturn="{Binding ElementName=ucTLKTextbox, Path=AcceptsReturn}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+        <TextBox Grid.Column="0" 
+                 Background="{Binding ElementName=ucTLKTextbox, Path=Background}" Foreground="{Binding ElementName=ucTLKTextbox, Path=Foreground}"
+                 BorderThickness="{Binding ElementName=ucTLKTextbox, Path=InnerBorderThickness}" BorderBrush="{Binding ElementName=ucTLKTextbox, Path=InnerBorderBrush}"
+                 AcceptsReturn="{Binding ElementName=ucTLKTextbox, Path=AcceptsReturn}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
                  Text="{Binding ElementName=ucTLKTextbox, Path=ChangedTrigger, Converter={StaticResource tlkConverter}, ConverterParameter={x:Reference selfParam}}"/>
         <FrameworkElement x:Name="selfParam" Visibility="Collapsed" Tag="{Binding ElementName=ucTLKTextbox}"/>
     </Grid>
