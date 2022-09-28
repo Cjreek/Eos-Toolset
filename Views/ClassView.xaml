@@ -10,7 +10,7 @@
       xmlns:types="clr-namespace:Eos.Types"
       xmlns:uc="clr-namespace:Eos.Usercontrols"
       xmlns:nwn="clr-namespace:Eos.Nwn"
-      mc:Ignorable="d" d:DesignHeight="460" d:DesignWidth="800"
+      mc:Ignorable="d" d:DesignHeight="550" d:DesignWidth="800"
       x:Name="page" Title="ClassView">
     <Page.DataContext>
         <vm:ClassViewModel/>
@@ -94,6 +94,9 @@
                         <RowDefinition Height="22"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
+                        <RowDefinition Height="22"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="22"/>
@@ -111,15 +114,18 @@
                     <TextBlock Text="Playable" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
                     <CheckBox IsChecked="{Binding Data.Playable}" Grid.Row="1" Grid.Column="1"/>
 
-                    <TextBlock Text="Hit Die" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.HitDie}" Grid.Row="2" Grid.Column="1"/>
-
-                    <TextBlock Text="Primary Ability" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
-                    <uc:EnumComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" 
+                    <TextBlock Text="Multiclass XP Penalty" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
+                    <CheckBox IsChecked="{Binding Data.MulticlassXPPenalty}" Grid.Row="2" Grid.Column="3"/>
+                    
+                    <TextBlock Text="Primary Ability" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+                    <uc:EnumComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" 
                                  SelectedValue="{Binding Data.PrimaryAbility}"/>
 
-                    <TextBlock Text="Multiclass XP Penalty" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
-                    <CheckBox IsChecked="{Binding Data.MulticlassXPPenalty}" Grid.Row="3" Grid.Column="3"/>
+                    <TextBlock Text="Hit Die" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.HitDie}" Grid.Row="3" Grid.Column="1"/>
+
+                    <TextBlock Text="Skill Points per Level" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.SkillPointsPerLevel}" Grid.Row="3" Grid.Column="3"/>
 
                     <TextBlock Text="Max. Level" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
                     <wpftk:IntegerUpDown Value="{Binding Data.MaxLevel}" Grid.Row="4" Grid.Column="1"/>
@@ -127,48 +133,51 @@
                     <TextBlock Text="Pre Epic max. Level" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
                     <wpftk:IntegerUpDown Value="{Binding Data.PreEpicMaxLevel}" Grid.Row="4" Grid.Column="3"/>
 
-                    <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Tables" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
-
-                    <TextBlock Text="Attack Bonus Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
-                    <uc:AttackBonusTableComboBox Grid.Row="7" Grid.Column="1" SelectedValue="{Binding Data.AttackBonusTable}" IsNullable="False"/>
-
-                    <TextBlock Text="Saving Throws Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="2"/>
-                    <uc:SavingThrowTableComboBox Grid.Row="7" Grid.Column="3" SelectedValue="{Binding Data.SavingThrows}" IsNullable="False"/>
-
-                    <TextBlock Text="Skills Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
-                    <uc:SkillTableComboBox Grid.Row="8" Grid.Column="1" SelectedValue="{Binding Data.Skills}" IsNullable="False"/>
-
-                    <TextBlock Text="Stat Gain Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2"/>
-                    <uc:StatGainTableComboBox Grid.Row="8" Grid.Column="3" SelectedValue="{Binding Data.StatGainTable}" IsNullable="True"/>
-
-                    <TextBlock Text="Feats Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
-                    <uc:FeatTableComboBox Grid.Row="9" Grid.Column="1" SelectedValue="{Binding Data.Feats}" IsNullable="False"/>
-
-                    <TextBlock Text="Bonus Feats Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
-                    <uc:BonusFeatTableComboBox Grid.Row="9" Grid.Column="3" SelectedValue="{Binding Data.BonusFeats}" IsNullable="False"/>
-
-                    <TextBlock Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Character Creation" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
-
-                    <TextBlock Text="Default Package" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0"/>
-                    <uc:PackageComboBox SelectedValue="{Binding Data.DefaultPackage}" Grid.Row="12" Grid.Column="1" IsNullable="False"/>
+                    <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Alignment" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
+                    <uc:AlignmentMatrix Height="100" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4" Alignment="{Binding Data.AllowedAlignments}"/>
                     
-                    <TextBlock Text="Strength" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="14" Grid.Column="1"/>
+                    <TextBlock Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Tables" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
 
-                    <TextBlock Text="Intelligence" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedInt}" Grid.Row="14" Grid.Column="3"/>
+                    <TextBlock Text="Attack Bonus Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
+                    <uc:AttackBonusTableComboBox Grid.Row="10" Grid.Column="1" SelectedValue="{Binding Data.AttackBonusTable}" IsNullable="False"/>
 
-                    <TextBlock Text="Dexterity" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="15" Grid.Column="1"/>
+                    <TextBlock Text="Saving Throws Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
+                    <uc:SavingThrowTableComboBox Grid.Row="10" Grid.Column="3" SelectedValue="{Binding Data.SavingThrows}" IsNullable="False"/>
 
-                    <TextBlock Text="Wisdom" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedWis}" Grid.Row="15" Grid.Column="3"/>
+                    <TextBlock Text="Skills Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="0"/>
+                    <uc:SkillTableComboBox Grid.Row="11" Grid.Column="1" SelectedValue="{Binding Data.Skills}" IsNullable="False"/>
 
-                    <TextBlock Text="Constitution" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="16" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="16" Grid.Column="1"/>
+                    <TextBlock Text="Stat Gain Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="2"/>
+                    <uc:StatGainTableComboBox Grid.Row="11" Grid.Column="3" SelectedValue="{Binding Data.StatGainTable}" IsNullable="True"/>
 
-                    <TextBlock Text="Charisma" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="16" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedCha}" Grid.Row="16" Grid.Column="3"/>
+                    <TextBlock Text="Feats Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0"/>
+                    <uc:FeatTableComboBox Grid.Row="12" Grid.Column="1" SelectedValue="{Binding Data.Feats}" IsNullable="False"/>
+
+                    <TextBlock Text="Bonus Feats Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="2"/>
+                    <uc:BonusFeatTableComboBox Grid.Row="12" Grid.Column="3" SelectedValue="{Binding Data.BonusFeats}" IsNullable="False"/>
+
+                    <TextBlock Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Character Creation" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
+
+                    <TextBlock Text="Default Package" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="0"/>
+                    <uc:PackageComboBox SelectedValue="{Binding Data.DefaultPackage}" Grid.Row="15" Grid.Column="1" IsNullable="False"/>
+                    
+                    <TextBlock Text="Strength" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="17" Grid.Column="0"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="17" Grid.Column="1"/>
+
+                    <TextBlock Text="Intelligence" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="17" Grid.Column="2"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedInt}" Grid.Row="17" Grid.Column="3"/>
+
+                    <TextBlock Text="Dexterity" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="18" Grid.Column="0"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="18" Grid.Column="1"/>
+
+                    <TextBlock Text="Wisdom" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="18" Grid.Column="2"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedWis}" Grid.Row="18" Grid.Column="3"/>
+
+                    <TextBlock Text="Constitution" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="19" Grid.Column="0"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="19" Grid.Column="1"/>
+
+                    <TextBlock Text="Charisma" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="19" Grid.Column="2"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedCha}" Grid.Row="19" Grid.Column="3"/>
                 </Grid>
             </ScrollViewer>
         </TabItem>

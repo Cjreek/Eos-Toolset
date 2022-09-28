@@ -408,6 +408,7 @@ namespace Eos.Import
 
                 tmpClass.Icon = Resources.AddResource(classes2da[i].AsString("Icon"), NWNResourceType.TGA);
                 tmpClass.HitDie = classes2da[i].AsInteger("HitDie") ?? 0;
+                tmpClass.SkillPointsPerLevel = classes2da[i].AsInteger("SkillPointBase") ?? 0;
 
                 // AttackBonusTable
                 var abTable = classes2da[i].AsString("AttackBonusTable");
@@ -459,8 +460,6 @@ namespace Eos.Import
                     tmpClass.BonusFeats = Standard.BonusFeatTables.GetByID(bonusFeatTableGuid);
                 }
 
-                // SkillPointBase ??
-
                 // SpellGainTable
                 var spellGainTable = classes2da[i].AsString("SpellGainTable");
                 if (spellGainTable != null)
@@ -492,6 +491,10 @@ namespace Eos.Import
                 tmpClass.PrimaryAbility = Enum.Parse<AbilityType>(classes2da[i].AsString("PrimaryAbil") ?? "", true);
 
                 // Alignment
+                var alignFlags = classes2da[i].AsInteger("AlignRestrict") ?? 0;
+                var alignAxis = classes2da[i].AsInteger("AlignRstrctType") ?? 0;
+                var alignInvert = !classes2da[i].AsBoolean("InvertRestrict");
+                tmpClass.AllowedAlignments = Alignments.Create(alignFlags, alignAxis, alignInvert);
 
                 // Prerequesites
                 var preRequTable = classes2da[i].AsString("PreReqTable");

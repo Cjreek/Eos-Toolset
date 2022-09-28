@@ -21,6 +21,7 @@ namespace Eos.Models
         public TLKStringSet NamePlural { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
         public int HitDie { get; set; } = 8;
+        public int SkillPointsPerLevel { get; set; } = 4;
         public AttackBonusTable? AttackBonusTable { get; set; }
         public FeatsTable? Feats { get; set; }
         public SavingThrowTable? SavingThrows { get; set; }
@@ -102,6 +103,7 @@ namespace Eos.Models
             this.Description.FromJson(json["Description"]?.AsObject());
             this.Icon = json["Icon"]?.GetValue<String>();
             this.HitDie = json["HitDie"]?.GetValue<int>() ?? 1;
+            this.SkillPointsPerLevel = json["SkillPointsPerLevel"]?.GetValue<int>() ?? 4;
             this.AttackBonusTable = CreateRefFromJson<AttackBonusTable>(json["AttackBonusTable"]?.AsObject());
             this.Feats = CreateRefFromJson<FeatsTable>(json["Feats"]?.AsObject());
             this.SavingThrows = CreateRefFromJson<SavingThrowTable>(json["SavingThrows"]?.AsObject());
@@ -153,6 +155,7 @@ namespace Eos.Models
             classJson.Add("Description", this.Description.ToJson());
             classJson.Add("Icon", this.Icon);
             classJson.Add("HitDie", this.HitDie);
+            classJson.Add("SkillPointsPerLevel", this.SkillPointsPerLevel);
             classJson.Add("AttackBonusTable", CreateJsonRef(this.AttackBonusTable));
             classJson.Add("Feats", CreateJsonRef(this.Feats));
             classJson.Add("SavingThrows", CreateJsonRef(this.SavingThrows));
