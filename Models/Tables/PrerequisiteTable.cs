@@ -8,5 +8,9 @@ namespace Eos.Models.Tables
 {
     public class PrerequisiteTable : BaseTable<PrerequisiteTableItem>
     {
+        protected override void SetDefaultValues()
+        {
+            Name = "NEW_PREREQ_TBL";
+        }
     }
 }

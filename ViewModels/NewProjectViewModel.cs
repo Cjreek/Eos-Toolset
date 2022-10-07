@@ -5,6 +5,7 @@ using Eos.ViewModels.Base;
 using Prism.Commands;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,6 +39,18 @@ namespace Eos.ViewModels
 
         public DelegateCommand<NewProjectViewModel> OKCommand { get; private set; } = new DelegateCommand<NewProjectViewModel>(vm =>
         {
+            if (vm.ProjectName.Trim() == "")
+            {
+                vm.DoError("Project name can't be empty!");
+                return;
+            }
+
+            if (!Directory.Exists(vm.ProjectFolder.Trim()))
+            {
+                vm.DoError("Project folder is invalid!");
+                return;
+            }
+
             MasterRepository.Project.CreateNew(vm.ProjectFolder, vm.ProjectName, vm.DefaultLanguage);
             MessageDispatcher.Send(MessageType.ChangeLanguage, vm.DefaultLanguage);
             WindowService.Close(vm);

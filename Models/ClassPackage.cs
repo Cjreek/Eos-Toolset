@@ -29,6 +29,12 @@ namespace Eos.Models
         public IntPtr StartingEquipment { get; set; }
         public bool Playable { get; set; }
 
+        protected override void SetDefaultValues()
+        {
+            Name[MasterRepository.Project.DefaultLanguage].Text = "New Class Package";
+            Name[MasterRepository.Project.DefaultLanguage].TextF = "New Class Package";
+        }
+
         public override void ResolveReferences()
         {
             ForClass = Resolve(ForClass, MasterRepository.Classes);
@@ -38,8 +44,7 @@ namespace Eos.Models
 
         public override void FromJson(JsonObject json)
         {
-            this.ID = ParseGuid(json["ID"]?.GetValue<String>());
-            this.Index = json["Index"]?.GetValue<int?>();
+            base.FromJson(json);
             this.Name.FromJson(json["Name"]?.AsObject());
             this.Description.FromJson(json["Description"]?.AsObject());
             this.ForClass = CreateRefFromJson<CharacterClass>(json["ForClass"]?.AsObject());
@@ -58,9 +63,7 @@ namespace Eos.Models
 
         public override JsonObject ToJson()
         {
-            var packageJson = new JsonObject();
-            packageJson.Add("ID", this.ID.ToString());
-            packageJson.Add("Index", this.Index);
+            var packageJson = base.ToJson();
             packageJson.Add("Name", this.Name.ToJson());
             packageJson.Add("Description", this.Description.ToJson());
             packageJson.Add("ForClass", CreateJsonRef(this.ForClass));

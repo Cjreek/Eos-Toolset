@@ -8,5 +8,9 @@ namespace Eos.Models.Tables
 {
     public class SkillsTable : BaseTable<SkillsTableItem>
     {
+        protected override void SetDefaultValues()
+        {
+            Name = "NEW_SKILLS_TBL";
+        }
     }
 }

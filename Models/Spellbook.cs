@@ -35,6 +35,11 @@ namespace Eos.Models
             return Name;
         }
 
+        protected override void SetDefaultValues()
+        {
+            Name = "NewSpellbook";
+        }
+
         public void AddSpell(int level, Spell spell)
         {
             AddSpell(level, new SpellbookEntry { Spell = spell });
@@ -108,7 +113,7 @@ namespace Eos.Models
 
         public override void FromJson(JsonObject json)
         {
-            this.ID = ParseGuid(json["ID"]?.GetValue<String>());
+            base.FromJson(json);
             this.Name = json["Name"]?.GetValue<String>() ?? "";
 
             ReadLevel(json["Level0"]?.AsArray(), Level0);
@@ -125,8 +130,7 @@ namespace Eos.Models
 
         public override JsonObject ToJson()
         {
-            var spellbookJson = new JsonObject();
-            spellbookJson.Add("ID", this.ID.ToString());
+            var spellbookJson = base.ToJson();
             spellbookJson.Add("Name", this.Name);
 
             WriteLevel(spellbookJson, "Level0", Level0);

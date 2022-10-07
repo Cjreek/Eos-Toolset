@@ -9,6 +9,11 @@ namespace Eos.Models.Tables
 {
     public class FeatsTable : BaseTable<FeatsTableItem>
     {
+        protected override void SetDefaultValues()
+        {
+            Name = "NEW_FEATS_TBL";
+        }
+
         protected override int GetMaximumItems()
         {
             return Int16.MaxValue;
@@ -24,7 +29,7 @@ namespace Eos.Models.Tables
         public IEnumerable<FeatsTableItem?> BonusFeats => Items.Where(item => item?.FeatList == Types.FeatListType.BonusFeat && item?.GrantedOnLevel < 99)
                                                                .OrderBy(item => item?.Feat?.Name[MasterRepository.Project.DefaultLanguage].Text);
 
-        public void Changed()
+        protected override void Changed()
         {
             NotifyPropertyChanged(nameof(GrantedFeats));
             NotifyPropertyChanged(nameof(GeneralFeats));

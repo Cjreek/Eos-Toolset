@@ -24,6 +24,18 @@ namespace Eos.Views
         public NewProjectView()
         {
             InitializeComponent();
+            this.DataContextChanged += NewProjectView_DataContextChanged;
+        }
+
+        private void NewProjectView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (DataContext is NewProjectViewModel vm)
+                vm.OnError += Vm_OnError;
+        }
+
+        private void Vm_OnError(ViewModelBase viewModel, ViewModelErrorEventArgs args)
+        {
+            MessageBox.Show(Window.GetWindow(this), args.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         private void btOpenDlg_Click(object sender, RoutedEventArgs e)

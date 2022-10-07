@@ -14,6 +14,8 @@ using Eos.Repositories;
 using Eos.ViewModels.Base;
 using Eos.Nwn.Tlk;
 using Eos.Services;
+using Eos.Views;
+using System.Globalization;
 
 namespace Eos.ViewModels
 {
@@ -88,6 +90,12 @@ namespace Eos.ViewModels
             }
         }
 
+        private void DeleteDetail(BaseModel model)
+        {
+            CloseDetail(model);
+            MasterRepository.Project.Delete(model);
+        }
+
         private void MessageHandler(MessageType type, object? param)
         {
             if (param is BaseModel model)
@@ -102,6 +110,21 @@ namespace Eos.ViewModels
                         break;
                     case MessageType.CloseDetail:
                         CloseDetail(model);
+                        break;
+                    case MessageType.DeleteDetail:
+                        DeleteDetail(model);
+                        break;
+
+                    case MessageType.OverrideDetail:
+                        if (model != null)
+                        {
+                            var newModel = model.Override();
+                            if (newModel != null)
+                            {
+                                MasterRepository.Add(newModel);
+                                MessageDispatcher.Send(MessageType.OpenDetail, newModel);
+                            }
+                        }
                         break;
                 }
             }
@@ -141,9 +164,11 @@ namespace Eos.ViewModels
             MessageDispatcher.Subscribe(MessageType.SaveProject, MessageHandler);
 
             MessageDispatcher.Subscribe(MessageType.NewDetail, MessageHandler);
+            MessageDispatcher.Subscribe(MessageType.OverrideDetail, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.OpenDetail, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.OpenDetailSilent, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.CloseDetail, MessageHandler);
+            MessageDispatcher.Subscribe(MessageType.DeleteDetail, MessageHandler);
 
             MessageDispatcher.Subscribe(MessageType.ChangeLanguage, MessageHandler);
         }
@@ -155,9 +180,11 @@ namespace Eos.ViewModels
             MessageDispatcher.Unsubscribe(MessageType.SaveProject, MessageHandler);
 
             MessageDispatcher.Unsubscribe(MessageType.NewDetail, MessageHandler);
+            MessageDispatcher.Unsubscribe(MessageType.OverrideDetail, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.OpenDetail, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.OpenDetailSilent, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.CloseDetail, MessageHandler);
+            MessageDispatcher.Unsubscribe(MessageType.DeleteDetail, MessageHandler);
 
             MessageDispatcher.Unsubscribe(MessageType.ChangeLanguage, MessageHandler);
         }

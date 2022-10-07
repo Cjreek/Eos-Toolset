@@ -1,4 +1,5 @@
-﻿using Eos.Models.Tables;
+﻿using Eos.Config;
+using Eos.Models.Tables;
 using Eos.Nwn.Tlk;
 using Eos.Types;
 using System;
@@ -17,9 +18,23 @@ namespace Eos.Repositories
     {
         private string _projectFolder = "";
         private string _name = "";
+        private bool _isLoaded = false;
 
         public EosProject() : base(false)
         {
+        }
+
+        public bool IsLoaded
+        {
+            get { return _isLoaded; }
+            private set
+            {
+                if (value != _isLoaded)
+                {
+                    _isLoaded = value;
+                    NotifyPropertyChanged();
+                }
+            }
         }
 
         public string Name
@@ -56,11 +71,13 @@ namespace Eos.Repositories
             DefaultLanguage = defaultLanguage;
             Save();
 
-            Load(projectFolder);
+            Load(ProjectFolder + Name + Constants.ProjectFileExtension);
         }
 
         private void LoadProjectFile(string projectFilename)
         {
+            ProjectFolder = Path.GetDirectoryName(projectFilename) ?? "";
+
             var fs = new FileStream(projectFilename, FileMode.Open, FileAccess.Read);
             try
             {
@@ -84,12 +101,12 @@ namespace Eos.Repositories
             File.WriteAllText(projectFilename, projectFile.ToJsonString(new JsonSerializerOptions(JsonSerializerDefaults.General) { WriteIndented = true }));
         }
 
-        public void Load(string projectFolder)
+        public void Load(string projectFilename)
         {
-            ProjectFolder = projectFolder;
             Clear();
 
-            LoadProjectFile(ProjectFolder + Constants.ProjectFilename);
+            LoadProjectFile(projectFilename);
+
             Races.LoadFromFile(ProjectFolder + Constants.RacesFilename);
             Classes.LoadFromFile(ProjectFolder + Constants.ClassesFilename);
             Domains.LoadFromFile(ProjectFolder + Constants.DomainsFilename);
@@ -113,11 +130,15 @@ namespace Eos.Repositories
             KnownSpellsTables.LoadFromFile(ProjectFolder + Constants.KnownSpellsTablesFilename);
             StatGainTables.LoadFromFile(ProjectFolder + Constants.StatGainTablesFilename);
             RacialFeatsTables.LoadFromFile(ProjectFolder + Constants.RacialFeatsTablesFilename);
+
+            IsLoaded = true;
+            EosConfig.LastProject = projectFilename;
         }
 
         public void Save()
         {
-            SaveProjectFile(ProjectFolder + Constants.ProjectFilename);
+            SaveProjectFile(ProjectFolder + Name + Constants.ProjectFileExtension);
+
             Races.SaveToFile(ProjectFolder + Constants.RacesFilename);
             Classes.SaveToFile(ProjectFolder + Constants.ClassesFilename);
             Domains.SaveToFile(ProjectFolder + Constants.DomainsFilename);

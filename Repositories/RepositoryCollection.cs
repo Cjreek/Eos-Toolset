@@ -129,6 +129,18 @@ namespace Eos.Repositories
                 throw new Exception();
         }
 
+        public void Add(BaseModel model)
+        {
+            var modelType = model.GetType();
+            repositoryDict[modelType].AddBase(model);
+        }
+
+        public void Delete(BaseModel model)
+        {
+            var modelType = model.GetType();
+            repositoryDict[modelType].RemoveBase(model);
+        }
+
         public void Clear()
         {
             Races.Clear();

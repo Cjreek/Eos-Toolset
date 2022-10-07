@@ -10,5 +10,6 @@ namespace Eos.Repositories
     public interface IRepository
     {
         void AddBase(BaseModel model);
+        void RemoveBase(BaseModel model);
     }
 }

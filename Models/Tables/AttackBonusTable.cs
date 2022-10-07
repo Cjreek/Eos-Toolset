@@ -9,6 +9,11 @@ namespace Eos.Models.Tables
 {
     public class AttackBonusTable : BaseTable<AttackBonusTableItem>
     {
+        protected override void SetDefaultValues()
+        {
+            Name = "NEW_BAB_TBL";
+        }
+
         protected override void InitializeData()
         {
             for (int i = 0; i < GetMaximumItems(); i++)

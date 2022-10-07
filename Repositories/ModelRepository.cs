@@ -127,5 +127,11 @@ namespace Eos.Repositories
             else
                 throw new InvalidCastException();
         }
+
+        public void RemoveBase(BaseModel model)
+        {
+            if (model is T specificModel)
+                Remove(specificModel);
+        }
     }
 }

@@ -8,5 +8,9 @@ namespace Eos.Models.Tables
 {
     public class RacialFeatsTable : BaseTable<RacialFeatsTableItem>
     {
+        protected override void SetDefaultValues()
+        {
+            Name = "NEW_RFEATS_TBL";
+        }
     }
 }

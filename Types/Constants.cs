@@ -12,8 +12,9 @@ namespace Eos.Types
         public static readonly String AppDataPath;
         public static readonly String BaseDataPath;
         public static readonly String BaseResourcePath;
+        public static readonly String ConfigPath;
 
-        public static readonly String ProjectFilename;
+        public static readonly String ProjectFileExtension;
 
         public static readonly String RacesFilename;
         public static readonly String ClassesFilename;
@@ -69,6 +70,7 @@ namespace Eos.Types
         {
             var eosAppDataFolder = "Eos Toolset";
             AppDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + eosAppDataFolder + Path.DirectorySeparatorChar;
+            ConfigPath = AppDataPath + "config.json";
 
             var baseDataFolder = "BaseData";
             BaseDataPath = AppDataPath + baseDataFolder + Path.DirectorySeparatorChar;
@@ -76,7 +78,7 @@ namespace Eos.Types
             var baseResourceFolder = "Resources";
             BaseResourcePath = AppDataPath + baseResourceFolder + Path.DirectorySeparatorChar;
 
-            ProjectFilename = "project.json";
+            ProjectFileExtension = ".eosproj";
 
             RacesFilename = "races.json";
             ClassesFilename = "classes.json";

@@ -25,7 +25,7 @@ namespace Eos.Models.Tables
                 if (_feat != value)
                 {
                     _feat = value;
-                    MessageDispatcher.Send(MessageType.FeatTableItemChanged, this);
+                    NotifyPropertyChanged();
                 }
             }
         }
@@ -39,7 +39,7 @@ namespace Eos.Models.Tables
                 if (_grantedOnLevel != value)
                 {
                     _grantedOnLevel = value;
-                    MessageDispatcher.Send(MessageType.FeatTableItemChanged, this);
+                    NotifyPropertyChanged();
                 }
             }
         }

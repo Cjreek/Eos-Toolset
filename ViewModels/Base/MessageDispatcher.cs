@@ -13,11 +13,11 @@ namespace Eos.ViewModels.Base
         OpenProject,
         SaveProject,
         NewDetail,
+        OverrideDetail,
         OpenDetail,
         OpenDetailSilent,
         CloseDetail,
-
-        FeatTableItemChanged,
+        DeleteDetail,
     }
 
     public delegate void MessageHandler(MessageType type, object? param);

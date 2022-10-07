@@ -574,7 +574,7 @@ namespace Eos.Import
                 if (!SetText(tmpDomain.Name, domains2da[i].AsInteger("Name"))) continue;
                 SetText(tmpDomain.Description, domains2da[i].AsInteger("Description"));
 
-                tmpDomain.Icon = Resources.AddResource(domains2da[i].AsString("Icon"), Nwn.NWNResourceType.TGA);
+                tmpDomain.Icon = Resources.AddResource(domains2da[i].AsString("Icon"), NWNResourceType.TGA);
                 tmpDomain.Level0Spell = CreateRef<Spell>(domains2da[i].AsInteger("Level_0", -1));
                 tmpDomain.Level1Spell = CreateRef<Spell>(domains2da[i].AsInteger("Level_1"));
                 tmpDomain.Level2Spell = CreateRef<Spell>(domains2da[i].AsInteger("Level_2"));
@@ -608,7 +608,7 @@ namespace Eos.Import
                 if (!SetText(tmpSkill.Name, skills2da[i].AsInteger("Name"))) continue;
                 SetText(tmpSkill.Description, skills2da[i].AsInteger("Description"));
 
-                tmpSkill.Icon = Resources.AddResource(skills2da[i].AsString("Icon"), Nwn.NWNResourceType.TGA);
+                tmpSkill.Icon = Resources.AddResource(skills2da[i].AsString("Icon"), NWNResourceType.TGA);
                 tmpSkill.CanUseUntrained = skills2da[i].AsBoolean("Untrained");
                 tmpSkill.KeyAbility = Enum.Parse<AbilityType>(skills2da[i].AsString("KeyAbility") ?? "", true);
                 tmpSkill.UseArmorPenalty = skills2da[i].AsBoolean("ArmorCheckPenalty");
@@ -635,7 +635,7 @@ namespace Eos.Import
                 if (!SetText(tmpFeat.Name, feat2da[i].AsInteger("FEAT"))) continue;
                 SetText(tmpFeat.Description, feat2da[i].AsInteger("DESCRIPTION"));
 
-                tmpFeat.Icon = Resources.AddResource(feat2da[i].AsString("ICON"), Nwn.NWNResourceType.TGA);
+                tmpFeat.Icon = Resources.AddResource(feat2da[i].AsString("ICON"), NWNResourceType.TGA);
                 tmpFeat.MinAttackBonus = feat2da[i].AsInteger("MINATTACKBONUS");
                 tmpFeat.MinStr = feat2da[i].AsInteger("MINSTR");
                 tmpFeat.MinDex = feat2da[i].AsInteger("MINDEX");
@@ -693,7 +693,7 @@ namespace Eos.Import
                 SetText(tmpSpell.Description, spells2da[i].AsInteger("SpellDesc"));
                 SetText(tmpSpell.AlternativeCastMessage, spells2da[i].AsInteger("AltMessage"));
 
-                tmpSpell.Icon = Resources.AddResource(spells2da[i].AsString("IconResRef"), Nwn.NWNResourceType.TGA);
+                tmpSpell.Icon = Resources.AddResource(spells2da[i].AsString("IconResRef"), NWNResourceType.TGA);
                 tmpSpell.School = Enum.Parse<SpellSchool>(spells2da[i].AsString("School") ?? "", true);
                 tmpSpell.Range = Enum.Parse<SpellRange>(spells2da[i].AsString("Range") ?? "", true);
 
@@ -824,7 +824,7 @@ namespace Eos.Import
                 tmpPoison.SecondaryEffectScript = poison2da[i].AsString("Script_2");
                 tmpPoison.Cost = poison2da[i].AsFloat("Cost") ?? 0.0;
                 tmpPoison.OnHitApplied = poison2da[i].AsBoolean("OnHitApplied");
-                //tmpPoison.ImpactVFX
+                tmpPoison.ImpactVFX = poison2da[i].AsString("VFX_Impact");
 
                 Standard.Poisons.Add(tmpPoison);
             }

@@ -44,6 +44,17 @@ namespace Eos.Models.Tables
         public BaseTable()
         {
             InitializeData();
+            this._items.CollectionChanged += Items_CollectionChanged;
+        }
+
+        ~BaseTable()
+        {
+            this._items.CollectionChanged -= Items_CollectionChanged;
+        }
+
+        private void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            Changed();
         }
 
         protected virtual void InitializeData()
@@ -119,6 +130,16 @@ namespace Eos.Models.Tables
             tableJson.Add("Items", itemArr);
 
             return tableJson;
+        }
+
+        protected virtual void Changed()
+        {
+
+        }
+
+        protected override String GetLabel()
+        {
+            return Name;
         }
     }
 }

@@ -14,10 +14,24 @@ namespace Eos.Models
 {
     public class Spell : BaseModel
     {
+        private SpellSchool _spellSchool = SpellSchool.G;
+        private SpellType _spellType = SpellType.Spell;
+
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
         public TLKStringSet AlternativeCastMessage { get; set; } = new TLKStringSet();
-        public SpellSchool School { get; set; } = SpellSchool.G;
+        public SpellSchool School
+        {
+            get { return _spellSchool; }
+            set
+            {
+                if (_spellSchool != value)
+                {
+                    _spellSchool = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
         public SpellRange Range { get; set; } = SpellRange.P;
         public SpellComponent Components { get; set; } = SpellComponent.V | SpellComponent.S;
         public MetaMagicType AvailableMetaMagic { get; set; } = (MetaMagicType)0;
@@ -53,7 +67,18 @@ namespace Eos.Models
         public Spell? SubSpell8 { get; set; }
         public AICategory? Category { get; set; }
         public Spell? ParentSpell { get; set; }
-        public SpellType Type { get; set; } = SpellType.Spell;
+        public SpellType Type
+        {
+            get { return _spellType; }
+            set
+            {
+                if (_spellType != value)
+                {
+                    _spellType = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
         public bool UseConcentration { get; set; } = true;
         public bool IsCastSpontaneously { get; set; } = false;
         public bool IsHostile { get; set; }
@@ -68,6 +93,12 @@ namespace Eos.Models
         protected override String GetLabel()
         {
             return Name;
+        }
+
+        protected override void SetDefaultValues()
+        {
+            Name[MasterRepository.Project.DefaultLanguage].Text = "New Spell";
+            Name[MasterRepository.Project.DefaultLanguage].TextF = "New Spell";
         }
 
         public override void ResolveReferences()
@@ -87,8 +118,7 @@ namespace Eos.Models
 
         public override void FromJson(JsonObject json)
         {
-            this.ID = ParseGuid(json["ID"]?.GetValue<String>());
-            this.Index = json["Index"]?.GetValue<int?>();
+            base.FromJson(json);
             this.Name.FromJson(json["Name"]?.AsObject());
             this.Description.FromJson(json["Description"]?.AsObject());
             this.AlternativeCastMessage.FromJson(json["AlternativeCastMessage"]?.AsObject());
@@ -142,9 +172,7 @@ namespace Eos.Models
 
         public override JsonObject ToJson()
         {
-            var spellJson = new JsonObject();
-            spellJson.Add("ID", this.ID.ToString());
-            spellJson.Add("Index", this.Index);
+            var spellJson = base.ToJson();
             spellJson.Add("Name", this.Name.ToJson());
             spellJson.Add("Description", this.Description.ToJson());
             spellJson.Add("AlternativeCastMessage", this.AlternativeCastMessage.ToJson());

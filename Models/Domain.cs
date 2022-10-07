@@ -33,6 +33,12 @@ namespace Eos.Models
             return Name;
         }
 
+        protected override void SetDefaultValues()
+        {
+            Name[MasterRepository.Project.DefaultLanguage].Text = "New Domain";
+            Name[MasterRepository.Project.DefaultLanguage].TextF = "New Domain";
+        }
+
         public override void ResolveReferences()
         {
             Level0Spell = Resolve(Level0Spell, MasterRepository.Spells);
@@ -50,8 +56,7 @@ namespace Eos.Models
 
         public override void FromJson(JsonObject json)
         {
-            this.ID = ParseGuid(json["ID"]?.GetValue<String>());
-            this.Index = json["Index"]?.GetValue<int?>();
+            base.FromJson(json);
             this.Name.FromJson(json["Name"]?.AsObject());
             this.Description.FromJson(json["Description"]?.AsObject());
             this.Icon = json["Icon"]?.GetValue<String>();
@@ -71,9 +76,7 @@ namespace Eos.Models
 
         public override JsonObject ToJson()
         {
-            var domainJson = new JsonObject();
-            domainJson.Add("ID", this.ID.ToString());
-            domainJson.Add("Index", this.Index);
+            var domainJson = base.ToJson();
             domainJson.Add("Name", this.Name.ToJson());
             domainJson.Add("Description", this.Description.ToJson());
             domainJson.Add("Icon", this.Icon);

@@ -8,17 +8,18 @@ using System.ComponentModel;
 using System.Collections.Specialized;
 using System.Collections;
 using System.Runtime.CompilerServices;
+using Eos.Models;
 
 namespace Eos.Repositories
 {
-    public class Repository<T> : INotifyCollectionChanged, INotifyPropertyChanged, IReadOnlyCollection<T?>, IReadOnlyList<T?>, IEnumerable<T?> where T : new()
+    public class Repository<T> : INotifyCollectionChanged, INotifyPropertyChanged, IReadOnlyCollection<T?>, IReadOnlyList<T?>, IEnumerable<T?> where T : INotifyPropertyChanged, new() 
     {
         protected ObservableCollection<T?> internalList = new ObservableCollection<T?>();
         private bool fireChangedEvent = true;
 
         public Repository()
         {
-            CollectionChanged += InternalListChanged;
+            internalList.CollectionChanged += InternalListChanged;
         }
 
         protected void RaisePropertyChanged(string? name = null)
@@ -26,27 +27,66 @@ namespace Eos.Repositories
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        public event NotifyCollectionChangedEventHandler? CollectionChanged
-        {
-            add
-            {
-                internalList.CollectionChanged += value;
-            }
-            remove
-            {
-                internalList.CollectionChanged -= value;
-            }
-        }
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         private void InternalListChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
+            if ((e.Action == NotifyCollectionChangedAction.Remove))
+            {
+                var items = e.OldItems;
+                if (items != null)
+                {
+                    foreach (var item in items.Cast<INotifyPropertyChanged>())
+                        item.PropertyChanged -= Item_PropertyChanged;
+                }
+            }
+            else
+            if ((e.Action == NotifyCollectionChangedAction.Add))
+            {
+                var items = e.NewItems;
+                if (items != null)
+                {
+                    foreach (var item in items.Cast<INotifyPropertyChanged>())
+                        item.PropertyChanged += Item_PropertyChanged;
+                }
+            }
+            else
+            if ((e.Action == NotifyCollectionChangedAction.Replace))
+            {
+                var oldItems = e.OldItems;
+                if (oldItems != null)
+                {
+                    foreach (var item in oldItems.Cast<INotifyPropertyChanged>())
+                        item.PropertyChanged -= Item_PropertyChanged;
+                }
+
+                var newItems = e.NewItems;
+                if (newItems != null)
+                {
+                    foreach (var item in newItems.Cast<INotifyPropertyChanged>())
+                        item.PropertyChanged += Item_PropertyChanged;
+                }
+            }
+
             if (fireChangedEvent)
-                Changed();
+                RaiseCollectionChanged(e);
+        }
+
+        protected void RaiseCollectionChanged(NotifyCollectionChangedEventArgs e)
+        {
+            if (CollectionChanged != null)
+                CollectionChanged(this, e);
+            Changed();
+        }
+
+        private void Item_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         protected virtual void Changed()
-        {
-
+        { 
+            
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

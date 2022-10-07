@@ -1,4 +1,5 @@
 ﻿using Eos.Nwn.Tlk;
+using Eos.Repositories;
 using Eos.Types;
 using System;
 using System.Collections.Generic;
@@ -26,11 +27,17 @@ namespace Eos.Models
         public String? SecondaryEffectScript { get; set; }
         public double Cost { get; set; } = 1.0; // Unused?
         public bool OnHitApplied { get; set; } = false; // Unused?
-        public IntPtr ImpactVFX { get; set; }
+        public String? ImpactVFX { get; set; }
 
         protected override String GetLabel()
         {
             return Name;
+        }
+
+        protected override void SetDefaultValues()
+        {
+            Name[MasterRepository.Project.DefaultLanguage].Text = "New Poison";
+            Name[MasterRepository.Project.DefaultLanguage].TextF = "New Poison";
         }
 
         public override void ResolveReferences()
@@ -40,8 +47,7 @@ namespace Eos.Models
 
         public override void FromJson(JsonObject json)
         {
-            this.ID = ParseGuid(json["ID"]?.GetValue<String>());
-            this.Index = json["Index"]?.GetValue<int?>();
+            base.FromJson(json);
             this.Name.FromJson(json["Name"]?.AsObject());
             this.SaveDC = json["SaveDC"]?.GetValue<int>() ?? 10;
             this.HandleDC = json["HandleDC"]?.GetValue<int>() ?? 0;
@@ -55,14 +61,12 @@ namespace Eos.Models
             this.SecondaryEffectScript = json["SecondaryEffectScript"]?.GetValue<String>();
             this.Cost = json["Cost"]?.GetValue<double>() ?? 1.0;
             this.OnHitApplied = json["OnHitApplied"]?.GetValue<bool>() ?? false;
-            this.ImpactVFX = IntPtr.Zero; // !
+            this.ImpactVFX = json["ImpactVFX"]?.GetValue<String>();
         }
 
         public override JsonObject ToJson()
         {
-            var poisonJson = new JsonObject();
-            poisonJson.Add("ID", this.ID.ToString());
-            poisonJson.Add("Index", this.Index);
+            var poisonJson = base.ToJson();
             poisonJson.Add("Name", this.Name.ToJson());
             poisonJson.Add("SaveDC", this.SaveDC);
             poisonJson.Add("HandleDC", this.HandleDC);
@@ -76,7 +80,7 @@ namespace Eos.Models
             poisonJson.Add("SecondaryEffectScript", this.SecondaryEffectScript);
             poisonJson.Add("Cost", this.Cost);
             poisonJson.Add("OnHitApplied", this.OnHitApplied);
-            poisonJson.Add("ImpactVFX", null); // !
+            poisonJson.Add("ImpactVFX", this.ImpactVFX);
 
             return poisonJson;
         }

@@ -1,4 +1,5 @@
-﻿using Eos.Nwn.Tlk;
+﻿using Eos.Models;
+using Eos.Nwn.Tlk;
 using Eos.ViewModels.Base;
 using Prism.Commands;
 using System;
@@ -8,9 +9,17 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace Eos.ViewModels
 {
+    public class ViewModelErrorEventArgs : EventArgs
+    {
+        public String Message { get; set; } = String.Empty;
+    }
+
+    public delegate void ErrorEventHandler(ViewModelBase viewModel, ViewModelErrorEventArgs args);
+
     public class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -20,6 +29,13 @@ namespace Eos.ViewModels
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        public event ErrorEventHandler? OnError;
+
+        protected void DoError(String message)
+        {
+            OnError?.Invoke(this, new ViewModelErrorEventArgs() { Message = message });
         }
 
         // Commands
@@ -48,6 +64,11 @@ namespace Eos.ViewModels
             MessageDispatcher.Send(MessageType.NewDetail, detailModelType);
         });
 
+        public DelegateCommand<BaseModel> OverrideDetailCommand { get; private set; } = new DelegateCommand<BaseModel>(originalModel =>
+        {
+            MessageDispatcher.Send(MessageType.OverrideDetail, originalModel);
+        });
+
         public DelegateCommand<object> OpenDetailCommand { get; private set; } = new DelegateCommand<object>(detailModel =>
         {
             MessageDispatcher.Send(MessageType.OpenDetail, detailModel);
@@ -61,6 +82,11 @@ namespace Eos.ViewModels
         public DelegateCommand<object> CloseDetailCommand { get; private set; } = new DelegateCommand<object>(detailModel =>
         {
             MessageDispatcher.Send(MessageType.CloseDetail, detailModel);
+        });
+
+        public DelegateCommand<object> DeleteDetailCommand { get; private set; } = new DelegateCommand<object>(detailModel =>
+        {
+            MessageDispatcher.Send(MessageType.DeleteDetail, detailModel);
         });
     }
 }

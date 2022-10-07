@@ -64,6 +64,12 @@ namespace Eos.Models
             return Guid.Parse(value);
         }
 
+        public static Guid? ParseNullableGuid(String? value)
+        {
+            if (value == null) return null;
+            return Guid.Parse(value);
+        }
+
         public static T CreateRef<T>(Guid guid) where T : BaseModel, new()
         {
             T result = new T();

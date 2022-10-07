@@ -22,12 +22,6 @@ namespace Eos.ViewModels
         {
             DeleteFeatItemCommand = new DelegateCommand<FeatsTableItem>(DeleteFeatItem);
             AddFeatItemCommand = new DelegateCommand<FeatListType?>(AddFeatItem);
-            MessageDispatcher.Subscribe(MessageType.FeatTableItemChanged, MessageHandler);
-        }
-
-        private void MessageHandler(MessageType type, object? param)
-        {
-            Data.Changed();
         }
 
         protected override string GetHeader()
@@ -47,14 +41,12 @@ namespace Eos.ViewModels
                 else
                     newItem.GrantedOnLevel = -1;
                 Data.Add(newItem);
-                Data.Changed();
             }
         }
 
         private void DeleteFeatItem(FeatsTableItem item)
         {
             this.Data.Remove(item);
-            Data.Changed();
         }
 
         public DelegateCommand<FeatsTableItem> DeleteFeatItemCommand { get; private set; }

@@ -57,6 +57,12 @@ namespace Eos.Models
             return Name;
         }
 
+        protected override void SetDefaultValues()
+        {
+            Name[MasterRepository.Project.DefaultLanguage].Text = "New Feat";
+            Name[MasterRepository.Project.DefaultLanguage].TextF = "New Feat";
+        }
+
         public override void ResolveReferences()
         {
             RequiredFeat1 = Resolve(RequiredFeat1, MasterRepository.Feats);
@@ -76,8 +82,7 @@ namespace Eos.Models
 
         public override void FromJson(JsonObject json)
         {
-            this.ID = ParseGuid(json["ID"]?.GetValue<String>());
-            this.Index = json["Index"]?.GetValue<int?>();
+            base.FromJson(json);
             this.Name.FromJson(json["Name"]?.AsObject());
             this.Description.FromJson(json["Description"]?.AsObject());
             this.Icon = json["Icon"]?.GetValue<String>();
@@ -120,9 +125,7 @@ namespace Eos.Models
 
         public override JsonObject ToJson()
         {
-            var featJson = new JsonObject();
-            featJson.Add("ID", this.ID.ToString());
-            featJson.Add("Index", this.Index);
+            var featJson = base.ToJson();
             featJson.Add("Name", this.Name.ToJson());
             featJson.Add("Description", this.Description.ToJson());
             featJson.Add("Icon", this.Icon);

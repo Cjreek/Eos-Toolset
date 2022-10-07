@@ -80,6 +80,12 @@ namespace Eos.Models
             return Name;
         }
 
+        protected override void SetDefaultValues()
+        {
+            Name[MasterRepository.Project.DefaultLanguage].Text = "New Class";
+            Name[MasterRepository.Project.DefaultLanguage].TextF = "New Class";
+        }
+
         public override void ResolveReferences()
         {
             AttackBonusTable = Resolve(AttackBonusTable, MasterRepository.AttackBonusTables);
@@ -96,8 +102,7 @@ namespace Eos.Models
 
         public override void FromJson(JsonObject json)
         {
-            this.ID = ParseGuid(json["ID"]?.GetValue<String>());
-            this.Index = json["Index"]?.GetValue<int?>();
+            base.FromJson(json);
             this.Name.FromJson(json["Name"]?.AsObject());
             this.NamePlural.FromJson(json["NamePlural"]?.AsObject());
             this.Description.FromJson(json["Description"]?.AsObject());
@@ -147,9 +152,7 @@ namespace Eos.Models
 
         public override JsonObject ToJson()
         {
-            var classJson = new JsonObject();
-            classJson.Add("ID", this.ID.ToString());
-            classJson.Add("Index", this.Index);
+            var classJson = base.ToJson();
             classJson.Add("Name", this.Name.ToJson());
             classJson.Add("NamePlural", this.NamePlural.ToJson());
             classJson.Add("Description", this.Description.ToJson());

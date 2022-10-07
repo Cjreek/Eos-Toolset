@@ -94,6 +94,11 @@ namespace Eos.Repositories
             return Project.New(modelType);
         }
 
+        public static void Add(BaseModel model)
+        {
+            Project.Add(model);
+        }
+
         public static ResourceRepository Resources { get { return resources; } }
 
         public static RepositoryCollection Standard { get { return standardCategory; } }

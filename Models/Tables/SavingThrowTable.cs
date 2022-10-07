@@ -9,6 +9,11 @@ namespace Eos.Models.Tables
 {
     public class SavingThrowTable : BaseTable<SavingThrowTableItem>
     {
+        protected override void SetDefaultValues()
+        {
+            Name = "NEW_SAVES_TBL";
+        }
+
         protected override void InitializeData()
         {
             for (int i = 0; i < GetMaximumItems(); i++)

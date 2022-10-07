@@ -49,6 +49,12 @@ namespace Eos.Models
             return Name;
         }
 
+        protected override void SetDefaultValues()
+        {
+            Name[MasterRepository.Project.DefaultLanguage].Text = "New Race";
+            Name[MasterRepository.Project.DefaultLanguage].TextF = "New Race";
+        }
+
         public override void ResolveReferences()
         {
             FavoredClass = Resolve(FavoredClass, MasterRepository.Classes);
@@ -60,9 +66,7 @@ namespace Eos.Models
 
         public override JsonObject ToJson()
         {
-            var raceJson = new JsonObject();
-            raceJson.Add("ID", this.ID.ToString());
-            raceJson.Add("Index", this.Index);
+            var raceJson = base.ToJson();
             raceJson.Add("Name", this.Name.ToJson());
             raceJson.Add("NamePlural", this.NamePlural.ToJson());
             raceJson.Add("Adjective", this.Adjective.ToJson());
@@ -98,8 +102,7 @@ namespace Eos.Models
 
         public override void FromJson(JsonObject json)
         {
-            this.ID = ParseGuid(json["ID"]?.GetValue<String>());
-            this.Index = json["Index"]?.GetValue<int?>();
+            base.FromJson(json);
             this.Name.FromJson(json["Name"]?.AsObject());
             this.NamePlural.FromJson(json["NamePlural"]?.AsObject());
             this.Adjective.FromJson(json["Adjective"]?.AsObject());

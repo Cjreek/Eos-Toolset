@@ -1,4 +1,5 @@
 ﻿using Eos.Nwn.Tlk;
+using Eos.Repositories;
 using Eos.Types;
 using System;
 using System.Collections.Generic;
@@ -28,14 +29,19 @@ namespace Eos.Models
             return Name;
         }
 
+        protected override void SetDefaultValues()
+        {
+            Name[MasterRepository.Project.DefaultLanguage].Text = "New Skill";
+            Name[MasterRepository.Project.DefaultLanguage].TextF = "New Skill";
+        }
+
         public override void ResolveReferences()
         {
         }
 
         public override void FromJson(JsonObject json)
         {
-            this.ID = ParseGuid(json["ID"]?.GetValue<String>());
-            this.Index = json["Index"]?.GetValue<int?>();
+            base.FromJson(json);
             this.Name.FromJson(json["Name"]?.AsObject());
             this.Description.FromJson(json["Description"]?.AsObject());
             this.Icon = json["Icon"]?.GetValue<String>();
@@ -50,9 +56,7 @@ namespace Eos.Models
 
         public override JsonObject ToJson()
         {
-            var skillJson = new JsonObject();
-            skillJson.Add("ID", this.ID.ToString());
-            skillJson.Add("Index", this.Index);
+            var skillJson = base.ToJson();
             skillJson.Add("Name", this.Name.ToJson());
             skillJson.Add("Description", this.Description.ToJson());
             skillJson.Add("Icon", this.Icon);

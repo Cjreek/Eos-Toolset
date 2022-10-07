@@ -1,4 +1,5 @@
 ﻿using Eos.Nwn.Tlk;
+using Eos.Repositories;
 using Eos.Types;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,12 @@ namespace Eos.Models
             return Name;
         }
 
+        protected override void SetDefaultValues()
+        {
+            Name[MasterRepository.Project.DefaultLanguage].Text = "New Disease";
+            Name[MasterRepository.Project.DefaultLanguage].TextF = "New Disease";
+        }
+
         public override void ResolveReferences()
         {
 
@@ -41,8 +48,7 @@ namespace Eos.Models
 
         public override void FromJson(JsonObject json)
         {
-            this.ID = ParseGuid(json["ID"]?.GetValue<String>());
-            this.Index = json["Index"]?.GetValue<int?>();
+            base.FromJson(json);
             this.Name.FromJson(json["Name"]?.AsObject());
             this.FirstSaveDC = json["FirstSaveDC"]?.GetValue<int>() ?? 15;
             this.SecondSaveDC = json["SecondSaveDC"]?.GetValue<int>() ?? 10;
@@ -62,9 +68,7 @@ namespace Eos.Models
 
         public override JsonObject ToJson()
         {
-            var diseaseJson = new JsonObject();
-            diseaseJson.Add("ID", this.ID.ToString());
-            diseaseJson.Add("Index", this.Index);
+            var diseaseJson = base.ToJson();
             diseaseJson.Add("Name", this.Name.ToJson());
             diseaseJson.Add("FirstSaveDC", this.FirstSaveDC);
             diseaseJson.Add("SecondSaveDC", this.SecondSaveDC);

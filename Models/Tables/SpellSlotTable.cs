@@ -8,6 +8,11 @@ namespace Eos.Models.Tables
 {
     public class SpellSlotTable : BaseTable<SpellSlotTableItem>
     {
+        protected override void SetDefaultValues()
+        {
+            Name = "NEW_SPSLOT_TBL";
+        }
+
         protected override void InitializeData()
         {
             for (int i = 0; i < GetMaximumItems(); i++)

@@ -55,14 +55,19 @@ namespace Eos.Models
             return Name;
         }
 
+        protected override void SetDefaultValues()
+        {
+            Name[MasterRepository.Project.DefaultLanguage].Text = "New Soundset";
+            Name[MasterRepository.Project.DefaultLanguage].TextF = "New Soundset";
+        }
+
         public override void ResolveReferences()
         {
         }
 
         public override void FromJson(JsonObject json)
         {
-            this.ID = ParseGuid(json["ID"]?.GetValue<String>());
-            this.Index = json["Index"]?.GetValue<int?>();
+            base.FromJson(json);
             this.Name.FromJson(json["Name"]?.AsObject());
             this.Gender = JsonToEnum<Gender>(json["Gender"]) ?? Gender.Male;
             this.Type = JsonToEnum<SoundsetType>(json["Type"]) ?? SoundsetType.Player;
@@ -83,9 +88,7 @@ namespace Eos.Models
 
         public override JsonObject ToJson()
         {
-            var soundsetJson = new JsonObject();
-            soundsetJson.Add("ID", this.ID.ToString());
-            soundsetJson.Add("Index", this.Index);
+            var soundsetJson = base.ToJson();
             soundsetJson.Add("Name", this.Name.ToJson());
             soundsetJson.Add("Gender", EnumToJson(this.Gender));
             soundsetJson.Add("Type", EnumToJson(this.Type));
