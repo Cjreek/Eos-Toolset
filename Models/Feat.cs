@@ -14,6 +14,8 @@ namespace Eos.Models
 {
     public class Feat : BaseModel
     {
+        private FeatCategory _toolsetCategory = FeatCategory.Other;
+
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
         public int? MinAttackBonus { get; set; }
@@ -43,7 +45,18 @@ namespace Eos.Models
         public int? RequiredSkill1Minimum { get; set; }
         public Skill? RequiredSkill2 { get; set; }
         public int? RequiredSkill2Minimum { get; set; }
-        public FeatCategory ToolsetCategory { get; set; } = FeatCategory.Other;
+        public FeatCategory ToolsetCategory
+        {
+            get { return _toolsetCategory; }
+            set
+            {
+                if (_toolsetCategory != value)
+                {
+                    _toolsetCategory = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
         public bool? IsHostile { get; set; } = false;
         public int? MinLevel { get; set; }
         public CharacterClass? MinLevelClass { get; set; }

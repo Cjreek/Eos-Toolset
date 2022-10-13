@@ -93,6 +93,7 @@ namespace Eos.Models
             if (result != null)
             {
                 result.FromJson(this.ToJson());
+                result.ResolveReferences();
                 result.ID = Guid.Empty;
                 return result;
             }

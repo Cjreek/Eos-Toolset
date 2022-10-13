@@ -48,7 +48,7 @@
                     <GridViewColumn Header="Skill" Width="300">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <uc:SkillComboBox SelectedValue="{Binding Path=Skill}" IsNullable="False" Margin="-6,-1,-6,-5"/>
+                                <uc:SkillComboBox SelectedValue="{Binding Path=Skill}" IsNullable="False" Margin="-6,-1,-6,-3"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

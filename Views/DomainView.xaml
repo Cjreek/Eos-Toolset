@@ -79,11 +79,11 @@
                         <ColumnDefinition Width="*" MinWidth="150"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="22"/>
+                        <RowDefinition Height="auto" MinHeight="22"/>
+                        <RowDefinition Height="auto" MinHeight="22"/>
+                        <RowDefinition Height="auto" MinHeight="22"/>
+                        <RowDefinition Height="auto" MinHeight="22"/>
                     </Grid.RowDefinitions>
 
                     <!--Granted Feat-->

@@ -11,5 +11,7 @@ namespace Eos.Repositories
     {
         void AddBase(BaseModel model);
         void RemoveBase(BaseModel model);
+        bool HasOverride(BaseModel model);
+        BaseModel? GetOverride(BaseModel model);
     }
 }

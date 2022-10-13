@@ -16,6 +16,7 @@ using Eos.Nwn.Tlk;
 using Eos.Services;
 using Eos.Views;
 using System.Globalization;
+using Eos.ViewModels.Dialogs;
 
 namespace Eos.ViewModels
 {
@@ -69,8 +70,11 @@ namespace Eos.ViewModels
             }
         }
 
-        private void OpenDetail(BaseModel model, bool changeView)
+        private void OpenDetail(BaseModel model, bool jumpToOverride, bool changeView)
         {
+            if (jumpToOverride)
+                model = MasterRepository.Project.GetOverride(model) ?? model;
+
             if (!detailViewDict.ContainsKey(model))
             {
                 var detailView = ViewModelFactory.CreateViewModel(model);
@@ -96,17 +100,17 @@ namespace Eos.ViewModels
             MasterRepository.Project.Delete(model);
         }
 
-        private void MessageHandler(MessageType type, object? param)
+        private void MessageHandler(MessageType type, object? message, object? param)
         {
-            if (param is BaseModel model)
+            if (message is BaseModel model)
             {
                 switch (type)
                 {
                     case MessageType.OpenDetail:
-                        OpenDetail(model, true);
+                        OpenDetail(model, (bool?)param ?? false, true);
                         break;
                     case MessageType.OpenDetailSilent:
-                        OpenDetail(model, false);
+                        OpenDetail(model, (bool?)param ?? false, false);
                         break;
                     case MessageType.CloseDetail:
                         CloseDetail(model);
@@ -118,11 +122,18 @@ namespace Eos.ViewModels
                     case MessageType.OverrideDetail:
                         if (model != null)
                         {
+                            var overrideModel = MasterRepository.Project.GetOverride(model);
+                            if (overrideModel != null)
+                            {
+                                MessageDispatcher.Send(MessageType.OpenDetail, overrideModel); 
+                                return;
+                            }
+
                             var newModel = model.Override();
                             if (newModel != null)
                             {
                                 MasterRepository.Add(newModel);
-                                MessageDispatcher.Send(MessageType.OpenDetail, newModel);
+                                MessageDispatcher.Send(MessageType.OpenDetail, newModel, param);
                             }
                         }
                         break;
@@ -133,8 +144,8 @@ namespace Eos.ViewModels
                 switch(type)
                 {
                     case MessageType.NewDetail:
-                        var newModel = MasterRepository.New((Type?)param ?? typeof(BaseModel));
-                        MessageDispatcher.Send(MessageType.OpenDetail, newModel);
+                        var newModel = MasterRepository.New((Type?)message ?? typeof(BaseModel));
+                        MessageDispatcher.Send(MessageType.OpenDetail, newModel, param);
                         break;
 
                     case MessageType.NewProject:
@@ -142,8 +153,8 @@ namespace Eos.ViewModels
                         break;
 
                     case MessageType.OpenProject:
-                        MasterRepository.Project.Load((String?)param ?? "");
-                        MessageDispatcher.Send(MessageType.ChangeLanguage, MasterRepository.Project.DefaultLanguage);
+                        MasterRepository.Project.Load((String?)message ?? "");
+                        MessageDispatcher.Send(MessageType.ChangeLanguage, MasterRepository.Project.DefaultLanguage, null);
                         break;
 
                     case MessageType.SaveProject:
@@ -151,7 +162,7 @@ namespace Eos.ViewModels
                         break;
 
                     case MessageType.ChangeLanguage:
-                        CurrentLanguage = (TLKLanguage?)param ?? CurrentLanguage;
+                        CurrentLanguage = (TLKLanguage?)message ?? CurrentLanguage;
                         break;
                 }
             }

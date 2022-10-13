@@ -1,12 +1,16 @@
 ﻿using Eos.Config;
-using Eos.Import;
 using Eos.Models;
+using Eos.Nwn.Erf;
+using Eos.Nwn.Tlk;
+using Eos.Nwn.TwoDimensionalArray;
 using Eos.Repositories;
+using Eos.Services;
 using Eos.ViewModels;
 using Eos.ViewModels.Base;
 using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -23,6 +27,27 @@ using System.Windows.Shapes;
 
 namespace Eos
 {
+    class ItemCountConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is IEnumerable<object> list)
+            {
+                var count = list.Count();
+                if (count > 0)
+                    return String.Format("({0})", count);
+                return String.Empty;
+            }
+
+            return "Invalid List";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     class IsViewModelValueConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -168,6 +193,9 @@ namespace Eos
         {
             if (EosConfig.LastProject != "")
                 MessageDispatcher.Send(MessageType.OpenProject, EosConfig.LastProject);
+
+            var export = new CustomDataExport();
+            export.Export(MasterRepository.Project);
         }
     }
 }

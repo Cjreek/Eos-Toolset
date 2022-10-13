@@ -9,5 +9,6 @@
     <ext:BoolToVisibilityConverterEx x:Key="bool2VisCollapsed" FalseValue="Collapsed"/>
     <ext:FlagToBoolConverter x:Key="flagsToBool"/>
     <ext:EnumToStringConverter x:Key="enumToString"/>
+    <ext:IsNullConverter x:Key="isNullConverter"/>
 
 </ResourceDictionary>

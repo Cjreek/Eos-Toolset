@@ -43,4 +43,24 @@
     <Style TargetType="{x:Type uc:FlagListbox}">
         <Setter Property="Margin" Value="2,0,0,3"/>
     </Style>
+
+    <Style TargetType="{x:Type uc:ClassComboBox}">
+        <Setter Property="Margin" Value="2,0,0,3"/>
+    </Style>
+    
+    <Style TargetType="{x:Type uc:FeatComboBox}">
+        <Setter Property="Margin" Value="2,0,0,3"/>
+    </Style>
+
+    <Style TargetType="{x:Type uc:SpellComboBox}">
+        <Setter Property="Margin" Value="2,0,0,3"/>
+    </Style>
+
+    <Style TargetType="{x:Type uc:DomainComboBox}">
+        <Setter Property="Margin" Value="2,0,0,3"/>
+    </Style>
+
+    <Style TargetType="{x:Type uc:SkillComboBox}">
+        <Setter Property="Margin" Value="2,0,0,3"/>
+    </Style>
 </ResourceDictionary>

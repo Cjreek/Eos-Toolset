@@ -25,9 +25,37 @@ namespace Eos.Nwn
             }
         }
 
+        public static void Write<T>(BinaryWriter stream, T? data)
+        {
+            if (data != null)
+            {
+                var structSize = Marshal.SizeOf<T>();
+                var byteArray = new byte[structSize];
+
+                var ptr = Marshal.AllocHGlobal(structSize);
+                try
+                {
+                    Marshal.StructureToPtr(data, ptr, true);
+                    Marshal.Copy(ptr, byteArray, 0, structSize);
+                    stream.Write(byteArray, 0, structSize);
+                }
+                finally
+                {
+                    Marshal.FreeHGlobal(ptr);
+                }
+            }
+        }
+
         public static String ReadString(BinaryReader stream, int length)
         {
-            return new String(stream.ReadChars(length));
+            return new String(stream.ReadChars(length)).Trim('\0');
+        }
+
+        public static void WriteString(BinaryWriter stream, String data, bool writeNullbyte = true)
+        {
+            stream.Write(data.ToCharArray());
+            if (writeNullbyte)
+                stream.Write('\0');
         }
     }
 }

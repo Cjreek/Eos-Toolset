@@ -48,6 +48,16 @@ namespace Eos.Nwn.Tlk
         private TlkHeader header;
 
         private Dictionary<int, String> cache = new Dictionary<int, string>();
+        private List<String> strings = new List<string>();
+
+        public void New(TLKLanguage language)
+        {
+            header = new TlkHeader();
+            header.FileType = "TLK ".ToCharArray();
+            header.FileVersion = "V3.0".ToCharArray();
+            header.LanguageId = language;
+            strings.Add("Bad Strref");
+        }
 
         public void Load(String tlkFile)
         {
@@ -82,6 +92,59 @@ namespace Eos.Nwn.Tlk
             }
 
             return cache[strRef];
+        }
+
+        public int AddText(String text)
+        {
+            var result = strings.IndexOf(text);
+            if (result == -1)
+            {
+                strings.Add(text);
+                result = strings.Count - 1;
+            }
+
+            return result;
+        }
+
+        public void Save(Stream stream)
+        {
+            var writer = new BinaryWriter(stream);
+
+            header.StringCount = (UInt32)strings.Count;
+            header.StringEntriesOffset = (UInt32)(Marshal.SizeOf<TlkHeader>() + (header.StringCount * Marshal.SizeOf<TlkStringDataElement>()));
+            BinaryHelper.Write(writer, header);
+
+            var offset = (UInt32)0;
+            for (int i = 0; i < strings.Count; i++)
+            {
+                var strEntry = new TlkStringDataElement();
+                strEntry.SoundResRef = new char[16];
+                strEntry.Flags = TlkStringFlags.TEXT_PRESENT;
+                strEntry.VolumeVariance = 0;
+                strEntry.PitchVariance = 0;
+                strEntry.OffsetToString = offset;
+                strEntry.StringSize = (UInt32)strings[i].Length;
+                strEntry.SoundLength = 0;
+                BinaryHelper.Write(writer, strEntry);
+
+                offset += strEntry.StringSize;
+            }
+
+            for (int i = 0; i < strings.Count; i++)
+                BinaryHelper.WriteString(writer, strings[i], false);
+        }
+
+        public void Save(String filename)
+        {
+            var fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite);
+            try
+            {
+                Save(fs);
+            }
+            finally
+            {
+                fs.Close();
+            }
         }
 
         public void Close()

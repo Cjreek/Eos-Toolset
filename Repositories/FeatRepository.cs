@@ -10,6 +10,11 @@ namespace Eos.Repositories
 {
     public class FeatRepository : ModelRepository<Feat>
     {
+        static FeatRepository()
+        {
+            RepositoryFactory.RegisterRepositoryClass<Feat>(typeof(FeatRepository));
+        }
+
         public FeatRepository(bool isReadonly) : base(isReadonly)
         {
         }
@@ -20,6 +25,12 @@ namespace Eos.Repositories
         public IEnumerable<Feat?> Defensive => this.Where(feat => feat?.ToolsetCategory == FeatCategory.Defensive);
         public IEnumerable<Feat?> Magical => this.Where(feat => feat?.ToolsetCategory == FeatCategory.Magical);
         public IEnumerable<Feat?> Other => this.Where(feat => feat?.ToolsetCategory == FeatCategory.Other);
+
+        protected override int GetCustomDataStartIndex()
+        {
+            return 1116;
+        }
+
 
         protected override void Changed()
         {

@@ -98,6 +98,7 @@ namespace Eos.Models
             Requirements = Resolve(Requirements, MasterRepository.PrerequisiteTables);
             StatGainTable = Resolve(StatGainTable, MasterRepository.StatGainTables);
             DefaultPackage = Resolve(DefaultPackage, MasterRepository.ClassPackages);
+            Spellbook = Resolve(Spellbook, MasterRepository.Spellbooks);
         }
 
         public override void FromJson(JsonObject json)

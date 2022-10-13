@@ -10,6 +10,11 @@ namespace Eos.Repositories
 {
     public class SpellRepository : ModelRepository<Spell>
     {
+        static SpellRepository()
+        {
+            RepositoryFactory.RegisterRepositoryClass<Spell>(typeof(SpellRepository));
+        }
+
         public SpellRepository(bool isReadonly) : base(isReadonly)
         {
         }
@@ -27,6 +32,11 @@ namespace Eos.Repositories
         public IEnumerable<Spell?> IllusionSpells => this.Where(spell => (spell?.Type == SpellType.Spell) && (spell?.School == SpellSchool.I));
         public IEnumerable<Spell?> NecromancySpells => this.Where(spell => (spell?.Type == SpellType.Spell) && (spell?.School == SpellSchool.N));
         public IEnumerable<Spell?> TransmutationSpells => this.Where(spell => (spell?.Type == SpellType.Spell) && (spell?.School == SpellSchool.T));
+
+        protected override int GetCustomDataStartIndex()
+        {
+            return 840;
+        }
 
         protected override void Changed()
         {

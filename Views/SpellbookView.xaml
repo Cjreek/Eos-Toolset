@@ -53,7 +53,7 @@
                 <TextBlock Text="Spellbook" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}" IsEnabled="{Binding Data.Overrides, Converter={StaticResource isNullConverter}}"/>
             </Grid>
         </TabItem>
         <TabItem Header="Level 0" Width="100" Height="30">

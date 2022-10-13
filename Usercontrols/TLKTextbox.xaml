@@ -15,7 +15,7 @@
     </UserControl.Resources>
 
     <Grid>
-        <TextBox Grid.Column="0" 
+        <TextBox Grid.Column="0"
                  Background="{Binding ElementName=ucTLKTextbox, Path=Background}" Foreground="{Binding ElementName=ucTLKTextbox, Path=Foreground}"
                  BorderThickness="{Binding ElementName=ucTLKTextbox, Path=InnerBorderThickness}" BorderBrush="{Binding ElementName=ucTLKTextbox, Path=InnerBorderBrush}"
                  AcceptsReturn="{Binding ElementName=ucTLKTextbox, Path=AcceptsReturn}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"

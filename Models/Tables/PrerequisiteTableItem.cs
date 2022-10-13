@@ -1,4 +1,5 @@
-﻿using Eos.Types;
+﻿using Eos.Repositories;
+using Eos.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,20 +37,54 @@ namespace Eos.Models.Tables
         private object? JsonToParam(JsonNode? node)
         {
             if (node == null) return null;
-            var element = node.GetValue<JsonElement>();
-            
-            switch (element.ValueKind)
+            if (node.AsValue().TryGetValue<JsonElement>(out JsonElement element))
             {
-                case JsonValueKind.String:
-                    return element.GetString();
-                case JsonValueKind.Number:
-                    if (element.TryGetInt32(out int intValue))
-                        return intValue;
-                    else
-                        return element.GetDouble();
+                switch (element.ValueKind)
+                {
+                    case JsonValueKind.String:
+                        return element.GetString();
+                    case JsonValueKind.Number:
+                        if (element.TryGetInt32(out int intValue))
+                            return intValue;
+                        else
+                            return element.GetDouble();
+                }
+            }
+            else
+            {
+                if (node.AsValue().TryGetValue<String>(out String? strValue))
+                    return strValue;
+                if (node.AsValue().TryGetValue<int>(out int intValue))
+                    return intValue;
+                if (node.AsValue().TryGetValue<double>(out double doubleValue))
+                    return doubleValue;
             }
 
             return null;
+        }
+
+        public override void ResolveReferences()
+        {
+            switch (this.RequirementType)
+            {
+                case RequirementType.CLASSOR:
+                case RequirementType.CLASSNOT:
+                    this.RequirementParam1 = BaseModel.Resolve((CharacterClass?)RequirementParam1, MasterRepository.Classes);
+                    break;
+
+                case RequirementType.FEAT:
+                case RequirementType.FEATOR:
+                    this.RequirementParam1 = BaseModel.Resolve((Feat?)RequirementParam1, MasterRepository.Feats);
+                    break;
+
+                case RequirementType.RACE:
+                    this.RequirementParam1 = BaseModel.Resolve((Race?)RequirementParam1, MasterRepository.Races);
+                    break;
+
+                case RequirementType.SKILL:
+                    this.RequirementParam1 = BaseModel.Resolve((Skill?)RequirementParam1, MasterRepository.Skills);
+                    break;
+            }
         }
 
         public override void FromJson(JsonObject json)
@@ -87,9 +122,9 @@ namespace Eos.Models.Tables
             if (param == null)
                 return null;
             if (param is int intValue)
-                return JsonValue.Create(intValue);
+                return JsonValue.Create<int>(intValue);
             if (param is String strValue)
-                return JsonValue.Create(strValue);
+                return JsonValue.Create<String>(strValue);
 
             return null;
         }

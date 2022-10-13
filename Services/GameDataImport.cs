@@ -17,11 +17,11 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace Eos.Import
+namespace Eos.Services
 {
     internal class GameDataImport
     {
-        private String nwnBasePath = "";
+        private string nwnBasePath = "";
         private TlkCollection tlk = new TlkCollection();
         private BifCollection bif = new BifCollection();
         private RepositoryCollection Standard = MasterRepository.Standard;
@@ -67,7 +67,7 @@ namespace Eos.Import
             }
         }
 
-        private void ImportRacialFeatsTable(String tablename, Guid guid)
+        private void ImportRacialFeatsTable(string tablename, Guid guid)
         {
             var tmpRacialFeatsTable = new RacialFeatsTable();
             tmpRacialFeatsTable.ID = guid;
@@ -147,7 +147,7 @@ namespace Eos.Import
             }
         }
 
-        private void ImportAttackBonusTable(String tablename, Guid guid)
+        private void ImportAttackBonusTable(string tablename, Guid guid)
         {
             var tmpAttackBonusTable = new AttackBonusTable();
             tmpAttackBonusTable.ID = guid;
@@ -168,7 +168,7 @@ namespace Eos.Import
             Standard.AttackBonusTables.Add(tmpAttackBonusTable);
         }
 
-        private void ImportFeatsTable(String tablename, Guid guid)
+        private void ImportFeatsTable(string tablename, Guid guid)
         {
             var tmpFeatsTable = new FeatsTable();
             tmpFeatsTable.ID = guid;
@@ -191,7 +191,7 @@ namespace Eos.Import
             Standard.FeatTables.Add(tmpFeatsTable);
         }
 
-        private void ImportSavingThrowTable(String tablename, Guid guid)
+        private void ImportSavingThrowTable(string tablename, Guid guid)
         {
             var tmpSavesTable = new SavingThrowTable();
             tmpSavesTable.ID = guid;
@@ -214,7 +214,7 @@ namespace Eos.Import
             Standard.SavingThrowTables.Add(tmpSavesTable);
         }
 
-        private void ImportBonusFeatsTable(String tablename, Guid guid)
+        private void ImportBonusFeatsTable(string tablename, Guid guid)
         {
             var tmpBFeatTable = new BonusFeatsTable();
             tmpBFeatTable.ID = guid;
@@ -235,7 +235,7 @@ namespace Eos.Import
             Standard.BonusFeatTables.Add(tmpBFeatTable);
         }
 
-        private void ImportSkillTable(String tablename, Guid guid)
+        private void ImportSkillTable(string tablename, Guid guid)
         {
             var skillTable = new SkillsTable();
             skillTable.ID = guid;
@@ -256,7 +256,7 @@ namespace Eos.Import
             Standard.SkillTables.Add(skillTable);
         }
 
-        private void ImportSpellSlotTable(String tablename, Guid guid)
+        private void ImportSpellSlotTable(string tablename, Guid guid)
         {
             var spellSlotTable = new SpellSlotTable();
             spellSlotTable.ID = guid;
@@ -286,7 +286,7 @@ namespace Eos.Import
             Standard.SpellSlotTables.Add(spellSlotTable);
         }
 
-        private void ImportKnownSpellsTable(String tablename, Guid guid)
+        private void ImportKnownSpellsTable(string tablename, Guid guid)
         {
             var knownSpellsTable = new KnownSpellsTable();
             knownSpellsTable.ID = guid;
@@ -316,7 +316,7 @@ namespace Eos.Import
             Standard.KnownSpellsTables.Add(knownSpellsTable);
         }
 
-        private void ImportPrerequisiteTable(String tablename, Guid guid)
+        private void ImportPrerequisiteTable(string tablename, Guid guid)
         {
             var preRequTable = new PrerequisiteTable();
             preRequTable.ID = guid;
@@ -355,7 +355,7 @@ namespace Eos.Import
                         tmpItem.RequirementParam1 = preRequTable2da[i].AsObject("ReqParam1");
                         break;
                 }
-                
+
                 tmpItem.RequirementParam2 = preRequTable2da[i].AsObject("ReqParam2");
                 preRequTable.Add(tmpItem);
             }
@@ -363,7 +363,7 @@ namespace Eos.Import
             Standard.PrerequisiteTables.Add(preRequTable);
         }
 
-        private void ImportStatGainTable(String tablename, Guid guid)
+        private void ImportStatGainTable(string tablename, Guid guid)
         {
             var statGainTable = new StatGainTable();
             statGainTable.ID = guid;
@@ -539,7 +539,7 @@ namespace Eos.Import
                 var spellbookName = classes2da[i].AsString("SpellTableColumn");
                 if (spellbookName != null)
                 {
-                    if(!Standard.Spellbooks.Contains(spellbookName))
+                    if (!((SpellbookRepository)Standard.Spellbooks).Contains(spellbookName))
                     {
                         Spellbook tmpSpellbook = new Spellbook();
                         tmpSpellbook.ID = GenerateGuid(spellbookName.ToLower(), 0);
@@ -547,7 +547,7 @@ namespace Eos.Import
                         Standard.Spellbooks.Add(tmpSpellbook);
                     }
 
-                    tmpClass.Spellbook = Standard.Spellbooks.GetByName(spellbookName);
+                    tmpClass.Spellbook = ((SpellbookRepository)Standard.Spellbooks).GetByName(spellbookName);
                 }
 
                 tmpClass.CasterLevelMultiplier = classes2da[i].AsFloat("CLMultiplier") ?? 1.0;
@@ -647,7 +647,7 @@ namespace Eos.Import
                 tmpFeat.RequiredFeat1 = CreateRef<Feat>(feat2da[i].AsInteger("PREREQFEAT1"));
                 tmpFeat.RequiredFeat2 = CreateRef<Feat>(feat2da[i].AsInteger("PREREQFEAT2"));
                 tmpFeat.UseableByAllClasses = feat2da[i].AsBoolean("ALLCLASSESCANUSE");
-                tmpFeat.Category = (!feat2da[i].IsNull("CATEGORY")) ? (AICategory)Enum.ToObject(typeof(AICategory), feat2da[i].AsInteger("CATEGORY") ?? 0) : null;
+                tmpFeat.Category = !feat2da[i].IsNull("CATEGORY") ? (AICategory)Enum.ToObject(typeof(AICategory), feat2da[i].AsInteger("CATEGORY") ?? 0) : null;
                 tmpFeat.OnUseEffect = CreateRef<Spell>(feat2da[i].AsInteger("SPELLID"));
                 tmpFeat.SuccessorFeat = CreateRef<Feat>(feat2da[i].AsInteger("SUCCESSOR"));
                 tmpFeat.CRModifier = feat2da[i].AsFloat("CRValue");
@@ -698,7 +698,7 @@ namespace Eos.Import
                 tmpSpell.Range = Enum.Parse<SpellRange>(spells2da[i].AsString("Range") ?? "", true);
 
                 var componentStr = spells2da[i].AsString("VS") ?? "";
-                SpellComponent components = (SpellComponent)0;
+                SpellComponent components = 0;
                 if (componentStr.Contains('v'))
                     components |= SpellComponent.V;
                 if (componentStr.Contains('s'))
@@ -707,16 +707,17 @@ namespace Eos.Import
                 tmpSpell.AvailableMetaMagic = (MetaMagicType)(spells2da[i].AsInteger("MetaMagic") ?? 0);
                 tmpSpell.TargetTypes = (SpellTarget)(spells2da[i].AsInteger("TargetType") ?? 0);
                 tmpSpell.ImpactScript = spells2da[i].AsString("ImpactScript");
-                
+                tmpSpell.InnateLevel = spells2da[i].AsInteger("Innate") ?? 0;
+
                 tmpSpell.ConjurationTime = spells2da[i].AsInteger("ConjTime") ?? 1500;
-                tmpSpell.ConjuringAnimation = (!spells2da[i].IsNull("ConjAnim")) ? Enum.Parse<SpellConjureAnimation>(spells2da[i].AsString("ConjAnim") ?? "", true) : null;
+                tmpSpell.ConjuringAnimation = !spells2da[i].IsNull("ConjAnim") ? Enum.Parse<SpellConjureAnimation>(spells2da[i].AsString("ConjAnim") ?? "", true) : null;
                 tmpSpell.ConjurationHeadEffect = spells2da[i].AsString("ConjHeadVisual");
                 tmpSpell.ConjurationHandEffect = spells2da[i].AsString("ConjHandVisual");
                 tmpSpell.ConjurationGroundEffect = spells2da[i].AsString("ConjGrndVisual");
                 tmpSpell.ConjurationSound = spells2da[i].AsString("ConjSoundVFX");
                 tmpSpell.ConjurationMaleSound = spells2da[i].AsString("ConjSoundMale");
                 tmpSpell.ConjurationFemaleSound = spells2da[i].AsString("ConjSoundFemale");
-                tmpSpell.CastingAnimation = (!spells2da[i].IsNull("CastAnim")) ? Enum.Parse<SpellCastAnimation>(spells2da[i].AsString("CastAnim") ?? "", true) : null;
+                tmpSpell.CastingAnimation = !spells2da[i].IsNull("CastAnim") ? Enum.Parse<SpellCastAnimation>(spells2da[i].AsString("CastAnim") ?? "", true) : null;
                 tmpSpell.CastTime = spells2da[i].AsInteger("CastTime") ?? 1000;
                 tmpSpell.CastingHeadEffect = spells2da[i].AsString("CastHeadVisual");
                 tmpSpell.CastingHandEffect = spells2da[i].AsString("CastHandVisual");
@@ -724,10 +725,10 @@ namespace Eos.Import
                 tmpSpell.CastingSound = spells2da[i].AsString("CastSound");
                 tmpSpell.HasProjectile = spells2da[i].AsBoolean("Proj");
                 tmpSpell.ProjectileModel = spells2da[i].AsString("ProjModel");
-                tmpSpell.ProjectileType = (!spells2da[i].IsNull("ProjType")) ? Enum.Parse<ProjectileType>(spells2da[i].AsString("ProjType") ?? "", true) : null;
-                tmpSpell.ProjectileSpawnPoint = (!spells2da[i].IsNull("ProjSpwnPoint")) ? Enum.Parse<ProjectileSource>(spells2da[i].AsString("ProjSpwnPoint") ?? "", true) : null;
+                tmpSpell.ProjectileType = !spells2da[i].IsNull("ProjType") ? Enum.Parse<ProjectileType>(spells2da[i].AsString("ProjType") ?? "", true) : null;
+                tmpSpell.ProjectileSpawnPoint = !spells2da[i].IsNull("ProjSpwnPoint") ? Enum.Parse<ProjectileSource>(spells2da[i].AsString("ProjSpwnPoint") ?? "", true) : null;
                 tmpSpell.ProjectileSound = spells2da[i].AsString("ProjSound");
-                tmpSpell.ProjectileOrientation = (!spells2da[i].IsNull("ProjOrientation")) ? Enum.Parse<ProjectileOrientation>(spells2da[i].AsString("ProjOrientation") ?? "", true) : null;
+                tmpSpell.ProjectileOrientation = !spells2da[i].IsNull("ProjOrientation") ? Enum.Parse<ProjectileOrientation>(spells2da[i].AsString("ProjOrientation") ?? "", true) : null;
 
                 tmpSpell.SubSpell1 = CreateRef<Spell>(spells2da[i].AsInteger("SubRadSpell1"));
                 tmpSpell.SubSpell2 = CreateRef<Spell>(spells2da[i].AsInteger("SubRadSpell2"));
@@ -738,9 +739,9 @@ namespace Eos.Import
                 tmpSpell.SubSpell7 = CreateRef<Spell>(spells2da[i].AsInteger("SubRadSpell7", -1));
                 tmpSpell.SubSpell8 = CreateRef<Spell>(spells2da[i].AsInteger("SubRadSpell8", -1));
 
-                tmpSpell.Category = (!spells2da[i].IsNull("Category")) ? (AICategory)Enum.ToObject(typeof(AICategory), spells2da[i].AsInteger("Category") ?? 0) : null;
+                tmpSpell.Category = !spells2da[i].IsNull("Category") ? (AICategory)Enum.ToObject(typeof(AICategory), spells2da[i].AsInteger("Category") ?? 0) : null;
                 tmpSpell.ParentSpell = CreateRef<Spell>(spells2da[i].AsInteger("Master"));
-                tmpSpell.Type = (!spells2da[i].IsNull("Category")) ? (SpellType)Enum.ToObject(typeof(SpellType), spells2da[i].AsInteger("UserType") ?? 0) : SpellType.Other;
+                tmpSpell.Type = !spells2da[i].IsNull("Category") ? (SpellType)Enum.ToObject(typeof(SpellType), spells2da[i].AsInteger("UserType") ?? 0) : SpellType.Other;
                 tmpSpell.UseConcentration = spells2da[i].AsBoolean("UseConcentration");
                 tmpSpell.IsCastSpontaneously = spells2da[i].AsBoolean("SpontaneouslyCast");
                 tmpSpell.IsHostile = spells2da[i].AsBoolean("HostileSetting");
@@ -748,9 +749,9 @@ namespace Eos.Import
                 tmpSpell.CounterSpell2 = CreateRef<Spell>(spells2da[i].AsInteger("Counter2"));
 
                 // Spellbook entries:
-                for (int j=0; j < spells2da.Columns.Count; j++)
+                for (int j = 0; j < spells2da.Columns.Count; j++)
                 {
-                    var spellbook = Standard.Spellbooks.GetByName(spells2da.Columns[j]);
+                    var spellbook = ((SpellbookRepository)Standard.Spellbooks).GetByName(spells2da.Columns[j]);
                     if (spellbook != null)
                     {
                         var level = spells2da[i].AsInteger(j);
@@ -784,13 +785,13 @@ namespace Eos.Import
                 tmpDisease.IncubationHours = disease2da[i].AsInteger("Incu_Hours") ?? 1;
                 tmpDisease.AbilityDamage1Dice = disease2da[i].AsInteger("Dice_1") ?? 1;
                 tmpDisease.AbilityDamage1DiceCount = disease2da[i].AsInteger("Dam_1") ?? 1;
-                tmpDisease.AbilityDamage1Type = (!disease2da[i].IsNull("Type_1")) ? (AbilityType)Enum.ToObject(typeof(SpellType), disease2da[i].AsInteger("Type_1") ?? 0) : null;
+                tmpDisease.AbilityDamage1Type = !disease2da[i].IsNull("Type_1") ? (AbilityType)Enum.ToObject(typeof(SpellType), disease2da[i].AsInteger("Type_1") ?? 0) : null;
                 tmpDisease.AbilityDamage2Dice = disease2da[i].AsInteger("Dice_2") ?? 1;
                 tmpDisease.AbilityDamage2DiceCount = disease2da[i].AsInteger("Dam_2") ?? 1;
-                tmpDisease.AbilityDamage2Type = (!disease2da[i].IsNull("Type_2")) ? (AbilityType)Enum.ToObject(typeof(SpellType), disease2da[i].AsInteger("Type_2") ?? 0) : null;
+                tmpDisease.AbilityDamage2Type = !disease2da[i].IsNull("Type_2") ? (AbilityType)Enum.ToObject(typeof(SpellType), disease2da[i].AsInteger("Type_2") ?? 0) : null;
                 tmpDisease.AbilityDamage3Dice = disease2da[i].AsInteger("Dice_3") ?? 1;
                 tmpDisease.AbilityDamage3DiceCount = disease2da[i].AsInteger("Dam_3") ?? 1;
-                tmpDisease.AbilityDamage3Type = (!disease2da[i].IsNull("Type_3")) ? (AbilityType)Enum.ToObject(typeof(SpellType), disease2da[i].AsInteger("Type_3") ?? 0) : null;
+                tmpDisease.AbilityDamage3Type = !disease2da[i].IsNull("Type_3") ? (AbilityType)Enum.ToObject(typeof(SpellType), disease2da[i].AsInteger("Type_3") ?? 0) : null;
                 tmpDisease.IncubationEndScript = disease2da[i].AsString("End_Incu_Script");
                 tmpDisease.DailyEffectScript = disease2da[i].AsString("24_Hour_Script");
 
@@ -816,11 +817,11 @@ namespace Eos.Import
                 tmpPoison.HandleDC = poison2da[i].AsInteger("Handle_DC") ?? 10;
                 tmpPoison.InitialAbilityDamageDice = poison2da[i].AsInteger("Dice_1") ?? 0;
                 tmpPoison.InitialAbilityDamageDiceCount = poison2da[i].AsInteger("Dam_1") ?? 0;
-                tmpPoison.InitialAbilityDamageType = (!poison2da[i].IsNull("Default_1")) ? Enum.Parse<AbilityType>(poison2da[i].AsString("Default_1") ?? "", true) : null;
+                tmpPoison.InitialAbilityDamageType = !poison2da[i].IsNull("Default_1") ? Enum.Parse<AbilityType>(poison2da[i].AsString("Default_1") ?? "", true) : null;
                 tmpPoison.InitialEffectScript = poison2da[i].AsString("Script_1");
                 tmpPoison.SecondaryAbilityDamageDice = poison2da[i].AsInteger("Dice_2") ?? 0;
                 tmpPoison.SecondaryAbilityDamageDiceCount = poison2da[i].AsInteger("Dam_2") ?? 0;
-                tmpPoison.SecondaryAbilityDamageType = (!poison2da[i].IsNull("Default_2")) ? Enum.Parse<AbilityType>(poison2da[i].AsString("Default_2") ?? "", true) : null;
+                tmpPoison.SecondaryAbilityDamageType = !poison2da[i].IsNull("Default_2") ? Enum.Parse<AbilityType>(poison2da[i].AsString("Default_2") ?? "", true) : null;
                 tmpPoison.SecondaryEffectScript = poison2da[i].AsString("Script_2");
                 tmpPoison.Cost = poison2da[i].AsFloat("Cost") ?? 0.0;
                 tmpPoison.OnHitApplied = poison2da[i].AsBoolean("OnHitApplied");
@@ -848,7 +849,7 @@ namespace Eos.Import
                 tmpPackage.ForClass = CreateRef<CharacterClass>(packages2da[i].AsInteger("ClassID", -1));
                 tmpPackage.PreferredAbility = Enum.Parse<AbilityType>(packages2da[i].AsString("Attribute") ?? "", true);
                 tmpPackage.Gold = packages2da[i].AsInteger("Gold") ?? 0;
-                tmpPackage.SpellSchool = (!packages2da[i].IsNull("School")) ? (SpellSchool)Enum.ToObject(typeof(SpellSchool), packages2da[i].AsInteger("School") ?? 0) : null;
+                tmpPackage.SpellSchool = !packages2da[i].IsNull("School") ? (SpellSchool)Enum.ToObject(typeof(SpellSchool), packages2da[i].AsInteger("School") ?? 0) : null;
                 tmpPackage.Domain1 = CreateRef<Domain>(packages2da[i].AsInteger("Domain1", -1));
                 tmpPackage.Domain2 = CreateRef<Domain>(packages2da[i].AsInteger("Domain2", -1));
                 tmpPackage.Associate = IntPtr.Zero; // ! (Associate)
@@ -876,19 +877,19 @@ namespace Eos.Import
 
                 if (!SetText(tmpSoundset.Name, soundset2da[i].AsInteger("STRREF"))) continue;
 
-                tmpSoundset.Gender = (!soundset2da[i].IsNull("GENDER")) ? (Gender)Enum.ToObject(typeof(Gender), soundset2da[i].AsInteger("GENDER") ?? 0) : Gender.Male;
-                tmpSoundset.Type = (!soundset2da[i].IsNull("TYPE")) ? (SoundsetType)Enum.ToObject(typeof(SoundsetType), soundset2da[i].AsInteger("TYPE") ?? 0) : SoundsetType.Player;
+                tmpSoundset.Gender = !soundset2da[i].IsNull("GENDER") ? (Gender)Enum.ToObject(typeof(Gender), soundset2da[i].AsInteger("GENDER") ?? 0) : Gender.Male;
+                tmpSoundset.Type = !soundset2da[i].IsNull("TYPE") ? (SoundsetType)Enum.ToObject(typeof(SoundsetType), soundset2da[i].AsInteger("TYPE") ?? 0) : SoundsetType.Player;
                 tmpSoundset.SoundsetResource = soundset2da[i].AsString("RESREF") ?? "";
 
                 var ssfResource = bif.ReadResource(tmpSoundset.SoundsetResource, NWNResourceType.SSF);
                 var ssf = new SsfFile(ssfResource.RawData);
-                for (int j=0; j < ssf.Data.Count; j++)
+                for (int j = 0; j < ssf.Data.Count; j++)
                 {
                     var soundsetEntry = tmpSoundset.Entries.GetByType((SoundsetEntryType)j);
                     if (soundsetEntry != null)
                     {
                         SetText(soundsetEntry.Text, ssf.Data[j].StringRef >= 0x01000000 ? null : (int)ssf.Data[j].StringRef);
-                        soundsetEntry.SoundFile = new String(ssf.Data[j].ResRef).Trim('\0');
+                        soundsetEntry.SoundFile = new string(ssf.Data[j].ResRef).Trim('\0');
                     }
                 }
 
@@ -999,7 +1000,7 @@ namespace Eos.Import
                 if (featTable == null) continue;
 
                 featTable.Items.Sort(p => p?.GrantedOnLevel == -1 ? int.MaxValue : p?.GrantedOnLevel);
-                for (int i=0; i < featTable.Count; i++)
+                for (int i = 0; i < featTable.Count; i++)
                 {
                     var item = featTable[i];
                     if (item == null) continue;
@@ -1120,7 +1121,7 @@ namespace Eos.Import
             Standard.RacialFeatsTables.Clear();
         }
 
-        public void Import(String nwnBasePath)
+        public void Import(string nwnBasePath)
         {
             this.nwnBasePath = nwnBasePath;
             tlk.Load(nwnBasePath);

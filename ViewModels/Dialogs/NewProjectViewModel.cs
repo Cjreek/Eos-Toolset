@@ -10,13 +10,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Eos.ViewModels
+namespace Eos.ViewModels.Dialogs
 {
-    public class NewProjectViewModel : ViewModelBase
+    public class NewProjectViewModel : DialogViewModel
     {
-        private String _projectFolder = "";
+        private string _projectFolder = "";
 
-        public string Title { get; set; } = "New Project";
         public string ProjectName { get; set; } = "New Project";
         public string ProjectFolder
         {
@@ -31,6 +30,11 @@ namespace Eos.ViewModels
             }
         }
         public TLKLanguage DefaultLanguage { get; set; }
+
+        protected override String GetWindowTitle()
+        {
+            return "New Project";
+        }
 
         public DelegateCommand<NewProjectViewModel> CloseCommand { get; private set; } = new DelegateCommand<NewProjectViewModel>(vm =>
         {
@@ -55,5 +59,15 @@ namespace Eos.ViewModels
             MessageDispatcher.Send(MessageType.ChangeLanguage, vm.DefaultLanguage);
             WindowService.Close(vm);
         });
+
+        protected override int GetDefaultWidth()
+        {
+            return 600;
+        }
+
+        protected override int GetDefaultHeight()
+        {
+            return 150;
+        }
     }
 }

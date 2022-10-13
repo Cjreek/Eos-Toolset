@@ -54,6 +54,10 @@ namespace Eos.ViewModels
                 return new StatGainTableViewModel(statGainTable);
             if (model is RacialFeatsTable racialFeatsTable)
                 return new RacialFeatsTableViewModel(racialFeatsTable);
+            if (model is SpellSlotTable spellSlotsTable)
+                return new SpellSlotTableViewModel(spellSlotsTable);
+            if (model is KnownSpellsTable knownSpellsTable)
+                return new KnownSpellsTableViewModel(knownSpellsTable);
 
             else
                 throw new ArgumentException("No viewmodel found", "model");

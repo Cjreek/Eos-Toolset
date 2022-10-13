@@ -1,4 +1,8 @@
 ﻿using Eos.Models;
+using Eos.Repositories;
+using Eos.Services;
+using Eos.ViewModels.Base;
+using Eos.ViewModels.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +48,19 @@ namespace Eos.Usercontrols
         private void btClear_Click(object sender, RoutedEventArgs e)
         {
             SetValue(SelectedValueProperty, null);
+        }
+
+        private void btSearch_Click(object sender, RoutedEventArgs e)
+        {
+            var viewModel = new SkillSearchViewModel(MasterRepository.Skills);
+            WindowService.OpenDialog(viewModel);
+            if (viewModel.ResultModel != null)
+                SetValue(SelectedValueProperty, viewModel.ResultModel);
+        }
+
+        private void btGoto_Click(object sender, RoutedEventArgs e)
+        {
+            MessageDispatcher.Send(MessageType.OpenDetail, SelectedValue, true);
         }
     }
 }

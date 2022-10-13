@@ -14,6 +14,10 @@ namespace Eos.Types
         public static readonly String BaseResourcePath;
         public static readonly String ConfigPath;
 
+        public static readonly String ExportFolder;
+        public static readonly String ExportTLKFolder;
+        public static readonly String ExportHAKFolder;
+
         public static readonly String ProjectFileExtension;
 
         public static readonly String RacesFilename;
@@ -77,6 +81,10 @@ namespace Eos.Types
 
             var baseResourceFolder = "Resources";
             BaseResourcePath = AppDataPath + baseResourceFolder + Path.DirectorySeparatorChar;
+
+            ExportFolder = @"Output\";
+            ExportHAKFolder = ExportFolder + @"hak\";
+            ExportTLKFolder = ExportFolder + @"tlk\";
 
             ProjectFileExtension = ".eosproj";
 

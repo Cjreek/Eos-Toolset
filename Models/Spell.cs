@@ -37,6 +37,7 @@ namespace Eos.Models
         public MetaMagicType AvailableMetaMagic { get; set; } = (MetaMagicType)0;
         public SpellTarget TargetTypes { get; set; } = SpellTarget.Self;
         public String? ImpactScript { get; set; }
+        public int InnateLevel { get; set; }
         public int ConjurationTime { get; set; } = 1500;
         public SpellConjureAnimation? ConjuringAnimation { get; set; } = SpellConjureAnimation.Hand;
         public String? ConjurationHeadEffect { get; set; }
@@ -129,6 +130,7 @@ namespace Eos.Models
             this.AvailableMetaMagic = JsonToEnum<MetaMagicType>(json["AvailableMetaMagic"]) ?? (MetaMagicType)0;
             this.TargetTypes = JsonToEnum<SpellTarget>(json["TargetTypes"]) ?? (SpellTarget)0;
             this.ImpactScript = json["ImpactScript"]?.GetValue<String>();
+            this.InnateLevel = json["InnateLevel"]?.GetValue<int>() ?? 0;
             this.ConjurationTime = json["ConjurationTime"]?.GetValue<int>() ?? 1500;
             this.ConjuringAnimation = JsonToEnum<SpellConjureAnimation>(json["ConjuringAnimation"]) ?? SpellConjureAnimation.Hand;
             this.ConjurationHeadEffect = json["ConjurationHeadEffect"]?.GetValue<String>();
@@ -183,6 +185,7 @@ namespace Eos.Models
             spellJson.Add("AvailableMetaMagic", EnumToJson(this.AvailableMetaMagic));
             spellJson.Add("TargetTypes", EnumToJson(this.TargetTypes));
             spellJson.Add("ImpactScript", this.ImpactScript);
+            spellJson.Add("InnateLevel", this.InnateLevel);
             spellJson.Add("ConjurationTime", this.ConjurationTime);
             spellJson.Add("ConjuringAnimation", EnumToJson(this.ConjuringAnimation));
             spellJson.Add("ConjurationHeadEffect", this.ConjurationHeadEffect);

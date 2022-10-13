@@ -170,7 +170,7 @@
                     <wpftk:IntegerUpDown Grid.Row="2" Grid.Column="1" Value="{Binding Data.MinLevel}"/>
 
                     <TextBlock Text="Max. Level" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Grid.Row="2" Grid.Column="3" Value="{Binding Data.MinLevel}"/>
+                    <wpftk:IntegerUpDown Grid.Row="2" Grid.Column="3" Value="{Binding Data.MaxLevel}"/>
 
                     <TextBlock Text="Min. Attack Bonus" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
                     <wpftk:IntegerUpDown Grid.Row="3" Grid.Column="1" Value="{Binding Data.MinAttackBonus}"/>
@@ -199,17 +199,17 @@
                     <TextBlock Text="Min. Charisma" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2"/>
                     <wpftk:IntegerUpDown Grid.Row="8" Grid.Column="3" Value="{Binding Data.MinCha}"/>
 
-                    <TextBlock Text="Required Skill 1 Min." Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Grid.Row="10" Grid.Column="1" Value="{Binding Data.RequiredSkill1Minimum}"/>
+                    <TextBlock Text="Required Skill 1" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
+                    <uc:SkillComboBox Grid.Row="10" Grid.Column="1" SelectedValue="{Binding Data.RequiredSkill1}"/>
+                    
+                    <TextBlock Text="Required Skill 1 Min." Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
+                    <wpftk:IntegerUpDown Grid.Row="10" Grid.Column="3" Value="{Binding Data.RequiredSkill1Minimum}"/>
 
-                    <TextBlock Text="Required Skill 1" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
-                    <uc:SkillComboBox Grid.Row="10" Grid.Column="3" SelectedValue="{Binding Data.RequiredSkill1}"/>
-
-                    <TextBlock Text="Required Skill 2 Min." Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Grid.Row="11" Grid.Column="1" Value="{Binding Data.RequiredSkill2Minimum}"/>
-
-                    <TextBlock Text="Required Skill 2" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="2"/>
-                    <uc:SkillComboBox Grid.Row="11" Grid.Column="3" SelectedValue="{Binding Data.RequiredSkill2}"/>
+                    <TextBlock Text="Required Skill 2" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="0"/>
+                    <uc:SkillComboBox Grid.Row="11" Grid.Column="1" SelectedValue="{Binding Data.RequiredSkill2}"/>
+                    
+                    <TextBlock Text="Required Skill 2 Min." Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="2"/>
+                    <wpftk:IntegerUpDown Grid.Row="11" Grid.Column="3" Value="{Binding Data.RequiredSkill2Minimum}"/>
 
                     <TextBlock Text="Required Feat 1" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="0"/>
                     <uc:FeatComboBox Grid.Row="13" Grid.Column="1" SelectedValue="{Binding Data.RequiredFeat1}"/>

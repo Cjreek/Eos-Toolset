@@ -2,25 +2,28 @@
 using Eos.Models.Tables;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Eos.Repositories
 {
-    public class RepositoryCollection
+    public class RepositoryCollection : INotifyPropertyChanged
     {
+        private readonly bool isReadonly;
         private readonly Dictionary<Type, IRepository> repositoryDict = new Dictionary<Type, IRepository>();
 
         private readonly ModelRepository<Race> raceRepository;
         private readonly ModelRepository<CharacterClass> classRepository;
         private readonly ModelRepository<Domain> domainRepository;
-        private readonly SpellRepository spellRepository;
-        private readonly FeatRepository featRepository;
+        private readonly ModelRepository<Spell> spellRepository;
+        private readonly ModelRepository<Feat> featRepository;
         private readonly ModelRepository<Skill> skillRepository;
         private readonly ModelRepository<Disease> diseaseRepository;
         private readonly ModelRepository<Poison> poisonRepository;
-        private readonly SpellbookRepository spellbookRepository;
+        private readonly ModelRepository<Spellbook> spellbookRepository;
 
         private readonly ModelRepository<Appearance> appearanceRepository;
         private readonly ModelRepository<ClassPackage> classPackageRepository;
@@ -37,69 +40,53 @@ namespace Eos.Repositories
         private readonly ModelRepository<StatGainTable> statGainTableRepository;
         private readonly ModelRepository<RacialFeatsTable> racialFeatsTableRepository;
 
+        private void InitRepository<T>(out ModelRepository<T> repository, String propertyName) where T: BaseModel, new() 
+        {
+            repository = RepositoryFactory.Create<T>(isReadonly);
+            repository.CollectionChanged += (_, _) => NotifyPropertyChanged(propertyName);
+            repositoryDict.Add(typeof(T), repository);
+        }
+
         public RepositoryCollection(bool isReadonly)
         {
-            raceRepository = new ModelRepository<Race>(isReadonly);
-            classRepository = new ModelRepository<CharacterClass>(isReadonly);
-            domainRepository = new ModelRepository<Domain>(isReadonly);
-            spellRepository = new SpellRepository(isReadonly);
-            featRepository = new FeatRepository(isReadonly);
-            skillRepository = new ModelRepository<Skill>(isReadonly);
-            diseaseRepository = new ModelRepository<Disease>(isReadonly);
-            poisonRepository = new ModelRepository<Poison>(isReadonly);
-            spellbookRepository = new SpellbookRepository(isReadonly);
+            this.isReadonly = isReadonly;
 
-            appearanceRepository = new ModelRepository<Appearance>(isReadonly);
-            classPackageRepository = new ModelRepository<ClassPackage>(isReadonly);
-            soundsetRepository = new ModelRepository<Soundset>(isReadonly);
+            InitRepository(out raceRepository, nameof(Races));
+            InitRepository(out classRepository, nameof(Classes));
+            InitRepository(out domainRepository, nameof(Domains));
+            InitRepository(out spellRepository, nameof(Spells));
+            InitRepository(out featRepository, nameof(Feats));
+            InitRepository(out skillRepository, nameof(Skills));
+            InitRepository(out diseaseRepository, nameof(Diseases));
+            InitRepository(out poisonRepository, nameof(Poisons));
+            InitRepository(out spellbookRepository, nameof(Spellbooks));
 
-            attackBonusTableRepository = new ModelRepository<AttackBonusTable>(isReadonly); // Always writeable?
-            bonusFeatTableRepository = new ModelRepository<BonusFeatsTable>(isReadonly); // Always writeable?
-            featTableRepository = new ModelRepository<FeatsTable>(isReadonly); // Always writeable?
-            savingThrowTableRepository = new ModelRepository<SavingThrowTable>(isReadonly); // Always writeable?
-            skillTableRepository = new ModelRepository<SkillsTable>(isReadonly); // Always writeable?
-            prerequisiteTableRepository = new ModelRepository<PrerequisiteTable>(isReadonly); // Always writeable?
-            spellSlotTableRepository = new ModelRepository<SpellSlotTable>(isReadonly); // Always writeable?
-            knownSpellsTableRepository = new ModelRepository<KnownSpellsTable>(isReadonly); // Always writeable?
-            statGainTableRepository = new ModelRepository<StatGainTable>(isReadonly); // Always writeable?
-            racialFeatsTableRepository = new ModelRepository<RacialFeatsTable>(isReadonly); // Always writeable?
+            InitRepository(out appearanceRepository, nameof(Appearances));
+            InitRepository(out classPackageRepository, nameof(ClassPackages));
+            InitRepository(out soundsetRepository, nameof(Soundsets));
 
-            repositoryDict.Add(typeof(Race), raceRepository);
-            repositoryDict.Add(typeof(CharacterClass), classRepository);
-            repositoryDict.Add(typeof(Domain), domainRepository);
-            repositoryDict.Add(typeof(Spell), spellRepository);
-            repositoryDict.Add(typeof(Feat), featRepository);
-            repositoryDict.Add(typeof(Skill), skillRepository);
-            repositoryDict.Add(typeof(Disease), diseaseRepository);
-            repositoryDict.Add(typeof(Poison), poisonRepository);
-            repositoryDict.Add(typeof(Spellbook), spellbookRepository);
-
-            repositoryDict.Add(typeof(Appearance), appearanceRepository);
-            repositoryDict.Add(typeof(ClassPackage), classPackageRepository);
-            repositoryDict.Add(typeof(Soundset), soundsetRepository);
-
-            repositoryDict.Add(typeof(AttackBonusTable), attackBonusTableRepository);
-            repositoryDict.Add(typeof(BonusFeatsTable), bonusFeatTableRepository);
-            repositoryDict.Add(typeof(FeatsTable), featTableRepository);
-            repositoryDict.Add(typeof(SavingThrowTable), savingThrowTableRepository);
-            repositoryDict.Add(typeof(SkillsTable), skillTableRepository);
-            repositoryDict.Add(typeof(PrerequisiteTable), prerequisiteTableRepository);
-            repositoryDict.Add(typeof(SpellSlotTable), prerequisiteTableRepository);
-            repositoryDict.Add(typeof(KnownSpellsTable), knownSpellsTableRepository);
-            repositoryDict.Add(typeof(StatGainTable), statGainTableRepository);
-            repositoryDict.Add(typeof(RacialFeatsTable), racialFeatsTableRepository);
+            InitRepository(out attackBonusTableRepository, nameof(AttackBonusTables));
+            InitRepository(out bonusFeatTableRepository, nameof(BonusFeatTables));
+            InitRepository(out featTableRepository, nameof(FeatTables));
+            InitRepository(out savingThrowTableRepository, nameof(SavingThrowTables));
+            InitRepository(out skillTableRepository, nameof(SkillTables));
+            InitRepository(out prerequisiteTableRepository, nameof(PrerequisiteTables));
+            InitRepository(out spellSlotTableRepository, nameof(SpellSlotTables));
+            InitRepository(out knownSpellsTableRepository, nameof(KnownSpellsTables));
+            InitRepository(out statGainTableRepository, nameof(StatGainTables));
+            InitRepository(out racialFeatsTableRepository, nameof(RacialFeatsTables));
         }
 
         // Model Repositories
         public ModelRepository<Race> Races { get { return raceRepository; } }
         public ModelRepository<CharacterClass> Classes { get { return classRepository; } }
         public ModelRepository<Domain> Domains { get { return domainRepository; } }
-        public SpellRepository Spells { get { return spellRepository; } }
-        public FeatRepository Feats { get { return featRepository; } }
+        public ModelRepository<Spell> Spells { get { return spellRepository; } }
+        public ModelRepository<Feat> Feats { get { return featRepository; } }
         public ModelRepository<Skill> Skills { get { return skillRepository; } }
         public ModelRepository<Disease> Diseases { get { return diseaseRepository; } }
         public ModelRepository<Poison> Poisons { get { return poisonRepository; } }
-        public SpellbookRepository Spellbooks { get { return spellbookRepository; } }
+        public ModelRepository<Spellbook> Spellbooks { get { return spellbookRepository; } }
 
         public ModelRepository<Appearance> Appearances { get { return appearanceRepository; } }
         public ModelRepository<ClassPackage> ClassPackages { get { return classPackageRepository; } }
@@ -141,6 +128,18 @@ namespace Eos.Repositories
             repositoryDict[modelType].RemoveBase(model);
         }
 
+        public bool HasOverride(BaseModel model)
+        {
+            var modelType = model.GetType();
+            return repositoryDict[modelType].HasOverride(model);
+        }
+
+        public BaseModel? GetOverride(BaseModel model)
+        {
+            var modelType = model.GetType();
+            return repositoryDict[modelType].GetOverride(model);
+        }
+
         public void Clear()
         {
             Races.Clear();
@@ -167,6 +166,15 @@ namespace Eos.Repositories
             KnownSpellsTables.Clear();
             StatGainTables.Clear();
             RacialFeatsTables.Clear();
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

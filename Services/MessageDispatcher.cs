@@ -20,7 +20,7 @@ namespace Eos.ViewModels.Base
         DeleteDetail,
     }
 
-    public delegate void MessageHandler(MessageType type, object? param);
+    public delegate void MessageHandler(MessageType type, object? message, object? param);
 
     public static class MessageDispatcher
     {
@@ -42,10 +42,10 @@ namespace Eos.ViewModels.Base
             messageSubscriptions[messageType].Remove(handler);
         }
 
-        public static void Send(MessageType messageType, object? message)
+        public static void Send(MessageType messageType, object? message, object? param = null)
         {
             foreach (var handler in messageSubscriptions[messageType])
-                handler(messageType, message);
+                handler(messageType, message, param);
         }
     }
 }

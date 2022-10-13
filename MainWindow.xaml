@@ -42,6 +42,7 @@
                     <conv:TLKStringSetConverter x:Key="tlkConverter" AlwaysUseDefaultLanguage="True"/>
                     <conv:ResRefConverter x:Key="resRefConverter"/>
                     <local:IsViewModelValueConverter x:Key="isViewModelValueConverter"/>
+                    <local:ItemCountConverter x:Key="itemCountConverter"/>
 
                     <ContextMenu DataContext="{Binding RelativeSource={RelativeSource Mode=Self}, Path=PlacementTarget}" x:Key="tviCustomContextMenu">
                         <MenuItem x:Name="miCustomNew" Header="New" Command="{Binding DataContext.NewDetailCommand}" CommandParameter="{Binding Tag}" Click="MenuItem_Click">
@@ -82,6 +83,15 @@
                                     </Run>      
                                 </TextBlock>
                             </MenuItem.Header>
+                            <MenuItem.Style>
+                                <Style TargetType="{x:Type MenuItem}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DataContext}" Value="{x:Null}">
+                                            <Setter Property="IsEnabled" Value="False"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </MenuItem.Style>
                         </MenuItem>
                     </ContextMenu>
 
@@ -374,6 +384,26 @@
                             </Frame.Content>
                         </Frame>
                     </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type vm:SpellSlotTableViewModel}">
+                        <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                            <Frame.Content>
+                                <view:SpellSlotTableView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                            </Frame.Content>
+                        </Frame>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type vm:KnownSpellsTableViewModel}">
+                        <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                            <Frame.Content>
+                                <view:KnownSpellsTableView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                            </Frame.Content>
+                        </Frame>
+                    </DataTemplate>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -512,7 +542,7 @@
                         <TreeViewItem Header="Poisons" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Poisons}"/>
                         <TreeViewItem Header="Soundsets" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Soundsets}"/>
 
-                        <TreeViewItem Header="Tables" ToolTip="CATEGORY" ToolTipService.IsEnabled="False">
+                        <TreeViewItem Header="Tables" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" IsExpanded="True">
                             <TreeViewItem Header="Racial Feats" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=RacialFeatsTables}"/>
                             <TreeViewItem Header="Feats" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=FeatTables}"/>
                             <TreeViewItem Header="Bonus Feats" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=BonusFeatTables}"/>
@@ -521,6 +551,8 @@
                             <TreeViewItem Header="Saving Throws" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=SavingThrowTables}"/>
                             <TreeViewItem Header="Prerequisites" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=PrerequisiteTables}"/>
                             <TreeViewItem Header="StatGain" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=StatGainTables}"/>
+                            <TreeViewItem Header="Spell Slots" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=SpellSlotTables}"/>
+                            <TreeViewItem Header="Known Spells" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=KnownSpellsTables}"/>
                         </TreeViewItem>
                     </TreeView>
                 </TabItem>
@@ -546,50 +578,325 @@
                                 </Style.Triggers>
                             </Style>
                         </TreeView.Resources>
-                        
-                        <TreeViewItem Header="Races" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Races}" Tag="{x:Type models:Race}"/>
-                        <TreeViewItem Header="Classes" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Classes}" Tag="{x:Type models:CharacterClass}"/>
-                        <TreeViewItem Header="Class Packages" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=ClassPackages}" Tag="{x:Type models:ClassPackage}"/>
-                        <TreeViewItem Header="Domains" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Domains}" Tag="{x:Type models:Domain}"/>
-                        <TreeViewItem Header="Spellbooks" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spellbooks}" Tag="{x:Type models:Spellbook}"/>
-                        <TreeViewItem Header="Spells" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" Tag="{x:Type models:Spell}">
-                            <TreeViewItem Header="Spell" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" Tag="{x:Type models:Spell}">
-                                <TreeViewItem Header="Abjuration" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.AbjurationSpells}" Tag="{x:Type models:Spell}"/>
-                                <TreeViewItem Header="Conjuration" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.ConjurationSpells}" Tag="{x:Type models:Spell}"/>
-                                <TreeViewItem Header="Divination" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.DivinationSpells}" Tag="{x:Type models:Spell}"/>
-                                <TreeViewItem Header="Enchantment" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.EnchantmentSpells}" Tag="{x:Type models:Spell}"/>
-                                <TreeViewItem Header="Evocation" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.EvocationSpells}" Tag="{x:Type models:Spell}"/>
-                                <TreeViewItem Header="Illusion" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.IllusionSpells}" Tag="{x:Type models:Spell}"/>
-                                <TreeViewItem Header="Necromancy" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.NecromancySpells}" Tag="{x:Type models:Spell}"/>
-                                <TreeViewItem Header="Transmutation" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.TransmutationSpells}" Tag="{x:Type models:Spell}"/>
-                                <TreeViewItem Header="General" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.GeneralSpells}" Tag="{x:Type models:Spell}"/>
-                            </TreeViewItem>
-                            <TreeViewItem Header="Creature Power" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.CreaturePowers}" Tag="{x:Type models:Spell}"/>
-                            <TreeViewItem Header="Feat" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.FeatSpells}" Tag="{x:Type models:Spell}"/>
-                            <TreeViewItem Header="Other" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.OtherSpells}" Tag="{x:Type models:Spell}"/>
-                        </TreeViewItem>
-                        <TreeViewItem Header="Feats" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" Tag="{x:Type models:Feat}">
-                            <TreeViewItem Header="Class/Racial" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.ClassOrRacial}" Tag="{x:Type models:Feat}"/>
-                            <TreeViewItem Header="Combat (Active)" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.CombatActive}" Tag="{x:Type models:Feat}"/>
-                            <TreeViewItem Header="Combat (Passive)" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Combat}" Tag="{x:Type models:Feat}"/>
-                            <TreeViewItem Header="Defensive" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Defensive}" Tag="{x:Type models:Feat}"/>
-                            <TreeViewItem Header="Magical" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Magical}" Tag="{x:Type models:Feat}"/>
-                            <TreeViewItem Header="Other" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Other}" Tag="{x:Type models:Feat}"/>
-                        </TreeViewItem>
-                        <TreeViewItem Header="Skills" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Skills}" Tag="{x:Type models:Skill}"/>
-                        <TreeViewItem Header="Diseases" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Diseases}" Tag="{x:Type models:Disease}"/>
-                        <TreeViewItem Header="Poisons" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Poisons}" Tag="{x:Type models:Poison}"/>
-                        <TreeViewItem Header="Soundsets" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Soundsets}" Tag="{x:Type models:Soundset}"/>
 
-                        <TreeViewItem Header="Tables" ToolTip="CATEGORY" ToolTipService.IsEnabled="False">
-                            <TreeViewItem Header="Racial Feats" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=RacialFeatsTables}" Tag="{x:Type tables:RacialFeatsTable}"/>
-                            <TreeViewItem Header="Feats" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=FeatTables}" Tag="{x:Type tables:FeatsTable}"/>
-                            <TreeViewItem Header="Bonus Feats" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=BonusFeatTables}" Tag="{x:Type tables:BonusFeatsTable}"/>
-                            <TreeViewItem Header="Skills" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=SkillTables}" Tag="{x:Type tables:SkillsTable}"/>
-                            <TreeViewItem Header="BAB" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=AttackBonusTables}" Tag="{x:Type tables:AttackBonusTable}"/>
-                            <TreeViewItem Header="Saving Throws" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=SavingThrowTables}" Tag="{x:Type tables:SavingThrowTable}"/>
-                            <TreeViewItem Header="Prerequisites" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=PrerequisiteTables}" Tag="{x:Type tables:PrerequisiteTable}"/>
-                            <TreeViewItem Header="StatGain" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=StatGainTables}" Tag="{x:Type tables:StatGainTable}"/>
+                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Races}" Tag="{x:Type models:Race}">
+                            <TreeViewItem.Header>
+                                <TextBlock>
+                                    <Run Text="Races"/>
+                                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Races, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                </TextBlock>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Classes}" Tag="{x:Type models:CharacterClass}">
+                            <TreeViewItem.Header>
+                                <TextBlock>
+                                    <Run Text="Classes"/>
+                                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Classes, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                </TextBlock>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=ClassPackages}" Tag="{x:Type models:ClassPackage}">
+                            <TreeViewItem.Header>
+                                <TextBlock>
+                                    <Run Text="Class Packages"/>
+                                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=ClassPackages, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                </TextBlock>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Domains}" Tag="{x:Type models:Domain}">
+                            <TreeViewItem.Header>
+                                <TextBlock>
+                                    <Run Text="Domains"/>
+                                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Domains, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                </TextBlock>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spellbooks}" Tag="{x:Type models:Spellbook}">
+                            <TreeViewItem.Header>
+                                <TextBlock>
+                                    <Run Text="Spellbooks"/>
+                                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spellbooks, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                </TextBlock>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" Tag="{x:Type models:Spell}">
+                            <TreeViewItem.Header>
+                                <TextBlock>
+                                    <Run Text="Spells"/>
+                                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                </TextBlock>
+                            </TreeViewItem.Header>
+                            
+                            <TreeViewItem Header="Spell" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" Tag="{x:Type models:Spell}">
+                                <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.AbjurationSpells}" Tag="{x:Type models:Spell}">
+                                    <TreeViewItem.Header>
+                                        <TextBlock>
+                                            <Run Text="Abjuration"/>
+                                            <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.AbjurationSpells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                        </TextBlock>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.ConjurationSpells}" Tag="{x:Type models:Spell}">
+                                    <TreeViewItem.Header>
+                                        <TextBlock>
+                                            <Run Text="Conjuration"/>
+                                            <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.ConjurationSpells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                        </TextBlock>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.DivinationSpells}" Tag="{x:Type models:Spell}">
+                                    <TreeViewItem.Header>
+                                        <TextBlock>
+                                            <Run Text="Divination"/>
+                                            <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.DivinationSpells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                        </TextBlock>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.EnchantmentSpells}" Tag="{x:Type models:Spell}">
+                                    <TreeViewItem.Header>
+                                        <TextBlock>
+                                            <Run Text="Enchantment"/>
+                                            <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.EnchantmentSpells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                        </TextBlock>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.EvocationSpells}" Tag="{x:Type models:Spell}">
+                                    <TreeViewItem.Header>
+                                        <TextBlock>
+                                            <Run Text="Evocation"/>
+                                            <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.EvocationSpells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                        </TextBlock>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.IllusionSpells}" Tag="{x:Type models:Spell}">
+                                    <TreeViewItem.Header>
+                                        <TextBlock>
+                                            <Run Text="Illusion"/>
+                                            <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.IllusionSpells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                        </TextBlock>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.NecromancySpells}" Tag="{x:Type models:Spell}">
+                                    <TreeViewItem.Header>
+                                        <TextBlock>
+                                            <Run Text="Necromancy"/>
+                                            <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.NecromancySpells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                        </TextBlock>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.TransmutationSpells}" Tag="{x:Type models:Spell}">
+                                    <TreeViewItem.Header>
+                                        <TextBlock>
+                                            <Run Text="Transmutation"/>
+                                            <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.TransmutationSpells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                        </TextBlock>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                                <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.GeneralSpells}" Tag="{x:Type models:Spell}">
+                                    <TreeViewItem.Header>
+                                        <TextBlock>
+                                            <Run Text="General"/>
+                                            <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.GeneralSpells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                        </TextBlock>
+                                    </TreeViewItem.Header>
+                                </TreeViewItem>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.CreaturePowers}" Tag="{x:Type models:Spell}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Creature Power"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.CreaturePowers, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.FeatSpells}" Tag="{x:Type models:Spell}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Feat"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.FeatSpells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.OtherSpells}" Tag="{x:Type models:Spell}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Other"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.OtherSpells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                        </TreeViewItem>
+                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" Tag="{x:Type models:Feat}">
+                            <TreeViewItem.Header>
+                                <TextBlock>
+                                    <Run Text="Feats"/>
+                                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                </TextBlock>
+                            </TreeViewItem.Header>
+
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.ClassOrRacial}" Tag="{x:Type models:Feat}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Class/Racial"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.ClassOrRacial, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.CombatActive}" Tag="{x:Type models:Feat}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Combat (Active)"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.CombatActive, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Combat}" Tag="{x:Type models:Feat}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Combat (Passive)"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Combat, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Defensive}" Tag="{x:Type models:Feat}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Defensive"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Defensive, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Magical}" Tag="{x:Type models:Feat}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Magical"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Magical, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Other}" Tag="{x:Type models:Feat}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Other"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Other, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                        </TreeViewItem>
+                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Skills}" Tag="{x:Type models:Skill}">
+                            <TreeViewItem.Header>
+                                <TextBlock>
+                                    <Run Text="Skills"/>
+                                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Skills, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                </TextBlock>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Diseases}" Tag="{x:Type models:Disease}">
+                            <TreeViewItem.Header>
+                                <TextBlock>
+                                    <Run Text="Diseases"/>
+                                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Diseases, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                </TextBlock>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Poisons}" Tag="{x:Type models:Poison}">
+                            <TreeViewItem.Header>
+                                <TextBlock>
+                                    <Run Text="Poisons"/>
+                                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Poisons, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                </TextBlock>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Soundsets}" Tag="{x:Type models:Soundset}">
+                            <TreeViewItem.Header>
+                                <TextBlock>
+                                    <Run Text="Soundsets"/>
+                                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Soundsets, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                </TextBlock>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+
+                        <TreeViewItem Header="Tables" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" IsExpanded="True">
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=RacialFeatsTables}" Tag="{x:Type tables:RacialFeatsTable}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Racial Feats"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=RacialFeatsTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=FeatTables}" Tag="{x:Type tables:FeatsTable}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Feats"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=FeatTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=BonusFeatTables}" Tag="{x:Type tables:BonusFeatsTable}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Bonus Feats"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=BonusFeatTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=SkillTables}" Tag="{x:Type tables:SkillsTable}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Skills"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=SkillTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=AttackBonusTables}" Tag="{x:Type tables:AttackBonusTable}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="BAB"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=AttackBonusTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=SavingThrowTables}" Tag="{x:Type tables:SavingThrowTable}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Saving Throws"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=SavingThrowTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=PrerequisiteTables}" Tag="{x:Type tables:PrerequisiteTable}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Prerequisites"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=PrerequisiteTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=StatGainTables}" Tag="{x:Type tables:StatGainTable}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="StatGain"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=StatGainTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=SpellSlotTables}" Tag="{x:Type tables:SpellSlotTable}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Spell Slots"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=SpellSlotTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=KnownSpellsTables}" Tag="{x:Type tables:KnownSpellsTable}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Known Spells"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=KnownSpellsTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
                         </TreeViewItem>
                     </TreeView>
                 </TabItem>

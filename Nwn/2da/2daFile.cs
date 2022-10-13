@@ -19,6 +19,8 @@ namespace Eos.Nwn.TwoDimensionalArray
         public LineRecord(String[] line, ColumnInfos columns)
         {
             this.columns = columns;
+            this.columns.ColumnAdded += Columns_ColumnAdded;
+
             for (int i = 1; i < line.Length; i++)
             {
                 if (int.TryParse(line[i], NumberStyles.Integer, enUS, out int intValue))
@@ -34,7 +36,33 @@ namespace Eos.Nwn.TwoDimensionalArray
             }
         }
 
-        public object? this[int index] => values[index];
+        ~LineRecord()
+        {
+            this.columns.ColumnAdded -= Columns_ColumnAdded;
+        }
+
+        private void Columns_ColumnAdded(object? defaultValue = null)
+        {
+            values.Add(defaultValue);
+        }
+
+        public object? this[int index]
+        {
+            get { return values[index]; }
+            set { values[index] = value; }
+        }
+
+        public void Set(String columnName, object? value)
+        {
+            var index = columns.IndexOf(columnName);
+            if ((index >= values.Count) || (index < 0))
+                throw new IndexOutOfRangeException();
+
+            if (value is bool b)
+                values[index] = b ? 1 : 0;
+            else
+                values[index] = value;
+        }
 
         public object? AsObject(String columnName, int? defaultValue = null, bool throwException = true)
         {
@@ -173,6 +201,8 @@ namespace Eos.Nwn.TwoDimensionalArray
         }
     }
 
+    internal delegate void ColumnAddedEvent(object? defaultValue = null);
+
     internal class ColumnInfos
     {
         private List<String> columnList;
@@ -183,6 +213,19 @@ namespace Eos.Nwn.TwoDimensionalArray
             columnList = new List<string>(columnLine);
             for (int i = 0; i < columnList.Count; i++)
                 columnLookup[columnList[i].ToLower()] = i;
+        }
+
+        public event ColumnAddedEvent? ColumnAdded;
+
+        public void AddColumn(String columnName, object? defaultValue = null)
+        {
+            if (!columnLookup.ContainsKey(columnName.ToLower()))
+            {
+                columnList.Add(columnName);
+                columnLookup[columnName.ToLower()] = columnList.Count - 1;
+                if (ColumnAdded != null)
+                    ColumnAdded(defaultValue);
+            }
         }
 
         public int Count => columnList.Count;
@@ -201,10 +244,17 @@ namespace Eos.Nwn.TwoDimensionalArray
 
     internal class TwoDimensionalArrayFile
     {
+        private static CultureInfo floatFormat = new CultureInfo("en-US");
+
         private ColumnInfos? columnInfos;
         private List<LineRecord> records = new List<LineRecord>();
 
+        static TwoDimensionalArrayFile()
+        {
+        }
+
         public TwoDimensionalArrayFile() {}
+
         public TwoDimensionalArrayFile(Stream stream)
         {
             Load(stream);
@@ -248,6 +298,25 @@ namespace Eos.Nwn.TwoDimensionalArray
             return split.ToArray();
         }
 
+        private String[] NullLine()
+        {
+            if (columnInfos != null)
+            {
+                var result = new String[columnInfos.Count + 1];
+                for (int i = 0; i < result.Length; i++)
+                    result[i] = "****";
+                return result;
+            }
+
+            return new String[0];
+        }
+
+        public void New(params String[] columns)
+        {
+            records.Clear();
+            columnInfos = new ColumnInfos(columns);
+        }
+
         public void Load(String filename)
         {
             var fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
@@ -284,7 +353,80 @@ namespace Eos.Nwn.TwoDimensionalArray
             }
         }
 
+        private int GetValueLength(object? value)
+        {
+            if (value == null) return 4;
+            if (value is String str)
+            {
+                if (str.Contains(' ')) return str.Length + 2;
+                return str.Length;
+            }
+            if (value is int intValue) return intValue.ToString().Length;
+            if (value is double dblValue) return dblValue.ToString().Length;
+
+            return 0;
+        }
+
+        private String ValueToStr(object? value)
+        {
+            if (value == null) return "****";
+            if ((value is String str) && (str.Contains(' '))) return "\"" + str + "\"";
+            if (value is double dblValue) return dblValue.ToString("n2", floatFormat);
+            return value.ToString() ?? "****";
+        }
+
+        public void Save(Stream stream)
+        {
+            const int COLUMN_EXTRA_SPACE = 4;
+
+            var columnWidths = new List<int>();
+            columnWidths.Add((Count - 1).ToString().Length + COLUMN_EXTRA_SPACE);
+            for (int i=0; i < Columns.Count; i++)
+            {
+                var maxLen = Columns[i].Length;
+                for (int j=0; j < records.Count; j++)
+                {
+                    var len = GetValueLength(records[j][i]);
+                    if (len > maxLen) maxLen = len;
+                }
+                columnWidths.Add(maxLen + COLUMN_EXTRA_SPACE);
+            }
+
+            var writer = new StreamWriter(stream);
+            writer.WriteLine("2DA V2.0");
+            writer.WriteLine("");
+
+            var line = new String(' ', columnWidths[0]);
+            for (int i = 0; i < Columns.Count; i++)
+                line += String.Format("{0,-" + columnWidths[i+1].ToString() + "}", Columns[i]);
+            writer.WriteLine(line.TrimEnd());
+
+            for (int i=0; i < records.Count; i++)
+            {
+                line = String.Format("{0,-" + columnWidths[0].ToString() + "}", i);
+                for (int j = 0; j < Columns.Count; j++)
+                    line += String.Format("{0,-" + columnWidths[j + 1].ToString() + "}", ValueToStr(records[i][j]));
+                writer.WriteLine(line.Trim());
+            }
+
+            writer.Flush();
+        }
+
+        public void Save(String filename)
+        {
+            var fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite);
+            try
+            {
+                Save(fs);
+            }
+            finally
+            {
+                fs.Close();
+            }
+        }
+
         public int Count => records.Count;
+
         public LineRecord this[int index]
         {
             get
@@ -303,6 +445,17 @@ namespace Eos.Nwn.TwoDimensionalArray
                     throw new InvalidOperationException("2da file is not initialized");
                 return columnInfos;
             }
+        }
+
+        public LineRecord AddRecord()
+        {
+            if (columnInfos == null)
+                throw new InvalidOperationException("2da file is not initialized");
+
+            var newRec = new LineRecord(NullLine(), columnInfos);
+            records.Add(newRec);
+
+            return newRec;
         }
     }
 }

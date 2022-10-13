@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Eos.Usercontrols"
-             xmlns:repo="clr-namespace:Eos.Repositories"
              xmlns:ext="clr-namespace:Eos.Extensions"
              xmlns:nwn="clr-namespace:Eos.Nwn"
              mc:Ignorable="d" 
@@ -22,30 +21,28 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
-        <ComboBox x:Name="cbClasses" Grid.Column="0" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Classes}}" SelectedValue="{Binding ElementName=ucClassComboBox, Path=SelectedValue}">
-            <ComboBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel />
-                </ItemsPanelTemplate>
-            </ComboBox.ItemsPanel>
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="16" Height="16" Source="{Binding Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}" Margin="0,0,3,0"/>
-                        <TextBlock>
-                            <TextBlock.Text>
-                                <MultiBinding Converter="{StaticResource tlkConverterDefault}">
-                                    <Binding Path="Name"/>
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                    </StackPanel>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
-        <Button x:Name="btClear" Grid.Column="1" Margin="2,-2,0,0" Content="X" Click="btClear_Click"
+        <Button x:Name="cbClasses" Grid.Column="0" Click="btSearch_Click" HorizontalContentAlignment="Stretch" MinHeight="22">
+            <Button.Content>
+                <StackPanel Orientation="Horizontal" Margin="3,0,0,0">
+                    <Image Grid.Column="0" Width="16" Height="16" Source="{Binding ElementName=ucClassComboBox, Path=SelectedValue.Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}" Margin="0,0,3,0"/>
+
+                    <TextBlock Grid.Column="1">
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                                <Binding ElementName="ucClassComboBox" Path="SelectedValue.Name"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </StackPanel>
+            </Button.Content>
+        </Button>
+
+        <Button x:Name="btGoto" Grid.Column="1" Content="👁" Click="btGoto_Click" Margin="1,0,0,0" 
+                Height="{Binding ElementName=cbClasses, Path=ActualHeight}" Width="{Binding ElementName=cbClasses, Path=ActualHeight}"/>
+        <Button x:Name="btClear" Grid.Column="2" Content="🗑" Click="btClear_Click" Margin="1,0,0,0"
                 Height="{Binding ElementName=cbClasses, Path=ActualHeight}" Width="{Binding ElementName=cbClasses, Path=ActualHeight}" 
                 Visibility="{Binding ElementName=ucClassComboBox, Path=IsNullable, Converter={StaticResource bool2VisCollapsed}}"/>
     </Grid>

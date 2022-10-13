@@ -12,9 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using Eos.ViewModels;
+using Eos.ViewModels.Dialogs;
 using Ookii.Dialogs.Wpf;
 
-namespace Eos.Views
+namespace Eos.Views.Dialogs
 {
     /// <summary>
     /// Interaktionslogik für NewProjectView.xaml

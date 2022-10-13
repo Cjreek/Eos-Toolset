@@ -7,10 +7,12 @@
              x:Name="ucDeleteButton"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Button Content="X" Background="Transparent" Command="{Binding ElementName=ucDeleteButton, Path=Command}" CommandParameter="{Binding ElementName=ucDeleteButton, Path=CommandParameter}">
+    <!--Background="Transparent"-->
+    <Button Content="🗑" Command="{Binding ElementName=ucDeleteButton, Path=Command}" CommandParameter="{Binding ElementName=ucDeleteButton, Path=CommandParameter}">
         <Button.Style>
             <Style TargetType="{x:Type Button}">
-                <Setter Property="Foreground" Value="Gray"/>
+                <!--Value="Gray"-->
+                <Setter Property="Foreground" Value="Black"/>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Foreground" Value="DarkRed"/>

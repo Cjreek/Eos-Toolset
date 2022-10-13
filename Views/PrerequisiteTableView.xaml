@@ -26,7 +26,8 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
+    <!--IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}"-->
+    <Grid Margin="10" >
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -56,22 +57,22 @@
                     <TextBox Text="{Binding RequirementParam1}" Margin="-5,-8,-6,-8" VerticalAlignment="Stretch" AcceptsReturn="True"/>
                 </DataTemplate>
                 <DataTemplate x:Key="intParamTemplate">
-                    <wpftk:IntegerUpDown Value="{Binding RequirementParam1}" Margin="-5,-1,-6,-5"/>
+                    <wpftk:IntegerUpDown Height="22" Value="{Binding RequirementParam1}" Margin="-5,-5,-6,-5"/>
                 </DataTemplate>
                 <DataTemplate x:Key="raceParamTemplate">
-                    <uc:RaceComboBox SelectedValue="{Binding RequirementParam1}" IsNullable="False" Margin="-7,-1,-6,-5"/>
+                    <uc:RaceComboBox SelectedValue="{Binding RequirementParam1}" IsNullable="False" Margin="-5,-4,-5,-5"/>
                 </DataTemplate>
                 <DataTemplate x:Key="classParamTemplate">
-                    <uc:ClassComboBox SelectedValue="{Binding RequirementParam1}" IsNullable="False" Margin="-7,-1,-6,-5"/>
+                    <uc:ClassComboBox SelectedValue="{Binding RequirementParam1}" IsNullable="False" Margin="-5,-4,-5,-5"/>
                 </DataTemplate>
                 <DataTemplate x:Key="featParamTemplate">
-                    <uc:FeatComboBox SelectedValue="{Binding RequirementParam1}" IsNullable="False" Margin="-7,-1,-6,-5"/>
+                    <uc:FeatComboBox SelectedValue="{Binding RequirementParam1}" IsNullable="False" Margin="-5,-4,-5,-5"/>
                 </DataTemplate>
                 <DataTemplate x:Key="skillParamTemplate">
-                    <uc:SkillComboBox SelectedValue="{Binding RequirementParam1}" IsNullable="False" Margin="-7,-1,-6,-5"/>
+                    <uc:SkillComboBox SelectedValue="{Binding RequirementParam1}" IsNullable="False" Margin="-5,-4,-5,-5"/>
                 </DataTemplate>
                 <DataTemplate x:Key="saveParamTemplate">
-                    <ComboBox ItemsSource="{Binding ElementName=page, Path=SaveTypes}" SelectedValue="{Binding RequirementParam1}" SelectedValuePath="Value" DisplayMemberPath="Name" Margin="-5,-1,-6,-1"/>
+                    <ComboBox ItemsSource="{Binding ElementName=page, Path=SaveTypes}" SelectedValue="{Binding RequirementParam1}" SelectedValuePath="Value" DisplayMemberPath="Name" Margin="-5,0,-6,-1"/>
                 </DataTemplate>
 
                 <DataTemplate x:Key="param2MetaTemplate">
@@ -80,7 +81,7 @@
 
                 <DataTemplate x:Key="emptyTemplate"/>
                 <DataTemplate x:Key="intParam2Template">
-                    <wpftk:IntegerUpDown Value="{Binding RequirementParam2}" Margin="-5,-6,-6,-6"/>
+                    <wpftk:IntegerUpDown Value="{Binding RequirementParam2}" Height="22" Margin="-5,-6,-6,-6"/>
                 </DataTemplate>
             </ListView.Resources>
             <ListView.View>

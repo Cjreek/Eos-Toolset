@@ -14,7 +14,7 @@ using System.Text.Json.Nodes;
 
 namespace Eos.Repositories
 {
-    public class EosProject : RepositoryCollection, INotifyPropertyChanged
+    public class EosProject : RepositoryCollection
     {
         private string _projectFolder = "";
         private string _name = "";
@@ -131,6 +131,31 @@ namespace Eos.Repositories
             StatGainTables.LoadFromFile(ProjectFolder + Constants.StatGainTablesFilename);
             RacialFeatsTables.LoadFromFile(ProjectFolder + Constants.RacialFeatsTablesFilename);
 
+            Races.ResolveReferences();
+            Classes.ResolveReferences();
+            Domains.ResolveReferences();
+            Spells.ResolveReferences();
+            Feats.ResolveReferences();
+            Skills.ResolveReferences();
+            Diseases.ResolveReferences();
+            Poisons.ResolveReferences();
+            Spellbooks.ResolveReferences();
+
+            Appearances.ResolveReferences();
+            ClassPackages.ResolveReferences();
+            Soundsets.ResolveReferences();
+
+            AttackBonusTables.ResolveReferences();
+            BonusFeatTables.ResolveReferences();
+            FeatTables.ResolveReferences();
+            SavingThrowTables.ResolveReferences();
+            SkillTables.ResolveReferences();
+            PrerequisiteTables.ResolveReferences();
+            SpellSlotTables.ResolveReferences();
+            KnownSpellsTables.ResolveReferences();
+            StatGainTables.ResolveReferences();
+            RacialFeatsTables.ResolveReferences();
+
             IsLoaded = true;
             EosConfig.LastProject = projectFilename;
         }
@@ -162,15 +187,6 @@ namespace Eos.Repositories
             KnownSpellsTables.SaveToFile(ProjectFolder + Constants.KnownSpellsTablesFilename);
             StatGainTables.SaveToFile(ProjectFolder + Constants.StatGainTablesFilename);
             RacialFeatsTables.SaveToFile(ProjectFolder + Constants.RacialFeatsTablesFilename);
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
         }
     }
 }

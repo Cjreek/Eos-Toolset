@@ -48,6 +48,10 @@ namespace Eos.Repositories
 
         static MasterRepository()
         {
+            RepositoryFactory.RegisterRepositoryClass<Feat>(typeof(FeatRepository));
+            RepositoryFactory.RegisterRepositoryClass<Spell>(typeof(SpellRepository));
+            RepositoryFactory.RegisterRepositoryClass<Spellbook>(typeof(SpellbookRepository));
+
             resources = new ResourceRepository();
 
             standardCategory = new RepositoryCollection(true);
