@@ -26,8 +26,7 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <!--IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}"-->
-    <Grid Margin="10" >
+    <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -54,7 +53,7 @@
                 </DataTemplate>
                 
                 <DataTemplate x:Key="strParamTemplate">
-                    <TextBox Text="{Binding RequirementParam1}" Margin="-5,-8,-6,-8" VerticalAlignment="Stretch" AcceptsReturn="True"/>
+                    <TextBox Text="{Binding RequirementParam1}" Margin="-5,-8,-6,-8" VerticalAlignment="Stretch" MinHeight="22" AcceptsReturn="True" VerticalContentAlignment="Center"/>
                 </DataTemplate>
                 <DataTemplate x:Key="intParamTemplate">
                     <wpftk:IntegerUpDown Height="22" Value="{Binding RequirementParam1}" Margin="-5,-5,-6,-5"/>
@@ -72,7 +71,7 @@
                     <uc:SkillComboBox SelectedValue="{Binding RequirementParam1}" IsNullable="False" Margin="-5,-4,-5,-5"/>
                 </DataTemplate>
                 <DataTemplate x:Key="saveParamTemplate">
-                    <ComboBox ItemsSource="{Binding ElementName=page, Path=SaveTypes}" SelectedValue="{Binding RequirementParam1}" SelectedValuePath="Value" DisplayMemberPath="Name" Margin="-5,0,-6,-1"/>
+                    <ComboBox ItemsSource="{Binding ElementName=page, Path=SaveTypes}" SelectedValue="{Binding RequirementParam1}" SelectedValuePath="Value" DisplayMemberPath="Name" Margin="-5,-1,-6,-2"/>
                 </DataTemplate>
 
                 <DataTemplate x:Key="param2MetaTemplate">

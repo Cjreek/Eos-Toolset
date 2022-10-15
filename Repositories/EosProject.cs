@@ -50,8 +50,8 @@ namespace Eos.Repositories
             }
         }
 
-        public string ProjectFolder 
-        { 
+        public string ProjectFolder
+        {
             get { return _projectFolder; }
             set
             {
@@ -84,7 +84,7 @@ namespace Eos.Repositories
                 if (JsonNode.Parse(fs) is JsonObject projectJson)
                 {
                     Name = projectJson["Name"]?.GetValue<String>() ?? "";
-                    DefaultLanguage = Enum.Parse<TLKLanguage>(projectJson["DefaultLanguage"]?.GetValue<String>() ?? "");
+                    DefaultLanguage = Enum.Parse<TLKLanguage>(projectJson["DefaultLanguage"]?.GetValue<string>() ?? "");
                 }
             }
             finally

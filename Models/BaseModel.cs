@@ -1,4 +1,5 @@
 ﻿using Eos.Nwn;
+using Eos.Nwn.Tlk;
 using Eos.Repositories;
 using Eos.Types;
 using System;
@@ -13,15 +14,50 @@ using static Eos.Models.JsonUtils;
 
 namespace Eos.Models
 {
+    public class BaseModelReference
+    {
+        public BaseModel? ReferenceObject { get; set; }
+        public String? ReferenceProperty { get; set; }
+        public String? ReferenceName { get; set; }
+    }
+
     public class BaseModel : INotifyPropertyChanged
     {
+        private bool _clearingReferences = false;
+        private Dictionary<(BaseModel refObject, String refProperty), BaseModelReference> referenceDict = new Dictionary<(BaseModel refObject, String refProperty), BaseModelReference>();
+
         public Guid ID { get; set; }
         public bool IsReadonly { get; set; } = false;
         public Guid? Overrides { get; set; } = null;
         public int? Index { get; set; }
         public String? Icon { get; set; }
+        public IEnumerable<BaseModelReference> References => referenceDict.Values;
+        public int ReferenceCount => referenceDict.Count;
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void Set<T>(ref T? reference, T? value, [CallerMemberName] String refProperty = "") where T: BaseModel
+        {
+            if (reference != value)
+            {
+                reference?.RemoveReference(this, refProperty);
+                reference = value;
+                reference?.AddReference(this, refProperty);
+            }
+        }
+
+        public void AddReference(BaseModel refObject, [CallerMemberName] String refProperty = "")
+        {
+            referenceDict[(refObject, refProperty)] = new BaseModelReference()
+            {
+                ReferenceObject = refObject,
+                ReferenceProperty = refProperty,
+                ReferenceName = refObject.GetLabel(),
+            };
+        }
+
+        public void RemoveReference(BaseModel refObject, [CallerMemberName] String refProperty = "")
+        {
+            referenceDict.Remove((refObject, refProperty));
+        }
 
         public BaseModel()
         {
@@ -76,15 +112,28 @@ namespace Eos.Models
             this.Overrides = ParseNullableGuid(json["Overrides"]?.GetValue<String>());
         }
 
-        public static M? Resolve<M>(M? modelRef, VirtualModelRepository<M> repository) where M : BaseModel, new()
+        public M? Resolve<M>(M? modelRef, VirtualModelRepository<M> repository) where M : BaseModel, new()
         {
-            if (modelRef == null) return null;
-            return repository.GetByID(modelRef.ID);
+            if (_clearingReferences) return null;
+            return repository.Resolve(modelRef);
         }
 
         public virtual void ResolveReferences()
         {
 
+        }
+
+        public void ClearReferences()
+        {
+            _clearingReferences = true;
+            try
+            {
+                ResolveReferences();
+            }
+            finally
+            {
+                _clearingReferences = false;
+            }
         }
 
         public virtual BaseModel? Copy()
@@ -109,6 +158,7 @@ namespace Eos.Models
             return result;
         }
 
+        public event PropertyChangedEventHandler? PropertyChanged;
         public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)

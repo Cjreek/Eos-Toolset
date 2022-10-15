@@ -72,7 +72,7 @@
                             <GridViewColumn Header="Spell" Width="300">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-6,-1,-6,-5"/>
+                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-5,-1,-5,-3"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -107,7 +107,7 @@
                             <GridViewColumn Header="Spell" Width="300">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-6,-1,-6,-5"/>
+                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-5,-1,-5,-3"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -142,7 +142,7 @@
                             <GridViewColumn Header="Spell" Width="300">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-6,-1,-6,-5"/>
+                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-5,-1,-5,-3"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -177,7 +177,7 @@
                             <GridViewColumn Header="Spell" Width="300">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-6,-1,-6,-5"/>
+                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-5,-1,-5,-3"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -212,7 +212,7 @@
                             <GridViewColumn Header="Spell" Width="300">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-6,-1,-6,-5"/>
+                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-5,-1,-5,-3"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -247,7 +247,7 @@
                             <GridViewColumn Header="Spell" Width="300">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-6,-1,-6,-5"/>
+                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-5,-1,-5,-3"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -282,7 +282,7 @@
                             <GridViewColumn Header="Spell" Width="300">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-6,-1,-6,-5"/>
+                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-5,-1,-5,-3"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -317,7 +317,7 @@
                             <GridViewColumn Header="Spell" Width="300">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-6,-1,-6,-5"/>
+                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-5,-1,-5,-3"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -352,7 +352,7 @@
                             <GridViewColumn Header="Spell" Width="300">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-6,-1,-6,-5"/>
+                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-5,-1,-5,-3"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -387,7 +387,7 @@
                             <GridViewColumn Header="Spell" Width="300">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-6,-1,-6,-5"/>
+                                        <uc:SpellComboBox SelectedValue="{Binding Path=Spell}" IsNullable="False" Margin="-5,-1,-5,-3"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

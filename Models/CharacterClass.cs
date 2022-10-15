@@ -16,19 +16,66 @@ namespace Eos.Models
     public class CharacterClass : BaseModel
     {
         private bool _isSpellcaster = false;
+        private AttackBonusTable? _attackBonusTable;
+        private FeatsTable? _feats;
+        private SavingThrowTable? _savingThrows;
+        private SkillsTable? _skills;
+        private BonusFeatsTable? _bonusFeats;
+        private SpellSlotTable? _spellSlots;
+        private KnownSpellsTable? _knownSpells;
+        private PrerequisiteTable? _requirements;
+        private ClassPackage? _defaultPackage;
+        private StatGainTable? _statGainTable;
+        private Spellbook? _spellbook;
 
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet NamePlural { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
         public int HitDie { get; set; } = 8;
         public int SkillPointsPerLevel { get; set; } = 4;
-        public AttackBonusTable? AttackBonusTable { get; set; }
-        public FeatsTable? Feats { get; set; }
-        public SavingThrowTable? SavingThrows { get; set; }
-        public SkillsTable? Skills { get; set; }
-        public BonusFeatsTable? BonusFeats { get; set; }
-        public SpellSlotTable? SpellSlots { get; set; }
-        public KnownSpellsTable? KnownSpells { get; set; }
+
+        public AttackBonusTable? AttackBonusTable
+        {
+            get { return _attackBonusTable; }
+            set { Set(ref _attackBonusTable, value); }
+        }
+
+        public FeatsTable? Feats
+        {
+            get { return _feats; }
+            set { Set(ref _feats, value); }
+        }
+
+        public SavingThrowTable? SavingThrows
+        {
+            get { return _savingThrows; }
+            set { Set(ref _savingThrows, value); }
+        }
+
+        public SkillsTable? Skills
+        {
+            get { return _skills; }
+            set { Set(ref _skills, value); }
+        }
+
+        public BonusFeatsTable? BonusFeats
+        {
+            get { return _bonusFeats; }
+            set { Set(ref _bonusFeats, value); }
+        }
+
+        public SpellSlotTable? SpellSlots
+        {
+            get { return _spellSlots; }
+            set { Set(ref _spellSlots, value); }
+        }
+
+        public KnownSpellsTable? KnownSpells
+        {
+            get { return _knownSpells; }
+            set { Set(ref _knownSpells, value); }
+        }
+
         public bool Playable { get; set; } = true;
 
         public bool IsSpellCaster
@@ -52,14 +99,26 @@ namespace Eos.Models
         public int RecommendedCha { get; set; } = 10;
         public AbilityType PrimaryAbility { get; set; } = AbilityType.STR;
         public Alignment AllowedAlignments { get; set; } = Alignments.All;
-        public PrerequisiteTable? Requirements { get; set; }
+        public PrerequisiteTable? Requirements
+        {
+            get { return _requirements; }
+            set { Set(ref _requirements, value); }
+        }
         public int MaxLevel { get; set; } = 0;
         public bool MulticlassXPPenalty { get; set; } = true;
         public int ArcaneCasterLevelMod { get; set; } = 0;
         public int DivineCasterLevelMod { get; set; } = 0;
         public int PreEpicMaxLevel { get; set; } = -1;
-        public ClassPackage? DefaultPackage { get; set; }
-        public StatGainTable? StatGainTable { get; set; }
+        public ClassPackage? DefaultPackage
+        {
+            get { return _defaultPackage; }
+            set { Set(ref _defaultPackage, value); }
+        }
+        public StatGainTable? StatGainTable
+        {
+            get { return _statGainTable; }
+            set { Set(ref _statGainTable, value); }
+        }
         public bool MemorizesSpells { get; set; } = true;
         public bool SpellbookRestricted { get; set; } = true;
         public bool PicksDomain { get; set; } = false;
@@ -68,7 +127,11 @@ namespace Eos.Models
         public bool IsArcaneCaster { get; set; } = true;
         public bool HasSpellFailure { get; set; } = true;
         public AbilityType SpellcastingAbility { get; set; } = AbilityType.INT;
-        public Spellbook? Spellbook { get; set; }
+        public Spellbook? Spellbook
+        {
+            get { return _spellbook; }
+            set { Set(ref _spellbook, value); }
+        }
         public double CasterLevelMultiplier { get; set; } = 1.0;
         public int MinCastingLevel { get; set; }
         public int MinAssociateLevel { get; set; }

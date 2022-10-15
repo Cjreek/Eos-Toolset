@@ -48,7 +48,6 @@
                     <GridViewColumn Header="Feat" Width="300">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <!-- -6,-1,-6,-5 -->
                                 <uc:FeatComboBox SelectedValue="{Binding Path=Feat}" IsNullable="False" Margin="-5,-1,-5,-3"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>

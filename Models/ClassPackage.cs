@@ -14,14 +14,30 @@ namespace Eos.Models
 {
     public class ClassPackage : BaseModel
     {
+        private CharacterClass? _forClass;
+        private Domain? _domain1;
+        private Domain? _domain2;
+
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
-        public CharacterClass? ForClass { get; set; }
+        public CharacterClass? ForClass
+        {
+            get { return _forClass; }
+            set { Set(ref _forClass, value); }
+        }
         public AbilityType? PreferredAbility { get; set; }
         public int Gold { get; set; }
         public SpellSchool? SpellSchool { get; set; }
-        public Domain? Domain1 { get; set; }
-        public Domain? Domain2 { get; set; }
+        public Domain? Domain1
+        {
+            get { return _domain1; }
+            set { Set(ref _domain1, value); }
+        }
+        public Domain? Domain2
+        {
+            get { return _domain2; }
+            set { Set(ref _domain2, value); }
+        }
         public IntPtr Associate { get; set; }
         public IntPtr SpellPreferences { get; set; }
         public IntPtr FeatPreferences { get; set; }

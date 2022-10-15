@@ -124,10 +124,15 @@ namespace Eos.Repositories
             if (overrideLookup.ContainsKey(item.Overrides ?? Guid.Empty))
                 overrideLookup.Remove(item.Overrides ?? Guid.Empty);
 
+            item.ClearReferences();
             base.Remove(item);
+
+            // Set all remaining references to null
+            foreach (var reference in item.References)
+                reference.ReferenceObject?.ResolveReferences();
         }
 
-        public void LoadFromFile(String filename)
+        public void LoadFromFile(string filename)
         {
             Clear();
 
@@ -155,7 +160,7 @@ namespace Eos.Repositories
             }
         }
 
-        public void SaveToFile(String filename)
+        public void SaveToFile(string filename)
         {
             var jsonArr = new JsonArray();
             foreach (var entity in this)
@@ -175,7 +180,7 @@ namespace Eos.Repositories
         public void AddBase(BaseModel model)
         {
             if (model is T notNullModel)
-                Add((T)notNullModel);
+                Add(notNullModel);
             else
                 throw new InvalidCastException();
         }

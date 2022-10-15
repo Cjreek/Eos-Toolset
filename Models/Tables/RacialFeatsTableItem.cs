@@ -12,11 +12,17 @@ namespace Eos.Models.Tables
 {
     public class RacialFeatsTableItem : TableItem
     {
-        public Feat? Feat { get; set; }
+        private Feat? _feat;
+
+        public Feat? Feat
+        {
+            get { return _feat; }
+            set { Set(ref _feat, value); }
+        }
 
         public override void ResolveReferences()
         {
-            Feat = BaseModel.Resolve(Feat, MasterRepository.Feats);
+            Feat = MasterRepository.Feats.Resolve(Feat);
         }
 
         public override void FromJson(JsonObject json)
@@ -30,6 +36,11 @@ namespace Eos.Models.Tables
             json.Add("Feat", this.Feat?.ToJsonRef());
 
             return json;
+        }
+
+        public override bool IsValid()
+        {
+            return (Feat != null);
         }
     }
 }

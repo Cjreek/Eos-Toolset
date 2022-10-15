@@ -12,7 +12,7 @@ using Eos.Models;
 
 namespace Eos.Repositories
 {
-    public class Repository<T> : INotifyCollectionChanged, INotifyPropertyChanged, IReadOnlyCollection<T?>, IReadOnlyList<T?>, IEnumerable<T?> where T : INotifyPropertyChanged, new() 
+    public class Repository<T> : INotifyCollectionChanged, INotifyPropertyChanged, IReadOnlyCollection<T?>, IReadOnlyList<T?>, IEnumerable<T?> where T : INotifyPropertyChanged, new()
     {
         protected ObservableCollection<T?> internalList = new ObservableCollection<T?>();
         private bool fireChangedEvent = true;
@@ -31,7 +31,7 @@ namespace Eos.Repositories
 
         private void InternalListChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            if ((e.Action == NotifyCollectionChangedAction.Remove))
+            if (e.Action == NotifyCollectionChangedAction.Remove)
             {
                 var items = e.OldItems;
                 if (items != null)
@@ -41,7 +41,7 @@ namespace Eos.Repositories
                 }
             }
             else
-            if ((e.Action == NotifyCollectionChangedAction.Add))
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 var items = e.NewItems;
                 if (items != null)
@@ -51,7 +51,7 @@ namespace Eos.Repositories
                 }
             }
             else
-            if ((e.Action == NotifyCollectionChangedAction.Replace))
+            if (e.Action == NotifyCollectionChangedAction.Replace)
             {
                 var oldItems = e.OldItems;
                 if (oldItems != null)
@@ -85,8 +85,8 @@ namespace Eos.Repositories
         }
 
         protected virtual void Changed()
-        { 
-            
+        {
+
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

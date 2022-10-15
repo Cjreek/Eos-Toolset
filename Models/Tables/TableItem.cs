@@ -11,6 +11,7 @@ namespace Eos.Models.Tables
 {
     public class TableItem : INotifyPropertyChanged
     {
+        public BaseModel? ParentTable { get; set; }
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public virtual void ResolveReferences()
@@ -26,6 +27,22 @@ namespace Eos.Models.Tables
         public virtual JsonObject ToJson()
         {
             return new JsonObject();
+        }
+
+        protected void Set<T>(ref T? reference, T? value, [CallerMemberName] String refProperty = "") where T : BaseModel
+        {
+            if ((reference != value) && (ParentTable != null))
+            {
+                reference?.RemoveReference(ParentTable, refProperty);
+                reference = value;
+                reference?.AddReference(ParentTable, refProperty);
+                NotifyPropertyChanged(refProperty);
+            }
+        }
+
+        public virtual bool IsValid()
+        {
+            return true;
         }
 
         protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

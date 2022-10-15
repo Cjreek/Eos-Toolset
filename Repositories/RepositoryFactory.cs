@@ -11,7 +11,7 @@ namespace Eos.Repositories
     {
         private static Dictionary<Type, Type> registeredRepositories = new Dictionary<Type, Type>();
 
-        public static ModelRepository<T> Create<T>(bool isReadonly) where T: BaseModel, new()
+        public static ModelRepository<T> Create<T>(bool isReadonly) where T : BaseModel, new()
         {
             if (!registeredRepositories.ContainsKey(typeof(T)))
                 return new ModelRepository<T>(isReadonly);
@@ -24,7 +24,7 @@ namespace Eos.Repositories
             return (ModelRepository<T>)constructor.Invoke(new object[] { isReadonly });
         }
 
-        public static void RegisterRepositoryClass<T>(Type repoType) where T: BaseModel
+        public static void RegisterRepositoryClass<T>(Type repoType) where T : BaseModel
         {
             registeredRepositories[typeof(T)] = repoType;
         }

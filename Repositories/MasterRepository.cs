@@ -3,6 +3,7 @@ using Eos.Models.Tables;
 using Eos.Nwn.Bif;
 using Eos.Nwn.Tlk;
 using Eos.Nwn.TwoDimensionalArray;
+using Eos.Repositories.Models;
 using Eos.Types;
 using System;
 using System.Collections;
@@ -48,9 +49,17 @@ namespace Eos.Repositories
 
         static MasterRepository()
         {
-            RepositoryFactory.RegisterRepositoryClass<Feat>(typeof(FeatRepository));
+            RepositoryFactory.RegisterRepositoryClass<Race>(typeof(RaceRepository));
+            RepositoryFactory.RegisterRepositoryClass<CharacterClass>(typeof(ClassRepository));
+            RepositoryFactory.RegisterRepositoryClass<Domain>(typeof(DomainRepository));
             RepositoryFactory.RegisterRepositoryClass<Spell>(typeof(SpellRepository));
+            RepositoryFactory.RegisterRepositoryClass<Feat>(typeof(FeatRepository));
+            RepositoryFactory.RegisterRepositoryClass<Skill>(typeof(SkillRepository));
+            RepositoryFactory.RegisterRepositoryClass<Disease>(typeof(DiseaseRepository));
+            RepositoryFactory.RegisterRepositoryClass<Poison>(typeof(PoisonRepository));
             RepositoryFactory.RegisterRepositoryClass<Spellbook>(typeof(SpellbookRepository));
+
+            // TODO: All repos
 
             resources = new ResourceRepository();
 
@@ -83,7 +92,7 @@ namespace Eos.Repositories
             racialFeatsTableVirtualRepository = new VirtualModelRepository<RacialFeatsTable>(standardCategory.RacialFeatsTables, project.RacialFeatsTables);
         }
 
-        public static void Initialize(String nwnBasePath)
+        public static void Initialize(string nwnBasePath)
         {
             resources.Initialize(nwnBasePath);
         }

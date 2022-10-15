@@ -9,16 +9,30 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Eos.ViewModels
 {
+    public enum ViewModelQueryResult
+    {
+        Yes, No, Cancel
+    }
+
     public class ViewModelErrorEventArgs : EventArgs
     {
         public String Message { get; set; } = String.Empty;
     }
 
+    public class ViewModelQueryEventArgs : EventArgs
+    {
+        public String Title { get; set; } = String.Empty;
+        public String Message { get; set; } = String.Empty;
+        public ViewModelQueryResult Result { get; set; } = ViewModelQueryResult.Cancel;
+    }
+
     public delegate void ErrorEventHandler(ViewModelBase viewModel, ViewModelErrorEventArgs args);
+    public delegate void QueryEventHandler(ViewModelBase viewModel, ViewModelQueryEventArgs args);
 
     public class ViewModelBase : INotifyPropertyChanged
     {
@@ -32,10 +46,23 @@ namespace Eos.ViewModels
         }
 
         public event ErrorEventHandler? OnError;
+        public event QueryEventHandler? OnQuery;
 
         protected void DoError(String message)
         {
             OnError?.Invoke(this, new ViewModelErrorEventArgs() { Message = message });
+        }
+
+        protected ViewModelQueryResult DoQuery(String title, String message)
+        {
+            var args = new ViewModelQueryEventArgs();
+            args.Title = title;
+            args.Message = message;
+            args.Result = ViewModelQueryResult.Cancel;
+
+            OnQuery?.Invoke(this, args);
+
+            return args.Result;
         }
 
         // Commands

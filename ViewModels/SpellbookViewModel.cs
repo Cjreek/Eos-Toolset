@@ -36,23 +36,12 @@ namespace Eos.ViewModels
         private void AddSpell(int? level)
         {
             if (level != null)
-            {
-                Data.AddSpell(level ?? 0, new SpellbookEntry());
-            }
+                Data.AddSpell(level ?? 0, new SpellbookEntry(Data));
         }
 
         private void DeleteSpell(SpellbookEntry entry)
         {
-            Data.Level0.Remove(entry);
-            Data.Level1.Remove(entry);
-            Data.Level2.Remove(entry);
-            Data.Level3.Remove(entry);
-            Data.Level4.Remove(entry);
-            Data.Level5.Remove(entry);
-            Data.Level6.Remove(entry);
-            Data.Level7.Remove(entry);
-            Data.Level8.Remove(entry);
-            Data.Level9.Remove(entry);
+            Data.RemoveSpell(entry);
         }
 
         public DelegateCommand<int?> AddSpellCommand { get; private set; }

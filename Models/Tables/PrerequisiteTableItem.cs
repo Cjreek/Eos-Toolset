@@ -15,6 +15,7 @@ namespace Eos.Models.Tables
     public class PrerequisiteTableItem : TableItem
     {
         private RequirementType requirementType;
+        private object? _requirementParam1;
 
         public RequirementType RequirementType
         {
@@ -31,7 +32,21 @@ namespace Eos.Models.Tables
             }
         }
 
-        public object? RequirementParam1 { get; set; }
+        public object? RequirementParam1
+        {
+            get { return _requirementParam1; }
+            set 
+            { 
+                if (_requirementParam1 != value)
+                {
+                    if ((_requirementParam1 is BaseModel oldValue) && (ParentTable != null))
+                        oldValue.RemoveReference(ParentTable);
+                    _requirementParam1 = value;
+                    if ((_requirementParam1 is BaseModel newValue) && (ParentTable != null))
+                        newValue.AddReference(ParentTable);
+                }
+            }
+        }
         public object? RequirementParam2 { get; set; }
 
         private object? JsonToParam(JsonNode? node)
@@ -69,20 +84,20 @@ namespace Eos.Models.Tables
             {
                 case RequirementType.CLASSOR:
                 case RequirementType.CLASSNOT:
-                    this.RequirementParam1 = BaseModel.Resolve((CharacterClass?)RequirementParam1, MasterRepository.Classes);
+                    this.RequirementParam1 = MasterRepository.Classes.Resolve((CharacterClass?)RequirementParam1);
                     break;
 
                 case RequirementType.FEAT:
                 case RequirementType.FEATOR:
-                    this.RequirementParam1 = BaseModel.Resolve((Feat?)RequirementParam1, MasterRepository.Feats);
+                    this.RequirementParam1 = MasterRepository.Feats.Resolve((Feat?)RequirementParam1);
                     break;
 
                 case RequirementType.RACE:
-                    this.RequirementParam1 = BaseModel.Resolve((Race?)RequirementParam1, MasterRepository.Races);
+                    this.RequirementParam1 = MasterRepository.Races.Resolve((Race?)RequirementParam1);
                     break;
 
                 case RequirementType.SKILL:
-                    this.RequirementParam1 = BaseModel.Resolve((Skill?)RequirementParam1, MasterRepository.Skills);
+                    this.RequirementParam1 = MasterRepository.Skills.Resolve((Skill?)RequirementParam1);
                     break;
             }
         }
@@ -160,6 +175,11 @@ namespace Eos.Models.Tables
             json.Add("RequirementParam2", ParamToJson(this.RequirementParam2));
 
             return json;
+        }
+
+        public override bool IsValid()
+        {
+            return (RequirementParam1 != null);
         }
     }
 }

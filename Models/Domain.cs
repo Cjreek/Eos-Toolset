@@ -3,29 +3,99 @@ using Eos.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Xml.Linq;
 using static Eos.Models.JsonUtils;
 
 namespace Eos.Models
 {
     public class Domain : BaseModel
     {
+        private Spell? _level0Spell;
+        private Spell? _level1Spell;
+        private Spell? _level2Spell;
+        private Spell? _level3Spell;
+        private Spell? _level4Spell;
+        private Spell? _level5Spell;
+        private Spell? _level6Spell;
+        private Spell? _level7Spell;
+        private Spell? _level8Spell;
+        private Spell? _level9Spell;
+        private Feat? _grantedFeat;
+
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
-        public Spell? Level0Spell { get; set; }
-        public Spell? Level1Spell { get; set; }
-        public Spell? Level2Spell { get; set; }
-        public Spell? Level3Spell { get; set; }
-        public Spell? Level4Spell { get; set; }
-        public Spell? Level5Spell { get; set; }
-        public Spell? Level6Spell { get; set; }
-        public Spell? Level7Spell { get; set; }
-        public Spell? Level8Spell { get; set; }
-        public Spell? Level9Spell { get; set; }
-        public Feat? GrantedFeat { get; set; }
+
+        public Spell? Level0Spell
+        {
+            get { return _level0Spell; }
+            set { Set(ref _level0Spell, value); }
+        }
+
+        public Spell? Level1Spell
+        {
+            get { return _level1Spell; }
+            set { Set(ref _level1Spell, value); }
+        }
+
+        public Spell? Level2Spell
+        {
+            get { return _level2Spell; }
+            set { Set(ref _level2Spell, value); }
+        }
+
+        public Spell? Level3Spell
+        {
+            get { return _level3Spell; }
+            set { Set(ref _level3Spell, value); }
+        }
+
+        public Spell? Level4Spell
+        {
+            get { return _level4Spell; }
+            set { Set(ref _level4Spell, value); }
+        }
+
+        public Spell? Level5Spell
+        {
+            get { return _level5Spell; }
+            set { Set(ref _level5Spell, value); }
+        }
+
+        public Spell? Level6Spell
+        {
+            get { return _level6Spell; }
+            set { Set(ref _level6Spell, value); }
+        }
+
+        public Spell? Level7Spell
+        {
+            get { return _level7Spell; }
+            set { Set(ref _level7Spell, value); }
+        }
+
+        public Spell? Level8Spell
+        {
+            get { return _level8Spell; }
+            set { Set(ref _level8Spell, value); }
+        }
+
+        public Spell? Level9Spell
+        {
+            get { return _level9Spell; }
+            set { Set(ref _level9Spell, value); }
+        }
+
+        public Feat? GrantedFeat
+        {
+            get { return _grantedFeat; }
+            set { Set(ref _grantedFeat, value); }
+        }
+
         public bool FeatIsActive { get; set; } = false;
 
         protected override String GetLabel()

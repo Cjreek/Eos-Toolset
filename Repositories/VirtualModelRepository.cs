@@ -93,5 +93,11 @@ namespace Eos.Repositories
 
             return result;
         }
+
+        public T? Resolve(T? modelRef)
+        {
+            if (modelRef == null) return null;
+            return GetByID(modelRef.ID);
+        }
     }
 }

@@ -16,6 +16,17 @@ namespace Eos.Models
     {
         private SpellSchool _spellSchool = SpellSchool.G;
         private SpellType _spellType = SpellType.Spell;
+        private Spell? _subSpell1;
+        private Spell? _subSpell2;
+        private Spell? _subSpell3;
+        private Spell? _subSpell4;
+        private Spell? _subSpell5;
+        private Spell? _subSpell6;
+        private Spell? _subSpell7;
+        private Spell? _subSpell8;
+        private Spell? _parentSpell;
+        private Spell? _counterSpell1;
+        private Spell? _counterSpell2;
 
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
@@ -58,16 +69,53 @@ namespace Eos.Models
         public ProjectileSource? ProjectileSpawnPoint { get; set; } = ProjectileSource.Hand;
         public String? ProjectileSound { get; set; }
         public ProjectileOrientation? ProjectileOrientation { get; set; } = Types.ProjectileOrientation.Path;
-        public Spell? SubSpell1 { get; set; }
-        public Spell? SubSpell2 { get; set; }
-        public Spell? SubSpell3 { get; set; }
-        public Spell? SubSpell4 { get; set; }
-        public Spell? SubSpell5 { get; set; }
-        public Spell? SubSpell6 { get; set; }
-        public Spell? SubSpell7 { get; set; }
-        public Spell? SubSpell8 { get; set; }
+        public Spell? SubSpell1
+        {
+            get { return _subSpell1; }
+            set { Set(ref _subSpell1, value); }
+        }
+        public Spell? SubSpell2
+        {
+            get { return _subSpell2; }
+            set { Set(ref _subSpell2, value); }
+        }
+        public Spell? SubSpell3
+        {
+            get { return _subSpell3; }
+            set { Set(ref _subSpell3, value); }
+        }
+        public Spell? SubSpell4
+        {
+            get { return _subSpell4; }
+            set { Set(ref _subSpell4, value); }
+        }
+        public Spell? SubSpell5
+        {
+            get { return _subSpell5; }
+            set { Set(ref _subSpell5, value); }
+        }
+        public Spell? SubSpell6
+        {
+            get { return _subSpell6; }
+            set { Set(ref _subSpell6, value); }
+        }
+        public Spell? SubSpell7
+        {
+            get { return _subSpell7; }
+            set { Set(ref _subSpell7, value); }
+        }
+        public Spell? SubSpell8
+        {
+            get { return _subSpell8; }
+            set { Set(ref _subSpell8, value); }
+        }
+
         public AICategory? Category { get; set; }
-        public Spell? ParentSpell { get; set; }
+        public Spell? ParentSpell
+        {
+            get { return _parentSpell; }
+            set { Set(ref _parentSpell, value); }
+        }
         public SpellType Type
         {
             get { return _spellType; }
@@ -83,8 +131,16 @@ namespace Eos.Models
         public bool UseConcentration { get; set; } = true;
         public bool IsCastSpontaneously { get; set; } = false;
         public bool IsHostile { get; set; }
-        public Spell? CounterSpell1 { get; set; }
-        public Spell? CounterSpell2 { get; set; }
+        public Spell? CounterSpell1
+        {
+            get { return _counterSpell1; }
+            set { Set(ref _counterSpell1, value); }
+        }
+        public Spell? CounterSpell2
+        {
+            get { return _counterSpell2; }
+            set { Set(ref _counterSpell2, value); }
+        }
 
         public TargetShape? TargetShape { get; set; }
         public int? TargetSizeX { get; set; }

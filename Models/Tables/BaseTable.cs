@@ -70,11 +70,15 @@ namespace Eos.Models.Tables
         public void Add(T item)
         {
             if (Count < GetMaximumItems())
+            {
+                item.ParentTable = this;
                 _items.Add(item);
+            }
         }
 
         public void Remove(T item)
         {
+            item.ParentTable = null;
             _items.Remove(item);
         }
 
@@ -85,11 +89,14 @@ namespace Eos.Models.Tables
 
         public override void ResolveReferences()
         {
-            for (int i=0; i < Count; i++)
+            for (int i = Count - 1; i >= 0; i--)
             {
                 var item = this[i];
                 if (item != null)
+                {
                     item.ResolveReferences();
+                    if (!item.IsValid()) Remove(item);
+                }
             }
         }
 
@@ -107,6 +114,7 @@ namespace Eos.Models.Tables
                     if (jsonItemValue is JsonObject jsonItem)
                     {
                         var item = new T();
+                        item.ParentTable = this;
                         item.FromJson(jsonItem);
                         Add(item);
                     }

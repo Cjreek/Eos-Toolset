@@ -15,6 +15,19 @@ namespace Eos.Models
     public class Feat : BaseModel
     {
         private FeatCategory _toolsetCategory = FeatCategory.Other;
+        private Feat? _requiredFeat1;
+        private Feat? _requiredFeat2;
+        private Spell? _onUseEffect;
+        private Feat? _successorFeat;
+        private Feat? _masterFeat;
+        private Feat? _requiredFeatSelection1;
+        private Feat? _requiredFeatSelection2;
+        private Feat? _requiredFeatSelection3;
+        private Feat? _requiredFeatSelection4;
+        private Feat? _requiredFeatSelection5;
+        private Skill? _requiredSkill1;
+        private Skill? _requiredSkill2;
+        private CharacterClass? _minLevelClass;
 
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
@@ -26,24 +39,72 @@ namespace Eos.Models
         public int? MinCon { get; set; }
         public int? MinCha { get; set; }
         public int? MinSpellLevel { get; set; }
-        public Feat? RequiredFeat1 { get; set; }
-        public Feat? RequiredFeat2 { get; set; }
+        public Feat? RequiredFeat1
+        {
+            get { return _requiredFeat1; }
+            set { Set(ref _requiredFeat1, value); }
+        }
+        public Feat? RequiredFeat2
+        {
+            get { return _requiredFeat2; }
+            set { Set(ref _requiredFeat2, value); }
+        }
         public bool UseableByAllClasses { get; set; } = true;
         public AICategory? Category { get; set; }
-        public Spell? OnUseEffect { get; set; }
-        public Feat? SuccessorFeat { get; set; }
+        public Spell? OnUseEffect
+        {
+            get { return _onUseEffect; }
+            set { Set(ref _onUseEffect, value); }
+        }
+        public Feat? SuccessorFeat
+        {
+            get { return _successorFeat; }
+            set { Set(ref _successorFeat, value); }
+        }
         public double? CRModifier { get; set; } = 1;
         public int? UsesPerDay { get; set; } = 0;
-        public Feat? MasterFeat { get; set; }
+        public Feat? MasterFeat
+        {
+            get { return _masterFeat; }
+            set { Set(ref _masterFeat, value); }
+        }
         public bool? TargetSelf { get; set; } = false;
-        public Feat? RequiredFeatSelection1 { get; set; }
-        public Feat? RequiredFeatSelection2 { get; set; }
-        public Feat? RequiredFeatSelection3 { get; set; }
-        public Feat? RequiredFeatSelection4 { get; set; }
-        public Feat? RequiredFeatSelection5 { get; set; }
-        public Skill? RequiredSkill1 { get; set; }
+        public Feat? RequiredFeatSelection1
+        {
+            get { return _requiredFeatSelection1; }
+            set { Set(ref _requiredFeatSelection1, value); }
+        }
+        public Feat? RequiredFeatSelection2
+        {
+            get { return _requiredFeatSelection2; }
+            set { Set(ref _requiredFeatSelection2, value); }
+        }
+        public Feat? RequiredFeatSelection3
+        {
+            get { return _requiredFeatSelection3; }
+            set { Set(ref _requiredFeatSelection3, value); }
+        }
+        public Feat? RequiredFeatSelection4
+        {
+            get { return _requiredFeatSelection4; }
+            set { Set(ref _requiredFeatSelection4, value); }
+        }
+        public Feat? RequiredFeatSelection5
+        {
+            get { return _requiredFeatSelection5; }
+            set { Set(ref _requiredFeatSelection5, value); }
+        }
+        public Skill? RequiredSkill1
+        {
+            get { return _requiredSkill1; }
+            set { Set(ref _requiredSkill1, value); }
+        }
         public int? RequiredSkill1Minimum { get; set; }
-        public Skill? RequiredSkill2 { get; set; }
+        public Skill? RequiredSkill2
+        {
+            get { return _requiredSkill2; }
+            set { Set(ref _requiredSkill2, value); }
+        }
         public int? RequiredSkill2Minimum { get; set; }
         public FeatCategory ToolsetCategory
         {
@@ -59,7 +120,11 @@ namespace Eos.Models
         }
         public bool? IsHostile { get; set; } = false;
         public int? MinLevel { get; set; }
-        public CharacterClass? MinLevelClass { get; set; }
+        public CharacterClass? MinLevelClass
+        {
+            get { return _minLevelClass; }
+            set { Set(ref _minLevelClass, value); }
+        }
         public int? MaxLevel { get; set; }
         public int? MinFortitudeSave { get; set; }
         public bool RequiresEpic { get; set; } = false;

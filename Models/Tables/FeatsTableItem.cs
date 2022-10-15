@@ -20,14 +20,7 @@ namespace Eos.Models.Tables
         public Feat? Feat
         {
             get { return _feat; }
-            set
-            {
-                if (_feat != value)
-                {
-                    _feat = value;
-                    NotifyPropertyChanged();
-                }
-            }
+            set { Set(ref _feat, value); }
         }
 
         public FeatListType FeatList { get; set; } = FeatListType.GeneralFeat;
@@ -48,7 +41,7 @@ namespace Eos.Models.Tables
 
         public override void ResolveReferences()
         {
-            Feat = BaseModel.Resolve(Feat, MasterRepository.Feats);
+            Feat = MasterRepository.Feats.Resolve(Feat);
         }
 
         public override void FromJson(JsonObject json)
@@ -68,6 +61,11 @@ namespace Eos.Models.Tables
             json.Add("Menu", EnumToJson(this.Menu));
 
             return json;
+        }
+
+        public override bool IsValid()
+        {
+            return (Feat != null);
         }
     }
 }

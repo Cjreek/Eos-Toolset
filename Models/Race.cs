@@ -15,22 +15,41 @@ namespace Eos.Models
 {
     public class Race : BaseModel
     {
+        private Appearance? _appearance;
+        private CharacterClass? _favoredClass;
+        private CharacterClass? _toolsetDefaultClass;
+        private Feat? _favoredEnemyFeat;
+        private RacialFeatsTable? _feats;
+
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet NamePlural { get; set; } = new TLKStringSet();
         public TLKStringSet Adjective { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
-        public Appearance? Appearance { get; set; }
+        public Appearance? Appearance
+        {
+            get { return _appearance; }
+            set { Set(ref _appearance, value); }
+        }
         public int StrAdjustment { get; set; } = 0;
         public int DexAdjustment { get; set; } = 0;
         public int IntAdjustment { get; set; } = 0;
         public int ChaAdjustment { get; set; } = 0;
         public int WisAdjustment { get; set; } = 0;
         public int ConAdjustment { get; set; } = 0;
-        public CharacterClass? FavoredClass { get; set; }
+        public CharacterClass? FavoredClass
+        {
+            get { return _favoredClass; }
+            set { Set(ref _favoredClass, value); }
+        }
+
         public TLKStringSet Biography { get; set; } = new TLKStringSet();
         public bool? Playable { get; set; } = false;
         public int? DefaultAge { get; set; }
-        public CharacterClass? ToolsetDefaultClass { get; set; }
+        public CharacterClass? ToolsetDefaultClass
+        {
+            get { return _toolsetDefaultClass; }
+            set { Set(ref _toolsetDefaultClass, value); }
+        }
         public double? CRModifier { get; set; } = 1;
         public String? NameGenTableA { get; set; }
         public String? NameGenTableB { get; set; }
@@ -41,8 +60,16 @@ namespace Eos.Models
         public int? FeatEveryNthLevel { get; set; } = 3;
         public int? FeatEveryNthLevelCount { get; set; } = 1;
         public AbilityType? SkillPointModifierAbility { get; set; } = AbilityType.INT;
-        public Feat? FavoredEnemyFeat { get; set; }
-        public RacialFeatsTable? Feats { get; set; }
+        public Feat? FavoredEnemyFeat
+        {
+            get { return _favoredEnemyFeat; }
+            set { Set(ref _favoredEnemyFeat, value); }
+        }
+        public RacialFeatsTable? Feats
+        {
+            get { return _feats; }
+            set { Set(ref _feats, value); }
+        }
 
         protected override String GetLabel()
         {

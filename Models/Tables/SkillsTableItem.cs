@@ -12,12 +12,19 @@ namespace Eos.Models.Tables
 {
     public class SkillsTableItem : TableItem
     {
-        public Skill? Skill { get; set; }
+        private Skill? _skill;
+
+        public Skill? Skill
+        {
+            get { return _skill; }
+            set { Set(ref _skill, value); }
+        }
+
         public bool IsClassSkill { get; set; }
 
         public override void ResolveReferences()
         {
-            Skill = BaseModel.Resolve(Skill, MasterRepository.Skills);
+            Skill = MasterRepository.Skills.Resolve(Skill);
         }
 
         public override void FromJson(JsonObject json)
@@ -33,6 +40,11 @@ namespace Eos.Models.Tables
             json.Add("IsClassSkill", this.IsClassSkill);
 
             return json;
+        }
+
+        public override bool IsValid()
+        {
+            return (Skill != null);
         }
     }
 }

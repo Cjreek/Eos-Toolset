@@ -10,13 +10,13 @@ using System.Windows.Data;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using Eos.Repositories;
 using Eos.ViewModels.Base;
 using Eos.Nwn.Tlk;
 using Eos.Services;
 using Eos.Views;
 using System.Globalization;
 using Eos.ViewModels.Dialogs;
+using Eos.Repositories;
 
 namespace Eos.ViewModels
 {
@@ -96,6 +96,17 @@ namespace Eos.ViewModels
 
         private void DeleteDetail(BaseModel model)
         {
+            if (model.ReferenceCount > 0)
+            {
+                var message = "There are still " + model.ReferenceCount.ToString() + " references to this " + model.GetType().Name + ":\n\n";
+                foreach (var reference in model.References)
+                    message += "> [" + reference.ReferenceObject?.GetType().Name + "] " + reference.ReferenceName + " (" + reference.ReferenceProperty + ")\n";
+                message += "\nDo you still want to delete this item and remove all its references?";
+                var queryResult = DoQuery("References", message);
+                if (queryResult != ViewModelQueryResult.Yes)
+                    return;
+            }
+
             CloseDetail(model);
             MasterRepository.Project.Delete(model);
         }

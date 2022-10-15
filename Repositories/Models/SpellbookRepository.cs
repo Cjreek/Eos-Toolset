@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Eos.Repositories
+namespace Eos.Repositories.Models
 {
     public class SpellbookRepository : ModelRepository<Spellbook>
     {
@@ -13,15 +13,15 @@ namespace Eos.Repositories
 
         public SpellbookRepository(bool isReadonly) : base(isReadonly)
         {
-            
+
         }
 
-        public bool Contains(String name)
+        public bool Contains(string name)
         {
             return _spellbookNameLookup.ContainsKey(name);
         }
 
-        public Spellbook? GetByName(String name)
+        public Spellbook? GetByName(string name)
         {
             if (!_spellbookNameLookup.TryGetValue(name, out Spellbook? spellbook))
                 return null;

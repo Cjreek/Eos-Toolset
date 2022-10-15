@@ -40,7 +40,7 @@ namespace Eos.Repositories
         private readonly ModelRepository<StatGainTable> statGainTableRepository;
         private readonly ModelRepository<RacialFeatsTable> racialFeatsTableRepository;
 
-        private void InitRepository<T>(out ModelRepository<T> repository, String propertyName) where T: BaseModel, new() 
+        private void InitRepository<T>(out ModelRepository<T> repository, string propertyName) where T : BaseModel, new()
         {
             repository = RepositoryFactory.Create<T>(isReadonly);
             repository.CollectionChanged += (_, _) => NotifyPropertyChanged(propertyName);

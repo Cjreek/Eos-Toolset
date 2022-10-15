@@ -62,14 +62,12 @@ namespace Eos.Services
             }
         }
 
-        private int GetTLKIndex(TLKStringSet tlkString)
+        private int? GetTLKIndex(TLKStringSet tlkString)
         {
             if (!customTLKIndices.TryGetValue(tlkString, out int result))
-                result = tlkString.OriginalIndex ?? 0;
+                return tlkString.OriginalIndex;
             else
-                result += 0x01000000;
-
-            return result;
+                return result + 0x01000000;
         }
 
         private void CollectTLKEntries(EosProject project)
@@ -379,36 +377,36 @@ namespace Eos.Services
                                 rec.Set("LABEL", labelModel);
                             switch (item.RequirementType)
                             {
-                                case Types.RequirementType.BAB:
+                                case RequirementType.BAB:
                                     rec.Set("LABEL", "Base_Attack");
                                     break;
 
-                                case Types.RequirementType.ARCSPELL:
+                                case RequirementType.ARCSPELL:
                                     rec.Set("LABEL", "Arcane");
                                     break;
 
-                                case Types.RequirementType.CLASSNOT:
+                                case RequirementType.CLASSNOT:
                                     rec.Set("LABEL", ((CharacterClass?)item.RequirementParam1)?.Name[project.DefaultLanguage].Text.Replace(" ", ""));
                                     break;
 
-                                case Types.RequirementType.CLASSOR:
+                                case RequirementType.CLASSOR:
                                     rec.Set("LABEL", ((CharacterClass?)item.RequirementParam1)?.Name[project.DefaultLanguage].Text.Replace(" ", "") + "Or");
                                     break;
 
-                                case Types.RequirementType.RACE:
+                                case RequirementType.RACE:
                                     rec.Set("LABEL", ((Race?)item.RequirementParam1)?.Name[project.DefaultLanguage].Text.Replace(" ", ""));
                                     break;
 
-                                case Types.RequirementType.FEAT:
-                                case Types.RequirementType.FEATOR:
+                                case RequirementType.FEAT:
+                                case RequirementType.FEATOR:
                                     rec.Set("LABEL", ((Feat?)item.RequirementParam1)?.Name[project.DefaultLanguage].Text.Replace(" ", ""));
                                     break;
 
-                                case Types.RequirementType.SKILL:
+                                case RequirementType.SKILL:
                                     rec.Set("LABEL", ((Skill?)item.RequirementParam1)?.Name[project.DefaultLanguage].Text.Replace(" ", ""));
                                     break;
 
-                                case Types.RequirementType.VAR:
+                                case RequirementType.VAR:
                                     rec.Set("LABEL", "ScriptVar");
                                     break;
 
@@ -420,21 +418,21 @@ namespace Eos.Services
                             rec.Set("ReqType", item.RequirementType.ToString());
                             switch (item.RequirementType)
                             {
-                                case Types.RequirementType.CLASSNOT:
-                                case Types.RequirementType.CLASSOR:
+                                case RequirementType.CLASSNOT:
+                                case RequirementType.CLASSOR:
                                     rec.Set("ReqParam1", project.Classes.IndexOf((CharacterClass?)item.RequirementParam1));
                                     break;
 
-                                case Types.RequirementType.RACE:
+                                case RequirementType.RACE:
                                     rec.Set("ReqParam1", project.Races.IndexOf((Race?)item.RequirementParam1));
                                     break;
 
-                                case Types.RequirementType.FEAT:
-                                case Types.RequirementType.FEATOR:
+                                case RequirementType.FEAT:
+                                case RequirementType.FEATOR:
                                     rec.Set("ReqParam1", project.Feats.IndexOf((Feat?)item.RequirementParam1));
                                     break;
 
-                                case Types.RequirementType.SKILL:
+                                case RequirementType.SKILL:
                                     rec.Set("ReqParam1", project.Skills.IndexOf((Skill?)item.RequirementParam1));
                                     break;
 

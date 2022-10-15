@@ -6,6 +6,7 @@ using Eos.Nwn.Ssf;
 using Eos.Nwn.Tlk;
 using Eos.Nwn.TwoDimensionalArray;
 using Eos.Repositories;
+using Eos.Repositories.Models;
 using Eos.Types;
 using System;
 using System.Collections.Generic;

@@ -70,9 +70,24 @@ namespace Eos
         {
             InitializeComponent();
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
+            viewModel.OnQuery += ViewModel_OnQuery;
 
             //var import = new GameDataImport();
             //import.Import(EosConfig.NwnBasePath);
+        }
+
+        private void ViewModel_OnQuery(ViewModelBase viewModel, ViewModelQueryEventArgs args)
+        {
+            var result = MessageBox.Show(this, args.Message, args.Title, MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    args.Result = ViewModelQueryResult.Yes;
+                    break;
+                case MessageBoxResult.No:
+                    args.Result = ViewModelQueryResult.No;
+                    break;
+            }
         }
 
         private TreeViewItem? GetDataContainer(TreeViewItem item, object? data)
