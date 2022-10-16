@@ -11,6 +11,7 @@
              d:DesignHeight="120" d:DesignWidth="400">
     <UserControl.Resources>
         <local:AlignmentToBoolConverter x:Key="alignmentToBoolConverter"/>
+        <local:AlignmentValidToVisibilityConverter x:Key="alignmentValidToVisibilityConverter"/>
 
         <ControlTemplate x:Key="alignmentCheckbox">
             <Border Margin="1" BorderThickness="1" BorderBrush="SlateGray">
@@ -80,6 +81,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             
             <ToggleButton Grid.Row="0" Grid.Column="0" Content="Lawful Good" Tag="{x:Static types:Alignment.LawfulGood}"
@@ -102,6 +104,10 @@
                       IsChecked="{Binding ElementName=ucAlignmentMatrix, Path=Alignment, Mode=OneWay, Converter={StaticResource alignmentToBoolConverter}, ConverterParameter={x:Static types:Alignment.NeutralEvil}}"/>
             <ToggleButton Grid.Row="2" Grid.Column="2" Content="Chaotic Evil" Tag="{x:Static types:Alignment.ChaoticEvil}"
                       IsChecked="{Binding ElementName=ucAlignmentMatrix, Path=Alignment, Mode=OneWay, Converter={StaticResource alignmentToBoolConverter}, ConverterParameter={x:Static types:Alignment.ChaoticEvil}}"/>
+
+            <TextBlock Grid.Row="4" Grid.ColumnSpan="3" Text="This is not a valid alignment restriction!" 
+                       TextAlignment="Center" Margin="1,5,0,0" Foreground="Red" FontWeight="Bold"
+                       Visibility="{Binding ElementName=ucAlignmentMatrix, Path=Alignment, Mode=OneWay, Converter={StaticResource alignmentValidToVisibilityConverter}}" />
         </Grid>
     </Viewbox>
 </UserControl>

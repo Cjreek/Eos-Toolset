@@ -207,12 +207,16 @@ namespace Eos.Nwn.TwoDimensionalArray
     {
         private List<String> columnList;
         private Dictionary<String, int> columnLookup = new Dictionary<String, int>();
+        private Dictionary<int, bool> writeHexDict = new Dictionary<int, bool>();
 
         public ColumnInfos(String[] columnLine)
         {
             columnList = new List<string>(columnLine);
             for (int i = 0; i < columnList.Count; i++)
+            {
                 columnLookup[columnList[i].ToLower()] = i;
+                writeHexDict[i] = false;
+            }
         }
 
         public event ColumnAddedEvent? ColumnAdded;
@@ -237,6 +241,25 @@ namespace Eos.Nwn.TwoDimensionalArray
                 return columnLookup[key];
 
             return -1;
+        }
+
+        public bool IsHex(int columnIndex)
+        {
+            if (writeHexDict.ContainsKey(columnIndex))
+                return writeHexDict[columnIndex];
+            return false;
+        }
+
+        public bool IsHex(String columnName)
+        {
+            return IsHex(IndexOf(columnName));
+        }
+
+        public void SetHex(String columnName, bool writeHex = true)
+        {
+            var index = IndexOf(columnName);
+            if (index >= 0)
+                writeHexDict[index] = writeHex;
         }
 
         public String this[int index] => columnList[index];
@@ -367,11 +390,13 @@ namespace Eos.Nwn.TwoDimensionalArray
             return 0;
         }
 
-        private String ValueToStr(object? value)
+        private String ValueToStr(object? value, bool isHex)
         {
             if (value == null) return "****";
             if ((value is String str) && (str.Contains(' '))) return "\"" + str + "\"";
             if (value is double dblValue) return dblValue.ToString("n2", floatFormat);
+            if ((value is int intValue) && (isHex)) return "0x" + intValue.ToString("x2");
+
             return value.ToString() ?? "****";
         }
 
@@ -405,7 +430,7 @@ namespace Eos.Nwn.TwoDimensionalArray
             {
                 line = String.Format("{0,-" + columnWidths[0].ToString() + "}", i);
                 for (int j = 0; j < Columns.Count; j++)
-                    line += String.Format("{0,-" + columnWidths[j + 1].ToString() + "}", ValueToStr(records[i][j]));
+                    line += String.Format("{0,-" + columnWidths[j + 1].ToString() + "}", ValueToStr(records[i][j], Columns.IsHex(j)));
                 writer.WriteLine(line.Trim());
             }
 

@@ -613,6 +613,8 @@ namespace Eos.Services
             if (originalClassesData != null)
             {
                 var classes2da = new TwoDimensionalArrayFile(originalClassesData);
+                classes2da.Columns.SetHex("AlignRestrict");
+                classes2da.Columns.SetHex("AlignRstrctType");
                 for (int i=0; i < project.Classes.Count; i++)
                 {
                     var cls = project.Classes[i];
@@ -652,9 +654,12 @@ namespace Eos.Services
                         record.Set("Int", cls.RecommendedInt);
                         record.Set("Cha", cls.RecommendedCha);
                         record.Set("PrimaryAbil", cls.PrimaryAbility.ToString());
-                        //record.Set("AlignRestrict", 0); // TODO: RVP
-                        //record.Set("AlignRstrctType", 0); // TODO: RVP
-                        //record.Set("InvertRestrict", 0); // TODO: RVP
+
+                        AlignmentTuple? align = Alignments.Get2daAlignment(cls.AllowedAlignments);
+                        record.Set("AlignRestrict", align?.Flags ?? 0);
+                        record.Set("AlignRstrctType", align?.Axis ?? 0);
+                        record.Set("InvertRestrict", align?.Inverted ?? false);
+
                         record.Set("Constant", "CLASS_TYPE_" + cls.Name[project.DefaultLanguage].Text.Replace(" ", "_").ToUpper()); // TODO: Get constant
                         record.Set("PreReqTable", cls.Requirements?.Name);
                         record.Set("MaxLevel", cls.MaxLevel > 60 ? 0 : cls.MaxLevel);

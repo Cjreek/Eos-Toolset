@@ -21,6 +21,22 @@ using System.Windows.Shapes;
 
 namespace Eos.Usercontrols
 {
+    class AlignmentValidToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is Alignment alignment)
+                return Alignments.IsValid(alignment) ? Visibility.Hidden : Visibility.Visible;
+
+            return Visibility.Hidden;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     class AlignmentToBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

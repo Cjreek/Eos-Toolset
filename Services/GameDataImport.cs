@@ -494,7 +494,7 @@ namespace Eos.Services
                 // Alignment
                 var alignFlags = classes2da[i].AsInteger("AlignRestrict") ?? 0;
                 var alignAxis = classes2da[i].AsInteger("AlignRstrctType") ?? 0;
-                var alignInvert = !classes2da[i].AsBoolean("InvertRestrict");
+                var alignInvert = classes2da[i].AsBoolean("InvertRestrict");
                 tmpClass.AllowedAlignments = Alignments.Create(alignFlags, alignAxis, alignInvert);
 
                 // Prerequesites

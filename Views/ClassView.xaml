@@ -134,7 +134,7 @@
                     <wpftk:IntegerUpDown Value="{Binding Data.PreEpicMaxLevel}" Grid.Row="4" Grid.Column="3"/>
 
                     <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Alignment" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
-                    <uc:AlignmentMatrix Height="100" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4" Alignment="{Binding Data.AllowedAlignments}"/>
+                    <uc:AlignmentMatrix Height="130" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4" Alignment="{Binding Data.AllowedAlignments}"/>
                     
                     <TextBlock Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Tables" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
 
