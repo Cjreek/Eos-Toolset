@@ -208,9 +208,13 @@ namespace Eos
         {
             if (EosConfig.LastProject != "")
                 MessageDispatcher.Send(MessageType.OpenProject, EosConfig.LastProject);
+        }
 
+        private void miExportProject_Click(object sender, RoutedEventArgs e)
+        {
             var export = new CustomDataExport();
             export.Export(MasterRepository.Project);
+            MessageBox.Show("Export successful!", "Export successful", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

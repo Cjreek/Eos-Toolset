@@ -8,4 +8,6 @@
     <BitmapImage x:Key="iconSave32" UriSource="Icons/save32.png"/>
     <BitmapImage x:Key="iconMale" UriSource="Icons/male16.png"/>
     <BitmapImage x:Key="iconFemale" UriSource="Icons/female16.png"/>
+    <BitmapImage x:Key="iconExport" UriSource="Icons/export16.png"/>
+    <BitmapImage x:Key="iconExport32" UriSource="Icons/export32.png"/>
 </ResourceDictionary>

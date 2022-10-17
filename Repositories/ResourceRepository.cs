@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Concurrent;
+using Eos.Types;
 
 namespace Eos.Repositories
 {
@@ -19,6 +20,7 @@ namespace Eos.Repositories
         public bool IsLoading { get; set; } = false;
         public bool IsLoaded { get; set; } = false;
         public object? Data { get; set; } = null;
+        public Stream RawData { get; set; } = new MemoryStream();
 
         public NWNResource(String? resRef, NWNResourceType type)
         {
@@ -74,13 +76,26 @@ namespace Eos.Repositories
                         resource.IsLoading = true;
                         try
                         {
-                            var rawResource = bif.ReadResource(resource.ResRef, resource.Type);
-                            if (rawResource != null)
+                            if ((resource.Type == NWNResourceType.TGA) && (File.Exists(Constants.IconResourcesFilePath + resource.ResRef + ".tga")))
                             {
-                                var loadResource = GetResourceLoader(rawResource.Type);
-                                resource.Type = rawResource.Type;
-                                resource.Data = loadResource(rawResource.RawData);
+                                var loadResource = GetResourceLoader(resource.Type);
+
+                                var resBytes = File.ReadAllBytes(Constants.IconResourcesFilePath + resource.ResRef + ".tga");
+                                resource.RawData = new MemoryStream(resBytes);
+                                resource.Data = loadResource(new MemoryStream(resBytes));
                                 resource.IsLoaded = true;
+                            }
+                            else
+                            {
+                                var rawResource = bif.ReadResource(resource.ResRef, resource.Type);
+                                if (rawResource != null)
+                                {
+                                    var loadResource = GetResourceLoader(rawResource.Type);
+                                    resource.Type = rawResource.Type;
+                                    rawResource.RawData.CopyTo(resource.RawData);
+                                    resource.Data = loadResource(rawResource.RawData);
+                                    resource.IsLoaded = true;
+                                }
                             }
                         }
                         finally
@@ -106,12 +121,11 @@ namespace Eos.Repositories
             return resRef;
         }
 
-        public object? Get(String? resRef, NWNResourceType type)
+        private NWNResource? GetResource(String? resRef, NWNResourceType type)
         {
             resRef = resRef?.ToLower();
-
             if (resRef == null) return null;
-           
+
             if (!_resources.ContainsKey((resRef, type)))
             {
                 if (bif.ContainsResource(resRef, type))
@@ -127,7 +141,20 @@ namespace Eos.Repositories
                 while (!res.IsLoaded) Thread.Sleep(1);
             }
 
-            return res.Data;
+            return res;
+        }
+
+        public object? Get(String? resRef, NWNResourceType type)
+        {
+            var res = GetResource(resRef, type);
+            return res?.Data;
+        }
+
+        public Stream? GetRaw(String? resRef, NWNResourceType type)
+        {
+            var res = GetResource(resRef, type);
+            res?.RawData.Seek(0, SeekOrigin.Begin);
+            return res?.RawData;
         }
 
         public T? Get<T>(String? resRef, NWNResourceType type)

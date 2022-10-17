@@ -143,9 +143,9 @@ namespace Eos.Models
         }
 
         public TargetShape? TargetShape { get; set; }
-        public int? TargetSizeX { get; set; }
-        public int? TargetSizeY { get; set; }
-        public int? TargetingFlags { get; set; }
+        public double? TargetSizeX { get; set; }
+        public double? TargetSizeY { get; set; }
+        public TargetFlag? TargetingFlags { get; set; }
 
         protected override String GetLabel()
         {
@@ -223,9 +223,9 @@ namespace Eos.Models
             this.CounterSpell1 = CreateRefFromJson<Spell>(json["CounterSpell1"]?.AsObject());
             this.CounterSpell2 = CreateRefFromJson<Spell>(json["CounterSpell2"]?.AsObject());
             this.TargetShape = JsonToEnum<TargetShape>(json["TargetShape"]);
-            this.TargetSizeX = json["TargetSizeX"]?.GetValue<int>();
-            this.TargetSizeY = json["TargetSizeY"]?.GetValue<int>();
-            this.TargetingFlags = json["TargetingFlags"]?.GetValue<int>(); // !
+            this.TargetSizeX = json["TargetSizeX"]?.GetValue<double>();
+            this.TargetSizeY = json["TargetSizeY"]?.GetValue<double>();
+            this.TargetingFlags = JsonToEnum<TargetFlag>(json["TargetingFlags"]);
         }
 
         public override JsonObject ToJson()
@@ -281,7 +281,7 @@ namespace Eos.Models
             spellJson.Add("TargetShape", EnumToJson(this.TargetShape));
             spellJson.Add("TargetSizeX", this.TargetSizeX);
             spellJson.Add("TargetSizeY", this.TargetSizeY);
-            spellJson.Add("TargetingFlags", this.TargetingFlags); // !
+            spellJson.Add("TargetingFlags", EnumToJson(this.TargetingFlags));
 
             return spellJson;
         }

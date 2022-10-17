@@ -195,9 +195,9 @@ namespace Eos.Nwn.TwoDimensionalArray
             return values[columnIndex] == null;
         }
 
-        public bool IsNull(String columnName)
+        public bool IsNull(String columnName, bool throwException = true)
         {
-            return IsNull(columns.IndexOf(columnName));
+            return IsNull(columns.IndexOf(columnName), throwException);
         }
     }
 
@@ -355,6 +355,7 @@ namespace Eos.Nwn.TwoDimensionalArray
 
         public void Load(Stream stream)
         {
+            stream.Seek(0, SeekOrigin.Begin);
             var reader = new StreamReader(stream);
 
             var header = reader.ReadLine()?.Trim();

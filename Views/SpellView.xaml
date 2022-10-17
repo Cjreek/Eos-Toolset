@@ -61,6 +61,8 @@
                             <RowDefinition Height="auto" MinHeight="22"/>
                             <RowDefinition Height="auto" MinHeight="22"/>
                             <RowDefinition Height="auto" MinHeight="22"/>
+                            <RowDefinition Height="auto" MinHeight="22"/>
+                            <RowDefinition Height="auto" MinHeight="22"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
@@ -95,26 +97,53 @@
                         <TextBlock Text="Components" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="2"/>
                         <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:SpellComponent}}" Flags="{Binding Data.Components}" Orientation="Horizontal" Grid.Row="6" Grid.Column="3"/>
 
-                        <TextBlock Text="Valid Targets" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
-                        <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:SpellTarget}}" Flags="{Binding Data.TargetTypes}" Grid.Row="7" Grid.Column="1"/>
+                        <Grid Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="*" MinWidth="150"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" MinHeight="22"/>
+                                <RowDefinition Height="auto" MinHeight="22"/>
+                                <RowDefinition Height="auto" MinHeight="22"/>
+                                <RowDefinition Height="auto" MinHeight="22"/>
+                                <RowDefinition Height="auto" MinHeight="22"/>
+                                <RowDefinition Height="auto" MinHeight="22"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Counterspell 1" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                            <uc:SpellComboBox SelectedValue="{Binding Data.CounterSpell1}" Grid.Row="0" Grid.Column="1"/>
+
+                            <TextBlock Text="Counterspell 2" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                            <uc:SpellComboBox SelectedValue="{Binding Data.CounterSpell2}" Grid.Row="1" Grid.Column="1"/>
+
+                            <TextBlock Text="Uses Concentration" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+                            <CheckBox IsChecked="{Binding Data.UseConcentration}" Grid.Row="2" Grid.Column="1"/>
+
+                            <TextBlock Text="Cast Spontaneously" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+                            <CheckBox IsChecked="{Binding Data.IsCastSpontaneously}" Grid.Row="3" Grid.Column="1"/>
+
+                            <TextBlock Text="Is Hostile" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+                            <CheckBox IsChecked="{Binding Data.IsHostile}" Grid.Row="4" Grid.Column="1"/>
+
+                            <TextBlock Text="Target Shape*" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0" VerticalAlignment="Top"/>
+                            <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:TargetShape}}" SelectedValue="{Binding Data.TargetShape}" Grid.Row="5" Grid.Column="1" IsNullable="True" VerticalAlignment="Top"/>
+                        </Grid>
 
                         <TextBlock Text="Metamagic" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="2"/>
                         <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:MetaMagicType}}" Flags="{Binding Data.AvailableMetaMagic}" Grid.Row="7" Grid.Column="3" VerticalAlignment="Top"/>
 
-                        <TextBlock Text="Counterspell 1" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
-                        <uc:SpellComboBox SelectedValue="{Binding Data.CounterSpell1}" Grid.Row="8" Grid.Column="1"/>
+                        <TextBlock Text="Valid Targets" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
+                        <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:SpellTarget}}" Flags="{Binding Data.TargetTypes}" Grid.Row="9" Grid.Column="1"/>
+                        
+                        <TextBlock Text="Target Flags*" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
+                        <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:TargetFlag}}" Flags="{Binding Data.TargetingFlags}" Grid.Row="9" Grid.Column="3" VerticalAlignment="Top"/>
 
-                        <TextBlock Text="Counterspell 2" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2"/>
-                        <uc:SpellComboBox SelectedValue="{Binding Data.CounterSpell2}" Grid.Row="8" Grid.Column="3"/>
+                        <TextBlock Text="Target Width*" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
+                        <wpftk:DoubleUpDown Value="{Binding Data.TargetSizeX}" Grid.Row="8" Grid.Column="1"/>
 
-                        <TextBlock Text="Uses Concentration" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
-                        <CheckBox IsChecked="{Binding Data.UseConcentration}" Grid.Row="9" Grid.Column="1"/>
-
-                        <TextBlock Text="Cast Spontaneously" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
-                        <CheckBox IsChecked="{Binding Data.IsCastSpontaneously}" Grid.Row="9" Grid.Column="3"/>
-
-                        <TextBlock Text="Is Hostile" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
-                        <CheckBox IsChecked="{Binding Data.IsHostile}" Grid.Row="10" Grid.Column="1"/>
+                        <TextBlock Text="Target Height*" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2"/>
+                        <wpftk:DoubleUpDown Value="{Binding Data.TargetSizeY}" Grid.Row="8" Grid.Column="3"/>
                     </Grid>
 
                     <!--Icon-->

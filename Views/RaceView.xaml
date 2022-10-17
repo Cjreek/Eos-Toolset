@@ -126,6 +126,7 @@
                         <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="22"/>
                         <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="auto" MinHeight="25"/>
@@ -167,37 +168,40 @@
                     <TextBlock Text="CR Modifier" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
                     <wpftk:DoubleUpDown Value="{Binding Data.CRModifier}" FormatString="N2" Increment="0.1" Grid.Row="5" Grid.Column="3"/>
 
-                    <TextBlock Text="Ability Modifiers" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="7" Grid.Column="0" FontWeight="Bold" FontSize="16" Grid.ColumnSpan="4"/>
+                    <TextBlock Text="Favored Enemy Feat*" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
+                    <uc:FeatComboBox SelectedValue="{Binding Data.FavoredEnemyFeat}" Grid.Row="6" Grid.Column="1" IsNullable="True"/>
+                    
+                    <TextBlock Text="Ability Modifiers" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="8" Grid.Column="0" FontWeight="Bold" FontSize="16" Grid.ColumnSpan="4"/>
 
                     <!--Strength-->
-                    <TextBlock Text="Strength" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.StrAdjustment}" Grid.Row="8" Grid.Column="1"/>
+                    <TextBlock Text="Strength" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.StrAdjustment}" Grid.Row="9" Grid.Column="1"/>
 
-                    <TextBlock Text="Dexterity" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.DexAdjustment}" Grid.Row="9" Grid.Column="1"/>
+                    <TextBlock Text="Dexterity" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.DexAdjustment}" Grid.Row="10" Grid.Column="1"/>
 
-                    <TextBlock Text="Constitution" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.ConAdjustment}" Grid.Row="10" Grid.Column="1"/>
+                    <TextBlock Text="Constitution" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="0"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.ConAdjustment}" Grid.Row="11" Grid.Column="1"/>
 
-                    <TextBlock Text="Intelligence" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.IntAdjustment}" Grid.Row="8" Grid.Column="3"/>
+                    <TextBlock Text="Intelligence" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.IntAdjustment}" Grid.Row="9" Grid.Column="3"/>
 
-                    <TextBlock Text="Wisdom" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.WisAdjustment}" Grid.Row="9" Grid.Column="3"/>
+                    <TextBlock Text="Wisdom" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.WisAdjustment}" Grid.Row="10" Grid.Column="3"/>
 
-                    <TextBlock Text="Charisma" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.ChaAdjustment}" Grid.Row="10" Grid.Column="3"/>
+                    <TextBlock Text="Charisma" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="2"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.ChaAdjustment}" Grid.Row="11" Grid.Column="3"/>
 
-                    <TextBlock Text="At Level 1" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="12" Grid.Column="0" FontWeight="Bold" FontSize="16" Grid.ColumnSpan="4"/>
+                    <TextBlock Text="At Level 1" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="13" Grid.Column="0" FontWeight="Bold" FontSize="16" Grid.ColumnSpan="4"/>
 
-                    <TextBlock Text="Extra Feats" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.FirstLevelExtraFeats}" Grid.Row="13" Grid.Column="1"/>
+                    <TextBlock Text="Extra Feats" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="0"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.FirstLevelExtraFeats}" Grid.Row="14" Grid.Column="1"/>
 
-                    <TextBlock Text="Skill Point Multiplier" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.FirstLevelSkillPointsMultiplier}" Grid.Row="13" Grid.Column="3"/>
+                    <TextBlock Text="Skill Point Multiplier" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="2"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.FirstLevelSkillPointsMultiplier}" Grid.Row="14" Grid.Column="3"/>
 
-                    <TextBlock Text="Ability Points" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.FirstLevelAbilityPoints}" Grid.Row="14" Grid.Column="1"/>
+                    <TextBlock Text="Ability Points" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="0"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.FirstLevelAbilityPoints}" Grid.Row="15" Grid.Column="1"/>
                 </Grid>
             </ScrollViewer>
         </TabItem>

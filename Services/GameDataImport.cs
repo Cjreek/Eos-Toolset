@@ -29,6 +29,31 @@ namespace Eos.Services
         private ResourceRepository Resources = MasterRepository.Resources;
 
         private List<KeyValuePair<TLKStringSet, int?>> tlkBuffer = new List<KeyValuePair<TLKStringSet, int?>>();
+        private HashSet<String> iconResourceBuffer = new HashSet<String>();
+
+        private TwoDimensionalArrayFile Load2da(String name)
+        {
+            var filename = nwnBasePath + @"\ovr\" + name + ".2da";
+            if (File.Exists(filename))
+            {
+                using (var fs = File.OpenRead(filename))
+                {
+                    return new TwoDimensionalArrayFile(fs);
+                }
+            }
+            else
+            {
+                var resource = bif.ReadResource(name, NWNResourceType.TWODA);
+                return new TwoDimensionalArrayFile(resource.RawData);
+            }
+        }
+
+        private String? AddIconResource(String? resRef)
+        {
+            if (resRef != null)
+                iconResourceBuffer.Add(resRef);
+            return Resources.AddResource(resRef, NWNResourceType.TGA);
+        }
 
         private Guid GenerateGuid(string prefix, int index)
         {
@@ -70,17 +95,17 @@ namespace Eos.Services
 
         private void ImportRacialFeatsTable(string tablename, Guid guid)
         {
+            var racialFeatTable2da = Load2da(tablename.ToLower());
+
             var tmpRacialFeatsTable = new RacialFeatsTable();
             tmpRacialFeatsTable.ID = guid;
             tmpRacialFeatsTable.Name = tablename;
-
-            var racialFeatTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
-            var racialFeatTable2da = new TwoDimensionalArrayFile(racialFeatTableResource.RawData);
 
             tmpRacialFeatsTable.Clear();
             for (int i = 0; i < racialFeatTable2da.Count; i++)
             {
                 var tmpItem = new RacialFeatsTableItem();
+                tmpItem.ParentTable = tmpRacialFeatsTable;
                 tmpItem.Feat = CreateRef<Feat>(racialFeatTable2da[i].AsInteger("FeatIndex"));
                 tmpRacialFeatsTable.Add(tmpItem);
             }
@@ -90,8 +115,7 @@ namespace Eos.Services
 
         private void ImportRaces()
         {
-            var raceResource = bif.ReadResource("racialtypes", NWNResourceType.TWODA);
-            var races2da = new TwoDimensionalArrayFile(raceResource.RawData);
+            var races2da = Load2da("racialtypes");
 
             Standard.Races.Clear();
             for (int i = 0; i < races2da.Count; i++)
@@ -106,7 +130,7 @@ namespace Eos.Services
                 SetText(tmpRace.Description, races2da[i].AsInteger("Description"));
                 SetText(tmpRace.Biography, races2da[i].AsInteger("Biography"));
 
-                tmpRace.Icon = Resources.AddResource(races2da[i].AsString("Icon"), NWNResourceType.TGA);
+                tmpRace.Icon = AddIconResource(races2da[i].AsString("Icon"));
                 tmpRace.Appearance = CreateRef<Appearance>(races2da[i].AsInteger("Appearance"));
                 tmpRace.StrAdjustment = races2da[i].AsInteger("StrAdjust") ?? 0;
                 tmpRace.DexAdjustment = races2da[i].AsInteger("DexAdjust") ?? 0;
@@ -150,17 +174,17 @@ namespace Eos.Services
 
         private void ImportAttackBonusTable(string tablename, Guid guid)
         {
+            var abTable2da = Load2da(tablename.ToLower());
+
             var tmpAttackBonusTable = new AttackBonusTable();
             tmpAttackBonusTable.ID = guid;
             tmpAttackBonusTable.Name = tablename;
-
-            var abTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
-            var abTable2da = new TwoDimensionalArrayFile(abTableResource.RawData);
 
             tmpAttackBonusTable.Clear();
             for (int i = 0; i < abTable2da.Count; i++)
             {
                 var tmpItem = new AttackBonusTableItem();
+                tmpItem.ParentTable = tmpAttackBonusTable;
                 tmpItem.Level = i + 1;
                 tmpItem.AttackBonus = abTable2da[i].AsInteger("BAB") ?? 0;
                 tmpAttackBonusTable.Add(tmpItem);
@@ -171,17 +195,17 @@ namespace Eos.Services
 
         private void ImportFeatsTable(string tablename, Guid guid)
         {
+            var featTable2da = Load2da(tablename.ToLower());
+
             var tmpFeatsTable = new FeatsTable();
             tmpFeatsTable.ID = guid;
             tmpFeatsTable.Name = tablename;
-
-            var featTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
-            var featTable2da = new TwoDimensionalArrayFile(featTableResource.RawData);
 
             tmpFeatsTable.Clear();
             for (int i = 0; i < featTable2da.Count; i++)
             {
                 var tmpItem = new FeatsTableItem();
+                tmpItem.ParentTable = tmpFeatsTable;
                 tmpItem.Feat = CreateRef<Feat>(featTable2da[i].AsInteger("FeatIndex"));
                 tmpItem.FeatList = (FeatListType)Enum.ToObject(typeof(FeatListType), featTable2da[i].AsInteger("List") ?? 0);
                 tmpItem.GrantedOnLevel = featTable2da[i].AsInteger("GrantedOnLevel") ?? -1;
@@ -194,17 +218,17 @@ namespace Eos.Services
 
         private void ImportSavingThrowTable(string tablename, Guid guid)
         {
+            var savesTable2da = Load2da(tablename.ToLower());
+
             var tmpSavesTable = new SavingThrowTable();
             tmpSavesTable.ID = guid;
             tmpSavesTable.Name = tablename;
-
-            var savesTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
-            var savesTable2da = new TwoDimensionalArrayFile(savesTableResource.RawData);
 
             tmpSavesTable.Clear();
             for (int i = 0; i < savesTable2da.Count; i++)
             {
                 var tmpItem = new SavingThrowTableItem();
+                tmpItem.ParentTable = tmpSavesTable;
                 tmpItem.Level = savesTable2da[i].AsInteger("Level") ?? 0;
                 tmpItem.FortitudeSave = savesTable2da[i].AsInteger("FortSave") ?? 0;
                 tmpItem.ReflexSave = savesTable2da[i].AsInteger("RefSave") ?? 0;
@@ -217,17 +241,17 @@ namespace Eos.Services
 
         private void ImportBonusFeatsTable(string tablename, Guid guid)
         {
+            var bfeatTable2da = Load2da(tablename.ToLower());
+
             var tmpBFeatTable = new BonusFeatsTable();
             tmpBFeatTable.ID = guid;
             tmpBFeatTable.Name = tablename;
-
-            var bfeatTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
-            var bfeatTable2da = new TwoDimensionalArrayFile(bfeatTableResource.RawData);
 
             tmpBFeatTable.Clear();
             for (int i = 0; i < bfeatTable2da.Count; i++)
             {
                 var tmpItem = new BonusFeatsTableItem();
+                tmpItem.ParentTable = tmpBFeatTable;
                 tmpItem.Level = i + 1;
                 tmpItem.BonusFeatCount = bfeatTable2da[i].AsInteger("Bonus") ?? 0;
                 tmpBFeatTable.Add(tmpItem);
@@ -238,17 +262,17 @@ namespace Eos.Services
 
         private void ImportSkillTable(string tablename, Guid guid)
         {
+            var skillTable2da = Load2da(tablename.ToLower());
+
             var skillTable = new SkillsTable();
             skillTable.ID = guid;
             skillTable.Name = tablename;
-
-            var skillTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
-            var skillTable2da = new TwoDimensionalArrayFile(skillTableResource.RawData);
 
             skillTable.Clear();
             for (int i = 0; i < skillTable2da.Count; i++)
             {
                 var tmpItem = new SkillsTableItem();
+                tmpItem.ParentTable = skillTable;
                 tmpItem.Skill = CreateRef<Skill>(skillTable2da[i].AsInteger("SkillIndex"));
                 tmpItem.IsClassSkill = skillTable2da[i].AsBoolean("ClassSkill");
                 skillTable.Add(tmpItem);
@@ -259,17 +283,17 @@ namespace Eos.Services
 
         private void ImportSpellSlotTable(string tablename, Guid guid)
         {
+            var spellSlotTable2da = Load2da(tablename.ToLower());
+
             var spellSlotTable = new SpellSlotTable();
             spellSlotTable.ID = guid;
             spellSlotTable.Name = tablename;
-
-            var spellSlotTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
-            var spellSlotTable2da = new TwoDimensionalArrayFile(spellSlotTableResource.RawData);
 
             spellSlotTable.Clear();
             for (int i = 0; i < spellSlotTable2da.Count; i++)
             {
                 var tmpItem = new SpellSlotTableItem();
+                tmpItem.ParentTable = spellSlotTable;
                 tmpItem.Level = spellSlotTable2da[i].AsInteger("Level") ?? 0;
                 tmpItem.SpellLevel0 = spellSlotTable2da[i].AsInteger("SpellLevel0", null);
                 tmpItem.SpellLevel1 = spellSlotTable2da[i].AsInteger("SpellLevel1", null);
@@ -289,17 +313,17 @@ namespace Eos.Services
 
         private void ImportKnownSpellsTable(string tablename, Guid guid)
         {
+            var knownSpellsTable2da = Load2da(tablename.ToLower());
+
             var knownSpellsTable = new KnownSpellsTable();
             knownSpellsTable.ID = guid;
             knownSpellsTable.Name = tablename;
-
-            var knownSpellsTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
-            var knownSpellsTable2da = new TwoDimensionalArrayFile(knownSpellsTableResource.RawData);
 
             knownSpellsTable.Clear();
             for (int i = 0; i < knownSpellsTable2da.Count; i++)
             {
                 var tmpItem = new KnownSpellsTableItem();
+                tmpItem.ParentTable = knownSpellsTable;
                 tmpItem.Level = knownSpellsTable2da[i].AsInteger("Level") ?? 0;
                 tmpItem.SpellLevel0 = knownSpellsTable2da[i].AsInteger("SpellLevel0", null);
                 tmpItem.SpellLevel1 = knownSpellsTable2da[i].AsInteger("SpellLevel1", null);
@@ -319,17 +343,17 @@ namespace Eos.Services
 
         private void ImportPrerequisiteTable(string tablename, Guid guid)
         {
+            var preRequTable2da = Load2da(tablename.ToLower());
+
             var preRequTable = new PrerequisiteTable();
             preRequTable.ID = guid;
             preRequTable.Name = tablename;
-
-            var preRequTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
-            var preRequTable2da = new TwoDimensionalArrayFile(preRequTableResource.RawData);
 
             preRequTable.Clear();
             for (int i = 0; i < preRequTable2da.Count; i++)
             {
                 var tmpItem = new PrerequisiteTableItem();
+                tmpItem.ParentTable = preRequTable;
                 tmpItem.RequirementType = Enum.Parse<RequirementType>(preRequTable2da[i].AsString("ReqType") ?? "", true);
 
                 switch (tmpItem.RequirementType)
@@ -366,17 +390,17 @@ namespace Eos.Services
 
         private void ImportStatGainTable(string tablename, Guid guid)
         {
+            var statGainTable2da = Load2da(tablename.ToLower());
+
             var statGainTable = new StatGainTable();
             statGainTable.ID = guid;
             statGainTable.Name = tablename;
-
-            var statGainTableResource = bif.ReadResource(tablename.ToLower(), NWNResourceType.TWODA);
-            var statGainTable2da = new TwoDimensionalArrayFile(statGainTableResource.RawData);
 
             statGainTable.Clear();
             for (int i = 0; i < statGainTable2da.Count; i++)
             {
                 var tmpItem = new StatGainTableItem();
+                tmpItem.ParentTable = statGainTable;
                 tmpItem.Level = statGainTable2da[i].AsInteger("Level") ?? 0;
                 tmpItem.Strength = statGainTable2da[i].AsInteger("Str", null);
                 tmpItem.Dexterity = statGainTable2da[i].AsInteger("Dex", null);
@@ -393,8 +417,7 @@ namespace Eos.Services
 
         private void ImportClasses()
         {
-            var classResource = bif.ReadResource("classes", NWNResourceType.TWODA);
-            var classes2da = new TwoDimensionalArrayFile(classResource.RawData);
+            var classes2da = Load2da("classes");
 
             Standard.Classes.Clear();
             for (int i = 0; i < classes2da.Count; i++)
@@ -407,7 +430,7 @@ namespace Eos.Services
                 SetText(tmpClass.NamePlural, classes2da[i].AsInteger("Plural"));
                 SetText(tmpClass.Description, classes2da[i].AsInteger("Description"));
 
-                tmpClass.Icon = Resources.AddResource(classes2da[i].AsString("Icon"), NWNResourceType.TGA);
+                tmpClass.Icon = AddIconResource(classes2da[i].AsString("Icon"));
                 tmpClass.HitDie = classes2da[i].AsInteger("HitDie") ?? 0;
                 tmpClass.SkillPointsPerLevel = classes2da[i].AsInteger("SkillPointBase") ?? 0;
 
@@ -555,6 +578,7 @@ namespace Eos.Services
                 tmpClass.MinCastingLevel = classes2da[i].AsInteger("MinCastingLevel") ?? 0;
                 tmpClass.MinAssociateLevel = classes2da[i].AsInteger("MinAssociateLevel") ?? 0;
                 tmpClass.CanCastSpontaneously = classes2da[i].AsBoolean("CanCastSpontaneously");
+                tmpClass.SkipSpellSelection = classes2da[i].AsBoolean("SkipSpellSelection", null);
 
                 Standard.Classes.Add(tmpClass);
             }
@@ -562,8 +586,7 @@ namespace Eos.Services
 
         private void ImportDomains()
         {
-            var domainResource = bif.ReadResource("domains", NWNResourceType.TWODA);
-            var domains2da = new TwoDimensionalArrayFile(domainResource.RawData);
+            var domains2da = Load2da("domains");
 
             Standard.Domains.Clear();
             for (int i = 0; i < domains2da.Count; i++)
@@ -575,7 +598,7 @@ namespace Eos.Services
                 if (!SetText(tmpDomain.Name, domains2da[i].AsInteger("Name"))) continue;
                 SetText(tmpDomain.Description, domains2da[i].AsInteger("Description"));
 
-                tmpDomain.Icon = Resources.AddResource(domains2da[i].AsString("Icon"), NWNResourceType.TGA);
+                tmpDomain.Icon = AddIconResource(domains2da[i].AsString("Icon"));
                 tmpDomain.Level0Spell = CreateRef<Spell>(domains2da[i].AsInteger("Level_0", -1));
                 tmpDomain.Level1Spell = CreateRef<Spell>(domains2da[i].AsInteger("Level_1"));
                 tmpDomain.Level2Spell = CreateRef<Spell>(domains2da[i].AsInteger("Level_2"));
@@ -596,8 +619,7 @@ namespace Eos.Services
 
         private void ImportSkills()
         {
-            var skillResource = bif.ReadResource("skills", NWNResourceType.TWODA);
-            var skills2da = new TwoDimensionalArrayFile(skillResource.RawData);
+            var skills2da = Load2da("skills");
 
             Standard.Skills.Clear();
             for (int i = 0; i < skills2da.Count; i++)
@@ -609,7 +631,7 @@ namespace Eos.Services
                 if (!SetText(tmpSkill.Name, skills2da[i].AsInteger("Name"))) continue;
                 SetText(tmpSkill.Description, skills2da[i].AsInteger("Description"));
 
-                tmpSkill.Icon = Resources.AddResource(skills2da[i].AsString("Icon"), NWNResourceType.TGA);
+                tmpSkill.Icon = AddIconResource(skills2da[i].AsString("Icon"));
                 tmpSkill.CanUseUntrained = skills2da[i].AsBoolean("Untrained");
                 tmpSkill.KeyAbility = Enum.Parse<AbilityType>(skills2da[i].AsString("KeyAbility") ?? "", true);
                 tmpSkill.UseArmorPenalty = skills2da[i].AsBoolean("ArmorCheckPenalty");
@@ -623,8 +645,7 @@ namespace Eos.Services
 
         private void ImportFeats()
         {
-            var featResource = bif.ReadResource("feat", NWNResourceType.TWODA);
-            var feat2da = new TwoDimensionalArrayFile(featResource.RawData);
+            var feat2da = Load2da("feat");
 
             Standard.Feats.Clear();
             for (int i = 0; i < feat2da.Count; i++)
@@ -636,7 +657,7 @@ namespace Eos.Services
                 if (!SetText(tmpFeat.Name, feat2da[i].AsInteger("FEAT"))) continue;
                 SetText(tmpFeat.Description, feat2da[i].AsInteger("DESCRIPTION"));
 
-                tmpFeat.Icon = Resources.AddResource(feat2da[i].AsString("ICON"), NWNResourceType.TGA);
+                tmpFeat.Icon = AddIconResource(feat2da[i].AsString("ICON"));
                 tmpFeat.MinAttackBonus = feat2da[i].AsInteger("MINATTACKBONUS");
                 tmpFeat.MinStr = feat2da[i].AsInteger("MINSTR");
                 tmpFeat.MinDex = feat2da[i].AsInteger("MINDEX");
@@ -679,8 +700,7 @@ namespace Eos.Services
 
         private void ImportSpells()
         {
-            var spellResource = bif.ReadResource("spells", NWNResourceType.TWODA);
-            var spells2da = new TwoDimensionalArrayFile(spellResource.RawData);
+            var spells2da = Load2da("spells");
 
             Standard.Spells.Clear();
             Standard.Spells.BeginUpdate();
@@ -694,7 +714,7 @@ namespace Eos.Services
                 SetText(tmpSpell.Description, spells2da[i].AsInteger("SpellDesc"));
                 SetText(tmpSpell.AlternativeCastMessage, spells2da[i].AsInteger("AltMessage"));
 
-                tmpSpell.Icon = Resources.AddResource(spells2da[i].AsString("IconResRef"), NWNResourceType.TGA);
+                tmpSpell.Icon = AddIconResource(spells2da[i].AsString("IconResRef"));
                 tmpSpell.School = Enum.Parse<SpellSchool>(spells2da[i].AsString("School") ?? "", true);
                 tmpSpell.Range = Enum.Parse<SpellRange>(spells2da[i].AsString("Range") ?? "", true);
 
@@ -748,6 +768,10 @@ namespace Eos.Services
                 tmpSpell.IsHostile = spells2da[i].AsBoolean("HostileSetting");
                 tmpSpell.CounterSpell1 = CreateRef<Spell>(spells2da[i].AsInteger("Counter1"));
                 tmpSpell.CounterSpell2 = CreateRef<Spell>(spells2da[i].AsInteger("Counter2"));
+                tmpSpell.TargetShape = !spells2da[i].IsNull("TargetShape", false) ? Enum.Parse<TargetShape>(spells2da[i].AsString("TargetShape", null) ?? "", true) : null;
+                tmpSpell.TargetSizeX = spells2da[i].AsFloat("TargetSizeX", null);
+                tmpSpell.TargetSizeY = spells2da[i].AsFloat("TargetSizeY", null);
+                tmpSpell.TargetingFlags = (TargetFlag?)spells2da[i].AsInteger("TargetFlags", null);
 
                 // Spellbook entries:
                 for (int j = 0; j < spells2da.Columns.Count; j++)
@@ -769,8 +793,7 @@ namespace Eos.Services
 
         private void ImportDiseases()
         {
-            var diseaseResource = bif.ReadResource("disease", NWNResourceType.TWODA);
-            var disease2da = new TwoDimensionalArrayFile(diseaseResource.RawData);
+            var disease2da = Load2da("disease");
 
             Standard.Diseases.Clear();
             for (int i = 0; i < disease2da.Count; i++)
@@ -802,8 +825,7 @@ namespace Eos.Services
 
         private void ImportPoisons()
         {
-            var poisonResource = bif.ReadResource("poison", NWNResourceType.TWODA);
-            var poison2da = new TwoDimensionalArrayFile(poisonResource.RawData);
+            var poison2da = Load2da("poison");
 
             Standard.Poisons.Clear();
             for (int i = 0; i < poison2da.Count; i++)
@@ -834,8 +856,7 @@ namespace Eos.Services
 
         private void ImportClassPackages()
         {
-            var packagesResource = bif.ReadResource("packages", NWNResourceType.TWODA);
-            var packages2da = new TwoDimensionalArrayFile(packagesResource.RawData);
+            var packages2da = Load2da("packages");
 
             Standard.ClassPackages.Clear();
             for (int i = 0; i < packages2da.Count; i++)
@@ -866,8 +887,7 @@ namespace Eos.Services
 
         private void ImportSoundsets()
         {
-            var soundsetResource = bif.ReadResource("soundset", NWNResourceType.TWODA);
-            var soundset2da = new TwoDimensionalArrayFile(soundsetResource.RawData);
+            var soundset2da = Load2da("soundset");
 
             Standard.Soundsets.Clear();
             for (int i = 0; i < soundset2da.Count; i++)
@@ -900,8 +920,7 @@ namespace Eos.Services
 
         private void ImportAppearances()
         {
-            var appearanceResource = bif.ReadResource("appearance", NWNResourceType.TWODA);
-            var appearance2da = new TwoDimensionalArrayFile(appearanceResource.RawData);
+            var appearance2da = Load2da("appearance");
 
             Standard.Appearances.Clear();
             for (int i = 0; i < appearance2da.Count; i++)
@@ -940,6 +959,7 @@ namespace Eos.Services
                 race.Appearance = SolveInstance(race.Appearance, Standard.Appearances);
                 race.FavoredClass = SolveInstance(race.FavoredClass, Standard.Classes);
                 race.ToolsetDefaultClass = SolveInstance(race.ToolsetDefaultClass, Standard.Classes);
+                race.FavoredEnemyFeat = SolveInstance(race.FavoredEnemyFeat, Standard.Feats);
             }
 
             // Domains
@@ -1106,6 +1126,29 @@ namespace Eos.Services
             Standard.RacialFeatsTables.SaveToFile(Constants.RacialFeatsTablesFilePath);
         }
 
+        private void ImportIcons()
+        {
+            if (!Directory.Exists(Constants.IconResourcesFilePath))
+                Directory.CreateDirectory(Constants.IconResourcesFilePath);
+
+            foreach (var iconResRef in iconResourceBuffer)
+            {
+                var iconTGAData = Resources.GetRaw(iconResRef, NWNResourceType.TGA);
+                if (iconTGAData != null)
+                {
+                    var fs = new FileStream(Constants.IconResourcesFilePath + iconResRef + ".tga", FileMode.Create, FileAccess.ReadWrite);
+                    try
+                    {
+                        iconTGAData.CopyTo(fs);
+                    }
+                    finally
+                    {
+                        fs.Close();
+                    }
+                }
+            }
+        }
+
         private void ClearTables()
         {
             Standard.Spellbooks.Clear();
@@ -1159,6 +1202,7 @@ namespace Eos.Services
             Standard.Soundsets.Sort(p => p?.Name[TLKLanguage.English].Text);
 
             SaveToJson();
+            ImportIcons();
         }
     }
 }

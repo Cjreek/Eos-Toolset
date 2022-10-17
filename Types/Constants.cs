@@ -45,6 +45,8 @@ namespace Eos.Types
         public static readonly String StatGainTablesFilename;
         public static readonly String RacialFeatsTablesFilename;
 
+        public static readonly String IconResourcesFolder;
+
         public static readonly String RacesFilePath;
         public static readonly String ClassesFilePath;
         public static readonly String DomainsFilePath;
@@ -69,6 +71,8 @@ namespace Eos.Types
         public static readonly String KnownSpellsTablesFilePath;
         public static readonly String StatGainTablesFilePath;
         public static readonly String RacialFeatsTablesFilePath;
+
+        public static readonly String IconResourcesFilePath;
 
         static Constants()
         {
@@ -113,6 +117,8 @@ namespace Eos.Types
             StatGainTablesFilename = "tables_statgain.json";
             RacialFeatsTablesFilename = "tables_racialfeats.json";
 
+            IconResourcesFolder = @"icons\";
+
             RacesFilePath = BaseDataPath + RacesFilename;
             ClassesFilePath = BaseDataPath + ClassesFilename;
             DomainsFilePath = BaseDataPath + DomainsFilename;
@@ -137,6 +143,8 @@ namespace Eos.Types
             KnownSpellsTablesFilePath = BaseDataPath + KnownSpellsTablesFilename;
             StatGainTablesFilePath = BaseDataPath + StatGainTablesFilename;
             RacialFeatsTablesFilePath = BaseDataPath + RacialFeatsTablesFilename;
+
+            IconResourcesFilePath = BaseDataPath + IconResourcesFolder;
         }
     }
 }

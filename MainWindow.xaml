@@ -429,6 +429,12 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
+                <MenuItem x:Name="miExportProject" Header="Export" Click="miExportProject_Click" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource iconExport}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
                 <MenuItem x:Name="miExit" Header="Exit" Click="miExit_Click"/>
             </MenuItem>
             <MenuItem Header="Tools">
@@ -452,6 +458,9 @@
                     </Button>
                     <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miSaveProject_Click">
                         <Image Source="{StaticResource iconSave32}"/>
+                    </Button>
+                    <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miExportProject_Click">
+                        <Image Source="{StaticResource iconExport32}"/>
                     </Button>
                 </DockPanel>
                 

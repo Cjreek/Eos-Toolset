@@ -1,4 +1,5 @@
-﻿using Eos.Models;
+﻿using Eos.Config;
+using Eos.Models;
 using Eos.Models.Tables;
 using Eos.Nwn;
 using Eos.Nwn.Erf;
@@ -37,6 +38,24 @@ namespace Eos.Services
         private Dictionary<Guid, int> modelIndices = new Dictionary<Guid, int>();
         private Dictionary<TLKStringSet, int> customTLKIndices = new Dictionary<TLKStringSet, int>();
         private Dictionary<(String resRef, NWNResourceType resType), String> hakResources = new Dictionary<(String, NWNResourceType), String>();
+
+        private TwoDimensionalArrayFile? Load2da(String name)
+        {
+            var filename = EosConfig.NwnBasePath + @"\ovr\" + name + ".2da";
+            if (File.Exists(filename))
+            {
+                using (var fs = File.OpenRead(filename))
+                {
+                    return new TwoDimensionalArrayFile(fs);
+                }
+            }
+            else
+            {
+                var resource = MasterRepository.Resources.Get<Stream>(name, NWNResourceType.TWODA);
+                if (resource == null) return null;
+                return new TwoDimensionalArrayFile(resource);
+            }
+        }
 
         private void AddHAKResource(String name, NWNResourceType type, String filename)
         {
@@ -190,7 +209,7 @@ namespace Eos.Services
             foreach (var tlk in customTLKIndices.Keys)
                 customTLKIndices[tlk] = tlkFile.AddText(tlk[project.DefaultLanguage].Text);
 
-            tlkFile.Save(ExportTLKFolder + "custom.tlk");
+            tlkFile.Save(ExportTLKFolder + project.Name.ToLower().Replace(' ', '_') + ".tlk");
         }
 
         private void ExportAttackBonusTables(EosProject project)
@@ -609,10 +628,10 @@ namespace Eos.Services
         {
             if (project.Classes.Count == 0) return;
 
-            var originalClassesData = MasterRepository.Resources.Get<Stream>("classes", NWNResourceType.TWODA);
-            if (originalClassesData != null)
+            var classes2da = Load2da("classes");
+            if (classes2da != null)
             {
-                var classes2da = new TwoDimensionalArrayFile(originalClassesData);
+                classes2da.Columns.AddColumn("SkipSpellSelection");
                 classes2da.Columns.SetHex("AlignRestrict");
                 classes2da.Columns.SetHex("AlignRstrctType");
                 for (int i=0; i < project.Classes.Count; i++)
@@ -682,6 +701,7 @@ namespace Eos.Services
                         record.Set("MinCastingLevel", cls.IsSpellCaster ? cls.MinCastingLevel : null);
                         record.Set("MinAssociateLevel", cls.IsSpellCaster ? cls.MinAssociateLevel: null);
                         record.Set("CanCastSpontaneously", cls.IsSpellCaster ? cls.CanCastSpontaneously : null);
+                        record.Set("SkipSpellSelection", cls.IsSpellCaster ? cls.SkipSpellSelection : null);
                     }
                 }
 
@@ -696,10 +716,9 @@ namespace Eos.Services
         {
             if (project.ClassPackages.Count == 0) return;
 
-            var originalPackageData = MasterRepository.Resources.Get<Stream>("packages", NWNResourceType.TWODA);
-            if (originalPackageData != null)
+            var packages2da = Load2da("packages");
+            if (packages2da != null)
             {
-                var packages2da = new TwoDimensionalArrayFile(originalPackageData);
                 for (int i = 0; i < project.ClassPackages.Count; i++)
                 {
                     var package = project.ClassPackages[i];
@@ -745,10 +764,9 @@ namespace Eos.Services
         {
             if (project.Diseases.Count == 0) return;
 
-            var originalDiseasesData = MasterRepository.Resources.Get<Stream>("disease", NWNResourceType.TWODA);
-            if (originalDiseasesData != null)
+            var disease2da = Load2da("disease");
+            if (disease2da != null)
             {
-                var disease2da = new TwoDimensionalArrayFile(originalDiseasesData);
                 for (int i = 0; i < project.Diseases.Count; i++)
                 {
                     var disease = project.Diseases[i];
@@ -795,12 +813,10 @@ namespace Eos.Services
         {
             if (project.Domains.Count == 0) return;
 
-            var originalDomainData = MasterRepository.Resources.Get<Stream>("domains", NWNResourceType.TWODA);
-            if (originalDomainData != null)
+            var domains2da = Load2da("domains");
+            if (domains2da != null)
             {
-                var domains2da = new TwoDimensionalArrayFile(originalDomainData);
                 domains2da.Columns.AddColumn("Level_0");
-
                 for (int i = 0; i < project.Domains.Count; i++)
                 {
                     var domain = project.Domains[i];
@@ -846,10 +862,9 @@ namespace Eos.Services
         {
             if (project.Feats.Count == 0) return;
 
-            var originalFeatData = MasterRepository.Resources.Get<Stream>("feat", NWNResourceType.TWODA);
-            if (originalFeatData != null)
+            var feat2da = Load2da("feat");
+            if (feat2da != null)
             {
-                var feat2da = new TwoDimensionalArrayFile(originalFeatData);
                 for (int i = 0; i < project.Feats.Count; i++)
                 {
                     var feat = project.Feats[i];
@@ -922,10 +937,9 @@ namespace Eos.Services
         {
             if (project.Poisons.Count == 0) return;
 
-            var originalPoisonData = MasterRepository.Resources.Get<Stream>("poison", NWNResourceType.TWODA);
-            if (originalPoisonData != null)
+            var poison2da = Load2da("poison");
+            if (poison2da != null)
             {
-                var poison2da = new TwoDimensionalArrayFile(originalPoisonData);
                 for (int i = 0; i < project.Poisons.Count; i++)
                 {
                     var poison = project.Poisons[i];
@@ -970,12 +984,10 @@ namespace Eos.Services
         {
             if (project.Races.Count == 0) return;
 
-            var originalRacesData = MasterRepository.Resources.Get<Stream>("racialtypes", NWNResourceType.TWODA);
-            if (originalRacesData != null)
+            var racialtypes2da = Load2da("racialtypes");
+            if (racialtypes2da != null)
             {
-                var racialtypes2da = new TwoDimensionalArrayFile(originalRacesData);
                 racialtypes2da.Columns.AddColumn("FavoredEnemyFeat");
-
                 for (int i = 0; i < project.Races.Count; i++)
                 {
                     var race = project.Races[i];
@@ -1039,10 +1051,10 @@ namespace Eos.Services
         {
             if (project.Skills.Count == 0) return;
 
-            var originalSkillsData = MasterRepository.Resources.Get<Stream>("skills", NWNResourceType.TWODA);
-            if (originalSkillsData != null)
+            var skills2da = Load2da("skills");
+            if (skills2da != null)
             {
-                var skills2da = new TwoDimensionalArrayFile(originalSkillsData);
+                skills2da.Columns.AddColumn("HideFromLevelUp");
                 for (int i = 0; i < project.Skills.Count; i++)
                 {
                     var skill = project.Skills[i];
@@ -1070,7 +1082,8 @@ namespace Eos.Services
                         //record.Set("MaxCR", null);
                         record.Set("Constant", "SKILL_" + skill.Name[project.DefaultLanguage].Text.Replace(" ", "_").ToUpper()); // TODO: Generate/Get skill constant
                         record.Set("HostileSkill", skill.IsHostile);
-                     }
+                        record.Set("HideFromLevelUp", skill.HideFromLevelUp);
+                    }
                 }
 
                 var filename = Export2DAFolder + "skills.2da";
@@ -1084,10 +1097,9 @@ namespace Eos.Services
         {
             if (project.Soundsets.Count == 0) return;
 
-            var originalSoundsetsData = MasterRepository.Resources.Get<Stream>("soundset", NWNResourceType.TWODA);
-            if (originalSoundsetsData != null)
+            var soundset2da = Load2da("soundset");
+            if (soundset2da != null)
             {
-                var soundset2da = new TwoDimensionalArrayFile(originalSoundsetsData);
                 for (int i = 0; i < project.Soundsets.Count; i++)
                 {
                     var soundset = project.Soundsets[i];
@@ -1134,13 +1146,16 @@ namespace Eos.Services
         {
             if ((project.Spells.Count == 0) && (project.Spellbooks.Count == 0)) return;
 
-            var originalSpellsData = MasterRepository.Resources.Get<Stream>("spells", NWNResourceType.TWODA);
-            if (originalSpellsData != null)
+            var spells2da = Load2da("spells");
+            if (spells2da != null)
             {
-                var spells2da = new TwoDimensionalArrayFile(originalSpellsData);
                 spells2da.Columns.AddColumn("SubRadSpell6");
                 spells2da.Columns.AddColumn("SubRadSpell7");
                 spells2da.Columns.AddColumn("SubRadSpell8");
+                spells2da.Columns.AddColumn("TargetShape");
+                spells2da.Columns.AddColumn("TargetingFlags");
+                spells2da.Columns.AddColumn("TargetSizeX");
+                spells2da.Columns.AddColumn("TargetSizeY");
                 for (int i = 0; i < project.Spellbooks.Count; i++)
                 {
                     var spellbook = project.Spellbooks[i];
@@ -1209,7 +1224,18 @@ namespace Eos.Services
                         record.Set("SpontaneouslyCast", spell.IsCastSpontaneously);
                         record.Set("AltMessage", GetTLKIndex(spell.AlternativeCastMessage));
                         record.Set("HostileSetting", spell.IsHostile);
-                        //record.Set("FeatID", 0); // TODO: Get Feat referencing Spell
+                        if (spell.Type == SpellType.Feat)
+                        {
+                            // TODO: Make less painful
+                            foreach (var feat in MasterRepository.Feats)
+                            {
+                                if ((feat != null) && (feat.OnUseEffect == spell))
+                                {
+                                    record.Set("FeatID", project.Feats.IndexOf(feat));
+                                    break;
+                                }
+                            }
+                        }
                         record.Set("Counter1", project.Spells.IndexOf(spell.CounterSpell1));
                         record.Set("Counter2", project.Spells.IndexOf(spell.CounterSpell2));
                         record.Set("HasProjectile", spell.HasProjectile);
@@ -1218,6 +1244,11 @@ namespace Eos.Services
                         record.Set("SubRadSpell6", project.Spells.IndexOf(spell.SubSpell6));
                         record.Set("SubRadSpell7", project.Spells.IndexOf(spell.SubSpell7));
                         record.Set("SubRadSpell8", project.Spells.IndexOf(spell.SubSpell8));
+
+                        record.Set("TargetShape", spell.TargetShape?.ToString().ToLower());
+                        record.Set("TargetingFlags", spell.TargetingFlags);
+                        record.Set("TargetSizeX", spell.TargetSizeX);
+                        record.Set("TargetSizeY", spell.TargetSizeY);
                     }
                 }
 
@@ -1262,7 +1293,7 @@ namespace Eos.Services
             foreach (var key in hakResources.Keys)
                 hak.AddResource(key.resRef, key.resType, hakResources[key]);
 
-            hak.Save(ExportHAKFolder + "custom.hak");
+            hak.Save(ExportHAKFolder + project.Name.ToLower().Replace(' ', '_') + ".hak");
         }
 
         public void Export(EosProject project)

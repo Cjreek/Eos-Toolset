@@ -9,6 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Icons\export16.png" />
+    <None Remove="Resources\Icons\export32.png" />
     <None Remove="Resources\Icons\female.png" />
     <None Remove="Resources\Icons\female16.png" />
     <None Remove="Resources\Icons\male.png" />
@@ -37,6 +39,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Icons\export16.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\export32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Icons\female16.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
