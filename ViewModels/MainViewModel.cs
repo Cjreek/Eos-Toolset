@@ -17,6 +17,7 @@ using Eos.Views;
 using System.Globalization;
 using Eos.ViewModels.Dialogs;
 using Eos.Repositories;
+using Eos.Models.Tables;
 
 namespace Eos.ViewModels
 {
@@ -72,7 +73,7 @@ namespace Eos.ViewModels
 
         private void OpenDetail(BaseModel model, bool jumpToOverride, bool changeView)
         {
-            if (jumpToOverride)
+            if ((jumpToOverride) && !(model is CustomObjectInstance))
                 model = MasterRepository.Project.GetOverride(model) ?? model;
 
             if (!detailViewDict.ContainsKey(model))
@@ -117,6 +118,16 @@ namespace Eos.ViewModels
             {
                 switch (type)
                 {
+                    case MessageType.NewCustomDetail:
+                        if (model is CustomObject template)
+                        {
+                            var instance = new CustomObjectInstance();
+                            instance.Template = template;
+                            MasterRepository.Project.CustomObjectRepositories[template].Add(instance);
+                            MessageDispatcher.Send(MessageType.OpenDetail, instance);
+                        }
+                        break;
+
                     case MessageType.OpenDetail:
                         OpenDetail(model, (bool?)param ?? false, true);
                         break;
@@ -128,6 +139,15 @@ namespace Eos.ViewModels
                         break;
                     case MessageType.DeleteDetail:
                         DeleteDetail(model);
+                        break;
+                        
+                    case MessageType.CopyDetail:
+                        var copyModel = model?.Copy();
+                        if (copyModel != null)
+                        {
+                            MasterRepository.Add(copyModel);
+                            MessageDispatcher.Send(MessageType.OpenDetail, copyModel, param);
+                        }
                         break;
 
                     case MessageType.OverrideDetail:
@@ -187,10 +207,13 @@ namespace Eos.ViewModels
 
             MessageDispatcher.Subscribe(MessageType.NewDetail, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.OverrideDetail, MessageHandler);
+            MessageDispatcher.Subscribe(MessageType.CopyDetail, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.OpenDetail, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.OpenDetailSilent, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.CloseDetail, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.DeleteDetail, MessageHandler);
+
+            MessageDispatcher.Subscribe(MessageType.NewCustomDetail, MessageHandler);
 
             MessageDispatcher.Subscribe(MessageType.ChangeLanguage, MessageHandler);
         }
@@ -203,10 +226,13 @@ namespace Eos.ViewModels
 
             MessageDispatcher.Unsubscribe(MessageType.NewDetail, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.OverrideDetail, MessageHandler);
+            MessageDispatcher.Unsubscribe(MessageType.CopyDetail, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.OpenDetail, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.OpenDetailSilent, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.CloseDetail, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.DeleteDetail, MessageHandler);
+
+            MessageDispatcher.Unsubscribe(MessageType.NewCustomDetail, MessageHandler);
 
             MessageDispatcher.Unsubscribe(MessageType.ChangeLanguage, MessageHandler);
         }

@@ -42,6 +42,14 @@ namespace Eos.ViewModels
                     newItem.GrantedOnLevel = -1;
                 Data.Add(newItem);
             }
+            else
+            {
+                var newItem = new FeatsTableItem();
+                newItem.FeatList = FeatListType.GeneralFeatOrBonusFeat;
+                newItem.Menu = FeatMenu.ClassRadialMenu;
+                newItem.GrantedOnLevel = 99;
+                Data.Add(newItem);
+            }
         }
 
         private void DeleteFeatItem(FeatsTableItem item)

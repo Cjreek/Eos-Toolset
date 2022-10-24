@@ -45,6 +45,9 @@ namespace Eos.Types
         public static readonly String StatGainTablesFilename;
         public static readonly String RacialFeatsTablesFilename;
 
+        public static readonly String CustomEnumsFilename;
+        public static readonly String CustomObjectsFilename;
+
         public static readonly String IconResourcesFolder;
 
         public static readonly String RacesFilePath;
@@ -116,6 +119,9 @@ namespace Eos.Types
             KnownSpellsTablesFilename = "tables_knownspells.json";
             StatGainTablesFilename = "tables_statgain.json";
             RacialFeatsTablesFilename = "tables_racialfeats.json";
+
+            CustomEnumsFilename = "customenums.json";
+            CustomObjectsFilename = "customobjects.json";
 
             IconResourcesFolder = @"icons\";
 

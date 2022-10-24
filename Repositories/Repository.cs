@@ -119,6 +119,16 @@ namespace Eos.Repositories
             set { internalList[index] = value; }
         }
 
+        public int IndexOf(T model)
+        {
+            return internalList.IndexOf(model);
+        }
+
+        public void Move(int fromIndex, int toIndex)
+        {
+            internalList.Move(fromIndex, toIndex);
+        }
+
         public bool Contains(T model)
         {
             return internalList.Contains(model);

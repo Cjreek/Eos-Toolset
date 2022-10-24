@@ -18,6 +18,8 @@ namespace Eos.ViewModels.Dialogs
         private IEnumerable<T?> _searchResult;
         private VirtualModelRepository<T> _repository;
 
+        public bool IsTableSearch { get; set; }
+
         public String SearchText
         {
             get { return _searchText; }
@@ -44,31 +46,6 @@ namespace Eos.ViewModels.Dialogs
 
         protected abstract TLKStringSet? GetModelText(T? model);
 
-        private bool FilterOld(T? model, String searchText)
-        {
-            if (model == null) return false;
-
-            var overrideModel = MasterRepository.Project.GetOverride(model);
-            if (overrideModel != null)
-            {
-                //orderDict[overrideModel] = n;
-                //n++;
-                return false;
-            }
-
-            var tlk = GetModelText(model);
-            if (tlk == null) return false;
-
-            var result = tlk[TLKLanguage.English].Text.ToLower().Contains(searchText);
-
-            //if (result && !orderDict.ContainsKey(model))
-            //{
-            //    orderDict[model] = n;
-            //    n++;
-            //}
-
-            return result;
-        }
         private bool Filter(T? model, String searchText)
         {
             if ((model == null) || (model.Overrides != null)) return false;
@@ -79,13 +56,7 @@ namespace Eos.ViewModels.Dialogs
 
         protected IEnumerable<T?> Search(String searchText)
         {
-            //Dictionary<BaseModel, int> orderDict = new Dictionary<BaseModel, int>();
-
-            //var n = 0;
-            _searchResult = _repository
-                .Where(model => Filter(model, searchText));
-             //   .OrderBy(model => model != null ? orderDict[model] : -1);
-
+            _searchResult = _repository.Where(model => Filter(model, searchText));
             NotifyPropertyChanged(nameof(SearchResult));
 
             return _searchResult;

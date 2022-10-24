@@ -59,6 +59,13 @@ namespace Eos.ViewModels
             if (model is KnownSpellsTable knownSpellsTable)
                 return new KnownSpellsTableViewModel(knownSpellsTable);
 
+            if (model is CustomEnum customEnum)
+                return new CustomEnumViewModel(customEnum);
+            if (model is CustomObject customObject)
+                return new CustomObjectViewModel(customObject);
+            if (model is CustomObjectInstance customObjectInstance)
+                return new CustomObjectInstanceViewModel(customObjectInstance);
+
             else
                 throw new ArgumentException("No viewmodel found", "model");
         }

@@ -394,7 +394,11 @@ namespace Eos.Nwn.TwoDimensionalArray
         private String ValueToStr(object? value, bool isHex)
         {
             if (value == null) return "****";
-            if ((value is String str) && (str.Contains(' '))) return "\"" + str + "\"";
+            if (value is String str)
+            {
+                if (str.Trim() == "") return "****";
+                if (str.Contains(' ')) return "\"" + str + "\"";
+            }
             if (value is double dblValue) return dblValue.ToString("n2", floatFormat);
             if ((value is int intValue) && (isHex)) return "0x" + intValue.ToString("x2");
 

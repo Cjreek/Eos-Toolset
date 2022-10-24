@@ -78,6 +78,12 @@
     <Compile Update="Usercontrols\DomainComboBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Usercontrols\CustomEnumComboBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Usercontrols\CustomObjectComboBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Usercontrols\PackageComboBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -111,7 +117,16 @@
     <Compile Update="Usercontrols\FeatComboBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\CustomObjectInstanceView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\CustomObjectView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\KnownSpellsTableView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\CustomEnumView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\SpellSlotTableView.xaml.cs">
@@ -140,6 +155,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Usercontrols\DomainComboBox.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Usercontrols\CustomEnumComboBox.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Usercontrols\CustomObjectComboBox.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
@@ -187,7 +210,19 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\CustomObjectInstanceView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\CustomObjectView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\KnownSpellsTableView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\CustomEnumView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

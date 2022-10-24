@@ -39,5 +39,9 @@
         <DataTemplate DataType="{x:Type dialogVM:ClassPackageSearchViewModel}">
             <dialogViews:ModelSearchView/>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type dialogVM:CustomObjectInstanceSearchViewModel}">
+            <dialogViews:ModelSearchView/>
+        </DataTemplate>
     </Application.Resources>
 </Application>

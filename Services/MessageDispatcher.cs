@@ -14,10 +14,12 @@ namespace Eos.ViewModels.Base
         SaveProject,
         NewDetail,
         OverrideDetail,
+        CopyDetail,
         OpenDetail,
         OpenDetailSilent,
         CloseDetail,
         DeleteDetail,
+        NewCustomDetail,
     }
 
     public delegate void MessageHandler(MessageType type, object? message, object? param);

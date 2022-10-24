@@ -19,9 +19,16 @@ namespace Eos.Repositories
         private string _projectFolder = "";
         private string _name = "";
         private bool _isLoaded = false;
+        private bool _useNWNX = true;
 
         public EosProject() : base(false)
         {
+        }
+
+        public bool UseNWNX
+        {
+            get { return _useNWNX; }
+            set { _useNWNX = value; }
         }
 
         public bool IsLoaded
@@ -107,6 +114,18 @@ namespace Eos.Repositories
 
             LoadProjectFile(projectFilename);
 
+            CustomEnums.LoadFromFile(ProjectFolder + Constants.CustomEnumsFilename);
+            CustomObjects.LoadFromFile(ProjectFolder + Constants.CustomObjectsFilename);
+
+            CustomEnums.ResolveReferences();
+            CustomObjects.ResolveReferences();
+
+            foreach (var customObj in CustomObjects)
+            {
+                if (customObj != null)
+                    CustomObjectRepositories.AddRepository(customObj);
+            }
+
             Races.LoadFromFile(ProjectFolder + Constants.RacesFilename);
             Classes.LoadFromFile(ProjectFolder + Constants.ClassesFilename);
             Domains.LoadFromFile(ProjectFolder + Constants.DomainsFilename);
@@ -130,6 +149,12 @@ namespace Eos.Repositories
             KnownSpellsTables.LoadFromFile(ProjectFolder + Constants.KnownSpellsTablesFilename);
             StatGainTables.LoadFromFile(ProjectFolder + Constants.StatGainTablesFilename);
             RacialFeatsTables.LoadFromFile(ProjectFolder + Constants.RacialFeatsTablesFilename);
+
+            foreach (var template in CustomObjects)
+            {
+                if (template != null)
+                    CustomObjectRepositories[template].LoadFromFile(ProjectFolder + template.ResourceName + ".json");
+            }
 
             Races.ResolveReferences();
             Classes.ResolveReferences();
@@ -155,6 +180,12 @@ namespace Eos.Repositories
             KnownSpellsTables.ResolveReferences();
             StatGainTables.ResolveReferences();
             RacialFeatsTables.ResolveReferences();
+
+            foreach (var template in CustomObjects)
+            {
+                if (template != null)
+                    CustomObjectRepositories[template].ResolveReferences();
+            }
 
             IsLoaded = true;
             EosConfig.LastProject = projectFilename;
@@ -187,6 +218,15 @@ namespace Eos.Repositories
             KnownSpellsTables.SaveToFile(ProjectFolder + Constants.KnownSpellsTablesFilename);
             StatGainTables.SaveToFile(ProjectFolder + Constants.StatGainTablesFilename);
             RacialFeatsTables.SaveToFile(ProjectFolder + Constants.RacialFeatsTablesFilename);
+
+            CustomEnums.SaveToFile(ProjectFolder + Constants.CustomEnumsFilename);
+            CustomObjects.SaveToFile(ProjectFolder + Constants.CustomObjectsFilename);
+
+            foreach (var template in CustomObjects)
+            {
+                if (template != null)
+                    CustomObjectRepositories[template].SaveToFile(ProjectFolder + template.ResourceName + ".json");
+            }
         }
     }
 }

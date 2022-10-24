@@ -8,6 +8,7 @@
       xmlns:views="clr-namespace:Eos.Views"
       xmlns:nwn="clr-namespace:Eos.Nwn"
       mc:Ignorable="d"
+      x:Name="page"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ModelSearchView">
 
@@ -19,9 +20,13 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <DockPanel Margin="10" LastChildFill="True">
+    <Page.InputBindings>
+        <KeyBinding Command="{Binding CloseCommand}" CommandParameter="{Binding}" Key="Esc"/>
+    </Page.InputBindings>
+
+    <DockPanel Margin="10" LastChildFill="True" FocusManager.FocusedElement="{Binding ElementName=searchTextbox, Mode=OneTime}">
         <Grid DockPanel.Dock="Top" Margin="0,0,0,5">
-            <TextBox Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="16"/>
+            <TextBox x:Name="searchTextbox" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="16"/>
         </Grid>
 
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" FlowDirection="RightToLeft" Margin="0,5,0,0">
@@ -43,6 +48,20 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Margin="-3,0,0,0">
                                     <Image Width="16" Height="16" Source="{Binding Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}" Margin="0,0,3,0"/>
+
+                                    <TextBlock Text="{Binding Label}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=page, Path=DataContext.IsTableSearch}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    
                                     <TextBlock>
                                         <TextBlock.Style>
                                             <Style TargetType="{x:Type TextBlock}">
@@ -51,14 +70,21 @@
                                                     <DataTrigger Binding="{Binding Overrides}" Value="{x:Null}">
                                                         <Setter Property="FontStyle" Value="Normal"/>
                                                     </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ElementName=page, Path=DataContext.IsTableSearch}" Value="True">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
                                         </TextBlock.Style>
-                                        <TextBlock.Text>
-                                            <MultiBinding Converter="{StaticResource tlkConverterDefault}">
-                                                <Binding Path="Name"/>
-                                            </MultiBinding>
-                                        </TextBlock.Text>
+                                        
+                                        <Run>
+                                            <Run.Text>
+                                                <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                                                    <Binding Path="Name"/>
+                                                </MultiBinding>
+                                            </Run.Text>   
+                                        </Run>
+                                        <Run Text="{Binding Hint, Converter={StaticResource hintConverter}}"/>
                                     </TextBlock>
                                 </StackPanel>
                             </DataTemplate>

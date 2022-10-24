@@ -13,7 +13,7 @@
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         
-        <TextBox x:Name="tbScript" Grid.Column="0" Text="{Binding ElementName=ucScriptResourceTextbox, Path=ResRef}"/>
+        <TextBox x:Name="tbScript" Grid.Column="0" Text="{Binding ElementName=ucScriptResourceTextbox, Path=ResRef}" MaxLength="16"/>
         <Button Grid.Column="1" Content="..." Margin="3,0,0,0" Height="{Binding ElementName=tbScript, Path=ActualHeight}" Width="{Binding ElementName=tbScript, Path=ActualHeight}" Click="Button_Click"/>
     </Grid>
 </UserControl>

@@ -10,5 +10,6 @@
     <ext:FlagToBoolConverter x:Key="flagsToBool"/>
     <ext:EnumToStringConverter x:Key="enumToString"/>
     <ext:IsNullConverter x:Key="isNullConverter"/>
+    <ext:HintConverter x:Key="hintConverter"/>
 
 </ResourceDictionary>

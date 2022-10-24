@@ -10,6 +10,32 @@ using System.Threading.Tasks;
 
 namespace Eos.Repositories
 {
+    public class CustomObjectRepositoryCollection
+    {
+        private Dictionary<CustomObject, ModelRepository<CustomObjectInstance>> repositoryDict = new Dictionary<CustomObject, ModelRepository<CustomObjectInstance>>();
+
+        public ModelRepository<CustomObjectInstance> this[CustomObject index] => repositoryDict[index];
+
+        public ModelRepository<CustomObjectInstance> AddRepository(CustomObject customObjectTemplate)
+        {
+            if (!repositoryDict.TryGetValue(customObjectTemplate, out var repo))
+            {
+                repo = RepositoryFactory.Create<CustomObjectInstance>(false);
+                //repo.CollectionChanged += (_, _) => NotifyPropertyChanged(nameof(CustomObjectInstances)); // TODO: ?
+                repositoryDict.Add(customObjectTemplate, repo);
+            }
+
+            return repo;
+        }
+
+        public void Clear()
+        {
+            foreach (var repo in repositoryDict.Values)
+                repo.Clear();
+            repositoryDict.Clear();
+        }
+    }
+
     public class RepositoryCollection : INotifyPropertyChanged
     {
         private readonly bool isReadonly;
@@ -39,6 +65,12 @@ namespace Eos.Repositories
         private readonly ModelRepository<KnownSpellsTable> knownSpellsTableRepository;
         private readonly ModelRepository<StatGainTable> statGainTableRepository;
         private readonly ModelRepository<RacialFeatsTable> racialFeatsTableRepository;
+
+        // Custom Datatypes
+        private readonly ModelRepository<CustomEnum> customEnumRepository;
+        private readonly ModelRepository<CustomObject> customObjectRepository;
+
+        private readonly CustomObjectRepositoryCollection customObjectRepositoryCollection = new CustomObjectRepositoryCollection();
 
         private void InitRepository<T>(out ModelRepository<T> repository, string propertyName) where T : BaseModel, new()
         {
@@ -75,6 +107,10 @@ namespace Eos.Repositories
             InitRepository(out knownSpellsTableRepository, nameof(KnownSpellsTables));
             InitRepository(out statGainTableRepository, nameof(StatGainTables));
             InitRepository(out racialFeatsTableRepository, nameof(RacialFeatsTables));
+
+            // Custom Datatypes
+            InitRepository(out customEnumRepository, nameof(CustomEnums));
+            InitRepository(out customObjectRepository, nameof(CustomObjects));
         }
 
         // Model Repositories
@@ -103,6 +139,11 @@ namespace Eos.Repositories
         public ModelRepository<StatGainTable> StatGainTables { get { return statGainTableRepository; } }
         public ModelRepository<RacialFeatsTable> RacialFeatsTables { get { return racialFeatsTableRepository; } }
 
+        // Custom Datatypes
+        public ModelRepository<CustomEnum> CustomEnums { get { return customEnumRepository; } }
+        public ModelRepository<CustomObject> CustomObjects { get { return customObjectRepository; } }
+        public CustomObjectRepositoryCollection CustomObjectRepositories { get { return customObjectRepositoryCollection; } }
+
         public BaseModel New(Type modelType)
         {
             var constructor = modelType.GetConstructor(new Type[] { });
@@ -120,6 +161,11 @@ namespace Eos.Repositories
         {
             var modelType = model.GetType();
             repositoryDict[modelType].AddBase(model);
+        }
+
+        public BaseModel? GetByID(Type modelType, Guid id)
+        {
+            return repositoryDict[modelType].GetBaseByID(id);
         }
 
         public void Delete(BaseModel model)
@@ -166,6 +212,12 @@ namespace Eos.Repositories
             KnownSpellsTables.Clear();
             StatGainTables.Clear();
             RacialFeatsTables.Clear();
+
+            // Custom Datatypes
+            CustomEnums.Clear();
+            CustomObjects.Clear();
+
+            CustomObjectRepositories.Clear();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

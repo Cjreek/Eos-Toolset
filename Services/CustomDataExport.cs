@@ -281,7 +281,7 @@ namespace Eos.Services
                         {
                             var rec = td2.AddRecord();
                             rec.Set("FeatLabel", item.Feat?.Name[project.DefaultLanguage].Text); // TODO: generate?/get FEAT constant
-                            rec.Set("FeatIndex", project.Feats.IndexOf(item?.Feat));
+                            rec.Set("FeatIndex", project.Feats.Get2DAIndex(item?.Feat));
                             rec.Set("List", (int?)(item?.FeatList));
                             rec.Set("GrantedOnLevel", (int?)item?.GrantedOnLevel);
                             rec.Set("OnMenu", (int?)item?.Menu);
@@ -439,20 +439,20 @@ namespace Eos.Services
                             {
                                 case RequirementType.CLASSNOT:
                                 case RequirementType.CLASSOR:
-                                    rec.Set("ReqParam1", project.Classes.IndexOf((CharacterClass?)item.RequirementParam1));
+                                    rec.Set("ReqParam1", project.Classes.Get2DAIndex((CharacterClass?)item.RequirementParam1));
                                     break;
 
                                 case RequirementType.RACE:
-                                    rec.Set("ReqParam1", project.Races.IndexOf((Race?)item.RequirementParam1));
+                                    rec.Set("ReqParam1", project.Races.Get2DAIndex((Race?)item.RequirementParam1));
                                     break;
 
                                 case RequirementType.FEAT:
                                 case RequirementType.FEATOR:
-                                    rec.Set("ReqParam1", project.Feats.IndexOf((Feat?)item.RequirementParam1));
+                                    rec.Set("ReqParam1", project.Feats.Get2DAIndex((Feat?)item.RequirementParam1));
                                     break;
 
                                 case RequirementType.SKILL:
-                                    rec.Set("ReqParam1", project.Skills.IndexOf((Skill?)item.RequirementParam1));
+                                    rec.Set("ReqParam1", project.Skills.Get2DAIndex((Skill?)item.RequirementParam1));
                                     break;
 
                                 default:
@@ -491,7 +491,7 @@ namespace Eos.Services
                         {
                             var rec = td2.AddRecord();
                             rec.Set("FeatLabel", item.Feat?.Name[project.DefaultLanguage].Text); // TODO: generate?/get FEAT constant
-                            rec.Set("FeatIndex", project.Feats.IndexOf(item?.Feat));
+                            rec.Set("FeatIndex", project.Feats.Get2DAIndex(item?.Feat));
                         }
                     }
 
@@ -555,7 +555,7 @@ namespace Eos.Services
                         {
                             var rec = td2.AddRecord();
                             rec.Set("SkillLabel", item.Skill?.Name[project.DefaultLanguage].Text.Replace(" ", ""));
-                            rec.Set("SkillIndex", project.Skills.IndexOf(item.Skill));
+                            rec.Set("SkillIndex", project.Skills.Get2DAIndex(item.Skill));
                             rec.Set("ClassSkill", item.IsClassSkill ? 1 : 0);
                         }
                     }
@@ -686,7 +686,7 @@ namespace Eos.Services
                         record.Set("ArcSpellLvlMod", cls.ArcaneCasterLevelMod);
                         record.Set("DivSpellLvlMod", cls.DivineCasterLevelMod);
                         record.Set("EpicLevel", cls.PreEpicMaxLevel > 60 ? -1 : cls.PreEpicMaxLevel);
-                        record.Set("Package", project.ClassPackages.IndexOf(cls.DefaultPackage));
+                        record.Set("Package", project.ClassPackages.Get2DAIndex(cls.DefaultPackage));
                         record.Set("StatGainTable", cls.StatGainTable?.Name);
                         record.Set("MemorizesSpells", cls.IsSpellCaster ? cls.MemorizesSpells : null);
                         record.Set("SpellbookRestricted", cls.IsSpellCaster ? cls.SpellbookRestricted : null);
@@ -737,12 +737,12 @@ namespace Eos.Services
                         record.Set("Label", package.Name[project.DefaultLanguage].Text.Replace(" ", "_"));
                         record.Set("Name", GetTLKIndex(package.Name));
                         record.Set("Description", GetTLKIndex(package.Description));
-                        record.Set("ClassID", project.Classes.IndexOf(package.ForClass));
+                        record.Set("ClassID", project.Classes.Get2DAIndex(package.ForClass));
                         record.Set("Attribute", package.PreferredAbility.ToString());
                         record.Set("Gold", package.Gold);
                         record.Set("School", (int?)package.SpellSchool);
-                        record.Set("Domain1", project.Domains.IndexOf(package.Domain1));
-                        record.Set("Domain2", project.Domains.IndexOf(package.Domain1));
+                        record.Set("Domain1", project.Domains.Get2DAIndex(package.Domain1));
+                        record.Set("Domain2", project.Domains.Get2DAIndex(package.Domain1));
                         record.Set("Associate", null); // TODO
                         record.Set("SpellPref2DA", null); // TODO
                         record.Set("FeatPref2DA", null); // TODO
@@ -836,17 +836,17 @@ namespace Eos.Services
                         record.Set("Name", GetTLKIndex(domain.Name));
                         record.Set("Description", GetTLKIndex(domain.Description));
                         record.Set("Icon", domain.Icon?.ToUpper());
-                        record.Set("Level_0", project.Spells.IndexOf(domain.Level0Spell));
-                        record.Set("Level_1", project.Spells.IndexOf(domain.Level1Spell));
-                        record.Set("Level_2", project.Spells.IndexOf(domain.Level2Spell));
-                        record.Set("Level_3", project.Spells.IndexOf(domain.Level3Spell));
-                        record.Set("Level_4", project.Spells.IndexOf(domain.Level4Spell));
-                        record.Set("Level_5", project.Spells.IndexOf(domain.Level5Spell));
-                        record.Set("Level_6", project.Spells.IndexOf(domain.Level6Spell));
-                        record.Set("Level_7", project.Spells.IndexOf(domain.Level7Spell));
-                        record.Set("Level_8", project.Spells.IndexOf(domain.Level8Spell));
-                        record.Set("Level_9", project.Spells.IndexOf(domain.Level9Spell));
-                        record.Set("GrantedFeat", project.Feats.IndexOf(domain.GrantedFeat));
+                        record.Set("Level_0", project.Spells.Get2DAIndex(domain.Level0Spell));
+                        record.Set("Level_1", project.Spells.Get2DAIndex(domain.Level1Spell));
+                        record.Set("Level_2", project.Spells.Get2DAIndex(domain.Level2Spell));
+                        record.Set("Level_3", project.Spells.Get2DAIndex(domain.Level3Spell));
+                        record.Set("Level_4", project.Spells.Get2DAIndex(domain.Level4Spell));
+                        record.Set("Level_5", project.Spells.Get2DAIndex(domain.Level5Spell));
+                        record.Set("Level_6", project.Spells.Get2DAIndex(domain.Level6Spell));
+                        record.Set("Level_7", project.Spells.Get2DAIndex(domain.Level7Spell));
+                        record.Set("Level_8", project.Spells.Get2DAIndex(domain.Level8Spell));
+                        record.Set("Level_9", project.Spells.Get2DAIndex(domain.Level9Spell));
+                        record.Set("GrantedFeat", project.Feats.Get2DAIndex(domain.GrantedFeat));
                         record.Set("CastableFeat", domain.FeatIsActive);
                     }
                 }
@@ -892,33 +892,33 @@ namespace Eos.Services
                         record.Set("MINCON", feat.MinCon > 0 ? feat.MinCon : null);
                         record.Set("MINCHA", feat.MinCha > 0 ? feat.MinCha : null);
                         record.Set("MINSPELLLVL", feat.MinSpellLevel > 0 ? feat.MinSpellLevel : null);
-                        record.Set("PREREQFEAT1", project.Feats.IndexOf(feat.RequiredFeat1));
-                        record.Set("PREREQFEAT2", project.Feats.IndexOf(feat.RequiredFeat2));
+                        record.Set("PREREQFEAT1", project.Feats.Get2DAIndex(feat.RequiredFeat1));
+                        record.Set("PREREQFEAT2", project.Feats.Get2DAIndex(feat.RequiredFeat2));
                         record.Set("GAINMULTIPLE", 0);
                         record.Set("EFFECTSSTACK", 0);
                         record.Set("ALLCLASSESCANUSE", feat.UseableByAllClasses);
                         record.Set("CATEGORY", (int?)feat.Category);
                         record.Set("MAXCR", feat.OnUseEffect?.InnateLevel * 2);
-                        record.Set("SPELLID", project.Spells.IndexOf(feat.OnUseEffect));
-                        record.Set("SUCCESSOR", project.Feats.IndexOf(feat.SuccessorFeat));
+                        record.Set("SPELLID", project.Spells.Get2DAIndex(feat.OnUseEffect));
+                        record.Set("SUCCESSOR", project.Feats.Get2DAIndex(feat.SuccessorFeat));
                         record.Set("CRValue", feat.CRModifier);
                         record.Set("USESPERDAY", feat.UsesPerDay != 0 ? feat.UsesPerDay : null);
-                        record.Set("MASTERFEAT", project.Feats.IndexOf(feat.MasterFeat));
+                        record.Set("MASTERFEAT", project.Feats.Get2DAIndex(feat.MasterFeat));
                         record.Set("TARGETSELF", (feat.TargetSelf ?? false) ? 1 : null);
-                        record.Set("OrReqFeat0", project.Feats.IndexOf(feat.RequiredFeatSelection1));
-                        record.Set("OrReqFeat1", project.Feats.IndexOf(feat.RequiredFeatSelection2));
-                        record.Set("OrReqFeat2", project.Feats.IndexOf(feat.RequiredFeatSelection3));
-                        record.Set("OrReqFeat3", project.Feats.IndexOf(feat.RequiredFeatSelection4));
-                        record.Set("OrReqFeat4", project.Feats.IndexOf(feat.RequiredFeatSelection5));
-                        record.Set("REQSKILL", project.Skills.IndexOf(feat.RequiredSkill1));
+                        record.Set("OrReqFeat0", project.Feats.Get2DAIndex(feat.RequiredFeatSelection1));
+                        record.Set("OrReqFeat1", project.Feats.Get2DAIndex(feat.RequiredFeatSelection2));
+                        record.Set("OrReqFeat2", project.Feats.Get2DAIndex(feat.RequiredFeatSelection3));
+                        record.Set("OrReqFeat3", project.Feats.Get2DAIndex(feat.RequiredFeatSelection4));
+                        record.Set("OrReqFeat4", project.Feats.Get2DAIndex(feat.RequiredFeatSelection5));
+                        record.Set("REQSKILL", project.Skills.Get2DAIndex(feat.RequiredSkill1));
                         record.Set("ReqSkillMinRanks", feat.RequiredSkill1Minimum != 0 ? feat.RequiredSkill1Minimum : null);
-                        record.Set("REQSKILL2", project.Skills.IndexOf(feat.RequiredSkill2));
+                        record.Set("REQSKILL2", project.Skills.Get2DAIndex(feat.RequiredSkill2));
                         record.Set("ReqSkillMinRanks2", feat.RequiredSkill2Minimum != 0 ? feat.RequiredSkill2Minimum : null);
                         record.Set("Constant", "FEAT_" + feat.Name[project.DefaultLanguage].Text.Replace(" ", "_").ToUpper()); // TODO: Get constant
                         record.Set("TOOLSCATEGORIES", (int)feat.ToolsetCategory);
                         record.Set("HostileFeat", feat.OnUseEffect != null ? feat.IsHostile : null);
                         record.Set("MinLevel", feat.MinLevel > 1 ? feat.MinLevel : null);
-                        record.Set("MinLevelClass", project.Classes.IndexOf(feat.MinLevelClass));
+                        record.Set("MinLevelClass", project.Classes.Get2DAIndex(feat.MinLevelClass));
                         record.Set("MaxLevel", feat.MaxLevel > 0 ? feat.MaxLevel : null);
                         record.Set("MinFortSave", feat.MinFortitudeSave > 0 ? feat.MinFortitudeSave : null);
                         record.Set("PreReqEpic", feat.RequiresEpic);
@@ -1011,7 +1011,7 @@ namespace Eos.Services
                         record.Set("NamePlural", GetTLKIndex(race.NamePlural));
                         record.Set("Description", GetTLKIndex(race.Description));
                         record.Set("Icon", race.Icon?.ToLower());
-                        record.Set("Appearance", project.Appearances.IndexOf(race.Appearance));
+                        record.Set("Appearance", project.Appearances.Get2DAIndex(race.Appearance));
                         record.Set("StrAdjust", race.StrAdjustment);
                         record.Set("DexAdjust", race.DexAdjustment);
                         record.Set("IntAdjust", race.IntAdjustment);
@@ -1019,13 +1019,13 @@ namespace Eos.Services
                         record.Set("WisAdjust", race.WisAdjustment);
                         record.Set("ConAdjust", race.ConAdjustment);
                         record.Set("Endurance", 0);
-                        record.Set("Favored", project.Classes.IndexOf(race.FavoredClass));
+                        record.Set("Favored", project.Classes.Get2DAIndex(race.FavoredClass));
                         record.Set("FeatsTable", race.Feats?.Name.ToUpper());
                         record.Set("Biography", GetTLKIndex(race.Biography));
                         record.Set("PlayerRace", race.Playable);
                         record.Set("Constant", "RACIAL_TYPE_" + race.Name[project.DefaultLanguage].Text.Replace(" ", "_").ToUpper()); // TODO: Generate/Get constant
                         record.Set("AGE", race.DefaultAge);
-                        record.Set("ToolsetDefaultClass", project.Classes.IndexOf(race.ToolsetDefaultClass));
+                        record.Set("ToolsetDefaultClass", project.Classes.Get2DAIndex(race.ToolsetDefaultClass));
                         record.Set("CRModifier", race.CRModifier);
                         record.Set("NameGenTableA", race.NameGenTableA);
                         record.Set("NameGenTableB", race.NameGenTableB);
@@ -1036,7 +1036,7 @@ namespace Eos.Services
                         record.Set("NormalFeatEveryNthLevel", race.FeatEveryNthLevel);
                         record.Set("NumberNormalFeatsEveryNthLevel", race.FeatEveryNthLevelCount);
                         record.Set("SkillPointModifierAbility", race.SkillPointModifierAbility?.ToString());
-                        record.Set("FavoredEnemyFeat", project.Feats.IndexOf(race.FavoredEnemyFeat));
+                        record.Set("FavoredEnemyFeat", project.Feats.Get2DAIndex(race.FavoredEnemyFeat));
                     }
                 }
 
@@ -1136,7 +1136,7 @@ namespace Eos.Services
         {
             foreach (var spell in spellLevel)
             {
-                var spellIndex = project.Spells.IndexOf(spell.Spell);
+                var spellIndex = project.Spells.Get2DAIndex(spell.Spell);
                 if (spellIndex != null)
                     spells2da[spellIndex ?? -1].Set(spellbook.Name, level);
             }
@@ -1211,13 +1211,13 @@ namespace Eos.Services
                         record.Set("ProjOrientation", spell.ProjectileOrientation?.ToString().ToLower());
                         // ImmunityType (Unused)
                         // ItemImmunity (Unused)
-                        record.Set("SubRadSpell1", project.Spells.IndexOf(spell.SubSpell1));
-                        record.Set("SubRadSpell2", project.Spells.IndexOf(spell.SubSpell2));
-                        record.Set("SubRadSpell3", project.Spells.IndexOf(spell.SubSpell3));
-                        record.Set("SubRadSpell4", project.Spells.IndexOf(spell.SubSpell4));
-                        record.Set("SubRadSpell5", project.Spells.IndexOf(spell.SubSpell5));
+                        record.Set("SubRadSpell1", project.Spells.Get2DAIndex(spell.SubSpell1));
+                        record.Set("SubRadSpell2", project.Spells.Get2DAIndex(spell.SubSpell2));
+                        record.Set("SubRadSpell3", project.Spells.Get2DAIndex(spell.SubSpell3));
+                        record.Set("SubRadSpell4", project.Spells.Get2DAIndex(spell.SubSpell4));
+                        record.Set("SubRadSpell5", project.Spells.Get2DAIndex(spell.SubSpell5));
                         record.Set("Category", (int?)spell.Category);
-                        record.Set("Master", project.Spells.IndexOf(spell.ParentSpell));
+                        record.Set("Master", project.Spells.Get2DAIndex(spell.ParentSpell));
                         record.Set("UserType", (int)spell.Type);
                         record.Set("SpellDesc", GetTLKIndex(spell.Description));
                         record.Set("UseConcentration", spell.UseConcentration);
@@ -1231,19 +1231,19 @@ namespace Eos.Services
                             {
                                 if ((feat != null) && (feat.OnUseEffect == spell))
                                 {
-                                    record.Set("FeatID", project.Feats.IndexOf(feat));
+                                    record.Set("FeatID", project.Feats.Get2DAIndex(feat));
                                     break;
                                 }
                             }
                         }
-                        record.Set("Counter1", project.Spells.IndexOf(spell.CounterSpell1));
-                        record.Set("Counter2", project.Spells.IndexOf(spell.CounterSpell2));
+                        record.Set("Counter1", project.Spells.Get2DAIndex(spell.CounterSpell1));
+                        record.Set("Counter2", project.Spells.Get2DAIndex(spell.CounterSpell2));
                         record.Set("HasProjectile", spell.HasProjectile);
 
                         // Additional columns
-                        record.Set("SubRadSpell6", project.Spells.IndexOf(spell.SubSpell6));
-                        record.Set("SubRadSpell7", project.Spells.IndexOf(spell.SubSpell7));
-                        record.Set("SubRadSpell8", project.Spells.IndexOf(spell.SubSpell8));
+                        record.Set("SubRadSpell6", project.Spells.Get2DAIndex(spell.SubSpell6));
+                        record.Set("SubRadSpell7", project.Spells.Get2DAIndex(spell.SubSpell7));
+                        record.Set("SubRadSpell8", project.Spells.Get2DAIndex(spell.SubSpell8));
 
                         record.Set("TargetShape", spell.TargetShape?.ToString().ToLower());
                         record.Set("TargetingFlags", spell.TargetingFlags);
@@ -1283,6 +1283,45 @@ namespace Eos.Services
                 spells2da.Save(filename);
 
                 AddHAKResource("spells", NWNResourceType.TWODA, filename);
+            }
+        }
+
+        private void ExportCustomObjects(EosProject project)
+        {
+            foreach (var template in project.CustomObjects)
+            {
+                if (template == null) continue;
+                
+                var repo = project.CustomObjectRepositories[template];
+                if (repo.Count == 0) return;
+
+                var custom2da = new TwoDimensionalArrayFile();
+                var columns = new List<string>();
+                columns.Add("Label");
+                foreach (var prop in template.Items)
+                {
+                    if ((prop == null) || (prop.DataType?.IsVisualOnly ?? false)) continue;
+                    columns.Add(prop.Column);
+                }
+                custom2da.New(columns.ToArray());
+
+                foreach (var instance in repo)
+                {
+                    if (instance == null) continue;
+
+                    var rec = custom2da.AddRecord();
+                    rec.Set("Label", instance.Label);
+                    foreach (var value in instance.Values)
+                    {
+                        if ((!value.Property.DataType?.IsVisualOnly ?? false) && (value.Property.DataType?.To2DA != null))
+                            rec.Set(value.Property.Column, value.Property.DataType?.To2DA(value.Value));
+                    }
+                }
+
+                var filename = Export2DAFolder + template.ResourceName.ToLower() + ".2da";
+                custom2da.Save(filename);
+
+                AddHAKResource(template.ResourceName.ToLower(), NWNResourceType.TWODA, filename);
             }
         }
 
@@ -1333,6 +1372,8 @@ namespace Eos.Services
             ExportSkills(project);
             ExportSoundsets(project);
             ExportSpells(project);
+
+            ExportCustomObjects(project);
 
             CreateHAK(project);
         }

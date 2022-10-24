@@ -1,4 +1,5 @@
 ﻿using Eos.Models;
+using Eos.Models.Tables;
 using Eos.Nwn.Tlk;
 using Eos.ViewModels.Base;
 using Prism.Commands;
@@ -91,9 +92,19 @@ namespace Eos.ViewModels
             MessageDispatcher.Send(MessageType.NewDetail, detailModelType);
         });
 
+        public DelegateCommand<CustomObject> NewCustomDetailCommand { get; private set; } = new DelegateCommand<CustomObject>(template =>
+        {
+            MessageDispatcher.Send(MessageType.NewCustomDetail, template);
+        });
+
         public DelegateCommand<BaseModel> OverrideDetailCommand { get; private set; } = new DelegateCommand<BaseModel>(originalModel =>
         {
             MessageDispatcher.Send(MessageType.OverrideDetail, originalModel);
+        });
+
+        public DelegateCommand<BaseModel> CopyDetailCommand { get; private set; } = new DelegateCommand<BaseModel>(originalModel =>
+        {
+            MessageDispatcher.Send(MessageType.CopyDetail, originalModel);
         });
 
         public DelegateCommand<object> OpenDetailCommand { get; private set; } = new DelegateCommand<object>(detailModel =>

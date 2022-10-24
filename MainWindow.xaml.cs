@@ -1,5 +1,6 @@
 ﻿using Eos.Config;
 using Eos.Models;
+using Eos.Models.Tables;
 using Eos.Nwn.Erf;
 using Eos.Nwn.Tlk;
 using Eos.Nwn.TwoDimensionalArray;
@@ -27,6 +28,22 @@ using System.Windows.Shapes;
 
 namespace Eos
 {
+    class CustomObjectRepositoryConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is CustomObject template)
+                return MasterRepository.Project.CustomObjectRepositories[template];
+
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     class ItemCountConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -113,7 +130,27 @@ namespace Eos
         {
             if ((e.PropertyName == nameof(viewModel.CurrentView)) && (viewModel.CurrentView?.GetDataObject() is BaseModel model))
             {
-                if (!model.IsReadonly)
+                if (model is CustomObjectInstance customObjectInstance)
+                {
+                    foreach (var item in tvAdditional.ItemContainerGenerator.Items)
+                    {
+                        if (item is TreeViewItem tvi)
+                        {
+                            var container = GetDataContainer(tvi, model);
+                            if (container != null)
+                            {
+                                container.BringIntoView(new Rect(0, -50, 100, 100));
+                                container.IsSelected = true;
+                                container.Focus();
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!tabAdditional.IsSelected)
+                        tabAdditional.IsSelected = true;
+                }
+                else if (!model.IsReadonly)
                 {
                     foreach (var item in tvCustom.ItemContainerGenerator.Items)
                     {

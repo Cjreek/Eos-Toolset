@@ -44,6 +44,10 @@
         <Setter Property="Margin" Value="2,0,0,3"/>
     </Style>
 
+    <Style TargetType="{x:Type uc:RaceComboBox}">
+        <Setter Property="Margin" Value="2,0,0,3"/>
+    </Style>
+
     <Style TargetType="{x:Type uc:ClassComboBox}">
         <Setter Property="Margin" Value="2,0,0,3"/>
     </Style>
@@ -61,6 +65,10 @@
     </Style>
 
     <Style TargetType="{x:Type uc:SkillComboBox}">
+        <Setter Property="Margin" Value="2,0,0,3"/>
+    </Style>
+
+    <Style TargetType="{x:Type uc:CustomObjectComboBox}">
         <Setter Property="Margin" Value="2,0,0,3"/>
     </Style>
 </ResourceDictionary>

@@ -13,5 +13,6 @@ namespace Eos.Repositories
         void RemoveBase(BaseModel model);
         bool HasOverride(BaseModel model);
         BaseModel? GetOverride(BaseModel model);
+        BaseModel? GetBaseByID(Guid id);
     }
 }

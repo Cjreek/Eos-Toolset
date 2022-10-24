@@ -23,6 +23,7 @@ namespace Eos.Models
 
     public class BaseModel : INotifyPropertyChanged
     {
+        private String _hint = "";
         private bool _clearingReferences = false;
         private Dictionary<(BaseModel refObject, String refProperty), BaseModelReference> referenceDict = new Dictionary<(BaseModel refObject, String refProperty), BaseModelReference>();
 
@@ -31,6 +32,19 @@ namespace Eos.Models
         public Guid? Overrides { get; set; } = null;
         public int? Index { get; set; }
         public String? Icon { get; set; }
+        public String Hint
+        {
+            get { return _hint; }
+            set
+            {
+                if (value != _hint)
+                {
+                    _hint = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public IEnumerable<BaseModelReference> References => referenceDict.Values;
         public int ReferenceCount => referenceDict.Count;
 
@@ -95,6 +109,7 @@ namespace Eos.Models
             result.Add("ID", this.ID.ToString());
             result.Add("Index", this.Index);
             result.Add("Overrides", this.Overrides != null ? this.Overrides.ToString() : null);
+            result.Add("Hint", this.Hint);
             return result;
         }
 
@@ -110,6 +125,7 @@ namespace Eos.Models
             this.ID = ParseGuid(json["ID"]?.GetValue<String>());
             this.Index = json["Index"]?.GetValue<int?>();
             this.Overrides = ParseNullableGuid(json["Overrides"]?.GetValue<String>());
+            this.Hint = json["Hint"]?.GetValue<String>() ?? "";
         }
 
         public M? Resolve<M>(M? modelRef, VirtualModelRepository<M> repository) where M : BaseModel, new()
@@ -136,7 +152,7 @@ namespace Eos.Models
             }
         }
 
-        public virtual BaseModel? Copy()
+        public virtual BaseModel? Copy(bool preserveIndex = false)
         {
             var result = (BaseModel?)this.GetType()?.GetConstructor(new Type[] { })?.Invoke(new object[] { });
             if (result != null)
@@ -144,6 +160,11 @@ namespace Eos.Models
                 result.FromJson(this.ToJson());
                 result.ResolveReferences();
                 result.ID = Guid.Empty;
+                if (!preserveIndex)
+                {
+                    result.Index = null;
+                    result.Hint = (result.Hint + " Copy").Trim();
+                }
                 return result;
             }
 
@@ -152,7 +173,7 @@ namespace Eos.Models
 
         public virtual BaseModel? Override()
         {
-            var result = Copy();
+            var result = Copy(true);
             if (result != null) 
                 result.Overrides = this.ID;
             return result;

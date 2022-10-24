@@ -36,6 +36,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources\ImageResources.xaml"/>
+                <ResourceDictionary Source="Resources\ConverterResources.xaml"/>
                 <ResourceDictionary>
                     <conv:BoolToVisibilityConverterEx FalseValue="Hidden" x:Key="Bool2Vis"/>
                     <conv:BoolToVisibilityConverterEx FalseValue="Collapsed" x:Key="Bool2VisCollapsed"/>
@@ -43,8 +44,13 @@
                     <conv:ResRefConverter x:Key="resRefConverter"/>
                     <local:IsViewModelValueConverter x:Key="isViewModelValueConverter"/>
                     <local:ItemCountConverter x:Key="itemCountConverter"/>
+                    <local:CustomObjectRepositoryConverter x:Key="customObjectRepositoryConverter"/>
 
-                    <ContextMenu DataContext="{Binding RelativeSource={RelativeSource Mode=Self}, Path=PlacementTarget}" x:Key="tviCustomContextMenu">
+                    <ContextMenu x:Key="customObjectContextMenu" DataContext="{Binding RelativeSource={RelativeSource Mode=Self}, Path=PlacementTarget}">
+                        <MenuItem x:Name="miAdditionalNew" Header="New" Command="{Binding Tag.NewCustomDetailCommand}" CommandParameter="{Binding DataContext}" Click="MenuItem_Click"/>
+                    </ContextMenu>
+
+                    <ContextMenu x:Key="tviCustomContextMenu" DataContext="{Binding RelativeSource={RelativeSource Mode=Self}, Path=PlacementTarget}">
                         <MenuItem x:Name="miCustomNew" Header="New" Command="{Binding DataContext.NewDetailCommand}" CommandParameter="{Binding Tag}" Click="MenuItem_Click">
                             <MenuItem.Style>
                                 <Style TargetType="{x:Type MenuItem}">
@@ -55,6 +61,20 @@
                                     </Style.Triggers>
                                 </Style>
                             </MenuItem.Style>
+                        </MenuItem>
+                        <MenuItem Command="{Binding Tag.CopyDetailCommand}" CommandParameter="{Binding DataContext}">
+                            <MenuItem.Header>
+                                <TextBlock>
+                                    <Run Text="Duplicate"/>
+                                    <Run>
+                                        <Run.Text>
+                                            <MultiBinding Converter="{StaticResource tlkConverter}">
+                                                <Binding Path="Header.Name"/>
+                                            </MultiBinding>
+                                        </Run.Text>
+                                    </Run>
+                                </TextBlock>
+                            </MenuItem.Header>
                         </MenuItem>
                         <MenuItem x:Name="miCustomDelete" Header="Delete" Command="{Binding Path=Tag.DeleteDetailCommand}" CommandParameter="{Binding DataContext}">
                             <MenuItem.Style>
@@ -69,7 +89,21 @@
                         </MenuItem>
                     </ContextMenu>
 
-                    <ContextMenu DataContext="{Binding RelativeSource={RelativeSource Mode=Self}, Path=PlacementTarget}" x:Key="tviStandardContextMenu">
+                    <ContextMenu x:Key="tviStandardContextMenu" DataContext="{Binding RelativeSource={RelativeSource Mode=Self}, Path=PlacementTarget}">
+                        <MenuItem Command="{Binding Tag.CopyDetailCommand}" CommandParameter="{Binding DataContext}">
+                            <MenuItem.Header>
+                                <TextBlock>
+                                    <Run Text="Duplicate"/>
+                                    <Run>
+                                        <Run.Text>
+                                            <MultiBinding Converter="{StaticResource tlkConverter}">
+                                                <Binding Path="Header.Name"/>
+                                            </MultiBinding>
+                                        </Run.Text>
+                                    </Run>
+                                </TextBlock>
+                            </MenuItem.Header>
+                        </MenuItem>
                         <MenuItem Command="{Binding Tag.OverrideDetailCommand}" CommandParameter="{Binding DataContext}">
                             <MenuItem.Header>
                                 <TextBlock>
@@ -118,13 +152,16 @@
                                 </Image>
 
                                 <TextBlock>
-                                    <TextBlock.Text>
-                                        <MultiBinding Converter="{StaticResource tlkConverter}">
-                                            <Binding Path="Name"/>
-                                            <Binding ElementName="viewModel" Path="CurrentLanguage"/>
-                                            <Binding ElementName="viewModel" Path="CurrentGender"/>
-                                        </MultiBinding>
-                                    </TextBlock.Text>
+                                    <Run>
+                                        <Run.Text>
+                                            <MultiBinding Converter="{StaticResource tlkConverter}">
+                                                <Binding Path="Name"/>
+                                                <Binding ElementName="viewModel" Path="CurrentLanguage"/>
+                                                <Binding ElementName="viewModel" Path="CurrentGender"/>
+                                            </MultiBinding>
+                                        </Run.Text>
+                                    </Run>
+                                    <Run Text="{Binding Hint, Converter={StaticResource hintConverter}}"/>
                                 </TextBlock>
                             </StackPanel>
                         </ContentControl>
@@ -149,14 +186,13 @@
                                     </Style>
                                 </Image.Style>
                             </Image>
-                            <TextBlock Text="{Binding Header}" MinWidth="50">
+                            <TextBlock MinWidth="50">
                                 <TextBlock.Style>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="Foreground" Value="Black"/>
                                         <Setter Property="FontStyle" Value="Italic"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Data.IsReadonly}" Value="True">
-                                                <!--<Setter Property="Foreground" Value="#FFB0B0B0"/>-->
                                                 <Setter Property="Foreground" Value="#FF909090"/>
                                                 <Setter Property="FontStyle" Value="Normal"/>
                                             </DataTrigger>
@@ -166,6 +202,8 @@
                                         </Style.Triggers>
                                     </Style>
                                 </TextBlock.Style>
+                                <Run Text="{Binding Header, Mode=OneWay}"/>
+                                <Run Text="{Binding Data.Hint, Mode=OneWay, Converter={StaticResource hintConverter}}"/>
                             </TextBlock>
                             <Button Content="x" Margin="5,0,0,0" Command="{Binding Path=CloseDetailCommand, ElementName=viewModel}" CommandParameter="{Binding Data}"
                                     Visibility="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}, Converter={StaticResource Bool2Vis}}">
@@ -399,6 +437,37 @@
                         <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
                             <Frame.Content>
                                 <view:KnownSpellsTableView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                            </Frame.Content>
+                        </Frame>
+                    </DataTemplate>
+
+                    <!--Custom Datatypes-->
+                    <DataTemplate DataType="{x:Type vm:CustomEnumViewModel}">
+                        <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                            <Frame.Content>
+                                <view:CustomEnumView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                            </Frame.Content>
+                        </Frame>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type vm:CustomObjectViewModel}">
+                        <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                            <Frame.Content>
+                                <view:CustomObjectView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                            </Frame.Content>
+                        </Frame>
+                    </DataTemplate>
+
+                    <DataTemplate DataType="{x:Type vm:CustomObjectInstanceViewModel}">
+                        <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                            <Frame.Content>
+                                <view:CustomObjectInstanceView DataContext="{Binding}" 
                                      TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
                                      Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
                             </Frame.Content>
@@ -907,6 +976,49 @@
                                 </TreeViewItem.Header>
                             </TreeViewItem>
                         </TreeViewItem>
+
+                        <TreeViewItem Header="Custom Datatypes" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" IsExpanded="True">
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomEnums}" Tag="{x:Type tables:CustomEnum}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Enums"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomEnums, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                            <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomObjects}" Tag="{x:Type tables:CustomObject}">
+                                <TreeViewItem.Header>
+                                    <TextBlock>
+                                        <Run Text="Objects"/>
+                                        <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomObjects, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                    </TextBlock>
+                                </TreeViewItem.Header>
+                            </TreeViewItem>
+                        </TreeViewItem>
+                    </TreeView>
+                </TabItem>
+                <TabItem x:Name="tabAdditional" Header="Additional">
+                    <TreeView x:Name="tvAdditional">
+                        <TreeView.Resources>
+                            <HierarchicalDataTemplate DataType="{x:Type tables:CustomObject}" ItemsSource="{Binding Converter={StaticResource customObjectRepositoryConverter}}">
+                                <TextBlock Text="{Binding Path=Name}" ContextMenu="{StaticResource customObjectContextMenu}" Tag="{Binding ElementName=viewModel}"/>
+                            </HierarchicalDataTemplate>
+                            
+                            <HierarchicalDataTemplate DataType="{x:Type models:CustomObjectInstance}">
+                                <ContentControl>
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseDoubleClick">
+                                            <i:InvokeCommandAction Command="{Binding Path=OpenDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+
+                                    <TextBlock FontWeight="Normal" Text="{Binding Label}"/>
+                                </ContentControl>
+                            </HierarchicalDataTemplate>
+                        </TreeView.Resources>
+                        
+                        <TreeViewItem FontWeight="Bold" Header="Data" IsExpanded="True" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomObjects}"/>
+                        <TreeViewItem FontWeight="Bold" Header="Tables" IsExpanded="True"/>
                     </TreeView>
                 </TabItem>
             </TabControl>

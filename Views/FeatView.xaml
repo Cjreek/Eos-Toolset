@@ -59,6 +59,7 @@
                             <RowDefinition Height="auto" MinHeight="25"/>
                             <RowDefinition Height="auto" MinHeight="25"/>
                             <RowDefinition Height="auto" MinHeight="25"/>
+                            <RowDefinition Height="auto" MinHeight="25"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
@@ -66,53 +67,57 @@
                         <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
                         <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
 
+                        <!--Hint-->
+                        <TextBlock Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+                        <TextBox Text="{Binding Data.Hint,UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4"/>
+                        
                         <!--Description-->
-                        <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="2" Grid.Column="0"/>
-                        <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
+                        <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="3" Grid.Column="0"/>
+                        <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"/>
 
                         <!--Parent Feat-->
-                        <TextBlock Text="Parent Feat" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
-                        <uc:FeatComboBox SelectedValue="{Binding Data.MasterFeat}" Grid.Row="4" Grid.Column="1"/>
+                        <TextBlock Text="Parent Feat" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+                        <uc:FeatComboBox SelectedValue="{Binding Data.MasterFeat}" Grid.Row="5" Grid.Column="1"/>
 
                         <!--Parent Feat-->
-                        <TextBlock Text="Successor Feat" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
-                        <uc:FeatComboBox SelectedValue="{Binding Data.SuccessorFeat}" Grid.Row="4" Grid.Column="3"/>
+                        <TextBlock Text="Successor Feat" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
+                        <uc:FeatComboBox SelectedValue="{Binding Data.SuccessorFeat}" Grid.Row="5" Grid.Column="3"/>
 
                         <!--Feat Category-->
-                        <TextBlock Text="Feat Category" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
-                        <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:FeatCategory}}" SelectedValue="{Binding Data.ToolsetCategory}" Grid.Row="3" Grid.Column="1" IsNullable="False"/>
+                        <TextBlock Text="Feat Category" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+                        <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:FeatCategory}}" SelectedValue="{Binding Data.ToolsetCategory}" Grid.Row="4" Grid.Column="1" IsNullable="False"/>
 
                         <!--AI Category-->
-                        <TextBlock Text="AI Category" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
-                        <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:AICategory}}" SelectedValue="{Binding Data.Category}" IsNullable="True" Grid.Row="3" Grid.Column="3"/>
+                        <TextBlock Text="AI Category" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
+                        <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:AICategory}}" SelectedValue="{Binding Data.Category}" IsNullable="True" Grid.Row="4" Grid.Column="3"/>
 
                         <!--Uses per Day-->
-                        <TextBlock Text="Uses per day" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
-                        <wpftk:IntegerUpDown Text="{Binding Data.UsesPerDay}" Grid.Row="5" Grid.Column="1"/>
+                        <TextBlock Text="Uses per day" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
+                        <wpftk:IntegerUpDown Text="{Binding Data.UsesPerDay}" Grid.Row="6" Grid.Column="1"/>
 
                         <!-- OnUse Effect -->
-                        <TextBlock Text="OnUse Spell Effect" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
-                        <uc:SpellComboBox SelectedValue="{Binding Data.OnUseEffect}" Grid.Row="5" Grid.Column="3"/>
+                        <TextBlock Text="OnUse Spell Effect" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="2"/>
+                        <uc:SpellComboBox SelectedValue="{Binding Data.OnUseEffect}" Grid.Row="6" Grid.Column="3"/>
 
                         <!--CR Modifier-->
-                        <TextBlock Text="CR Modifier" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
-                        <wpftk:DoubleUpDown Text="{Binding Data.CRModifier}" Grid.Row="6" Grid.Column="1"/>
+                        <TextBlock Text="CR Modifier" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
+                        <wpftk:DoubleUpDown Text="{Binding Data.CRModifier}" Grid.Row="7" Grid.Column="1"/>
 
                         <!--Is Hostile-->
-                        <TextBlock Text="Is Hostile" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
-                        <CheckBox IsChecked="{Binding Data.IsHostile}" Grid.Row="7" Grid.Column="1"/>
+                        <TextBlock Text="Is Hostile" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
+                        <CheckBox IsChecked="{Binding Data.IsHostile}" Grid.Row="8" Grid.Column="1"/>
 
                         <!--Use Action Queue-->
-                        <TextBlock Text="Use Action Queue" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="2"/>
-                        <CheckBox IsChecked="{Binding Data.UseActionQueue}" Grid.Row="7" Grid.Column="3"/>
+                        <TextBlock Text="Use Action Queue" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2"/>
+                        <CheckBox IsChecked="{Binding Data.UseActionQueue}" Grid.Row="8" Grid.Column="3"/>
 
                         <!--Target Self-->
-                        <TextBlock Text="Target Self" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
-                        <CheckBox IsChecked="{Binding Data.TargetSelf}" Grid.Row="8" Grid.Column="1"/>
+                        <TextBlock Text="Target Self" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
+                        <CheckBox IsChecked="{Binding Data.TargetSelf}" Grid.Row="9" Grid.Column="1"/>
 
                         <!--Useable By All Classes-->
-                        <TextBlock Text="Usable by all classes" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2"/>
-                        <CheckBox IsChecked="{Binding Data.UseableByAllClasses}" Grid.Row="8" Grid.Column="3"/>
+                        <TextBlock Text="Usable by all classes" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
+                        <CheckBox IsChecked="{Binding Data.UseableByAllClasses}" Grid.Row="9" Grid.Column="3"/>
                     </Grid>
 
                     <!--Icon-->

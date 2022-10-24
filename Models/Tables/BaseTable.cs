@@ -18,7 +18,20 @@ namespace Eos.Models.Tables
     public class BaseTable<T> : BaseModel where T : TableItem, new()
     {
         private Repository<T> _items = new Repository<T>();
-        public string Name { get; set; } = "";
+        private string _name = "";
+
+        public string Name
+        {
+            get { return _name; }
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
         
         public Repository<T> Items => _items;
 

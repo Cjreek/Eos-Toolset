@@ -49,7 +49,7 @@ namespace Eos.Repositories
             throw new NotImplementedException();
         }
 
-        public int? IndexOf(T? model, bool returnCustomDataIndex = true)
+        public int? Get2DAIndex(T? model, bool returnCustomDataIndex = true)
         {
             if (model == null) return null;
 
@@ -168,6 +168,7 @@ namespace Eos.Repositories
                 if (entity != null)
                     jsonArr.Add(entity.ToJson());
             }
+
             File.WriteAllText(filename, jsonArr.ToJsonString());
         }
 
@@ -189,6 +190,12 @@ namespace Eos.Repositories
         {
             if (model is T specificModel)
                 Remove(specificModel);
+        }
+
+        public BaseModel? GetBaseByID(Guid id)
+        {
+            modelLookup.TryGetValue(id, out T? result);
+            return result;
         }
     }
 }
