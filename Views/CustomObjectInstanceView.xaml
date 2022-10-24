@@ -5,11 +5,6 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Eos.Views"
       xmlns:vm="clr-namespace:Eos.ViewModels"     
-      xmlns:wpftk="clr-namespace:Xceed.Wpf.Toolkit;assembly=DotNetProjects.Wpf.Extended.Toolkit"
-      xmlns:ext="clr-namespace:Eos.Extensions"
-      xmlns:uc="clr-namespace:Eos.Usercontrols"
-      xmlns:repo="clr-namespace:Eos.Repositories"
-      xmlns:sys="clr-namespace:System;assembly=mscorlib"
       x:Name="page"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
@@ -23,108 +18,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\Resources\StyleResources.xaml"/>
                 <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
-                <ResourceDictionary>
-                    <local:VariantValueTemplateSelector x:Key="variantValueTemplateSelector"/>
-
-                    <DataTemplate x:Key="spaceTemplate"/>
-
-                    <DataTemplate x:Key="errorTemplate">
-                        <TextBlock Foreground="Red" FontWeight="Bold" Text="Type not available" TextAlignment="Center" VerticalAlignment="Center"/>
-                    </DataTemplate>
-                    
-                    <DataTemplate x:Key="intTemplate">
-                        <wpftk:IntegerUpDown Value="{Binding Value}"/>
-                    </DataTemplate>
-                    <DataTemplate x:Key="doubleTemplate">
-                        <wpftk:DoubleUpDown Value="{Binding Value}"/>
-                    </DataTemplate>
-                    <DataTemplate x:Key="boolTemplate">
-                        <CheckBox IsChecked="{Binding Value}" Margin="3,0,0,0"/>
-                    </DataTemplate>
-                    <DataTemplate x:Key="strTemplate">
-                        <TextBox Text="{Binding Value}" Height="22" VerticalContentAlignment="Center"/>
-                    </DataTemplate>
-
-                    <DataTemplate x:Key="raceTemplate">
-                        <uc:RaceComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
-                    </DataTemplate>
-                    <DataTemplate x:Key="classTemplate">
-                        <uc:ClassComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
-                    </DataTemplate>
-                    <DataTemplate x:Key="skillTemplate">
-                        <uc:SkillComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
-                    </DataTemplate>
-                    <DataTemplate x:Key="featTemplate">
-                        <uc:FeatComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
-                    </DataTemplate>
-                    <DataTemplate x:Key="domainTemplate">
-                        <uc:DomainComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
-                    </DataTemplate>
-                    <DataTemplate x:Key="spellTemplate">
-                        <uc:SpellComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
-                    </DataTemplate>
-
-                    <DataTemplate x:Key="customObjectTemplate">
-                        <uc:CustomObjectComboBox CustomObjectTemplate="{Binding Property.DataType.CustomType}" SelectedValue="{Binding Value}" IsNullable="True"/>
-                    </DataTemplate>
-                    
-                    <DataTemplate x:Key="customEnumTemplate">
-                        <uc:CustomEnumComboBox CustomEnum="{Binding Property.DataType.CustomType}" SelectedValue="{Binding Value}" IsNullable="True"/>
-                    </DataTemplate>
-
-                    <DataTemplate x:Key="customObjectVariantTemplate">
-                        <uc:CustomObjectComboBox CustomObjectTemplate="{Binding DataType.CustomType}" SelectedValue="{Binding Value}" IsNullable="True"/>
-                    </DataTemplate>
-
-                    <DataTemplate x:Key="customEnumVariantTemplate">
-                        <uc:CustomEnumComboBox CustomEnum="{Binding DataType.CustomType}" SelectedValue="{Binding Value}" IsNullable="True"/>
-                    </DataTemplate>
-
-                    <local:InstancePropertyValueTemplateSelector x:Key="variantTemplateSelector"
-                                                                        ErrorTemplate="{StaticResource errorTemplate}"
-                                                                        SpaceTemplate="{StaticResource spaceTemplate}"
-                                                                        IntTemplate="{StaticResource intTemplate}"
-                                                                        DoubleTemplate="{StaticResource doubleTemplate}"
-                                                                        BoolTemplate="{StaticResource boolTemplate}"
-                                                                        StringTemplate="{StaticResource strTemplate}"
-                                                                        RaceTemplate="{StaticResource raceTemplate}"
-                                                                        ClassTemplate="{StaticResource classTemplate}"
-                                                                        SkillTemplate="{StaticResource skillTemplate}"
-                                                                        FeatTemplate="{StaticResource featTemplate}"
-                                                                        DomainTemplate="{StaticResource domainTemplate}"
-                                                                        SpellTemplate="{StaticResource spellTemplate}"
-                                                                        CustomObjectTemplate="{StaticResource customObjectVariantTemplate}"
-                                                                        CustomEnumTemplate="{StaticResource customEnumVariantTemplate}"/>
-
-                    <DataTemplate x:Key="variantTemplate">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="120"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <ComboBox x:Name="cbDataType" Grid.Column="0" Height="22" ItemsSource="{Binding Source={x:Static repo:MasterRepository.DataTypes}}" DisplayMemberPath="Label" SelectedValue="{Binding Value.DataType}"/>
-                            <ContentPresenter Grid.Column="1" Content="{Binding Value}" ContentTemplate="{Binding ElementName=cbDataType, Path=SelectedValue, Converter={StaticResource variantValueTemplateSelector}, ConverterParameter={StaticResource variantTemplateSelector}}"/>
-                        </Grid>
-                    </DataTemplate>
-
-                    <local:InstancePropertyValueTemplateSelector x:Key="templateSelector"
-                                                                        ErrorTemplate="{StaticResource errorTemplate}"
-                                                                        SpaceTemplate="{StaticResource spaceTemplate}"
-                                                                        IntTemplate="{StaticResource intTemplate}"
-                                                                        DoubleTemplate="{StaticResource doubleTemplate}"
-                                                                        BoolTemplate="{StaticResource boolTemplate}"
-                                                                        StringTemplate="{StaticResource strTemplate}"
-                                                                        VariantTemplate="{StaticResource variantTemplate}"
-                                                                        RaceTemplate="{StaticResource raceTemplate}"
-                                                                        ClassTemplate="{StaticResource classTemplate}"
-                                                                        SkillTemplate="{StaticResource skillTemplate}"
-                                                                        FeatTemplate="{StaticResource featTemplate}"
-                                                                        DomainTemplate="{StaticResource domainTemplate}"
-                                                                        SpellTemplate="{StaticResource spellTemplate}"
-                                                                        CustomObjectTemplate="{StaticResource customObjectTemplate}"
-                                                                        CustomEnumTemplate="{StaticResource customEnumTemplate}"/>
-                </ResourceDictionary>
+                <ResourceDictionary Source="..\Resources\CustomDataTemplateResources.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>

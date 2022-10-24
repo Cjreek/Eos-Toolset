@@ -117,6 +117,7 @@ namespace Eos.Models
 
         public override void ResolveReferences()
         {
+            base.ResolveReferences();
             ResolveSpellList(Level0);
             ResolveSpellList(Level1);
             ResolveSpellList(Level2);

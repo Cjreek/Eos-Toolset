@@ -84,6 +84,7 @@ namespace Eos.Models
 
         public override void ResolveReferences()
         {
+            base.ResolveReferences();
             FavoredClass = Resolve(FavoredClass, MasterRepository.Classes);
             ToolsetDefaultClass = Resolve(ToolsetDefaultClass, MasterRepository.Classes);
             FavoredEnemyFeat = Resolve(FavoredEnemyFeat, MasterRepository.Feats);

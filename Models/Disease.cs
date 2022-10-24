@@ -41,11 +41,6 @@ namespace Eos.Models
             Name[MasterRepository.Project.DefaultLanguage].TextF = "New Disease";
         }
 
-        public override void ResolveReferences()
-        {
-
-        }
-
         public override void FromJson(JsonObject json)
         {
             base.FromJson(json);

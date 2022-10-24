@@ -53,6 +53,7 @@ namespace Eos.Models
 
         public override void ResolveReferences()
         {
+            base.ResolveReferences();
             ForClass = Resolve(ForClass, MasterRepository.Classes);
             Domain1 = Resolve(Domain1, MasterRepository.Domains);
             Domain2 = Resolve(Domain2, MasterRepository.Domains);

@@ -151,6 +151,7 @@ namespace Eos.Models
 
         public override void ResolveReferences()
         {
+            base.ResolveReferences();
             AttackBonusTable = Resolve(AttackBonusTable, MasterRepository.AttackBonusTables);
             Feats = Resolve(Feats, MasterRepository.FeatTables);
             SavingThrows = Resolve(SavingThrows, MasterRepository.SavingThrowTables);

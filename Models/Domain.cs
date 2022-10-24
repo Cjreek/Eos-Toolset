@@ -111,6 +111,7 @@ namespace Eos.Models
 
         public override void ResolveReferences()
         {
+            base.ResolveReferences();
             Level0Spell = Resolve(Level0Spell, MasterRepository.Spells);
             Level1Spell = Resolve(Level1Spell, MasterRepository.Spells);
             Level2Spell = Resolve(Level2Spell, MasterRepository.Spells);

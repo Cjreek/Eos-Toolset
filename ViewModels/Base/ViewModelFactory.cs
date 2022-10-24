@@ -66,6 +66,9 @@ namespace Eos.ViewModels
             if (model is CustomObjectInstance customObjectInstance)
                 return new CustomObjectInstanceViewModel(customObjectInstance);
 
+            if (model is ModelExtension extension)
+                return new ModelExtensionViewModel(extension);
+
             else
                 throw new ArgumentException("No viewmodel found", "model");
         }

@@ -120,6 +120,9 @@
     <Compile Update="Views\CustomObjectInstanceView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\ModelExtensionView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\CustomObjectView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -211,6 +214,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\CustomObjectInstanceView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ModelExtensionView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

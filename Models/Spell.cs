@@ -160,6 +160,7 @@ namespace Eos.Models
 
         public override void ResolveReferences()
         {
+            base.ResolveReferences();
             SubSpell1 = Resolve(SubSpell1, MasterRepository.Spells);
             SubSpell2 = Resolve(SubSpell2, MasterRepository.Spells);
             SubSpell3 = Resolve(SubSpell3, MasterRepository.Spells);

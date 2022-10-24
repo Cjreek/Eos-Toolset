@@ -1,9 +1,11 @@
-﻿using Eos.Nwn;
+﻿using Eos.Models.Tables;
+using Eos.Nwn;
 using Eos.Nwn.Tlk;
 using Eos.Repositories;
 using Eos.Types;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -25,7 +27,24 @@ namespace Eos.Models
     {
         private String _hint = "";
         private bool _clearingReferences = false;
+        private ModelExtension? _extensions;
         private Dictionary<(BaseModel refObject, String refProperty), BaseModelReference> referenceDict = new Dictionary<(BaseModel refObject, String refProperty), BaseModelReference>();
+
+        private Dictionary<CustomObjectProperty, CustomValueInstance> extensionValueDict = new Dictionary<CustomObjectProperty, CustomValueInstance>();
+        public ObservableCollection<CustomValueInstance> ExtensionValues { get; } = new ObservableCollection<CustomValueInstance>();
+
+        public ModelExtension? Extensions
+        {
+            get { return _extensions; }
+            set
+            {
+                if (_extensions != value)
+                {
+                    _extensions = value;
+                    InitExtensionValues();
+                }
+            }
+        }
 
         public Guid ID { get; set; }
         public bool IsReadonly { get; set; } = false;
@@ -41,6 +60,24 @@ namespace Eos.Models
                 {
                     _hint = value;
                     NotifyPropertyChanged();
+                }
+            }
+        }
+
+        private void InitExtensionValues()
+        {
+            ExtensionValues.Clear();
+            extensionValueDict.Clear();
+            if (_extensions != null)
+            {
+                foreach (var prop in _extensions.Items)
+                {
+                    if (prop != null)
+                    {
+                        var valueInstance = new CustomValueInstance(prop);
+                        extensionValueDict[prop] = valueInstance;
+                        ExtensionValues.Add(valueInstance);
+                    }
                 }
             }
         }
@@ -103,6 +140,14 @@ namespace Eos.Models
             return CreateJsonRef(this);
         }
 
+        public static T CreateFromJson<T>(JsonObject json, ModelExtension extensions) where T : BaseModel, new()
+        {
+            T result = new T();
+            result.Extensions = extensions;
+            result.FromJson(json);
+            return result;
+        }
+
         public virtual JsonObject ToJson()
         {
             var result = new JsonObject();
@@ -110,13 +155,15 @@ namespace Eos.Models
             result.Add("Index", this.Index);
             result.Add("Overrides", this.Overrides != null ? this.Overrides.ToString() : null);
             result.Add("Hint", this.Hint);
-            return result;
-        }
 
-        public static T CreateFromJson<T>(JsonObject json) where T : BaseModel, new()
-        {
-            T result = new T();
-            result.FromJson(json);
+            var extensionValues = new JsonObject();
+            foreach (var prop in extensionValueDict.Keys)
+            {
+                if (!prop.DataType?.IsVisualOnly ?? false)
+                    extensionValues.Add(prop.Column, prop.ValueToJson(extensionValueDict[prop].Value));
+            }
+            result.Add("ExtensionValues", extensionValues);
+
             return result;
         }
 
@@ -126,6 +173,16 @@ namespace Eos.Models
             this.Index = json["Index"]?.GetValue<int?>();
             this.Overrides = ParseNullableGuid(json["Overrides"]?.GetValue<String>());
             this.Hint = json["Hint"]?.GetValue<String>() ?? "";
+
+            var extensionValues = json["ExtensionValues"]?.AsObject();
+            if (extensionValues != null)
+            {
+                foreach (var prop in extensionValueDict.Keys)
+                {
+                    if (!prop.DataType?.IsVisualOnly ?? false)
+                        extensionValueDict[prop].Value = prop.ValueFromJson(extensionValues[prop.Column]);
+                }
+            }
         }
 
         public M? Resolve<M>(M? modelRef, VirtualModelRepository<M> repository) where M : BaseModel, new()
@@ -134,9 +191,30 @@ namespace Eos.Models
             return repository.Resolve(modelRef);
         }
 
+        protected BaseModel? ResolveByType(Type modelType, Guid id)
+        {
+            return MasterRepository.Standard.GetByID(modelType, id) ?? MasterRepository.Project.GetByID(modelType, id);
+        }
+
         public virtual void ResolveReferences()
         {
-
+            foreach (var prop in extensionValueDict.Keys)
+            {
+                if ((extensionValueDict[prop].Value is VariantValue varValue) && (varValue.Value is BaseModel varModel))
+                {
+                    if ((varModel is CustomObjectInstance coInstance) && (varValue.DataType?.CustomType is CustomObject template))
+                        varValue.Value = MasterRepository.Project.CustomObjectRepositories[template].GetByID(coInstance.ID);
+                    else
+                        varValue.Value = ResolveByType(varModel.GetType(), varModel.ID);
+                }
+                else if (extensionValueDict[prop].Value is BaseModel model)
+                {
+                    if ((model is CustomObjectInstance coInstance) && (prop.DataType?.CustomType is CustomObject template))
+                        extensionValueDict[prop].Value = MasterRepository.Project.CustomObjectRepositories[template].GetByID(coInstance.ID);
+                    else
+                        extensionValueDict[prop].Value = ResolveByType(model.GetType(), model.ID);
+                }
+            }
         }
 
         public void ClearReferences()
@@ -157,6 +235,7 @@ namespace Eos.Models
             var result = (BaseModel?)this.GetType()?.GetConstructor(new Type[] { })?.Invoke(new object[] { });
             if (result != null)
             {
+                result.Extensions = Extensions;
                 result.FromJson(this.ToJson());
                 result.ResolveReferences();
                 result.ID = Guid.Empty;

@@ -122,11 +122,6 @@ namespace Eos.Models
             return Label;
         }
 
-        private BaseModel? ResolveByType(Type modelType, Guid id)
-        {
-            return MasterRepository.Standard.GetByID(modelType, id) ?? MasterRepository.Project.GetByID(modelType, id);
-        }
-
         public override void ResolveReferences()
         {
             foreach (var prop in valueDict.Keys)

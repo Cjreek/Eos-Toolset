@@ -143,6 +143,7 @@ namespace Eos.Models
 
         public override void ResolveReferences()
         {
+            base.ResolveReferences();
             RequiredFeat1 = Resolve(RequiredFeat1, MasterRepository.Feats);
             RequiredFeat2 = Resolve(RequiredFeat2, MasterRepository.Feats);
             OnUseEffect = Resolve(OnUseEffect, MasterRepository.Spells);

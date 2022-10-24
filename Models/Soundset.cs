@@ -61,10 +61,6 @@ namespace Eos.Models
             Name[MasterRepository.Project.DefaultLanguage].TextF = "New Soundset";
         }
 
-        public override void ResolveReferences()
-        {
-        }
-
         public override void FromJson(JsonObject json)
         {
             base.FromJson(json);

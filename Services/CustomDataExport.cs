@@ -15,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Documents;
 using System.Xml.Linq;
 
@@ -38,6 +39,24 @@ namespace Eos.Services
         private Dictionary<Guid, int> modelIndices = new Dictionary<Guid, int>();
         private Dictionary<TLKStringSet, int> customTLKIndices = new Dictionary<TLKStringSet, int>();
         private Dictionary<(String resRef, NWNResourceType resType), String> hakResources = new Dictionary<(String, NWNResourceType), String>();
+
+        private void AddExtensionColumns(TwoDimensionalArrayFile twoDAFile, ModelExtension extensions)
+        {
+            foreach (var extension in extensions.Items)
+            {
+                if (extension != null)
+                    twoDAFile.Columns.AddColumn(extension.Column);
+            }
+        }
+
+        private void WriteExtensionValues(LineRecord record, ObservableCollection<CustomValueInstance> values)
+        {
+            foreach (var value in values)
+            {
+                if ((!value.Property.DataType?.IsVisualOnly ?? false) && (value.Property.DataType?.To2DA != null))
+                    record.Set(value.Property.Column, value.Property.DataType?.To2DA(value.Value));
+            }
+        }
 
         private TwoDimensionalArrayFile? Load2da(String name)
         {
@@ -634,6 +653,9 @@ namespace Eos.Services
                 classes2da.Columns.AddColumn("SkipSpellSelection");
                 classes2da.Columns.SetHex("AlignRestrict");
                 classes2da.Columns.SetHex("AlignRstrctType");
+
+                AddExtensionColumns(classes2da, project.Classes.Extensions);
+
                 for (int i=0; i < project.Classes.Count; i++)
                 {
                     var cls = project.Classes[i];
@@ -702,6 +724,8 @@ namespace Eos.Services
                         record.Set("MinAssociateLevel", cls.IsSpellCaster ? cls.MinAssociateLevel: null);
                         record.Set("CanCastSpontaneously", cls.IsSpellCaster ? cls.CanCastSpontaneously : null);
                         record.Set("SkipSpellSelection", cls.IsSpellCaster ? cls.SkipSpellSelection : null);
+
+                        WriteExtensionValues(record, cls.ExtensionValues);
                     }
                 }
 
@@ -767,6 +791,7 @@ namespace Eos.Services
             var disease2da = Load2da("disease");
             if (disease2da != null)
             {
+                AddExtensionColumns(disease2da, project.Diseases.Extensions);
                 for (int i = 0; i < project.Diseases.Count; i++)
                 {
                     var disease = project.Diseases[i];
@@ -799,6 +824,8 @@ namespace Eos.Services
                         record.Set("Type", "EXTRA");
                         record.Set("End_Incu_Script", disease.IncubationEndScript);
                         record.Set("24_Hour_Script", disease.DailyEffectScript);
+
+                        WriteExtensionValues(record, disease.ExtensionValues);
                     }
                 }
 
@@ -817,6 +844,7 @@ namespace Eos.Services
             if (domains2da != null)
             {
                 domains2da.Columns.AddColumn("Level_0");
+                AddExtensionColumns(domains2da, project.Domains.Extensions);
                 for (int i = 0; i < project.Domains.Count; i++)
                 {
                     var domain = project.Domains[i];
@@ -848,6 +876,8 @@ namespace Eos.Services
                         record.Set("Level_9", project.Spells.Get2DAIndex(domain.Level9Spell));
                         record.Set("GrantedFeat", project.Feats.Get2DAIndex(domain.GrantedFeat));
                         record.Set("CastableFeat", domain.FeatIsActive);
+
+                        WriteExtensionValues(record, domain.ExtensionValues);
                     }
                 }
 
@@ -865,6 +895,7 @@ namespace Eos.Services
             var feat2da = Load2da("feat");
             if (feat2da != null)
             {
+                AddExtensionColumns(feat2da, project.Feats.Extensions);
                 for (int i = 0; i < project.Feats.Count; i++)
                 {
                     var feat = project.Feats[i];
@@ -923,6 +954,8 @@ namespace Eos.Services
                         record.Set("MinFortSave", feat.MinFortitudeSave > 0 ? feat.MinFortitudeSave : null);
                         record.Set("PreReqEpic", feat.RequiresEpic);
                         record.Set("ReqAction", feat.UseActionQueue);
+
+                        WriteExtensionValues(record, feat.ExtensionValues);
                     }
                 }
 
@@ -940,6 +973,7 @@ namespace Eos.Services
             var poison2da = Load2da("poison");
             if (poison2da != null)
             {
+                AddExtensionColumns(poison2da, project.Poisons.Extensions);
                 for (int i = 0; i < project.Poisons.Count; i++)
                 {
                     var poison = project.Poisons[i];
@@ -970,6 +1004,8 @@ namespace Eos.Services
                         record.Set("Cost", poison.Cost);
                         record.Set("OnHitApplied", poison.OnHitApplied);
                         record.Set("VFX_Impact", poison.ImpactVFX);
+
+                        WriteExtensionValues(record, poison.ExtensionValues);
                     }
                 }
 
@@ -988,6 +1024,7 @@ namespace Eos.Services
             if (racialtypes2da != null)
             {
                 racialtypes2da.Columns.AddColumn("FavoredEnemyFeat");
+                AddExtensionColumns(racialtypes2da, project.Races.Extensions);
                 for (int i = 0; i < project.Races.Count; i++)
                 {
                     var race = project.Races[i];
@@ -1037,6 +1074,8 @@ namespace Eos.Services
                         record.Set("NumberNormalFeatsEveryNthLevel", race.FeatEveryNthLevelCount);
                         record.Set("SkillPointModifierAbility", race.SkillPointModifierAbility?.ToString());
                         record.Set("FavoredEnemyFeat", project.Feats.Get2DAIndex(race.FavoredEnemyFeat));
+
+                        WriteExtensionValues(record, race.ExtensionValues);
                     }
                 }
 
@@ -1055,6 +1094,7 @@ namespace Eos.Services
             if (skills2da != null)
             {
                 skills2da.Columns.AddColumn("HideFromLevelUp");
+                AddExtensionColumns(skills2da, project.Skills.Extensions);
                 for (int i = 0; i < project.Skills.Count; i++)
                 {
                     var skill = project.Skills[i];
@@ -1083,6 +1123,8 @@ namespace Eos.Services
                         record.Set("Constant", "SKILL_" + skill.Name[project.DefaultLanguage].Text.Replace(" ", "_").ToUpper()); // TODO: Generate/Get skill constant
                         record.Set("HostileSkill", skill.IsHostile);
                         record.Set("HideFromLevelUp", skill.HideFromLevelUp);
+
+                        WriteExtensionValues(record, skill.ExtensionValues);
                     }
                 }
 
@@ -1153,15 +1195,18 @@ namespace Eos.Services
                 spells2da.Columns.AddColumn("SubRadSpell7");
                 spells2da.Columns.AddColumn("SubRadSpell8");
                 spells2da.Columns.AddColumn("TargetShape");
-                spells2da.Columns.AddColumn("TargetingFlags");
+                spells2da.Columns.AddColumn("TargetFlags");
                 spells2da.Columns.AddColumn("TargetSizeX");
                 spells2da.Columns.AddColumn("TargetSizeY");
+
                 for (int i = 0; i < project.Spellbooks.Count; i++)
                 {
                     var spellbook = project.Spellbooks[i];
                     if ((spellbook != null) && (spellbook.Overrides == null))
                         spells2da.Columns.AddColumn(spellbook.Name);
                 }
+
+                AddExtensionColumns(spells2da, project.Spells.Extensions);
 
                 for (int i = 0; i < project.Spells.Count; i++)
                 {
@@ -1246,9 +1291,11 @@ namespace Eos.Services
                         record.Set("SubRadSpell8", project.Spells.Get2DAIndex(spell.SubSpell8));
 
                         record.Set("TargetShape", spell.TargetShape?.ToString().ToLower());
-                        record.Set("TargetingFlags", spell.TargetingFlags);
+                        record.Set("TargetFlags", (int?)spell.TargetingFlags);
                         record.Set("TargetSizeX", spell.TargetSizeX);
                         record.Set("TargetSizeY", spell.TargetSizeY);
+
+                        WriteExtensionValues(record, spell.ExtensionValues);
                     }
                 }
 

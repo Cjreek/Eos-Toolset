@@ -7,6 +7,7 @@ using System.Collections;
 using Eos.Models;
 using System.IO;
 using System.Text.Json.Nodes;
+using Eos.Models.Tables;
 
 namespace Eos.Repositories
 {
@@ -16,6 +17,8 @@ namespace Eos.Repositories
         private Dictionary<int, T?> modelIndexLookup = new Dictionary<int, T?>();
         private Dictionary<Guid, Guid> overrideLookup = new Dictionary<Guid, Guid>();
         private bool isReadonly;
+
+        public ModelExtension Extensions { get; } = new ModelExtension() { Name = typeof(T).Name };
 
         public ModelRepository(bool isReadonly) : base()
         {
@@ -92,6 +95,7 @@ namespace Eos.Repositories
             if (model.ID == Guid.Empty)
                 model.ID = Guid.NewGuid();
 
+            model.Extensions = Extensions;
             model.IsReadonly = isReadonly;
 
             if (!modelLookup.ContainsKey(model.ID))
@@ -135,20 +139,38 @@ namespace Eos.Repositories
         public void LoadFromFile(string filename)
         {
             Clear();
-
             if (File.Exists(filename))
             {
                 var fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
                 try
                 {
-                    if (JsonNode.Parse(fs) is JsonArray jsonRepository)
+                    if (JsonNode.Parse(fs) is JsonObject jsonRepository)
                     {
-                        for (int i = 0; i < jsonRepository.Count; i++)
+                        var extensions = jsonRepository["Extensions"]?.AsArray();
+                        if (extensions != null)
                         {
-                            if (jsonRepository[i] is JsonObject jsonObj)
+                            for (int i = 0; i < extensions.Count; i++)
                             {
-                                var newModel = BaseModel.CreateFromJson<T>(jsonObj);
-                                Add(newModel);
+                                if (extensions[i] is JsonObject jsonObj)
+                                {
+                                    var prop = new CustomObjectProperty();
+                                    prop.FromJson(jsonObj);
+                                    prop.ResolveReferences();
+                                    Extensions.Add(prop);
+                                }
+                            }
+                        }
+
+                        var items = jsonRepository["Items"]?.AsArray();
+                        if (items != null)
+                        {
+                            for (int i = 0; i < items.Count; i++)
+                            {
+                                if (items[i] is JsonObject jsonObj)
+                                {
+                                    var newModel = BaseModel.CreateFromJson<T>(jsonObj, Extensions);
+                                    Add(newModel);
+                                }
                             }
                         }
                     }
@@ -162,14 +184,25 @@ namespace Eos.Repositories
 
         public void SaveToFile(string filename)
         {
+            var jsonRepo = new JsonObject();
+
+            var extensionArr = new JsonArray();
+            foreach (var item in Extensions.Items)
+            {
+                if (item == null) continue;
+                extensionArr.Add(item.ToJson());
+            }
+            jsonRepo.Add("Extensions", extensionArr);
+
             var jsonArr = new JsonArray();
             foreach (var entity in this)
             {
                 if (entity != null)
                     jsonArr.Add(entity.ToJson());
             }
+            jsonRepo.Add("Items", jsonArr);
 
-            File.WriteAllText(filename, jsonArr.ToJsonString());
+            File.WriteAllText(filename, jsonRepo.ToJsonString());
         }
 
         public void ResolveReferences()

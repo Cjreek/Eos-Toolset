@@ -102,6 +102,7 @@ namespace Eos.Models.Tables
 
         public override void ResolveReferences()
         {
+            base.ResolveReferences();
             for (int i = Count - 1; i >= 0; i--)
             {
                 var item = this[i];
@@ -119,6 +120,8 @@ namespace Eos.Models.Tables
 
             this.ID = ParseGuid(json["ID"]?.GetValue<String>());
             this.Name = json["Name"]?.GetValue<String>() ?? "";
+            this.Overrides = ParseNullableGuid(json["Overrides"]?.GetValue<String>());
+
             var itemArr = json["Items"]?.AsArray();
             if (itemArr != null)
             {
@@ -140,6 +143,7 @@ namespace Eos.Models.Tables
             var tableJson = new JsonObject();
             tableJson.Add("ID", this.ID.ToString());
             tableJson.Add("Name", this.Name);
+            tableJson.Add("Overrides", this.Overrides != null ? this.Overrides.ToString() : null);
 
             var itemArr = new JsonArray();
             for (int i = 0; i < Count; i++)
