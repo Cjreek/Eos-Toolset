@@ -38,6 +38,7 @@ namespace Eos.Repositories
         private static readonly VirtualModelRepository<Disease> diseaseVirtualRepository;
         private static readonly VirtualModelRepository<Poison> poisonVirtualRepository;
         private static readonly VirtualModelRepository<Spellbook> spellbookVirtualRepository;
+        private static readonly VirtualModelRepository<AreaEffect> aoeVirtualRepository;
 
         private static readonly VirtualModelRepository<Appearance> appearanceVirtualRepository;
         private static readonly VirtualModelRepository<ClassPackage> classPackageVirtualRepository;
@@ -69,6 +70,7 @@ namespace Eos.Repositories
             RepositoryFactory.RegisterRepositoryClass<Disease>(typeof(DiseaseRepository));
             RepositoryFactory.RegisterRepositoryClass<Poison>(typeof(PoisonRepository));
             RepositoryFactory.RegisterRepositoryClass<Spellbook>(typeof(SpellbookRepository));
+            RepositoryFactory.RegisterRepositoryClass<AreaEffect>(typeof(AreaEffectRepository));
             RepositoryFactory.RegisterRepositoryClass<CustomObjectInstance>(typeof(CustomObjectInstanceRepository));
 
             // TODO: All repos
@@ -87,6 +89,7 @@ namespace Eos.Repositories
             diseaseVirtualRepository = new VirtualModelRepository<Disease>(standardCategory.Diseases, project.Diseases);
             poisonVirtualRepository = new VirtualModelRepository<Poison>(standardCategory.Poisons, project.Poisons);
             spellbookVirtualRepository = new VirtualModelRepository<Spellbook>(standardCategory.Spellbooks, project.Spellbooks);
+            aoeVirtualRepository = new VirtualModelRepository<AreaEffect>(standardCategory.AreaEffects, project.AreaEffects);
 
             appearanceVirtualRepository = new VirtualModelRepository<Appearance>(standardCategory.Appearances, project.Appearances);
             classPackageVirtualRepository = new VirtualModelRepository<ClassPackage>(standardCategory.ClassPackages, project.ClassPackages);
@@ -173,6 +176,7 @@ namespace Eos.Repositories
             AddDataType(Guid.Parse("7649f1d6-cd21-4af0-abae-834c5898b75b"), "Spell", typeof(Spell), modelToJson, json => JsonUtils.CreateRefFromJson<Spell>((JsonObject?)json), o => Project.Spells.Get2DAIndex((Spell?)o));
             AddDataType(Guid.Parse("159e9a47-de78-435d-9047-d96847544883"), "Poison", typeof(Poison), modelToJson, json => JsonUtils.CreateRefFromJson<Poison>((JsonObject?)json), o => Project.Poisons.Get2DAIndex((Poison?)o));
             AddDataType(Guid.Parse("c241bc8c-0a05-477d-9cbd-3bb4e50d0bfb"), "Disease", typeof(Disease), modelToJson, json => JsonUtils.CreateRefFromJson<Disease>((JsonObject?)json), o => Project.Diseases.Get2DAIndex((Disease?)o));
+            AddDataType(Guid.Parse("f4d8a469-32a6-4f68-bccd-7710ebb026d9"), "Area Effect", typeof(AreaEffect), modelToJson, json => JsonUtils.CreateRefFromJson<AreaEffect>((JsonObject?)json), o => Project.AreaEffects.Get2DAIndex((AreaEffect?)o));
 
             AddDataType(Guid.Parse("80b538dc-7e6a-40c7-830a-05bdac2fe3a4"), "Appearance", typeof(Appearance), modelToJson, json => JsonUtils.CreateRefFromJson<Appearance>((JsonObject?)json), o => Project.Appearances.Get2DAIndex((Appearance?)o));
             AddDataType(Guid.Parse("8fb225be-dca3-4dce-bd38-fbde34e6fce1"), "Soundset", typeof(Soundset), modelToJson, json => JsonUtils.CreateRefFromJson<Soundset>((JsonObject?)json), o => Project.Soundsets.Get2DAIndex((Soundset?)o));
@@ -240,6 +244,7 @@ namespace Eos.Repositories
         public static VirtualModelRepository<Disease> Diseases { get { return diseaseVirtualRepository; } }
         public static VirtualModelRepository<Poison> Poisons { get { return poisonVirtualRepository; } }
         public static VirtualModelRepository<Spellbook> Spellbooks { get { return spellbookVirtualRepository; } }
+        public static VirtualModelRepository<AreaEffect> AreaEffects { get { return aoeVirtualRepository; } }
 
         public static VirtualModelRepository<Appearance> Appearances { get { return appearanceVirtualRepository; } }
         public static VirtualModelRepository<ClassPackage> ClassPackages { get { return classPackageVirtualRepository; } }
@@ -287,6 +292,7 @@ namespace Eos.Repositories
             Standard.Diseases.LoadFromFile(Constants.DiseasesFilePath);
             Standard.Poisons.LoadFromFile(Constants.PoisonsFilePath);
             Standard.Spellbooks.LoadFromFile(Constants.SpellbooksFilePath);
+            Standard.AreaEffects.LoadFromFile(Constants.AreaEffectsFilePath);
 
             Standard.Appearances.LoadFromFile(Constants.AppearancesFilePath);
             Standard.ClassPackages.LoadFromFile(Constants.ClassPackagesFilePath);
@@ -312,6 +318,7 @@ namespace Eos.Repositories
             Standard.Diseases.ResolveReferences();
             Standard.Poisons.ResolveReferences();
             Standard.Spellbooks.ResolveReferences();
+            Standard.AreaEffects.ResolveReferences();
 
             Standard.Appearances.ResolveReferences();
             Standard.ClassPackages.ResolveReferences();

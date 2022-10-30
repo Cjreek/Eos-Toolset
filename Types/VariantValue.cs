@@ -23,6 +23,7 @@ namespace Eos.Types
                     _dataType = value;
                     NotifyPropertyChanged();
                     NotifyPropertyChanged(nameof(Value));
+                    Value = null;
                 }
             }
         }

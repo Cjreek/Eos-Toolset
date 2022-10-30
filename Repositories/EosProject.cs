@@ -135,6 +135,7 @@ namespace Eos.Repositories
             Diseases.LoadFromFile(ProjectFolder + Constants.DiseasesFilename);
             Poisons.LoadFromFile(ProjectFolder + Constants.PoisonsFilename);
             Spellbooks.LoadFromFile(ProjectFolder + Constants.SpellbooksFilename);
+            AreaEffects.LoadFromFile(ProjectFolder + Constants.AreaEffectsFilename);
 
             ClassPackages.LoadFromFile(ProjectFolder + Constants.ClassPackagesFilename);
             Soundsets.LoadFromFile(ProjectFolder + Constants.SoundsetsFilename);
@@ -165,6 +166,7 @@ namespace Eos.Repositories
             Diseases.ResolveReferences();
             Poisons.ResolveReferences();
             Spellbooks.ResolveReferences();
+            AreaEffects.ResolveReferences();
 
             Appearances.ResolveReferences();
             ClassPackages.ResolveReferences();
@@ -204,6 +206,7 @@ namespace Eos.Repositories
             Diseases.SaveToFile(ProjectFolder + Constants.DiseasesFilename);
             Poisons.SaveToFile(ProjectFolder + Constants.PoisonsFilename);
             Spellbooks.SaveToFile(ProjectFolder + Constants.SpellbooksFilename);
+            AreaEffects.SaveToFile(ProjectFolder + Constants.AreaEffectsFilename);
 
             ClassPackages.SaveToFile(ProjectFolder + Constants.ClassPackagesFilename);
             Soundsets.SaveToFile(ProjectFolder + Constants.SoundsetsFilename);

@@ -885,6 +885,53 @@ namespace Eos.Services
             }
         }
 
+        private void ImportAreaOfEffects()
+        {
+            var aoe2da = Load2da("vfx_persistent");
+
+            Standard.AreaEffects.Clear();
+            for (int i = 0; i < aoe2da.Count; i++)
+            {
+                var tmpAreaEffect = new AreaEffect();
+                tmpAreaEffect.ID = GenerateGuid("vfx_persistent", i);
+                tmpAreaEffect.Index = i;
+
+                tmpAreaEffect.Name = aoe2da[i].AsString("LABEL") ?? "";
+                if (aoe2da[i].IsNull("SHAPE")) continue;
+                tmpAreaEffect.Shape = Enum.Parse<AreaEffectShape>(aoe2da[i].AsString("SHAPE") ?? "C", true);
+                tmpAreaEffect.Radius = aoe2da[i].AsFloat("RADIUS");
+                tmpAreaEffect.Width = aoe2da[i].AsFloat("WIDTH");
+                tmpAreaEffect.Length = aoe2da[i].AsFloat("LENGTH");
+                tmpAreaEffect.OnEnterScript = aoe2da[i].AsString("ONENTER");
+                tmpAreaEffect.OnExitScript = aoe2da[i].AsString("ONEXIT");
+                tmpAreaEffect.OnHeartbeatScript = aoe2da[i].AsString("HEARTBEAT");
+                tmpAreaEffect.OrientWithGround = aoe2da[i].AsBoolean("OrientWithGround");
+                tmpAreaEffect.VisualEffect = IntPtr.Zero; // !
+                tmpAreaEffect.Model1 = aoe2da[i].AsString("MODEL01");
+                tmpAreaEffect.Model2 = aoe2da[i].AsString("MODEL02");
+                tmpAreaEffect.Model3 = aoe2da[i].AsString("MODEL03");
+                tmpAreaEffect.Model1Amount = aoe2da[i].AsInteger("NUMACT01");
+                tmpAreaEffect.Model2Amount = aoe2da[i].AsInteger("NUMACT02");
+                tmpAreaEffect.Model3Amount = aoe2da[i].AsInteger("NUMACT03");
+                tmpAreaEffect.Model1Duration = aoe2da[i].AsInteger("DURATION01");
+                tmpAreaEffect.Model2Duration = aoe2da[i].AsInteger("DURATION02");
+                tmpAreaEffect.Model3Duration = aoe2da[i].AsInteger("DURATION03");
+                tmpAreaEffect.Model1EdgeWeight = aoe2da[i].AsFloat("EDGEWGHT01");
+                tmpAreaEffect.Model2EdgeWeight = aoe2da[i].AsFloat("EDGEWGHT02");
+                tmpAreaEffect.Model3EdgeWeight = aoe2da[i].AsFloat("EDGEWGHT03");
+                tmpAreaEffect.ImpactSound = aoe2da[i].AsString("SoundImpact");
+                tmpAreaEffect.LoopSound = aoe2da[i].AsString("SoundDuration");
+                tmpAreaEffect.CessationSound = aoe2da[i].AsString("SoundCessation");
+                tmpAreaEffect.RandomSound = aoe2da[i].AsString("SoundOneShot");
+                tmpAreaEffect.RandomSoundChance = aoe2da[i].AsFloat("SoundOneShotPercentage");
+                tmpAreaEffect.LowQualityModel1 = aoe2da[i].AsString("MODELMIN01");
+                tmpAreaEffect.LowQualityModel2 = aoe2da[i].AsString("MODELMIN02");
+                tmpAreaEffect.LowQualityModel3 = aoe2da[i].AsString("MODELMIN03");
+
+                Standard.AreaEffects.Add(tmpAreaEffect);
+            }
+        }
+
         private void ImportSoundsets()
         {
             var soundset2da = Load2da("soundset");
@@ -1109,6 +1156,7 @@ namespace Eos.Services
             Standard.Diseases.SaveToFile(Constants.DiseasesFilePath);
             Standard.Poisons.SaveToFile(Constants.PoisonsFilePath);
             Standard.Spellbooks.SaveToFile(Constants.SpellbooksFilePath);
+            Standard.AreaEffects.SaveToFile(Constants.AreaEffectsFilePath);
 
             Standard.Appearances.SaveToFile(Constants.AppearancesFilePath);
             Standard.ClassPackages.SaveToFile(Constants.ClassPackagesFilePath);
@@ -1173,7 +1221,7 @@ namespace Eos.Services
 
             ClearTables();
 
-            ImportAppearances();
+            ImportRaces();
             ImportClasses();
             ImportDomains();
             ImportSkills();
@@ -1181,8 +1229,9 @@ namespace Eos.Services
             ImportSpells();
             ImportDiseases();
             ImportPoisons();
+            ImportAreaOfEffects();
 
-            ImportRaces();
+            ImportAppearances();
             ImportClassPackages();
             ImportSoundsets();
 

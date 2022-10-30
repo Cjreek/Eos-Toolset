@@ -93,6 +93,9 @@
     <Compile Update="Usercontrols\RacialFeatsTableComboBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Usercontrols\AreaEffectComboBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Usercontrols\SoundsetComboBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -130,6 +133,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\CustomEnumView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\AreaEffectView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\SpellSlotTableView.xaml.cs">
@@ -178,6 +184,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Usercontrols\RacialFeatsTableComboBox.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Usercontrols\AreaEffectComboBox.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
@@ -230,6 +240,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\CustomEnumView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\AreaEffectView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

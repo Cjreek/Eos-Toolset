@@ -321,6 +321,16 @@
                         </Frame>
                     </DataTemplate>
 
+                    <DataTemplate DataType="{x:Type vm:AreaEffectViewModel}">
+                        <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                            <Frame.Content>
+                                <view:AreaEffectView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                            </Frame.Content>
+                        </Frame>
+                    </DataTemplate>
+
                     <DataTemplate DataType="{x:Type vm:ClassPackageViewModel}">
                         <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
                             <Frame.Content>
@@ -628,6 +638,7 @@
                         <TreeViewItem Header="Skills" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Skills}"/>
                         <TreeViewItem Header="Diseases" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Diseases}"/>
                         <TreeViewItem Header="Poisons" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Poisons}"/>
+                        <TreeViewItem Header="Area Effects" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=AreaEffects}"/>
                         <TreeViewItem Header="Soundsets" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Soundsets}"/>
 
                         <TreeViewItem Header="Tables" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" IsExpanded="True">
@@ -892,6 +903,14 @@
                                 <TextBlock>
                                     <Run Text="Poisons"/>
                                     <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Poisons, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                </TextBlock>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=AreaEffects}" Tag="{x:Type models:AreaEffect}">
+                            <TreeViewItem.Header>
+                                <TextBlock>
+                                    <Run Text="Area Effects"/>
+                                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=AreaEffects, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
                                 </TextBlock>
                             </TreeViewItem.Header>
                         </TreeViewItem>

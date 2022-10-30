@@ -44,6 +44,9 @@
     <DataTemplate x:Key="spellTemplate">
         <uc:SpellComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
     </DataTemplate>
+    <DataTemplate x:Key="aoeTemplate">
+        <uc:AreaEffectComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+    </DataTemplate>
 
     <DataTemplate x:Key="customObjectTemplate">
         <uc:CustomObjectComboBox CustomObjectTemplate="{Binding Property.DataType.CustomType}" SelectedValue="{Binding Value}" IsNullable="True"/>
@@ -74,6 +77,7 @@
                                                 FeatTemplate="{StaticResource featTemplate}"
                                                 DomainTemplate="{StaticResource domainTemplate}"
                                                 SpellTemplate="{StaticResource spellTemplate}"
+                                                AreaEffectTemplate="{StaticResource aoeTemplate}"
                                                 CustomObjectTemplate="{StaticResource customObjectVariantTemplate}"
                                                 CustomEnumTemplate="{StaticResource customEnumVariantTemplate}"/>
 
@@ -103,6 +107,7 @@
                                                 FeatTemplate="{StaticResource featTemplate}"
                                                 DomainTemplate="{StaticResource domainTemplate}"
                                                 SpellTemplate="{StaticResource spellTemplate}"
+                                                AreaEffectTemplate="{StaticResource aoeTemplate}"
                                                 CustomObjectTemplate="{StaticResource customObjectTemplate}"
                                                 CustomEnumTemplate="{StaticResource customEnumTemplate}"/>
 </ResourceDictionary>

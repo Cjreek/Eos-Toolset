@@ -26,6 +26,7 @@ namespace Eos.Extensions
         public DataTemplate? DomainTemplate { get; set; }
         public DataTemplate? SpellTemplate { get; set; }
         public DataTemplate? FeatTemplate { get; set; }
+        public DataTemplate? AreaEffectTemplate { get; set; }
         public DataTemplate? CustomObjectTemplate { get; set; }
         public DataTemplate? CustomEnumTemplate { get; set; }
 
@@ -63,6 +64,8 @@ namespace Eos.Extensions
                     return SkillTemplate ?? ErrorTemplate;
                 if (dataTypeDef.Type == typeof(Feat))
                     return FeatTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(AreaEffect))
+                    return AreaEffectTemplate ?? ErrorTemplate;
 
                 if (dataTypeDef.CustomType is CustomObject customObject)
                     return CustomObjectTemplate ?? ErrorTemplate;

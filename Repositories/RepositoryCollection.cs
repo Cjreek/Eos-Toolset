@@ -50,6 +50,7 @@ namespace Eos.Repositories
         private readonly ModelRepository<Disease> diseaseRepository;
         private readonly ModelRepository<Poison> poisonRepository;
         private readonly ModelRepository<Spellbook> spellbookRepository;
+        private readonly ModelRepository<AreaEffect> aoeRepository;
 
         private readonly ModelRepository<Appearance> appearanceRepository;
         private readonly ModelRepository<ClassPackage> classPackageRepository;
@@ -92,6 +93,7 @@ namespace Eos.Repositories
             InitRepository(out diseaseRepository, nameof(Diseases));
             InitRepository(out poisonRepository, nameof(Poisons));
             InitRepository(out spellbookRepository, nameof(Spellbooks));
+            InitRepository(out aoeRepository, nameof(AreaEffects));
 
             InitRepository(out appearanceRepository, nameof(Appearances));
             InitRepository(out classPackageRepository, nameof(ClassPackages));
@@ -123,6 +125,7 @@ namespace Eos.Repositories
         public ModelRepository<Disease> Diseases { get { return diseaseRepository; } }
         public ModelRepository<Poison> Poisons { get { return poisonRepository; } }
         public ModelRepository<Spellbook> Spellbooks { get { return spellbookRepository; } }
+        public ModelRepository<AreaEffect> AreaEffects { get { return aoeRepository; } }
 
         public ModelRepository<Appearance> Appearances { get { return appearanceRepository; } }
         public ModelRepository<ClassPackage> ClassPackages { get { return classPackageRepository; } }
@@ -197,6 +200,7 @@ namespace Eos.Repositories
             Diseases.Clear();
             Poisons.Clear();
             Spellbooks.Clear();
+            AreaEffects.Clear();
 
             Appearances.Clear();
             ClassPackages.Clear();

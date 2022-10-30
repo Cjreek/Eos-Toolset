@@ -1135,6 +1135,71 @@ namespace Eos.Services
             }
         }
 
+        private void ExportAreaEffects(EosProject project)
+        {
+            if (project.AreaEffects.Count == 0) return;
+
+            var aoe2da = Load2da("vfx_persistent");
+            if (aoe2da != null)
+            {
+                AddExtensionColumns(aoe2da, project.AreaEffects.Extensions);
+                for (int i = 0; i < project.AreaEffects.Count; i++)
+                {
+                    var aoe = project.AreaEffects[i];
+                    if (aoe != null)
+                    {
+                        var index = -1;
+                        if (aoe.Overrides != null)
+                            index = MasterRepository.Standard.AreaEffects.GetByID(aoe.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            aoe2da.AddRecord();
+                            index = aoe2da.Count - 1;
+                        }
+
+                        var record = aoe2da[index];
+                        record.Set("LABEL", aoe.Name);
+                        record.Set("SHAPE", aoe.Shape.ToString());
+                        record.Set("RADIUS", aoe.Radius);
+                        record.Set("WIDTH", aoe.Width);
+                        record.Set("LENGTH", aoe.Length);
+                        record.Set("ONENTER", aoe.OnEnterScript);
+                        record.Set("ONEXIT", aoe.OnExitScript);
+                        record.Set("HEARTBEAT", aoe.OnHeartbeatScript);
+                        record.Set("OrientWithGround", aoe.OrientWithGround);
+                        //record.Set("DurationVFX", aoe.VisualEffect);
+                        record.Set("MODEL01", aoe.Model1);
+                        record.Set("MODEL02", aoe.Model2);
+                        record.Set("MODEL03", aoe.Model3);
+                        record.Set("NUMACT01", aoe.Model1Amount);
+                        record.Set("NUMACT02", aoe.Model2Amount);
+                        record.Set("NUMACT03", aoe.Model3Amount);
+                        record.Set("DURATION01", aoe.Model1Duration);
+                        record.Set("DURATION02", aoe.Model2Duration);
+                        record.Set("DURATION03", aoe.Model3Duration);
+                        record.Set("EDGEWGHT01", aoe.Model1EdgeWeight);
+                        record.Set("EDGEWGHT02", aoe.Model2EdgeWeight);
+                        record.Set("EDGEWGHT03", aoe.Model3EdgeWeight);
+                        record.Set("SoundImpact", aoe.ImpactSound);
+                        record.Set("SoundDuration", aoe.LoopSound);
+                        record.Set("SoundCessation", aoe.CessationSound);
+                        record.Set("SoundOneShot", aoe.RandomSound);
+                        record.Set("SoundOneShotPercentage", aoe.RandomSoundChance);
+                        record.Set("MODELMIN01", aoe.LowQualityModel1);
+                        record.Set("MODELMIN02", aoe.LowQualityModel2);
+                        record.Set("MODELMIN03", aoe.LowQualityModel3);
+
+                        WriteExtensionValues(record, aoe.ExtensionValues);
+                    }
+                }
+
+                var filename = Export2DAFolder + "vfx_persistent.2da";
+                aoe2da.Save(filename);
+
+                AddHAKResource("vfx_persistent", NWNResourceType.TWODA, filename);
+            }
+        }
+
         private void ExportSoundsets(EosProject project)
         {
             if (project.Soundsets.Count == 0) return;
@@ -1419,6 +1484,7 @@ namespace Eos.Services
             ExportSkills(project);
             ExportSoundsets(project);
             ExportSpells(project);
+            ExportAreaEffects(project);
 
             ExportCustomObjects(project);
 
