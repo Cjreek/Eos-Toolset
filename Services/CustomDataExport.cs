@@ -1293,7 +1293,13 @@ namespace Eos.Services
                         record.Set("IconResRef", spell.Icon);
                         record.Set("School", spell.School.ToString());
                         record.Set("Range", spell.Range.ToString());
-                        record.Set("VS", spell.Components.ToString().ToLower()); // TODO: Does this work? Probably not
+
+                        String vs = "";
+                        if (spell.Components.HasFlag(SpellComponent.V))
+                            vs += "v";
+                        if (spell.Components.HasFlag(SpellComponent.S))
+                            vs += "s";
+                        record.Set("VS", vs != "" ? vs : "-");
                         record.Set("MetaMagic", (int)spell.AvailableMetaMagic);
                         record.Set("TargetType", (int)spell.TargetTypes);
                         record.Set("ImpactScript", spell.ImpactScript);
@@ -1348,7 +1354,7 @@ namespace Eos.Services
                         }
                         record.Set("Counter1", project.Spells.Get2DAIndex(spell.CounterSpell1));
                         record.Set("Counter2", project.Spells.Get2DAIndex(spell.CounterSpell2));
-                        record.Set("HasProjectile", spell.HasProjectile);
+                        record.Set("HasProjectile", spell.HasProjectileVisuals);
 
                         // Additional columns
                         record.Set("SubRadSpell6", project.Spells.Get2DAIndex(spell.SubSpell6));

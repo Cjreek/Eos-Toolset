@@ -176,7 +176,7 @@
                         <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="22"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="22"/>
                         <RowDefinition Height="auto" MinHeight="25"/>
@@ -201,6 +201,9 @@
                     <!--Has Projectile-->
                     <TextBlock Text="Has Projectile" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
                     <CheckBox IsChecked="{Binding Data.HasProjectile}" Grid.Row="2" Grid.Column="1"/>
+
+                    <TextBlock Text="Projectile Visuals" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
+                    <CheckBox IsChecked="{Binding Data.HasProjectileVisuals}" Grid.Row="2" Grid.Column="3"/>
 
                     <TextBlock Text="Type" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
                     <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:ProjectileType}}" SelectedValue="{Binding Data.ProjectileType}" Grid.Row="3" Grid.Column="1" IsEnabled="{Binding Data.HasProjectile}"/>

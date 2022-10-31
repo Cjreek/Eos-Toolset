@@ -64,6 +64,7 @@ namespace Eos.Models
         public String? CastingGroundEffect { get; set; }
         public String? CastingSound { get; set; }
         public bool HasProjectile { get; set; } = false;
+        public bool HasProjectileVisuals { get; set; } = false;
         public String? ProjectileModel { get; set; }
         public ProjectileType? ProjectileType { get; set; } = Types.ProjectileType.Homing;
         public ProjectileSource? ProjectileSpawnPoint { get; set; } = ProjectileSource.Hand;
@@ -197,6 +198,7 @@ namespace Eos.Models
             this.ConjurationMaleSound = json["ConjurationMaleSound"]?.GetValue<String>();
             this.ConjurationFemaleSound = json["ConjurationFemaleSound"]?.GetValue<String>();
             this.CastingAnimation = JsonToEnum<SpellCastAnimation>(json["CastingAnimation"]) ?? SpellCastAnimation.Out;
+            this.CastTime = json["CastTime"]?.GetValue<int>() ?? 1000;
             this.CastingHeadEffect = json["CastingHeadEffect"]?.GetValue<String>();
             this.CastingHandEffect = json["CastingHandEffect"]?.GetValue<String>();
             this.CastingGroundEffect = json["CastingGroundEffect"]?.GetValue<String>();
@@ -223,6 +225,7 @@ namespace Eos.Models
             this.IsHostile = json["IsHostile"]?.GetValue<bool>() ?? true;
             this.CounterSpell1 = CreateRefFromJson<Spell>(json["CounterSpell1"]?.AsObject());
             this.CounterSpell2 = CreateRefFromJson<Spell>(json["CounterSpell2"]?.AsObject());
+            this.HasProjectileVisuals = json["HasProjectileVisuals"]?.GetValue<bool>() ?? false;
             this.TargetShape = JsonToEnum<TargetShape>(json["TargetShape"]);
             this.TargetSizeX = json["TargetSizeX"]?.GetValue<double>();
             this.TargetSizeY = json["TargetSizeY"]?.GetValue<double>();
@@ -279,6 +282,7 @@ namespace Eos.Models
             spellJson.Add("IsHostile", this.IsHostile);
             spellJson.Add("CounterSpell1", CreateJsonRef(this.CounterSpell1));
             spellJson.Add("CounterSpell2", CreateJsonRef(this.CounterSpell2));
+            spellJson.Add("HasProjectileVisuals", this.HasProjectileVisuals);
             spellJson.Add("TargetShape", EnumToJson(this.TargetShape));
             spellJson.Add("TargetSizeX", this.TargetSizeX);
             spellJson.Add("TargetSizeY", this.TargetSizeY);

@@ -768,6 +768,7 @@ namespace Eos.Services
                 tmpSpell.IsHostile = spells2da[i].AsBoolean("HostileSetting");
                 tmpSpell.CounterSpell1 = CreateRef<Spell>(spells2da[i].AsInteger("Counter1"));
                 tmpSpell.CounterSpell2 = CreateRef<Spell>(spells2da[i].AsInteger("Counter2"));
+                tmpSpell.HasProjectileVisuals = tmpSpell.IsHostile = spells2da[i].AsBoolean("HasProjectile");
                 tmpSpell.TargetShape = !spells2da[i].IsNull("TargetShape", false) ? Enum.Parse<TargetShape>(spells2da[i].AsString("TargetShape", null) ?? "", true) : null;
                 tmpSpell.TargetSizeX = spells2da[i].AsFloat("TargetSizeX", null);
                 tmpSpell.TargetSizeY = spells2da[i].AsFloat("TargetSizeY", null);
