@@ -226,7 +226,7 @@ namespace Eos.Services
             tlkFile.New(project.DefaultLanguage);
 
             foreach (var tlk in customTLKIndices.Keys)
-                customTLKIndices[tlk] = tlkFile.AddText(tlk[project.DefaultLanguage].Text);
+                customTLKIndices[tlk] = tlkFile.AddText(tlk[project.DefaultLanguage].Text.ReplaceLineEndings("\n"));
 
             tlkFile.Save(ExportTLKFolder + project.Name.ToLower().Replace(' ', '_') + ".tlk");
         }
