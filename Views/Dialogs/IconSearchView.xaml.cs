@@ -1,8 +1,4 @@
-﻿using Eos.Repositories;
-using Eos.Services;
-using Eos.ViewModels;
-using Eos.ViewModels.Dialogs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Eos.Views
+namespace Eos.Views.Dialogs
 {
     /// <summary>
-    /// Interaktionslogik für DomainView.xaml
+    /// Interaktionslogik für IconSearchView.xaml
     /// </summary>
-    public partial class DomainView : LanguageAwarePage
+    public partial class IconSearchView : LanguageAwarePage
     {
-        public DomainView()
+        public IconSearchView()
         {
             InitializeComponent();
         }

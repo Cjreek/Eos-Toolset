@@ -10,22 +10,32 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Collections.Concurrent;
 using Eos.Types;
+using Eos.Extensions;
 
 namespace Eos.Repositories
 {
+    public enum NWNResourceSource
+    {
+        Unknown, BIF, External
+    }
+
     public class NWNResource
     {
+        public NWNResourceSource Source { get; set; }
         public String? ResRef { get; set; }
         public NWNResourceType Type { get; set; }
+        public String FilePath { get; set; }
         public bool IsLoading { get; set; } = false;
         public bool IsLoaded { get; set; } = false;
         public object? Data { get; set; } = null;
         public Stream RawData { get; set; } = new MemoryStream();
 
-        public NWNResource(String? resRef, NWNResourceType type)
+        public NWNResource(NWNResourceSource source, String? resRef, NWNResourceType type, string filePath = "")
         {
+            this.Source = source;
             this.ResRef = resRef;
             this.Type = type;
+            this.FilePath = filePath;
         }
     }
 
@@ -40,21 +50,75 @@ namespace Eos.Repositories
         private ConcurrentQueue<NWNResource> priorityQueue = new ConcurrentQueue<NWNResource>();
         private Thread? resourceLoaderThread;
         private bool stopThread = false;
+        private Dictionary<NWNResourceType, HashSet<String?>> filesByTypeDict = new Dictionary<NWNResourceType, HashSet<string?>>();
+        private List<NWNResource> externalResources = new List<NWNResource>();
 
         ~ResourceRepository()
         {
             Cleanup();
         }
 
+        public IEnumerable<String?> GetResourceKeys(NWNResourceType type)
+        {
+            if (!filesByTypeDict.ContainsKey(type))
+                filesByTypeDict[type] = new HashSet<String?>();
+            return filesByTypeDict[type];
+        }
+
+        public IEnumerable<NWNResource> GetExternalResources()
+        {
+            return externalResources;
+        }
+
+        private void LoadBif(String nwnBasePath)
+        {
+            bif.Load(nwnBasePath);
+            foreach (var res in bif.Resources)
+            {
+                if (!filesByTypeDict.ContainsKey(res.type))
+                    filesByTypeDict.Add(res.type, new HashSet<String?>());
+                filesByTypeDict[res.type].Add(res.resRef);
+            }
+        }
+
         public void Initialize(String nwnBasePath)
         {
+            filesByTypeDict.Clear();
+
             RegisterResourceLoader(NWNResourceType.TGA, TargaResourceLoader);
             RegisterResourceLoader(NWNResourceType.NSS, ScriptSourceLoader);
 
-            bif.Load(nwnBasePath);
+            LoadBif(nwnBasePath);
 
             resourceLoaderThread = new Thread(ResourceLoaderThread);
             resourceLoaderThread.Start();
+        }
+
+        private NWNResourceType ExtensionToResourceType(string extension)
+        {
+            switch (extension)
+            {
+                case ".tga": return NWNResourceType.TGA;
+                case ".2da": return NWNResourceType.TWODA;
+            }
+
+            return NWNResourceType.TXT;
+        }
+
+        public void LoadExternalResources(String externalBasePath)
+        {
+            externalResources.Clear();
+            foreach (var file in Directory.EnumerateFiles(externalBasePath, "*.*", SearchOption.AllDirectories))
+            {
+                var ext = Path.GetExtension(file).ToLower();
+                var resType = ExtensionToResourceType(ext);
+                var filename = Path.GetFileName(file);
+                var resRef = filename.Substring(0, filename.Length - ext.Length);
+
+                AddResource(NWNResourceSource.External, resRef, resType, file, true);
+                if (!filesByTypeDict[resType].Contains(resRef))
+                    filesByTypeDict[resType].Add(resRef);
+            }
         }
 
         public void Cleanup()
@@ -76,26 +140,38 @@ namespace Eos.Repositories
                         resource.IsLoading = true;
                         try
                         {
-                            if ((resource.Type == NWNResourceType.TGA) && (File.Exists(Constants.IconResourcesFilePath + resource.ResRef + ".tga")))
+                            if (resource.Source == NWNResourceSource.BIF)
+                            {
+                                if ((resource.Type == NWNResourceType.TGA) && (File.Exists(Constants.IconResourcesFilePath + resource.ResRef + ".tga")))
+                                {
+                                    var loadResource = GetResourceLoader(resource.Type);
+
+                                    var resBytes = File.ReadAllBytes(Constants.IconResourcesFilePath + resource.ResRef + ".tga");
+                                    resource.RawData = new MemoryStream(resBytes);
+                                    resource.Data = loadResource(new MemoryStream(resBytes));
+                                    resource.IsLoaded = true;
+                                }
+                                else
+                                {
+                                    var rawResource = bif.ReadResource(resource.ResRef, resource.Type);
+                                    if (rawResource != null)
+                                    {
+                                        var loadResource = GetResourceLoader(rawResource.Type);
+                                        resource.Type = rawResource.Type;
+                                        rawResource.RawData.CopyTo(resource.RawData);
+                                        resource.Data = loadResource(rawResource.RawData);
+                                        resource.IsLoaded = true;
+                                    }
+                                }
+                            }
+                            else if (resource.Source == NWNResourceSource.External)
                             {
                                 var loadResource = GetResourceLoader(resource.Type);
 
-                                var resBytes = File.ReadAllBytes(Constants.IconResourcesFilePath + resource.ResRef + ".tga");
+                                var resBytes = File.ReadAllBytes(resource.FilePath);
                                 resource.RawData = new MemoryStream(resBytes);
                                 resource.Data = loadResource(new MemoryStream(resBytes));
                                 resource.IsLoaded = true;
-                            }
-                            else
-                            {
-                                var rawResource = bif.ReadResource(resource.ResRef, resource.Type);
-                                if (rawResource != null)
-                                {
-                                    var loadResource = GetResourceLoader(rawResource.Type);
-                                    resource.Type = rawResource.Type;
-                                    rawResource.RawData.CopyTo(resource.RawData);
-                                    resource.Data = loadResource(rawResource.RawData);
-                                    resource.IsLoaded = true;
-                                }
                             }
                         }
                         finally
@@ -108,14 +184,18 @@ namespace Eos.Repositories
             }
         }
 
-        public String? AddResource(String? resRef, NWNResourceType type)
+        public String? AddResource(NWNResourceSource source, String? resRef, NWNResourceType type, string filePath = "", bool overwrite = false)
         {
             resRef = resRef?.ToLower();
-            if ((resRef != null) && (!_resources.ContainsKey((resRef, type))))
+            if ((resRef != null) && (!_resources.ContainsKey((resRef, type)) || (overwrite)))
             {
-                var resource = new NWNResource(resRef, type);
+                if (overwrite) _resources.Remove((resRef, type));
+                var resource = new NWNResource(source, resRef, type, filePath);
                 _resources.Add((resRef, type), resource);
                 loadQueue.Enqueue(resource);
+
+                if (source == NWNResourceSource.External)
+                    externalResources.Add(resource);
             }
 
             return resRef;
@@ -129,7 +209,7 @@ namespace Eos.Repositories
             if (!_resources.ContainsKey((resRef, type)))
             {
                 if (bif.ContainsResource(resRef, type))
-                    AddResource(resRef, type);
+                    AddResource(NWNResourceSource.BIF, resRef, type); // !
                 else
                     return null;
             }

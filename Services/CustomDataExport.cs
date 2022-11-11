@@ -1450,6 +1450,13 @@ namespace Eos.Services
             foreach (var key in hakResources.Keys)
                 hak.AddResource(key.resRef, key.resType, hakResources[key]);
 
+            // External Resources
+            foreach (var resource in MasterRepository.Resources.GetExternalResources())
+            {
+                if (resource.ResRef != null)
+                    hak.AddResource(resource.ResRef, resource.Type, resource.FilePath);
+            }
+
             hak.Save(ExportHAKFolder + project.Name.ToLower().Replace(' ', '_') + ".hak");
         }
 

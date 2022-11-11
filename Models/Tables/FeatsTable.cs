@@ -23,14 +23,17 @@ namespace Eos.Models.Tables
                                                                  .OrderBy(item => item?.GrantedOnLevel)
                                                                  .ThenBy(item => item?.Feat?.Name[MasterRepository.Project.DefaultLanguage].Text);
         public IEnumerable<FeatsTableItem?> GeneralFeats => Items.Where(item => item?.FeatList == Types.FeatListType.GeneralFeat && item?.GrantedOnLevel < 99)
-                                                                 .OrderBy(item => item?.Feat?.Name[MasterRepository.Project.DefaultLanguage].Text);
+                                                                 .OrderBy(item => item?.GrantedOnLevel)
+                                                                 .ThenBy(item => item?.Feat?.Name[MasterRepository.Project.DefaultLanguage].Text);
         public IEnumerable<FeatsTableItem?> GeneralOrBonusFeats => Items.Where(item => item?.FeatList == Types.FeatListType.GeneralFeatOrBonusFeat && item?.GrantedOnLevel < 99)
-                                                                        .OrderBy(item => item?.Feat?.Name[MasterRepository.Project.DefaultLanguage].Text);
+                                                                        .OrderBy(item => item?.GrantedOnLevel)
+                                                                        .ThenBy(item => item?.Feat?.Name[MasterRepository.Project.DefaultLanguage].Text);
         public IEnumerable<FeatsTableItem?> BonusFeats => Items.Where(item => item?.FeatList == Types.FeatListType.BonusFeat && item?.GrantedOnLevel < 99)
-                                                               .OrderBy(item => item?.Feat?.Name[MasterRepository.Project.DefaultLanguage].Text);
+                                                               .OrderBy(item => item?.GrantedOnLevel)
+                                                               .ThenBy(item => item?.Feat?.Name[MasterRepository.Project.DefaultLanguage].Text);
 
         public IEnumerable<FeatsTableItem?> GainableFeats => Items.Where(item => item?.GrantedOnLevel == 99)
-                                                               .OrderBy(item => item?.Feat?.Name[MasterRepository.Project.DefaultLanguage].Text);
+                                                                  .OrderBy(item => item?.Feat?.Name[MasterRepository.Project.DefaultLanguage].Text);
 
         protected override void Changed()
         {

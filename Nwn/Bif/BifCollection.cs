@@ -28,6 +28,8 @@ namespace Eos.Nwn.Bif
         private KeyFile _keyFile = new KeyFile();
         private Dictionary<string, BifFile> bifCache = new Dictionary<string, BifFile>();
 
+        public IEnumerable<(String? resRef, NWNResourceType type)> Resources => _keyFile;
+
         ~BifCollection()
         {
             ClearCache();

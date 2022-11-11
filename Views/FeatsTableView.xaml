@@ -73,7 +73,7 @@
             </Grid>
         </TabItem>
         <TabItem Header="Granted Feats" Width="150" Height="30">
-            <Grid Margin="10">
+            <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
@@ -100,7 +100,7 @@
             </Grid>
         </TabItem>
         <TabItem Header="General Feats" Width="150" Height="30">
-            <Grid Margin="10">
+            <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
@@ -114,6 +114,7 @@
                 <ListView Grid.Row="1" ItemsSource="{Binding Data.GeneralFeats}">
                     <ListView.View>
                         <GridView>
+                            <GridViewColumn Header="Min. Level" Width="75" CellTemplate="{StaticResource grantedCellTemplate}"/>
                             <GridViewColumn Header="Feat" Width="300" CellTemplate="{StaticResource featCellTemplate}"/>
                             <GridViewColumn Header="Menu" Width="120" CellTemplate="{StaticResource menuCellTemplate}"/>
                             <GridViewColumn Header="" Width="25" CellTemplate="{StaticResource deleteCellTemplate}"/>
@@ -126,7 +127,7 @@
         </TabItem>
         
         <TabItem Header="General &amp; Bonus Feats" Width="150" Height="30">
-            <Grid Margin="10">
+            <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
@@ -140,6 +141,7 @@
                 <ListView Grid.Row="1" ItemsSource="{Binding Data.GeneralOrBonusFeats}">
                     <ListView.View>
                         <GridView>
+                            <GridViewColumn Header="Min. Level" Width="75" CellTemplate="{StaticResource grantedCellTemplate}"/>
                             <GridViewColumn Header="Feat" Width="300" CellTemplate="{StaticResource featCellTemplate}"/>
                             <GridViewColumn Header="Menu" Width="120" CellTemplate="{StaticResource menuCellTemplate}"/>
                             <GridViewColumn Header="" Width="25" CellTemplate="{StaticResource deleteCellTemplate}"/>
@@ -152,7 +154,7 @@
         </TabItem>
 
         <TabItem Header="Bonus Feats Only" Width="150" Height="30">
-            <Grid Margin="10">
+            <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
@@ -166,6 +168,7 @@
                 <ListView Grid.Row="1" ItemsSource="{Binding Data.BonusFeats}">
                     <ListView.View>
                         <GridView>
+                            <GridViewColumn Header="Min. Level" Width="75" CellTemplate="{StaticResource grantedCellTemplate}"/>
                             <GridViewColumn Header="Feat" Width="300" CellTemplate="{StaticResource featCellTemplate}"/>
                             <GridViewColumn Header="Menu" Width="120" CellTemplate="{StaticResource menuCellTemplate}"/>
                             <GridViewColumn Header="" Width="25" CellTemplate="{StaticResource deleteCellTemplate}"/>
@@ -178,7 +181,7 @@
         </TabItem>
 
         <TabItem Header="Gainable Feats" Width="150" Height="30">
-            <Grid Margin="10">
+            <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>

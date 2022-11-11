@@ -58,45 +58,40 @@
                 </Grid.RowDefinitions>
 
                 <!--Name-->
-                <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-                <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1"/>
+                <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="0" Grid.Column="1"/>
 
                 <!--Description-->
-                <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="2" Grid.Column="0"/>
-                <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" Grid.Row="2" Grid.Column="1"/>
+                <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="1" Grid.Column="0"/>
+                <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" Grid.Row="1" Grid.Column="1"/>
 
                 <!--Ability-->
-                <TextBlock Text="Key Ability" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="3" Grid.Column="0"/>
-                <ComboBox ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.KeyAbility}" SelectedValuePath="Value" DisplayMemberPath="DisplayName" Grid.Row="3" Grid.Column="1"/>
+                <TextBlock Text="Key Ability" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="2" Grid.Column="0"/>
+                <ComboBox ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.KeyAbility}" SelectedValuePath="Value" DisplayMemberPath="DisplayName" Grid.Row="2" Grid.Column="1"/>
 
                 <!--Untrained Usage-->
-                <TextBlock Text="Untrained Usage" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
-                <CheckBox IsChecked="{Binding Data.CanUseUntrained}" Grid.Row="4" Grid.Column="1"/>
+                <TextBlock Text="Untrained Usage" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+                <CheckBox IsChecked="{Binding Data.CanUseUntrained}" Grid.Row="3" Grid.Column="1"/>
 
                 <!--Armor Penalty-->
-                <TextBlock Text="Armor Penalty" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
-                <CheckBox IsChecked="{Binding Data.UseArmorPenalty}" Grid.Row="5" Grid.Column="1"/>
+                <TextBlock Text="Armor Penalty" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+                <CheckBox IsChecked="{Binding Data.UseArmorPenalty}" Grid.Row="4" Grid.Column="1"/>
 
                 <!--Usable by every class-->
-                <TextBlock Text="Usable by every Class" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
-                <CheckBox IsChecked="{Binding Data.AllClassesCanUse}" Grid.Row="6" Grid.Column="1"/>
+                <TextBlock Text="Usable by every Class" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+                <CheckBox IsChecked="{Binding Data.AllClassesCanUse}" Grid.Row="5" Grid.Column="1"/>
 
                 <!--Hostile?-->
-                <TextBlock Text="Is Hostile" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
-                <CheckBox IsChecked="{Binding Data.IsHostile}" Grid.Row="7" Grid.Column="1"/>
+                <TextBlock Text="Is Hostile" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
+                <CheckBox IsChecked="{Binding Data.IsHostile}" Grid.Row="6" Grid.Column="1"/>
 
                 <!--Hide from Level up?-->
-                <TextBlock Text="Hide from LevelUp" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
-                <CheckBox IsChecked="{Binding Data.HideFromLevelUp}" Grid.Row="8" Grid.Column="1"/>
+                <TextBlock Text="Hide from LevelUp" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
+                <CheckBox IsChecked="{Binding Data.HideFromLevelUp}" Grid.Row="7" Grid.Column="1"/>
             </Grid>
 
             <!--Icon-->
-            <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">
-                <Border BorderThickness="1" BorderBrush="Black" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Top">
-                    <Image Source="{Binding Data.Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}"/>
-                </Border>
-                <Button Content="Load Icon" HorizontalAlignment="Center" Margin="0,5,0,0" Width="80"/>
-            </StackPanel>
+            <uc:IconControl Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" Icon="{Binding Data.Icon}"/>
         </Grid>
     </ScrollViewer>
 </local:LanguageAwarePage>

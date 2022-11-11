@@ -12,6 +12,10 @@
             <dialogViews:NewProjectView/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type dialogVM:IconSearchViewModel}">
+            <dialogViews:IconSearchView/>
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type dialogVM:SpellSearchViewModel}">
             <dialogViews:ModelSearchView/>
         </DataTemplate>

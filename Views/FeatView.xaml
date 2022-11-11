@@ -121,12 +121,7 @@
                     </Grid>
 
                     <!--Icon-->
-                    <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">
-                        <Border BorderThickness="1" BorderBrush="Black" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Top">
-                            <Image Source="{Binding Data.Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}"/>
-                        </Border>
-                        <Button Content="Load Icon" HorizontalAlignment="Center" Margin="0,5,0,0" Width="80"/>
-                    </StackPanel>
+                    <uc:IconControl Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" Icon="{Binding Data.Icon}"/>
                 </Grid>
             </ScrollViewer>
         </TabItem>

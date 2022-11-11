@@ -48,11 +48,11 @@ namespace Eos.Services
             }
         }
 
-        private String? AddIconResource(String? resRef)
+        private String? AddIconResource(String? resRef, NWNResourceSource source = NWNResourceSource.BIF)
         {
             if (resRef != null)
                 iconResourceBuffer.Add(resRef);
-            return Resources.AddResource(resRef, NWNResourceType.TGA);
+            return Resources.AddResource(source, resRef, NWNResourceType.TGA);
         }
 
         private Guid GenerateGuid(string prefix, int index)

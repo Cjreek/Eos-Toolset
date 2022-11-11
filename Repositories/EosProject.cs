@@ -191,6 +191,7 @@ namespace Eos.Repositories
 
             IsLoaded = true;
             EosConfig.LastProject = projectFilename;
+            MasterRepository.LoadExternalResources(ProjectFolder + Constants.ExternalFilesPath);
         }
 
         public void Save()

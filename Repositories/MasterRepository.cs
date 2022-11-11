@@ -215,6 +215,11 @@ namespace Eos.Repositories
             resources.Initialize(nwnBasePath);
         }
 
+        public static void LoadExternalResources(string externalBasePath)
+        {
+            resources.LoadExternalResources(externalBasePath);
+        }
+
         public static void Cleanup()
         {
             resources.Cleanup();

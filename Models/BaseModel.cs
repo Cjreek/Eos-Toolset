@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Nodes;
@@ -26,6 +27,7 @@ namespace Eos.Models
     public class BaseModel : INotifyPropertyChanged
     {
         private String _hint = "";
+        private String? _icon;
         private bool _clearingReferences = false;
         private ModelExtension? _extensions;
         private Dictionary<(BaseModel refObject, String refProperty), BaseModelReference> referenceDict = new Dictionary<(BaseModel refObject, String refProperty), BaseModelReference>();
@@ -50,7 +52,19 @@ namespace Eos.Models
         public bool IsReadonly { get; set; } = false;
         public Guid? Overrides { get; set; } = null;
         public int? Index { get; set; }
-        public String? Icon { get; set; }
+        public String? Icon
+        {
+            get { return _icon; }
+            set
+            {
+                if (value != _icon)
+                {
+                    _icon = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public String Hint
         {
             get { return _hint; }

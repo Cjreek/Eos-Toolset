@@ -50,6 +50,7 @@ namespace Eos.Types
         public static readonly String CustomObjectsFilename;
 
         public static readonly String IconResourcesFolder;
+        public static readonly String ExternalFilesPath;
 
         public static readonly String RacesFilePath;
         public static readonly String ClassesFilePath;
@@ -91,7 +92,7 @@ namespace Eos.Types
             var baseResourceFolder = "Resources";
             BaseResourcePath = AppDataPath + baseResourceFolder + Path.DirectorySeparatorChar;
 
-            ExportFolder = @"Output\";
+            ExportFolder = @"output\";
             ExportHAKFolder = ExportFolder + @"hak\";
             ExportTLKFolder = ExportFolder + @"tlk\";
 
@@ -127,6 +128,7 @@ namespace Eos.Types
             CustomObjectsFilename = "customobjects.json";
 
             IconResourcesFolder = @"icons\";
+            ExternalFilesPath = @"external\";
 
             RacesFilePath = BaseDataPath + RacesFilename;
             ClassesFilePath = BaseDataPath + ClassesFilename;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -51,7 +52,7 @@ namespace Eos.Nwn.Bif
         public UInt32 BifIndex { get; set; }
     }
 
-    internal class KeyFile
+    internal class KeyFile : IEnumerable<(String? resRef, NWNResourceType type)>
     {
         private Dictionary<(String? resRef, NWNResourceType type), BifResourceKey> _resourceKeys = new Dictionary<(String? resRef, NWNResourceType type), BifResourceKey>();
 
@@ -119,6 +120,16 @@ namespace Eos.Nwn.Bif
         {
             resRef = resRef?.ToLower();
             return _resourceKeys.ContainsKey((resRef, type));
+        }
+
+        public IEnumerator<(string? resRef, NWNResourceType type)> GetEnumerator()
+        {
+            return _resourceKeys.Keys.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _resourceKeys.Keys.GetEnumerator();
         }
     }
 }
