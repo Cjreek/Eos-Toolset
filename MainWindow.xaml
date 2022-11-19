@@ -518,7 +518,12 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem x:Name="miExportProject" Header="Export" Click="miExportProject_Click" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}">
+                <MenuItem x:Name="miImportBaseData" Header="Import Game Files" Click="miImportBaseData_Click">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource iconImport}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem x:Name="miExportProject" Header="Export Project" Click="miExportProject_Click" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}">
                     <MenuItem.Icon>
                         <Image Source="{StaticResource iconExport}"/>
                     </MenuItem.Icon>
@@ -527,7 +532,7 @@
                 <MenuItem x:Name="miExit" Header="Exit" Click="miExit_Click"/>
             </MenuItem>
             <MenuItem Header="Tools">
-                <MenuItem Header="Settings..."/>
+                <MenuItem Header="Settings..." IsEnabled="False"/>
             </MenuItem>
         </Menu>
 
@@ -548,7 +553,10 @@
                     <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miSaveProject_Click">
                         <Image Source="{StaticResource iconSave32}"/>
                     </Button>
-                    <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miExportProject_Click">
+                    <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" Click="miImportBaseData_Click">
+                        <Image Source="{StaticResource iconImport32}"/>
+                    </Button>
+                    <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miExportProject_Click">
                         <Image Source="{StaticResource iconExport32}"/>
                     </Button>
                 </DockPanel>

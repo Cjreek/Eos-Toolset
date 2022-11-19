@@ -253,5 +253,12 @@ namespace Eos
             export.Export(MasterRepository.Project);
             MessageBox.Show("Export successful!", "Export successful", MessageBoxButton.OK, MessageBoxImage.Information);
         }
+
+        private void miImportBaseData_Click(object sender, RoutedEventArgs e)
+        {
+            var import = new GameDataImport();
+            import.Import(EosConfig.NwnBasePath);
+            MessageBox.Show("Game files have been imported successfully!", "Game Data Import", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 }

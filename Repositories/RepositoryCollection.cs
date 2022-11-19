@@ -14,7 +14,7 @@ namespace Eos.Repositories
     {
         private Dictionary<CustomObject, ModelRepository<CustomObjectInstance>> repositoryDict = new Dictionary<CustomObject, ModelRepository<CustomObjectInstance>>();
 
-        public ModelRepository<CustomObjectInstance> this[CustomObject index] => repositoryDict[index];
+        public ModelRepository<CustomObjectInstance> this[CustomObject index] => AddRepository(index);
 
         public ModelRepository<CustomObjectInstance> AddRepository(CustomObject customObjectTemplate)
         {

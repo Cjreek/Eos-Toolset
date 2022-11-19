@@ -198,6 +198,9 @@ namespace Eos.Repositories
         {
             SaveProjectFile(ProjectFolder + Name + Constants.ProjectFileExtension);
 
+            if (!Directory.Exists(ProjectFolder + Constants.ExternalFilesPath))
+                Directory.CreateDirectory(ProjectFolder + Constants.ExternalFilesPath);
+
             Races.SaveToFile(ProjectFolder + Constants.RacesFilename);
             Classes.SaveToFile(ProjectFolder + Constants.ClassesFilename);
             Domains.SaveToFile(ProjectFolder + Constants.DomainsFilename);

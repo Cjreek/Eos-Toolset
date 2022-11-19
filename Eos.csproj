@@ -13,6 +13,8 @@
     <None Remove="Resources\Icons\export32.png" />
     <None Remove="Resources\Icons\female.png" />
     <None Remove="Resources\Icons\female16.png" />
+    <None Remove="Resources\Icons\import16.png" />
+    <None Remove="Resources\Icons\import32.png" />
     <None Remove="Resources\Icons\male.png" />
     <None Remove="Resources\Icons\male16.png" />
     <None Remove="Resources\Icons\New.png" />
@@ -46,6 +48,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Icons\female16.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\import16.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\import32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Icons\male16.png">
