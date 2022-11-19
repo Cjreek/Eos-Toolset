@@ -107,6 +107,12 @@
     <Compile Update="Usercontrols\SoundsetComboBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Usercontrols\KnownSpellsTableComboBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Usercontrols\SpellSlotTableComboBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Usercontrols\StatGainTableComboBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -200,6 +206,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Usercontrols\SoundsetComboBox.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Usercontrols\KnownSpellsTableComboBox.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Usercontrols\SpellSlotTableComboBox.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

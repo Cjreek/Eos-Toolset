@@ -65,6 +65,7 @@
                             <RowDefinition Height="auto" MinHeight="22"/>
                             <RowDefinition Height="auto" MinHeight="22"/>
                             <RowDefinition Height="auto" MinHeight="22"/>
+                            <RowDefinition Height="auto" MinHeight="22"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
@@ -94,16 +95,19 @@
                         <TextBlock Text="AI Category" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
                         <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:AICategory}}" SelectedValue="{Binding Data.Category}" Grid.Row="6" Grid.Column="1" IsNullable="True"/>
 
+                        <TextBlock Text="Innate Level" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
+                        <wpftk:IntegerUpDown Value="{Binding Data.InnateLevel}" Grid.Row="7" Grid.Column="1"/>
+                        
                         <TextBlock Text="Impact Script" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="2"/>
                         <uc:ScriptResourceTextbox ResRef="{Binding Data.ImpactScript}" Grid.Row="6" Grid.Column="3"/>
 
-                        <TextBlock Text="Range" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
-                        <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:SpellRange}}" SelectedValue="{Binding Data.Range}" Grid.Row="7" Grid.Column="1" VerticalAlignment="Top"/>
+                        <TextBlock Text="Range" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
+                        <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:SpellRange}}" SelectedValue="{Binding Data.Range}" Grid.Row="8" Grid.Column="1" VerticalAlignment="Top"/>
 
-                        <TextBlock Text="Components" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="2"/>
-                        <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:SpellComponent}}" Flags="{Binding Data.Components}" Orientation="Horizontal" Grid.Row="7" Grid.Column="3"/>
+                        <TextBlock Text="Components" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2"/>
+                        <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:SpellComponent}}" Flags="{Binding Data.Components}" Orientation="Horizontal" Grid.Row="8" Grid.Column="3"/>
 
-                        <Grid Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2">
+                        <Grid Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="120"/>
                                 <ColumnDefinition Width="*" MinWidth="150"/>
@@ -136,20 +140,20 @@
                             <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:TargetShape}}" SelectedValue="{Binding Data.TargetShape}" Grid.Row="5" Grid.Column="1" IsNullable="True" VerticalAlignment="Top"/>
                         </Grid>
 
-                        <TextBlock Text="Metamagic" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2"/>
-                        <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:MetaMagicType}}" Flags="{Binding Data.AvailableMetaMagic}" Grid.Row="8" Grid.Column="3" VerticalAlignment="Top"/>
+                        <TextBlock Text="Metamagic" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
+                        <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:MetaMagicType}}" Flags="{Binding Data.AvailableMetaMagic}" Grid.Row="9" Grid.Column="3" VerticalAlignment="Top"/>
 
-                        <TextBlock Text="Valid Targets" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
-                        <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:SpellTarget}}" Flags="{Binding Data.TargetTypes}" Grid.Row="10" Grid.Column="1"/>
+                        <TextBlock Text="Valid Targets" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="0"/>
+                        <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:SpellTarget}}" Flags="{Binding Data.TargetTypes}" Grid.Row="11" Grid.Column="1"/>
                         
-                        <TextBlock Text="Target Flags*" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
-                        <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:TargetFlag}}" Flags="{Binding Data.TargetingFlags}" Grid.Row="10" Grid.Column="3" VerticalAlignment="Top"/>
+                        <TextBlock Text="Target Flags*" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="2"/>
+                        <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:TargetFlag}}" Flags="{Binding Data.TargetingFlags}" Grid.Row="11" Grid.Column="3" VerticalAlignment="Top"/>
 
-                        <TextBlock Text="Target Width*" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
-                        <wpftk:DoubleUpDown Value="{Binding Data.TargetSizeX}" Grid.Row="9" Grid.Column="1"/>
+                        <TextBlock Text="Target Width*" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
+                        <wpftk:DoubleUpDown Value="{Binding Data.TargetSizeX}" Grid.Row="10" Grid.Column="1"/>
 
-                        <TextBlock Text="Target Height*" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
-                        <wpftk:DoubleUpDown Value="{Binding Data.TargetSizeY}" Grid.Row="9" Grid.Column="3"/>
+                        <TextBlock Text="Target Height*" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
+                        <wpftk:DoubleUpDown Value="{Binding Data.TargetSizeY}" Grid.Row="10" Grid.Column="3"/>
                     </Grid>
 
                     <!--Icon-->

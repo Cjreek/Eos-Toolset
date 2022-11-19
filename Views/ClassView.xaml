@@ -196,6 +196,7 @@
                         <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="auto" MinHeight="25"/>
+                        <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="22"/>
                         <RowDefinition Height="auto" MinHeight="25"/>
                         <RowDefinition Height="auto" MinHeight="25"/>
@@ -234,29 +235,38 @@
                     <TextBlock Text="Has spell failure" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
                     <CheckBox IsChecked="{Binding Data.HasSpellFailure}" Grid.Row="5" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
 
-                    <TextBlock Grid.Row="7" Grid.Column="0" Text="Spellcasting Ability" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-                    <ComboBox Grid.Row="7" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.SpellcastingAbility}" 
+                    <TextBlock Grid.Row="7" Grid.Column="0" Text="Spellslot Table" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+                    <uc:SpellSlotTableComboBox SelectedValue="{Binding Data.SpellSlots}" Grid.Row="7" Grid.Column="1" IsEnabled="{Binding Data.IsSpellCaster}"/>
+
+                    <TextBlock Grid.Row="7" Grid.Column="2" Text="Known Spells Table" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+                    <uc:KnownSpellsTableComboBox SelectedValue="{Binding Data.KnownSpells}" Grid.Row="7" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
+
+                    <TextBlock Grid.Row="8" Grid.Column="2" Text="Spellbook" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+                    <uc:SpellbookComboBox SelectedValue="{Binding Data.Spellbook}" Grid.Row="8" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
+
+                    <TextBlock Grid.Row="8" Grid.Column="0" Text="Spellcasting Ability" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+                    <ComboBox Grid.Row="8" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.SpellcastingAbility}" 
                           SelectedValuePath="Value" DisplayMemberPath="DisplayName" IsEnabled="{Binding Data.IsSpellCaster}"/>
 
-                    <TextBlock Grid.Row="7" Grid.Column="2" Text="Spellbook" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-                    <uc:SpellbookComboBox SelectedValue="{Binding Data.Spellbook}" Grid.Row="7" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
+                    <TextBlock Grid.Row="8" Grid.Column="2" Text="Spellbook" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+                    <uc:SpellbookComboBox SelectedValue="{Binding Data.Spellbook}" Grid.Row="8" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
 
-                    <TextBlock Grid.Row="8" Grid.Column="0" Text="Minimum Casting Level" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-                    <wpftk:IntegerUpDown Grid.Row="8" Grid.Column="1" Value="{Binding Data.MinCastingLevel}" IsEnabled="{Binding Data.IsSpellCaster}"/>
+                    <TextBlock Grid.Row="9" Grid.Column="0" Text="Minimum Casting Level" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+                    <wpftk:IntegerUpDown Grid.Row="9" Grid.Column="1" Value="{Binding Data.MinCastingLevel}" IsEnabled="{Binding Data.IsSpellCaster}"/>
 
-                    <TextBlock Grid.Row="8" Grid.Column="2" Text="Caster Level Multiplier" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-                    <wpftk:DoubleUpDown Grid.Row="8" Grid.Column="3" Value="{Binding Data.CasterLevelMultiplier}" IsEnabled="{Binding Data.IsSpellCaster}"/>
+                    <TextBlock Grid.Row="9" Grid.Column="2" Text="Caster Level Multiplier" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+                    <wpftk:DoubleUpDown Grid.Row="9" Grid.Column="3" Value="{Binding Data.CasterLevelMultiplier}" IsEnabled="{Binding Data.IsSpellCaster}"/>
 
-                    <TextBlock Grid.Row="9" Grid.Column="0" Text="Min. Associate Level" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-                    <wpftk:IntegerUpDown Grid.Row="9" Grid.Column="1" Value="{Binding Data.MinAssociateLevel}" IsEnabled="{Binding Data.IsSpellCaster}"/>
+                    <TextBlock Grid.Row="10" Grid.Column="0" Text="Min. Associate Level" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+                    <wpftk:IntegerUpDown Grid.Row="10" Grid.Column="1" Value="{Binding Data.MinAssociateLevel}" IsEnabled="{Binding Data.IsSpellCaster}"/>
 
-                    <TextBlock Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Non-Caster Casterlevels" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
+                    <TextBlock Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Non-Caster Casterlevels" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
 
-                    <TextBlock Text="Arcane Caster Level Mod" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.ArcaneCasterLevelMod}" Grid.Row="12" Grid.Column="1" IsEnabled="{Binding Path=Data.IsSpellCaster, Converter={StaticResource inverter}}"/>
+                    <TextBlock Text="Arcane Caster Level Mod" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="0"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.ArcaneCasterLevelMod}" Grid.Row="13" Grid.Column="1" IsEnabled="{Binding Path=Data.IsSpellCaster, Converter={StaticResource inverter}}"/>
 
-                    <TextBlock Text="Divine Caster Level Mod" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.DivineCasterLevelMod}" Grid.Row="12" Grid.Column="3" IsEnabled="{Binding Path=Data.IsSpellCaster, Converter={StaticResource inverter}}"/>
+                    <TextBlock Text="Divine Caster Level Mod" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="2"/>
+                    <wpftk:IntegerUpDown Value="{Binding Data.DivineCasterLevelMod}" Grid.Row="13" Grid.Column="3" IsEnabled="{Binding Path=Data.IsSpellCaster, Converter={StaticResource inverter}}"/>
                 </Grid>
             </ScrollViewer>
         </TabItem>
