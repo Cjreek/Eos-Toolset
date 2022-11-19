@@ -589,16 +589,18 @@ namespace Eos.Services
 
         private int GetNumSpellLevels(SpellSlotTableItem spellSlotItem)
         {
-            return ((spellSlotItem.SpellLevel0 ?? 0) > 0 ? 1 : 0) +
-                   ((spellSlotItem.SpellLevel0 ?? 0) > 0 ? 1 : 0) +
-                   ((spellSlotItem.SpellLevel0 ?? 0) > 0 ? 1 : 0) +
-                   ((spellSlotItem.SpellLevel0 ?? 0) > 0 ? 1 : 0) +
-                   ((spellSlotItem.SpellLevel0 ?? 0) > 0 ? 1 : 0) +
-                   ((spellSlotItem.SpellLevel0 ?? 0) > 0 ? 1 : 0) +
-                   ((spellSlotItem.SpellLevel0 ?? 0) > 0 ? 1 : 0) +
-                   ((spellSlotItem.SpellLevel0 ?? 0) > 0 ? 1 : 0) +
-                   ((spellSlotItem.SpellLevel0 ?? 0) > 0 ? 1 : 0) +
-                   ((spellSlotItem.SpellLevel0 ?? 0) > 0 ? 1 : 0);
+            if (spellSlotItem.SpellLevel9 != null) return 10;
+            if (spellSlotItem.SpellLevel8 != null) return 9;
+            if (spellSlotItem.SpellLevel7 != null) return 8;
+            if (spellSlotItem.SpellLevel6 != null) return 7;
+            if (spellSlotItem.SpellLevel5 != null) return 6;
+            if (spellSlotItem.SpellLevel4 != null) return 5;
+            if (spellSlotItem.SpellLevel3 != null) return 4;
+            if (spellSlotItem.SpellLevel2 != null) return 3;
+            if (spellSlotItem.SpellLevel1 != null) return 2;
+            if (spellSlotItem.SpellLevel0 != null) return 1;
+
+            return 0;
         }
 
         private void ExportSpellSlotTables(EosProject project)
@@ -622,16 +624,16 @@ namespace Eos.Services
                             var rec = td2.AddRecord();
                             rec.Set("Level", item.Level);
                             rec.Set("NumSpellLevels", GetNumSpellLevels(item));
-                            rec.Set("SpellLevel0", item.SpellLevel0 > 0 ? item.SpellLevel0 : null);
-                            rec.Set("SpellLevel1", item.SpellLevel1 > 0 ? item.SpellLevel1 : null);
-                            rec.Set("SpellLevel2", item.SpellLevel2 > 0 ? item.SpellLevel2 : null);
-                            rec.Set("SpellLevel3", item.SpellLevel3 > 0 ? item.SpellLevel3 : null);
-                            rec.Set("SpellLevel4", item.SpellLevel4 > 0 ? item.SpellLevel4 : null);
-                            rec.Set("SpellLevel5", item.SpellLevel5 > 0 ? item.SpellLevel5 : null);
-                            rec.Set("SpellLevel6", item.SpellLevel6 > 0 ? item.SpellLevel6 : null);
-                            rec.Set("SpellLevel7", item.SpellLevel7 > 0 ? item.SpellLevel7 : null);
-                            rec.Set("SpellLevel8", item.SpellLevel8 > 0 ? item.SpellLevel8 : null);
-                            rec.Set("SpellLevel9", item.SpellLevel9 > 0 ? item.SpellLevel9 : null);
+                            rec.Set("SpellLevel0", item.SpellLevel0);
+                            rec.Set("SpellLevel1", item.SpellLevel1);
+                            rec.Set("SpellLevel2", item.SpellLevel2);
+                            rec.Set("SpellLevel3", item.SpellLevel3);
+                            rec.Set("SpellLevel4", item.SpellLevel4);
+                            rec.Set("SpellLevel5", item.SpellLevel5);
+                            rec.Set("SpellLevel6", item.SpellLevel6);
+                            rec.Set("SpellLevel7", item.SpellLevel7);
+                            rec.Set("SpellLevel8", item.SpellLevel8);
+                            rec.Set("SpellLevel9", item.SpellLevel9);
                         }
                     }
 
