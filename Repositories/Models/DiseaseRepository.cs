@@ -19,7 +19,7 @@ namespace Eos.Repositories.Models
         {
         }
 
-        protected override int GetCustomDataStartIndex()
+        public override int GetCustomDataStartIndex()
         {
             return 17;
         }

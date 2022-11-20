@@ -47,7 +47,7 @@ namespace Eos.Repositories
             return modelIndexLookup.ContainsKey(index);
         }
 
-        protected virtual int GetCustomDataStartIndex()
+        public virtual int GetCustomDataStartIndex()
         {
             throw new NotImplementedException();
         }
@@ -56,22 +56,12 @@ namespace Eos.Repositories
         {
             if (model == null) return null;
 
-            if ((model.Index ?? -1) < 0)
+            if (!isReadonly)
             {
-                var result = -1;
-                for (int i = 0; i < internalList.Count; i++)
-                {
-                    if (internalList[i]?.Overrides == null)
-                        result++;
-
-                    if (internalList[i] == model)
-                        break;
-                }
-
-                if (returnCustomDataIndex)
-                    return GetCustomDataStartIndex() + result;
+                if (returnCustomDataIndex && (model.Overrides == null))
+                    return GetCustomDataStartIndex() + (model.Index ?? 0);
                 else
-                    return result;
+                    return model.Index ?? 0;
             }
 
             return model.Index;
@@ -136,6 +126,12 @@ namespace Eos.Repositories
                 reference.ReferenceObject?.ResolveReferences();
         }
 
+        public int GetNextFreeIndex(int startIndex = 0)
+        {
+            while (modelIndexLookup.ContainsKey(startIndex)) startIndex++;
+            return startIndex;
+        }
+
         public void LoadFromFile(string filename)
         {
             Clear();
@@ -171,6 +167,18 @@ namespace Eos.Repositories
                                     var newModel = BaseModel.CreateFromJson<T>(jsonObj, Extensions);
                                     Add(newModel);
                                 }
+                            }
+                        }
+
+                        int nextIndex = GetNextFreeIndex(0);
+                        for (int i=0; i < internalList.Count; i++)
+                        {
+                            var model = internalList[i];
+                            if (model != null && model.Index == null)
+                            {
+                                model.Index = nextIndex;
+                                modelIndexLookup.Add(model.Index ?? 0, model);
+                                nextIndex = GetNextFreeIndex(nextIndex);
                             }
                         }
                     }

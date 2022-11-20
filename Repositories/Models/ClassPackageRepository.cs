@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace Eos.Repositories.Models
 {
-    public class ClassRepository : ModelRepository<CharacterClass>
+    public class ClassPackageRepository : ModelRepository<ClassPackage>
     {
-        static ClassRepository()
+        static ClassPackageRepository()
         {
-            RepositoryFactory.RegisterRepositoryClass<CharacterClass>(typeof(ClassRepository));
+            RepositoryFactory.RegisterRepositoryClass<ClassPackage>(typeof(ClassPackageRepository));
         }
 
-        public ClassRepository(bool isReadonly) : base(isReadonly)
+        public ClassPackageRepository(bool isReadonly) : base(isReadonly)
         {
         }
 
         public override int GetCustomDataStartIndex()
         {
-            return 43;
+            return 132;
         }
     }
 }

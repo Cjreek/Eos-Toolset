@@ -658,9 +658,8 @@ namespace Eos.Services
 
                 AddExtensionColumns(classes2da, project.Classes.Extensions);
 
-                for (int i=0; i < project.Classes.Count; i++)
+                foreach (var cls in project.Classes.OrderBy(cls => cls?.Index))
                 {
-                    var cls = project.Classes[i];
                     if (cls != null)
                     {
                         var index = -1;
@@ -668,8 +667,12 @@ namespace Eos.Services
                             index = MasterRepository.Standard.Classes.GetByID(cls.Overrides ?? Guid.Empty)?.Index ?? -1;
                         else
                         {
-                            classes2da.AddRecord();
-                            index = classes2da.Count - 1;
+                            while (project.Classes.GetCustomDataStartIndex() + cls.Index >= classes2da.Count)
+                            {
+                                classes2da.AddRecord();
+                            }
+
+                            index = project.Classes.GetCustomDataStartIndex() + (cls.Index ?? 0);
                         }
 
                         var record = classes2da[index];
@@ -745,9 +748,8 @@ namespace Eos.Services
             var packages2da = Load2da("packages");
             if (packages2da != null)
             {
-                for (int i = 0; i < project.ClassPackages.Count; i++)
+                foreach (var package in project.ClassPackages.OrderBy(package => package?.Index))
                 {
-                    var package = project.ClassPackages[i];
                     if (package != null)
                     {
                         var index = -1;
@@ -755,8 +757,12 @@ namespace Eos.Services
                             index = MasterRepository.Standard.ClassPackages.GetByID(package.Overrides ?? Guid.Empty)?.Index ?? -1;
                         else
                         {
-                            packages2da.AddRecord();
-                            index = packages2da.Count - 1;
+                            while (project.ClassPackages.GetCustomDataStartIndex() + package.Index >= packages2da.Count)
+                            {
+                                packages2da.AddRecord();
+                            }
+
+                            index = project.ClassPackages.GetCustomDataStartIndex() + (package.Index ?? 0);
                         }
 
                         var record = packages2da[index];
@@ -794,9 +800,8 @@ namespace Eos.Services
             if (disease2da != null)
             {
                 AddExtensionColumns(disease2da, project.Diseases.Extensions);
-                for (int i = 0; i < project.Diseases.Count; i++)
+                foreach (var disease in project.Diseases.OrderBy(disease => disease?.Index))
                 {
-                    var disease = project.Diseases[i];
                     if (disease != null)
                     {
                         var index = -1;
@@ -804,8 +809,12 @@ namespace Eos.Services
                             index = MasterRepository.Standard.Diseases.GetByID(disease.Overrides ?? Guid.Empty)?.Index ?? -1;
                         else
                         {
-                            disease2da.AddRecord();
-                            index = disease2da.Count - 1;
+                            while (project.Diseases.GetCustomDataStartIndex() + disease.Index >= disease2da.Count)
+                            {
+                                disease2da.AddRecord();
+                            }
+
+                            index = project.Diseases.GetCustomDataStartIndex() + (disease.Index ?? 0);
                         }
 
                         var record = disease2da[index];
@@ -847,9 +856,8 @@ namespace Eos.Services
             {
                 domains2da.Columns.AddColumn("Level_0");
                 AddExtensionColumns(domains2da, project.Domains.Extensions);
-                for (int i = 0; i < project.Domains.Count; i++)
+                foreach (var domain in project.Domains.OrderBy(domain => domain?.Index))
                 {
-                    var domain = project.Domains[i];
                     if (domain != null)
                     {
                         var index = -1;
@@ -857,8 +865,12 @@ namespace Eos.Services
                             index = MasterRepository.Standard.Domains.GetByID(domain.Overrides ?? Guid.Empty)?.Index ?? -1;
                         else
                         {
-                            domains2da.AddRecord();
-                            index = domains2da.Count - 1;
+                            while (project.Domains.GetCustomDataStartIndex() + domain.Index >= domains2da.Count)
+                            {
+                                domains2da.AddRecord();
+                            }
+
+                            index = project.Domains.GetCustomDataStartIndex() + (domain.Index ?? 0);
                         }
 
                         var record = domains2da[index];
@@ -898,9 +910,8 @@ namespace Eos.Services
             if (feat2da != null)
             {
                 AddExtensionColumns(feat2da, project.Feats.Extensions);
-                for (int i = 0; i < project.Feats.Count; i++)
+                foreach (var feat in project.Feats.OrderBy(feat => feat?.Index))
                 {
-                    var feat = project.Feats[i];
                     if (feat != null)
                     {
                         var index = -1;
@@ -908,8 +919,12 @@ namespace Eos.Services
                             index = MasterRepository.Standard.Feats.GetByID(feat.Overrides ?? Guid.Empty)?.Index ?? -1;
                         else
                         {
-                            feat2da.AddRecord();
-                            index = feat2da.Count - 1;
+                            while (project.Feats.GetCustomDataStartIndex() + feat.Index >= feat2da.Count)
+                            {
+                                feat2da.AddRecord();
+                            }
+
+                            index = project.Feats.GetCustomDataStartIndex() + (feat.Index ?? 0);
                         }
 
                         var record = feat2da[index];
@@ -976,9 +991,8 @@ namespace Eos.Services
             if (poison2da != null)
             {
                 AddExtensionColumns(poison2da, project.Poisons.Extensions);
-                for (int i = 0; i < project.Poisons.Count; i++)
+                foreach (var poison in project.Poisons.OrderBy(poison => poison?.Index))
                 {
-                    var poison = project.Poisons[i];
                     if (poison != null)
                     {
                         var index = -1;
@@ -986,8 +1000,12 @@ namespace Eos.Services
                             index = MasterRepository.Standard.Poisons.GetByID(poison.Overrides ?? Guid.Empty)?.Index ?? -1;
                         else
                         {
-                            poison2da.AddRecord();
-                            index = poison2da.Count - 1;
+                            while (project.Poisons.GetCustomDataStartIndex() + poison.Index >= poison2da.Count)
+                            {
+                                poison2da.AddRecord();
+                            }
+
+                            index = project.Poisons.GetCustomDataStartIndex() + (poison.Index ?? 0);
                         }
 
                         var record = poison2da[index];
@@ -1027,9 +1045,8 @@ namespace Eos.Services
             {
                 racialtypes2da.Columns.AddColumn("FavoredEnemyFeat");
                 AddExtensionColumns(racialtypes2da, project.Races.Extensions);
-                for (int i = 0; i < project.Races.Count; i++)
+                foreach (var race in project.Races.OrderBy(race => race?.Index))
                 {
-                    var race = project.Races[i];
                     if (race != null)
                     {
                         var index = -1;
@@ -1037,8 +1054,12 @@ namespace Eos.Services
                             index = MasterRepository.Standard.Races.GetByID(race.Overrides ?? Guid.Empty)?.Index ?? -1;
                         else
                         {
-                            racialtypes2da.AddRecord();
-                            index = racialtypes2da.Count - 1;
+                            while (project.Races.GetCustomDataStartIndex() + race.Index >= racialtypes2da.Count)
+                            {
+                                racialtypes2da.AddRecord();
+                            }
+
+                            index = project.Races.GetCustomDataStartIndex() + (race.Index ?? 0);
                         }
 
                         var record = racialtypes2da[index];
@@ -1097,9 +1118,8 @@ namespace Eos.Services
             {
                 skills2da.Columns.AddColumn("HideFromLevelUp");
                 AddExtensionColumns(skills2da, project.Skills.Extensions);
-                for (int i = 0; i < project.Skills.Count; i++)
+                foreach (var skill in project.Skills.OrderBy(skill => skill?.Index))
                 {
-                    var skill = project.Skills[i];
                     if (skill != null)
                     {
                         var index = -1;
@@ -1107,8 +1127,12 @@ namespace Eos.Services
                             index = MasterRepository.Standard.Skills.GetByID(skill.Overrides ?? Guid.Empty)?.Index ?? -1;
                         else
                         {
-                            skills2da.AddRecord();
-                            index = skills2da.Count - 1;
+                            while (project.Skills.GetCustomDataStartIndex() + skill.Index >= skills2da.Count)
+                            {
+                                skills2da.AddRecord();
+                            }
+
+                            index = project.Skills.GetCustomDataStartIndex() + (skill.Index ?? 0);
                         }
 
                         var record = skills2da[index];
@@ -1145,9 +1169,8 @@ namespace Eos.Services
             if (aoe2da != null)
             {
                 AddExtensionColumns(aoe2da, project.AreaEffects.Extensions);
-                for (int i = 0; i < project.AreaEffects.Count; i++)
+                foreach (var aoe in project.AreaEffects.OrderBy(aoe => aoe?.Index))
                 {
-                    var aoe = project.AreaEffects[i];
                     if (aoe != null)
                     {
                         var index = -1;
@@ -1155,8 +1178,12 @@ namespace Eos.Services
                             index = MasterRepository.Standard.AreaEffects.GetByID(aoe.Overrides ?? Guid.Empty)?.Index ?? -1;
                         else
                         {
-                            aoe2da.AddRecord();
-                            index = aoe2da.Count - 1;
+                            while (project.AreaEffects.GetCustomDataStartIndex() + aoe.Index >= aoe2da.Count)
+                            {
+                                aoe2da.AddRecord();
+                            }
+
+                            index = project.AreaEffects.GetCustomDataStartIndex() + (aoe.Index ?? 0);
                         }
 
                         var record = aoe2da[index];
@@ -1209,9 +1236,8 @@ namespace Eos.Services
             var soundset2da = Load2da("soundset");
             if (soundset2da != null)
             {
-                for (int i = 0; i < project.Soundsets.Count; i++)
+                foreach (var soundset in project.Soundsets.OrderBy(soundset => soundset?.Index))
                 {
-                    var soundset = project.Soundsets[i];
                     if (soundset != null)
                     {
                         var index = -1;
@@ -1219,8 +1245,12 @@ namespace Eos.Services
                             index = MasterRepository.Standard.Soundsets.GetByID(soundset.Overrides ?? Guid.Empty)?.Index ?? -1;
                         else
                         {
-                            soundset2da.AddRecord();
-                            index = soundset2da.Count - 1;
+                            while (project.Soundsets.GetCustomDataStartIndex() + soundset.Index >= soundset2da.Count)
+                            {
+                                soundset2da.AddRecord();
+                            }
+
+                            index = project.Soundsets.GetCustomDataStartIndex() + (soundset.Index ?? 0);
                         }
 
                         var record = soundset2da[index];
@@ -1275,9 +1305,8 @@ namespace Eos.Services
 
                 AddExtensionColumns(spells2da, project.Spells.Extensions);
 
-                for (int i = 0; i < project.Spells.Count; i++)
+                foreach (var spell in project.Spells.OrderBy(spell => spell?.Index))
                 {
-                    var spell = project.Spells[i];
                     if (spell != null)
                     {
                         var index = -1;
@@ -1285,8 +1314,12 @@ namespace Eos.Services
                             index = MasterRepository.Standard.Spells.GetByID(spell.Overrides ?? Guid.Empty)?.Index ?? -1;
                         else
                         {
-                            spells2da.AddRecord();
-                            index = spells2da.Count - 1;
+                            while (project.Spells.GetCustomDataStartIndex() + spell.Index >= spells2da.Count)
+                            {
+                                spells2da.AddRecord();
+                            }
+
+                            index = project.Spells.GetCustomDataStartIndex() + (spell.Index ?? 0);
                         }
 
                         var record = spells2da[index];
@@ -1425,11 +1458,16 @@ namespace Eos.Services
                 }
                 custom2da.New(columns.ToArray());
 
-                foreach (var instance in repo)
+                foreach (var instance in repo.OrderBy(instance => instance?.Index))
                 {
                     if (instance == null) continue;
 
                     var rec = custom2da.AddRecord();
+                    while (instance.Index >= custom2da.Count)
+                    {
+                        rec = custom2da.AddRecord();
+                    }
+
                     rec.Set("Label", instance.Label);
                     foreach (var value in instance.Values)
                     {

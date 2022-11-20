@@ -26,11 +26,10 @@ namespace Eos.Repositories.Models
         public IEnumerable<Feat?> Magical => this.Where(feat => feat?.ToolsetCategory == FeatCategory.Magical);
         public IEnumerable<Feat?> Other => this.Where(feat => feat?.ToolsetCategory == FeatCategory.Other);
 
-        protected override int GetCustomDataStartIndex()
+        public override int GetCustomDataStartIndex()
         {
             return 1116;
         }
-
 
         protected override void Changed()
         {

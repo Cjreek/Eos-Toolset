@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace Eos.Repositories.Models
 {
-    public class ClassRepository : ModelRepository<CharacterClass>
+    public class SoundsetRepository : ModelRepository<Soundset>
     {
-        static ClassRepository()
+        static SoundsetRepository()
         {
-            RepositoryFactory.RegisterRepositoryClass<CharacterClass>(typeof(ClassRepository));
+            RepositoryFactory.RegisterRepositoryClass<Soundset>(typeof(SoundsetRepository));
         }
 
-        public ClassRepository(bool isReadonly) : base(isReadonly)
+        public SoundsetRepository(bool isReadonly) : base(isReadonly)
         {
         }
 
         public override int GetCustomDataStartIndex()
         {
-            return 43;
+            return 5100; // Nja
         }
     }
 }

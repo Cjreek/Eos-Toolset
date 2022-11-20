@@ -61,19 +61,19 @@ namespace Eos.Repositories
 
         static MasterRepository()
         {
-            RepositoryFactory.RegisterRepositoryClass<Race>(typeof(RaceRepository));
-            RepositoryFactory.RegisterRepositoryClass<CharacterClass>(typeof(ClassRepository));
-            RepositoryFactory.RegisterRepositoryClass<Domain>(typeof(DomainRepository));
-            RepositoryFactory.RegisterRepositoryClass<Spell>(typeof(SpellRepository));
-            RepositoryFactory.RegisterRepositoryClass<Feat>(typeof(FeatRepository));
-            RepositoryFactory.RegisterRepositoryClass<Skill>(typeof(SkillRepository));
-            RepositoryFactory.RegisterRepositoryClass<Disease>(typeof(DiseaseRepository));
-            RepositoryFactory.RegisterRepositoryClass<Poison>(typeof(PoisonRepository));
-            RepositoryFactory.RegisterRepositoryClass<Spellbook>(typeof(SpellbookRepository));
             RepositoryFactory.RegisterRepositoryClass<AreaEffect>(typeof(AreaEffectRepository));
+            RepositoryFactory.RegisterRepositoryClass<CharacterClass>(typeof(ClassRepository));
+            RepositoryFactory.RegisterRepositoryClass<ClassPackage>(typeof(ClassPackageRepository));
             RepositoryFactory.RegisterRepositoryClass<CustomObjectInstance>(typeof(CustomObjectInstanceRepository));
-
-            // TODO: All repos
+            RepositoryFactory.RegisterRepositoryClass<Disease>(typeof(DiseaseRepository));
+            RepositoryFactory.RegisterRepositoryClass<Domain>(typeof(DomainRepository));
+            RepositoryFactory.RegisterRepositoryClass<Feat>(typeof(FeatRepository));
+            RepositoryFactory.RegisterRepositoryClass<Poison>(typeof(PoisonRepository));
+            RepositoryFactory.RegisterRepositoryClass<Race>(typeof(RaceRepository));
+            RepositoryFactory.RegisterRepositoryClass<Skill>(typeof(SkillRepository));
+            RepositoryFactory.RegisterRepositoryClass<Soundset>(typeof(SoundsetRepository));
+            RepositoryFactory.RegisterRepositoryClass<Spell>(typeof(SpellRepository));
+            RepositoryFactory.RegisterRepositoryClass<Spellbook>(typeof(SpellbookRepository));
 
             resources = new ResourceRepository();
 

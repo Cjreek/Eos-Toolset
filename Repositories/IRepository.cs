@@ -14,5 +14,6 @@ namespace Eos.Repositories
         bool HasOverride(BaseModel model);
         BaseModel? GetOverride(BaseModel model);
         BaseModel? GetBaseByID(Guid id);
+        int GetNextFreeIndex(int startIndex = 0);
     }
 }

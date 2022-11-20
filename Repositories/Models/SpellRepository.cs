@@ -33,7 +33,7 @@ namespace Eos.Repositories.Models
         public IEnumerable<Spell?> NecromancySpells => this.Where(spell => spell?.Type == SpellType.Spell && spell?.School == SpellSchool.N);
         public IEnumerable<Spell?> TransmutationSpells => this.Where(spell => spell?.Type == SpellType.Spell && spell?.School == SpellSchool.T);
 
-        protected override int GetCustomDataStartIndex()
+        public override int GetCustomDataStartIndex()
         {
             return 840;
         }

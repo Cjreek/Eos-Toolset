@@ -153,6 +153,7 @@ namespace Eos.Repositories
             if (constructor != null)
             {
                 var newModel = (BaseModel)constructor.Invoke(new object[] { });
+                newModel.Index = repositoryDict[modelType].GetNextFreeIndex();
                 repositoryDict[modelType].AddBase(newModel);
                 return newModel;
             }
@@ -163,6 +164,8 @@ namespace Eos.Repositories
         public void Add(BaseModel model)
         {
             var modelType = model.GetType();
+            if (model.Index == null)
+                model.Index = repositoryDict[modelType].GetNextFreeIndex();
             repositoryDict[modelType].AddBase(model);
         }
 
