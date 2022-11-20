@@ -83,21 +83,19 @@ namespace Eos.Services
 
         private void AddTLKString(TLKStringSet tlk)
         {
-            if ((tlk.OriginalIndex ?? -1) < 0)
+            //if ((tlk.OriginalIndex ?? -1) < 0)
+            var isEmpty = true;
+            foreach (var lang in Enum.GetValues<TLKLanguage>())
             {
-                var isEmpty = true;
-                foreach (var lang in Enum.GetValues<TLKLanguage>())
+                if ((tlk[lang].Text.Trim() != "") || (tlk[lang].TextF.Trim() != ""))
                 {
-                    if ((tlk[lang].Text.Trim() != "") || (tlk[lang].TextF.Trim() != ""))
-                    {
-                        isEmpty = false;
-                        break;
-                    }
+                    isEmpty = false;
+                    break;
                 }
-
-                if (!isEmpty)
-                    customTLKIndices.Add(tlk, -1);
             }
+
+            if (!isEmpty)
+                customTLKIndices.Add(tlk, -1);
         }
 
         private int? GetTLKIndex(TLKStringSet tlkString)
@@ -132,7 +130,15 @@ namespace Eos.Services
                 {
                     AddTLKString(cls.Name);
                     AddTLKString(cls.NamePlural);
-                //    AddTLKString(cls.NameLower);
+
+                    cls.NameLower.FromJson(cls.Name.ToJson());
+                    foreach (var lang in Enum.GetValues<TLKLanguage>())
+                    {
+                        cls.NameLower[lang].Text = cls.NameLower[lang].Text.ToLower();
+                        cls.NameLower[lang].TextF = cls.NameLower[lang].TextF.ToLower();
+                    }
+                    AddTLKString(cls.NameLower);
+
                     AddTLKString(cls.Description);
                 }
             }
@@ -679,7 +685,7 @@ namespace Eos.Services
                         record.Set("Label", cls.Name[project.DefaultLanguage].Text.Replace(" ", "_"));
                         record.Set("Name", GetTLKIndex(cls.Name));
                         record.Set("Plural", GetTLKIndex(cls.NamePlural));
-                        record.Set("Lower", 0); // TODO: automatic lower index
+                        record.Set("Lower", GetTLKIndex(cls.NameLower));
                         record.Set("Description", GetTLKIndex(cls.Description));
                         record.Set("Icon", cls.Icon?.ToUpper());
                         record.Set("HitDie", cls.HitDie);

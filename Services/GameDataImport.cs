@@ -762,7 +762,7 @@ namespace Eos.Services
 
                 tmpSpell.Category = !spells2da[i].IsNull("Category") ? (AICategory)Enum.ToObject(typeof(AICategory), spells2da[i].AsInteger("Category") ?? 0) : null;
                 tmpSpell.ParentSpell = CreateRef<Spell>(spells2da[i].AsInteger("Master"));
-                tmpSpell.Type = !spells2da[i].IsNull("Category") ? (SpellType)Enum.ToObject(typeof(SpellType), spells2da[i].AsInteger("UserType") ?? 0) : SpellType.Other;
+                tmpSpell.Type = !spells2da[i].IsNull("UserType") ? (SpellType)Enum.ToObject(typeof(SpellType), spells2da[i].AsInteger("UserType") ?? 0) : SpellType.Other;
                 tmpSpell.UseConcentration = spells2da[i].AsBoolean("UseConcentration");
                 tmpSpell.IsCastSpontaneously = spells2da[i].AsBoolean("SpontaneouslyCast");
                 tmpSpell.IsHostile = spells2da[i].AsBoolean("HostileSetting");

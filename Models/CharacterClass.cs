@@ -29,6 +29,7 @@ namespace Eos.Models
         private Spellbook? _spellbook;
 
         public TLKStringSet Name { get; set; } = new TLKStringSet();
+        public TLKStringSet NameLower { get; set; } = new TLKStringSet();
         public TLKStringSet NamePlural { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
         public int HitDie { get; set; } = 8;

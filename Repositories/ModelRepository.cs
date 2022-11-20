@@ -56,7 +56,7 @@ namespace Eos.Repositories
         {
             if (model == null) return null;
 
-            if (!isReadonly)
+            if (!model.IsReadonly)
             {
                 if (returnCustomDataIndex && (model.Overrides == null))
                     return GetCustomDataStartIndex() + (model.Index ?? 0);
