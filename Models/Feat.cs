@@ -130,6 +130,12 @@ namespace Eos.Models
         public bool RequiresEpic { get; set; } = false;
         public bool UseActionQueue { get; set; } = true;
 
+        protected override TLKStringSet? GetTlkDisplayName()
+        {
+            var modelOverride = (Feat?)MasterRepository.Project.GetOverride(this);
+            return modelOverride?.Name ?? this.Name;
+        }
+
         protected override String GetLabel()
         {
             return Name;

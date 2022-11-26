@@ -51,7 +51,10 @@
 
             <!--Name-->
             <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-            <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+            <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1"/>
+
+            <TextBlock Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2"/>
+            <TextBox Text="{Binding Data.Hint}" Grid.Row="1" Grid.Column="3"/>
 
             <TextBlock Text="First Save DC" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
             <wpftk:IntegerUpDown Text="{Binding Data.FirstSaveDC}" Grid.Row="2" Grid.Column="1"/>

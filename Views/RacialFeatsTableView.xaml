@@ -29,6 +29,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
@@ -42,7 +43,10 @@
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}"/>
 
-        <ListView Grid.Row="2" Grid.Column="1"  ItemsSource="{Binding Data.Items}">
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
+
+        <ListView Grid.Row="3" Grid.Column="1"  ItemsSource="{Binding Data.Items}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Feat" Width="300">
@@ -64,6 +68,6 @@
             </ListView.View>
         </ListView>
 
-        <Button Grid.Row="3" Grid.Column="1" Content="Add Feat" Width="150" Margin="0,5,0,0" HorizontalAlignment="Left" Command="{Binding AddRacialFeatItemCommand}"/>
+        <Button Grid.Row="4" Grid.Column="1" Content="Add Feat" Width="150" Margin="0,5,0,0" HorizontalAlignment="Left" Command="{Binding AddRacialFeatItemCommand}"/>
     </Grid>
 </local:LanguageAwarePage>

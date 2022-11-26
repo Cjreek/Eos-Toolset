@@ -42,6 +42,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
@@ -54,6 +55,9 @@
 
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
                 <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}" IsEnabled="{Binding Data.Overrides, Converter={StaticResource isNullConverter}}"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
             </Grid>
         </TabItem>
         <TabItem Header="Level 0" Width="100" Height="30">

@@ -33,11 +33,11 @@
                         <Run>
                             <Run.Text>
                                 <MultiBinding Converter="{StaticResource tlkConverterDefault}">
-                                    <Binding ElementName="ucFeatComboBox" Path="SelectedValue.Name"/>
+                                    <Binding ElementName="ucFeatComboBox" Path="SelectedValue.TlkDisplayName" Mode="OneWay"/>
                                 </MultiBinding>
-                            </Run.Text> 
+                            </Run.Text>
                         </Run>
-                        <Run Text="{Binding ElementName=ucFeatComboBox, Path=SelectedValue.Hint, Converter={StaticResource hintConverter}}"/>
+                        <Run Text="{Binding ElementName=ucFeatComboBox, Path=SelectedValue.DisplayHint, Converter={StaticResource hintConverter}, Mode=OneWay}"/>
                     </TextBlock>
                 </StackPanel>
             </Button.Content>

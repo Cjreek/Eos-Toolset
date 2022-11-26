@@ -30,6 +30,12 @@ namespace Eos.Models
         public String? IncubationEndScript { get; set; }
         public String? DailyEffectScript { get; set; }
 
+        protected override TLKStringSet? GetTlkDisplayName()
+        {
+            var modelOverride = (Disease?)MasterRepository.Project.GetOverride(this);
+            return modelOverride?.Name ?? this.Name;
+        }
+
         protected override String GetLabel()
         {
             return Name;

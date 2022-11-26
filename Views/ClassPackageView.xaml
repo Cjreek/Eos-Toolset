@@ -35,6 +35,7 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition MinHeight="22" Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
@@ -55,33 +56,36 @@
                     <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
                     <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
 
+                    <TextBlock Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+                    <TextBox Text="{Binding Data.Hint}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
+                    
                     <!--Description-->
-                    <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="2" Grid.Column="0"/>
-                    <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
+                    <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="3" Grid.Column="0"/>
+                    <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"/>
 
-                    <TextBlock Text="Playable" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
-                    <CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding Data.Playable}"/>
+                    <TextBlock Text="Playable" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+                    <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding Data.Playable}"/>
 
-                    <TextBlock Text="Class" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
-                    <uc:ClassComboBox Grid.Row="4" Grid.Column="1" SelectedValue="{Binding Data.ForClass}" IsNullable="False"/>
+                    <TextBlock Text="Class" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+                    <uc:ClassComboBox Grid.Row="5" Grid.Column="1" SelectedValue="{Binding Data.ForClass}" IsNullable="False"/>
 
-                    <TextBlock Text="Preferred Ability" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
-                    <uc:EnumComboBox Grid.Row="4" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.PreferredAbility}"/>
+                    <TextBlock Text="Preferred Ability" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
+                    <uc:EnumComboBox Grid.Row="5" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.PreferredAbility}"/>
 
-                    <TextBlock Text="Starting Gold" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Grid.Row="5" Grid.Column="1" Value="{Binding Data.Gold}"/>
+                    <TextBlock Text="Starting Gold" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
+                    <wpftk:IntegerUpDown Grid.Row="6" Grid.Column="1" Value="{Binding Data.Gold}"/>
 
-                    <TextBlock Text="Domain 1" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
-                    <uc:DomainComboBox Grid.Row="6" Grid.Column="1" SelectedValue="{Binding Data.Domain1}"/>
+                    <TextBlock Text="Domain 1" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
+                    <uc:DomainComboBox Grid.Row="7" Grid.Column="1" SelectedValue="{Binding Data.Domain1}"/>
 
-                    <TextBlock Text="Domain 2" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="2"/>
-                    <uc:DomainComboBox Grid.Row="6" Grid.Column="3" SelectedValue="{Binding Data.Domain2}"/>
+                    <TextBlock Text="Domain 2" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="2"/>
+                    <uc:DomainComboBox Grid.Row="7" Grid.Column="3" SelectedValue="{Binding Data.Domain2}"/>
 
-                    <TextBlock Text="Spell School" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
-                    <uc:EnumComboBox Grid.Row="7" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:SpellSchool}}" SelectedValue="{Binding Data.SpellSchool}"/>
+                    <TextBlock Text="Spell School" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
+                    <uc:EnumComboBox Grid.Row="8" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:SpellSchool}}" SelectedValue="{Binding Data.SpellSchool}"/>
 
-                    <TextBlock Text="Associate" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="2"/>
-                    <ComboBox Grid.Row="7" Grid.Column="3"/>
+                    <TextBlock Text="Associate" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2"/>
+                    <ComboBox Grid.Row="8" Grid.Column="3"/>
                 </Grid>
             </ScrollViewer>
         </TabItem>

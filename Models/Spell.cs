@@ -148,6 +148,12 @@ namespace Eos.Models
         public double? TargetSizeY { get; set; }
         public TargetFlag? TargetingFlags { get; set; }
 
+        protected override TLKStringSet? GetTlkDisplayName()
+        {
+            var modelOverride = (Spell?)MasterRepository.Project.GetOverride(this);
+            return modelOverride?.Name ?? this.Name;
+        }
+
         protected override String GetLabel()
         {
             return Name;

@@ -48,7 +48,9 @@ namespace Eos.ViewModels.Dialogs
 
         private bool Filter(T? model, String searchText)
         {
-            if ((model == null) || (model.Overrides != null)) return false;
+            //if ((model == null) || (model.Overrides != null)) return false;
+            if ((model == null) || (MasterRepository.Project.HasOverride(model))) return false;
+
             var tlk = GetModelText(model);
             if (tlk == null) return false;
             return tlk[TLKLanguage.English].Text.ToLower().Contains(searchText);
@@ -85,6 +87,10 @@ namespace Eos.ViewModels.Dialogs
 
         public DelegateCommand<ModelSearchViewModel<T>> OKCommand { get; private set; } = new DelegateCommand<ModelSearchViewModel<T>>(vm =>
         {
+            if (vm.ResultModel?.Overrides != null)
+            {
+                vm.ResultModel = (T?)MasterRepository.Standard.GetByID(typeof(T), vm.ResultModel?.Overrides ?? Guid.Empty);
+            }
             WindowService.Close(vm);
         });
     }

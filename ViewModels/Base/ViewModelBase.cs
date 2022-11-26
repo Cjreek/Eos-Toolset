@@ -126,5 +126,10 @@ namespace Eos.ViewModels
         {
             MessageDispatcher.Send(MessageType.DeleteDetail, detailModel);
         });
+
+        public DelegateCommand<int?> GotoDetailCommand { get; private set; } = new DelegateCommand<int?>(index =>
+        {
+            MessageDispatcher.Send(MessageType.GotoDetail, index);
+        });
     }
 }

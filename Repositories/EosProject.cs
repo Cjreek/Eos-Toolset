@@ -69,6 +69,13 @@ namespace Eos.Repositories
         }
         public TLKLanguage DefaultLanguage { get; set; } = TLKLanguage.English;
 
+        public bool ExportLowercaseFilenames { get; set; } = false;
+        public string ExternalFolder { get; set; } = "";
+        public string ExportHakFolder { get; set; } = "";
+        public string Export2daFolder { get; set; } = "";
+        public string ExportTlkFolder { get; set; } = "";
+        public string ExportIncludeFolder { get; set; } = "";
+
         public void CreateNew(string projectFolder, string name, TLKLanguage defaultLanguage)
         {
             Clear();
@@ -85,6 +92,12 @@ namespace Eos.Repositories
         {
             ProjectFolder = Path.GetDirectoryName(projectFilename) ?? "";
 
+            ExternalFolder = ProjectFolder + Constants.ExternalFilesPath;
+            ExportHakFolder = ProjectFolder + Constants.ExportHAKFolder;
+            ExportTlkFolder = ProjectFolder + Constants.ExportTLKFolder;
+            Export2daFolder = ProjectFolder + Constants.Export2DAFolder;
+            ExportIncludeFolder = ProjectFolder + Constants.Export2DAFolder;
+
             var fs = new FileStream(projectFilename, FileMode.Open, FileAccess.Read);
             try
             {
@@ -92,12 +105,24 @@ namespace Eos.Repositories
                 {
                     Name = projectJson["Name"]?.GetValue<String>() ?? "";
                     DefaultLanguage = Enum.Parse<TLKLanguage>(projectJson["DefaultLanguage"]?.GetValue<string>() ?? "");
+                    ExportLowercaseFilenames = projectJson["ExportLowercaseFilenames"]?.GetValue<bool>() ?? false;
+                    ExternalFolder = projectJson["ExternalFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.ExternalFilesPath;
+                    ExportHakFolder = projectJson["ExportHakFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.ExportHAKFolder;
+                    ExportTlkFolder = projectJson["ExportTlkFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.ExportTLKFolder;
+                    Export2daFolder = projectJson["Export2daFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.Export2DAFolder;
+                    ExportIncludeFolder = projectJson["ExportIncludeFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.Export2DAFolder;
                 }
             }
             finally
             {
                 fs.Close();
             }
+
+            if (!ExternalFolder.EndsWith(Path.DirectorySeparatorChar)) ExternalFolder += Path.DirectorySeparatorChar;
+            if (!ExportHakFolder.EndsWith(Path.DirectorySeparatorChar)) ExportHakFolder += Path.DirectorySeparatorChar;
+            if (!ExportTlkFolder.EndsWith(Path.DirectorySeparatorChar)) ExportTlkFolder += Path.DirectorySeparatorChar;
+            if (!Export2daFolder.EndsWith(Path.DirectorySeparatorChar)) Export2daFolder += Path.DirectorySeparatorChar;
+            if (!ExportIncludeFolder.EndsWith(Path.DirectorySeparatorChar)) ExportIncludeFolder += Path.DirectorySeparatorChar;
         }
 
         private void SaveProjectFile(string projectFilename)
@@ -105,6 +130,12 @@ namespace Eos.Repositories
             JsonObject projectFile = new JsonObject();
             projectFile.Add("Name", Name);
             projectFile.Add("DefaultLanguage", Enum.GetName(DefaultLanguage));
+            projectFile.Add("ExportLowercaseFilenames", ExportLowercaseFilenames);
+            projectFile.Add("ExternalFolder", ExternalFolder);
+            projectFile.Add("ExportHakFolder", ExportHakFolder);
+            projectFile.Add("Export2daFolder", Export2daFolder);
+            projectFile.Add("ExportTlkFolder", ExportTlkFolder);
+            projectFile.Add("ExportIncludeFolder", ExportIncludeFolder);
             File.WriteAllText(projectFilename, projectFile.ToJsonString(new JsonSerializerOptions(JsonSerializerDefaults.General) { WriteIndented = true }));
         }
 

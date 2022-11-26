@@ -32,6 +32,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -47,13 +48,16 @@
         <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
         <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
 
-        <TextBlock Text="Type" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
-        <uc:EnumComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:SoundsetType}}" SelectedValue="{Binding Data.Type}" IsNullable="False"/>
+        <TextBlock Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0" />
+        <TextBox Text="{Binding Data.Hint}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
 
-        <TextBlock Text="Gender" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
-        <uc:EnumComboBox Grid.Row="2" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type types:Gender}}" SelectedValue="{Binding Data.Gender}" IsNullable="False"/>
+        <TextBlock Text="Type" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+        <uc:EnumComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:SoundsetType}}" SelectedValue="{Binding Data.Type}" IsNullable="False"/>
 
-        <ListView Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" ItemsSource="{Binding Data.Entries}" AlternationCount="2">
+        <TextBlock Text="Gender" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+        <uc:EnumComboBox Grid.Row="3" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type types:Gender}}" SelectedValue="{Binding Data.Gender}" IsNullable="False"/>
+
+        <ListView Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" ItemsSource="{Binding Data.Entries}" AlternationCount="2">
             <ListView.Resources>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -95,6 +99,5 @@
                 </GridView>
             </ListView.View>
         </ListView>
-
     </Grid> 
 </local:LanguageAwarePage>

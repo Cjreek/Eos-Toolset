@@ -27,7 +27,7 @@
 
         <Button x:Name="cbAreaEffects" Grid.Column="0" Click="btSearch_Click" HorizontalContentAlignment="Stretch" MinHeight="22">
             <Button.Content>
-                <TextBlock Text="{Binding ElementName=ucAreaEffectComboBox, Path=SelectedValue.Name}" Margin="3,0,0,0"/>
+                <TextBlock Text="{Binding ElementName=ucAreaEffectComboBox, Path=SelectedValue.Name, Mode=OneWay}" Margin="3,0,0,0"/>
             </Button.Content>
         </Button>
 

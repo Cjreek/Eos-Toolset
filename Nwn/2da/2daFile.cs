@@ -208,6 +208,7 @@ namespace Eos.Nwn.TwoDimensionalArray
         private List<String> columnList;
         private Dictionary<String, int> columnLookup = new Dictionary<String, int>();
         private Dictionary<int, bool> writeHexDict = new Dictionary<int, bool>();
+        private Dictionary<int, bool> writeLowerCaseDict = new Dictionary<int, bool>();
 
         public ColumnInfos(String[] columnLine)
         {
@@ -216,6 +217,7 @@ namespace Eos.Nwn.TwoDimensionalArray
             {
                 columnLookup[columnList[i].ToLower()] = i;
                 writeHexDict[i] = false;
+                writeLowerCaseDict[i] = false;
             }
         }
 
@@ -260,6 +262,25 @@ namespace Eos.Nwn.TwoDimensionalArray
             var index = IndexOf(columnName);
             if (index >= 0)
                 writeHexDict[index] = writeHex;
+        }
+
+        public bool IsLowercase(int columnIndex)
+        {
+            if (writeLowerCaseDict.ContainsKey(columnIndex))
+                return writeLowerCaseDict[columnIndex];
+            return false;
+        }
+
+        public bool IsLowercase(String columnName)
+        {
+            return IsLowercase(IndexOf(columnName));
+        }
+
+        public void SetLowercase(String columnName, bool writeLowercase = true)
+        {
+            var index = IndexOf(columnName);
+            if (index >= 0)
+                writeLowerCaseDict[index] = writeLowercase;
         }
 
         public String this[int index] => columnList[index];
@@ -391,18 +412,19 @@ namespace Eos.Nwn.TwoDimensionalArray
             return 0;
         }
 
-        private String ValueToStr(object? value, bool isHex)
+        private String ValueToStr(object? value, bool isHex, bool isLowercase)
         {
             if (value == null) return "****";
             if (value is String str)
             {
+                if (isLowercase) str = str.ToLower();
                 if (str.Trim() == "") return "****";
                 if (str.Contains(' ')) return "\"" + str + "\"";
             }
             if (value is double dblValue) return dblValue.ToString("n2", floatFormat);
             if ((value is int intValue) && (isHex)) return "0x" + intValue.ToString("x2");
 
-            return value.ToString() ?? "****";
+            return isLowercase ? value.ToString()?.ToLower() ?? "****" : value.ToString() ?? "****";
         }
 
         public void Save(Stream stream)
@@ -435,7 +457,7 @@ namespace Eos.Nwn.TwoDimensionalArray
             {
                 line = String.Format("{0,-" + columnWidths[0].ToString() + "}", i);
                 for (int j = 0; j < Columns.Count; j++)
-                    line += String.Format("{0,-" + columnWidths[j + 1].ToString() + "}", ValueToStr(records[i][j], Columns.IsHex(j)));
+                    line += String.Format("{0,-" + columnWidths[j + 1].ToString() + "}", ValueToStr(records[i][j], Columns.IsHex(j), Columns.IsLowercase(j)));
                 writer.WriteLine(line.Trim());
             }
 

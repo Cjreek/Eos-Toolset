@@ -78,6 +78,22 @@ namespace Eos.Models
             }
         }
 
+        protected virtual TLKStringSet? GetTlkDisplayName()
+        {
+            return null;
+        }
+
+        public TLKStringSet? TlkDisplayName => GetTlkDisplayName();
+
+        public String DisplayHint
+        {
+            get
+            {
+                var selfOverride = MasterRepository.Project.GetOverride(this);
+                return selfOverride?.Hint ?? this.Hint;
+            }
+        }
+
         private void InitExtensionValues()
         {
             ExtensionValues.Clear();
@@ -244,7 +260,7 @@ namespace Eos.Models
             }
         }
 
-        public virtual BaseModel? Copy(bool preserveIndex = false)
+        public virtual BaseModel? Copy(bool addCopyHint = true)
         {
             var result = (BaseModel?)this.GetType()?.GetConstructor(new Type[] { })?.Invoke(new object[] { });
             if (result != null)
@@ -253,9 +269,9 @@ namespace Eos.Models
                 result.FromJson(this.ToJson());
                 result.ResolveReferences();
                 result.ID = Guid.Empty;
-                if (!preserveIndex)
+                result.Index = null;
+                if (addCopyHint)
                 {
-                    result.Index = null;
                     result.Hint = (result.Hint + " Copy").Trim();
                 }
                 return result;
@@ -266,9 +282,13 @@ namespace Eos.Models
 
         public virtual BaseModel? Override()
         {
-            var result = Copy(true);
-            if (result != null) 
+            var result = Copy(false);
+            if (result != null)
+            {
+                result.Index = -1;
                 result.Overrides = this.ID;
+            }
+
             return result;
         }
 

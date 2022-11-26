@@ -45,6 +45,12 @@ namespace Eos.Models
         public IntPtr StartingEquipment { get; set; }
         public bool Playable { get; set; }
 
+        protected override TLKStringSet? GetTlkDisplayName()
+        {
+            var modelOverride = (ClassPackage?)MasterRepository.Project.GetOverride(this);
+            return modelOverride?.Name ?? this.Name;
+        }
+
         protected override void SetDefaultValues()
         {
             Name[MasterRepository.Project.DefaultLanguage].Text = "New Class Package";

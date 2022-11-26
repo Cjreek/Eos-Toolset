@@ -23,11 +23,6 @@ namespace Eos.Services
 {
     internal class CustomDataExport
     {
-        private String ExportFolder = "";
-        private String ExportTLKFolder = "";
-        private String ExportHAKFolder = "";
-        private String Export2DAFolder = "";
-
         private class TableData
         {
             public string Name { get; set; } = "";
@@ -234,7 +229,7 @@ namespace Eos.Services
             foreach (var tlk in customTLKIndices.Keys)
                 customTLKIndices[tlk] = tlkFile.AddText(tlk[project.DefaultLanguage].Text.ReplaceLineEndings("\n"));
 
-            tlkFile.Save(ExportTLKFolder + project.Name.ToLower().Replace(' ', '_') + ".tlk");
+            tlkFile.Save(project.ExportTlkFolder + project.Name.ToLower().Replace(' ', '_') + ".tlk");
         }
 
         private void ExportAttackBonusTables(EosProject project)
@@ -254,7 +249,7 @@ namespace Eos.Services
                         }
                     }
 
-                    var filename = Export2DAFolder + table.Name.ToLower() + ".2da";
+                    var filename = project.Export2daFolder + table.Name.ToLower() + ".2da";
                     td2.Save(filename);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
@@ -279,7 +274,7 @@ namespace Eos.Services
                         }
                     }
 
-                    var filename = Export2DAFolder + table.Name.ToLower() + ".2da";
+                    var filename = project.Export2daFolder + table.Name.ToLower() + ".2da";
                     td2.Save(filename);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
@@ -313,7 +308,7 @@ namespace Eos.Services
                         }
                     }
 
-                    var filename = Export2DAFolder + table.Name.ToLower() + ".2da";
+                    var filename = project.Export2daFolder + table.Name.ToLower() + ".2da";
                     td2.Save(filename);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
@@ -350,7 +345,7 @@ namespace Eos.Services
                         }
                     }
 
-                    var filename = Export2DAFolder + table.Name.ToLower() + ".2da";
+                    var filename = project.Export2daFolder + table.Name.ToLower() + ".2da";
                     td2.Save(filename);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
@@ -391,7 +386,7 @@ namespace Eos.Services
                         }
                     }
 
-                    var filename = Export2DAFolder + table.Name.ToLower() + ".2da";
+                    var filename = project.Export2daFolder + table.Name.ToLower() + ".2da";
                     td2.Save(filename);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
@@ -489,7 +484,7 @@ namespace Eos.Services
                         }
                     }
 
-                    var filename = Export2DAFolder + table.Name.ToLower() + ".2da";
+                    var filename = project.Export2daFolder + table.Name.ToLower() + ".2da";
                     td2.Save(filename);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
@@ -520,7 +515,7 @@ namespace Eos.Services
                         }
                     }
 
-                    var filename = Export2DAFolder + table.Name.ToLower() + ".2da";
+                    var filename = project.Export2daFolder + table.Name.ToLower() + ".2da";
                     td2.Save(filename);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
@@ -553,7 +548,7 @@ namespace Eos.Services
                         }
                     }
 
-                    var filename = Export2DAFolder + table.Name.ToLower() + ".2da";
+                    var filename = project.Export2daFolder + table.Name.ToLower() + ".2da";
                     td2.Save(filename);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
@@ -585,7 +580,7 @@ namespace Eos.Services
                         }
                     }
 
-                    var filename = Export2DAFolder + table.Name.ToLower() + ".2da";
+                    var filename = project.Export2daFolder + table.Name.ToLower() + ".2da";
                     td2.Save(filename);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
@@ -643,7 +638,7 @@ namespace Eos.Services
                         }
                     }
 
-                    var filename = Export2DAFolder + table.Name.ToLower() + ".2da";
+                    var filename = project.Export2daFolder + table.Name.ToLower() + ".2da";
                     td2.Save(filename);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
@@ -661,6 +656,19 @@ namespace Eos.Services
                 classes2da.Columns.AddColumn("SkipSpellSelection");
                 classes2da.Columns.SetHex("AlignRestrict");
                 classes2da.Columns.SetHex("AlignRstrctType");
+                if (project.ExportLowercaseFilenames)
+                {
+                    classes2da.Columns.SetLowercase("Icon");
+                    classes2da.Columns.SetLowercase("AttackBonusTable");
+                    classes2da.Columns.SetLowercase("FeatsTable");
+                    classes2da.Columns.SetLowercase("SavingThrowTable");
+                    classes2da.Columns.SetLowercase("SkillsTable");
+                    classes2da.Columns.SetLowercase("BonusFeatsTable");
+                    classes2da.Columns.SetLowercase("SpellGainTable");
+                    classes2da.Columns.SetLowercase("SpellKnownTable");
+                    classes2da.Columns.SetLowercase("PreReqTable");
+                    classes2da.Columns.SetLowercase("StatGainTable");
+                }
 
                 AddExtensionColumns(classes2da, project.Classes.Extensions);
 
@@ -687,7 +695,7 @@ namespace Eos.Services
                         record.Set("Plural", GetTLKIndex(cls.NamePlural));
                         record.Set("Lower", GetTLKIndex(cls.NameLower));
                         record.Set("Description", GetTLKIndex(cls.Description));
-                        record.Set("Icon", cls.Icon?.ToUpper());
+                        record.Set("Icon", cls.Icon);
                         record.Set("HitDie", cls.HitDie);
                         record.Set("AttackBonusTable", cls.AttackBonusTable?.Name);
                         record.Set("FeatsTable", cls.Feats?.Name);
@@ -740,7 +748,7 @@ namespace Eos.Services
                     }
                 }
 
-                var filename = Export2DAFolder + "classes.2da";
+                var filename = project.Export2daFolder + "classes.2da";
                 classes2da.Save(filename);
 
                 AddHAKResource("classes", NWNResourceType.TWODA, filename);
@@ -791,7 +799,7 @@ namespace Eos.Services
                     }
                 }
 
-                var filename = Export2DAFolder + "packages.2da";
+                var filename = project.Export2daFolder + "packages.2da";
                 packages2da.Save(filename);
 
                 AddHAKResource("packages", NWNResourceType.TWODA, filename);
@@ -805,6 +813,12 @@ namespace Eos.Services
             var disease2da = Load2da("disease");
             if (disease2da != null)
             {
+                if (project.ExportLowercaseFilenames)
+                {
+                    disease2da.Columns.SetLowercase("End_Incu_Script");
+                    disease2da.Columns.SetLowercase("24_Hour_Script");
+                }
+                
                 AddExtensionColumns(disease2da, project.Diseases.Extensions);
                 foreach (var disease in project.Diseases.OrderBy(disease => disease?.Index))
                 {
@@ -846,7 +860,7 @@ namespace Eos.Services
                     }
                 }
 
-                var filename = Export2DAFolder + "disease.2da";
+                var filename = project.Export2daFolder + "disease.2da";
                 disease2da.Save(filename);
 
                 AddHAKResource("disease", NWNResourceType.TWODA, filename);
@@ -861,6 +875,12 @@ namespace Eos.Services
             if (domains2da != null)
             {
                 domains2da.Columns.AddColumn("Level_0");
+
+                if (project.ExportLowercaseFilenames)
+                {
+                    domains2da.Columns.SetLowercase("Icon");
+                }
+
                 AddExtensionColumns(domains2da, project.Domains.Extensions);
                 foreach (var domain in project.Domains.OrderBy(domain => domain?.Index))
                 {
@@ -883,7 +903,7 @@ namespace Eos.Services
                         record.Set("Label", domain.Name[project.DefaultLanguage].Text.Replace(" ", "_").ToUpper());
                         record.Set("Name", GetTLKIndex(domain.Name));
                         record.Set("Description", GetTLKIndex(domain.Description));
-                        record.Set("Icon", domain.Icon?.ToUpper());
+                        record.Set("Icon", domain.Icon);
                         record.Set("Level_0", project.Spells.Get2DAIndex(domain.Level0Spell));
                         record.Set("Level_1", project.Spells.Get2DAIndex(domain.Level1Spell));
                         record.Set("Level_2", project.Spells.Get2DAIndex(domain.Level2Spell));
@@ -901,7 +921,7 @@ namespace Eos.Services
                     }
                 }
 
-                var filename = Export2DAFolder + "domains.2da";
+                var filename = project.Export2daFolder + "domains.2da";
                 domains2da.Save(filename);
 
                 AddHAKResource("domains", NWNResourceType.TWODA, filename);
@@ -915,6 +935,11 @@ namespace Eos.Services
             var feat2da = Load2da("feat");
             if (feat2da != null)
             {
+                if (project.ExportLowercaseFilenames)
+                {
+                    feat2da.Columns.SetLowercase("Icon");
+                }
+
                 AddExtensionColumns(feat2da, project.Feats.Extensions);
                 foreach (var feat in project.Feats.OrderBy(feat => feat?.Index))
                 {
@@ -937,7 +962,7 @@ namespace Eos.Services
                         record.Set("LABEL", feat.Name[project.DefaultLanguage].Text.Replace(" ", "_"));
                         record.Set("FEAT", GetTLKIndex(feat.Name));
                         record.Set("DESCRIPTION", GetTLKIndex(feat.Description));
-                        record.Set("Icon", feat.Icon?.ToLower());
+                        record.Set("Icon", feat.Icon);
                         record.Set("MINATTACKBONUS", feat.MinAttackBonus > 0 ? feat.MinAttackBonus : null);
                         record.Set("MINSTR", feat.MinStr > 0 ? feat.MinStr : null);
                         record.Set("MINDEX", feat.MinDex > 0 ? feat.MinDex : null);
@@ -982,7 +1007,7 @@ namespace Eos.Services
                     }
                 }
 
-                var filename = Export2DAFolder + "feat.2da";
+                var filename = project.Export2daFolder + "feat.2da";
                 feat2da.Save(filename);
 
                 AddHAKResource("feat", NWNResourceType.TWODA, filename);
@@ -996,6 +1021,13 @@ namespace Eos.Services
             var poison2da = Load2da("poison");
             if (poison2da != null)
             {
+                if (project.ExportLowercaseFilenames)
+                {
+                    poison2da.Columns.SetLowercase("Script_1");
+                    poison2da.Columns.SetLowercase("Script_2");
+                    poison2da.Columns.SetLowercase("VFX_Impact");
+                }
+
                 AddExtensionColumns(poison2da, project.Poisons.Extensions);
                 foreach (var poison in project.Poisons.OrderBy(poison => poison?.Index))
                 {
@@ -1035,7 +1067,7 @@ namespace Eos.Services
                     }
                 }
 
-                var filename = Export2DAFolder + "poison.2da";
+                var filename = project.Export2daFolder + "poison.2da";
                 poison2da.Save(filename);
 
                 AddHAKResource("poison", NWNResourceType.TWODA, filename);
@@ -1050,6 +1082,14 @@ namespace Eos.Services
             if (racialtypes2da != null)
             {
                 racialtypes2da.Columns.AddColumn("FavoredEnemyFeat");
+
+                if (project.ExportLowercaseFilenames)
+                {
+                    racialtypes2da.Columns.SetLowercase("Icon");
+                    racialtypes2da.Columns.SetLowercase("NameGenTableA");
+                    racialtypes2da.Columns.SetLowercase("NameGenTableB");
+                }
+
                 AddExtensionColumns(racialtypes2da, project.Races.Extensions);
                 foreach (var race in project.Races.OrderBy(race => race?.Index))
                 {
@@ -1076,7 +1116,7 @@ namespace Eos.Services
                         //record.Set("ConverNameLower", 0); // TODO: Generate lower adjective
                         record.Set("NamePlural", GetTLKIndex(race.NamePlural));
                         record.Set("Description", GetTLKIndex(race.Description));
-                        record.Set("Icon", race.Icon?.ToLower());
+                        record.Set("Icon", race.Icon);
                         record.Set("Appearance", project.Appearances.Get2DAIndex(race.Appearance));
                         record.Set("StrAdjust", race.StrAdjustment);
                         record.Set("DexAdjust", race.DexAdjustment);
@@ -1108,7 +1148,7 @@ namespace Eos.Services
                     }
                 }
 
-                var filename = Export2DAFolder + "racialtypes.2da";
+                var filename = project.Export2daFolder + "racialtypes.2da";
                 racialtypes2da.Save(filename);
 
                 AddHAKResource("racialtypes", NWNResourceType.TWODA, filename);
@@ -1123,6 +1163,12 @@ namespace Eos.Services
             if (skills2da != null)
             {
                 skills2da.Columns.AddColumn("HideFromLevelUp");
+
+                if (project.ExportLowercaseFilenames)
+                {
+                    skills2da.Columns.SetLowercase("Icon");
+                }
+
                 AddExtensionColumns(skills2da, project.Skills.Extensions);
                 foreach (var skill in project.Skills.OrderBy(skill => skill?.Index))
                 {
@@ -1145,7 +1191,7 @@ namespace Eos.Services
                         record.Set("Label", skill.Name[project.DefaultLanguage].Text.Replace(" ", ""));
                         record.Set("Name", GetTLKIndex(skill.Name));
                         record.Set("Description", GetTLKIndex(skill.Description));
-                        record.Set("Icon", skill.Icon?.ToLower());
+                        record.Set("Icon", skill.Icon);
                         record.Set("Untrained", skill.CanUseUntrained);
                         record.Set("KeyAbility", skill.KeyAbility.ToString());
                         record.Set("ArmorCheckPenalty", skill.UseArmorPenalty);
@@ -1160,7 +1206,7 @@ namespace Eos.Services
                     }
                 }
 
-                var filename = Export2DAFolder + "skills.2da";
+                var filename = project.Export2daFolder + "skills.2da";
                 skills2da.Save(filename);
 
                 AddHAKResource("skills", NWNResourceType.TWODA, filename);
@@ -1174,6 +1220,23 @@ namespace Eos.Services
             var aoe2da = Load2da("vfx_persistent");
             if (aoe2da != null)
             {
+                if (project.ExportLowercaseFilenames)
+                {
+                    aoe2da.Columns.SetLowercase("ONENTER");
+                    aoe2da.Columns.SetLowercase("ONEXIT");
+                    aoe2da.Columns.SetLowercase("HEARTBEAT");
+                    aoe2da.Columns.SetLowercase("MODEL01");
+                    aoe2da.Columns.SetLowercase("MODEL02");
+                    aoe2da.Columns.SetLowercase("MODEL03");
+                    aoe2da.Columns.SetLowercase("SoundImpact");
+                    aoe2da.Columns.SetLowercase("SoundDuration");
+                    aoe2da.Columns.SetLowercase("SoundCessation");
+                    aoe2da.Columns.SetLowercase("SoundOneShot");
+                    aoe2da.Columns.SetLowercase("MODELMIN01");
+                    aoe2da.Columns.SetLowercase("MODELMIN02");
+                    aoe2da.Columns.SetLowercase("MODELMIN03");
+                }
+
                 AddExtensionColumns(aoe2da, project.AreaEffects.Extensions);
                 foreach (var aoe in project.AreaEffects.OrderBy(aoe => aoe?.Index))
                 {
@@ -1228,7 +1291,7 @@ namespace Eos.Services
                     }
                 }
 
-                var filename = Export2DAFolder + "vfx_persistent.2da";
+                var filename = project.Export2daFolder + "vfx_persistent.2da";
                 aoe2da.Save(filename);
 
                 AddHAKResource("vfx_persistent", NWNResourceType.TWODA, filename);
@@ -1242,6 +1305,11 @@ namespace Eos.Services
             var soundset2da = Load2da("soundset");
             if (soundset2da != null)
             {
+                if (project.ExportLowercaseFilenames)
+                {
+                    soundset2da.Columns.SetLowercase("RESREF");
+                }
+                
                 foreach (var soundset in project.Soundsets.OrderBy(soundset => soundset?.Index))
                 {
                     if (soundset != null)
@@ -1268,7 +1336,7 @@ namespace Eos.Services
                     }
                 }
 
-                var filename = Export2DAFolder + "soundset.2da";
+                var filename = project.Export2daFolder + "soundset.2da";
                 soundset2da.Save(filename);
 
                 AddHAKResource("soundset", NWNResourceType.TWODA, filename);
@@ -1309,8 +1377,28 @@ namespace Eos.Services
                         spells2da.Columns.AddColumn(spellbook.Name);
                 }
 
-                AddExtensionColumns(spells2da, project.Spells.Extensions);
+                spells2da.Columns.SetHex("MetaMagic");
+                spells2da.Columns.SetHex("TargetType");
 
+                if (project.ExportLowercaseFilenames)
+                {
+                    spells2da.Columns.SetLowercase("IconResRef");
+                    spells2da.Columns.SetLowercase("ImpactScript");
+                    spells2da.Columns.SetLowercase("ConjHeadVisual");
+                    spells2da.Columns.SetLowercase("ConjHandVisual");
+                    spells2da.Columns.SetLowercase("ConjGrndVisual");
+                    spells2da.Columns.SetLowercase("ConjSoundVFX");
+                    spells2da.Columns.SetLowercase("ConjSoundMale");
+                    spells2da.Columns.SetLowercase("ConjSoundFemale");
+                    spells2da.Columns.SetLowercase("CastHeadVisual");
+                    spells2da.Columns.SetLowercase("CastHandVisual");
+                    spells2da.Columns.SetLowercase("CastGrndVisual");
+                    spells2da.Columns.SetLowercase("CastSound");
+                    spells2da.Columns.SetLowercase("ProjModel");
+                    spells2da.Columns.SetLowercase("ProjSound");
+                }
+
+                AddExtensionColumns(spells2da, project.Spells.Extensions);
                 foreach (var spell in project.Spells.OrderBy(spell => spell?.Index))
                 {
                     if (spell != null)
@@ -1438,7 +1526,7 @@ namespace Eos.Services
                     SetSpellbookSpellLevels(project, spellbook, spellbook.Level9, 9, spells2da);
                 }
 
-                var filename = Export2DAFolder + "spells.2da";
+                var filename = project.Export2daFolder + "spells.2da";
                 spells2da.Save(filename);
 
                 AddHAKResource("spells", NWNResourceType.TWODA, filename);
@@ -1482,7 +1570,7 @@ namespace Eos.Services
                     }
                 }
 
-                var filename = Export2DAFolder + template.ResourceName.ToLower() + ".2da";
+                var filename = project.Export2daFolder + template.ResourceName.ToLower() + ".2da";
                 custom2da.Save(filename);
 
                 AddHAKResource(template.ResourceName.ToLower(), NWNResourceType.TWODA, filename);
@@ -1503,7 +1591,7 @@ namespace Eos.Services
                     hak.AddResource(resource.ResRef, resource.Type, resource.FilePath);
             }
 
-            hak.Save(ExportHAKFolder + project.Name.ToLower().Replace(' ', '_') + ".hak");
+            hak.Save(project.ExportHakFolder + project.Name.ToLower().Replace(' ', '_') + ".hak");
         }
 
         public void Export(EosProject project)
@@ -1511,14 +1599,9 @@ namespace Eos.Services
             tableDataDict.Clear();
             modelIndices.Clear();
 
-            ExportFolder = project.ProjectFolder + Constants.ExportFolder;
-            Export2DAFolder = project.ProjectFolder + Constants.ExportFolder;
-            ExportTLKFolder = project.ProjectFolder + Constants.ExportTLKFolder;
-            ExportHAKFolder = project.ProjectFolder + Constants.ExportHAKFolder;
-            Directory.CreateDirectory(ExportFolder);
-            Directory.CreateDirectory(Export2DAFolder);
-            Directory.CreateDirectory(ExportTLKFolder);
-            Directory.CreateDirectory(ExportHAKFolder);
+            Directory.CreateDirectory(project.Export2daFolder);
+            Directory.CreateDirectory(project.ExportHakFolder);
+            Directory.CreateDirectory(project.ExportTlkFolder);
 
             ExportTLKs(project);
 

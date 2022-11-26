@@ -63,12 +63,16 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition Height="300"/>
                         <RowDefinition Height="300"/>
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
                     <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Data.Name}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Hint}"/>
                 </Grid>
             </Grid>
         </TabItem>

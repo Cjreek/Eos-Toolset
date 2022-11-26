@@ -28,6 +28,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="10"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
@@ -41,7 +42,10 @@
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Label" Margin="0,0,5,0" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Label}" Height="22" VerticalContentAlignment="Center"/>
 
-            <ItemsControl Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Data.Values}">
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}" Height="22" VerticalContentAlignment="Center"/>
+
+            <ItemsControl Grid.Row="4" Grid.ColumnSpan="2" ItemsSource="{Binding Data.Values}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Columns="2"/>

@@ -249,6 +249,8 @@ namespace Eos
 
         private void miExportProject_Click(object sender, RoutedEventArgs e)
         {
+            MessageDispatcher.Send(MessageType.SaveProject, null);
+
             var export = new CustomDataExport();
             export.Export(MasterRepository.Project);
             MessageBox.Show("Export successful!", "Export successful", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -259,6 +261,15 @@ namespace Eos
             var import = new GameDataImport();
             import.Import(EosConfig.NwnBasePath);
             MessageBox.Show("Game files have been imported successfully!", "Game Data Import", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void mainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var result = MessageBox.Show("Save changes before exit?", "Save changes?", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+                MessageDispatcher.Send(MessageType.SaveProject, null);
+            else if (result == MessageBoxResult.Cancel)
+                e.Cancel = true;
         }
     }
 }

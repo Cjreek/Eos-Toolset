@@ -96,7 +96,7 @@ namespace Eos.Repositories
                     overrideLookup.Add(model.Overrides ?? Guid.Empty, model.ID);
 
                 modelLookup.Add(model.ID, model);
-                if (model.Index != null)
+                if (model.Index != null && model.Index != -1)
                     modelIndexLookup.Add(model.Index ?? 0, model);
             }
         }

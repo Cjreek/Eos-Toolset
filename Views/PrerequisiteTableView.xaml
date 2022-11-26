@@ -30,6 +30,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
@@ -43,7 +44,10 @@
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}"/>
 
-        <ListView x:Name="listView" Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Data.Items}">
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
+
+        <ListView x:Name="listView" Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Data.Items}">
             <ListView.Resources>
                 <local:Param1TemplateSelectorConverter x:Key="templateParam1Converter"/>
                 <local:Param2TemplateSelectorConverter x:Key="templateParam2Converter"/>
@@ -107,6 +111,6 @@
             </ListView.View>
         </ListView>
 
-        <Button Grid.Row="3" Grid.Column="1" Content="Add Requirement" Width="150" Margin="0,5,0,0" HorizontalAlignment="Left" Command="{Binding AddPrerequisiteItemCommand}"/>
+        <Button Grid.Row="4" Grid.Column="1" Content="Add Requirement" Width="150" Margin="0,5,0,0" HorizontalAlignment="Left" Command="{Binding AddPrerequisiteItemCommand}"/>
     </Grid>
 </local:LanguageAwarePage>

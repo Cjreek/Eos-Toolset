@@ -29,6 +29,12 @@ namespace Eos.Models
         public bool OnHitApplied { get; set; } = false; // Unused?
         public String? ImpactVFX { get; set; }
 
+        protected override TLKStringSet? GetTlkDisplayName()
+        {
+            var modelOverride = (Poison?)MasterRepository.Project.GetOverride(this);
+            return modelOverride?.Name ?? this.Name;
+        }
+
         protected override String GetLabel()
         {
             return Name;

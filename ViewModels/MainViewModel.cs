@@ -174,6 +174,12 @@ namespace Eos.ViewModels
             {
                 switch(type)
                 {
+                    case MessageType.GotoDetail:
+                        var index = (int?)message;
+                        if (index != null && index < detailViewList.Count && index >= 0)
+                            CurrentView = detailViewList.ElementAt(index ?? 0);
+                        break;
+
                     case MessageType.NewDetail:
                         var newModel = MasterRepository.New((Type?)message ?? typeof(BaseModel));
                         MessageDispatcher.Send(MessageType.OpenDetail, newModel, param);
@@ -209,6 +215,7 @@ namespace Eos.ViewModels
             MessageDispatcher.Subscribe(MessageType.OverrideDetail, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.CopyDetail, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.OpenDetail, MessageHandler);
+            MessageDispatcher.Subscribe(MessageType.GotoDetail, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.OpenDetailSilent, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.CloseDetail, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.DeleteDetail, MessageHandler);
@@ -228,6 +235,7 @@ namespace Eos.ViewModels
             MessageDispatcher.Unsubscribe(MessageType.OverrideDetail, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.CopyDetail, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.OpenDetail, MessageHandler);
+            MessageDispatcher.Unsubscribe(MessageType.GotoDetail, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.OpenDetailSilent, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.CloseDetail, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.DeleteDetail, MessageHandler);

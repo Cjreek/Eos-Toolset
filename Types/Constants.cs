@@ -15,8 +15,10 @@ namespace Eos.Types
         public static readonly String ConfigPath;
 
         public static readonly String ExportFolder;
+        public static readonly String Export2DAFolder;
         public static readonly String ExportTLKFolder;
         public static readonly String ExportHAKFolder;
+        public static readonly String ExportIncludeFolder;
 
         public static readonly String ProjectFileExtension;
 
@@ -93,8 +95,10 @@ namespace Eos.Types
             BaseResourcePath = AppDataPath + baseResourceFolder + Path.DirectorySeparatorChar;
 
             ExportFolder = @"output\";
+            Export2DAFolder = ExportFolder;
             ExportHAKFolder = ExportFolder + @"hak\";
             ExportTLKFolder = ExportFolder + @"tlk\";
+            ExportIncludeFolder = ExportFolder + @"include\";
 
             ProjectFileExtension = ".eosproj";
 

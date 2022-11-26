@@ -17,11 +17,12 @@
         xmlns:tlk="clr-namespace:Eos.Nwn.Tlk"
         xmlns:models="clr-namespace:Eos.Models"
         xmlns:tables="clr-namespace:Eos.Models.Tables"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         x:Name="mainWindow"
         MinHeight="300" MinWidth="500" Tag="Eos Toolset"
         Height="700" Width="1100" FontSize="16"
-        Loaded="mainWindow_Loaded">
+        Loaded="mainWindow_Loaded" Closing="mainWindow_Closing">
     <Window.Title>
         <MultiBinding StringFormat="{}{0} - {1}">
             <Binding ElementName="mainWindow" Path="Tag"/>
@@ -31,6 +32,60 @@
     <Window.DataContext>
         <vm:MainViewModel x:Name="viewModel"/>
     </Window.DataContext>
+
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding Path=CloseDetailCommand, ElementName=viewModel}" CommandParameter="{Binding ElementName=viewModel, Path=CurrentView.Data}" Key="W" Modifiers="Ctrl"/>
+        <KeyBinding Command="{Binding Path=GotoDetailCommand, ElementName=viewModel}" Key="D1" Modifiers="Ctrl">
+            <KeyBinding.CommandParameter>
+                <sys:Int32>0</sys:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Command="{Binding Path=GotoDetailCommand, ElementName=viewModel}" Key="D2" Modifiers="Ctrl">
+            <KeyBinding.CommandParameter>
+                <sys:Int32>1</sys:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Command="{Binding Path=GotoDetailCommand, ElementName=viewModel}" Key="D3" Modifiers="Ctrl">
+            <KeyBinding.CommandParameter>
+                <sys:Int32>2</sys:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Command="{Binding Path=GotoDetailCommand, ElementName=viewModel}" Key="D4" Modifiers="Ctrl">
+            <KeyBinding.CommandParameter>
+                <sys:Int32>3</sys:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Command="{Binding Path=GotoDetailCommand, ElementName=viewModel}" Key="D5" Modifiers="Ctrl">
+            <KeyBinding.CommandParameter>
+                <sys:Int32>4</sys:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Command="{Binding Path=GotoDetailCommand, ElementName=viewModel}" Key="D6" Modifiers="Ctrl">
+            <KeyBinding.CommandParameter>
+                <sys:Int32>5</sys:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Command="{Binding Path=GotoDetailCommand, ElementName=viewModel}" Key="D7" Modifiers="Ctrl">
+            <KeyBinding.CommandParameter>
+                <sys:Int32>6</sys:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Command="{Binding Path=GotoDetailCommand, ElementName=viewModel}" Key="D8" Modifiers="Ctrl">
+            <KeyBinding.CommandParameter>
+                <sys:Int32>7</sys:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Command="{Binding Path=GotoDetailCommand, ElementName=viewModel}" Key="D9" Modifiers="Ctrl">
+            <KeyBinding.CommandParameter>
+                <sys:Int32>8</sys:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Command="{Binding Path=GotoDetailCommand, ElementName=viewModel}" Key="D0" Modifiers="Ctrl">
+            <KeyBinding.CommandParameter>
+                <sys:Int32>9</sys:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+    </Window.InputBindings>
 
     <Window.Resources>
         <ResourceDictionary>
@@ -174,6 +229,10 @@
                     <!-- TabControl ItemTemplate -->
                     <DataTemplate x:Key="TabItemTemplate">
                         <StackPanel Orientation="Horizontal" Margin="0" HorizontalAlignment="Left">
+                            <StackPanel.InputBindings>
+                                <MouseBinding Command="{Binding Path=CloseDetailCommand, ElementName=viewModel}" CommandParameter="{Binding Data}" Gesture="MiddleClick" />
+                            </StackPanel.InputBindings>
+
                             <Image Source="{Binding Data.Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}" Width="16" Height="16" Margin="0,0,3,0">
                                 <Image.Style>
                                     <Style TargetType="{x:Type Image}">

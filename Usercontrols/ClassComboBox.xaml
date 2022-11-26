@@ -30,11 +30,14 @@
                     <Image Grid.Column="0" Width="16" Height="16" Source="{Binding ElementName=ucClassComboBox, Path=SelectedValue.Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}" Margin="0,0,3,0"/>
 
                     <TextBlock Grid.Column="1">
-                        <TextBlock.Text>
-                            <MultiBinding Converter="{StaticResource tlkConverterDefault}">
-                                <Binding ElementName="ucClassComboBox" Path="SelectedValue.Name"/>
-                            </MultiBinding>
-                        </TextBlock.Text>
+                        <Run>
+                            <Run.Text>
+                                <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                                    <Binding ElementName="ucClassComboBox" Path="SelectedValue.TlkDisplayName" Mode="OneWay"/>
+                                </MultiBinding>
+                            </Run.Text>
+                        </Run>
+                        <Run Text="{Binding ElementName=ucClassComboBox, Path=SelectedValue.DisplayHint, Converter={StaticResource hintConverter}, Mode=OneWay}"/>
                     </TextBlock>
                 </StackPanel>
             </Button.Content>
