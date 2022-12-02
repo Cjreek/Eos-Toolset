@@ -43,6 +43,7 @@ namespace Eos.Repositories
         private static readonly VirtualModelRepository<Appearance> appearanceVirtualRepository;
         private static readonly VirtualModelRepository<ClassPackage> classPackageVirtualRepository;
         private static readonly VirtualModelRepository<Soundset> soundsetVirtualRepository;
+        private static readonly VirtualModelRepository<Polymorph> polymorphVirtualRepository;
 
         private static readonly VirtualModelRepository<AttackBonusTable> babTableVirtualRepository;
         private static readonly VirtualModelRepository<BonusFeatsTable> bonusFeatTableVirtualRepository;
@@ -74,6 +75,7 @@ namespace Eos.Repositories
             RepositoryFactory.RegisterRepositoryClass<Soundset>(typeof(SoundsetRepository));
             RepositoryFactory.RegisterRepositoryClass<Spell>(typeof(SpellRepository));
             RepositoryFactory.RegisterRepositoryClass<Spellbook>(typeof(SpellbookRepository));
+            RepositoryFactory.RegisterRepositoryClass<Polymorph>(typeof(PolymorphRepository));
 
             resources = new ResourceRepository();
 
@@ -94,6 +96,7 @@ namespace Eos.Repositories
             appearanceVirtualRepository = new VirtualModelRepository<Appearance>(standardCategory.Appearances, project.Appearances);
             classPackageVirtualRepository = new VirtualModelRepository<ClassPackage>(standardCategory.ClassPackages, project.ClassPackages);
             soundsetVirtualRepository = new VirtualModelRepository<Soundset>(standardCategory.Soundsets, project.Soundsets);
+            polymorphVirtualRepository = new VirtualModelRepository<Polymorph>(standardCategory.Polymorphs, project.Polymorphs);
 
             babTableVirtualRepository = new VirtualModelRepository<AttackBonusTable>(standardCategory.AttackBonusTables, project.AttackBonusTables);
             bonusFeatTableVirtualRepository = new VirtualModelRepository<BonusFeatsTable>(standardCategory.BonusFeatTables, project.BonusFeatTables);
@@ -166,7 +169,7 @@ namespace Eos.Repositories
                         return varValue.DataType?.To2DA(varValue.Value);
                     return null;
                 });
-
+             
             DataTypeToJsonDelegate modelToJson = o => ((BaseModel?)o)?.ToJsonRef();
             AddDataType(Guid.Parse("75a47130-999f-46b3-ac79-0e8e9ca48344"), "Race", typeof(Race), modelToJson, json => JsonUtils.CreateRefFromJson<Race>((JsonObject?)json), o => Project.Races.Get2DAIndex((Race?)o));
             AddDataType(Guid.Parse("8541fb58-1534-464d-baab-0384381cc506"), "Class", typeof(CharacterClass), modelToJson, json => JsonUtils.CreateRefFromJson<CharacterClass>((JsonObject?)json), o => Project.Classes.Get2DAIndex((CharacterClass?)o));
@@ -180,6 +183,7 @@ namespace Eos.Repositories
 
             AddDataType(Guid.Parse("80b538dc-7e6a-40c7-830a-05bdac2fe3a4"), "Appearance", typeof(Appearance), modelToJson, json => JsonUtils.CreateRefFromJson<Appearance>((JsonObject?)json), o => Project.Appearances.Get2DAIndex((Appearance?)o));
             AddDataType(Guid.Parse("8fb225be-dca3-4dce-bd38-fbde34e6fce1"), "Soundset", typeof(Soundset), modelToJson, json => JsonUtils.CreateRefFromJson<Soundset>((JsonObject?)json), o => Project.Soundsets.Get2DAIndex((Soundset?)o));
+            AddDataType(Guid.Parse("0de3877c-ec2d-4f05-86ee-7c7ef26d7df7"), "Polymorph", typeof(Polymorph), modelToJson, json => JsonUtils.CreateRefFromJson<Polymorph>((JsonObject?)json), o => Project.Polymorphs.Get2DAIndex((Polymorph?)o));
             AddDataType(Guid.Parse("3bffa036-db5f-4946-ae66-ed4c31a29830"), "Class Package", typeof(ClassPackage), modelToJson, json => JsonUtils.CreateRefFromJson<ClassPackage>((JsonObject?)json), o => Project.ClassPackages.Get2DAIndex((ClassPackage?)o));
 
             //AddDataType(Guid.Parse("5045137d-9b31-47e7-8391-2c9f0b4dd4eb"), "BAB Table", typeof(AttackBonusTable), modelToJson, json => JsonUtils.CreateRefFromJson<AttackBonusTable>((JsonObject?)json), o => ((AttackBonusTable?)o)?.Name.ToUpper());
@@ -254,6 +258,7 @@ namespace Eos.Repositories
         public static VirtualModelRepository<Appearance> Appearances { get { return appearanceVirtualRepository; } }
         public static VirtualModelRepository<ClassPackage> ClassPackages { get { return classPackageVirtualRepository; } }
         public static VirtualModelRepository<Soundset> Soundsets { get { return soundsetVirtualRepository; } }
+        public static VirtualModelRepository<Polymorph> Polymorphs { get { return polymorphVirtualRepository; } }
 
         public static VirtualModelRepository<AttackBonusTable> AttackBonusTables { get { return babTableVirtualRepository; } }
         public static VirtualModelRepository<BonusFeatsTable> BonusFeatTables { get { return bonusFeatTableVirtualRepository; } }
@@ -302,6 +307,7 @@ namespace Eos.Repositories
             Standard.Appearances.LoadFromFile(Constants.AppearancesFilePath);
             Standard.ClassPackages.LoadFromFile(Constants.ClassPackagesFilePath);
             Standard.Soundsets.LoadFromFile(Constants.SoundsetsFilePath);
+            Standard.Polymorphs.LoadFromFile(Constants.PolymorphsFilePath);
 
             Standard.AttackBonusTables.LoadFromFile(Constants.AttackBonusTablesFilePath);
             Standard.BonusFeatTables.LoadFromFile(Constants.BonusFeatTablesFilePath);
@@ -328,6 +334,7 @@ namespace Eos.Repositories
             Standard.Appearances.ResolveReferences();
             Standard.ClassPackages.ResolveReferences();
             Standard.Soundsets.ResolveReferences();
+            Standard.Polymorphs.ResolveReferences();
 
             Standard.AttackBonusTables.ResolveReferences();
             Standard.BonusFeatTables.ResolveReferences();

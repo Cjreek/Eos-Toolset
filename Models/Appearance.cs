@@ -1,4 +1,5 @@
 ﻿using Eos.Nwn.Tlk;
+using Eos.Repositories;
 using Eos.Types;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,17 @@ namespace Eos.Models
     public class Appearance : BaseModel
     {
         public TLKStringSet Name { get; set; } = new TLKStringSet();
+
+        protected override TLKStringSet? GetTlkDisplayName()
+        {
+            var modelOverride = (Appearance?)MasterRepository.Project.GetOverride(this);
+            return modelOverride?.Name ?? this.Name;
+        }
+
+        protected override String GetLabel()
+        {
+            return Name;
+        }
 
         public override void FromJson(JsonObject json)
         {

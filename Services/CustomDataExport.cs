@@ -10,6 +10,7 @@ using Eos.Types;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
@@ -1298,6 +1299,78 @@ namespace Eos.Services
             }
         }
 
+        private void ExportPolymorphs(EosProject project)
+        {
+            if (project.Polymorphs.Count == 0) return;
+
+            var polymorph2da = Load2da("polymorph");
+            if (polymorph2da != null)
+            {
+                if (project.ExportLowercaseFilenames)
+                {
+                    polymorph2da.Columns.SetLowercase("Portrait");
+                    polymorph2da.Columns.SetLowercase("CreatureWeapon1");
+                    polymorph2da.Columns.SetLowercase("CreatureWeapon2");
+                    polymorph2da.Columns.SetLowercase("CreatureWeapon3");
+                    polymorph2da.Columns.SetLowercase("HideItem");
+                    polymorph2da.Columns.SetLowercase("EQUIPPED");
+                }
+
+                AddExtensionColumns(polymorph2da, project.Polymorphs.Extensions);
+                foreach (var polymorph in project.Polymorphs.OrderBy(polymorph => polymorph?.Index))
+                {
+                    if (polymorph != null)
+                    {
+                        var index = -1;
+                        if (polymorph.Overrides != null)
+                            index = MasterRepository.Standard.Polymorphs.GetByID(polymorph.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.Polymorphs.GetCustomDataStartIndex() + polymorph.Index >= polymorph2da.Count)
+                            {
+                                polymorph2da.AddRecord();
+                            }
+
+                            index = project.Polymorphs.GetCustomDataStartIndex() + (polymorph.Index ?? 0);
+                        }
+
+                        var record = polymorph2da[index];
+                        record.Set("Name", polymorph.Name);
+                        record.Set("AppearanceType", project.Appearances.Get2DAIndex(polymorph.Appearance));
+                        record.Set("RacialType", project.Races.Get2DAIndex(polymorph.RacialType));
+                        //record.Set("PortraitId", project.Portraits.Get2DAIndex(polymorph.Portrait));
+                        if (record.AsString("Portrait") != polymorph.PortraitResRef)
+                            record.Set("PortraitId", null);
+                        record.Set("Portrait", polymorph.PortraitResRef);
+                        record.Set("CreatureWeapon1", polymorph.CreatureWeapon1);
+                        record.Set("CreatureWeapon2", polymorph.CreatureWeapon2);
+                        record.Set("CreatureWeapon3", polymorph.CreatureWeapon3);
+                        record.Set("HideItem", polymorph.HideItem);
+                        record.Set("EQUIPPED", polymorph.MainHandItem);
+                        record.Set("STR", polymorph.Strength);
+                        record.Set("CON", polymorph.Constitution);
+                        record.Set("DEX", polymorph.Dexterity);
+                        record.Set("NATURALACBONUS", polymorph.NaturalACBonus != 0 ? polymorph.NaturalACBonus : null);
+                        record.Set("HPBONUS", polymorph.HPBonus != 0 ? polymorph.HPBonus : null);
+                        //record.Set("SoundSet", project.Soundsets.Get2DAIndex(polymorph.Soundset));
+                        record.Set("SPELL1", project.Spells.Get2DAIndex(polymorph.Spell1));
+                        record.Set("SPELL2", project.Spells.Get2DAIndex(polymorph.Spell2));
+                        record.Set("SPELL3", project.Spells.Get2DAIndex(polymorph.Spell3));
+                        record.Set("MergeW", polymorph.MergeWeapon ? polymorph.MergeWeapon : null);
+                        record.Set("MergeI", polymorph.MergeAccessories ? polymorph.MergeAccessories : null);
+                        record.Set("MergeA", polymorph.MergeArmor ? polymorph.MergeArmor : null);
+
+                        WriteExtensionValues(record, polymorph.ExtensionValues);
+                    }
+                }
+
+                var filename = project.Export2daFolder + "polymorph.2da";
+                polymorph2da.Save(filename);
+
+                AddHAKResource("polymorph", NWNResourceType.TWODA, filename);
+            }
+        }
+
         private void ExportSoundsets(EosProject project)
         {
             if (project.Soundsets.Count == 0) return;
@@ -1627,6 +1700,7 @@ namespace Eos.Services
             ExportSoundsets(project);
             ExportSpells(project);
             ExportAreaEffects(project);
+            ExportPolymorphs(project);
 
             ExportCustomObjects(project);
 

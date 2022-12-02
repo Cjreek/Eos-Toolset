@@ -410,6 +410,16 @@
                         </Frame>
                     </DataTemplate>
 
+                    <DataTemplate DataType="{x:Type vm:PolymorphViewModel}">
+                        <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                            <Frame.Content>
+                                <view:PolymorphView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                            </Frame.Content>
+                        </Frame>
+                    </DataTemplate>
+
                     <!--Tables-->
 
                     <DataTemplate DataType="{x:Type vm:FeatsTableViewModel}">
@@ -707,6 +717,7 @@
                         <TreeViewItem Header="Poisons" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Poisons}"/>
                         <TreeViewItem Header="Area Effects" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=AreaEffects}"/>
                         <TreeViewItem Header="Soundsets" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Soundsets}"/>
+                        <TreeViewItem Header="Polymorphs" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Polymorphs}"/>
 
                         <TreeViewItem Header="Tables" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" IsExpanded="True">
                             <TreeViewItem Header="Racial Feats" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=RacialFeatsTables}"/>
@@ -989,6 +1000,14 @@
                                 </TextBlock>
                             </TreeViewItem.Header>
                         </TreeViewItem>
+                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Polymorphs}" Tag="{x:Type models:Polymorph}">
+                            <TreeViewItem.Header>
+                                <TextBlock>
+                                    <Run Text="Polymorphs"/>
+                                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Polymorphs, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                </TextBlock>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
 
                         <TreeViewItem Header="Tables" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" IsExpanded="True">
                             <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=RacialFeatsTables}" Tag="{x:Type tables:RacialFeatsTable}">
@@ -1125,6 +1144,13 @@
                                     </i:Interaction.Triggers>
                                 </TreeViewItem>
                                 <TreeViewItem Header="Poison" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Poisons.Extensions}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseDoubleClick">
+                                            <i:InvokeCommandAction Command="{Binding Path=OpenDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TreeViewItem>
+                                <TreeViewItem Header="Polymorph" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Polymorphs.Extensions}">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDoubleClick">
                                             <i:InvokeCommandAction Command="{Binding Path=OpenDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>

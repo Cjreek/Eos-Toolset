@@ -39,6 +39,8 @@ namespace Eos.ViewModels
                 return new ClassPackageViewModel(classPackage);
             if (model is Soundset soundset)
                 return new SoundsetViewModel(soundset);
+            if (model is Polymorph polymorph)
+                return new PolymorphViewModel(polymorph);
 
             if (model is FeatsTable featsTable)
                 return new FeatsTableViewModel(featsTable);

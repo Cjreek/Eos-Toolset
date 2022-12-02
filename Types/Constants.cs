@@ -36,6 +36,7 @@ namespace Eos.Types
         public static readonly String AppearancesFilename;
         public static readonly String ClassPackagesFilename;
         public static readonly String SoundsetsFilename;
+        public static readonly String PolymorphsFilename;
 
         public static readonly String AttackBonusTablesFilename;
         public static readonly String BonusFeatTablesFilename;
@@ -68,6 +69,7 @@ namespace Eos.Types
         public static readonly String AppearancesFilePath;
         public static readonly String ClassPackagesFilePath;
         public static readonly String SoundsetsFilePath;
+        public static readonly String PolymorphsFilePath;
 
         public static readonly String AttackBonusTablesFilePath;
         public static readonly String BonusFeatTablesFilePath;
@@ -116,6 +118,7 @@ namespace Eos.Types
             AppearancesFilename = "appearances.json";
             ClassPackagesFilename = "packages.json";
             SoundsetsFilename = "soundsets.json";
+            PolymorphsFilename = "polymorphs.json";
 
             AttackBonusTablesFilename = "tables_bab.json";
             BonusFeatTablesFilename = "tables_bonusfeats.json";
@@ -148,6 +151,7 @@ namespace Eos.Types
             AppearancesFilePath = BaseDataPath + AppearancesFilename;
             ClassPackagesFilePath = BaseDataPath + ClassPackagesFilename;
             SoundsetsFilePath = BaseDataPath + SoundsetsFilename;
+            PolymorphsFilePath = BaseDataPath + PolymorphsFilename;
 
             AttackBonusTablesFilePath = BaseDataPath + AttackBonusTablesFilename;
             BonusFeatTablesFilePath = BaseDataPath + BonusFeatTablesFilename;

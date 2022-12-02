@@ -55,6 +55,7 @@ namespace Eos.Repositories
         private readonly ModelRepository<Appearance> appearanceRepository;
         private readonly ModelRepository<ClassPackage> classPackageRepository;
         private readonly ModelRepository<Soundset> soundsetRepository;
+        private readonly ModelRepository<Polymorph> polymorphRepository;
 
         private readonly ModelRepository<AttackBonusTable> attackBonusTableRepository;
         private readonly ModelRepository<BonusFeatsTable> bonusFeatTableRepository;
@@ -98,6 +99,7 @@ namespace Eos.Repositories
             InitRepository(out appearanceRepository, nameof(Appearances));
             InitRepository(out classPackageRepository, nameof(ClassPackages));
             InitRepository(out soundsetRepository, nameof(Soundsets));
+            InitRepository(out polymorphRepository, nameof(Polymorphs));
 
             InitRepository(out attackBonusTableRepository, nameof(AttackBonusTables));
             InitRepository(out bonusFeatTableRepository, nameof(BonusFeatTables));
@@ -130,6 +132,7 @@ namespace Eos.Repositories
         public ModelRepository<Appearance> Appearances { get { return appearanceRepository; } }
         public ModelRepository<ClassPackage> ClassPackages { get { return classPackageRepository; } }
         public ModelRepository<Soundset> Soundsets { get { return soundsetRepository; } }
+        public ModelRepository<Polymorph> Polymorphs { get { return polymorphRepository; } }
 
         public ModelRepository<AttackBonusTable> AttackBonusTables { get { return attackBonusTableRepository; } }
         public ModelRepository<BonusFeatsTable> BonusFeatTables { get { return bonusFeatTableRepository; } }
@@ -208,6 +211,7 @@ namespace Eos.Repositories
             Appearances.Clear();
             ClassPackages.Clear();
             Soundsets.Clear();
+            Polymorphs.Clear();
 
             AttackBonusTables.Clear();
             BonusFeatTables.Clear();

@@ -966,6 +966,45 @@ namespace Eos.Services
             }
         }
 
+        private void ImportPolymorphs()
+        {
+            var polymorph2da = Load2da("polymorph");
+
+            Standard.Polymorphs.Clear();
+            for (int i = 0; i < polymorph2da.Count; i++)
+            {
+                var tmpPolymorph = new Polymorph();
+                tmpPolymorph.ID = GenerateGuid("polymorph", i);
+                tmpPolymorph.Index = i;
+
+                if (polymorph2da[i].IsNull("Name")) continue;
+                tmpPolymorph.Name = polymorph2da[i].AsString("Name") ?? "";
+                tmpPolymorph.Appearance = CreateRef<Appearance>(polymorph2da[i].AsInteger("AppearanceType"));
+                tmpPolymorph.RacialType = CreateRef<Race>(polymorph2da[i].AsInteger("RacialType"));
+                //tmpPolymorph.Portrait = CreateRef<Portrait>(polymorph2da[i].AsInteger("PortraitId"));
+                tmpPolymorph.PortraitResRef = polymorph2da[i].AsString("Portrait") ?? "";
+                tmpPolymorph.CreatureWeapon1 = polymorph2da[i].AsString("CreatureWeapon1");
+                tmpPolymorph.CreatureWeapon1 = polymorph2da[i].AsString("CreatureWeapon2");
+                tmpPolymorph.CreatureWeapon1 = polymorph2da[i].AsString("CreatureWeapon3");
+                tmpPolymorph.HideItem = polymorph2da[i].AsString("HideItem");
+                tmpPolymorph.MainHandItem = polymorph2da[i].AsString("EQUIPPED");
+                tmpPolymorph.Strength = polymorph2da[i].AsInteger("STR");
+                tmpPolymorph.Constitution = polymorph2da[i].AsInteger("CON");
+                tmpPolymorph.Dexterity = polymorph2da[i].AsInteger("DEX");
+                tmpPolymorph.NaturalACBonus = polymorph2da[i].AsInteger("NATURALACBONUS");
+                tmpPolymorph.HPBonus = polymorph2da[i].AsInteger("HPBONUS");
+                //tmpPolymorph.Soundset = CreateRef<Soundset>(polymorph2da[i].AsInteger("SoundSet"));
+                tmpPolymorph.Spell1 = CreateRef<Spell>(polymorph2da[i].AsInteger("SPELL1"));
+                tmpPolymorph.Spell2 = CreateRef<Spell>(polymorph2da[i].AsInteger("SPELL2"));
+                tmpPolymorph.Spell3 = CreateRef<Spell>(polymorph2da[i].AsInteger("SPELL3"));
+                tmpPolymorph.MergeWeapon = polymorph2da[i].AsBoolean("MergeW");
+                tmpPolymorph.MergeAccessories = polymorph2da[i].AsBoolean("MergeI");
+                tmpPolymorph.MergeArmor = polymorph2da[i].AsBoolean("MergeA");
+
+                Standard.Polymorphs.Add(tmpPolymorph);
+            }
+        }
+
         private void ImportAppearances()
         {
             var appearance2da = Load2da("appearance");
@@ -1061,6 +1100,19 @@ namespace Eos.Services
                 feat.RequiredSkill2 = SolveInstance(feat.RequiredSkill2, Standard.Skills);
                 feat.SuccessorFeat = SolveInstance(feat.SuccessorFeat, Standard.Feats);
                 feat.MinLevelClass = SolveInstance(feat.MinLevelClass, Standard.Classes);
+            }
+
+            // Polymorphs
+            foreach (var polymorph in Standard.Polymorphs)
+            {
+                if (polymorph == null) continue;
+                polymorph.Appearance = SolveInstance(polymorph.Appearance, Standard.Appearances);
+                polymorph.RacialType = SolveInstance(polymorph.RacialType, Standard.Races);
+                //polymorph.Portrait = SolveInstance(polymorph.Portrait, Standard.Portraits);
+                //polymorph.Soundset = SolveInstance(polymorph.Soundset, Standard.Soundsets);
+                polymorph.Spell1 = SolveInstance(polymorph.Spell1, Standard.Spells);
+                polymorph.Spell2 = SolveInstance(polymorph.Spell2, Standard.Spells);
+                polymorph.Spell3 = SolveInstance(polymorph.Spell3, Standard.Spells);
             }
 
             // FeatsTable
@@ -1162,6 +1214,7 @@ namespace Eos.Services
             Standard.Appearances.SaveToFile(Constants.AppearancesFilePath);
             Standard.ClassPackages.SaveToFile(Constants.ClassPackagesFilePath);
             Standard.Soundsets.SaveToFile(Constants.SoundsetsFilePath);
+            Standard.Polymorphs.SaveToFile(Constants.PolymorphsFilePath);
 
             Standard.AttackBonusTables.SaveToFile(Constants.AttackBonusTablesFilePath);
             Standard.BonusFeatTables.SaveToFile(Constants.BonusFeatTablesFilePath);
@@ -1235,6 +1288,7 @@ namespace Eos.Services
             ImportAppearances();
             ImportClassPackages();
             ImportSoundsets();
+            ImportPolymorphs();
 
             ImportText();
 
