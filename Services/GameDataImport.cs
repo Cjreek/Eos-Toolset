@@ -984,8 +984,8 @@ namespace Eos.Services
                 //tmpPolymorph.Portrait = CreateRef<Portrait>(polymorph2da[i].AsInteger("PortraitId"));
                 tmpPolymorph.PortraitResRef = polymorph2da[i].AsString("Portrait") ?? "";
                 tmpPolymorph.CreatureWeapon1 = polymorph2da[i].AsString("CreatureWeapon1");
-                tmpPolymorph.CreatureWeapon1 = polymorph2da[i].AsString("CreatureWeapon2");
-                tmpPolymorph.CreatureWeapon1 = polymorph2da[i].AsString("CreatureWeapon3");
+                tmpPolymorph.CreatureWeapon2 = polymorph2da[i].AsString("CreatureWeapon2");
+                tmpPolymorph.CreatureWeapon3 = polymorph2da[i].AsString("CreatureWeapon3");
                 tmpPolymorph.HideItem = polymorph2da[i].AsString("HideItem");
                 tmpPolymorph.MainHandItem = polymorph2da[i].AsString("EQUIPPED");
                 tmpPolymorph.Strength = polymorph2da[i].AsInteger("STR");

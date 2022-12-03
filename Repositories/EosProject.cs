@@ -170,6 +170,7 @@ namespace Eos.Repositories
 
             ClassPackages.LoadFromFile(ProjectFolder + Constants.ClassPackagesFilename);
             Soundsets.LoadFromFile(ProjectFolder + Constants.SoundsetsFilename);
+            Polymorphs.LoadFromFile(ProjectFolder + Constants.PolymorphsFilename);
 
             AttackBonusTables.LoadFromFile(ProjectFolder + Constants.AttackBonusTablesFilename);
             BonusFeatTables.LoadFromFile(ProjectFolder + Constants.BonusFeatTablesFilename);
@@ -202,6 +203,7 @@ namespace Eos.Repositories
             Appearances.ResolveReferences();
             ClassPackages.ResolveReferences();
             Soundsets.ResolveReferences();
+            Polymorphs.ResolveReferences();
 
             AttackBonusTables.ResolveReferences();
             BonusFeatTables.ResolveReferences();
@@ -245,6 +247,7 @@ namespace Eos.Repositories
 
             ClassPackages.SaveToFile(ProjectFolder + Constants.ClassPackagesFilename);
             Soundsets.SaveToFile(ProjectFolder + Constants.SoundsetsFilename);
+            Polymorphs.SaveToFile(ProjectFolder + Constants.PolymorphsFilename);
 
             AttackBonusTables.SaveToFile(ProjectFolder + Constants.AttackBonusTablesFilename);
             BonusFeatTables.SaveToFile(ProjectFolder + Constants.BonusFeatTablesFilename);
