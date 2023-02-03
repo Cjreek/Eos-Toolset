@@ -363,14 +363,17 @@ namespace Eos.Nwn.TwoDimensionalArray
 
         public void Load(String filename)
         {
-            var fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
-            try
+            if (File.Exists(filename))
             {
-                Load(fs);
-            }
-            finally
-            {
-                fs.Close();
+                var fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+                try
+                {
+                    Load(fs);
+                }
+                finally
+                {
+                    fs.Close();
+                }
             }
         }
 

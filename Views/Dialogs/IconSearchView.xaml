@@ -47,7 +47,7 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Margin="-3,0,0,0">
-                                    <Image Width="16" Height="16" Source="{Binding Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}" Margin="0,0,3,0"/>
+                                    <Image Width="32" Height="32" Source="{Binding Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}" Margin="0,0,3,0"/>
                                     <TextBlock Text="{Binding}"/>
                                 </StackPanel>
                             </DataTemplate>

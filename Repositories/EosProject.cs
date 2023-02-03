@@ -123,6 +123,8 @@ namespace Eos.Repositories
             if (!ExportTlkFolder.EndsWith(Path.DirectorySeparatorChar)) ExportTlkFolder += Path.DirectorySeparatorChar;
             if (!Export2daFolder.EndsWith(Path.DirectorySeparatorChar)) Export2daFolder += Path.DirectorySeparatorChar;
             if (!ExportIncludeFolder.EndsWith(Path.DirectorySeparatorChar)) ExportIncludeFolder += Path.DirectorySeparatorChar;
+
+            Directory.SetCurrentDirectory(ProjectFolder);
         }
 
         private void SaveProjectFile(string projectFilename)
@@ -224,7 +226,7 @@ namespace Eos.Repositories
 
             IsLoaded = true;
             EosConfig.LastProject = projectFilename;
-            MasterRepository.LoadExternalResources(ProjectFolder + Constants.ExternalFilesPath);
+            MasterRepository.LoadExternalResources(ExternalFolder);
         }
 
         public void Save()

@@ -98,26 +98,64 @@ namespace Eos.Repositories
         {
             switch (extension)
             {
+                case ".bmp": return NWNResourceType.BMP;
                 case ".tga": return NWNResourceType.TGA;
+                case ".wav": return NWNResourceType.WAV;
+                case ".plt": return NWNResourceType.PLT;
+                case ".ini": return NWNResourceType.INI;
+                case ".txt": return NWNResourceType.TXT;
+                case ".mdl": return NWNResourceType.MDL;
+                case ".nss": return NWNResourceType.NSS;
+                case ".ncs": return NWNResourceType.NCS;
+                case ".are": return NWNResourceType.ARE;
+                case ".set": return NWNResourceType.SET;
+                case ".ifo": return NWNResourceType.IFO;
+                case ".bic": return NWNResourceType.BIC;
+                case ".wok": return NWNResourceType.WOK;
                 case ".2da": return NWNResourceType.TWODA;
+                case ".txi": return NWNResourceType.TXI;
+                case ".git": return NWNResourceType.GIT;
+                case ".uti": return NWNResourceType.UTI;
+                case ".utc": return NWNResourceType.UTC;
+                case ".dlg": return NWNResourceType.DLG;
+                case ".itp": return NWNResourceType.ITP;
+                case ".utt": return NWNResourceType.UTT;
+                case ".dds": return NWNResourceType.DDS;
+                case ".uts": return NWNResourceType.UTS;
+                case ".ltr": return NWNResourceType.LTR;
+                case ".gff": return NWNResourceType.GFF;
+                case ".fac": return NWNResourceType.FAC;
+                case ".ute": return NWNResourceType.UTE;
+                case ".utd": return NWNResourceType.UTD;
+                case ".utp": return NWNResourceType.UTP;
+                case ".ssf": return NWNResourceType.SSF;
+                case ".ndb": return NWNResourceType.NDB;
+                case ".ptm": return NWNResourceType.PTM;
+                case ".ptt": return NWNResourceType.PTT;
             }
 
-            return NWNResourceType.TXT;
+            return NWNResourceType.INVALID_RESOURCE_TYPE;
         }
 
         public void LoadExternalResources(String externalBasePath)
         {
             externalResources.Clear();
-            foreach (var file in Directory.EnumerateFiles(externalBasePath, "*.*", SearchOption.AllDirectories))
+            if (Directory.Exists(externalBasePath))
             {
-                var ext = Path.GetExtension(file).ToLower();
-                var resType = ExtensionToResourceType(ext);
-                var filename = Path.GetFileName(file);
-                var resRef = filename.Substring(0, filename.Length - ext.Length);
+                foreach (var file in Directory.EnumerateFiles(externalBasePath, "*.*", SearchOption.AllDirectories))
+                {
+                    var ext = Path.GetExtension(file).ToLower();
+                    var resType = ExtensionToResourceType(ext);
+                    if (resType != NWNResourceType.INVALID_RESOURCE_TYPE)
+                    {
+                        var filename = Path.GetFileName(file);
+                        var resRef = filename.Substring(0, filename.Length - ext.Length);
 
-                AddResource(NWNResourceSource.External, resRef, resType, file, true);
-                if (!filesByTypeDict[resType].Contains(resRef))
-                    filesByTypeDict[resType].Add(resRef);
+                        AddResource(NWNResourceSource.External, resRef, resType, file, true);
+                        if (!filesByTypeDict[resType].Contains(resRef))
+                            filesByTypeDict[resType].Add(resRef);
+                    }
+                }
             }
         }
 

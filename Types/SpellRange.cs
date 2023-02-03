@@ -17,7 +17,7 @@ namespace Eos.Types
         S,
         [DisplayName("Medium (20m)")]
         M,
-        [DisplayName("Large (40m)")]
+        [DisplayName("Long (40m)")]
         L
     }
 }

@@ -20,7 +20,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         x:Name="mainWindow"
-        MinHeight="300" MinWidth="500" Tag="Eos Toolset"
+        MinHeight="300" MinWidth="500" Tag="Eos Toolset v0.50"
         Height="700" Width="1100" FontSize="16"
         Loaded="mainWindow_Loaded" Closing="mainWindow_Closing">
     <Window.Title>
@@ -706,8 +706,8 @@
                         </TreeViewItem>
                         <TreeViewItem Header="Feats" ToolTip="CATEGORY" ToolTipService.IsEnabled="False">
                             <TreeViewItem Header="Class/Racial" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.ClassOrRacial}"/>
-                            <TreeViewItem Header="Combat (Active)" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.CombatActive}"/>
-                            <TreeViewItem Header="Combat (Passive)" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Combat}"/>
+                            <TreeViewItem Header="Active Combat Feats" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.CombatActive}"/>
+                            <TreeViewItem Header="Combat Feats" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Combat}"/>
                             <TreeViewItem Header="Defensive" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Defensive}"/>
                             <TreeViewItem Header="Magical" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Magical}"/>
                             <TreeViewItem Header="Other" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Other}"/>
@@ -922,7 +922,7 @@
                             <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.CombatActive}" Tag="{x:Type models:Feat}">
                                 <TreeViewItem.Header>
                                     <TextBlock>
-                                        <Run Text="Combat (Active)"/>
+                                        <Run Text="Active Combat"/>
                                         <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.CombatActive, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
                                     </TextBlock>
                                 </TreeViewItem.Header>
@@ -930,7 +930,7 @@
                             <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Combat}" Tag="{x:Type models:Feat}">
                                 <TreeViewItem.Header>
                                     <TextBlock>
-                                        <Run Text="Combat (Passive)"/>
+                                        <Run Text="Combat"/>
                                         <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Combat, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
                                     </TextBlock>
                                 </TreeViewItem.Header>

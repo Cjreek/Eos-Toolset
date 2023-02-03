@@ -120,6 +120,7 @@ namespace Eos.Models.Tables
 
             this.ID = ParseGuid(json["ID"]?.GetValue<String>());
             this.Name = json["Name"]?.GetValue<String>() ?? "";
+            this.Hint = json["Hint"]?.GetValue<String>() ?? "";
             this.Overrides = ParseNullableGuid(json["Overrides"]?.GetValue<String>());
 
             var itemArr = json["Items"]?.AsArray();
@@ -143,6 +144,7 @@ namespace Eos.Models.Tables
             var tableJson = new JsonObject();
             tableJson.Add("ID", this.ID.ToString());
             tableJson.Add("Name", this.Name);
+            tableJson.Add("Hint", this.Hint);
             tableJson.Add("Overrides", this.Overrides != null ? this.Overrides.ToString() : null);
 
             var itemArr = new JsonArray();
