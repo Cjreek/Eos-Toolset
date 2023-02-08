@@ -16,7 +16,7 @@ namespace Eos.Models.Tables
 
         protected override int GetMaximumItems()
         {
-            return Int16.MaxValue;
+            return UInt16.MaxValue;
         }
 
         public IEnumerable<FeatsTableItem?> GrantedFeats => Items.Where(item => item?.FeatList == Types.FeatListType.AutomaticallyGranted && item?.GrantedOnLevel < 99)

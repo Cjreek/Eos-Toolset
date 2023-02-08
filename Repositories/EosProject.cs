@@ -75,6 +75,10 @@ namespace Eos.Repositories
         public string Export2daFolder { get; set; } = "";
         public string ExportTlkFolder { get; set; } = "";
         public string ExportIncludeFolder { get; set; } = "";
+        public string BaseTlkFile { get; set; } = "";
+        public int ExportTlkOffset { get; set; } = 0;
+
+        public bool FormatJson { get; set; } = false;
 
         public void CreateNew(string projectFolder, string name, TLKLanguage defaultLanguage)
         {
@@ -97,6 +101,9 @@ namespace Eos.Repositories
             ExportTlkFolder = ProjectFolder + Constants.ExportTLKFolder;
             Export2daFolder = ProjectFolder + Constants.Export2DAFolder;
             ExportIncludeFolder = ProjectFolder + Constants.Export2DAFolder;
+            BaseTlkFile = "";
+            ExportTlkOffset = 0;
+            FormatJson = false;
 
             var fs = new FileStream(projectFilename, FileMode.Open, FileAccess.Read);
             try
@@ -111,6 +118,9 @@ namespace Eos.Repositories
                     ExportTlkFolder = projectJson["ExportTlkFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.ExportTLKFolder;
                     Export2daFolder = projectJson["Export2daFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.Export2DAFolder;
                     ExportIncludeFolder = projectJson["ExportIncludeFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.Export2DAFolder;
+                    BaseTlkFile = projectJson["BaseTlkFile"]?.GetValue<string>() ?? "";
+                    ExportTlkOffset = projectJson["ExportTlkOffset"]?.GetValue<int>() ?? 0;
+                    FormatJson = projectJson["FormatJson"]?.GetValue<bool>() ?? false;
                 }
             }
             finally
@@ -138,6 +148,10 @@ namespace Eos.Repositories
             projectFile.Add("Export2daFolder", Export2daFolder);
             projectFile.Add("ExportTlkFolder", ExportTlkFolder);
             projectFile.Add("ExportIncludeFolder", ExportIncludeFolder);
+            projectFile.Add("BaseTlkFile", BaseTlkFile);
+            projectFile.Add("ExportTlkOffset", ExportTlkOffset);
+            projectFile.Add("FormatJson", FormatJson);
+
             File.WriteAllText(projectFilename, projectFile.ToJsonString(new JsonSerializerOptions(JsonSerializerDefaults.General) { WriteIndented = true }));
         }
 
@@ -236,39 +250,39 @@ namespace Eos.Repositories
             if (!Directory.Exists(ProjectFolder + Constants.ExternalFilesPath))
                 Directory.CreateDirectory(ProjectFolder + Constants.ExternalFilesPath);
 
-            Races.SaveToFile(ProjectFolder + Constants.RacesFilename);
-            Classes.SaveToFile(ProjectFolder + Constants.ClassesFilename);
-            Domains.SaveToFile(ProjectFolder + Constants.DomainsFilename);
-            Spells.SaveToFile(ProjectFolder + Constants.SpellsFilename);
-            Feats.SaveToFile(ProjectFolder + Constants.FeatsFilename);
-            Skills.SaveToFile(ProjectFolder + Constants.SkillsFilename);
-            Diseases.SaveToFile(ProjectFolder + Constants.DiseasesFilename);
-            Poisons.SaveToFile(ProjectFolder + Constants.PoisonsFilename);
-            Spellbooks.SaveToFile(ProjectFolder + Constants.SpellbooksFilename);
-            AreaEffects.SaveToFile(ProjectFolder + Constants.AreaEffectsFilename);
+            Races.SaveToFile(ProjectFolder + Constants.RacesFilename, FormatJson);
+            Classes.SaveToFile(ProjectFolder + Constants.ClassesFilename, FormatJson);
+            Domains.SaveToFile(ProjectFolder + Constants.DomainsFilename, FormatJson);
+            Spells.SaveToFile(ProjectFolder + Constants.SpellsFilename, FormatJson);
+            Feats.SaveToFile(ProjectFolder + Constants.FeatsFilename, FormatJson);
+            Skills.SaveToFile(ProjectFolder + Constants.SkillsFilename, FormatJson);
+            Diseases.SaveToFile(ProjectFolder + Constants.DiseasesFilename, FormatJson);
+            Poisons.SaveToFile(ProjectFolder + Constants.PoisonsFilename, FormatJson);
+            Spellbooks.SaveToFile(ProjectFolder + Constants.SpellbooksFilename, FormatJson);
+            AreaEffects.SaveToFile(ProjectFolder + Constants.AreaEffectsFilename, FormatJson);
 
-            ClassPackages.SaveToFile(ProjectFolder + Constants.ClassPackagesFilename);
-            Soundsets.SaveToFile(ProjectFolder + Constants.SoundsetsFilename);
-            Polymorphs.SaveToFile(ProjectFolder + Constants.PolymorphsFilename);
+            ClassPackages.SaveToFile(ProjectFolder + Constants.ClassPackagesFilename, FormatJson);
+            Soundsets.SaveToFile(ProjectFolder + Constants.SoundsetsFilename, FormatJson);
+            Polymorphs.SaveToFile(ProjectFolder + Constants.PolymorphsFilename, FormatJson);
 
-            AttackBonusTables.SaveToFile(ProjectFolder + Constants.AttackBonusTablesFilename);
-            BonusFeatTables.SaveToFile(ProjectFolder + Constants.BonusFeatTablesFilename);
-            FeatTables.SaveToFile(ProjectFolder + Constants.FeatTablesFilename);
-            SavingThrowTables.SaveToFile(ProjectFolder + Constants.SavingThrowTablesFilename);
-            SkillTables.SaveToFile(ProjectFolder + Constants.SkillTablesFilename);
-            PrerequisiteTables.SaveToFile(ProjectFolder + Constants.PrerequisiteTablesFilename);
-            SpellSlotTables.SaveToFile(ProjectFolder + Constants.SpellSlotTablesFilename);
-            KnownSpellsTables.SaveToFile(ProjectFolder + Constants.KnownSpellsTablesFilename);
-            StatGainTables.SaveToFile(ProjectFolder + Constants.StatGainTablesFilename);
-            RacialFeatsTables.SaveToFile(ProjectFolder + Constants.RacialFeatsTablesFilename);
+            AttackBonusTables.SaveToFile(ProjectFolder + Constants.AttackBonusTablesFilename, FormatJson);
+            BonusFeatTables.SaveToFile(ProjectFolder + Constants.BonusFeatTablesFilename, FormatJson);
+            FeatTables.SaveToFile(ProjectFolder + Constants.FeatTablesFilename, FormatJson);
+            SavingThrowTables.SaveToFile(ProjectFolder + Constants.SavingThrowTablesFilename, FormatJson);
+            SkillTables.SaveToFile(ProjectFolder + Constants.SkillTablesFilename, FormatJson);
+            PrerequisiteTables.SaveToFile(ProjectFolder + Constants.PrerequisiteTablesFilename, FormatJson);
+            SpellSlotTables.SaveToFile(ProjectFolder + Constants.SpellSlotTablesFilename, FormatJson);
+            KnownSpellsTables.SaveToFile(ProjectFolder + Constants.KnownSpellsTablesFilename, FormatJson);
+            StatGainTables.SaveToFile(ProjectFolder + Constants.StatGainTablesFilename, FormatJson);
+            RacialFeatsTables.SaveToFile(ProjectFolder + Constants.RacialFeatsTablesFilename, FormatJson);
 
-            CustomEnums.SaveToFile(ProjectFolder + Constants.CustomEnumsFilename);
-            CustomObjects.SaveToFile(ProjectFolder + Constants.CustomObjectsFilename);
+            CustomEnums.SaveToFile(ProjectFolder + Constants.CustomEnumsFilename, FormatJson);
+            CustomObjects.SaveToFile(ProjectFolder + Constants.CustomObjectsFilename, FormatJson);
 
             foreach (var template in CustomObjects)
             {
                 if (template != null)
-                    CustomObjectRepositories[template].SaveToFile(ProjectFolder + template.ResourceName + ".json");
+                    CustomObjectRepositories[template].SaveToFile(ProjectFolder + template.ResourceName + ".json", FormatJson);
             }
         }
     }

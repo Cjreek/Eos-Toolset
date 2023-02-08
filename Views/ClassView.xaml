@@ -159,7 +159,10 @@
 
                     <TextBlock Text="Default Package" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="0"/>
                     <uc:PackageComboBox SelectedValue="{Binding Data.DefaultPackage}" Grid.Row="15" Grid.Column="1" IsNullable="False"/>
-                    
+
+                    <TextBlock Text="Requirements" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="2"/>
+                    <uc:PrerequisiteComboBox SelectedValue="{Binding Data.Requirements}" Grid.Row="15" Grid.Column="3" IsNullable="True"/>
+
                     <TextBlock Text="Strength" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="17" Grid.Column="0"/>
                     <wpftk:IntegerUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="17" Grid.Column="1"/>
 

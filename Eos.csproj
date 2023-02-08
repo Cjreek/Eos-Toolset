@@ -104,6 +104,9 @@
     <Compile Update="Usercontrols\AreaEffectComboBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Usercontrols\PrerequisiteComboBox.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Usercontrols\SoundsetComboBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -205,6 +208,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Usercontrols\AreaEffectComboBox.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Usercontrols\PrerequisiteComboBox.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

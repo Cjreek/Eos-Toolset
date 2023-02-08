@@ -59,11 +59,26 @@ namespace Eos.Nwn.Tlk
             strings.Add("Bad Strref");
         }
 
-        public void Load(String tlkFile)
+        public void Load(String tlkFile, bool writeable = false)
         {
             fileStream = new FileStream(tlkFile, FileMode.Open, FileAccess.Read);
             reader = new BinaryReader(fileStream, Encoding.Latin1);
             header = BinaryHelper.Read<TlkHeader>(reader);
+
+            if (writeable)
+            {
+                int lastNonNullIndex = -1;
+                for (int i = 0; i < header.StringCount; i++)
+                {
+                    if (GetString(i) != "")
+                        lastNonNullIndex = i;
+                }
+
+                for (int i=0; i <= lastNonNullIndex; i++)
+                {
+                    strings.Add(GetString(i));
+                }
+            }
         }
 
         public String GetString(int? stringRef)
@@ -94,16 +109,32 @@ namespace Eos.Nwn.Tlk
             return cache[strRef];
         }
 
-        public int AddText(String text)
+        public int AddText(String text, bool forceAdd = false)
         {
-            var result = strings.IndexOf(text);
-            if (result == -1)
+            if (forceAdd)
             {
                 strings.Add(text);
-                result = strings.Count - 1;
+                return strings.Count - 1;
             }
+            else
+            {
+                var result = strings.IndexOf(text);
+                if (result == -1)
+                {
+                    strings.Add(text);
+                    result = strings.Count - 1;
+                }
 
-            return result;
+                return result;
+            }
+        }
+
+        public void PadTo(int nIndex)
+        {
+            while (strings.Count < nIndex)
+            {
+                AddText("", true);
+            }
         }
 
         public void Save(Stream stream)

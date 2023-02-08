@@ -8,6 +8,7 @@ using Eos.Models;
 using System.IO;
 using System.Text.Json.Nodes;
 using Eos.Models.Tables;
+using System.Text.Json;
 
 namespace Eos.Repositories
 {
@@ -190,7 +191,7 @@ namespace Eos.Repositories
             }
         }
 
-        public void SaveToFile(string filename)
+        public void SaveToFile(string filename, bool writeIndented = false)
         {
             var jsonRepo = new JsonObject();
 
@@ -210,7 +211,9 @@ namespace Eos.Repositories
             }
             jsonRepo.Add("Items", jsonArr);
 
-            File.WriteAllText(filename, jsonRepo.ToJsonString());
+            var serializeOptions = new JsonSerializerOptions();
+            serializeOptions.WriteIndented = writeIndented;
+            File.WriteAllText(filename, jsonRepo.ToJsonString(serializeOptions));
         }
 
         public void ResolveReferences()

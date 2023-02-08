@@ -18,21 +18,21 @@ using System.Windows.Shapes;
 namespace Eos.Usercontrols
 {
     /// <summary>
-    /// Interaktionslogik für SavingThrowTableComboBox.xaml
+    /// Interaktionslogik für PrerequisiteComboBox.xaml
     /// </summary>
-    public partial class SavingThrowTableComboBox : UserControl
+    public partial class PrerequisiteComboBox : UserControl
     {
-        public SavingThrowTableComboBox()
+        public PrerequisiteComboBox()
         {
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register("SelectedValue", typeof(SavingThrowTable), typeof(SavingThrowTableComboBox), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-        public static readonly DependencyProperty IsNullableProperty = DependencyProperty.Register("IsNullable", typeof(bool), typeof(SavingThrowTableComboBox), new PropertyMetadata(true));
+        public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register("SelectedValue", typeof(PrerequisiteTable), typeof(PrerequisiteComboBox), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        public static readonly DependencyProperty IsNullableProperty = DependencyProperty.Register("IsNullable", typeof(bool), typeof(PrerequisiteComboBox), new PropertyMetadata(true));
 
-        public SavingThrowTable? SelectedValue
+        public PrerequisiteTable? SelectedValue
         {
-            get { return (SavingThrowTable)GetValue(SelectedValueProperty); }
+            get { return (PrerequisiteTable)GetValue(SelectedValueProperty); }
             set { SetValue(SelectedValueProperty, value); }
         }
 
