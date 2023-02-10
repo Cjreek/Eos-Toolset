@@ -1302,6 +1302,9 @@ namespace Eos.Services
             Standard.Poisons.Sort(p => p?.Name[TLKLanguage.English].Text);
             Standard.Spellbooks.Sort(p => p?.Name);
 
+            Standard.AreaEffects.Sort(p => p?.Name);
+            Standard.Polymorphs.Sort(p => p?.Name);
+            Standard.Appearances.Sort(p => p?.Name[TLKLanguage.English].Text);
             Standard.ClassPackages.Sort(p => p?.Name[TLKLanguage.English].Text);
             Standard.Soundsets.Sort(p => p?.Name[TLKLanguage.English].Text);
 

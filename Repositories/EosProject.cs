@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace Eos.Repositories
 {
@@ -77,8 +78,8 @@ namespace Eos.Repositories
         public string ExportIncludeFolder { get; set; } = "";
         public string BaseTlkFile { get; set; } = "";
         public int ExportTlkOffset { get; set; } = 0;
-
         public bool FormatJson { get; set; } = false;
+        public bool SortCustomData { get; set; } = false;
 
         public void CreateNew(string projectFolder, string name, TLKLanguage defaultLanguage)
         {
@@ -104,6 +105,7 @@ namespace Eos.Repositories
             BaseTlkFile = "";
             ExportTlkOffset = 0;
             FormatJson = false;
+            SortCustomData = false;
 
             var fs = new FileStream(projectFilename, FileMode.Open, FileAccess.Read);
             try
@@ -121,6 +123,7 @@ namespace Eos.Repositories
                     BaseTlkFile = projectJson["BaseTlkFile"]?.GetValue<string>() ?? "";
                     ExportTlkOffset = projectJson["ExportTlkOffset"]?.GetValue<int>() ?? 0;
                     FormatJson = projectJson["FormatJson"]?.GetValue<bool>() ?? false;
+                    SortCustomData = projectJson["SortCustomData"]?.GetValue<bool>() ?? false;
                 }
             }
             finally
@@ -151,6 +154,7 @@ namespace Eos.Repositories
             projectFile.Add("BaseTlkFile", BaseTlkFile);
             projectFile.Add("ExportTlkOffset", ExportTlkOffset);
             projectFile.Add("FormatJson", FormatJson);
+            projectFile.Add("SortCustomData", SortCustomData);
 
             File.WriteAllText(projectFilename, projectFile.ToJsonString(new JsonSerializerOptions(JsonSerializerDefaults.General) { WriteIndented = true }));
         }
@@ -236,6 +240,25 @@ namespace Eos.Repositories
             {
                 if (template != null)
                     CustomObjectRepositories[template].ResolveReferences();
+            }
+
+            if (SortCustomData)
+            {
+                Races.Sort(d => d?.Name[TLKLanguage.English].Text);
+                Classes.Sort(d => d?.Name[TLKLanguage.English].Text);
+                Domains.Sort(d => d?.Name[TLKLanguage.English].Text);
+                Skills.Sort(s => s?.Name[TLKLanguage.English].Text);
+                Feats.Sort(f => f?.Name[TLKLanguage.English].Text);
+                Spells.Sort(s => s?.Name[TLKLanguage.English].Text);
+                Diseases.Sort(d => d?.Name[TLKLanguage.English].Text);
+                Poisons.Sort(p => p?.Name[TLKLanguage.English].Text);
+                Spellbooks.Sort(p => p?.Name);
+
+                Polymorphs.Sort(p => p?.Name);
+                AreaEffects.Sort(p => p?.Name);
+                Appearances.Sort(p => p?.Name[TLKLanguage.English].Text);
+                ClassPackages.Sort(p => p?.Name[TLKLanguage.English].Text);
+                Soundsets.Sort(p => p?.Name[TLKLanguage.English].Text);
             }
 
             IsLoaded = true;
