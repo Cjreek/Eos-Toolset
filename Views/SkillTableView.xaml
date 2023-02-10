@@ -46,35 +46,37 @@
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
         <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
 
-        <ListView Grid.Row="3" Grid.Column="1"  ItemsSource="{Binding Data.Items}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Skill" Width="300">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <uc:SkillComboBox SelectedValue="{Binding Path=Skill}" IsNullable="False" Margin="-6,-1,-6,-3"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+        <uc:ResetIsEnabled Grid.Row="3" Grid.Column="1">
+            <ListView ItemsSource="{Binding Data.Items}" IsTabStop="{Binding Data.IsReadonly}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Skill" Width="300">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <uc:SkillComboBox SelectedValue="{Binding Path=Skill}" IsNullable="False" Margin="-6,-1,-6,-3"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
 
-                    <GridViewColumn Header="Class?" Width="50">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox VerticalAlignment="Top" HorizontalAlignment="Center" IsChecked="{Binding IsClassSkill}" Margin="-6,-1,-6,-5"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                        <GridViewColumn Header="Class?" Width="50">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox VerticalAlignment="Top" HorizontalAlignment="Center" IsChecked="{Binding IsClassSkill}" Margin="-6,-1,-6,-5"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
 
-                    <GridViewColumn Header="" Width="25">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <uc:DeleteButton Command="{Binding ElementName=page, Path=DataContext.DeleteSkillItemCommand}" CommandParameter="{Binding}" Margin="-4,-10,-6,-11"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+                        <GridViewColumn Header="" Width="25">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <uc:DeleteButton Command="{Binding ElementName=page, Path=DataContext.DeleteSkillItemCommand}" CommandParameter="{Binding}" Margin="-4,-10,-6,-11"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </uc:ResetIsEnabled>
 
         <Button Grid.Row="4" Grid.Column="1" Content="Add Skill" Width="150" Margin="2,5,0,0" HorizontalAlignment="Left" Command="{Binding AddSkillItemCommand}"/>
     </Grid>

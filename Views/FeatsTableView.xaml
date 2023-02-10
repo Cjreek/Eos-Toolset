@@ -89,16 +89,18 @@
 
                 <TextBlock Text="Granted Feats" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-                <ListView Grid.Row="1" ItemsSource="{Binding Data.GrantedFeats}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Level" Width="50" CellTemplate="{StaticResource grantedCellTemplate}"/>
-                            <GridViewColumn Header="Feat" Width="300" CellTemplate="{StaticResource featCellTemplate}"/>
-                            <GridViewColumn Header="Menu" Width="120" CellTemplate="{StaticResource menuCellTemplate}"/>
-                            <GridViewColumn Header="" Width="25" CellTemplate="{StaticResource deleteCellTemplate}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <uc:ResetIsEnabled Grid.Row="1">
+                    <ListView ItemsSource="{Binding Data.GrantedFeats}" IsTabStop="{Binding Data.IsReadonly}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Level" Width="50" CellTemplate="{StaticResource grantedCellTemplate}"/>
+                                <GridViewColumn Header="Feat" Width="300" CellTemplate="{StaticResource featCellTemplate}"/>
+                                <GridViewColumn Header="Menu" Width="120" CellTemplate="{StaticResource menuCellTemplate}"/>
+                                <GridViewColumn Header="" Width="25" CellTemplate="{StaticResource deleteCellTemplate}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </uc:ResetIsEnabled>
 
                 <Button Grid.Row="2" Content="Add Feat" Width="150" Margin="0,5,0,0" HorizontalAlignment="Left" Command="{Binding AddFeatItemCommand}" CommandParameter="{x:Static types:FeatListType.AutomaticallyGranted}"/>
             </Grid>
@@ -115,16 +117,18 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="Available General Feats" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
-                <ListView Grid.Row="1" ItemsSource="{Binding Data.GeneralFeats}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Min. Level" Width="75" CellTemplate="{StaticResource grantedCellTemplate}"/>
-                            <GridViewColumn Header="Feat" Width="300" CellTemplate="{StaticResource featCellTemplate}"/>
-                            <GridViewColumn Header="Menu" Width="120" CellTemplate="{StaticResource menuCellTemplate}"/>
-                            <GridViewColumn Header="" Width="25" CellTemplate="{StaticResource deleteCellTemplate}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <uc:ResetIsEnabled Grid.Row="1">
+                    <ListView ItemsSource="{Binding Data.GeneralFeats}" IsTabStop="{Binding Data.IsReadonly}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Min. Level" Width="75" CellTemplate="{StaticResource grantedCellTemplate}"/>
+                                <GridViewColumn Header="Feat" Width="300" CellTemplate="{StaticResource featCellTemplate}"/>
+                                <GridViewColumn Header="Menu" Width="120" CellTemplate="{StaticResource menuCellTemplate}"/>
+                                <GridViewColumn Header="" Width="25" CellTemplate="{StaticResource deleteCellTemplate}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </uc:ResetIsEnabled>
 
                 <Button Grid.Row="2" Content="Add Feat" Width="150" Margin="0,5,0,0" HorizontalAlignment="Left" Command="{Binding AddFeatItemCommand}" CommandParameter="{x:Static types:FeatListType.GeneralFeat}"/>
             </Grid>
@@ -142,16 +146,18 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="Available General &amp; Bonus Feats" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
-                <ListView Grid.Row="1" ItemsSource="{Binding Data.GeneralOrBonusFeats}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Min. Level" Width="75" CellTemplate="{StaticResource grantedCellTemplate}"/>
-                            <GridViewColumn Header="Feat" Width="300" CellTemplate="{StaticResource featCellTemplate}"/>
-                            <GridViewColumn Header="Menu" Width="120" CellTemplate="{StaticResource menuCellTemplate}"/>
-                            <GridViewColumn Header="" Width="25" CellTemplate="{StaticResource deleteCellTemplate}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <uc:ResetIsEnabled Grid.Row="1">
+                    <ListView ItemsSource="{Binding Data.GeneralOrBonusFeats}" IsTabStop="{Binding Data.IsReadonly}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Min. Level" Width="75" CellTemplate="{StaticResource grantedCellTemplate}"/>
+                                <GridViewColumn Header="Feat" Width="300" CellTemplate="{StaticResource featCellTemplate}"/>
+                                <GridViewColumn Header="Menu" Width="120" CellTemplate="{StaticResource menuCellTemplate}"/>
+                                <GridViewColumn Header="" Width="25" CellTemplate="{StaticResource deleteCellTemplate}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </uc:ResetIsEnabled>
 
                 <Button Grid.Row="2" Content="Add Feat" Width="150" Margin="0,5,0,0" HorizontalAlignment="Left" Command="{Binding AddFeatItemCommand}" CommandParameter="{x:Static types:FeatListType.GeneralFeatOrBonusFeat}"/>
             </Grid>
@@ -169,16 +175,18 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="Available Bonus Feats" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
-                <ListView Grid.Row="1" ItemsSource="{Binding Data.BonusFeats}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Min. Level" Width="75" CellTemplate="{StaticResource grantedCellTemplate}"/>
-                            <GridViewColumn Header="Feat" Width="300" CellTemplate="{StaticResource featCellTemplate}"/>
-                            <GridViewColumn Header="Menu" Width="120" CellTemplate="{StaticResource menuCellTemplate}"/>
-                            <GridViewColumn Header="" Width="25" CellTemplate="{StaticResource deleteCellTemplate}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <uc:ResetIsEnabled Grid.Row="1">
+                    <ListView ItemsSource="{Binding Data.BonusFeats}" IsTabStop="{Binding Data.IsReadonly}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Min. Level" Width="75" CellTemplate="{StaticResource grantedCellTemplate}"/>
+                                <GridViewColumn Header="Feat" Width="300" CellTemplate="{StaticResource featCellTemplate}"/>
+                                <GridViewColumn Header="Menu" Width="120" CellTemplate="{StaticResource menuCellTemplate}"/>
+                                <GridViewColumn Header="" Width="25" CellTemplate="{StaticResource deleteCellTemplate}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </uc:ResetIsEnabled>
 
                 <Button Grid.Row="2" Content="Add Feat" Width="150" Margin="0,5,0,0" HorizontalAlignment="Left" Command="{Binding AddFeatItemCommand}" CommandParameter="{x:Static types:FeatListType.BonusFeat}"/>
             </Grid>
@@ -196,15 +204,17 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="Available Gainable Bonus Feats" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
-                <ListView Grid.Row="1" ItemsSource="{Binding Data.GainableFeats}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Feat" Width="300" CellTemplate="{StaticResource featCellTemplate}"/>
-                            <GridViewColumn Header="Menu" Width="120" CellTemplate="{StaticResource menuCellTemplate}"/>
-                            <GridViewColumn Header="" Width="25" CellTemplate="{StaticResource deleteCellTemplate}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <uc:ResetIsEnabled Grid.Row="1">
+                    <ListView ItemsSource="{Binding Data.GainableFeats}" IsTabStop="{Binding Data.IsReadonly}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Feat" Width="300" CellTemplate="{StaticResource featCellTemplate}"/>
+                                <GridViewColumn Header="Menu" Width="120" CellTemplate="{StaticResource menuCellTemplate}"/>
+                                <GridViewColumn Header="" Width="25" CellTemplate="{StaticResource deleteCellTemplate}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </uc:ResetIsEnabled>
 
                 <Button Grid.Row="2" Content="Add Feat" Width="150" Margin="0,5,0,0" HorizontalAlignment="Left" Command="{Binding AddFeatItemCommand}" CommandParameter="{x:Null}"/>
             </Grid>

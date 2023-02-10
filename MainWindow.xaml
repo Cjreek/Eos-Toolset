@@ -752,6 +752,10 @@
                                     <DataTrigger Binding="{Binding Overrides}" Value="{x:Null}">
                                         <Setter Property="Background" Value="Transparent"/>
                                     </DataTrigger>
+
+                                    <DataTrigger Binding="{Binding Disabled}" Value="True">
+                                        <Setter Property="Foreground" Value="DimGray"/>
+                                    </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </TreeView.Resources>

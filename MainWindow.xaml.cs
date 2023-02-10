@@ -272,5 +272,12 @@ namespace Eos
             else if (result == MessageBoxResult.Cancel)
                 e.Cancel = true;
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var repo = (IRepository)button.Tag;
+
+        }
     }
 }

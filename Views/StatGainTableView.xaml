@@ -7,6 +7,7 @@
       xmlns:vm="clr-namespace:Eos.ViewModels"     
       xmlns:wpftk="clr-namespace:Xceed.Wpf.Toolkit;assembly=DotNetProjects.Wpf.Extended.Toolkit"
       xmlns:ext="clr-namespace:Eos.Extensions"
+      xmlns:uc="clr-namespace:Eos.Usercontrols"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="StatGainTableView">
@@ -43,67 +44,69 @@
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
         <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
 
-        <ListView Grid.Row="3" Grid.Column="1"  ItemsSource="{Binding Data.Items}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Level" Width="50">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center" Text="{Binding Level}" Margin="-6,-2,-6,-2"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Strength" Width="70">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding Strength}" Margin="-6,-2,-6,-2"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Dexterity" Width="70">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding Dexterity}" Margin="-6,-2,-6,-2"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Constitution" Width="70">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding Constitution}" Margin="-6,-2,-6,-2"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Wisdom" Width="70">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding Wisdom}" Margin="-6,-2,-6,-2"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Intelligence" Width="70">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding Intelligence}" Margin="-6,-2,-6,-2"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Charisma" Width="70">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding Charisma}" Margin="-6,-2,-6,-2"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Natural AC" Width="70">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding NaturalAC}" Margin="-6,-2,-6,-2"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <uc:ResetIsEnabled Grid.Row="3" Grid.Column="1" >
+            <ListView ItemsSource="{Binding Data.Items}" IsTabStop="{Binding Data.IsReadonly}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Level" Width="50">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center" Text="{Binding Level}" Margin="-6,-2,-6,-2"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Strength" Width="70">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding Strength}" Margin="-6,-2,-6,-2"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Dexterity" Width="70">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding Dexterity}" Margin="-6,-2,-6,-2"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Constitution" Width="70">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding Constitution}" Margin="-6,-2,-6,-2"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Wisdom" Width="70">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding Wisdom}" Margin="-6,-2,-6,-2"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Intelligence" Width="70">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding Intelligence}" Margin="-6,-2,-6,-2"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Charisma" Width="70">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding Charisma}" Margin="-6,-2,-6,-2"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Natural AC" Width="70">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding NaturalAC}" Margin="-6,-2,-6,-2"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </uc:ResetIsEnabled>
     </Grid>
 </local:LanguageAwarePage>

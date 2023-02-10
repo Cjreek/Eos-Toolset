@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Xml.Linq;
+using Xceed.Wpf.DataGrid;
 
 namespace Eos.Services
 {
@@ -965,6 +966,12 @@ namespace Eos.Services
                         }
 
                         var record = feat2da[index];
+                        if (feat.Disabled)
+                        {
+                            record.Clear();
+                            continue;
+                        }
+
                         record.Set("LABEL", feat.Name[project.DefaultLanguage].Text.Replace(" ", "_"));
                         record.Set("FEAT", GetTLKIndex(feat.Name));
                         record.Set("DESCRIPTION", GetTLKIndex(feat.Description));
@@ -1427,9 +1434,16 @@ namespace Eos.Services
         {
             foreach (var spell in spellLevel)
             {
-                var spellIndex = project.Spells.Get2DAIndex(spell.Spell);
-                if (spellIndex != null)
-                    spells2da[spellIndex ?? -1].Set(spellbook.Name, level);
+                if (spell.Spell != null)
+                {
+                    var overrideSpell = project.Spells.GetOverride(spell.Spell);
+                    if (!(overrideSpell ?? spell.Spell)?.Disabled ?? false)
+                    {
+                        var spellIndex = project.Spells.Get2DAIndex(spell.Spell);
+                        if (spellIndex != null)
+                            spells2da[spellIndex ?? -1].Set(spellbook.Name, level);
+                    }
+                }
             }
         }
 
@@ -1495,6 +1509,12 @@ namespace Eos.Services
                         }
 
                         var record = spells2da[index];
+                        if (spell.Disabled)
+                        {
+                            record.Clear();
+                            continue;
+                        }
+
                         record.Set("Label", spell.Name[project.DefaultLanguage].Text.Replace(" ", "_"));
                         record.Set("Name", GetTLKIndex(spell.Name));
                         record.Set("IconResRef", spell.Icon);

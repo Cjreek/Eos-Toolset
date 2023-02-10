@@ -64,6 +64,12 @@ namespace Eos.Nwn.TwoDimensionalArray
                 values[index] = value;
         }
 
+        public void Clear()
+        {
+            for (int i = 0; i < values.Count; i++)
+                values[i] = null;
+        }
+
         public object? AsObject(String columnName, int? defaultValue = null, bool throwException = true)
         {
             var index = columns.IndexOf(columnName);

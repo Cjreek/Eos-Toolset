@@ -43,8 +43,10 @@
             </Button.Content>
         </Button>
 
-        <Button x:Name="btGoto" Grid.Column="1" Content="👁" Click="btGoto_Click" Margin="1,0,0,0" 
+        <local:ResetIsEnabled Grid.Column="1" Margin="1,0,0,0">
+            <Button x:Name="btGoto" Content="👁" Click="btGoto_Click"
                 Height="{Binding ElementName=cbClasses, Path=ActualHeight}" Width="{Binding ElementName=cbClasses, Path=ActualHeight}"/>
+        </local:ResetIsEnabled>
         <Button x:Name="btClear" Grid.Column="2" Content="🗑" Click="btClear_Click" Margin="1,0,0,0"
                 Height="{Binding ElementName=cbClasses, Path=ActualHeight}" Width="{Binding ElementName=cbClasses, Path=ActualHeight}" 
                 Visibility="{Binding ElementName=ucClassComboBox, Path=IsNullable, Converter={StaticResource bool2VisCollapsed}}"/>

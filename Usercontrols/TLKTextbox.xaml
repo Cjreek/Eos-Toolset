@@ -11,12 +11,20 @@
              d:DesignHeight="22" d:DesignWidth="800"
              BorderThickness="0" BorderBrush="Transparent">
     <UserControl.Resources>
-        <local:TLKConverter x:Key="tlkConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
+                <ResourceDictionary>
+                    <local:TLKConverter x:Key="tlkConverter"/>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid>
-        <TextBox Grid.Column="0"
-                 Background="{Binding ElementName=ucTLKTextbox, Path=Background}" Foreground="{Binding ElementName=ucTLKTextbox, Path=Foreground}"
+        <!--Foreground="{Binding ElementName=ucTLKTextbox, Path=Foreground}"-->
+        <TextBox Grid.Column="0" IsReadOnly="{Binding ElementName=ucTLKTextbox, Path=IsReadonly}"
+                 Background="{Binding ElementName=ucTLKTextbox, Path=Background}" IsTabStop="{Binding ElementName=ucTLKTextbox, Path=IsReadonly, Converter={StaticResource inverter}}"
                  BorderThickness="{Binding ElementName=ucTLKTextbox, Path=InnerBorderThickness}" BorderBrush="{Binding ElementName=ucTLKTextbox, Path=InnerBorderBrush}"
                  AcceptsReturn="{Binding ElementName=ucTLKTextbox, Path=AcceptsReturn}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
                  Text="{Binding ElementName=ucTLKTextbox, Path=ChangedTrigger, Converter={StaticResource tlkConverter}, ConverterParameter={x:Reference selfParam}}"/>

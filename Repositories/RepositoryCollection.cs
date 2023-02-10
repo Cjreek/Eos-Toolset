@@ -195,6 +195,12 @@ namespace Eos.Repositories
             return repositoryDict[modelType].GetOverride(model);
         }
 
+        public int? GetBase2DAIndex(BaseModel model, bool returnCustomDataIndex = true)
+        {
+            var modelType = model.GetType();
+            return repositoryDict[modelType].GetBase2DAIndex(model, returnCustomDataIndex);
+        }
+
         public void Clear()
         {
             Races.Clear();

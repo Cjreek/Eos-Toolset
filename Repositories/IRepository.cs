@@ -15,5 +15,6 @@ namespace Eos.Repositories
         BaseModel? GetOverride(BaseModel model);
         BaseModel? GetBaseByID(Guid id);
         int GetNextFreeIndex(int startIndex = 0);
+        int? GetBase2DAIndex(BaseModel model, bool returnCustomDataIndex = true);
     }
 }

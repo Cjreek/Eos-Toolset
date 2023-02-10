@@ -49,9 +49,19 @@ namespace Eos.Models
         }
 
         public Guid ID { get; set; }
+        public bool Disabled { get; set; }
         public bool IsReadonly { get; set; } = false;
         public Guid? Overrides { get; set; } = null;
         public int? Index { get; set; }
+        public int? CalculatedIndex
+        {
+            get
+            {
+                var index = MasterRepository.Project.GetBase2DAIndex(this);
+                return index;
+            }
+        }
+
         public String? Icon
         {
             get { return _icon; }
@@ -184,6 +194,7 @@ namespace Eos.Models
             result.Add("ID", this.ID.ToString());
             result.Add("Index", this.Index);
             result.Add("Overrides", this.Overrides != null ? this.Overrides.ToString() : null);
+            result.Add("Disabled", this.Disabled);
             result.Add("Hint", this.Hint);
 
             var extensionValues = new JsonObject();
@@ -202,6 +213,7 @@ namespace Eos.Models
             this.ID = ParseGuid(json["ID"]?.GetValue<String>());
             this.Index = json["Index"]?.GetValue<int?>();
             this.Overrides = ParseNullableGuid(json["Overrides"]?.GetValue<String>());
+            this.Disabled = json["Disabled"]?.GetValue<bool?>() ?? false;
             this.Hint = json["Hint"]?.GetValue<String>() ?? "";
 
             var extensionValues = json["ExtensionValues"]?.AsObject();

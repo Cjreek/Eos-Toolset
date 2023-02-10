@@ -40,8 +40,22 @@
                         <ColumnDefinition Width="100"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Race Info" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,0,0,10">
+                        <TextBlock FontSize="22" FontWeight="Bold">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                                    <Binding Path="Data.Name"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
 
+                        <TextBlock Text=" (Race ID:" FontSize="16" VerticalAlignment="Center"/>
+                        <uc:ResetIsEnabled>
+                            <TextBox Text="{Binding Data.CalculatedIndex, Mode=OneWay}" BorderThickness="0" FontSize="16" VerticalAlignment="Center" Margin="0" IsReadOnly="True"/>
+                        </uc:ResetIsEnabled>
+                        <TextBlock Text=")" FontSize="16" VerticalAlignment="Center" Margin="-2,0,0,0"/>
+                    </StackPanel>
+       
                     <Grid Grid.Row="1" Grid.Column="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150"/>
@@ -82,8 +96,10 @@
 
                         <!--Description-->
                         <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="5" Grid.Column="0"/>
-                        <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" Grid.Row="5" Grid.Column="1"/>
-
+                        <uc:ResetIsEnabled Grid.Row="5" Grid.Column="1">
+                            <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
+                        </uc:ResetIsEnabled>
+                            
                         <TextBlock Text="Appearance" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
                         <uc:AppearanceComboBox SelectedValue="{Binding Data.Appearance}" Grid.Row="6" Grid.Column="1"/>
 
@@ -102,7 +118,9 @@
 
                         <!--Biography-->
                         <TextBlock Text="Biography" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="12" Grid.Column="0"/>
-                        <uc:TLKTextbox TLKStrings="{Binding Data.Biography}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" Grid.Row="12" Grid.Column="1"/>
+                        <uc:ResetIsEnabled Grid.Row="12" Grid.Column="1">
+                            <uc:TLKTextbox TLKStrings="{Binding Data.Biography}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
+                        </uc:ResetIsEnabled>
                     </Grid>
 
                     <!--Icon-->

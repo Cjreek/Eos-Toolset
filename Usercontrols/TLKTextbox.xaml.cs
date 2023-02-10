@@ -64,6 +64,7 @@ namespace Eos.Usercontrols
 
         public static readonly DependencyProperty ChangedTriggerProperty = DependencyProperty.Register("ChangedTrigger", typeof(bool), typeof(TLKTextbox));
 
+        public static readonly DependencyProperty IsReadonlyProperty = DependencyProperty.Register("IsReadonly", typeof(bool), typeof(TLKTextbox));
         public static readonly DependencyProperty AcceptsReturnProperty = DependencyProperty.Register("AcceptsReturn", typeof(bool), typeof(TLKTextbox));
         public static readonly DependencyProperty InnerBorderThicknessProperty = DependencyProperty.Register("InnerBorderThickness", typeof(Thickness), typeof(TLKTextbox), new PropertyMetadata(new Thickness(1)));
         public static readonly DependencyProperty InnerBorderBrushProperty = DependencyProperty.Register("InnerBorderBrush", typeof(Brush), typeof(TLKTextbox), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(0xFF, 0xAB, 0xAD, 0xB3))));
@@ -100,6 +101,12 @@ namespace Eos.Usercontrols
         {
             get { return (bool)GetValue(AcceptsReturnProperty); }
             set { SetValue(AcceptsReturnProperty, value); }
+        }
+
+        public bool IsReadonly
+        {
+            get { return (bool)GetValue(IsReadonlyProperty); }
+            set { SetValue(IsReadonlyProperty, value); }
         }
 
         public Thickness InnerBorderThickness

@@ -62,7 +62,12 @@ namespace Eos.Repositories
                 if (returnCustomDataIndex && (model.Overrides == null))
                     return GetCustomDataStartIndex() + (model.Index ?? 0);
                 else
-                    return model.Index ?? 0;
+                {
+                    if (model.Overrides != null)
+                        return MasterRepository.Standard.GetByID(model.GetType(), model.Overrides ?? Guid.Empty)?.Index;
+                    else
+                        return model.Index;
+                }
             }
 
             return model.Index;
@@ -240,6 +245,13 @@ namespace Eos.Repositories
         {
             modelLookup.TryGetValue(id, out T? result);
             return result;
+        }
+
+        public int? GetBase2DAIndex(BaseModel model, bool returnCustomDataIndex = true)
+        {
+            if (model is T specificModel)
+                return Get2DAIndex(specificModel, returnCustomDataIndex);
+            return null;
         }
     }
 }
