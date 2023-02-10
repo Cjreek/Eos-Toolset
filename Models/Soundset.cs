@@ -50,7 +50,7 @@ namespace Eos.Models
         public String SoundsetResource { get; set; } = "";
         public SoundsetEntryList Entries { get; set; } = new SoundsetEntryList();
 
-        protected override String GetLabel()
+        public override String GetLabel()
         {
             return Name;
         }

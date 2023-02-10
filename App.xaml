@@ -51,5 +51,9 @@
         <DataTemplate DataType="{x:Type dialogVM:CustomObjectInstanceSearchViewModel}">
             <dialogViews:ModelSearchView/>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type dialogVM:GlobalSearchViewModel}">
+            <dialogViews:GlobalSearchView/>
+        </DataTemplate>
     </Application.Resources>
 </Application>

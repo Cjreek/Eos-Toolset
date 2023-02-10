@@ -1,0 +1,98 @@
+﻿<views:LanguageAwarePage x:Class="Eos.Views.Dialogs.GlobalSearchView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Eos.Views.Dialogs"
+      xmlns:views="clr-namespace:Eos.Views"
+      xmlns:nwn="clr-namespace:Eos.Nwn"                   
+      xmlns:i="clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="GlobalSearchView">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\..\Resources\ConverterResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Page.InputBindings>
+        <KeyBinding Command="{Binding CloseCommand}" CommandParameter="{Binding}" Key="Esc"/>
+    </Page.InputBindings>
+
+    <DockPanel Margin="10" LastChildFill="True" FocusManager.FocusedElement="{Binding ElementName=searchTextbox, Mode=OneTime}">
+        <Grid DockPanel.Dock="Top" Margin="0,0,0,5">
+            <TextBox x:Name="searchTextbox" Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="16"/>
+        </Grid>
+
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" FlowDirection="RightToLeft" Margin="0,5,0,0">
+            <Button Content="Cancel" VerticalAlignment="Center" Width="100" Command="{Binding CloseCommand}" CommandParameter="{Binding}"/>
+            <Button Content="OK" VerticalAlignment="Center" Width="100" Margin="3,0,0,0" Command="{Binding OKCommand}" CommandParameter="{Binding}"/>
+        </StackPanel>
+
+        <ListView Grid.Row="1" MinHeight="200" MinWidth="500" MaxHeight="1000" ItemsSource="{Binding SearchResult}" SelectedValue="{Binding ResultModel}" FontSize="14">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding OKCommand}" CommandParameter="{Binding}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" Width="450">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="-3,0,0,0">
+                                    <Image Width="16" Height="16" Source="{Binding Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}" Margin="0,0,3,0"/>
+
+                                    <TextBlock Text="{Binding Label}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ElementName=page, Path=DataContext.IsTableSearch}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+
+                                    <TextBlock>
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="FontStyle" Value="Italic"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Overrides}" Value="{x:Null}">
+                                                        <Setter Property="FontStyle" Value="Normal"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ElementName=page, Path=DataContext.IsTableSearch}" Value="True">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                        
+                                        <Run>
+                                            <Run.Text>
+                                                <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                                                    <Binding Path="Name"/>
+                                                </MultiBinding>
+                                            </Run.Text>   
+                                        </Run>
+                                        <Run Text="{Binding Hint, Converter={StaticResource hintConverter}}"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Type" Width="75" DisplayMemberBinding="{Binding Path=TypeName}"/>
+                    <GridViewColumn Header="ID" Width="35" DisplayMemberBinding="{Binding Path=CalculatedIndex, Mode=OneWay}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </DockPanel>
+</views:LanguageAwarePage>

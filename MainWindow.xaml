@@ -85,6 +85,7 @@
                 <sys:Int32>9</sys:Int32>
             </KeyBinding.CommandParameter>
         </KeyBinding>
+        <KeyBinding Modifiers="Ctrl" Key="F" Command="{Binding ElementName=viewModel, Path=GlobalSearchCommand}"/>
     </Window.InputBindings>
 
     <Window.Resources>
@@ -601,6 +602,11 @@
                 <MenuItem x:Name="miExit" Header="Exit" Click="miExit_Click"/>
             </MenuItem>
             <MenuItem Header="Tools">
+                <MenuItem x:Name="miSearch" Header="Global Search" InputGestureText="Ctrl+F" Command="{Binding ElementName=viewModel, Path=GlobalSearchCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource iconSearch}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="Settings..." IsEnabled="False"/>
             </MenuItem>
         </Menu>
@@ -621,6 +627,9 @@
                     </Button>
                     <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miSaveProject_Click">
                         <Image Source="{StaticResource iconSave32}"/>
+                    </Button>
+                    <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" Command="{Binding ElementName=viewModel, Path=GlobalSearchCommand}">
+                        <Image Source="{StaticResource iconSearch32}"/>
                     </Button>
                     <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" Click="miImportBaseData_Click">
                         <Image Source="{StaticResource iconImport32}"/>

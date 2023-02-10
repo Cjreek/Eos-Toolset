@@ -62,6 +62,8 @@ namespace Eos.Models
             }
         }
 
+        public String TypeName => GetTypeName();
+
         public String? Icon
         {
             get { return _icon; }
@@ -102,6 +104,11 @@ namespace Eos.Models
                 var selfOverride = MasterRepository.Project.GetOverride(this);
                 return selfOverride?.Hint ?? this.Hint;
             }
+        }
+
+        protected virtual String GetTypeName()
+        {
+            return GetType().Name;
         }
 
         private void InitExtensionValues()
@@ -160,7 +167,7 @@ namespace Eos.Models
 
         }
 
-        protected virtual String GetLabel()
+        public virtual String GetLabel()
         {
             return "";
         }

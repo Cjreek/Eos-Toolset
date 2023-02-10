@@ -36,7 +36,7 @@ namespace Eos.Models
         public bool MergeAccessories { get; set; }
         public bool MergeArmor { get; set; }
 
-        protected override String GetLabel()
+        public override String GetLabel()
         {
             return Name;
         }

@@ -139,13 +139,18 @@ namespace Eos.Models
         public bool CanCastSpontaneously { get; set; } = false;
         public bool SkipSpellSelection { get; set; } = false;
 
+        protected override String GetTypeName()
+        {
+            return "Class";
+        }
+
         protected override TLKStringSet? GetTlkDisplayName()
         {
             var modelOverride = (CharacterClass?)MasterRepository.Project.GetOverride(this);
             return modelOverride?.Name ?? this.Name;
         }
 
-        protected override String GetLabel()
+        public override String GetLabel()
         {
             return Name;
         }

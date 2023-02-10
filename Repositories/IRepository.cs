@@ -16,5 +16,6 @@ namespace Eos.Repositories
         BaseModel? GetBaseByID(Guid id);
         int GetNextFreeIndex(int startIndex = 0);
         int? GetBase2DAIndex(BaseModel model, bool returnCustomDataIndex = true);
+        IEnumerable<BaseModel?> GetItems();
     }
 }

@@ -117,7 +117,7 @@ namespace Eos.Models
                 Label = "New Object";
         }
 
-        protected override String GetLabel()
+        public override String GetLabel()
         {
             return Label;
         }

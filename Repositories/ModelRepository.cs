@@ -50,7 +50,7 @@ namespace Eos.Repositories
 
         public virtual int GetCustomDataStartIndex()
         {
-            throw new NotImplementedException();
+            return -1;
         }
 
         public int? Get2DAIndex(T? model, bool returnCustomDataIndex = true)
@@ -252,6 +252,11 @@ namespace Eos.Repositories
             if (model is T specificModel)
                 return Get2DAIndex(specificModel, returnCustomDataIndex);
             return null;
+        }
+
+        IEnumerable<BaseModel?> IRepository.GetItems()
+        {
+            return internalList.Cast<BaseModel>();
         }
     }
 }

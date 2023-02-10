@@ -154,7 +154,7 @@ namespace Eos.Models
             return modelOverride?.Name ?? this.Name;
         }
 
-        protected override String GetLabel()
+        public override String GetLabel()
         {
             return Name;
         }

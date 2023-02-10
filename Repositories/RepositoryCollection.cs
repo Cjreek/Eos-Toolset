@@ -150,6 +150,8 @@ namespace Eos.Repositories
         public ModelRepository<CustomObject> CustomObjects { get { return customObjectRepository; } }
         public CustomObjectRepositoryCollection CustomObjectRepositories { get { return customObjectRepositoryCollection; } }
 
+        public IEnumerable<IRepository> AllRepositories => repositoryDict.Values;
+
         public BaseModel New(Type modelType)
         {
             var constructor = modelType.GetConstructor(new Type[] { });

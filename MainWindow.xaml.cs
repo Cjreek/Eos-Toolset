@@ -8,6 +8,7 @@ using Eos.Repositories;
 using Eos.Services;
 using Eos.ViewModels;
 using Eos.ViewModels.Base;
+using Eos.ViewModels.Dialogs;
 using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.Generic;
@@ -273,11 +274,12 @@ namespace Eos
                 e.Cancel = true;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void miSearchClick(object sender, RoutedEventArgs e)
         {
-            var button = (Button)sender;
-            var repo = (IRepository)button.Tag;
-
+            var viewModel = new GlobalSearchViewModel();
+            WindowService.OpenDialog(viewModel);
+            if (viewModel.ResultModel != null)
+                MessageDispatcher.Send(MessageType.OpenDetail, viewModel.ResultModel);
         }
     }
 }

@@ -20,7 +20,8 @@ namespace Eos.ViewModels.Base
         CloseDetail,
         DeleteDetail,
         NewCustomDetail,
-        GotoDetail
+        GotoDetail,
+        OpenGlobalSearch
     }
 
     public delegate void MessageHandler(MessageType type, object? message, object? param);

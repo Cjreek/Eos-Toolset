@@ -164,7 +164,7 @@ namespace Eos.Models.Tables
 
         }
 
-        protected override String GetLabel()
+        public override String GetLabel()
         {
             return Name;
         }

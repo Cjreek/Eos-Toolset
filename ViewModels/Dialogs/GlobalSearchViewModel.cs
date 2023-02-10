@@ -1,5 +1,4 @@
 ﻿using Eos.Models;
-using Eos.Nwn.Tlk;
 using Eos.Repositories;
 using Eos.Services;
 using Prism.Commands;
@@ -12,13 +11,11 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels.Dialogs
 {
-    public abstract class ModelSearchViewModel<T> : DialogViewModel where T : BaseModel, new()
+    internal class GlobalSearchViewModel : DialogViewModel
     {
         private String _searchText;
-        private IEnumerable<T?> _searchResult;
-        private VirtualModelRepository<T> _repository;
-
-        public bool IsTableSearch { get; set; }
+        private IEnumerable<BaseModel?> _searchResult;
+        private IEnumerable<IRepository> _source;
 
         public String SearchText
         {
@@ -34,31 +31,29 @@ namespace Eos.ViewModels.Dialogs
             }
         }
 
-        public ModelSearchViewModel(VirtualModelRepository<T> repository)
+        public IEnumerable<BaseModel?> SearchResult => _searchResult;
+        public BaseModel? ResultModel { get; set; }
+
+        public GlobalSearchViewModel()
         {
-            _repository = repository;
             _searchText = "";
+            _source = MasterRepository.Project.AllRepositories.Concat(MasterRepository.Standard.AllRepositories);
+            _source = _source.Where(repo => repo.GetType() != typeof(ModelRepository<Appearance>));
             _searchResult = Search(_searchText);
         }
 
-        public IEnumerable<T?> SearchResult => _searchResult;
-        public T? ResultModel { get; set; }
-
-        protected abstract TLKStringSet? GetModelText(T? model);
-
-        private bool Filter(T? model, String searchText)
+        private bool FilterModel(BaseModel? model, string searchText)
         {
-            //if ((model == null) || (model.Overrides != null)) return false;
             if ((model == null) || (MasterRepository.Project.HasOverride(model))) return false;
 
-            var tlk = GetModelText(model);
-            if (tlk == null) return false;
-            return tlk[MasterRepository.Project.DefaultLanguage].Text.ToLower().Contains(searchText);
+            var tlk = model.TlkDisplayName;
+            if (tlk != null) return tlk[MasterRepository.Project.DefaultLanguage].Text.ToLower().Contains(searchText);
+            return model.GetLabel().ToLower().Contains(searchText);
         }
 
-        protected IEnumerable<T?> Search(String searchText)
+        protected IEnumerable<BaseModel?> Search(String searchText)
         {
-            _searchResult = _repository.Where(model => Filter(model, searchText));
+            _searchResult = _source.SelectMany(repo => repo.GetItems()).Where(model => FilterModel(model, searchText));
             NotifyPropertyChanged(nameof(SearchResult));
 
             return _searchResult;
@@ -79,17 +74,17 @@ namespace Eos.ViewModels.Dialogs
             return true;
         }
 
-        public DelegateCommand<ModelSearchViewModel<T>> CloseCommand { get; private set; } = new DelegateCommand<ModelSearchViewModel<T>>(vm =>
+        public DelegateCommand<GlobalSearchViewModel> CloseCommand { get; private set; } = new DelegateCommand<GlobalSearchViewModel>(vm =>
         {
             vm.ResultModel = null;
             WindowService.Close(vm);
         });
 
-        public DelegateCommand<ModelSearchViewModel<T>> OKCommand { get; private set; } = new DelegateCommand<ModelSearchViewModel<T>>(vm =>
+        public DelegateCommand<GlobalSearchViewModel> OKCommand { get; private set; } = new DelegateCommand<GlobalSearchViewModel>(vm =>
         {
             if (vm.ResultModel?.Overrides != null)
             {
-                vm.ResultModel = (T?)MasterRepository.Standard.GetByID(typeof(T), vm.ResultModel?.Overrides ?? Guid.Empty);
+                vm.ResultModel = MasterRepository.Standard.GetByID(vm.ResultModel.GetType(), vm.ResultModel?.Overrides ?? Guid.Empty);
             }
             WindowService.Close(vm);
         });

@@ -131,5 +131,10 @@ namespace Eos.ViewModels
         {
             MessageDispatcher.Send(MessageType.GotoDetail, index);
         });
+
+        public DelegateCommand GlobalSearchCommand { get; private set; } = new DelegateCommand(() =>
+        {
+            MessageDispatcher.Send(MessageType.OpenGlobalSearch, null);
+        });
     }
 }

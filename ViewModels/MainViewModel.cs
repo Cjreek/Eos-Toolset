@@ -174,6 +174,13 @@ namespace Eos.ViewModels
             {
                 switch(type)
                 {
+                    case MessageType.OpenGlobalSearch:
+                        var viewModel = new GlobalSearchViewModel();
+                        WindowService.OpenDialog(viewModel);
+                        if (viewModel.ResultModel != null)
+                            MessageDispatcher.Send(MessageType.OpenDetail, viewModel.ResultModel, true);
+                        break;
+
                     case MessageType.GotoDetail:
                         var index = (int?)message;
                         if (index != null && index < detailViewList.Count && index >= 0)
@@ -223,6 +230,7 @@ namespace Eos.ViewModels
             MessageDispatcher.Subscribe(MessageType.NewCustomDetail, MessageHandler);
 
             MessageDispatcher.Subscribe(MessageType.ChangeLanguage, MessageHandler);
+            MessageDispatcher.Subscribe(MessageType.OpenGlobalSearch, MessageHandler);
         }
 
         ~MainViewModel()
@@ -243,6 +251,7 @@ namespace Eos.ViewModels
             MessageDispatcher.Unsubscribe(MessageType.NewCustomDetail, MessageHandler);
 
             MessageDispatcher.Unsubscribe(MessageType.ChangeLanguage, MessageHandler);
+            MessageDispatcher.Unsubscribe(MessageType.OpenGlobalSearch, MessageHandler);
         }
     }
 }

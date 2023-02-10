@@ -53,7 +53,7 @@ namespace Eos.Models
         public ObservableCollection<SpellbookEntry> Level8 { get; } = new ObservableCollection<SpellbookEntry>();
         public ObservableCollection<SpellbookEntry> Level9 { get; } = new ObservableCollection<SpellbookEntry>();
 
-        protected override String GetLabel()
+        public override String GetLabel()
         {
             return Name;
         }

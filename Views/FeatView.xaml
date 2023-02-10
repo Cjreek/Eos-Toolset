@@ -19,6 +19,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\Resources\StyleResources.xaml"/>
                 <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
+                <ResourceDictionary Source="..\Resources\CustomDataTemplateResources.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
@@ -251,6 +252,43 @@
 
                     <TextBlock Text="Feat" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="18" Grid.Column="0"/>
                     <uc:FeatComboBox Grid.Row="18" Grid.Column="1" SelectedValue="{Binding Data.RequiredFeatSelection5}"/>
+                </Grid>
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Header="Extensions" Width="100" Height="30">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Extension Fields" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+                    <ItemsControl Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Data.ExtensionValues}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="2"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Margin="0,0,5,0" Text="{Binding Property.Label}"/>
+                                    <ContentPresenter Grid.Column="1" Content="{Binding}" ContentTemplateSelector="{StaticResource templateSelector}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </Grid>
             </ScrollViewer>
         </TabItem>

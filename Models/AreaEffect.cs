@@ -45,7 +45,7 @@ namespace Eos.Models
         public String? RandomSound { get; set; }
         public double? RandomSoundChance { get; set; }
 
-        protected override String GetLabel()
+        public override String GetLabel()
         {
             return Name;
         }
