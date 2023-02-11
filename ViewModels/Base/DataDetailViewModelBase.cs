@@ -20,5 +20,6 @@ namespace Eos.ViewModels
 
         public string Header { get { return GetHeader(); } }
         public Brush EntityColor { get { return GetEntityColor(); } }
+        public int SelectedTabIndex { get; set; }
     }
 }

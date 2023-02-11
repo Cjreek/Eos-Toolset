@@ -42,7 +42,7 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <Button x:Name="btClear" Grid.Column="1" Margin="2,-2,0,0" Content="X" Click="btClear_Click"
+        <Button x:Name="btClear" Grid.Column="1" Margin="2,-2,0,0" Content="🞪" Click="btClear_Click"
                 Height="{Binding ElementName=cbAppearances, Path=ActualHeight}" Width="{Binding ElementName=cbAppearances, Path=ActualHeight}" 
                 Visibility="{Binding ElementName=ucAppearanceComboBox, Path=IsNullable, Converter={StaticResource bool2VisCollapsed}}"/>
     </Grid>

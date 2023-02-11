@@ -21,7 +21,7 @@ namespace Eos.Repositories.Models
 
         public override int GetCustomDataStartIndex()
         {
-            return 5100; // Nja
+            return MasterRepository.Project.Settings.Soundsets.ExportOffset;
         }
     }
 }

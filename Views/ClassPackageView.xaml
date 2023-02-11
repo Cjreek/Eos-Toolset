@@ -27,7 +27,7 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <TabControl TabStripPlacement="Left" BorderThickness="1,0,0,0">
+    <TabControl TabStripPlacement="Left" BorderThickness="1,0,0,0" SelectedIndex="{Binding SelectedTabIndex}">
         <TabItem Header="Info" Width="100" Height="30">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">

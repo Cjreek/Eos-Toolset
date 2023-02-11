@@ -21,7 +21,7 @@ namespace Eos.Repositories.Models
 
         public override int GetCustomDataStartIndex()
         {
-            return 47;
+            return MasterRepository.Project.Settings.AreaEffects.ExportOffset;
         }
     }
 }

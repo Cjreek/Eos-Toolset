@@ -21,6 +21,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
         <ComboBox x:Name="cbSavesTables" Grid.Column="0" ItemsSource="{Binding Source={x:Static repo:MasterRepository.SavingThrowTables}}" SelectedValue="{Binding ElementName=ucSavingThrowTableComboBox, Path=SelectedValue}" DisplayMemberPath="Name">
@@ -30,8 +31,13 @@
                 </ItemsPanelTemplate>
             </ComboBox.ItemsPanel>
         </ComboBox>
-        <Button x:Name="btClear" Grid.Column="1" Margin="2,-2,0,0" Content="X" Click="btClear_Click"
+
+        <Button x:Name="btClear" Grid.Column="1" Margin="2,-3,0,0" Content="🞪" Click="btClear_Click"
                 Height="{Binding ElementName=cbSavesTables, Path=ActualHeight}" Width="{Binding ElementName=cbSavesTables, Path=ActualHeight}" 
                 Visibility="{Binding ElementName=ucSavingThrowTableComboBox, Path=IsNullable, Converter={StaticResource bool2VisCollapsed}}"/>
+        <local:ResetIsEnabled Grid.Column="2" Margin="2,-3,0,0">
+            <Button x:Name="btGoto" Content="👁" Click="btGoto_Click"
+			Height="{Binding ElementName=cbSavesTables, Path=ActualHeight}" Width="{Binding ElementName=cbSavesTables, Path=ActualHeight}"/>
+        </local:ResetIsEnabled>
     </Grid>
 </UserControl>

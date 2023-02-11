@@ -43,7 +43,7 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <TabControl TabStripPlacement="Left" BorderThickness="1,0,0,0">
+    <TabControl TabStripPlacement="Left" BorderThickness="1,0,0,0" SelectedIndex="{Binding SelectedTabIndex}">
         <TabItem Header="General" Width="150" Height="30">
             <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                 <Grid.RowDefinitions>

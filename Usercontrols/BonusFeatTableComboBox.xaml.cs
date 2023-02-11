@@ -1,5 +1,6 @@
 ﻿using Eos.Models;
 using Eos.Models.Tables;
+using Eos.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,6 +46,11 @@ namespace Eos.Usercontrols
         private void btClear_Click(object sender, RoutedEventArgs e)
         {
             SetValue(SelectedValueProperty, null);
+        }
+
+        private void btGoto_Click(object sender, RoutedEventArgs e)
+        {
+            MessageDispatcher.Send(MessageType.OpenDetail, SelectedValue, true);
         }
     }
 }
