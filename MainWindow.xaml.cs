@@ -260,9 +260,27 @@ namespace Eos
 
         private void miImportBaseData_Click(object sender, RoutedEventArgs e)
         {
-            var import = new GameDataImport();
-            import.Import(EosConfig.NwnBasePath);
-            MessageBox.Show("Game files have been imported successfully!", "Game Data Import", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (MessageBox.Show("Importing base game data will take a while.\nThe current active project will be saved if you continue!\n\nDo you really want to import the base game data?", "Game Data Import", MessageBoxButton.YesNoCancel, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+                try
+                {
+                    if (MasterRepository.Project.IsLoaded)
+                        MessageDispatcher.Send(MessageType.SaveProject, null);
+
+                    var import = new GameDataImport();
+                    import.Import(EosConfig.NwnBasePath);
+                    
+                    if (MasterRepository.Project.IsLoaded)
+                        MessageDispatcher.Send(MessageType.OpenProject, EosConfig.LastProject);
+                }
+                finally
+                {
+                    Mouse.OverrideCursor = null;
+                }
+
+                MessageBox.Show("Game files have been imported successfully!", "Game Data Import", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void mainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)

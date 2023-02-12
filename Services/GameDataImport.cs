@@ -17,6 +17,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Eos.Services
 {
@@ -415,6 +416,55 @@ namespace Eos.Services
             Standard.StatGainTables.Add(statGainTable);
         }
 
+        private void ImportCutClass(TwoDimensionalArrayFile classes2da, CharacterClass tmpClass, int index)
+        {
+            switch (index)
+            {
+                case 39: // Eye of Grummsh
+                    tmpClass.Playable = true;
+                    tmpClass.Name.OriginalIndex = -1;
+                    tmpClass.Name[TLKLanguage.English].Text = "Eye of Grummsh";
+                    tmpClass.Name[TLKLanguage.English].TextF = "Eye of Grummsh";
+                    tmpClass.NamePlural.OriginalIndex = -1;
+                    tmpClass.NamePlural[TLKLanguage.English].Text = "Eyes of Grummsh";
+                    tmpClass.NamePlural[TLKLanguage.English].TextF = "Eyes of Grummsh";
+                    tmpClass.Hint = "Cut";
+                    tmpClass.Icon = "ir_wizard";
+                    tmpClass.HitDie = 12;
+                    tmpClass.SkillPointsPerLevel = 2;
+                    tmpClass.IsSpellCaster = false;
+                    tmpClass.PrimaryAbility = AbilityType.STR;
+                    tmpClass.MulticlassXPPenalty = false;
+                    tmpClass.PreEpicMaxLevel = 10;
+                    tmpClass.MaxLevel = 40;
+                    tmpClass.AllowedAlignments = Alignment.Neutral | Alignment.NeutralEvil | Alignment.ChaoticEvil | Alignment.ChaoticNeutral;
+
+                    Standard.Classes.Add(tmpClass);
+                    break;
+
+                case 40: // Shou Disciple
+                    tmpClass.Playable = true;
+                    tmpClass.Name.OriginalIndex = -1;
+                    tmpClass.Name[TLKLanguage.English].Text = "Shou Disciple";
+                    tmpClass.Name[TLKLanguage.English].TextF = "Shou Disciple";
+                    tmpClass.NamePlural.OriginalIndex = -1;
+                    tmpClass.NamePlural[TLKLanguage.English].Text = "Shou Disciples";
+                    tmpClass.NamePlural[TLKLanguage.English].TextF = "Shou Disciples";
+                    tmpClass.Hint = "Cut";
+                    tmpClass.Icon = "ir_wizard";
+                    tmpClass.HitDie = 10;
+                    tmpClass.SkillPointsPerLevel = 2;
+                    tmpClass.IsSpellCaster = false;
+                    tmpClass.PrimaryAbility = AbilityType.WIS;
+                    tmpClass.MulticlassXPPenalty = false;
+                    tmpClass.PreEpicMaxLevel = 5;
+                    tmpClass.MaxLevel = 40;
+
+                    Standard.Classes.Add(tmpClass);
+                    break;
+            }
+        }
+
         private void ImportClasses()
         {
             var classes2da = Load2da("classes");
@@ -426,7 +476,11 @@ namespace Eos.Services
                 tmpClass.ID = GenerateGuid("classes", i);
                 tmpClass.Index = i;
 
-                if (!SetText(tmpClass.Name, classes2da[i].AsInteger("Name"))) continue;
+                if (!SetText(tmpClass.Name, classes2da[i].AsInteger("Name")))
+                {
+                    ImportCutClass(classes2da, tmpClass, i);
+                    continue;
+                }
                 SetText(tmpClass.NamePlural, classes2da[i].AsInteger("Plural"));
                 SetText(tmpClass.Description, classes2da[i].AsInteger("Description"));
 
@@ -643,6 +697,284 @@ namespace Eos.Services
             }
         }
 
+        private void ImportCutFeat(TwoDimensionalArrayFile feat2da, Feat tmpFeat, int index)
+        {
+            switch (index)
+            {
+                case 480: // Blinding Spittle
+                    SetText(tmpFeat.Name, 110691);
+                    SetText(tmpFeat.Description, 110692);
+                    tmpFeat.Hint = "Cut";
+                    tmpFeat.MinLevelClass = CreateRef<CharacterClass>(39);
+                    tmpFeat.MinLevel = 4;
+                    tmpFeat.Icon = "ife_X1GFSPen";
+                    tmpFeat.Category = AICategory.HarmfulRanged;
+                    tmpFeat.UsesPerDay = 2;
+                    tmpFeat.UseableByAllClasses = false;
+                    tmpFeat.SuccessorFeat = CreateRef<Feat>(481);
+                    tmpFeat.ToolsetCategory = FeatCategory.ClassOrRacial;
+                    tmpFeat.IsHostile = true;
+                    tmpFeat.UseActionQueue = true;
+                    tmpFeat.CRModifier = 0.5;
+
+                    Standard.Feats.Add(tmpFeat);
+                    break;
+
+                case 481: // Blinding Spittle 2
+                    SetText(tmpFeat.Name, 110691);
+                    SetText(tmpFeat.Description, 110692);
+                    tmpFeat.Hint = "Cut";
+                    tmpFeat.MinLevelClass = CreateRef<CharacterClass>(39);
+                    tmpFeat.MinLevel = 7;
+                    tmpFeat.Icon = "ife_X1GFSPen";
+                    tmpFeat.Category = AICategory.HarmfulRanged;
+                    tmpFeat.UsesPerDay = 4;
+                    tmpFeat.UseableByAllClasses = false;
+                    tmpFeat.ToolsetCategory = FeatCategory.ClassOrRacial;
+                    tmpFeat.IsHostile = true;
+                    tmpFeat.UseActionQueue = true;
+                    tmpFeat.CRModifier = 0.5;
+
+                    Standard.Feats.Add(tmpFeat);
+                    break;
+
+                case 482: // Command the Horde
+                    SetText(tmpFeat.Name, 110693);
+                    SetText(tmpFeat.Description, 110694);
+                    tmpFeat.Hint = "Cut";
+                    tmpFeat.MinLevelClass = CreateRef<CharacterClass>(39);
+                    tmpFeat.MinLevel = 1;
+                    tmpFeat.Icon = "ife_barbrage";
+                    tmpFeat.Category = AICategory.FriendlyEnhancementAoe;
+                    tmpFeat.UseableByAllClasses = false;
+                    tmpFeat.ToolsetCategory = FeatCategory.ClassOrRacial;
+                    tmpFeat.IsHostile = false;
+                    tmpFeat.UseActionQueue = true;
+                    tmpFeat.CRModifier = 0.5;
+
+                    Standard.Feats.Add(tmpFeat);
+                    break;
+
+                case 483: // Swing Blindly
+                    SetText(tmpFeat.Name, 110695);
+                    SetText(tmpFeat.Description, 110696);
+                    tmpFeat.Hint = "Cut";
+                    tmpFeat.MinLevelClass = CreateRef<CharacterClass>(39);
+                    tmpFeat.MinLevel = 2;
+                    tmpFeat.Icon = "ife_X1BliFig";
+                    tmpFeat.Category = AICategory.FriendlyEnhancementSelf;
+                    tmpFeat.UseableByAllClasses = false;
+                    tmpFeat.ToolsetCategory = FeatCategory.ClassOrRacial;
+                    tmpFeat.IsHostile = false;
+                    tmpFeat.UseActionQueue = false;
+                    tmpFeat.CRModifier = 0.5;
+
+                    Standard.Feats.Add(tmpFeat);
+                    break;
+
+                case 484: // Ritual Scarring
+                    SetText(tmpFeat.Name, 110697);
+                    SetText(tmpFeat.Description, 110698);
+                    tmpFeat.Hint = "Cut";
+                    tmpFeat.MinLevelClass = CreateRef<CharacterClass>(39);
+                    tmpFeat.MinLevel = 3;
+                    tmpFeat.Icon = "ife_X1Blood";
+                    tmpFeat.Category = AICategory.FriendlyEnhancementSelf;
+                    tmpFeat.UseableByAllClasses = false;
+                    tmpFeat.ToolsetCategory = FeatCategory.ClassOrRacial;
+                    tmpFeat.IsHostile = false;
+                    tmpFeat.UseActionQueue = false;
+                    tmpFeat.CRModifier = 0.5;
+
+                    Standard.Feats.Add(tmpFeat);
+                    break;
+
+                case 485: // Blindsight 5 Feet
+                    SetText(tmpFeat.Name, 110699);
+                    SetText(tmpFeat.Description, 110700);
+                    tmpFeat.Hint = "Cut";
+                    tmpFeat.MinLevelClass = CreateRef<CharacterClass>(39);
+                    tmpFeat.MinLevel = 5;
+                    tmpFeat.Icon = "ife_x2blindsigh";
+                    tmpFeat.Category = AICategory.FriendlyEnhancementSelf;
+                    tmpFeat.UseableByAllClasses = false;
+                    tmpFeat.ToolsetCategory = FeatCategory.ClassOrRacial;
+                    tmpFeat.SuccessorFeat = CreateRef<Feat>(486);
+                    tmpFeat.IsHostile = false;
+                    tmpFeat.UseActionQueue = false;
+                    tmpFeat.CRModifier = 0.5;
+
+                    Standard.Feats.Add(tmpFeat);
+                    break;
+
+                case 486: // Blindsight 10 Feet
+                    SetText(tmpFeat.Name, 110701);
+                    SetText(tmpFeat.Description, 110702);
+                    tmpFeat.Hint = "Cut";
+                    tmpFeat.MinLevelClass = CreateRef<CharacterClass>(39);
+                    tmpFeat.MinLevel = 8;
+                    tmpFeat.Icon = "ife_x2blindsigh";
+                    tmpFeat.Category = AICategory.FriendlyEnhancementSelf;
+                    tmpFeat.UseableByAllClasses = false;
+                    tmpFeat.ToolsetCategory = FeatCategory.ClassOrRacial;
+                    tmpFeat.IsHostile = false;
+                    tmpFeat.UseActionQueue = false;
+                    tmpFeat.CRModifier = 0.5;
+
+                    Standard.Feats.Add(tmpFeat);
+                    break;
+
+                case 487: // Sight of Gruumsh
+                    SetText(tmpFeat.Name, 110703);
+                    SetText(tmpFeat.Description, 110704);
+                    tmpFeat.Hint = "Cut";
+                    tmpFeat.MinLevelClass = CreateRef<CharacterClass>(39);
+                    tmpFeat.MinLevel = 10;
+                    tmpFeat.Icon = "ife_wizard";
+                    tmpFeat.Category = AICategory.FriendlyEnhancementSelf;
+                    tmpFeat.UseableByAllClasses = false;
+                    tmpFeat.ToolsetCategory = FeatCategory.ClassOrRacial;
+                    tmpFeat.IsHostile = false;
+                    tmpFeat.UseActionQueue = false;
+                    tmpFeat.CRModifier = 0.5;
+
+                    Standard.Feats.Add(tmpFeat);
+                    break;
+
+                case 489: // Dodge Bonus + 2 (Shou Disciple)
+                    SetText(tmpFeat.Name, 110711);
+                    SetText(tmpFeat.Description, 110712);
+                    tmpFeat.Hint = "Cut";
+                    tmpFeat.MinLevelClass = CreateRef<CharacterClass>(40);
+                    tmpFeat.MinLevel = 2;
+                    tmpFeat.Icon = "ife_dodge";
+                    tmpFeat.Category = AICategory.FriendlyEnhancementSelf;
+                    tmpFeat.UseableByAllClasses = false;
+                    tmpFeat.ToolsetCategory = FeatCategory.ClassOrRacial;
+                    tmpFeat.SuccessorFeat = CreateRef<Feat>(1031);
+                    tmpFeat.IsHostile = false;
+                    tmpFeat.UseActionQueue = false;
+                    tmpFeat.CRModifier = 0.5;
+
+                    Standard.Feats.Add(tmpFeat);
+                    break;
+
+                case 866: // Martial Flurry (light)
+                    SetText(tmpFeat.Name, 110715);
+                    SetText(tmpFeat.Description, 110716);
+                    tmpFeat.Hint = "Cut";
+                    tmpFeat.MinLevelClass = CreateRef<CharacterClass>(40);
+                    tmpFeat.MinLevel = 3;
+                    tmpFeat.Icon = "ife_flurry";
+                    tmpFeat.Category = AICategory.FriendlyEnhancementSelf;
+                    tmpFeat.UseableByAllClasses = false;
+                    tmpFeat.ToolsetCategory = FeatCategory.ClassOrRacial;
+                    tmpFeat.SuccessorFeat = CreateRef<Feat>(899);
+                    tmpFeat.IsHostile = false;
+                    tmpFeat.UseActionQueue = false;
+                    tmpFeat.CRModifier = 1.0;
+
+                    Standard.Feats.Add(tmpFeat);
+                    break;
+
+                case 899: // Martial Flurry (light)
+                    SetText(tmpFeat.Name, 110717);
+                    SetText(tmpFeat.Description, 110718);
+                    tmpFeat.Hint = "Cut";
+                    tmpFeat.MinLevelClass = CreateRef<CharacterClass>(40);
+                    tmpFeat.MinLevel = 5;
+                    tmpFeat.Icon = "ife_flurry";
+                    tmpFeat.Category = AICategory.FriendlyEnhancementSelf;
+                    tmpFeat.UseableByAllClasses = false;
+                    tmpFeat.ToolsetCategory = FeatCategory.ClassOrRacial;
+                    tmpFeat.IsHostile = false;
+                    tmpFeat.UseActionQueue = false;
+                    tmpFeat.CRModifier = 1.0;
+
+                    Standard.Feats.Add(tmpFeat);
+                    break;
+
+                case 1031: // Dodge Bonus + 3 (Shou Disciple)
+                    SetText(tmpFeat.Name, 110713);
+                    SetText(tmpFeat.Description, 110714);
+                    tmpFeat.Hint = "Cut";
+                    tmpFeat.MinLevelClass = CreateRef<CharacterClass>(40);
+                    tmpFeat.MinLevel = 4;
+                    tmpFeat.Icon = "ife_dodge";
+                    tmpFeat.Category = AICategory.FriendlyEnhancementSelf;
+                    tmpFeat.UseableByAllClasses = false;
+                    tmpFeat.ToolsetCategory = FeatCategory.ClassOrRacial;
+                    tmpFeat.IsHostile = false;
+                    tmpFeat.UseActionQueue = false;
+                    tmpFeat.CRModifier = 0.5;
+
+                    Standard.Feats.Add(tmpFeat);
+                    break;
+
+                // General cut Feats
+
+                case 385: // Smooth Talk
+                    tmpFeat.Name.OriginalIndex = -1;
+                    tmpFeat.Name[TLKLanguage.English].Text = "Smooth Talk";
+                    tmpFeat.Name[TLKLanguage.English].TextF = tmpFeat.Name[TLKLanguage.English].Text;
+                    tmpFeat.Hint = "Cut";
+                    tmpFeat.Icon = "ife_x1smooth";
+                    tmpFeat.Category = AICategory.FriendlyEnhancementSelf;
+                    tmpFeat.UseableByAllClasses = true;
+                    tmpFeat.ToolsetCategory = FeatCategory.Other;
+                    tmpFeat.IsHostile = false;
+                    tmpFeat.UseActionQueue = false;
+
+                    Standard.Feats.Add(tmpFeat);
+                    break;
+
+                case 403: // Mercantile Background
+                    tmpFeat.Name.OriginalIndex = -1;
+                    tmpFeat.Name[TLKLanguage.English].Text = "Mercantile Background";
+                    tmpFeat.Name[TLKLanguage.English].TextF = tmpFeat.Name[TLKLanguage.English].Text;
+                    tmpFeat.Hint = "Cut";
+                    tmpFeat.Icon = "ife_x1merch";
+                    tmpFeat.Category = AICategory.FriendlyEnhancementSelf;
+                    tmpFeat.UseableByAllClasses = true;
+                    tmpFeat.ToolsetCategory = FeatCategory.Other;
+                    tmpFeat.IsHostile = false;
+                    tmpFeat.UseActionQueue = false;
+
+                    Standard.Feats.Add(tmpFeat);
+                    break;
+
+                case 991: // Master Crafter
+                    SetText(tmpFeat.Name, 83633);
+                    SetText(tmpFeat.Description, 83634);
+                    tmpFeat.Hint = "Cut";
+                    tmpFeat.MinLevelClass = CreateRef<CharacterClass>(28); // Harper
+                    tmpFeat.MinLevel = 10;
+                    tmpFeat.Icon = "ife_X2MstCraft";
+                    tmpFeat.UseableByAllClasses = false;
+                    tmpFeat.ToolsetCategory = FeatCategory.ClassOrRacial;
+                    tmpFeat.IsHostile = false;
+                    tmpFeat.UseActionQueue = false;
+
+                    Standard.Feats.Add(tmpFeat);
+                    break;
+
+                case 992: // Scrounger
+                    SetText(tmpFeat.Name, 83635);
+                    SetText(tmpFeat.Description, 83636);
+                    tmpFeat.Hint = "Cut";
+                    tmpFeat.MinLevelClass = CreateRef<CharacterClass>(28); // Harper
+                    tmpFeat.MinLevel = 6;
+                    tmpFeat.Icon = "ife_X2MstCraft";
+                    tmpFeat.UseableByAllClasses = false;
+                    tmpFeat.ToolsetCategory = FeatCategory.ClassOrRacial;
+                    tmpFeat.IsHostile = false;
+                    tmpFeat.UseActionQueue = false;
+
+                    Standard.Feats.Add(tmpFeat);
+                    break;
+            }
+        }
+
         private void ImportFeats()
         {
             var feat2da = Load2da("feat");
@@ -654,7 +986,11 @@ namespace Eos.Services
                 tmpFeat.ID = GenerateGuid("feat", i);
                 tmpFeat.Index = i;
 
-                if (!SetText(tmpFeat.Name, feat2da[i].AsInteger("FEAT"))) continue;
+                if (!SetText(tmpFeat.Name, feat2da[i].AsInteger("FEAT")))
+                {
+                    ImportCutFeat(feat2da, tmpFeat, i);
+                    continue;
+                }
                 SetText(tmpFeat.Description, feat2da[i].AsInteger("DESCRIPTION"));
 
                 tmpFeat.Icon = AddIconResource(feat2da[i].AsString("ICON"));

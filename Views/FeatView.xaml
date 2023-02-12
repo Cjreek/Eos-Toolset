@@ -120,7 +120,7 @@
 
                         <!--CR Modifier-->
                         <TextBlock Text="CR Modifier" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
-                        <wpftk:DoubleUpDown Text="{Binding Data.CRModifier}" Grid.Row="7" Grid.Column="1"/>
+                        <wpftk:DoubleUpDown Value="{Binding Data.CRModifier}" Grid.Row="7" Grid.Column="1"/>
 
                         <!--Is Hostile-->
                         <TextBlock Text="Is Hostile" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
