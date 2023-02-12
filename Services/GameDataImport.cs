@@ -31,7 +31,6 @@ namespace Eos.Services
 
         private List<KeyValuePair<TLKStringSet, int?>> tlkBuffer = new List<KeyValuePair<TLKStringSet, int?>>();
         private HashSet<String> iconResourceBuffer = new HashSet<String>();
-
         private TwoDimensionalArrayFile Load2da(String name)
         {
             var filename = nwnBasePath + @"\ovr\" + name + ".2da";
@@ -424,10 +423,13 @@ namespace Eos.Services
                     tmpClass.Playable = true;
                     tmpClass.Name.OriginalIndex = -1;
                     tmpClass.Name[TLKLanguage.English].Text = "Eye of Grummsh";
-                    tmpClass.Name[TLKLanguage.English].TextF = "Eye of Grummsh";
+                    tmpClass.Name[TLKLanguage.English].TextF = tmpClass.Name[TLKLanguage.English].Text;
                     tmpClass.NamePlural.OriginalIndex = -1;
                     tmpClass.NamePlural[TLKLanguage.English].Text = "Eyes of Grummsh";
-                    tmpClass.NamePlural[TLKLanguage.English].TextF = "Eyes of Grummsh";
+                    tmpClass.NamePlural[TLKLanguage.English].TextF = tmpClass.NamePlural[TLKLanguage.English].Text;
+                    tmpClass.Description.OriginalIndex = -1;
+                    tmpClass.Description[TLKLanguage.English].Text = "(PRESTIGE CLASS)\r\nWorshipers of the Orc deity Gruumsh that have put out their own right eye in a bloody and painful ritual. These living martyrs to Gruumsh are some of the toughest orcs and half-orcs in the world.\r\nThe eye of Gruumsh is a true prestige class in the sense that all orcs respect those who achieve it.\r\nBarbarians gain the most value from this prestige class, since it encourages raging as a fighting style\r\n\r\n- Hit Die: d12\r\n- Proficiencies: Simple and Martial Weapons, Light, and Medium Armor Proficiency, Shields\r\n- Skill Points: 2 + Int Modifier.\r\n\r\nREQUIREMENTS:\r\n\r\nAlignment: Chaotic evil, choatic neutral, neutral evil, or neutral.\r\nRace: Half-Orc or Orc\r\nFeats: Exotic Weapon Proficiency (Double Axe), Weapon Focus (Double Axe).\r\nBase Attack Bonus: +6\r\n\r\nABILITIES:\r\n\r\nLevel\r\n1: Blind-Fight.\r\n Command the Horde\r\n Rage 1/day.\r\n2. Swing Blindly - The character's rage's become more powerful granting a +4 strength bonus, while also suffering a -4 armor bonus while raging.\r\n3: Ritual Scarring - Through frequent disfiguration of his own skin, the eye of Gruumsh gains a +1 natural armor bonus.\r\n4: Blinding Spittle - The character can spit their stomach acid into a target's eyes 2/day.\r\n Rage 2/day.\r\n5: Blindsight - The character gains blindsight in a 5 foot radius.\r\n6: Ritual Scarring - The eye of Gruumsh's natural armor bonus increases to +2.\r\n7: Blinding Spittle 4/day.\r\n8: Blindsight 10 foot radius.\r\n Rage 3/day.\r\n9: Ritual Scarring - The eye of Gruumsh's natural armor bonus increases to +3.\r\n10: Sight of Gruumsh - The character gains a +2 morale bonus on all saving throws.";
+                    tmpClass.Description[TLKLanguage.English].TextF = tmpClass.Description[TLKLanguage.English].Text;
                     tmpClass.Hint = "Cut";
                     tmpClass.Icon = "ir_wizard";
                     tmpClass.HitDie = 12;
@@ -446,10 +448,13 @@ namespace Eos.Services
                     tmpClass.Playable = true;
                     tmpClass.Name.OriginalIndex = -1;
                     tmpClass.Name[TLKLanguage.English].Text = "Shou Disciple";
-                    tmpClass.Name[TLKLanguage.English].TextF = "Shou Disciple";
+                    tmpClass.Name[TLKLanguage.English].TextF = tmpClass.Name[TLKLanguage.English].Text;
                     tmpClass.NamePlural.OriginalIndex = -1;
                     tmpClass.NamePlural[TLKLanguage.English].Text = "Shou Disciples";
-                    tmpClass.NamePlural[TLKLanguage.English].TextF = "Shou Disciples";
+                    tmpClass.NamePlural[TLKLanguage.English].TextF = tmpClass.NamePlural[TLKLanguage.English].Text;
+                    tmpClass.Description.OriginalIndex = -1;
+                    tmpClass.Description[TLKLanguage.English].Text = "(PRESTIGE CLASS)\r\nShou disciples are martial artists who have studied or observed the monks of Kara-Tur and seek to emulate their style. Focusing more on the martial aspects of a monk's training, they sacrifice the enlightenment and supernatural abilities of the true ascetic. Shou disciples fight with martial weapons and often wear armor, instantly marking them as different from monks.\r\n\r\n- Hit Die: d10\r\n- Proficiencies: Martial and Monk Weapons, Light Armor Proficiency.\r\n- Skill Points: 2 + Int Modifier.\r\n\r\nREQUIREMENTS:\r\n\r\nFeats: Dodge, Improved Unarmed Strike, Weapon Focus (Unarmed Strike)\r\nBase Attack Bonus: +3\r\nSkills: Tumble 4 ranks\r\nBase Reflex Save: +2\r\n\r\nABILITIES:\r\n\r\nLevel\r\n1: Shou Disciple Dodge Bonus +1 (replaces the normal +1 dodge feat bonus).\r\n Unarmed Strike - The character deals 1d6 of unarmed damage. A Shou disciple with levels in the monk class will use the better of the two damage ranges, or the unarmed damage calculated by combining his Shou disciple and monk levels and using the unarmed damage of a monk of the resulting level if it produces a better result.\r\n Wearing light armor does not interfere with any of the Shou disciple's class abilities, but shields and medium or heavy armor do.\r\n2: Unarmed Strike - The character deals 1d8 of unarmed damage.\r\n Shou Disciple Dodge Bonus +2\r\n Bonus Feat - Chosen from the following list if the prerequisites are met: Deflect Arrows, Expertise, Improved Initiative, Improved Knockdown, Mobility, Power Attack, Spring Attack, Weapon Finesse and Weapon Specialization.\r\n3: Unarmed Strike - The character deals 1d10 of unarmed damage.\r\n Martial Flurry (light) - The character gains the ability to use any light melee weapon for his flurry of blows.\r\n4: Shou Disciple Dodge Bonus +3\r\n Bonus Feat - Chosen from the following list if the prerequisites are met: Deflect Arrows, Expertise, Improved Initiative, Improved Knockdown, Mobility, Power Attack, Spring Attack, Weapon Finesse and Weapon Specialization.\r\n5: Unarmed Strike - The character deals 2d6 of unarmed damage.\r\n Martial Flurry (any) - The character gains the ability to use any melee weapon for his flurry of blows.";
+                    tmpClass.Description[TLKLanguage.English].TextF = tmpClass.Description[TLKLanguage.English].Text;
                     tmpClass.Hint = "Cut";
                     tmpClass.Icon = "ir_wizard";
                     tmpClass.HitDie = 10;
