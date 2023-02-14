@@ -87,6 +87,11 @@ namespace Eos.ViewModels
             MessageDispatcher.Send(MessageType.SaveProject, null);
         });
 
+        public DelegateCommand OpenProjectSettingsCommand { get; private set; } = new DelegateCommand(() =>
+        {
+            MessageDispatcher.Send(MessageType.OpenProjectSettings, null);
+        });
+
         public DelegateCommand<Type> NewDetailCommand { get; private set; } = new DelegateCommand<Type>(detailModelType =>
         {
             MessageDispatcher.Send(MessageType.NewDetail, detailModelType);

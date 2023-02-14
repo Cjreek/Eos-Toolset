@@ -21,7 +21,8 @@ namespace Eos.ViewModels.Base
         DeleteDetail,
         NewCustomDetail,
         GotoDetail,
-        OpenGlobalSearch
+        OpenGlobalSearch,
+        OpenProjectSettings
     }
 
     public delegate void MessageHandler(MessageType type, object? message, object? param);

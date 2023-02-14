@@ -137,23 +137,26 @@ namespace Eos.Repositories
             return NWNResourceType.INVALID_RESOURCE_TYPE;
         }
 
-        public void LoadExternalResources(String externalBasePath)
+        public void LoadExternalResources(IEnumerable<String> externalBasePath)
         {
             externalResources.Clear();
-            if (Directory.Exists(externalBasePath))
+            foreach (String path in externalBasePath)
             {
-                foreach (var file in Directory.EnumerateFiles(externalBasePath, "*.*", SearchOption.AllDirectories))
+                if (Directory.Exists(path))
                 {
-                    var ext = Path.GetExtension(file).ToLower();
-                    var resType = ExtensionToResourceType(ext);
-                    if (resType != NWNResourceType.INVALID_RESOURCE_TYPE)
+                    foreach (var file in Directory.EnumerateFiles(path, "*.*", SearchOption.AllDirectories))
                     {
-                        var filename = Path.GetFileName(file);
-                        var resRef = filename.Substring(0, filename.Length - ext.Length);
+                        var ext = Path.GetExtension(file).ToLower();
+                        var resType = ExtensionToResourceType(ext);
+                        if (resType != NWNResourceType.INVALID_RESOURCE_TYPE)
+                        {
+                            var filename = Path.GetFileName(file);
+                            var resRef = filename.Substring(0, filename.Length - ext.Length);
 
-                        AddResource(NWNResourceSource.External, resRef, resType, file, true);
-                        if (!filesByTypeDict[resType].Contains(resRef))
-                            filesByTypeDict[resType].Add(resRef);
+                            AddResource(NWNResourceSource.External, resRef, resType, file, true);
+                            if (!filesByTypeDict[resType].Contains(resRef))
+                                filesByTypeDict[resType].Add(resRef);
+                        }
                     }
                 }
             }

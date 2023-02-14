@@ -20,7 +20,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         x:Name="mainWindow"
-        MinHeight="300" MinWidth="500" Tag="Eos Toolset v0.55"
+        MinHeight="300" MinWidth="500" Tag="Eos Toolset v0.56"
         Height="700" Width="1100" FontSize="16"
         Loaded="mainWindow_Loaded" Closing="mainWindow_Closing">
     <Window.Title>
@@ -421,6 +421,16 @@
                         </Frame>
                     </DataTemplate>
 
+                    <DataTemplate DataType="{x:Type vm:MasterFeatViewModel}">
+                        <Frame DataContext="{Binding}" LoadCompleted="Frame_LoadCompleted" DataContextChanged="Frame_DataContextChanged">
+                            <Frame.Content>
+                                <view:MasterFeatView DataContext="{Binding}" 
+                                     TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}" 
+                                     Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+                            </Frame.Content>
+                        </Frame>
+                    </DataTemplate>
+
                     <!--Tables-->
 
                     <DataTemplate DataType="{x:Type vm:FeatsTableViewModel}">
@@ -571,13 +581,13 @@
     <!-- Window Content -->
     <DockPanel>
         <Menu DockPanel.Dock="Top" FontSize="16">
-            <MenuItem Header="File">
-                <MenuItem Header="New Project" InputGestureText="Ctrl+N" Command="{Binding Path=NewProjectCommand}">
+            <MenuItem Header="Project">
+                <MenuItem Header="New" InputGestureText="Ctrl+N" Command="{Binding Path=NewProjectCommand}">
                     <MenuItem.Icon>
                         <Image Source="{StaticResource iconNew}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem x:Name="miOpenProject" Header="Open Project" InputGestureText="Ctrl+O" Click="miOpenProject_Click">
+                <MenuItem x:Name="miOpenProject" Header="Open" InputGestureText="Ctrl+O" Click="miOpenProject_Click">
                     <MenuItem.Icon>
                         <Image Source="{StaticResource iconOpen}"/>
                     </MenuItem.Icon>
@@ -587,6 +597,8 @@
                         <Image Source="{StaticResource iconSave}"/>
                     </MenuItem.Icon>
                 </MenuItem>
+                <Separator/>
+                <MenuItem Header="Settings" Command="{Binding ElementName=viewModel, Path=OpenProjectSettingsCommand}"/>
                 <Separator/>
                 <MenuItem x:Name="miImportBaseData" Header="Import Game Files" Click="miImportBaseData_Click">
                     <MenuItem.Icon>
@@ -601,13 +613,13 @@
                 <Separator/>
                 <MenuItem x:Name="miExit" Header="Exit" Click="miExit_Click"/>
             </MenuItem>
+            
             <MenuItem Header="Tools">
                 <MenuItem x:Name="miSearch" Header="Global Search" InputGestureText="Ctrl+F" Command="{Binding ElementName=viewModel, Path=GlobalSearchCommand}">
                     <MenuItem.Icon>
                         <Image Source="{StaticResource iconSearch}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Settings..." IsEnabled="False"/>
             </MenuItem>
         </Menu>
 
@@ -641,8 +653,8 @@
                 
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <TextBlock Text="Language" VerticalAlignment="Center"/>
-                    <uc:EnumComboBox Margin="3,0,0,0" Width="150" ItemsSource="{ext:EnumSource {x:Type tlk:TLKLanguage}}" SelectedValue="{Binding CurrentLanguage, Mode=TwoWay}" VerticalAlignment="Center"/>
-                    <ToggleButton Margin="3,0,0,0" IsChecked="{Binding CurrentGender, Mode=TwoWay}" VerticalAlignment="Center" Width="24">
+                    <uc:EnumComboBox x:Name="cbCurrentLang" Margin="3,0,0,0" Width="150" ItemsSource="{ext:EnumSource {x:Type tlk:TLKLanguage}}" SelectedValue="{Binding CurrentLanguage, Mode=TwoWay}" VerticalAlignment="Center"/>
+                    <ToggleButton Margin="3,0,0,0" IsChecked="{Binding CurrentGender, Mode=TwoWay}" VerticalAlignment="Center" Width="{Binding ElementName=cbCurrentLang, Path=ActualHeight}" Height="{Binding ElementName=cbCurrentLang, Path=ActualHeight}">
                         <ToggleButton.Style>
                             <Style TargetType="ToggleButton">
                                 <Setter Property="Content">
@@ -713,6 +725,7 @@
                             <TreeViewItem Header="Feat" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.FeatSpells}"/>
                             <TreeViewItem Header="Other" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.OtherSpells}"/>
                         </TreeViewItem>
+                        <TreeViewItem Header="Master Feats" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=MasterFeats}"/>
                         <TreeViewItem Header="Feats" ToolTip="CATEGORY" ToolTipService.IsEnabled="False">
                             <TreeViewItem Header="Class/Racial" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.ClassOrRacial}"/>
                             <TreeViewItem Header="Active Combat Feats" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.CombatActive}"/>
@@ -915,6 +928,14 @@
                                     </TextBlock>
                                 </TreeViewItem.Header>
                             </TreeViewItem>
+                        </TreeViewItem>
+                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=MasterFeats}" Tag="{x:Type models:MasterFeat}">
+                            <TreeViewItem.Header>
+                                <TextBlock>
+                                    <Run Text="Master Feats"/>
+                                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=MasterFeats, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                                </TextBlock>
+                            </TreeViewItem.Header>
                         </TreeViewItem>
                         <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" Tag="{x:Type models:Feat}">
                             <TreeViewItem.Header>

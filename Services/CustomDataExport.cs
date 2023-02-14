@@ -179,6 +179,16 @@ namespace Eos.Services
                 }
             }
 
+            // MasterFeats
+            foreach (var masterFeat in project.MasterFeats)
+            {
+                if (masterFeat != null)
+                {
+                    AddTLKString(masterFeat.Name);
+                    AddTLKString(masterFeat.Description);
+                }
+            }
+
             // Poisons
             foreach (var poison in project.Poisons)
             {
@@ -935,6 +945,47 @@ namespace Eos.Services
             }
         }
 
+        private void ExportMasterFeats(EosProject project)
+        {
+            if (project.MasterFeats.Count == 0) return;
+
+            var masterFeats2da = Load2da("masterfeats");
+            if (masterFeats2da != null)
+            {
+                AddExtensionColumns(masterFeats2da, project.MasterFeats.Extensions);
+                foreach (var masterFeat in project.MasterFeats.OrderBy(feat => feat?.Index))
+                {
+                    if (masterFeat != null)
+                    {
+                        var index = -1;
+                        if (masterFeat.Overrides != null)
+                            index = MasterRepository.Standard.MasterFeats.GetByID(masterFeat.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.MasterFeats.GetCustomDataStartIndex() + masterFeat.Index >= masterFeats2da.Count)
+                            {
+                                masterFeats2da.AddRecord();
+                            }
+
+                            index = project.MasterFeats.GetCustomDataStartIndex() + (masterFeat.Index ?? 0);
+                        }
+
+                        var record = masterFeats2da[index];
+                        record.Set("STRREF", GetTLKIndex(masterFeat.Name));
+                        record.Set("DESCRIPTION", GetTLKIndex(masterFeat.Description));
+                        record.Set("ICON", masterFeat.Icon);
+
+                        WriteExtensionValues(record, masterFeat.ExtensionValues);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "masterfeats.2da";
+                masterFeats2da.Save(filename);
+
+                AddHAKResource("masterfeats", NWNResourceType.TWODA, filename);
+            }
+        }
+
         private void ExportFeats(EosProject project)
         {
             if (project.Feats.Count == 0) return;
@@ -995,7 +1046,7 @@ namespace Eos.Services
                         record.Set("SUCCESSOR", project.Feats.Get2DAIndex(feat.SuccessorFeat));
                         record.Set("CRValue", feat.CRModifier);
                         record.Set("USESPERDAY", feat.UsesPerDay != 0 ? feat.UsesPerDay : null);
-                        record.Set("MASTERFEAT", project.Feats.Get2DAIndex(feat.MasterFeat));
+                        record.Set("MASTERFEAT", project.MasterFeats.Get2DAIndex(feat.MasterFeat));
                         record.Set("TARGETSELF", (feat.TargetSelf ?? false) ? 1 : null);
                         record.Set("OrReqFeat0", project.Feats.Get2DAIndex(feat.RequiredFeatSelection1));
                         record.Set("OrReqFeat1", project.Feats.Get2DAIndex(feat.RequiredFeatSelection2));
@@ -1726,6 +1777,7 @@ namespace Eos.Services
             ExportSpells(project);
             ExportAreaEffects(project);
             ExportPolymorphs(project);
+            ExportMasterFeats(project);
 
             ExportCustomObjects(project);
 

@@ -94,9 +94,9 @@
                             <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
                         </uc:ResetIsEnabled>
                         
-                        <!--Parent Feat-->
-                        <TextBlock Text="Parent Feat" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
-                        <uc:FeatComboBox SelectedValue="{Binding Data.MasterFeat}" Grid.Row="5" Grid.Column="1"/>
+                        <!--Master Feat-->
+                        <TextBlock Text="Master Feat" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+                        <uc:MasterFeatComboBox SelectedValue="{Binding Data.MasterFeat}" Grid.Row="5" Grid.Column="1"/>
 
                         <!--Parent Feat-->
                         <TextBlock Text="Successor Feat" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>

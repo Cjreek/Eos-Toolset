@@ -89,7 +89,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Type" Width="75" DisplayMemberBinding="{Binding Path=TypeName}"/>
+                    <GridViewColumn Header="Type" Width="80" DisplayMemberBinding="{Binding Path=TypeName}"/>
                     <GridViewColumn Header="ID" Width="35" DisplayMemberBinding="{Binding Path=CalculatedIndex, Mode=OneWay}"/>
                 </GridView>
             </ListView.View>

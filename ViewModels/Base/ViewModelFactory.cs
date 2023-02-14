@@ -34,6 +34,8 @@ namespace Eos.ViewModels
                 return new SpellbookViewModel(spellbook);
             if (model is AreaEffect aoe)
                 return new AreaEffectViewModel(aoe);
+            if (model is MasterFeat masterFeat)
+                return new MasterFeatViewModel(masterFeat);
 
             if (model is ClassPackage classPackage)
                 return new ClassPackageViewModel(classPackage);

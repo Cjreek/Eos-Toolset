@@ -205,6 +205,10 @@ namespace Eos.ViewModels
                         MasterRepository.Project.Save();
                         break;
 
+                    case MessageType.OpenProjectSettings:
+                        WindowService.OpenDialog<ProjectOptionsViewModel>();
+                        break;
+
                     case MessageType.ChangeLanguage:
                         CurrentLanguage = (TLKLanguage?)message ?? CurrentLanguage;
                         break;
@@ -217,6 +221,7 @@ namespace Eos.ViewModels
             MessageDispatcher.Subscribe(MessageType.NewProject, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.OpenProject, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.SaveProject, MessageHandler);
+            MessageDispatcher.Subscribe(MessageType.OpenProjectSettings, MessageHandler); 
 
             MessageDispatcher.Subscribe(MessageType.NewDetail, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.OverrideDetail, MessageHandler);
@@ -238,6 +243,7 @@ namespace Eos.ViewModels
             MessageDispatcher.Unsubscribe(MessageType.NewProject, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.OpenProject, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.SaveProject, MessageHandler);
+            MessageDispatcher.Unsubscribe(MessageType.OpenProjectSettings, MessageHandler);
 
             MessageDispatcher.Unsubscribe(MessageType.NewDetail, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.OverrideDetail, MessageHandler);

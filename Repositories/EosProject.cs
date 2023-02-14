@@ -5,6 +5,7 @@ using Eos.Nwn.Tlk;
 using Eos.Types;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.IO.Packaging;
@@ -26,50 +27,175 @@ namespace Eos.Repositories
         {
             ExportOffset = exportOffset;
         }
+
+        public ProjectSettingsCustomData Clone()
+        {
+            return (ProjectSettingsCustomData)MemberwiseClone();
+        }
     }
 
-    public class ProjectSettingsExport
+    public class ProjectSettingsExport : INotifyPropertyChanged
     {
+        private string _hakFolder = "";
+        private string _2daFolder = "";
+        private string _tlkFolder = "";
+        private string _incFolder = "";
+        private string _baseTlk = "";
+
         public bool LowercaseFilenames { get; set; } = false;
-        public string HakFolder { get; set; } = "";
-        public string TwoDAFolder { get; set; } = "";
-        public string TlkFolder { get; set; } = "";
-        public string IncludeFolder { get; set; } = "";
-        public string BaseTlkFile { get; set; } = "";
+        public string HakFolder
+        {
+            get { return _hakFolder; }
+            set
+            {
+                if (_hakFolder != value)
+                {
+                    _hakFolder = value;
+                    if (!_hakFolder.EndsWith(Path.DirectorySeparatorChar)) _hakFolder += Path.DirectorySeparatorChar;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public string TwoDAFolder
+        {
+            get { return _2daFolder; }
+            set
+            {
+                if (_2daFolder != value)
+                {
+                    _2daFolder = value;
+                    if (!_2daFolder.EndsWith(Path.DirectorySeparatorChar)) _2daFolder += Path.DirectorySeparatorChar;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public string TlkFolder
+        {
+            get { return _tlkFolder; }
+            set
+            {
+                if (_tlkFolder != value)
+                {
+                    _tlkFolder = value;
+                    if (!_tlkFolder.EndsWith(Path.DirectorySeparatorChar)) _tlkFolder += Path.DirectorySeparatorChar;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public string IncludeFolder
+        {
+            get { return _incFolder; }
+            set
+            {
+                if (_incFolder != value)
+                {
+                    _incFolder = value;
+                    if (!_incFolder.EndsWith(Path.DirectorySeparatorChar)) _incFolder += Path.DirectorySeparatorChar;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public string BaseTlkFile
+        {
+            get { return _baseTlk; }
+            set
+            {
+                if (_baseTlk != value)
+                {
+                    _baseTlk = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public int TlkOffset { get; set; } = 0;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        public ProjectSettingsExport Clone()
+        {
+            return (ProjectSettingsExport)MemberwiseClone();
+        }
     }
 
     public class ProjectSettings
     {
-        public string ExternalFolder { get; set; } = "";
+        public ObservableCollection<String> ExternalFolders { get; set; } = new ObservableCollection<String>();
 
-        public ProjectSettingsExport Export { get; } = new ProjectSettingsExport();
+        public ProjectSettingsExport Export { get; private set; } = new ProjectSettingsExport();
 
-        public ProjectSettingsCustomData AreaEffects { get; } = new ProjectSettingsCustomData(47);
-        public ProjectSettingsCustomData Classes { get; } = new ProjectSettingsCustomData(43);
-        public ProjectSettingsCustomData Diseases { get; } = new ProjectSettingsCustomData(17);
-        public ProjectSettingsCustomData Domains { get; } = new ProjectSettingsCustomData(22);
-        public ProjectSettingsCustomData Feats { get; } = new ProjectSettingsCustomData(1116);
-        public ProjectSettingsCustomData Packages { get; } = new ProjectSettingsCustomData(132);
-        public ProjectSettingsCustomData Poisons { get; } = new ProjectSettingsCustomData(45);
-        public ProjectSettingsCustomData Polymorphs { get; } = new ProjectSettingsCustomData(107);
-        public ProjectSettingsCustomData Races { get; } = new ProjectSettingsCustomData(30);
-        public ProjectSettingsCustomData Skills { get; } = new ProjectSettingsCustomData(28);
-        public ProjectSettingsCustomData Soundsets { get; } = new ProjectSettingsCustomData(5100);
-        public ProjectSettingsCustomData Spellbooks { get; } = new ProjectSettingsCustomData();
-        public ProjectSettingsCustomData Spells { get; } = new ProjectSettingsCustomData(840);
-        public ProjectSettingsCustomData AttackBonusTables { get; } = new ProjectSettingsCustomData();
-        public ProjectSettingsCustomData BonusFeatTables { get; } = new ProjectSettingsCustomData();
-        public ProjectSettingsCustomData FeatTables { get; } = new ProjectSettingsCustomData();
-        public ProjectSettingsCustomData KnownSpellsTables { get; } = new ProjectSettingsCustomData();
-        public ProjectSettingsCustomData PrerequisiteTables { get; } = new ProjectSettingsCustomData(); 
-        public ProjectSettingsCustomData RacialFeatsTables { get; } = new ProjectSettingsCustomData();
-        public ProjectSettingsCustomData SavesTables { get; } = new ProjectSettingsCustomData();
-        public ProjectSettingsCustomData SkillsTables { get; } = new ProjectSettingsCustomData();
-        public ProjectSettingsCustomData SpellSlotTables { get; } = new ProjectSettingsCustomData();
-        public ProjectSettingsCustomData StatGainTables { get; } = new ProjectSettingsCustomData();
+        public ProjectSettingsCustomData AreaEffects { get; private set; } = new ProjectSettingsCustomData(47);
+        public ProjectSettingsCustomData Classes { get; private set; } = new ProjectSettingsCustomData(43);
+        public ProjectSettingsCustomData Diseases { get; private set; } = new ProjectSettingsCustomData(17);
+        public ProjectSettingsCustomData Domains { get; private set; } = new ProjectSettingsCustomData(22);
+        public ProjectSettingsCustomData Feats { get; private set; } = new ProjectSettingsCustomData(1116);
+        public ProjectSettingsCustomData MasterFeats { get; private set; } = new ProjectSettingsCustomData(18);
+        public ProjectSettingsCustomData Packages { get; private set; } = new ProjectSettingsCustomData(132);
+        public ProjectSettingsCustomData Poisons { get; private set; } = new ProjectSettingsCustomData(45);
+        public ProjectSettingsCustomData Polymorphs { get; private set; } = new ProjectSettingsCustomData(107);
+        public ProjectSettingsCustomData Races { get; private set; } = new ProjectSettingsCustomData(30);
+        public ProjectSettingsCustomData Skills { get; private set; } = new ProjectSettingsCustomData(28);
+        public ProjectSettingsCustomData Soundsets { get; private set; } = new ProjectSettingsCustomData(5100);
+        public ProjectSettingsCustomData Spellbooks { get; private set; } = new ProjectSettingsCustomData();
+        public ProjectSettingsCustomData Spells { get; private set; } = new ProjectSettingsCustomData(840);
+        public ProjectSettingsCustomData AttackBonusTables { get; private set; } = new ProjectSettingsCustomData();
+        public ProjectSettingsCustomData BonusFeatTables { get; private set; } = new ProjectSettingsCustomData();
+        public ProjectSettingsCustomData FeatTables { get; private set; } = new ProjectSettingsCustomData();
+        public ProjectSettingsCustomData KnownSpellsTables { get; private set; } = new ProjectSettingsCustomData();
+        public ProjectSettingsCustomData PrerequisiteTables { get; private set; } = new ProjectSettingsCustomData(); 
+        public ProjectSettingsCustomData RacialFeatsTables { get; private set; } = new ProjectSettingsCustomData();
+        public ProjectSettingsCustomData SavesTables { get; private set; } = new ProjectSettingsCustomData();
+        public ProjectSettingsCustomData SkillsTables { get; private set; } = new ProjectSettingsCustomData();
+        public ProjectSettingsCustomData SpellSlotTables { get; private set; } = new ProjectSettingsCustomData();
+        public ProjectSettingsCustomData StatGainTables { get; private set; } = new ProjectSettingsCustomData();
 
-        public ProjectSettingsCustomData CustomData { get; } = new ProjectSettingsCustomData();
+        public ProjectSettingsCustomData CustomData { get; private set; } = new ProjectSettingsCustomData();
+
+        public ProjectSettings Clone()
+        {
+            ProjectSettings clone = (ProjectSettings)this.MemberwiseClone();
+            clone.ExternalFolders = new ObservableCollection<String>(this.ExternalFolders);
+            clone.Export = this.Export.Clone();
+            clone.AreaEffects = this.AreaEffects.Clone();
+            clone.AttackBonusTables = this.AttackBonusTables.Clone();
+            clone.BonusFeatTables = this.BonusFeatTables.Clone();
+            clone.Classes = this.Classes.Clone();
+            clone.CustomData = this.CustomData.Clone();
+            clone.Diseases = this.Diseases.Clone();
+            clone.Domains = this.Domains.Clone();
+            clone.Feats = this.Feats.Clone();
+            clone.FeatTables = this.FeatTables.Clone();
+            clone.KnownSpellsTables = this.KnownSpellsTables.Clone();
+            clone.MasterFeats = this.MasterFeats.Clone();
+            clone.Packages = this.Packages.Clone();
+            clone.Poisons = this.Poisons.Clone();
+            clone.Polymorphs = this.Polymorphs.Clone();
+            clone.PrerequisiteTables = this.PrerequisiteTables.Clone();
+            clone.Races = this.Races.Clone();
+            clone.RacialFeatsTables = this.RacialFeatsTables.Clone();
+            clone.SavesTables = this.SavesTables.Clone();
+            clone.Skills = this.Skills.Clone();
+            clone.SkillsTables = this.SkillsTables.Clone();
+            clone.Soundsets = this.Soundsets.Clone();
+            clone.Spellbooks = this.Spellbooks.Clone();
+            clone.Spells = this.Spells.Clone();
+            clone.SpellSlotTables = this.SpellSlotTables.Clone();
+            clone.StatGainTables = this.StatGainTables.Clone();      
+
+            return clone;
+        }
     }
 
     public class EosProject : RepositoryCollection
@@ -83,7 +209,7 @@ namespace Eos.Repositories
         {
         }
 
-        public ProjectSettings Settings { get; } = new ProjectSettings();
+        public ProjectSettings Settings { get; private set; } = new ProjectSettings();
 
         public bool UseNWNX
         {
@@ -150,11 +276,16 @@ namespace Eos.Repositories
             settings.ExportOffset = node?["ExportOffset"]?.GetValue<int>() ?? settings.ExportOffset;
         }
 
+        public void OverrideSettings(ProjectSettings settings)
+        {
+            this.Settings = settings.Clone();
+        }
+
         private void LoadProjectFile(string projectFilename)
         {
             ProjectFolder = Path.GetDirectoryName(projectFilename) ?? "";
 
-            Settings.ExternalFolder = ProjectFolder + Constants.ExternalFilesPath;
+            //Settings.ExternalFolder = ProjectFolder + Constants.ExternalFilesPath;
         
             Settings.Export.HakFolder = ProjectFolder + Constants.ExportHAKFolder;
             Settings.Export.TlkFolder = ProjectFolder + Constants.ExportTLKFolder;
@@ -169,7 +300,17 @@ namespace Eos.Repositories
                     Name = projectJson["Name"]?.GetValue<String>() ?? "";
                     DefaultLanguage = Enum.Parse<TLKLanguage>(projectJson["DefaultLanguage"]?.GetValue<string>() ?? "");
 
-                    Settings.ExternalFolder = projectJson["ExternalFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.ExternalFilesPath;
+                    var foldersJson = projectJson["ExternalFolders"]?.AsArray();
+                    if (foldersJson != null)
+                    { 
+                        foreach (var folderJson in foldersJson)
+                        {
+                            if (folderJson == null) continue;
+                            var folder = folderJson.GetValue<String>();
+                            if (!folder.EndsWith(Path.DirectorySeparatorChar)) folder += Path.DirectorySeparatorChar;
+                            Settings.ExternalFolders.Add(folder);
+                        }
+                    }
 
                     var exportJson = projectJson["Export"];
                     Settings.Export.LowercaseFilenames = exportJson?["LowercaseFilenames"]?.GetValue<bool>() ?? false;
@@ -186,6 +327,7 @@ namespace Eos.Repositories
                     LoadCustomDataSettings(Settings.Diseases, customDataJson?["Diseases"]);
                     LoadCustomDataSettings(Settings.Domains, customDataJson?["Domains"]);
                     LoadCustomDataSettings(Settings.Feats, customDataJson?["Feats"]);
+                    LoadCustomDataSettings(Settings.MasterFeats, customDataJson?["MasterFeats"]);
                     LoadCustomDataSettings(Settings.Packages, customDataJson?["Packages"]);
                     LoadCustomDataSettings(Settings.Poisons, customDataJson?["Poisons"]);
                     LoadCustomDataSettings(Settings.Polymorphs, customDataJson?["Polymorphs"]);
@@ -214,11 +356,8 @@ namespace Eos.Repositories
                 fs.Close();
             }
 
-            if (!Settings.ExternalFolder.EndsWith(Path.DirectorySeparatorChar)) Settings.ExternalFolder += Path.DirectorySeparatorChar;
-            if (!Settings.Export.HakFolder.EndsWith(Path.DirectorySeparatorChar)) Settings.Export.HakFolder += Path.DirectorySeparatorChar;
-            if (!Settings.Export.TlkFolder.EndsWith(Path.DirectorySeparatorChar)) Settings.Export.TlkFolder += Path.DirectorySeparatorChar;
-            if (!Settings.Export.TwoDAFolder.EndsWith(Path.DirectorySeparatorChar)) Settings.Export.TwoDAFolder += Path.DirectorySeparatorChar;
-            if (!Settings.Export.IncludeFolder.EndsWith(Path.DirectorySeparatorChar)) Settings.Export.IncludeFolder += Path.DirectorySeparatorChar;
+            if (Settings.ExternalFolders.Count == 0)
+                Settings.ExternalFolders.Add(ProjectFolder + Constants.ExternalFilesPath);
 
             Directory.SetCurrentDirectory(ProjectFolder);
         }
@@ -238,7 +377,14 @@ namespace Eos.Repositories
             projectFile.Add("FileFormatVersion", 1);
             projectFile.Add("Name", Name);
             projectFile.Add("DefaultLanguage", Enum.GetName(DefaultLanguage));
-            projectFile.Add("ExternalFolder", Settings.ExternalFolder);
+
+            var externalFolders = new JsonArray();
+            foreach (var folder in Settings.ExternalFolders)
+            {
+                if (folder != null)
+                    externalFolders.Add(folder);
+            }
+            projectFile.Add("ExternalFolders", externalFolders);
 
             var export = new JsonObject();
             export.Add("LowercaseFilenames", Settings.Export.LowercaseFilenames);
@@ -256,6 +402,7 @@ namespace Eos.Repositories
             SaveCustomDataSettings(Settings.Diseases, "Diseases", customDataSettings);
             SaveCustomDataSettings(Settings.Domains, "Domains", customDataSettings);
             SaveCustomDataSettings(Settings.Feats, "Feats", customDataSettings);
+            SaveCustomDataSettings(Settings.MasterFeats, "MasterFeats", customDataSettings);
             SaveCustomDataSettings(Settings.Packages, "Packages", customDataSettings);
             SaveCustomDataSettings(Settings.Poisons, "Poisons", customDataSettings);
             SaveCustomDataSettings(Settings.Polymorphs, "Polymorphs", customDataSettings);
@@ -310,6 +457,7 @@ namespace Eos.Repositories
             Poisons.LoadFromFile(ProjectFolder + Constants.PoisonsFilename);
             Spellbooks.LoadFromFile(ProjectFolder + Constants.SpellbooksFilename);
             AreaEffects.LoadFromFile(ProjectFolder + Constants.AreaEffectsFilename);
+            MasterFeats.LoadFromFile(ProjectFolder + Constants.MasterFeatsFilename);
 
             ClassPackages.LoadFromFile(ProjectFolder + Constants.ClassPackagesFilename);
             Soundsets.LoadFromFile(ProjectFolder + Constants.SoundsetsFilename);
@@ -342,6 +490,7 @@ namespace Eos.Repositories
             Poisons.ResolveReferences();
             Spellbooks.ResolveReferences();
             AreaEffects.ResolveReferences();
+            MasterFeats.ResolveReferences();
 
             Appearances.ResolveReferences();
             ClassPackages.ResolveReferences();
@@ -372,6 +521,7 @@ namespace Eos.Repositories
             if (Settings.Diseases.Sorted) Diseases.Sort(d => d?.Name[TLKLanguage.English].Text);
             if (Settings.Domains.Sorted) Domains.Sort(d => d?.Name[TLKLanguage.English].Text);
             if (Settings.Feats.Sorted) Feats.Sort(d => d?.Name[TLKLanguage.English].Text);
+            if (Settings.MasterFeats.Sorted) MasterFeats.Sort(d => d?.Name[TLKLanguage.English].Text);
             if (Settings.FeatTables.Sorted) FeatTables.Sort(d => d?.Name);
             if (Settings.KnownSpellsTables.Sorted) KnownSpellsTables.Sort(d => d?.Name);
             if (Settings.Packages.Sorted) ClassPackages.Sort(d => d?.Name[TLKLanguage.English].Text);
@@ -390,7 +540,7 @@ namespace Eos.Repositories
 
             IsLoaded = true;
             EosConfig.LastProject = projectFilename;
-            MasterRepository.LoadExternalResources(Settings.ExternalFolder);
+            MasterRepository.LoadExternalResources(Settings.ExternalFolders);
         }
 
         public void Save()
@@ -410,6 +560,7 @@ namespace Eos.Repositories
             Poisons.SaveToFile(ProjectFolder + Constants.PoisonsFilename, Settings.Poisons.FormatJson);
             Spellbooks.SaveToFile(ProjectFolder + Constants.SpellbooksFilename, Settings.Spellbooks.FormatJson);
             AreaEffects.SaveToFile(ProjectFolder + Constants.AreaEffectsFilename, Settings.AreaEffects.FormatJson);
+            MasterFeats.SaveToFile(ProjectFolder + Constants.MasterFeatsFilename, Settings.MasterFeats.FormatJson);
 
             ClassPackages.SaveToFile(ProjectFolder + Constants.ClassPackagesFilename, Settings.Packages.FormatJson);
             Soundsets.SaveToFile(ProjectFolder + Constants.SoundsetsFilename, Settings.Soundsets.FormatJson);

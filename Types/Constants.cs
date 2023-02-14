@@ -32,6 +32,7 @@ namespace Eos.Types
         public static readonly String PoisonsFilename;
         public static readonly String SpellbooksFilename;
         public static readonly String AreaEffectsFilename;
+        public static readonly String MasterFeatsFilename;
 
         public static readonly String AppearancesFilename;
         public static readonly String ClassPackagesFilename;
@@ -65,6 +66,7 @@ namespace Eos.Types
         public static readonly String PoisonsFilePath;
         public static readonly String SpellbooksFilePath;
         public static readonly String AreaEffectsFilePath;
+        public static readonly String MasterFeatsFilePath;
 
         public static readonly String AppearancesFilePath;
         public static readonly String ClassPackagesFilePath;
@@ -114,6 +116,7 @@ namespace Eos.Types
             PoisonsFilename = "poisons.json";
             SpellbooksFilename = "spellbooks.json";
             AreaEffectsFilename = "areaeffects.json";
+            MasterFeatsFilename = "masterfeats.json";
 
             AppearancesFilename = "appearances.json";
             ClassPackagesFilename = "packages.json";
@@ -147,6 +150,7 @@ namespace Eos.Types
             PoisonsFilePath = BaseDataPath + PoisonsFilename;
             SpellbooksFilePath = BaseDataPath + SpellbooksFilename;
             AreaEffectsFilePath = BaseDataPath + AreaEffectsFilename;
+            MasterFeatsFilePath = BaseDataPath + MasterFeatsFilename;
 
             AppearancesFilePath = BaseDataPath + AppearancesFilename;
             ClassPackagesFilePath = BaseDataPath + ClassPackagesFilename;

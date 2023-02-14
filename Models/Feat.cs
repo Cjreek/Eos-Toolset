@@ -19,7 +19,7 @@ namespace Eos.Models
         private Feat? _requiredFeat2;
         private Spell? _onUseEffect;
         private Feat? _successorFeat;
-        private Feat? _masterFeat;
+        private MasterFeat? _masterFeat;
         private Feat? _requiredFeatSelection1;
         private Feat? _requiredFeatSelection2;
         private Feat? _requiredFeatSelection3;
@@ -63,7 +63,7 @@ namespace Eos.Models
         }
         public double? CRModifier { get; set; } = 1;
         public int? UsesPerDay { get; set; } = 0;
-        public Feat? MasterFeat
+        public MasterFeat? MasterFeat
         {
             get { return _masterFeat; }
             set { Set(ref _masterFeat, value); }
@@ -154,7 +154,7 @@ namespace Eos.Models
             RequiredFeat2 = Resolve(RequiredFeat2, MasterRepository.Feats);
             OnUseEffect = Resolve(OnUseEffect, MasterRepository.Spells);
             SuccessorFeat = Resolve(SuccessorFeat, MasterRepository.Feats);
-            MasterFeat = Resolve(MasterFeat, MasterRepository.Feats);
+            MasterFeat = Resolve(MasterFeat, MasterRepository.MasterFeats);
             RequiredFeatSelection1 = Resolve(RequiredFeatSelection1, MasterRepository.Feats);
             RequiredFeatSelection2 = Resolve(RequiredFeatSelection2, MasterRepository.Feats);
             RequiredFeatSelection3 = Resolve(RequiredFeatSelection3, MasterRepository.Feats);
@@ -187,7 +187,7 @@ namespace Eos.Models
             this.SuccessorFeat = CreateRefFromJson<Feat>(json["SuccessorFeat"]?.AsObject());
             this.CRModifier = json["CRModifier"]?.GetValue<double>();
             this.UsesPerDay = json["UsesPerDay"]?.GetValue<int>();
-            this.MasterFeat = CreateRefFromJson<Feat>(json["MasterFeat"]?.AsObject());
+            this.MasterFeat = CreateRefFromJson<MasterFeat>(json["MasterFeat"]?.AsObject());
             this.TargetSelf = json["TargetSelf"]?.GetValue<bool>();
             this.RequiredFeatSelection1 = CreateRefFromJson<Feat>(json["RequiredFeatSelection1"]?.AsObject());
             this.RequiredFeatSelection2 = CreateRefFromJson<Feat>(json["RequiredFeatSelection2"]?.AsObject());

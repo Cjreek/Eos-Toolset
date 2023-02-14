@@ -39,6 +39,7 @@ namespace Eos.Repositories
         private static readonly VirtualModelRepository<Poison> poisonVirtualRepository;
         private static readonly VirtualModelRepository<Spellbook> spellbookVirtualRepository;
         private static readonly VirtualModelRepository<AreaEffect> aoeVirtualRepository;
+        private static readonly VirtualModelRepository<MasterFeat> masterFeatVirtualRepository;
 
         private static readonly VirtualModelRepository<Appearance> appearanceVirtualRepository;
         private static readonly VirtualModelRepository<ClassPackage> classPackageVirtualRepository;
@@ -76,6 +77,7 @@ namespace Eos.Repositories
             RepositoryFactory.RegisterRepositoryClass<Spell>(typeof(SpellRepository));
             RepositoryFactory.RegisterRepositoryClass<Spellbook>(typeof(SpellbookRepository));
             RepositoryFactory.RegisterRepositoryClass<Polymorph>(typeof(PolymorphRepository));
+            RepositoryFactory.RegisterRepositoryClass<MasterFeat>(typeof(MasterFeatRepository));
 
             resources = new ResourceRepository();
 
@@ -92,6 +94,7 @@ namespace Eos.Repositories
             poisonVirtualRepository = new VirtualModelRepository<Poison>(standardCategory.Poisons, project.Poisons);
             spellbookVirtualRepository = new VirtualModelRepository<Spellbook>(standardCategory.Spellbooks, project.Spellbooks);
             aoeVirtualRepository = new VirtualModelRepository<AreaEffect>(standardCategory.AreaEffects, project.AreaEffects);
+            masterFeatVirtualRepository = new VirtualModelRepository<MasterFeat>(standardCategory.MasterFeats, project.MasterFeats);
 
             appearanceVirtualRepository = new VirtualModelRepository<Appearance>(standardCategory.Appearances, project.Appearances);
             classPackageVirtualRepository = new VirtualModelRepository<ClassPackage>(standardCategory.ClassPackages, project.ClassPackages);
@@ -180,6 +183,8 @@ namespace Eos.Repositories
             AddDataType(Guid.Parse("159e9a47-de78-435d-9047-d96847544883"), "Poison", typeof(Poison), modelToJson, json => JsonUtils.CreateRefFromJson<Poison>((JsonObject?)json), o => Project.Poisons.Get2DAIndex((Poison?)o));
             AddDataType(Guid.Parse("c241bc8c-0a05-477d-9cbd-3bb4e50d0bfb"), "Disease", typeof(Disease), modelToJson, json => JsonUtils.CreateRefFromJson<Disease>((JsonObject?)json), o => Project.Diseases.Get2DAIndex((Disease?)o));
             AddDataType(Guid.Parse("f4d8a469-32a6-4f68-bccd-7710ebb026d9"), "Area Effect", typeof(AreaEffect), modelToJson, json => JsonUtils.CreateRefFromJson<AreaEffect>((JsonObject?)json), o => Project.AreaEffects.Get2DAIndex((AreaEffect?)o));
+            AddDataType(Guid.Parse("d84ec31c-5e6b-4373-a1c4-9d8fb4a501a7"), "Master Feat", typeof(MasterFeat), modelToJson, json => JsonUtils.CreateRefFromJson<MasterFeat>((JsonObject?)json), o => Project.MasterFeats.Get2DAIndex((MasterFeat?)o));
+
 
             AddDataType(Guid.Parse("80b538dc-7e6a-40c7-830a-05bdac2fe3a4"), "Appearance", typeof(Appearance), modelToJson, json => JsonUtils.CreateRefFromJson<Appearance>((JsonObject?)json), o => Project.Appearances.Get2DAIndex((Appearance?)o));
             AddDataType(Guid.Parse("8fb225be-dca3-4dce-bd38-fbde34e6fce1"), "Soundset", typeof(Soundset), modelToJson, json => JsonUtils.CreateRefFromJson<Soundset>((JsonObject?)json), o => Project.Soundsets.Get2DAIndex((Soundset?)o));
@@ -219,7 +224,7 @@ namespace Eos.Repositories
             resources.Initialize(nwnBasePath);
         }
 
-        public static void LoadExternalResources(string externalBasePath)
+        public static void LoadExternalResources(IEnumerable<String> externalBasePath)
         {
             resources.LoadExternalResources(externalBasePath);
         }
@@ -254,6 +259,7 @@ namespace Eos.Repositories
         public static VirtualModelRepository<Poison> Poisons { get { return poisonVirtualRepository; } }
         public static VirtualModelRepository<Spellbook> Spellbooks { get { return spellbookVirtualRepository; } }
         public static VirtualModelRepository<AreaEffect> AreaEffects { get { return aoeVirtualRepository; } }
+        public static VirtualModelRepository<MasterFeat> MasterFeats { get { return masterFeatVirtualRepository; } }
 
         public static VirtualModelRepository<Appearance> Appearances { get { return appearanceVirtualRepository; } }
         public static VirtualModelRepository<ClassPackage> ClassPackages { get { return classPackageVirtualRepository; } }
@@ -303,6 +309,7 @@ namespace Eos.Repositories
             Standard.Poisons.LoadFromFile(Constants.PoisonsFilePath);
             Standard.Spellbooks.LoadFromFile(Constants.SpellbooksFilePath);
             Standard.AreaEffects.LoadFromFile(Constants.AreaEffectsFilePath);
+            Standard.MasterFeats.LoadFromFile(Constants.MasterFeatsFilePath);
 
             Standard.Appearances.LoadFromFile(Constants.AppearancesFilePath);
             Standard.ClassPackages.LoadFromFile(Constants.ClassPackagesFilePath);
@@ -330,6 +337,7 @@ namespace Eos.Repositories
             Standard.Poisons.ResolveReferences();
             Standard.Spellbooks.ResolveReferences();
             Standard.AreaEffects.ResolveReferences();
+            Standard.MasterFeats.ResolveReferences();
 
             Standard.Appearances.ResolveReferences();
             Standard.ClassPackages.ResolveReferences();

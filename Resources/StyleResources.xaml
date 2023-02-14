@@ -17,6 +17,10 @@
     <Style TargetType="{x:Type ComboBox}">
         <Setter Property="Margin" Value="2,0,0,3"/>
     </Style>
+    
+    <Style TargetType="{x:Type ListBox}">
+        <Setter Property="Margin" Value="2,0,0,3"/>
+    </Style>
 
     <Style TargetType="{x:Type CheckBox}">
         <Setter Property="Margin" Value="1,0,0,3"/>
@@ -69,6 +73,10 @@
     </Style>
     
     <Style TargetType="{x:Type uc:FeatComboBox}">
+        <Setter Property="Margin" Value="2,0,0,3"/>
+    </Style>
+
+    <Style TargetType="{x:Type uc:MasterFeatComboBox}">
         <Setter Property="Margin" Value="2,0,0,3"/>
     </Style>
 

@@ -47,6 +47,10 @@
         <DataTemplate DataType="{x:Type dialogVM:AreaEffectSearchViewModel}">
             <dialogViews:ModelSearchView/>
         </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type dialogVM:MasterFeatSearchViewModel}">
+            <dialogViews:ModelSearchView/>
+        </DataTemplate>
 
         <DataTemplate DataType="{x:Type dialogVM:CustomObjectInstanceSearchViewModel}">
             <dialogViews:ModelSearchView/>
@@ -54,6 +58,10 @@
 
         <DataTemplate DataType="{x:Type dialogVM:GlobalSearchViewModel}">
             <dialogViews:GlobalSearchView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type dialogVM:ProjectOptionsViewModel}">
+            <dialogViews:ProjectOptionsView/>
         </DataTemplate>
     </Application.Resources>
 </Application>

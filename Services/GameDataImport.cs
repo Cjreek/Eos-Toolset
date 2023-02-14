@@ -980,6 +980,25 @@ namespace Eos.Services
             }
         }
 
+        private void ImportMasterFeats()
+        {
+            var masterFeats2da = Load2da("masterfeats");
+
+            Standard.MasterFeats.Clear();
+            for (int i = 0; i < masterFeats2da.Count; i++)
+            {
+                var tmpMasterFeat = new MasterFeat();
+                tmpMasterFeat.ID = GenerateGuid("masterfeats", i);
+                tmpMasterFeat.Index = i;
+
+                if (!SetText(tmpMasterFeat.Name, masterFeats2da[i].AsInteger("STRREF"))) continue;
+                SetText(tmpMasterFeat.Description, masterFeats2da[i].AsInteger("DESCRIPTION"));
+                tmpMasterFeat.Icon = AddIconResource(masterFeats2da[i].AsString("ICON"));
+
+                Standard.MasterFeats.Add(tmpMasterFeat);
+            }
+        }
+
         private void ImportFeats()
         {
             var feat2da = Load2da("feat");
@@ -1015,7 +1034,7 @@ namespace Eos.Services
                 tmpFeat.SuccessorFeat = CreateRef<Feat>(feat2da[i].AsInteger("SUCCESSOR"));
                 tmpFeat.CRModifier = feat2da[i].AsFloat("CRValue");
                 tmpFeat.UsesPerDay = feat2da[i].AsInteger("USESPERDAY");
-                tmpFeat.MasterFeat = CreateRef<Feat>(feat2da[i].AsInteger("MASTERFEAT"));
+                tmpFeat.MasterFeat = CreateRef<MasterFeat>(feat2da[i].AsInteger("MASTERFEAT"));
                 tmpFeat.TargetSelf = feat2da[i].AsBoolean("TARGETSELF");
                 tmpFeat.RequiredFeatSelection1 = CreateRef<Feat>(feat2da[i].AsInteger("OrReqFeat0"));
                 tmpFeat.RequiredFeatSelection2 = CreateRef<Feat>(feat2da[i].AsInteger("OrReqFeat1"));
@@ -1429,7 +1448,7 @@ namespace Eos.Services
             {
                 if (feat == null) continue;
                 feat.OnUseEffect = SolveInstance(feat.OnUseEffect, Standard.Spells);
-                feat.MasterFeat = SolveInstance(feat.MasterFeat, Standard.Feats);
+                feat.MasterFeat = SolveInstance(feat.MasterFeat, Standard.MasterFeats);
                 feat.RequiredFeat1 = SolveInstance(feat.RequiredFeat1, Standard.Feats);
                 feat.RequiredFeat2 = SolveInstance(feat.RequiredFeat2, Standard.Feats);
                 feat.RequiredFeatSelection1 = SolveInstance(feat.RequiredFeatSelection1, Standard.Feats);
@@ -1551,6 +1570,7 @@ namespace Eos.Services
             Standard.Poisons.SaveToFile(Constants.PoisonsFilePath);
             Standard.Spellbooks.SaveToFile(Constants.SpellbooksFilePath);
             Standard.AreaEffects.SaveToFile(Constants.AreaEffectsFilePath);
+            Standard.MasterFeats.SaveToFile(Constants.MasterFeatsFilePath);
 
             Standard.Appearances.SaveToFile(Constants.AppearancesFilePath);
             Standard.ClassPackages.SaveToFile(Constants.ClassPackagesFilePath);
@@ -1625,6 +1645,7 @@ namespace Eos.Services
             ImportDiseases();
             ImportPoisons();
             ImportAreaOfEffects();
+            ImportMasterFeats();
 
             ImportAppearances();
             ImportClassPackages();
