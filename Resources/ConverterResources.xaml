@@ -12,5 +12,6 @@
     <ext:EnumToStringConverter x:Key="enumToString"/>
     <ext:IsNullConverter x:Key="isNullConverter"/>
     <ext:HintConverter x:Key="hintConverter"/>
+    <ext:EqualityConverter x:Key="equalityConverter"/>
 
 </ResourceDictionary>

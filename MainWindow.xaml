@@ -1252,10 +1252,59 @@
             </TabControl>
 
             <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="Transparent"/>
-            
-            <TabControl Grid.Column="2" Margin="0,3,5,5" Padding="0"
+
+            <TabControl x:Name="tcTabs" Grid.Column="2" Margin="0,3,5,5" Padding="0"
                         ItemsSource="{Binding DetailViewList}" ItemTemplate="{StaticResource TabItemTemplate}" 
-                        SelectedItem="{Binding CurrentView}"/>
+                        SelectedItem="{Binding CurrentView}" HorizontalContentAlignment="Left">
+                <TabControl.Resources>
+                    <ControlTemplate x:Key="tabMultiLineTemplate" TargetType="{x:Type TabControl}">
+                        <DockPanel LastChildFill="True">
+                            <DockPanel DockPanel.Dock="Top" LastChildFill="True">
+                                <RepeatButton Content="⮜" DockPanel.Dock="Left" Margin="1,2,1,0" Click="btTabScrollLeft_Click" Tag="{Binding ElementName=scv}">
+                                    <RepeatButton.Style>
+                                        <Style TargetType="{x:Type RepeatButton}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ElementName=scv, Path=HorizontalOffset}" Value="0">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </RepeatButton.Style>
+                                </RepeatButton>
+                                <RepeatButton Content="⮞" DockPanel.Dock="Right" Margin="1,2,0,0" Click="btTabScrollRight_Click" Tag="{Binding ElementName=scv}">
+                                    <RepeatButton.Style>
+                                        <Style TargetType="{x:Type RepeatButton}">
+                                            <Style.Triggers>
+                                                <DataTrigger Value="True">
+                                                    <DataTrigger.Binding>
+                                                        <MultiBinding Converter="{StaticResource equalityConverter}">
+                                                            <Binding ElementName="scv" Path="HorizontalOffset"/>
+                                                            <Binding ElementName="scv" Path="ScrollableWidth"/>
+                                                        </MultiBinding>
+                                                    </DataTrigger.Binding>
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </RepeatButton.Style>
+                                </RepeatButton>
+
+                                <ScrollViewer x:Name="scv" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" >
+                                    <TabPanel Panel.ZIndex="1" KeyboardNavigation.TabIndex="1" Grid.Column="0" Grid.Row="0" Margin="2,2,2,0" IsItemsHost="true"/>
+                                </ScrollViewer>
+                            </DockPanel>
+
+                            <Border BorderThickness="1" BorderBrush="Silver">
+                                <ContentPresenter ContentSource="SelectedContent"/>
+                            </Border>
+                        </DockPanel>
+                    </ControlTemplate>
+                </TabControl.Resources>
+            </TabControl>
+
+            <Button Grid.Column="2" ToolTip="Change tab layout" Panel.ZIndex="10" Height="24" Width="24" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0,0,9" Click="btChangeTabLayout_Click">
+                <Image Source="{StaticResource iconTabLayout}"/>
+            </Button>
         </Grid>
     </DockPanel>
 </Window>

@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -85,14 +86,21 @@ namespace Eos
     /// </summary>
     public partial class MainWindow : Window
     {
+        private ControlTemplate tabMultilineTemplate;
+        private ControlTemplate tabSinglelineTemplate;
+
         public MainWindow()
         {
             InitializeComponent();
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
             viewModel.OnQuery += ViewModel_OnQuery;
 
-            //var import = new GameDataImport();
-            //import.Import(EosConfig.NwnBasePath);
+            tabMultilineTemplate = tcTabs.Template;
+            tabSinglelineTemplate = (ControlTemplate)tcTabs.FindResource("tabMultiLineTemplate");
+            if (EosConfig.TabLayout == TabLayout.Multiline)
+                tcTabs.Template = tabMultilineTemplate;
+            else
+                tcTabs.Template = tabSinglelineTemplate;
         }
 
         private void ViewModel_OnQuery(ViewModelBase viewModel, ViewModelQueryEventArgs args)
@@ -298,6 +306,39 @@ namespace Eos
             WindowService.OpenDialog(viewModel);
             if (viewModel.ResultModel != null)
                 MessageDispatcher.Send(MessageType.OpenDetail, viewModel.ResultModel);
+        }
+
+        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToHorizontalOffset(scv.HorizontalOffset - (e.Delta / 5));
+            e.Handled = true;
+        }
+
+        private void btTabScrollRight_Click(object sender, RoutedEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)((RepeatButton)sender).Tag;
+            scv.ScrollToHorizontalOffset(Math.Min(scv.ScrollableWidth, scv.HorizontalOffset + 10));
+        }
+
+        private void btTabScrollLeft_Click(object sender, RoutedEventArgs e)
+        {
+            ScrollViewer scv = (ScrollViewer)((RepeatButton)sender).Tag;
+            scv.ScrollToHorizontalOffset(Math.Max(0, scv.HorizontalOffset - 10));
+        }
+
+        private void btChangeTabLayout_Click(object sender, RoutedEventArgs e)
+        {
+            if (EosConfig.TabLayout == TabLayout.Multiline)
+            {
+                tcTabs.Template = tabSinglelineTemplate;
+                EosConfig.TabLayout = TabLayout.Simple;
+            }
+            else
+            {
+                tcTabs.Template = tabMultilineTemplate;
+                EosConfig.TabLayout = TabLayout.Multiline;
+            }
         }
     }
 }

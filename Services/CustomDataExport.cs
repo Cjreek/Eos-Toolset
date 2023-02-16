@@ -44,7 +44,16 @@ namespace Eos.Services
         {
             NWNResourceType.NSS,
             NWNResourceType.NCS,
-            NWNResourceType.ITP
+            NWNResourceType.ITP, // Palette
+            NWNResourceType.UTC, // Creatures
+            NWNResourceType.UTI, // Items
+            NWNResourceType.UTP, // Placeables
+            NWNResourceType.UTD, // Doors
+            NWNResourceType.UTM, // Merchants
+            NWNResourceType.UTS, // Sounds
+            NWNResourceType.UTT, // Triggers
+            NWNResourceType.UTW, // Waypoints
+            NWNResourceType.UTE, // Encounters
         };
 
         private void AddExtensionColumns(TwoDimensionalArrayFile twoDAFile, ModelExtension extensions)

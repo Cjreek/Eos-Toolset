@@ -45,6 +45,9 @@ namespace Eos.Views.Dialogs
                         case "HAK":
                             vm.SettingsCopy.Export.HakFolder = dlg.SelectedPath;
                             break;
+                        case "ERF":
+                            vm.SettingsCopy.Export.ErfFolder = dlg.SelectedPath;
+                            break;
                         case "TLK":
                             vm.SettingsCopy.Export.TlkFolder = dlg.SelectedPath;
                             break;

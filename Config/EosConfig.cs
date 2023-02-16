@@ -11,12 +11,22 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
+using static Eos.Models.JsonUtils;
+
 namespace Eos.Config
 {
+    public enum TabLayout
+    {
+        Simple, Multiline
+    }
+
     public static class EosConfig
     {
+        
+
         public static String NwnBasePath { get; private set; } = "";
         public static String LastProject { get; set; } = "";
+        public static TabLayout TabLayout { get; set; } = TabLayout.Multiline;
 
         private static String FindNwnBasePath()
         {
@@ -38,6 +48,7 @@ namespace Eos.Config
                     {
                         NwnBasePath = configJson[nameof(NwnBasePath)]?.GetValue<String>() ?? "";
                         LastProject = configJson[nameof(LastProject)]?.GetValue<String>() ?? "";
+                        TabLayout = JsonToEnum<TabLayout>(configJson[nameof(TabLayout)]) ?? TabLayout.Multiline;
                     }
                 }
                 finally
@@ -55,6 +66,7 @@ namespace Eos.Config
             JsonObject configJson = new JsonObject();
             configJson.Add(nameof(NwnBasePath), NwnBasePath);
             configJson.Add(nameof(LastProject), LastProject);
+            configJson.Add(nameof(TabLayout), EnumToJson(TabLayout));
 
             File.WriteAllText(Constants.ConfigPath, configJson.ToJsonString(new JsonSerializerOptions(JsonSerializerDefaults.General) { WriteIndented = true }));
         }

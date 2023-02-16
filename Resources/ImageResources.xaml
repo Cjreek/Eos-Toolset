@@ -16,4 +16,5 @@
     <BitmapImage x:Key="iconSearch32" UriSource="Icons/search32.png"/>
     <BitmapImage x:Key="iconSettings" UriSource="Icons/settings16.png"/>
     <BitmapImage x:Key="iconSettings32" UriSource="Icons/settings32.png"/>
+    <BitmapImage x:Key="iconTabLayout" UriSource="Icons/tab.png"/>
 </ResourceDictionary>
