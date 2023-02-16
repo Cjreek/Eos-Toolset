@@ -225,16 +225,18 @@
 
                     <Style TargetType="{x:Type TabItem}">
                         <Setter Property="Background" Value="{Binding EntityColor}"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
                     </Style>
 
                     <!-- TabControl ItemTemplate -->
                     <DataTemplate x:Key="TabItemTemplate">
-                        <StackPanel Orientation="Horizontal" Margin="0" HorizontalAlignment="Left">
-                            <StackPanel.InputBindings>
+                        <DockPanel Margin="0" LastChildFill="True" HorizontalAlignment="Stretch">
+                            <DockPanel.InputBindings>
                                 <MouseBinding Command="{Binding Path=CloseDetailCommand, ElementName=viewModel}" CommandParameter="{Binding Data}" Gesture="MiddleClick" />
-                            </StackPanel.InputBindings>
+                            </DockPanel.InputBindings>
 
-                            <Image Source="{Binding Data.Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}" Width="16" Height="16" Margin="0,0,3,0">
+                            <Image DockPanel.Dock="Left" Source="{Binding Data.Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}" Width="16" Height="16" Margin="0,0,3,0">
                                 <Image.Style>
                                     <Style TargetType="{x:Type Image}">
                                         <Setter Property="Visibility" Value="Visible"/>
@@ -246,26 +248,8 @@
                                     </Style>
                                 </Image.Style>
                             </Image>
-                            <TextBlock MinWidth="50">
-                                <TextBlock.Style>
-                                    <Style TargetType="{x:Type TextBlock}">
-                                        <Setter Property="Foreground" Value="Black"/>
-                                        <Setter Property="FontStyle" Value="Italic"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Data.IsReadonly}" Value="True">
-                                                <Setter Property="Foreground" Value="#FF909090"/>
-                                                <Setter Property="FontStyle" Value="Normal"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Data.Overrides}" Value="{x:Null}">
-                                                <Setter Property="FontStyle" Value="Normal"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                                <Run Text="{Binding Header, Mode=OneWay}"/>
-                                <Run Text="{Binding Data.Hint, Mode=OneWay, Converter={StaticResource hintConverter}}"/>
-                            </TextBlock>
-                            <Button Content="x" Margin="5,0,0,0" Command="{Binding Path=CloseDetailCommand, ElementName=viewModel}" CommandParameter="{Binding Data}"
+
+                            <Button DockPanel.Dock="Right" Content="x" Margin="5,0,0,0" Command="{Binding Path=CloseDetailCommand, ElementName=viewModel}" CommandParameter="{Binding Data}"
                                     Visibility="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type TabItem}}, Converter={StaticResource Bool2Vis}}">
                                 <Button.Style>
                                     <Style TargetType="{x:Type Button}">
@@ -287,7 +271,27 @@
                                     </Style>
                                 </Button.Style>
                             </Button>
-                        </StackPanel>
+
+                            <TextBlock MinWidth="50">
+                                <TextBlock.Style>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="Foreground" Value="Black"/>
+                                        <Setter Property="FontStyle" Value="Italic"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Data.IsReadonly}" Value="True">
+                                                <Setter Property="Foreground" Value="#FF909090"/>
+                                                <Setter Property="FontStyle" Value="Normal"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Data.Overrides}" Value="{x:Null}">
+                                                <Setter Property="FontStyle" Value="Normal"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                                <Run Text="{Binding Header, Mode=OneWay}"/>
+                                <Run Text="{Binding Data.Hint, Mode=OneWay, Converter={StaticResource hintConverter}}"/>
+                            </TextBlock>
+                        </DockPanel>
                     </DataTemplate>
 
                     <!-- Tab Content Datatemplates -->
@@ -1255,7 +1259,7 @@
 
             <TabControl x:Name="tcTabs" Grid.Column="2" Margin="0,3,5,5" Padding="0"
                         ItemsSource="{Binding DetailViewList}" ItemTemplate="{StaticResource TabItemTemplate}" 
-                        SelectedItem="{Binding CurrentView}" HorizontalContentAlignment="Left">
+                        SelectedItem="{Binding CurrentView}" HorizontalContentAlignment="Stretch">
                 <TabControl.Resources>
                     <ControlTemplate x:Key="tabMultiLineTemplate" TargetType="{x:Type TabControl}">
                         <DockPanel LastChildFill="True">
