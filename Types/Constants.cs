@@ -19,6 +19,9 @@ namespace Eos.Types
         public static readonly String ExportTLKFolder;
         public static readonly String ExportHAKFolder;
         public static readonly String ExportIncludeFolder;
+        public static readonly String ExportERFFolder;
+
+        public static readonly String IncludeFilename;
 
         public static readonly String ProjectFileExtension;
 
@@ -103,6 +106,9 @@ namespace Eos.Types
             ExportHAKFolder = ExportFolder + @"hak\";
             ExportTLKFolder = ExportFolder + @"tlk\";
             ExportIncludeFolder = ExportFolder + @"include\";
+            ExportERFFolder = ExportFolder + @"erf\";
+
+            IncludeFilename = "inc_eos";
 
             ProjectFileExtension = ".eosproj";
 

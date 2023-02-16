@@ -7,6 +7,7 @@
     <ext:TLKStringSetConverter x:Key="tlkConverter" AlwaysUseDefaultLanguage="False"/>
     <ext:TLKStringSetConverter x:Key="tlkConverterDefault" AlwaysUseDefaultLanguage="True"/>
     <ext:BoolToVisibilityConverterEx x:Key="bool2VisCollapsed" FalseValue="Collapsed"/>
+    <ext:BoolToVisibilityConverterEx x:Key="bool2VisCollapsedInverted" FalseValue="Collapsed" Inverted="True"/>
     <ext:FlagToBoolConverter x:Key="flagsToBool"/>
     <ext:EnumToStringConverter x:Key="enumToString"/>
     <ext:IsNullConverter x:Key="isNullConverter"/>

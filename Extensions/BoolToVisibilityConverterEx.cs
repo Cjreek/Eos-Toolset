@@ -13,11 +13,12 @@ namespace Eos.Extensions
     public sealed class BoolToVisibilityConverterEx : IValueConverter
     {
         public Visibility FalseValue { get; set; } = Visibility.Hidden;
+        public bool Inverted { get; set; }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is bool)
-                return (bool)value ? Visibility.Visible : FalseValue;
+                return ((bool)value ^ Inverted) ? Visibility.Visible : FalseValue;
 
             return DependencyProperty.UnsetValue;
         }
@@ -25,7 +26,7 @@ namespace Eos.Extensions
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is Visibility)
-                return ((Visibility)value == Visibility.Visible ? true : false);
+                return ((Visibility)value == Visibility.Visible ? !Inverted : Inverted);
 
             return DependencyProperty.UnsetValue;
         }

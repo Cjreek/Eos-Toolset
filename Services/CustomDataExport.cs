@@ -36,6 +36,16 @@ namespace Eos.Services
         private Dictionary<Guid, int> modelIndices = new Dictionary<Guid, int>();
         private Dictionary<TLKStringSet, int> customTLKIndices = new Dictionary<TLKStringSet, int>();
         private Dictionary<(String resRef, NWNResourceType resType), String> hakResources = new Dictionary<(String, NWNResourceType), String>();
+        private Dictionary<(String resRef, NWNResourceType resType), String> erfResources = new Dictionary<(String, NWNResourceType), String>();
+        private HashSet<String> generatedConstants = new HashSet<string>();
+        private Dictionary<BaseModel, String> modelScriptConstants = new Dictionary<BaseModel, string>();
+
+        private HashSet<NWNResourceType> erfTypes = new HashSet<NWNResourceType>()
+        {
+            NWNResourceType.NSS,
+            NWNResourceType.NCS,
+            NWNResourceType.ITP
+        };
 
         private void AddExtensionColumns(TwoDimensionalArrayFile twoDAFile, ModelExtension extensions)
         {
@@ -76,6 +86,11 @@ namespace Eos.Services
         private void AddHAKResource(String name, NWNResourceType type, String filename)
         {
             hakResources[(name.ToLower(), type)] = filename;
+        }
+
+        private void AddERFResource(String name, NWNResourceType type, String filename)
+        {
+            erfResources[(name.ToLower(), type)] = filename;
         }
 
         private void AddTLKString(TLKStringSet tlk)
@@ -317,7 +332,7 @@ namespace Eos.Services
                         if (item != null)
                         {
                             var rec = td2.AddRecord();
-                            rec.Set("FeatLabel", item.Feat?.Name[project.DefaultLanguage].Text); // TODO: generate?/get FEAT constant
+                            rec.Set("FeatLabel", GetScriptConstant("FEAT_", item.Feat));
                             rec.Set("FeatIndex", project.Feats.Get2DAIndex(item?.Feat));
                             rec.Set("List", (int?)(item?.FeatList));
                             rec.Set("GrantedOnLevel", (int?)item?.GrantedOnLevel);
@@ -527,7 +542,7 @@ namespace Eos.Services
                         if (item != null)
                         {
                             var rec = td2.AddRecord();
-                            rec.Set("FeatLabel", item.Feat?.Name[project.DefaultLanguage].Text); // TODO: generate?/get FEAT constant
+                            rec.Set("FeatLabel", GetScriptConstant("FEAT_", item.Feat));
                             rec.Set("FeatIndex", project.Feats.Get2DAIndex(item?.Feat));
                         }
                     }
@@ -737,7 +752,7 @@ namespace Eos.Services
                         record.Set("AlignRstrctType", align?.Axis ?? 0);
                         record.Set("InvertRestrict", align?.Inverted ?? false);
 
-                        record.Set("Constant", "CLASS_TYPE_" + cls.Name[project.DefaultLanguage].Text.Replace(" ", "_").ToUpper()); // TODO: Get constant
+                        record.Set("Constant", GetScriptConstant("CLASS_TYPE_", cls));
                         record.Set("PreReqTable", cls.Requirements?.Name);
                         record.Set("MaxLevel", cls.MaxLevel > 60 ? 0 : cls.MaxLevel);
                         record.Set("XPPenalty", cls.MulticlassXPPenalty);
@@ -1726,21 +1741,291 @@ namespace Eos.Services
             }
         }
 
+        private String CleanString(String str, bool toUppercase = true)
+        {
+            if (toUppercase) str = str.Trim().ToUpper();
+
+            var result = "";
+            foreach (var c in str)
+            {
+                if (char.IsLetterOrDigit(c) || (c == '_'))
+                    result += c;
+                else if (char.IsWhiteSpace(c))
+                    result += "_";
+            }
+
+            return result;
+        }
+
+        private String GetScriptConstant(String prefix, BaseModel? model)
+        {
+            if (model == null) return "";
+
+            var modelOverride = MasterRepository.Standard.GetOverride(model);
+            model = modelOverride ?? model;
+
+            var result = "";
+            if (!modelScriptConstants.TryGetValue(model, out result))
+            {
+                if (model.ScriptConstant != "")
+                    result = prefix + CleanString(model.ScriptConstant);
+                else
+                    result = prefix + CleanString(model.TlkDisplayName ?? "");
+
+                if (generatedConstants.Contains(result))
+                {
+                    var tmpResult = result;
+                    if (model.Hint.Trim() != "")
+                        tmpResult = result + "_" + CleanString(model.Hint);
+
+                    var numberedResult = tmpResult;
+                    var number = 2;
+                    while (generatedConstants.Contains(numberedResult))
+                    {
+                        numberedResult = tmpResult + "_" + number.ToString();
+                        number++;
+                    }
+
+                    result = numberedResult;
+                }
+
+                generatedConstants.Add(result);
+                modelScriptConstants.Add(model, result);
+            }
+
+            return result;
+        }
+
+        private void ExportIncludeFile(EosProject project)
+        {
+            var incFile = new List<String>();
+
+            // Races
+            var customRaces = project.Races.Where(race => race != null && race.Overrides == null);
+            if (customRaces.Any())
+            {
+                incFile.Add("// Racial Types");
+                foreach (var race in customRaces)
+                {
+                    if (race == null) continue;
+                    var index = project.Races.GetCustomDataStartIndex() + race.Index;
+                    incFile.Add("const int " + GetScriptConstant("RACIAL_TYPE_", race) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Classes
+            var customClasses = project.Classes.Where(cls => cls != null && cls.Overrides == null);
+            if (customClasses.Any())
+            {
+                incFile.Add("// Classes");
+                foreach (var cls in customClasses)
+                {
+                    if (cls == null) continue;
+                    var index = project.Classes.GetCustomDataStartIndex() + cls.Index;
+                    incFile.Add("const int " + GetScriptConstant("CLASS_TYPE_", cls) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Packages
+            var customPackages = project.ClassPackages.Where(package => package != null && package.Overrides == null);
+            if (customPackages.Any())
+            {
+                incFile.Add("// Packages");
+                foreach (var package in customPackages)
+                {
+                    if (package == null) continue;
+                    var index = project.ClassPackages.GetCustomDataStartIndex() + package.Index;
+                    incFile.Add("const int " + GetScriptConstant("PACKAGE_", package) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Domains
+            var customDomains = project.Domains.Where(domain => domain != null && domain.Overrides == null);
+            if (customDomains.Any())
+            {
+                incFile.Add("// Domains");
+                foreach (var domain in customDomains)
+                {
+                    if (domain == null) continue;
+                    var index = project.Domains.GetCustomDataStartIndex() + domain.Index;
+                    incFile.Add("const int " + GetScriptConstant("DOMAIN_", domain) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Spells
+            var customSpells = project.Spells.Where(spell => spell != null && spell.Overrides == null);
+            if (customSpells.Any())
+            {
+                incFile.Add("// Spells");
+                foreach (var spell in customSpells)
+                {
+                    if (spell == null) continue;
+                    var index = project.Spells.GetCustomDataStartIndex() + spell.Index;
+                    incFile.Add("const int " + GetScriptConstant("SPELL_", spell) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Master Feats
+            var customMasterFeats = project.MasterFeats.Where(masterFeat => masterFeat != null && masterFeat.Overrides == null);
+            if (customMasterFeats.Any())
+            {
+                incFile.Add("// Master Feats");
+                foreach (var masterFeat in customMasterFeats)
+                {
+                    if (masterFeat == null) continue;
+                    var index = project.MasterFeats.GetCustomDataStartIndex() + masterFeat.Index;
+                    incFile.Add("const int " + GetScriptConstant("MASTER_FEAT_", masterFeat) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Feats
+            var customFeats = project.Feats.Where(feat => feat != null && feat.Overrides == null);
+            if (customFeats.Any())
+            {
+                incFile.Add("// Feats");
+                foreach (var feat in customFeats)
+                {
+                    if (feat == null) continue;
+                    var index = project.Feats.GetCustomDataStartIndex() + feat.Index;
+                    incFile.Add("const int " + GetScriptConstant("FEAT_", feat) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Skills
+            var customSkills = project.Skills.Where(skill => skill != null && skill.Overrides == null);
+            if (customSkills.Any())
+            {
+                incFile.Add("// Skills");
+                foreach (var skill in customSkills)
+                {
+                    if (skill == null) continue;
+                    var index = project.Skills.GetCustomDataStartIndex() + skill.Index;
+                    incFile.Add("const int " + GetScriptConstant("SKILL_", skill) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Diseases
+            var customDiseases = project.Diseases.Where(disease => disease != null && disease.Overrides == null);
+            if (customDiseases.Any())
+            {
+                incFile.Add("// Diseases");
+                foreach (var disease in customDiseases)
+                {
+                    if (disease == null) continue;
+                    var index = project.Diseases.GetCustomDataStartIndex() + disease.Index;
+                    incFile.Add("const int " + GetScriptConstant("DISEASE_", disease) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Poisons
+            var customPoisons = project.Poisons.Where(poison => poison != null && poison.Overrides == null);
+            if (customPoisons.Any())
+            {
+                incFile.Add("// Poisons");
+                foreach (var poison in customPoisons)
+                {
+                    if (poison == null) continue;
+                    var index = project.Poisons.GetCustomDataStartIndex() + poison.Index;
+                    incFile.Add("const int " + GetScriptConstant("POISON_", poison) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Area Effects
+            var customAoEs = project.AreaEffects.Where(aoe => aoe != null && aoe.Overrides == null);
+            if (customAoEs.Any())
+            {
+                incFile.Add("// Area Effects");
+                foreach (var aoe in customAoEs)
+                {
+                    if (aoe == null) continue;
+                    var index = project.AreaEffects.GetCustomDataStartIndex() + aoe.Index;
+                    incFile.Add("const int " + GetScriptConstant("AOE_PER_", aoe) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Soundsets
+            var customSoundsets = project.Soundsets.Where(soundset => soundset != null && soundset.Overrides == null);
+            if (customSoundsets.Any())
+            {
+                incFile.Add("// Area Effects");
+                foreach (var soundset in customSoundsets)
+                {
+                    if (soundset == null) continue;
+                    var index = project.Soundsets.GetCustomDataStartIndex() + soundset.Index;
+                    incFile.Add("const int " + GetScriptConstant("SOUNDSET_", soundset) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Polymorphs
+            var customPolymorphs = project.Polymorphs.Where(polymorph => polymorph != null && polymorph.Overrides == null);
+            if (customPolymorphs.Any())
+            {
+                incFile.Add("// Polymorphs");
+                foreach (var polymorph in customPolymorphs)
+                {
+                    if (polymorph == null) continue;
+                    var index = project.Polymorphs.GetCustomDataStartIndex() + polymorph.Index;
+                    incFile.Add("const int " + GetScriptConstant("POLYMORPH_TYPE_", polymorph) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            Directory.CreateDirectory(project.Settings.Export.IncludeFolder);
+            var filename = project.Settings.Export.IncludeFolder + project.Settings.Export.IncludeFilename + ".nss";
+            File.WriteAllLines(filename, incFile);
+
+            AddERFResource(project.Settings.Export.IncludeFilename.ToLower(), NWNResourceType.NSS, filename);
+        }
+
         private void CreateHAK(EosProject project)
         {
             var hak = new ErfFile();
-            hak.Description[TLKLanguage.English].Text = project.Name + "\n\n";
+            hak.Description[project.DefaultLanguage].Text = project.Name + "\n\n";
             foreach (var key in hakResources.Keys)
                 hak.AddResource(key.resRef, key.resType, hakResources[key]);
 
             // External Resources
             foreach (var resource in MasterRepository.Resources.GetExternalResources())
             {
-                if (resource.ResRef != null)
+                if ((resource.ResRef != null) && (!erfTypes.Contains(resource.Type)))
                     hak.AddResource(resource.ResRef, resource.Type, resource.FilePath);
             }
 
-            hak.Save(project.Settings.Export.HakFolder + project.Name.ToLower().Replace(' ', '_') + ".hak");
+            Directory.CreateDirectory(project.Settings.Export.HakFolder);
+            hak.Save(project.Settings.Export.HakFolder + CleanString(project.Name, false).ToLower() + ".hak");
+        }
+
+        private void CreateERF(EosProject project)
+        {
+            var erf = new ErfFile();
+            erf.Description[project.DefaultLanguage].Text = project.Name + "\n\n";
+            foreach (var key in erfResources.Keys)
+                erf.AddResource(key.resRef, key.resType, erfResources[key]);
+
+            // External Resources
+            foreach (var resource in MasterRepository.Resources.GetExternalResources())
+            {
+                if ((resource.ResRef != null) && (erfTypes.Contains(resource.Type)))
+                    erf.AddResource(resource.ResRef, resource.Type, resource.FilePath);
+            }
+
+            if (erf.Count > 0)
+            {
+                Directory.CreateDirectory(project.Settings.Export.ErfFolder);
+                erf.Save(project.Settings.Export.ErfFolder + CleanString(project.Name, false).ToLower() + ".erf");
+            }
         }
 
         public void Export(EosProject project)
@@ -1781,7 +2066,10 @@ namespace Eos.Services
 
             ExportCustomObjects(project);
 
+            ExportIncludeFile(project);
+
             CreateHAK(project);
+            CreateERF(project);
         }
     }
 }

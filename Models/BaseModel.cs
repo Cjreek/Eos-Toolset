@@ -27,6 +27,7 @@ namespace Eos.Models
     public class BaseModel : INotifyPropertyChanged
     {
         private String _hint = "";
+        private String _scriptConstant = "";
         private String? _icon;
         private bool _clearingReferences = false;
         private ModelExtension? _extensions;
@@ -53,6 +54,20 @@ namespace Eos.Models
         public bool IsReadonly { get; set; } = false;
         public Guid? Overrides { get; set; } = null;
         public int? Index { get; set; }
+
+        public string ScriptConstant
+        {
+            get { return _scriptConstant; }
+            set
+            {
+                if (_scriptConstant != value)
+                {
+                    _scriptConstant = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public int? CalculatedIndex
         {
             get
@@ -203,6 +218,7 @@ namespace Eos.Models
             result.Add("Overrides", this.Overrides != null ? this.Overrides.ToString() : null);
             result.Add("Disabled", this.Disabled);
             result.Add("Hint", this.Hint);
+            result.Add("ScriptConstant", this.ScriptConstant);
 
             var extensionValues = new JsonObject();
             foreach (var prop in extensionValueDict.Keys)
@@ -222,6 +238,7 @@ namespace Eos.Models
             this.Overrides = ParseNullableGuid(json["Overrides"]?.GetValue<String>());
             this.Disabled = json["Disabled"]?.GetValue<bool?>() ?? false;
             this.Hint = json["Hint"]?.GetValue<String>() ?? "";
+            this.ScriptConstant = json["ScriptConstant"]?.GetValue<String>() ?? "";
 
             var extensionValues = json["ExtensionValues"]?.AsObject();
             if (extensionValues != null)

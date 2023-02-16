@@ -10,7 +10,7 @@
       xmlns:vm="clr-namespace:Eos.ViewModels.Dialogs"
       xmlns:wpftk="clr-namespace:Xceed.Wpf.Toolkit;assembly=DotNetProjects.Wpf.Extended.Toolkit"
       mc:Ignorable="d" Background="LightGray"
-      d:DesignHeight="530" d:DesignWidth="800"
+      d:DesignHeight="560" d:DesignWidth="800"
       x:Name="page"
       Title="ProjectOptionsView">
 
@@ -117,6 +117,8 @@
                                     <RowDefinition Height="25"/>
                                     <RowDefinition Height="25"/>
                                     <RowDefinition Height="25"/>
+                                    <RowDefinition Height="25"/>
+                                    <RowDefinition Height="25"/>
                                 </Grid.RowDefinitions>
 
                                 <TextBlock Text="2DA Folder" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
@@ -131,17 +133,26 @@
                                     <TextBox x:Name="tbHakFolder" Margin="2,0,0,3" Text="{Binding SettingsCopy.Export.HakFolder}" HorizontalAlignment="Stretch"/>
                                 </DockPanel>
 
-                                <TextBlock Text="TLK Folder" Grid.Row="2" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <TextBlock Text="ERF Folder" Grid.Row="2" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                                 <DockPanel Grid.Row="2" Grid.Column="1" LastChildFill="True">
+                                    <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbErfFolder, Path=ActualHeight}" Height="{Binding ElementName=tbErfFolder, Path=ActualHeight}" VerticalAlignment="Top" Click="btOpenDlg_Click" Tag="ERF"/>
+                                    <TextBox x:Name="tbErfFolder" Margin="2,0,0,3" Text="{Binding SettingsCopy.Export.ErfFolder}" HorizontalAlignment="Stretch"/>
+                                </DockPanel>
+
+                                <TextBlock Text="TLK Folder" Grid.Row="3" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <DockPanel Grid.Row="3" Grid.Column="1" LastChildFill="True">
                                     <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbTlkFolder, Path=ActualHeight}" Height="{Binding ElementName=tbTlkFolder, Path=ActualHeight}" VerticalAlignment="Top" Click="btOpenDlg_Click" Tag="TLK"/>
                                     <TextBox x:Name="tbTlkFolder" Margin="2,0,0,3" Text="{Binding SettingsCopy.Export.TlkFolder}" HorizontalAlignment="Stretch"/>
                                 </DockPanel>
 
-                                <TextBlock Text="Include Folder" Grid.Row="3" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                <DockPanel Grid.Row="3" Grid.Column="1" LastChildFill="True">
+                                <TextBlock Text="Include Folder" Grid.Row="4" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <DockPanel Grid.Row="4" Grid.Column="1" LastChildFill="True">
                                     <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbIncFolder, Path=ActualHeight}" Height="{Binding ElementName=tbIncFolder, Path=ActualHeight}" VerticalAlignment="Top" Click="btOpenDlg_Click" Tag="INC"/>
                                     <TextBox x:Name="tbIncFolder" Margin="2,0,0,3" Text="{Binding SettingsCopy.Export.IncludeFolder}" HorizontalAlignment="Stretch"/>
                                 </DockPanel>
+
+                                <TextBlock Text="Include Filename" Grid.Row="5" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <TextBox Text="{Binding SettingsCopy.Export.IncludeFilename}" Grid.Row="5" Grid.Column="1" MaxLength="16"/>
                             </Grid>
                         </GroupBox>
 

@@ -40,7 +40,9 @@ namespace Eos.Repositories
         private string _2daFolder = "";
         private string _tlkFolder = "";
         private string _incFolder = "";
+        private string _erfFolder = "";
         private string _baseTlk = "";
+        private string _incFilename = "";
 
         public bool LowercaseFilenames { get; set; } = false;
         public string HakFolder
@@ -99,6 +101,20 @@ namespace Eos.Repositories
             }
         }
 
+        public string ErfFolder
+        {
+            get { return _erfFolder; }
+            set
+            {
+                if (_erfFolder != value)
+                {
+                    _erfFolder = value;
+                    if (!_erfFolder.EndsWith(Path.DirectorySeparatorChar)) _erfFolder += Path.DirectorySeparatorChar;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public string BaseTlkFile
         {
             get { return _baseTlk; }
@@ -113,6 +129,22 @@ namespace Eos.Repositories
         }
 
         public int TlkOffset { get; set; } = 0;
+
+        public string IncludeFilename
+        {
+            get { return _incFilename; }
+            set
+            {
+                if (_incFilename != value)
+                {
+                    _incFilename = value;
+                    if (_incFilename.EndsWith(".nss", StringComparison.OrdinalIgnoreCase))
+                        _incFilename = _incFilename.Substring(0, _incFilename.Length - ".nss".Length);
+                    _incFilename = _incFilename.Substring(0, Math.Min(16, _incFilename.Length));
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -291,6 +323,8 @@ namespace Eos.Repositories
             Settings.Export.TlkFolder = ProjectFolder + Constants.ExportTLKFolder;
             Settings.Export.TwoDAFolder = ProjectFolder + Constants.Export2DAFolder;
             Settings.Export.IncludeFolder = ProjectFolder + Constants.ExportIncludeFolder;
+            Settings.Export.ErfFolder = ProjectFolder + Constants.ExportERFFolder;
+            Settings.Export.IncludeFilename = Constants.IncludeFilename;
 
             var fs = new FileStream(projectFilename, FileMode.Open, FileAccess.Read);
             try
@@ -315,11 +349,13 @@ namespace Eos.Repositories
                     var exportJson = projectJson["Export"];
                     Settings.Export.LowercaseFilenames = exportJson?["LowercaseFilenames"]?.GetValue<bool>() ?? false;
                     Settings.Export.HakFolder = exportJson?["HakFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.ExportHAKFolder;
+                    Settings.Export.ErfFolder = exportJson?["ErfFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.ExportERFFolder;
                     Settings.Export.TlkFolder = exportJson?["TlkFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.ExportTLKFolder;
                     Settings.Export.TwoDAFolder = exportJson?["TwoDAFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.Export2DAFolder;
                     Settings.Export.IncludeFolder = exportJson?["IncludeFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.ExportIncludeFolder;
                     Settings.Export.BaseTlkFile = exportJson?["BaseTlkFile"]?.GetValue<string>() ?? "";
                     Settings.Export.TlkOffset = exportJson?["TlkOffset"]?.GetValue<int>() ?? 0;
+                    Settings.Export.IncludeFilename = exportJson?["IncludeFilename"]?.GetValue<string>() ?? Constants.IncludeFilename;
 
                     var customDataJson = projectJson["CustomData"];
                     LoadCustomDataSettings(Settings.AreaEffects, customDataJson?["AreaEffects"]);
@@ -389,11 +425,13 @@ namespace Eos.Repositories
             var export = new JsonObject();
             export.Add("LowercaseFilenames", Settings.Export.LowercaseFilenames);
             export.Add("HakFolder", Settings.Export.HakFolder);
+            export.Add("ErfFolder", Settings.Export.ErfFolder);
             export.Add("TwoDAFolder", Settings.Export.TwoDAFolder);
             export.Add("TlkFolder", Settings.Export.TlkFolder);
             export.Add("IncludeFolder", Settings.Export.IncludeFolder);
             export.Add("BaseTlkFile", Settings.Export.BaseTlkFile);
             export.Add("TlkOffset", Settings.Export.TlkOffset);
+            export.Add("IncludeFilename", Settings.Export.IncludeFilename);
             projectFile.Add("Export", export);
 
             var customDataSettings = new JsonObject();

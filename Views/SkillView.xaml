@@ -118,7 +118,7 @@
                 </Grid>
             </ScrollViewer>
         </TabItem>
-        <TabItem Header="Extensions" Width="100" Height="30">
+        <TabItem Header="Extensions" Width="100" Height="30" Visibility="{Binding Data.IsReadonly, Converter={StaticResource bool2VisCollapsedInverted}}">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
                     <Grid.RowDefinitions>
@@ -152,6 +152,30 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
+                </Grid>
+            </ScrollViewer>
+        </TabItem>
+        <TabItem Header="Metadata" Width="100" Height="30" Visibility="{Binding Data.IsReadonly, Converter={StaticResource bool2VisCollapsedInverted}}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Skill Metadata" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+                    <TextBlock Text="Script Constant" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+                    <DockPanel Grid.Row="1" Grid.Column="1">
+                        <TextBox Text="SKILL_" BorderThickness="1,1,0,1" IsReadOnly="True" VerticalContentAlignment="Center" Style="{x:Null}" Margin="2,0,0,3"/>
+                        <TextBox Text="{Binding Data.ScriptConstant}" Style="{StaticResource ConstantHintTextboxStyle}" CharacterCasing="Upper" Margin="-2,0,0,3" BorderThickness="0,1,1,1" VerticalContentAlignment="Center"/>
+                    </DockPanel>
                 </Grid>
             </ScrollViewer>
         </TabItem>

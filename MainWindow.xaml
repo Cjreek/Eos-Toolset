@@ -20,7 +20,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         x:Name="mainWindow"
-        MinHeight="300" MinWidth="500" Tag="Eos Toolset v0.56"
+        MinHeight="300" MinWidth="500" Tag="Eos Toolset v0.57"
         Height="700" Width="1100" FontSize="16"
         Loaded="mainWindow_Loaded" Closing="mainWindow_Closing">
     <Window.Title>
@@ -598,7 +598,11 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Settings" Command="{Binding ElementName=viewModel, Path=OpenProjectSettingsCommand}"/>
+                <MenuItem Header="Settings" Command="{Binding ElementName=viewModel, Path=OpenProjectSettingsCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="{StaticResource iconSettings}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator/>
                 <MenuItem x:Name="miImportBaseData" Header="Import Game Files" Click="miImportBaseData_Click">
                     <MenuItem.Icon>
@@ -631,23 +635,26 @@
                 </Grid.ColumnDefinitions>
 
                 <DockPanel Grid.Column="0" HorizontalAlignment="Left">
-                    <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" Command="{Binding Path=NewProjectCommand}">
+                    <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" ToolTip="New Project" Command="{Binding Path=NewProjectCommand}">
                         <Image Source="{StaticResource iconNew32}"/>
                     </Button>
-                    <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" Click="miOpenProject_Click">
+                    <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" ToolTip="Open Project" Click="miOpenProject_Click">
                         <Image Source="{StaticResource iconOpen32}"/>
                     </Button>
-                    <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miSaveProject_Click">
+                    <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" ToolTip="Save Project" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miSaveProject_Click">
                         <Image Source="{StaticResource iconSave32}"/>
                     </Button>
-                    <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" Command="{Binding ElementName=viewModel, Path=GlobalSearchCommand}">
+                    <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" ToolTip="Search" Command="{Binding ElementName=viewModel, Path=GlobalSearchCommand}">
                         <Image Source="{StaticResource iconSearch32}"/>
                     </Button>
-                    <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" Click="miImportBaseData_Click">
+                    <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" ToolTip="Import Data" Click="miImportBaseData_Click">
                         <Image Source="{StaticResource iconImport32}"/>
                     </Button>
-                    <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miExportProject_Click">
+                    <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" ToolTip="Export Project" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miExportProject_Click">
                         <Image Source="{StaticResource iconExport32}"/>
+                    </Button>
+                    <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" ToolTip="Project Settings" Command="{Binding ElementName=viewModel, Path=OpenProjectSettingsCommand}">
+                        <Image Source="{StaticResource iconSettings32}"/>
                     </Button>
                 </DockPanel>
                 
@@ -1150,6 +1157,13 @@
                                     </i:Interaction.Triggers>
                                 </TreeViewItem>
                                 <TreeViewItem Header="Spell" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.Extensions}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseDoubleClick">
+                                            <i:InvokeCommandAction Command="{Binding Path=OpenDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TreeViewItem>
+                                <TreeViewItem Header="Master Feat" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=MasterFeats.Extensions}">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDoubleClick">
                                             <i:InvokeCommandAction Command="{Binding Path=OpenDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>
