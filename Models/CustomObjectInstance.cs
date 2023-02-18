@@ -72,9 +72,19 @@ namespace Eos.Models
             get { return _template; }
             set 
             { 
+                if (_template != null)
+                    _template.OnChanged -= _template_OnChanged;
                 Set(ref _template, value);
+                if (_template != null)
+                    _template.OnChanged += _template_OnChanged;
+
                 InitValueDictionary();
             }
+        }
+
+        private void _template_OnChanged(object? sender, EventArgs e)
+        {
+            InitValueDictionary();
         }
 
         public String Label

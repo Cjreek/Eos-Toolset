@@ -148,6 +148,12 @@ namespace Eos.Models
         public double? TargetSizeY { get; set; }
         public TargetFlag? TargetingFlags { get; set; }
 
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Name = new TLKStringSet(() => NotifyPropertyChanged(nameof(Name)));
+        }
+
         protected override TLKStringSet? GetTlkDisplayName()
         {
             var modelOverride = (Spell?)MasterRepository.Project.GetOverride(this);

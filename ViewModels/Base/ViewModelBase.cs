@@ -20,6 +20,11 @@ namespace Eos.ViewModels
         Yes, No, Cancel
     }
 
+    public enum ViewModelQueryType
+    {
+        Information, Question, Warning, Error
+    }
+
     public class ViewModelErrorEventArgs : EventArgs
     {
         public String Message { get; set; } = String.Empty;
@@ -29,6 +34,7 @@ namespace Eos.ViewModels
     {
         public String Title { get; set; } = String.Empty;
         public String Message { get; set; } = String.Empty;
+        public ViewModelQueryType QueryType { get; set; } = ViewModelQueryType.Question;
         public ViewModelQueryResult Result { get; set; } = ViewModelQueryResult.Cancel;
     }
 
@@ -54,12 +60,13 @@ namespace Eos.ViewModels
             OnError?.Invoke(this, new ViewModelErrorEventArgs() { Message = message });
         }
 
-        protected ViewModelQueryResult DoQuery(String title, String message)
+        protected ViewModelQueryResult DoQuery(String title, String message, ViewModelQueryType type = ViewModelQueryType.Question)
         {
             var args = new ViewModelQueryEventArgs();
             args.Title = title;
             args.Message = message;
             args.Result = ViewModelQueryResult.Cancel;
+            args.QueryType = type;
 
             OnQuery?.Invoke(this, args);
 

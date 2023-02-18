@@ -99,16 +99,43 @@ namespace Eos.ViewModels
         {
             if (model.ReferenceCount > 0)
             {
-                var message = "There are still " + model.ReferenceCount.ToString() + " references to this " + model.GetType().Name + ":\n\n";
+                var message = "There are still " + model.ReferenceCount.ToString() + " references to this " + model.TypeName + ":\n\n";
                 foreach (var reference in model.References)
                     message += "> [" + reference.ReferenceObject?.GetType().Name + "] " + reference.ReferenceName + " (" + reference.ReferenceProperty + ")\n";
                 message += "\nDo you still want to delete this item and remove all its references?";
-                var queryResult = DoQuery("References", message);
+                var queryResult = DoQuery("References", message, ViewModelQueryType.Warning);
+                if (queryResult != ViewModelQueryResult.Yes)
+                    return;
+            }
+            else
+            {
+                ViewModelQueryResult queryResult = ViewModelQueryResult.Cancel;
+                if (model is CustomObject)
+                {
+                    var message = "Do you really want to delete the definition of: \"" + model.GetLabel() + "\"?\n";
+                    message += "WARNING: This will delete every instance of this object type!\n\n";
+                    message += "Do you still want to delete this Custom Object definition?";
+                    queryResult = DoQuery("Delete Confirmation", message, ViewModelQueryType.Warning);
+                }
+                else
+                {
+                    var message = "Do you really want to delete this " + model.TypeName + ": \"" + model.GetLabel() + "\"?";
+                    queryResult = DoQuery("Delete Confirmation", message, ViewModelQueryType.Question);
+                }
+                
                 if (queryResult != ViewModelQueryResult.Yes)
                     return;
             }
 
             CloseDetail(model);
+            if (model is CustomObject customObject)
+            {
+                foreach (var custObjInstance in MasterRepository.Project.CustomObjectRepositories[customObject])
+                {
+                    if (custObjInstance != null)
+                        CloseDetail(custObjInstance);
+                }
+            }
             MasterRepository.Project.Delete(model);
         }
 

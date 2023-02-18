@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
@@ -11,19 +12,23 @@ namespace Eos.Nwn.Tlk
     public class TLKStringSet
     {
         private Dictionary<TLKLanguage, TLKString> strings;
-        public TLKStringSet()
+        private NotifyPropertyChangedDelegate? changedCallback;
+
+        public TLKStringSet(NotifyPropertyChangedDelegate? changedCallback = null)
         {
             strings = new Dictionary<TLKLanguage, TLKString>();
-            strings.Add(TLKLanguage.English, new TLKString());
-            strings.Add(TLKLanguage.French, new TLKString());
-            strings.Add(TLKLanguage.German, new TLKString());
-            strings.Add(TLKLanguage.Italian, new TLKString());
-            strings.Add(TLKLanguage.Spanish, new TLKString());
-            strings.Add(TLKLanguage.Polish, new TLKString());
-            strings.Add(TLKLanguage.Korean, new TLKString());
-            strings.Add(TLKLanguage.ChineseTraditional, new TLKString());
-            strings.Add(TLKLanguage.ChineseSimplified, new TLKString());
-            strings.Add(TLKLanguage.Japanese, new TLKString());
+            strings.Add(TLKLanguage.English, new TLKString(changedCallback));
+            strings.Add(TLKLanguage.French, new TLKString(changedCallback));
+            strings.Add(TLKLanguage.German, new TLKString(changedCallback));
+            strings.Add(TLKLanguage.Italian, new TLKString(changedCallback));
+            strings.Add(TLKLanguage.Spanish, new TLKString(changedCallback));
+            strings.Add(TLKLanguage.Polish, new TLKString(changedCallback));
+            strings.Add(TLKLanguage.Korean, new TLKString(changedCallback));
+            strings.Add(TLKLanguage.ChineseTraditional, new TLKString(changedCallback));
+            strings.Add(TLKLanguage.ChineseSimplified, new TLKString(changedCallback));
+            strings.Add(TLKLanguage.Japanese, new TLKString(changedCallback));
+
+            this.changedCallback = changedCallback;
         }
 
         public TLKString this[TLKLanguage index]

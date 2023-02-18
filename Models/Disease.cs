@@ -30,6 +30,12 @@ namespace Eos.Models
         public String? IncubationEndScript { get; set; }
         public String? DailyEffectScript { get; set; }
 
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Name = new TLKStringSet(() => NotifyPropertyChanged(nameof(Name)));
+        }
+
         protected override TLKStringSet? GetTlkDisplayName()
         {
             var modelOverride = (Disease?)MasterRepository.Project.GetOverride(this);

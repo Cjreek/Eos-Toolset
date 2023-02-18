@@ -29,6 +29,8 @@ namespace Eos.Models.Tables
             }
         }
 
+        public event EventHandler? OnChanged;
+
         public String ResourceName { get; set; } = "";
 
         protected override void SetDefaultValues()
@@ -47,6 +49,11 @@ namespace Eos.Models.Tables
         {
             base.FromJson(json);
             this.ResourceName = json["ResourceName"]?.GetValue<String>() ?? "";
+        }
+
+        protected override void Changed()
+        {
+            OnChanged?.Invoke(this, new EventArgs());
         }
     }
 }

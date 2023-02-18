@@ -45,6 +45,12 @@ namespace Eos.Models
         public IntPtr StartingEquipment { get; set; }
         public bool Playable { get; set; }
 
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Name = new TLKStringSet(() => NotifyPropertyChanged(nameof(Name)));
+        }
+
         protected override string GetTypeName()
         {
             return "Package";

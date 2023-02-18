@@ -15,6 +15,12 @@ namespace Eos.Models
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
 
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Name = new TLKStringSet(() => NotifyPropertyChanged(nameof(Name)));
+        }
+
         protected override TLKStringSet? GetTlkDisplayName()
         {
             var modelOverride = (MasterFeat?)MasterRepository.Project.GetOverride(this);

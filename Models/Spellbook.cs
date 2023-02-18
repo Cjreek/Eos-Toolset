@@ -41,7 +41,21 @@ namespace Eos.Models
 
     public class Spellbook : BaseModel
     {
-        public string Name { get; set; } = "";
+        private String _name = "";
+
+        public String Name
+        {
+            get { return _name; }
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public ObservableCollection<SpellbookEntry> Level0 { get; } = new ObservableCollection<SpellbookEntry>();
         public ObservableCollection<SpellbookEntry> Level1 { get; } = new ObservableCollection<SpellbookEntry>();
         public ObservableCollection<SpellbookEntry> Level2 { get; } = new ObservableCollection<SpellbookEntry>();

@@ -2,15 +2,31 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Eos.Repositories
 {
-    public class VirtualModelRepository<T> : IReadOnlyList<T?> where T : BaseModel, new()
+    public class VirtualModelRepository<T> : IReadOnlyList<T?>, INotifyCollectionChanged where T : BaseModel, new()
     {
         private readonly ModelRepository<T>[] repositories;
+
+        public event NotifyCollectionChangedEventHandler? CollectionChanged
+        {
+            add 
+            {
+                foreach (var repo in repositories)
+                    repo.CollectionChanged += value;
+            }
+            remove
+            {
+                foreach (var repo in repositories)
+                    repo.CollectionChanged -= value;
+            }
+        }
 
         public VirtualModelRepository(params ModelRepository<T>[] repositories)
         {

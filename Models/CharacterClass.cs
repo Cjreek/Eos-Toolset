@@ -139,6 +139,12 @@ namespace Eos.Models
         public bool CanCastSpontaneously { get; set; } = false;
         public bool SkipSpellSelection { get; set; } = false;
 
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Name = new TLKStringSet(() => NotifyPropertyChanged(nameof(Name)));
+        }
+
         protected override String GetTypeName()
         {
             return "Class";

@@ -20,6 +20,14 @@ namespace Eos.ViewModels
         {
         }
 
+        protected override HashSet<String> GetHeaderSourceFields()
+        {
+            return new HashSet<String>()
+            {
+                "Label"
+            };
+        }
+
         protected override string GetHeader()
         {
             return Data.Label;

@@ -13,6 +13,8 @@ namespace Eos.Models.Tables
     {
         private DataTypeDefinition dataTypeDefinition = new DataTypeDefinition(Guid.Empty, String.Empty, null);
 
+        public event EventHandler? OnChanged;
+
         public DataTypeDefinition DataTypeDefinition
         {
             get
@@ -47,6 +49,11 @@ namespace Eos.Models.Tables
         {
             base.FromJson(json);
             this.ResourceName = json["ResourceName"]?.GetValue<String>() ?? "";
+        }
+
+        protected override void Changed()
+        {
+            OnChanged?.Invoke(this, new EventArgs());
         }
     }
 }

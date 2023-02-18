@@ -20,7 +20,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         x:Name="mainWindow"
-        MinHeight="300" MinWidth="500" Tag="Eos Toolset v0.57"
+        MinHeight="300" MinWidth="500" Tag="Eos Toolset v0.58"
         Height="700" Width="1100" FontSize="16"
         Loaded="mainWindow_Loaded" Closing="mainWindow_Closing">
     <Window.Title>
@@ -119,6 +119,15 @@
                             </MenuItem.Style>
                         </MenuItem>
                         <MenuItem Command="{Binding Tag.CopyDetailCommand}" CommandParameter="{Binding DataContext}">
+                            <MenuItem.Style>
+                                <Style TargetType="{x:Type MenuItem}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DataContext, Converter={StaticResource isViewModelValueConverter}}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </MenuItem.Style>
                             <MenuItem.Header>
                                 <TextBlock>
                                     <Run Text="Duplicate"/>
@@ -772,10 +781,12 @@
                             <Style TargetType="{x:Type TreeViewItem}">
                                 <Setter Property="FontWeight" Value="Normal"/>
                                 <Setter Property="ItemTemplate" Value="{StaticResource TreeViewItemTemplate}"/>
-                                <Setter Property="ContextMenu" Value="{StaticResource tviCustomContextMenu}"/>
+                                <!--<Setter Property="ContextMenu" Value="{StaticResource tviCustomContextMenu}"/>-->
+                                <Setter Property="ContextMenuService.ContextMenu" Value="{StaticResource tviCustomContextMenu}"/>
                                 <Setter Property="Background" Value="#4087CEFA"/> <!--LightSkyBlue-->
                                 <Setter Property="Tag" Value="{Binding ElementName=viewModel}"/>
-                                
+                                <EventSetter Event="ContextMenuOpening" Handler="ContextMenu_ContextMenuOpening"/>
+
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ToolTip}" Value="CATEGORY">
                                         <Setter Property="FontWeight" Value="Bold"/>
@@ -788,6 +799,11 @@
 
                                     <DataTrigger Binding="{Binding Disabled}" Value="True">
                                         <Setter Property="Foreground" Value="DimGray"/>
+                                    </DataTrigger>
+
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ToolTip}" Value="INLINE">
+                                        <Setter Property="ContextMenu" Value="{x:Null}"/>
+                                        <Setter Property="Background" Value="Red"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -1054,7 +1070,7 @@
                             </TreeViewItem.Header>
                         </TreeViewItem>
 
-                        <TreeViewItem Header="Tables" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" IsExpanded="True">
+                        <TreeViewItem Header="Tables" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" IsExpanded="True" DisplayMemberPath="NOCONTEXT">
                             <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=RacialFeatsTables}" Tag="{x:Type tables:RacialFeatsTable}">
                                 <TreeViewItem.Header>
                                     <TextBlock>
@@ -1137,72 +1153,72 @@
                             </TreeViewItem>
                         </TreeViewItem>
 
-                        <TreeViewItem Header="Custom Datatypes" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" IsExpanded="True">
-                            <TreeViewItem ToolTip="CATEGORY" Header="Extension Fields" ToolTipService.IsEnabled="False">
-                                <TreeViewItem Header="Race" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Races.Extensions}">
+                        <TreeViewItem Header="Custom Datatypes" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" IsExpanded="True" DisplayMemberPath="NOCONTEXT">
+                            <TreeViewItem ToolTip="CATEGORY" Header="Extension Fields" ToolTipService.IsEnabled="False" DisplayMemberPath="NOCONTEXT">
+                                <TreeViewItem Header="Race" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Races.Extensions}" DisplayMemberPath="NOCONTEXT">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDoubleClick">
                                             <i:InvokeCommandAction Command="{Binding Path=OpenDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </TreeViewItem>
-                                <TreeViewItem Header="Class" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Classes.Extensions}">
+                                <TreeViewItem Header="Class" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Classes.Extensions}" DisplayMemberPath="NOCONTEXT">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDoubleClick">
                                             <i:InvokeCommandAction Command="{Binding Path=OpenDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </TreeViewItem>
-                                <TreeViewItem Header="Domain" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Domains.Extensions}">
+                                <TreeViewItem Header="Domain" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Domains.Extensions}" DisplayMemberPath="NOCONTEXT">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDoubleClick">
                                             <i:InvokeCommandAction Command="{Binding Path=OpenDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </TreeViewItem>
-                                <TreeViewItem Header="Spell" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.Extensions}">
+                                <TreeViewItem Header="Spell" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.Extensions}" DisplayMemberPath="NOCONTEXT">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDoubleClick">
                                             <i:InvokeCommandAction Command="{Binding Path=OpenDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </TreeViewItem>
-                                <TreeViewItem Header="Master Feat" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=MasterFeats.Extensions}">
+                                <TreeViewItem Header="Master Feat" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=MasterFeats.Extensions}" DisplayMemberPath="NOCONTEXT">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDoubleClick">
                                             <i:InvokeCommandAction Command="{Binding Path=OpenDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </TreeViewItem>
-                                <TreeViewItem Header="Feat" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Extensions}">
+                                <TreeViewItem Header="Feat" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Extensions}" DisplayMemberPath="NOCONTEXT">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDoubleClick">
                                             <i:InvokeCommandAction Command="{Binding Path=OpenDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </TreeViewItem>
-                                <TreeViewItem Header="Skill" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Skills.Extensions}">
+                                <TreeViewItem Header="Skill" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Skills.Extensions}" DisplayMemberPath="NOCONTEXT">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDoubleClick">
                                             <i:InvokeCommandAction Command="{Binding Path=OpenDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </TreeViewItem>
-                                <TreeViewItem Header="Disease" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Diseases.Extensions}">
+                                <TreeViewItem Header="Disease" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Diseases.Extensions}" DisplayMemberPath="NOCONTEXT">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDoubleClick">
                                             <i:InvokeCommandAction Command="{Binding Path=OpenDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </TreeViewItem>
-                                <TreeViewItem Header="Poison" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Poisons.Extensions}">
+                                <TreeViewItem Header="Poison" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Poisons.Extensions}" DisplayMemberPath="NOCONTEXT">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDoubleClick">
                                             <i:InvokeCommandAction Command="{Binding Path=OpenDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </TreeViewItem>
-                                <TreeViewItem Header="Polymorph" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Polymorphs.Extensions}">
+                                <TreeViewItem Header="Polymorph" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Polymorphs.Extensions}" DisplayMemberPath="NOCONTEXT">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDoubleClick">
                                             <i:InvokeCommandAction Command="{Binding Path=OpenDetailCommand, ElementName=viewModel}" CommandParameter="{Binding}"/>
@@ -1249,8 +1265,8 @@
                             </HierarchicalDataTemplate>
                         </TreeView.Resources>
                         
-                        <TreeViewItem FontWeight="Bold" Header="Data" IsExpanded="True" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomObjects}"/>
-                        <TreeViewItem FontWeight="Bold" Header="Tables" IsExpanded="True"/>
+                        <TreeViewItem FontWeight="Bold" Header="Object Types" IsExpanded="True" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomObjects}"/>
+                        <TreeViewItem FontWeight="Bold" Header="Tables" IsExpanded="True" Visibility="Hidden"/>
                     </TreeView>
                 </TabItem>
             </TabControl>

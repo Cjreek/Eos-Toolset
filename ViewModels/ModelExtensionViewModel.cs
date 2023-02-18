@@ -11,6 +11,8 @@ namespace Eos.ViewModels
 {
     internal class ModelExtensionViewModel : DataDetailViewModel<ModelExtension>
     {
+        public event EventHandler<DeleteCustomPropertyEventArgs>? OnDeleteCustomProperty;
+
         public ModelExtensionViewModel() : base()
         {
             DeleteExtensionPropertyCommand = new DelegateCommand<CustomObjectProperty>(DeleteExtensionProperty);
@@ -29,6 +31,18 @@ namespace Eos.ViewModels
             MoveExtensionPropertyDownCommand = new DelegateCommand<CustomObjectProperty>(MoveDown);
         }
 
+        public void RemoveAllEventsCalling(EventHandler<DeleteCustomPropertyEventArgs> method)
+        {
+            if (OnDeleteCustomProperty != null)
+            {
+                foreach (var d in OnDeleteCustomProperty.GetInvocationList())
+                {
+                    if (d.Method == method.Method)
+                        OnDeleteCustomProperty -= (EventHandler<DeleteCustomPropertyEventArgs>)d;
+                }
+            }
+        }
+
         protected override string GetHeader()
         {
             return Data.Name + " Extensions";
@@ -43,8 +57,13 @@ namespace Eos.ViewModels
 
         private void DeleteExtensionProperty(CustomObjectProperty item)
         {
-            this.Data.Remove(item);
-            NotifyPropertyChanged("Data");
+            var eventData = new DeleteCustomPropertyEventArgs(item);
+            OnDeleteCustomProperty?.Invoke(this, eventData);
+            if (eventData.CanDelete)
+            {
+                this.Data.Remove(item);
+                NotifyPropertyChanged("Data");
+            }
         }
 
         private void MoveUp(CustomObjectProperty item)

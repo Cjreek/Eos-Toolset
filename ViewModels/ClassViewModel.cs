@@ -11,9 +11,8 @@ namespace Eos.ViewModels
     internal class ClassViewModel : DataDetailViewModel<CharacterClass>
     {
         public ClassViewModel() : base()
-        {
+        { 
         }
-
         public ClassViewModel(CharacterClass cls) : base(cls)
         {
         }

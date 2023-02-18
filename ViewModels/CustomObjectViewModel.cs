@@ -4,6 +4,7 @@ using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,6 +12,19 @@ namespace Eos.ViewModels
 {
     internal class CustomObjectViewModel : DataDetailViewModel<CustomObject>
     {
+        public event EventHandler<DeleteCustomPropertyEventArgs>? OnDeleteCustomProperty;
+        public void RemoveAllEventsCalling(EventHandler<DeleteCustomPropertyEventArgs> method)
+        {
+            if (OnDeleteCustomProperty != null)
+            {
+                foreach (var d in OnDeleteCustomProperty.GetInvocationList())
+                {
+                    if (d.Method == method.Method)
+                        OnDeleteCustomProperty -= (EventHandler<DeleteCustomPropertyEventArgs>)d;
+                }
+            }
+        }
+
         public CustomObjectViewModel() : base()
         {
             DeleteObjectPropertyCommand = new DelegateCommand<CustomObjectProperty>(DeleteObjectProperty);
@@ -43,8 +57,13 @@ namespace Eos.ViewModels
 
         private void DeleteObjectProperty(CustomObjectProperty item)
         {
-            this.Data.Remove(item);
-            NotifyPropertyChanged("Data");
+            var eventData = new DeleteCustomPropertyEventArgs(item);
+            OnDeleteCustomProperty?.Invoke(this, eventData);
+            if (eventData.CanDelete)
+            {
+                this.Data.Remove(item);
+                NotifyPropertyChanged("Data");
+            }
         }
 
         private void MoveUp(CustomObjectProperty item)

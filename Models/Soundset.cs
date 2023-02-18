@@ -50,6 +50,12 @@ namespace Eos.Models
         public String SoundsetResource { get; set; } = "";
         public SoundsetEntryList Entries { get; set; } = new SoundsetEntryList();
 
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Name = new TLKStringSet(() => NotifyPropertyChanged(nameof(Name)));
+        }
+
         public override String GetLabel()
         {
             return Name;

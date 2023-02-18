@@ -71,6 +71,12 @@ namespace Eos.Models
             set { Set(ref _feats, value); }
         }
 
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Name = new TLKStringSet(() => NotifyPropertyChanged(nameof(Name)));
+        }
+
         protected override TLKStringSet? GetTlkDisplayName()
         {
             var modelOverride = (Race?)MasterRepository.Project.GetOverride(this);

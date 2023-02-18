@@ -98,6 +98,12 @@ namespace Eos.Models
 
         public bool FeatIsActive { get; set; } = false;
 
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Name = new TLKStringSet(() => NotifyPropertyChanged(nameof(Name)));
+        }
+
         protected override TLKStringSet? GetTlkDisplayName()
         {
             var modelOverride = (Domain?)MasterRepository.Project.GetOverride(this);

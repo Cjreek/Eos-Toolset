@@ -14,7 +14,21 @@ namespace Eos.Models
 {
     public class AreaEffect : BaseModel
     {
-        public String Name { get; set; } = "";
+        private String _name = "";
+
+        public String Name
+        {
+            get { return _name; }
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public AreaEffectShape Shape { get; set; }
         public double? Radius { get; set; }
         public double? Width { get; set; }

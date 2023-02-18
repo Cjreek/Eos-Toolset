@@ -43,10 +43,20 @@ namespace Eos.Models
             {
                 if (_extensions != value)
                 {
+                    if (_extensions != null)
+                        _extensions.OnChanged -= _extensions_OnChanged;
                     _extensions = value;
+                    if (_extensions != null)
+                        _extensions.OnChanged += _extensions_OnChanged;
+
                     InitExtensionValues();
                 }
             }
+        }
+
+        private void _extensions_OnChanged(object? sender, EventArgs e)
+        {
+            InitExtensionValues();
         }
 
         public Guid ID { get; set; }
@@ -174,7 +184,13 @@ namespace Eos.Models
 
         public BaseModel()
         {
+            Initialize();
             SetDefaultValues();
+        }
+
+        protected virtual void Initialize()
+        {
+
         }
 
         protected virtual void SetDefaultValues()

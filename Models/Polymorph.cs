@@ -13,7 +13,21 @@ namespace Eos.Models
 {
     public class Polymorph : BaseModel
     {
-        public String Name { get; set; } = "";
+        private String _name = "";
+
+        public String Name
+        {
+            get { return _name; }
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public Appearance? Appearance { get; set; }
         public Race? RacialType { get; set; }
         //public Portrait? Portrait { get; set; }

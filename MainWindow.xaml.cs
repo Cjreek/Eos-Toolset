@@ -105,7 +105,24 @@ namespace Eos
 
         private void ViewModel_OnQuery(ViewModelBase viewModel, ViewModelQueryEventArgs args)
         {
-            var result = MessageBox.Show(this, args.Message, args.Title, MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
+            var image = MessageBoxImage.Question;
+            switch(args.QueryType)
+            {
+                case ViewModelQueryType.Information:
+                    image = MessageBoxImage.Information;
+                    break;
+                case ViewModelQueryType.Question:
+                    image = MessageBoxImage.Question;
+                    break;
+                case ViewModelQueryType.Warning:
+                    image = MessageBoxImage.Warning;
+                    break;
+                case ViewModelQueryType.Error:
+                    image = MessageBoxImage.Error;
+                    break;
+            }
+
+            var result = MessageBox.Show(this, args.Message, args.Title, MessageBoxButton.YesNoCancel, image, MessageBoxResult.Cancel);
             switch (result)
             {
                 case MessageBoxResult.Yes:
@@ -338,6 +355,41 @@ namespace Eos
             {
                 tcTabs.Template = tabMultilineTemplate;
                 EosConfig.TabLayout = TabLayout.Multiline;
+            }
+        }
+
+        private void ContextMenu_Opened(object sender, RoutedEventArgs e)
+        {
+            ((ContextMenu)sender).IsOpen = false;
+            e.Handled = true; 
+        }
+
+        private void ContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            var tvi = e.Source is TreeViewItem ? (TreeViewItem)e.Source : null;
+            if ((tvi == null) && (e.Source is DependencyObject))
+            {
+                var depObj = (DependencyObject)e.Source;
+                do
+                {
+                    if (depObj is Visual)
+                        depObj = VisualTreeHelper.GetParent(depObj);
+                    else if (depObj is FrameworkContentElement contentElement)
+                        depObj = contentElement.Parent;
+                    else
+                        depObj = null;
+                }
+                while ((!(depObj is TreeViewItem)) && (depObj != null));
+
+
+                if (depObj is TreeViewItem parentTvi)
+                    tvi = parentTvi;
+            }
+            
+            if (tvi != null)
+            {
+                if ((String)tvi.DisplayMemberPath == "NOCONTEXT")
+                    e.Handled = true;
             }
         }
     }
