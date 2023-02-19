@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "eos-export": {
+      "commandName": "Project",
+      "commandLineArgs": "F:\\NWN\\CustomContent\\ActionPW\\ActionPW.eosproj"
+    }
+  }
+}

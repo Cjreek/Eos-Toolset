@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eos", "Toolset\Toolset.csproj", "{1C544A4B-CCB7-40FC-A8E0-C371449DBF1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eos-edit", "eos-edit\eos-edit.csproj", "{1C544A4B-CCB7-40FC-A8E0-C371449DBF1E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eos", "eos\eos.csproj", "{0B185610-3C05-436B-88EF-A3DB94D25338}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eos-export", "eos-export\eos-export.csproj", "{53AFF56A-9D74-4F49-BD10-4D36B73CD104}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{1C544A4B-CCB7-40FC-A8E0-C371449DBF1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C544A4B-CCB7-40FC-A8E0-C371449DBF1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C544A4B-CCB7-40FC-A8E0-C371449DBF1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B185610-3C05-436B-88EF-A3DB94D25338}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B185610-3C05-436B-88EF-A3DB94D25338}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B185610-3C05-436B-88EF-A3DB94D25338}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B185610-3C05-436B-88EF-A3DB94D25338}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53AFF56A-9D74-4F49-BD10-4D36B73CD104}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53AFF56A-9D74-4F49-BD10-4D36B73CD104}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53AFF56A-9D74-4F49-BD10-4D36B73CD104}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53AFF56A-9D74-4F49-BD10-4D36B73CD104}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

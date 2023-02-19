@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="Eos.Usercontrols.SoundsetComboBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Eos.Usercontrols"
+             xmlns:repo="clr-namespace:Eos.Repositories;assembly=Eos"
+             x:Name="ucSoundsetComboBox"
+             mc:Ignorable="d" 
+             d:DesignHeight="20" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+
+        <ComboBox x:Name="cbSoundsets" Grid.Column="0" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Soundsets}}" SelectedValue="{Binding ElementName=ucSoundsetComboBox, Path=SelectedValue}">
+            <ComboBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </ComboBox.ItemsPanel>
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                                <Binding Path="Name"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <Button x:Name="btClear" Grid.Column="1" Margin="2,-3,0,0" Content="🞪" Click="btClear_Click"
+                Height="{Binding ElementName=cbSoundsets, Path=ActualHeight}" Width="{Binding ElementName=cbSoundsets, Path=ActualHeight}" 
+                Visibility="{Binding ElementName=ucSoundsetComboBox, Path=IsNullable, Converter={StaticResource bool2VisCollapsed}}"/>
+        <local:ResetIsEnabled Grid.Column="2" Margin="2,-3,0,0">
+            <Button x:Name="btGoto" Content="👁" Click="btGoto_Click"
+			Height="{Binding ElementName=cbSoundsets, Path=ActualHeight}" Width="{Binding ElementName=cbSoundsets, Path=ActualHeight}"/>
+        </local:ResetIsEnabled>
+    </Grid>
+</UserControl>

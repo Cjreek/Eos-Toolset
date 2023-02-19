@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>eos_export</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Eos</RootNamespace>
+    <ApplicationIcon>Eos.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Eos.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\eos\eos.csproj" />
+  </ItemGroup>
+
+</Project>
