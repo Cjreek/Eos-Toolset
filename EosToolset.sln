@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eos", "Eos.csproj", "{1C544A4B-CCB7-40FC-A8E0-C371449DBF1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Eos", "Toolset\Toolset.csproj", "{1C544A4B-CCB7-40FC-A8E0-C371449DBF1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
