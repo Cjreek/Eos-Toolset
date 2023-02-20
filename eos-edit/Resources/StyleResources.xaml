@@ -97,7 +97,11 @@
     <Style TargetType="{x:Type uc:ClassComboBox}">
         <Setter Property="Margin" Value="2,0,0,3"/>
     </Style>
-    
+
+    <Style TargetType="{x:Type uc:PackageComboBox}">
+        <Setter Property="Margin" Value="2,0,0,3"/>
+    </Style>
+
     <Style TargetType="{x:Type uc:FeatComboBox}">
         <Setter Property="Margin" Value="2,0,0,3"/>
     </Style>

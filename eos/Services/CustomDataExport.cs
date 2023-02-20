@@ -1360,7 +1360,7 @@ namespace Eos.Services
                         record.Set("ONEXIT", aoe.OnExitScript);
                         record.Set("HEARTBEAT", aoe.OnHeartbeatScript);
                         record.Set("OrientWithGround", aoe.OrientWithGround);
-                        //record.Set("DurationVFX", aoe.VisualEffect);
+                        record.Set("DurationVFX", project.VisualEffects.Get2DAIndex(aoe.VisualEffect));
                         record.Set("MODEL01", aoe.Model1);
                         record.Set("MODEL02", aoe.Model2);
                         record.Set("MODEL03", aoe.Model3);
@@ -1432,9 +1432,7 @@ namespace Eos.Services
                         record.Set("Name", polymorph.Name);
                         record.Set("AppearanceType", project.Appearances.Get2DAIndex(polymorph.Appearance));
                         record.Set("RacialType", project.Races.Get2DAIndex(polymorph.RacialType));
-                        //record.Set("PortraitId", project.Portraits.Get2DAIndex(polymorph.Portrait));
-                        if (record.AsString("Portrait") != polymorph.PortraitResRef)
-                            record.Set("PortraitId", null);
+                        record.Set("PortraitId", project.Portraits.Get2DAIndex(polymorph.Portrait));
                         record.Set("Portrait", polymorph.PortraitResRef);
                         record.Set("CreatureWeapon1", polymorph.CreatureWeapon1);
                         record.Set("CreatureWeapon2", polymorph.CreatureWeapon2);
@@ -1446,7 +1444,7 @@ namespace Eos.Services
                         record.Set("DEX", polymorph.Dexterity);
                         record.Set("NATURALACBONUS", polymorph.NaturalACBonus != 0 ? polymorph.NaturalACBonus : null);
                         record.Set("HPBONUS", polymorph.HPBonus != 0 ? polymorph.HPBonus : null);
-                        //record.Set("SoundSet", project.Soundsets.Get2DAIndex(polymorph.Soundset));
+                        //record.Set("SoundSet", project.Soundsets.Get2DAIndex(polymorph.Soundset)); // Unused -> not written/changed
                         record.Set("SPELL1", project.Spells.Get2DAIndex(polymorph.Spell1));
                         record.Set("SPELL2", project.Spells.Get2DAIndex(polymorph.Spell2));
                         record.Set("SPELL3", project.Spells.Get2DAIndex(polymorph.Spell3));

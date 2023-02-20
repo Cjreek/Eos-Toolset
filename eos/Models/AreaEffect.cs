@@ -37,7 +37,7 @@ namespace Eos.Models
         public String? OnExitScript { get; set; }
         public String? OnHeartbeatScript { get; set; }
         public bool OrientWithGround { get; set; }
-        public IntPtr VisualEffect { get; set; }
+        public VisualEffect? VisualEffect { get; set; }
         public String? Model1 { get; set; }
         public String? LowQualityModel1 { get; set; }
         public int? Model1Amount { get; set; }
@@ -72,6 +72,7 @@ namespace Eos.Models
         public override void ResolveReferences()
         {
             base.ResolveReferences();
+            VisualEffect = Resolve(VisualEffect, MasterRepository.VisualEffects);
         }
 
         public override void FromJson(JsonObject json)
@@ -86,7 +87,7 @@ namespace Eos.Models
             this.OnExitScript = json["OnExitScript"]?.GetValue<String>();
             this.OnHeartbeatScript = json["OnHeartbeatScript"]?.GetValue<String>();
             this.OrientWithGround = json["OrientWithGround"]?.GetValue<bool>() ?? false;
-            //this.VisualEffect = json["VisualEffect"]?.GetValue<int>();
+            this.VisualEffect = CreateRefFromJson<VisualEffect>(json["VisualEffect"]?.AsObject());
             this.Model1 = json["Model1"]?.GetValue<String>();
             this.LowQualityModel1 = json["LowQualityModel1"]?.GetValue<String>();
             this.Model1Amount = json["Model1Amount"]?.GetValue<int>();
@@ -121,7 +122,7 @@ namespace Eos.Models
             aoeJson.Add("OnExitScript", this.OnExitScript);
             aoeJson.Add("OnHeartbeatScript", this.OnHeartbeatScript);
             aoeJson.Add("OrientWithGround", this.OrientWithGround);
-            aoeJson.Add("VisualEffect", null); // !
+            aoeJson.Add("VisualEffect", CreateJsonRef(this.VisualEffect));
             aoeJson.Add("Model1", this.Model1);
             aoeJson.Add("LowQualityModel1", this.LowQualityModel1);
             aoeJson.Add("Model1Amount", this.Model1Amount);

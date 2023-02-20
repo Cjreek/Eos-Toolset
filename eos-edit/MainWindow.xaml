@@ -20,7 +20,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         x:Name="mainWindow"
-        MinHeight="300" MinWidth="500" Tag="Eos Toolset v0.58"
+        MinHeight="300" MinWidth="500" Tag="Eos Toolset v0.59"
         Height="700" Width="1100" FontSize="16"
         Loaded="mainWindow_Loaded" Closing="mainWindow_Closing">
     <Window.Title>

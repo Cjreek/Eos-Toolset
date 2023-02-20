@@ -47,6 +47,27 @@
     <DataTemplate x:Key="aoeTemplate">
         <uc:AreaEffectComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
     </DataTemplate>
+    <DataTemplate x:Key="appearanceTemplate">
+        <uc:AppearanceComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+    </DataTemplate>
+    <DataTemplate x:Key="vfxTemplate">
+        <uc:VisualEffectComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+    </DataTemplate>
+    <DataTemplate x:Key="portraitTemplate">
+        <uc:PortraitComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+    </DataTemplate>
+    <DataTemplate x:Key="polymorphTemplate">
+        <uc:PolymorphComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+    </DataTemplate>
+    <DataTemplate x:Key="masterfeatTemplate">
+        <uc:MasterFeatComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+    </DataTemplate>
+    <DataTemplate x:Key="soundsetTemplate">
+        <uc:SoundsetComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+    </DataTemplate>
+    <DataTemplate x:Key="packageTemplate">
+        <uc:PackageComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+    </DataTemplate>
 
     <DataTemplate x:Key="customObjectTemplate">
         <uc:CustomObjectComboBox CustomObjectTemplate="{Binding Property.DataType.CustomType}" SelectedValue="{Binding Value}" IsNullable="True"/>
@@ -108,6 +129,13 @@
                                                 DomainTemplate="{StaticResource domainTemplate}"
                                                 SpellTemplate="{StaticResource spellTemplate}"
                                                 AreaEffectTemplate="{StaticResource aoeTemplate}"
+                                                AppearanceTemplate="{StaticResource appearanceTemplate}"
+                                                VisualEffectTemplate="{StaticResource vfxTemplate}"
+                                                PortraitTemplate="{StaticResource portraitTemplate}"
+                                                PolymorphTemplate="{StaticResource polymorphTemplate}"
+                                                MasterFeatTemplate="{StaticResource masterfeatTemplate}"
+                                                SoundsetTemplate="{StaticResource soundsetTemplate}"
+                                                PackageTemplate="{StaticResource packageTemplate}"
                                                 CustomObjectTemplate="{StaticResource customObjectTemplate}"
                                                 CustomEnumTemplate="{StaticResource customEnumTemplate}"/>
 </ResourceDictionary>

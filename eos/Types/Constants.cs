@@ -38,6 +38,8 @@ namespace Eos.Types
         public static readonly String MasterFeatsFilename;
 
         public static readonly String AppearancesFilename;
+        public static readonly String PortraitsFilename;
+        public static readonly String VisualEffectsFilename;
         public static readonly String ClassPackagesFilename;
         public static readonly String SoundsetsFilename;
         public static readonly String PolymorphsFilename;
@@ -72,6 +74,8 @@ namespace Eos.Types
         public static readonly String MasterFeatsFilePath;
 
         public static readonly String AppearancesFilePath;
+        public static readonly String PortraitsFilePath;
+        public static readonly String VisualEffectsFilePath; 
         public static readonly String ClassPackagesFilePath;
         public static readonly String SoundsetsFilePath;
         public static readonly String PolymorphsFilePath;
@@ -125,6 +129,8 @@ namespace Eos.Types
             MasterFeatsFilename = "masterfeats.json";
 
             AppearancesFilename = "appearances.json";
+            PortraitsFilename = "portraits.json";
+            VisualEffectsFilename = "vfx.json";
             ClassPackagesFilename = "packages.json";
             SoundsetsFilename = "soundsets.json";
             PolymorphsFilename = "polymorphs.json";
@@ -159,6 +165,8 @@ namespace Eos.Types
             MasterFeatsFilePath = BaseDataPath + MasterFeatsFilename;
 
             AppearancesFilePath = BaseDataPath + AppearancesFilename;
+            PortraitsFilePath = BaseDataPath + PortraitsFilename;
+            VisualEffectsFilePath = BaseDataPath + VisualEffectsFilename;
             ClassPackagesFilePath = BaseDataPath + ClassPackagesFilename;
             SoundsetsFilePath = BaseDataPath + SoundsetsFilename;
             PolymorphsFilePath = BaseDataPath + PolymorphsFilename;

@@ -54,6 +54,8 @@ namespace Eos.Repositories
         private readonly ModelRepository<MasterFeat> masterFeatRepository;
 
         private readonly ModelRepository<Appearance> appearanceRepository;
+        private readonly ModelRepository<Portrait> portraitRepository;
+        private readonly ModelRepository<VisualEffect> vfxRepository;
         private readonly ModelRepository<ClassPackage> classPackageRepository;
         private readonly ModelRepository<Soundset> soundsetRepository;
         private readonly ModelRepository<Polymorph> polymorphRepository;
@@ -99,6 +101,8 @@ namespace Eos.Repositories
             InitRepository(out masterFeatRepository, nameof(MasterFeats));
 
             InitRepository(out appearanceRepository, nameof(Appearances));
+            InitRepository(out portraitRepository, nameof(Portraits));
+            InitRepository(out vfxRepository, nameof(VisualEffects));
             InitRepository(out classPackageRepository, nameof(ClassPackages));
             InitRepository(out soundsetRepository, nameof(Soundsets));
             InitRepository(out polymorphRepository, nameof(Polymorphs));
@@ -133,6 +137,8 @@ namespace Eos.Repositories
         public ModelRepository<MasterFeat> MasterFeats { get { return masterFeatRepository; } }
 
         public ModelRepository<Appearance> Appearances { get { return appearanceRepository; } }
+        public ModelRepository<Portrait> Portraits { get { return portraitRepository; } }
+        public ModelRepository<VisualEffect> VisualEffects { get { return vfxRepository; } }
         public ModelRepository<ClassPackage> ClassPackages { get { return classPackageRepository; } }
         public ModelRepository<Soundset> Soundsets { get { return soundsetRepository; } }
         public ModelRepository<Polymorph> Polymorphs { get { return polymorphRepository; } }
@@ -221,6 +227,8 @@ namespace Eos.Repositories
             MasterFeats.Clear();
 
             Appearances.Clear();
+            Portraits.Clear();
+            VisualEffects.Clear();
             ClassPackages.Clear();
             Soundsets.Clear();
             Polymorphs.Clear();

@@ -30,7 +30,7 @@ namespace Eos.Models
 
         public Appearance? Appearance { get; set; }
         public Race? RacialType { get; set; }
-        //public Portrait? Portrait { get; set; }
+        public Portrait? Portrait { get; set; }
         public String? PortraitResRef { get; set; }
         public String? CreatureWeapon1 { get; set; }
         public String? CreatureWeapon2 { get; set; }
@@ -64,6 +64,7 @@ namespace Eos.Models
         {
             base.ResolveReferences();
             Appearance = Resolve(Appearance, MasterRepository.Appearances);
+            Portrait = Resolve(Portrait, MasterRepository.Portraits);
             RacialType = Resolve(RacialType, MasterRepository.Races);
             Spell1 = Resolve(Spell1, MasterRepository.Spells);
             Spell2 = Resolve(Spell2, MasterRepository.Spells);
@@ -76,7 +77,7 @@ namespace Eos.Models
             this.Name = json["Name"]?.GetValue<String>() ?? "";
             this.Appearance = CreateRefFromJson<Appearance>(json["Appearance"]?.AsObject());
             this.RacialType = CreateRefFromJson<Race>(json["RacialType"]?.AsObject());
-            //this.Portrait = CreateRefFromJson<Portrait>(json["Portrait"]?.AsObject());
+            this.Portrait = CreateRefFromJson<Portrait>(json["Portrait"]?.AsObject());
             this.PortraitResRef = json["PortraitResRef"]?.GetValue<String>() ?? "";
             this.CreatureWeapon1 = json["CreatureWeapon1"]?.GetValue<String>() ?? "";
             this.CreatureWeapon2 = json["CreatureWeapon2"]?.GetValue<String>() ?? "";
@@ -102,7 +103,7 @@ namespace Eos.Models
             polymorphJson.Add("Name", this.Name);
             polymorphJson.Add("Appearance", CreateJsonRef(this.Appearance));
             polymorphJson.Add("RacialType", CreateJsonRef(this.RacialType));
-            polymorphJson.Add("Portrait", null); // !
+            polymorphJson.Add("Portrait", CreateJsonRef(this.Portrait));
             polymorphJson.Add("PortraitResRef", this.PortraitResRef);
             polymorphJson.Add("CreatureWeapon1", this.CreatureWeapon1);
             polymorphJson.Add("CreatureWeapon2", this.CreatureWeapon2);

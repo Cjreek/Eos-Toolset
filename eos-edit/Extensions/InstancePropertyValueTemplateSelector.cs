@@ -27,6 +27,13 @@ namespace Eos.Extensions
         public DataTemplate? SpellTemplate { get; set; }
         public DataTemplate? FeatTemplate { get; set; }
         public DataTemplate? AreaEffectTemplate { get; set; }
+        public DataTemplate? AppearanceTemplate { get; set; }
+        public DataTemplate? VisualEffectTemplate { get; set; }
+        public DataTemplate? PortraitTemplate { get; set; }
+        public DataTemplate? PolymorphTemplate { get; set; }
+        public DataTemplate? MasterFeatTemplate { get; set; }
+        public DataTemplate? SoundsetTemplate { get; set; }
+        public DataTemplate? PackageTemplate { get; set; }
         public DataTemplate? CustomObjectTemplate { get; set; }
         public DataTemplate? CustomEnumTemplate { get; set; }
 
@@ -66,6 +73,20 @@ namespace Eos.Extensions
                     return FeatTemplate ?? ErrorTemplate;
                 if (dataTypeDef.Type == typeof(AreaEffect))
                     return AreaEffectTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(Appearance))
+                    return AppearanceTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(VisualEffect))
+                    return VisualEffectTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(Portrait))
+                    return PortraitTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(Polymorph))
+                    return PolymorphTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(MasterFeat))
+                    return MasterFeatTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(Soundset))
+                    return SoundsetTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(ClassPackage))
+                    return PackageTemplate ?? ErrorTemplate;
 
                 if (dataTypeDef.CustomType is CustomObject customObject)
                     return CustomObjectTemplate ?? ErrorTemplate;

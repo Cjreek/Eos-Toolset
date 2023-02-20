@@ -42,6 +42,8 @@ namespace Eos.Repositories
         private static readonly VirtualModelRepository<MasterFeat> masterFeatVirtualRepository;
 
         private static readonly VirtualModelRepository<Appearance> appearanceVirtualRepository;
+        private static readonly VirtualModelRepository<Portrait> portraitVirtualRepository;
+        private static readonly VirtualModelRepository<VisualEffect> vfxVirtualRepository;
         private static readonly VirtualModelRepository<ClassPackage> classPackageVirtualRepository;
         private static readonly VirtualModelRepository<Soundset> soundsetVirtualRepository;
         private static readonly VirtualModelRepository<Polymorph> polymorphVirtualRepository;
@@ -97,6 +99,8 @@ namespace Eos.Repositories
             masterFeatVirtualRepository = new VirtualModelRepository<MasterFeat>(standardCategory.MasterFeats, project.MasterFeats);
 
             appearanceVirtualRepository = new VirtualModelRepository<Appearance>(standardCategory.Appearances, project.Appearances);
+            portraitVirtualRepository = new VirtualModelRepository<Portrait>(standardCategory.Portraits, project.Portraits);
+            vfxVirtualRepository = new VirtualModelRepository<VisualEffect>(standardCategory.VisualEffects, project.VisualEffects);
             classPackageVirtualRepository = new VirtualModelRepository<ClassPackage>(standardCategory.ClassPackages, project.ClassPackages);
             soundsetVirtualRepository = new VirtualModelRepository<Soundset>(standardCategory.Soundsets, project.Soundsets);
             polymorphVirtualRepository = new VirtualModelRepository<Polymorph>(standardCategory.Polymorphs, project.Polymorphs);
@@ -185,11 +189,12 @@ namespace Eos.Repositories
             AddDataType(Guid.Parse("f4d8a469-32a6-4f68-bccd-7710ebb026d9"), "Area Effect", typeof(AreaEffect), modelToJson, json => JsonUtils.CreateRefFromJson<AreaEffect>((JsonObject?)json), o => Project.AreaEffects.Get2DAIndex((AreaEffect?)o));
             AddDataType(Guid.Parse("d84ec31c-5e6b-4373-a1c4-9d8fb4a501a7"), "Master Feat", typeof(MasterFeat), modelToJson, json => JsonUtils.CreateRefFromJson<MasterFeat>((JsonObject?)json), o => Project.MasterFeats.Get2DAIndex((MasterFeat?)o));
 
-
             AddDataType(Guid.Parse("80b538dc-7e6a-40c7-830a-05bdac2fe3a4"), "Appearance", typeof(Appearance), modelToJson, json => JsonUtils.CreateRefFromJson<Appearance>((JsonObject?)json), o => Project.Appearances.Get2DAIndex((Appearance?)o));
+            AddDataType(Guid.Parse("3744b4c4-12e6-40e0-a776-cf9866f268a0"), "Visual Effect", typeof(VisualEffect), modelToJson, json => JsonUtils.CreateRefFromJson<VisualEffect>((JsonObject?)json), o => Project.VisualEffects.Get2DAIndex((VisualEffect?)o));
             AddDataType(Guid.Parse("8fb225be-dca3-4dce-bd38-fbde34e6fce1"), "Soundset", typeof(Soundset), modelToJson, json => JsonUtils.CreateRefFromJson<Soundset>((JsonObject?)json), o => Project.Soundsets.Get2DAIndex((Soundset?)o));
             AddDataType(Guid.Parse("0de3877c-ec2d-4f05-86ee-7c7ef26d7df7"), "Polymorph", typeof(Polymorph), modelToJson, json => JsonUtils.CreateRefFromJson<Polymorph>((JsonObject?)json), o => Project.Polymorphs.Get2DAIndex((Polymorph?)o));
             AddDataType(Guid.Parse("3bffa036-db5f-4946-ae66-ed4c31a29830"), "Class Package", typeof(ClassPackage), modelToJson, json => JsonUtils.CreateRefFromJson<ClassPackage>((JsonObject?)json), o => Project.ClassPackages.Get2DAIndex((ClassPackage?)o));
+            AddDataType(Guid.Parse("3a5fa240-0931-43b1-afb7-b244b2ef9e61"), "Portrait", typeof(Portrait), modelToJson, json => JsonUtils.CreateRefFromJson<Portrait>((JsonObject?)json), o => Project.Portraits.Get2DAIndex((Portrait?)o));
 
             //AddDataType(Guid.Parse("5045137d-9b31-47e7-8391-2c9f0b4dd4eb"), "BAB Table", typeof(AttackBonusTable), modelToJson, json => JsonUtils.CreateRefFromJson<AttackBonusTable>((JsonObject?)json), o => ((AttackBonusTable?)o)?.Name.ToUpper());
             //AddDataType(Guid.Parse("769b4809-d4c9-404b-a9a7-b8079cd7ac89"), "Bonusfeats Table", typeof(BonusFeatsTable), modelToJson, json => JsonUtils.CreateRefFromJson<BonusFeatsTable>((JsonObject?)json), o => ((BonusFeatsTable?)o)?.Name.ToUpper());
@@ -262,6 +267,8 @@ namespace Eos.Repositories
         public static VirtualModelRepository<MasterFeat> MasterFeats { get { return masterFeatVirtualRepository; } }
 
         public static VirtualModelRepository<Appearance> Appearances { get { return appearanceVirtualRepository; } }
+        public static VirtualModelRepository<Portrait> Portraits { get { return portraitVirtualRepository; } }
+        public static VirtualModelRepository<VisualEffect> VisualEffects { get { return vfxVirtualRepository; } }
         public static VirtualModelRepository<ClassPackage> ClassPackages { get { return classPackageVirtualRepository; } }
         public static VirtualModelRepository<Soundset> Soundsets { get { return soundsetVirtualRepository; } }
         public static VirtualModelRepository<Polymorph> Polymorphs { get { return polymorphVirtualRepository; } }
@@ -312,6 +319,8 @@ namespace Eos.Repositories
             Standard.MasterFeats.LoadFromFile(Constants.MasterFeatsFilePath);
 
             Standard.Appearances.LoadFromFile(Constants.AppearancesFilePath);
+            Standard.Portraits.LoadFromFile(Constants.PortraitsFilePath);
+            Standard.VisualEffects.LoadFromFile(Constants.VisualEffectsFilePath);
             Standard.ClassPackages.LoadFromFile(Constants.ClassPackagesFilePath);
             Standard.Soundsets.LoadFromFile(Constants.SoundsetsFilePath);
             Standard.Polymorphs.LoadFromFile(Constants.PolymorphsFilePath);
@@ -340,6 +349,7 @@ namespace Eos.Repositories
             Standard.MasterFeats.ResolveReferences();
 
             Standard.Appearances.ResolveReferences();
+            Standard.Portraits.ResolveReferences();
             Standard.ClassPackages.ResolveReferences();
             Standard.Soundsets.ResolveReferences();
             Standard.Polymorphs.ResolveReferences();

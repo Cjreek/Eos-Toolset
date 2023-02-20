@@ -86,7 +86,10 @@
                     <uc:AppearanceComboBox SelectedValue="{Binding Data.Appearance}" IsNullable="False" Grid.Row="3" Grid.Column="3"/>
 
                     <TextBlock Text="Portrait" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
-                    <TextBox Text="{Binding Data.PortraitResRef}" Grid.Row="4" Grid.Column="1"/>
+                    <uc:PortraitComboBox SelectedValue="{Binding Data.Portrait}" Grid.Row="4" Grid.Column="1"/>
+                    
+                    <TextBlock Text="Portrait ResRef" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
+                    <TextBox Text="{Binding Data.PortraitResRef}" Grid.Row="4" Grid.Column="3"/>
 
                     <TextBlock Text="Stats" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="6" Grid.Column="0" FontWeight="Bold" FontSize="16" Grid.ColumnSpan="4"/>
 

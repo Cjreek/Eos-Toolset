@@ -1267,7 +1267,7 @@ namespace Eos.Services
                 tmpAreaEffect.OnExitScript = aoe2da[i].AsString("ONEXIT");
                 tmpAreaEffect.OnHeartbeatScript = aoe2da[i].AsString("HEARTBEAT");
                 tmpAreaEffect.OrientWithGround = aoe2da[i].AsBoolean("OrientWithGround");
-                tmpAreaEffect.VisualEffect = IntPtr.Zero; // !
+                tmpAreaEffect.VisualEffect = CreateRef<VisualEffect>(aoe2da[i].AsInteger("DurationVFX", -1));
                 tmpAreaEffect.Model1 = aoe2da[i].AsString("MODEL01");
                 tmpAreaEffect.Model2 = aoe2da[i].AsString("MODEL02");
                 tmpAreaEffect.Model3 = aoe2da[i].AsString("MODEL03");
@@ -1341,7 +1341,7 @@ namespace Eos.Services
                 tmpPolymorph.Name = polymorph2da[i].AsString("Name") ?? "";
                 tmpPolymorph.Appearance = CreateRef<Appearance>(polymorph2da[i].AsInteger("AppearanceType"));
                 tmpPolymorph.RacialType = CreateRef<Race>(polymorph2da[i].AsInteger("RacialType"));
-                //tmpPolymorph.Portrait = CreateRef<Portrait>(polymorph2da[i].AsInteger("PortraitId"));
+                tmpPolymorph.Portrait = CreateRef<Portrait>(polymorph2da[i].AsInteger("PortraitId"));
                 tmpPolymorph.PortraitResRef = polymorph2da[i].AsString("Portrait") ?? "";
                 tmpPolymorph.CreatureWeapon1 = polymorph2da[i].AsString("CreatureWeapon1");
                 tmpPolymorph.CreatureWeapon2 = polymorph2da[i].AsString("CreatureWeapon2");
@@ -1379,6 +1379,42 @@ namespace Eos.Services
                 if (!SetText(tmpAppearance.Name, appearance2da[i].AsInteger("STRING_REF"))) continue;
 
                 Standard.Appearances.Add(tmpAppearance);
+            }
+        }
+
+        private void ImportVisualEffects()
+        {
+            var vfx2da = Load2da("visualeffects");
+
+            Standard.VisualEffects.Clear();
+            for (int i = 0; i < vfx2da.Count; i++)
+            {
+                var tmpVfx = new VisualEffect();
+                tmpVfx.ID = GenerateGuid("visualeffects", i);
+                tmpVfx.Index = i;
+
+                if (vfx2da[i].IsNull("Type_FD")) continue;
+                tmpVfx.Name = vfx2da[i].AsString("Label") ?? "";
+
+                Standard.VisualEffects.Add(tmpVfx);
+            }
+        }
+
+        private void ImportPortraits()
+        {
+            var portraits2da = Load2da("portraits");
+
+            Standard.Portraits.Clear();
+            for (int i = 0; i < portraits2da.Count; i++)
+            {
+                var tmpPortrait = new Portrait();
+                tmpPortrait.ID = GenerateGuid("portraits", i);
+                tmpPortrait.Index = i;
+
+                if (portraits2da[i].IsNull("BaseResRef")) continue;
+                tmpPortrait.ResRef = portraits2da[i].AsString("BaseResRef") ?? "";
+
+                Standard.Portraits.Add(tmpPortrait);
             }
         }
 
@@ -1468,8 +1504,8 @@ namespace Eos.Services
                 if (polymorph == null) continue;
                 polymorph.Appearance = SolveInstance(polymorph.Appearance, Standard.Appearances);
                 polymorph.RacialType = SolveInstance(polymorph.RacialType, Standard.Races);
-                //polymorph.Portrait = SolveInstance(polymorph.Portrait, Standard.Portraits);
-                //polymorph.Soundset = SolveInstance(polymorph.Soundset, Standard.Soundsets);
+                polymorph.Portrait = SolveInstance(polymorph.Portrait, Standard.Portraits);
+                //polymorph.Soundset = SolveInstance(polymorph.Soundset, Standard.Soundsets); // Unused will not be imported!
                 polymorph.Spell1 = SolveInstance(polymorph.Spell1, Standard.Spells);
                 polymorph.Spell2 = SolveInstance(polymorph.Spell2, Standard.Spells);
                 polymorph.Spell3 = SolveInstance(polymorph.Spell3, Standard.Spells);
@@ -1553,6 +1589,13 @@ namespace Eos.Services
                 package.Domain1 = SolveInstance(package.Domain1, Standard.Domains);
                 package.Domain2 = SolveInstance(package.Domain2, Standard.Domains);
             }
+
+            // Area Effects
+            foreach (var aoe in Standard.AreaEffects)
+            {
+                if (aoe == null) continue;
+                aoe.VisualEffect = SolveInstance(aoe.VisualEffect, Standard.VisualEffects);
+            }
         }
 
         private void SaveToJson()
@@ -1573,6 +1616,8 @@ namespace Eos.Services
             Standard.MasterFeats.SaveToFile(Constants.MasterFeatsFilePath);
 
             Standard.Appearances.SaveToFile(Constants.AppearancesFilePath);
+            Standard.Portraits.SaveToFile(Constants.PortraitsFilePath);
+            Standard.VisualEffects.SaveToFile(Constants.VisualEffectsFilePath);
             Standard.ClassPackages.SaveToFile(Constants.ClassPackagesFilePath);
             Standard.Soundsets.SaveToFile(Constants.SoundsetsFilePath);
             Standard.Polymorphs.SaveToFile(Constants.PolymorphsFilePath);
@@ -1648,9 +1693,11 @@ namespace Eos.Services
             ImportMasterFeats();
 
             ImportAppearances();
+            ImportVisualEffects();
             ImportClassPackages();
             ImportSoundsets();
             ImportPolymorphs();
+            ImportPortraits();
 
             ImportText();
 

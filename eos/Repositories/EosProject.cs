@@ -168,6 +168,7 @@ namespace Eos.Repositories
 
         public ProjectSettingsExport Export { get; private set; } = new ProjectSettingsExport();
 
+        public ProjectSettingsCustomData Appearances { get; private set; } = new ProjectSettingsCustomData(15100);
         public ProjectSettingsCustomData AreaEffects { get; private set; } = new ProjectSettingsCustomData(47);
         public ProjectSettingsCustomData Classes { get; private set; } = new ProjectSettingsCustomData(43);
         public ProjectSettingsCustomData Diseases { get; private set; } = new ProjectSettingsCustomData(17);
@@ -177,11 +178,13 @@ namespace Eos.Repositories
         public ProjectSettingsCustomData Packages { get; private set; } = new ProjectSettingsCustomData(132);
         public ProjectSettingsCustomData Poisons { get; private set; } = new ProjectSettingsCustomData(45);
         public ProjectSettingsCustomData Polymorphs { get; private set; } = new ProjectSettingsCustomData(107);
+        public ProjectSettingsCustomData Portraits { get; private set; } = new ProjectSettingsCustomData(16001);
         public ProjectSettingsCustomData Races { get; private set; } = new ProjectSettingsCustomData(30);
         public ProjectSettingsCustomData Skills { get; private set; } = new ProjectSettingsCustomData(28);
         public ProjectSettingsCustomData Soundsets { get; private set; } = new ProjectSettingsCustomData(5100);
         public ProjectSettingsCustomData Spellbooks { get; private set; } = new ProjectSettingsCustomData();
         public ProjectSettingsCustomData Spells { get; private set; } = new ProjectSettingsCustomData(840);
+        public ProjectSettingsCustomData VisualEffects { get; private set; } = new ProjectSettingsCustomData(10100);
         public ProjectSettingsCustomData AttackBonusTables { get; private set; } = new ProjectSettingsCustomData();
         public ProjectSettingsCustomData BonusFeatTables { get; private set; } = new ProjectSettingsCustomData();
         public ProjectSettingsCustomData FeatTables { get; private set; } = new ProjectSettingsCustomData();
@@ -200,6 +203,8 @@ namespace Eos.Repositories
             ProjectSettings clone = (ProjectSettings)this.MemberwiseClone();
             clone.ExternalFolders = new ObservableCollection<String>(this.ExternalFolders);
             clone.Export = this.Export.Clone();
+
+            clone.Appearances = this.Appearances.Clone();
             clone.AreaEffects = this.AreaEffects.Clone();
             clone.AttackBonusTables = this.AttackBonusTables.Clone();
             clone.BonusFeatTables = this.BonusFeatTables.Clone();
@@ -214,6 +219,7 @@ namespace Eos.Repositories
             clone.Packages = this.Packages.Clone();
             clone.Poisons = this.Poisons.Clone();
             clone.Polymorphs = this.Polymorphs.Clone();
+            clone.Portraits = this.Portraits.Clone();
             clone.PrerequisiteTables = this.PrerequisiteTables.Clone();
             clone.Races = this.Races.Clone();
             clone.RacialFeatsTables = this.RacialFeatsTables.Clone();
@@ -224,7 +230,8 @@ namespace Eos.Repositories
             clone.Spellbooks = this.Spellbooks.Clone();
             clone.Spells = this.Spells.Clone();
             clone.SpellSlotTables = this.SpellSlotTables.Clone();
-            clone.StatGainTables = this.StatGainTables.Clone();      
+            clone.StatGainTables = this.StatGainTables.Clone();
+            clone.VisualEffects = this.VisualEffects.Clone();
 
             return clone;
         }
@@ -317,8 +324,8 @@ namespace Eos.Repositories
         {
             ProjectFolder = Path.GetDirectoryName(projectFilename) ?? "";
 
-            //Settings.ExternalFolder = ProjectFolder + Constants.ExternalFilesPath;
-        
+            Settings.ExternalFolders.Clear();
+
             Settings.Export.HakFolder = ProjectFolder + Constants.ExportHAKFolder;
             Settings.Export.TlkFolder = ProjectFolder + Constants.ExportTLKFolder;
             Settings.Export.TwoDAFolder = ProjectFolder + Constants.Export2DAFolder;
@@ -358,6 +365,7 @@ namespace Eos.Repositories
                     Settings.Export.IncludeFilename = exportJson?["IncludeFilename"]?.GetValue<string>() ?? Constants.IncludeFilename;
 
                     var customDataJson = projectJson["CustomData"];
+                    LoadCustomDataSettings(Settings.Appearances, customDataJson?["AreaEffects"]);
                     LoadCustomDataSettings(Settings.AreaEffects, customDataJson?["AreaEffects"]);
                     LoadCustomDataSettings(Settings.Classes, customDataJson?["Classes"]);
                     LoadCustomDataSettings(Settings.Diseases, customDataJson?["Diseases"]);
@@ -367,11 +375,13 @@ namespace Eos.Repositories
                     LoadCustomDataSettings(Settings.Packages, customDataJson?["Packages"]);
                     LoadCustomDataSettings(Settings.Poisons, customDataJson?["Poisons"]);
                     LoadCustomDataSettings(Settings.Polymorphs, customDataJson?["Polymorphs"]);
+                    LoadCustomDataSettings(Settings.Portraits, customDataJson?["Portraits"]);
                     LoadCustomDataSettings(Settings.Races, customDataJson?["Races"]);
                     LoadCustomDataSettings(Settings.Skills, customDataJson?["Skills"]);
                     LoadCustomDataSettings(Settings.Soundsets, customDataJson?["Soundsets"]);
                     LoadCustomDataSettings(Settings.Spellbooks, customDataJson?["Spellbooks"]);
                     LoadCustomDataSettings(Settings.Spells, customDataJson?["Spells"]);
+                    LoadCustomDataSettings(Settings.VisualEffects, customDataJson?["VisualEffects"]);
 
                     LoadCustomDataSettings(Settings.AttackBonusTables, customDataJson?["AttackBonusTables"]);
                     LoadCustomDataSettings(Settings.BonusFeatTables, customDataJson?["BonusFeatTables"]);
@@ -435,6 +445,7 @@ namespace Eos.Repositories
             projectFile.Add("Export", export);
 
             var customDataSettings = new JsonObject();
+            SaveCustomDataSettings(Settings.Appearances, "Appearances", customDataSettings);
             SaveCustomDataSettings(Settings.AreaEffects, "AreaEffects", customDataSettings);
             SaveCustomDataSettings(Settings.Classes, "Classes", customDataSettings);
             SaveCustomDataSettings(Settings.Diseases, "Diseases", customDataSettings);
@@ -444,11 +455,13 @@ namespace Eos.Repositories
             SaveCustomDataSettings(Settings.Packages, "Packages", customDataSettings);
             SaveCustomDataSettings(Settings.Poisons, "Poisons", customDataSettings);
             SaveCustomDataSettings(Settings.Polymorphs, "Polymorphs", customDataSettings);
+            SaveCustomDataSettings(Settings.Portraits, "Portraits", customDataSettings);
             SaveCustomDataSettings(Settings.Races, "Races", customDataSettings);
             SaveCustomDataSettings(Settings.Skills, "Skills", customDataSettings);
             SaveCustomDataSettings(Settings.Soundsets, "Soundsets", customDataSettings);
             SaveCustomDataSettings(Settings.Spellbooks, "Spellbooks", customDataSettings);
             SaveCustomDataSettings(Settings.Spells, "Spells", customDataSettings);
+            SaveCustomDataSettings(Settings.VisualEffects, "VisualEffects", customDataSettings);
 
             SaveCustomDataSettings(Settings.BonusFeatTables, "BonusFeatTables", customDataSettings);
             SaveCustomDataSettings(Settings.AttackBonusTables, "AttackBonusTables", customDataSettings);
@@ -497,9 +510,12 @@ namespace Eos.Repositories
             AreaEffects.LoadFromFile(ProjectFolder + Constants.AreaEffectsFilename);
             MasterFeats.LoadFromFile(ProjectFolder + Constants.MasterFeatsFilename);
 
+            Appearances.LoadFromFile(ProjectFolder + Constants.AppearancesFilename);
+            VisualEffects.LoadFromFile(ProjectFolder + Constants.VisualEffectsFilename);
             ClassPackages.LoadFromFile(ProjectFolder + Constants.ClassPackagesFilename);
             Soundsets.LoadFromFile(ProjectFolder + Constants.SoundsetsFilename);
             Polymorphs.LoadFromFile(ProjectFolder + Constants.PolymorphsFilename);
+            Portraits.LoadFromFile(ProjectFolder + Constants.PortraitsFilename);
 
             AttackBonusTables.LoadFromFile(ProjectFolder + Constants.AttackBonusTablesFilename);
             BonusFeatTables.LoadFromFile(ProjectFolder + Constants.BonusFeatTablesFilename);
@@ -531,9 +547,11 @@ namespace Eos.Repositories
             MasterFeats.ResolveReferences();
 
             Appearances.ResolveReferences();
+            VisualEffects.ResolveReferences();
             ClassPackages.ResolveReferences();
             Soundsets.ResolveReferences();
             Polymorphs.ResolveReferences();
+            Portraits.ResolveReferences();
 
             AttackBonusTables.ResolveReferences();
             BonusFeatTables.ResolveReferences();
@@ -552,6 +570,7 @@ namespace Eos.Repositories
                     CustomObjectRepositories[template].ResolveReferences();
             }
 
+            if (Settings.Appearances.Sorted) Appearances.Sort(d => d?.Name);
             if (Settings.AreaEffects.Sorted) AreaEffects.Sort(d => d?.Name);
             if (Settings.AttackBonusTables.Sorted) AttackBonusTables.Sort(d => d?.Name);
             if (Settings.BonusFeatTables.Sorted) BonusFeatTables.Sort(d => d?.Name);
@@ -565,6 +584,7 @@ namespace Eos.Repositories
             if (Settings.Packages.Sorted) ClassPackages.Sort(d => d?.Name[TLKLanguage.English].Text);
             if (Settings.Poisons.Sorted) Poisons.Sort(d => d?.Name[TLKLanguage.English].Text);
             if (Settings.Polymorphs.Sorted) Polymorphs.Sort(d => d?.Name);
+            if (Settings.Portraits.Sorted) Portraits.Sort(d => d?.ResRef);
             if (Settings.Races.Sorted) Races.Sort(d => d?.Name[TLKLanguage.English].Text);
             if (Settings.RacialFeatsTables.Sorted) RacialFeatsTables.Sort(d => d?.Name);
             if (Settings.SavesTables.Sorted) SavingThrowTables.Sort(d => d?.Name);
@@ -574,7 +594,8 @@ namespace Eos.Repositories
             if (Settings.Spellbooks.Sorted) Spellbooks.Sort(d => d?.Name);
             if (Settings.Spells.Sorted) Spells.Sort(d => d?.Name[TLKLanguage.English].Text);
             if (Settings.SpellSlotTables.Sorted) SpellSlotTables.Sort(d => d?.Name);
-            if (Settings.StatGainTables.Sorted) StatGainTables.Sort(d => d?.Name);            
+            if (Settings.StatGainTables.Sorted) StatGainTables.Sort(d => d?.Name);
+            if (Settings.VisualEffects.Sorted) VisualEffects.Sort(d => d?.Name);
 
             IsLoaded = true;
             EosConfig.LastProject = projectFilename;
@@ -600,6 +621,9 @@ namespace Eos.Repositories
             AreaEffects.SaveToFile(ProjectFolder + Constants.AreaEffectsFilename, Settings.AreaEffects.FormatJson);
             MasterFeats.SaveToFile(ProjectFolder + Constants.MasterFeatsFilename, Settings.MasterFeats.FormatJson);
 
+            Appearances.SaveToFile(ProjectFolder + Constants.AppearancesFilename, Settings.Appearances.FormatJson);
+            Portraits.SaveToFile(ProjectFolder + Constants.PortraitsFilename, Settings.Portraits.FormatJson);
+            VisualEffects.SaveToFile(ProjectFolder + Constants.VisualEffectsFilename, Settings.VisualEffects.FormatJson);
             ClassPackages.SaveToFile(ProjectFolder + Constants.ClassPackagesFilename, Settings.Packages.FormatJson);
             Soundsets.SaveToFile(ProjectFolder + Constants.SoundsetsFilename, Settings.Soundsets.FormatJson);
             Polymorphs.SaveToFile(ProjectFolder + Constants.PolymorphsFilename, Settings.Polymorphs.FormatJson);
