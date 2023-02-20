@@ -150,7 +150,7 @@ namespace Eos.ViewModels
                         {
                             var instance = new CustomObjectInstance();
                             instance.Template = template;
-                            MasterRepository.Project.CustomObjectRepositories[template].Add(instance);
+                            MasterRepository.Add(instance);
                             MessageDispatcher.Send(MessageType.OpenDetail, instance);
                         }
                         break;

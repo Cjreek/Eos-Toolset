@@ -1740,11 +1740,14 @@ namespace Eos.Services
                         rec = custom2da.AddRecord();
                     }
 
-                    rec.Set("Label", instance.Label);
-                    foreach (var value in instance.Values)
+                    if (!instance.Disabled)
                     {
-                        if ((!value.Property.DataType?.IsVisualOnly ?? false) && (value.Property.DataType?.To2DA != null))
-                            rec.Set(value.Property.Column, value.Property.DataType?.To2DA(value.Value));
+                        rec.Set("Label", instance.Label);
+                        foreach (var value in instance.Values)
+                        {
+                            if ((!value.Property.DataType?.IsVisualOnly ?? false) && (value.Property.DataType?.To2DA != null))
+                                rec.Set(value.Property.Column, value.Property.DataType?.To2DA(value.Value));
+                        }
                     }
                 }
 

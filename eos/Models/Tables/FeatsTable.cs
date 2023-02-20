@@ -11,7 +11,7 @@ namespace Eos.Models.Tables
     {
         protected override void SetDefaultValues()
         {
-            Name = "NEW_FEATS_TBL";
+            Name = "CLS_FEAT_NEW";
         }
 
         protected override int GetMaximumItems()

@@ -10,7 +10,7 @@ namespace Eos.Models.Tables
     {
         protected override void SetDefaultValues()
         {
-            Name = "NEW_KSPELLS_TBL";
+            Name = "CLS_SPKN_NEW";
         }
 
         protected override void InitializeData()

@@ -10,7 +10,7 @@ namespace Eos.Models.Tables
     {
         protected override void SetDefaultValues()
         {
-            Name = "NEW_RFEATS_TBL";
+            Name = "RACE_FEAT_NEW";
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Eos.Models.Tables
     {
         protected override void SetDefaultValues()
         {
-            Name = "NEW_SKILLS_TBL";
+            Name = "CLS_SKILL_NEW";
         }
     }
 }

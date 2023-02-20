@@ -11,7 +11,7 @@ namespace Eos.Models.Tables
     {
         protected override void SetDefaultValues()
         {
-            Name = "NEW_BAB_TBL";
+            Name = "CLS_ATK_NEW";
         }
 
         protected override void InitializeData()

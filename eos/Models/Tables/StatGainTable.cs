@@ -10,7 +10,7 @@ namespace Eos.Models.Tables
     {
         protected override void SetDefaultValues()
         {
-            Name = "NEW_STATGN_TBL";
+            Name = "CLS_STAT_NEW";
         }
 
         protected override void InitializeData()

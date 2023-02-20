@@ -10,7 +10,7 @@ namespace Eos.Models.Tables
     {
         protected override void SetDefaultValues()
         {
-            Name = "NEW_PREREQ_TBL";
+            Name = "CLS_PRES_NEW";
         }
     }
 }

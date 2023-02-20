@@ -177,10 +177,22 @@ namespace Eos.Repositories
 
         public void Add(BaseModel model)
         {
-            var modelType = model.GetType();
-            if (model.Index == null)
-                model.Index = repositoryDict[modelType].GetNextFreeIndex();
-            repositoryDict[modelType].AddBase(model);
+            if (model is CustomObjectInstance coi)
+            {
+                if (coi.Template != null)
+                {
+                    if (coi.Index == null)
+                        coi.Index = CustomObjectRepositories[coi.Template].GetNextFreeIndex();
+                    CustomObjectRepositories[coi.Template].Add(coi);
+                }
+            }
+            else
+            {
+                var modelType = model.GetType();
+                if (model.Index == null)
+                    model.Index = repositoryDict[modelType].GetNextFreeIndex();
+                repositoryDict[modelType].AddBase(model);
+            }
         }
 
         public BaseModel? GetByID(Type modelType, Guid id)
@@ -190,8 +202,16 @@ namespace Eos.Repositories
 
         public void Delete(BaseModel model)
         {
-            var modelType = model.GetType();
-            repositoryDict[modelType].RemoveBase(model);
+            if (model is CustomObjectInstance coi)
+            {
+                if (coi.Template != null)
+                    CustomObjectRepositories[coi.Template].Remove(coi);
+            }
+            else
+            {
+                var modelType = model.GetType();
+                repositoryDict[modelType].RemoveBase(model);
+            }
         }
 
         public bool HasOverride(BaseModel model)

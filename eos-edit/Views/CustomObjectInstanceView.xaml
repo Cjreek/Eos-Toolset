@@ -35,6 +35,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="150"/>
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="{Binding Data.Template.Name}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
@@ -42,8 +43,10 @@
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Label" Margin="0,0,5,0" HorizontalAlignment="Right"/>
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Label}" Height="22" VerticalContentAlignment="Center"/>
 
+            <CheckBox Content="Disable" Grid.Row="1" Grid.Column="3" Margin="3,-2,0,0" IsChecked="{Binding Data.Disabled}"/>
+            
             <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}" Height="22" VerticalContentAlignment="Center"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}" Height="22" VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
 
             <ItemsControl Grid.Row="4" Grid.ColumnSpan="2" ItemsSource="{Binding Data.Values}">
                 <ItemsControl.ItemsPanel>

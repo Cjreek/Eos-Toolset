@@ -10,7 +10,7 @@ namespace Eos.Models.Tables
     {
         protected override void SetDefaultValues()
         {
-            Name = "NEW_BFEAT_TBL";
+            Name = "CLS_BFEAT_NEW";
         }
 
         protected override void InitializeData()
