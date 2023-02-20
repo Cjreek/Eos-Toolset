@@ -731,7 +731,7 @@
 
                         <TreeViewItem Header="Races" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Races}"/>
                         <TreeViewItem Header="Classes" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Classes}"/>
-                        <TreeViewItem Header="Class Packages" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=ClassPackages}"/>
+                        <TreeViewItem Header="Class Packages" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=ClassPackages}" Visibility="Collapsed"/>
                         <TreeViewItem Header="Domains" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Domains}"/>
                         <TreeViewItem Header="Spellbooks" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spellbooks}"/>
                         <TreeViewItem Header="Spells" ToolTip="CATEGORY" ToolTipService.IsEnabled="False">
@@ -763,7 +763,7 @@
                         <TreeViewItem Header="Diseases" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Diseases}"/>
                         <TreeViewItem Header="Poisons" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Poisons}"/>
                         <TreeViewItem Header="Area Effects" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=AreaEffects}"/>
-                        <TreeViewItem Header="Soundsets" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Soundsets}"/>
+                        <TreeViewItem Header="Soundsets" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Soundsets}" Visibility="Collapsed"/>
                         <TreeViewItem Header="Polymorphs" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Polymorphs}"/>
 
                         <TreeViewItem Header="Tables" ToolTip="CATEGORY" ToolTipService.IsEnabled="False" IsExpanded="True">
@@ -830,7 +830,7 @@
                                 </TextBlock>
                             </TreeViewItem.Header>
                         </TreeViewItem>
-                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=ClassPackages}" Tag="{x:Type models:ClassPackage}">
+                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=ClassPackages}" Tag="{x:Type models:ClassPackage}" Visibility="Collapsed">
                             <TreeViewItem.Header>
                                 <TextBlock>
                                     <Run Text="Class Packages"/>
@@ -1058,7 +1058,7 @@
                                 </TextBlock>
                             </TreeViewItem.Header>
                         </TreeViewItem>
-                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Soundsets}" Tag="{x:Type models:Soundset}">
+                        <TreeViewItem ToolTip="CATEGORY" ToolTipService.IsEnabled="False" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Soundsets}" Tag="{x:Type models:Soundset}" Visibility="Collapsed">
                             <TreeViewItem.Header>
                                 <TextBlock>
                                     <Run Text="Soundsets"/>
