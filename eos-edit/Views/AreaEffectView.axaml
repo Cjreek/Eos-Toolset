@@ -1,216 +1,221 @@
-﻿<local:LanguageAwarePage x:Class="Eos.Views.AreaEffectView"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Eos.Views"
-      xmlns:vm="clr-namespace:Eos.ViewModels"
-      xmlns:ext="clr-namespace:Eos.Extensions"
-      xmlns:types="clr-namespace:Eos.Types;assembly=Eos"
-      xmlns:uc="clr-namespace:Eos.Usercontrols"
-      xmlns:nwn="clr-namespace:Eos.Nwn;assembly=Eos"
-      xmlns:wpftk="clr-namespace:Xceed.Wpf.Toolkit;assembly=DotNetProjects.Wpf.Extended.Toolkit"
-      mc:Ignorable="d" 
-      x:Name="page"
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="SkillView" Margin="10">
-    <Page.DataContext>
-        <vm:AreaEffectViewModel/>
-    </Page.DataContext>
-    
-    <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources\StyleResources.xaml"/>
-                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Page.Resources>
+<local:LanguageAwarePage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views"
+             xmlns:vm="using:Eos.ViewModels"
+             xmlns:uc="using:Eos.Usercontrols"
+             xmlns:types="using:Eos.Types"
+             xmlns:ext="using:Eos.Extensions"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Views.AreaEffectView"
+             x:Name="page">
+  <Design.DataContext>
+    <vm:AreaEffectViewModel/>
+  </Design.DataContext>
 
-    <TabControl TabStripPlacement="Left" BorderThickness="1,0,0,0" SelectedIndex="{Binding SelectedTabIndex}">
-        <TabItem Header="Info" Width="100" Height="30">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <Grid IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}" Margin="10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+  <local:LanguageAwarePage.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </local:LanguageAwarePage.Resources>
 
-                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="0,0,0,10">
-                        <TextBlock FontSize="22" FontWeight="Bold">
-                            <TextBlock.Text>
-                                <MultiBinding Converter="{StaticResource tlkConverterDefault}">
-                                    <Binding Path="Data.Name"/>
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
+  <local:LanguageAwarePage.Styles>
+    <Styles>
+      <StyleInclude Source="/Assets/StyleResources.axaml"/>
+    </Styles>
+  </local:LanguageAwarePage.Styles>
 
-                        <TextBlock Text=" (AoE ID:" FontSize="16" VerticalAlignment="Center"/>
-                        <uc:ResetIsEnabled>
-                            <TextBox Text="{Binding Data.CalculatedIndex, Mode=OneWay}" BorderThickness="0" FontSize="16" VerticalAlignment="Center" Margin="0" IsReadOnly="True"/>
-                        </uc:ResetIsEnabled>
-                        <TextBlock Text=")" FontSize="16" VerticalAlignment="Center" Margin="-2,0,0,0"/>
-                    </StackPanel>
+  <TabControl TabStripPlacement="Left" BorderThickness="0,1,0,0" SelectedIndex="{Binding SelectedTabIndex}" Padding="0">
+    <TabItem Header="Info" Width="100" Height="30" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid IsEnabled="{Binding !Data.IsReadonly}" Margin="10">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto" MinHeight="22"/>
+              <RowDefinition Height="auto" MinHeight="22"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="22"/>
+              <RowDefinition Height="auto" MinHeight="22"/>
+              <RowDefinition Height="auto" MinHeight="22"/>
+              <RowDefinition Height="auto" MinHeight="22"/>
+              <RowDefinition Height="auto" MinHeight="22"/>
+              <RowDefinition Height="auto" MinHeight="22"/>
+              <RowDefinition Height="25" MinHeight="22"/>
+              <RowDefinition Height="25" MinHeight="22"/>
+              <RowDefinition Height="auto" MinHeight="22"/>
+              <RowDefinition Height="auto" MinHeight="22"/>
+              <RowDefinition Height="auto" MinHeight="22"/>
+              <RowDefinition Height="25" MinHeight="22"/>
+              <RowDefinition Height="25" MinHeight="22"/>
+              <RowDefinition Height="auto" MinHeight="22"/>
+              <RowDefinition Height="auto" MinHeight="22"/>
+              <RowDefinition Height="auto" MinHeight="22"/>
+              <RowDefinition Height="25" MinHeight="22"/>
+              <RowDefinition Height="25" MinHeight="22"/>
+              <RowDefinition Height="25" MinHeight="22"/>
+              <RowDefinition Height="25" MinHeight="22"/>
+              <RowDefinition Height="auto" MinHeight="22"/>
+              <RowDefinition Height="auto" MinHeight="22"/>
+              <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
 
-                    <!--Label-->
-                    <TextBlock Text="Label" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-                    <TextBox Text="{Binding Data.Name}" Grid.Row="1" Grid.Column="1"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="0,0,0,10">
+              <TextBlock FontSize="22" FontWeight="Bold">
+                <TextBlock.Text>
+                  <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                    <Binding Path="Data.Name"/>
+                  </MultiBinding>
+                </TextBlock.Text>
+              </TextBlock>
 
-                    <TextBlock Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2"/>
-                    <TextBox Text="{Binding Data.Hint}" Grid.Row="1" Grid.Column="3"/>
+              <TextBlock Text=" (AoE ID:" FontSize="16" VerticalAlignment="Center"/>
+              <!--<uc:ResetIsEnabled>-->
+              <TextBox Text="{Binding Data.CalculatedIndex, Mode=OneWay}" BorderThickness="0" FontSize="16" VerticalAlignment="Center" Margin="0" IsReadOnly="True"/>
+              <!--</uc:ResetIsEnabled>-->
+              <TextBlock Text=")" FontSize="16" VerticalAlignment="Center" Margin="0"/>
+            </StackPanel>
 
-                    <TextBlock Text="Shape" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
-                    <uc:EnumComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:AreaEffectShape}}" SelectedValue="{Binding Data.Shape}"/>
+            <!--Label-->
+            <TextBlock Text="Label" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <TextBox Text="{Binding Data.Name}" Grid.Row="1" Grid.Column="1"/>
 
-                    <TextBlock Text="Radius" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.Radius}" Grid.Row="2" Grid.Column="3"/>
+            <TextBlock Text="Hint" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2"/>
+            <TextBox Text="{Binding Data.Hint}" Grid.Row="1" Grid.Column="3"/>
 
-                    <TextBlock Text="Width" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.Width}" Grid.Row="3" Grid.Column="1"/>
+            <TextBlock Text="Shape" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+            <uc:EnumComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:AreaEffectShape}}" SelectedValue="{Binding Data.Shape}"/>
 
-                    <TextBlock Text="Length" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.Length}" Grid.Row="3" Grid.Column="3"/>
+            <TextBlock Text="Radius" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.Radius}" Grid.Row="2" Grid.Column="3" Increment="1"/>
 
-                    <TextBlock Text="Visual Effect" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
-                    <uc:VisualEffectComboBox SelectedValue="{Binding Data.VisualEffect}" Grid.Row="4" Grid.Column="1"/>
+            <TextBlock Text="Width" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.Width}" Grid.Row="3" Grid.Column="1" Increment="1"/>
 
-                    <TextBlock Text="Orient with Ground" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
-                    <CheckBox IsChecked="{Binding Data.OrientWithGround}" Grid.Row="4" Grid.Column="3"/>
+            <TextBlock Text="Length" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.Length}" Grid.Row="3" Grid.Column="3" Increment="1"/>
 
-                    <TextBlock Text="OnEnter Script" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
-                    <uc:ScriptResourceTextbox ResRef="{Binding Data.OnEnterScript}" Grid.Row="6" Grid.Column="1"/>
+            <TextBlock Text="Visual Effect" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+            <uc:VisualEffectComboBox SelectedValue="{Binding Data.VisualEffect}" Grid.Row="4" Grid.Column="1"/>
 
-                    <TextBlock Text="OnExit Script" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="2"/>
-                    <uc:ScriptResourceTextbox ResRef="{Binding Data.OnExitScript}" Grid.Row="6" Grid.Column="3"/>
+            <TextBlock Text="Orient with Ground" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
+            <CheckBox IsChecked="{Binding Data.OrientWithGround}" Grid.Row="4" Grid.Column="3"/>
 
-                    <TextBlock Text="OnHeartbeat Script" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
-                    <uc:ScriptResourceTextbox ResRef="{Binding Data.OnHeartbeatScript}" Grid.Row="7" Grid.Column="1"/>
+            <TextBlock Text="OnEnter Script" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
+            <uc:ScriptResourceTextbox ResRef="{Binding Data.OnEnterScript}" Grid.Row="6" Grid.Column="1"/>
 
-                    <TextBlock Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Model 1" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
+            <TextBlock Text="OnExit Script" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="2"/>
+            <uc:ScriptResourceTextbox ResRef="{Binding Data.OnExitScript}" Grid.Row="6" Grid.Column="3"/>
 
-                    <TextBlock Text="Regular Model" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
-                    <uc:ModelResourceTextbox ResRef="{Binding Data.Model1}" Grid.Row="10" Grid.Column="1"/>
+            <TextBlock Text="OnHeartbeat Script" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
+            <uc:ScriptResourceTextbox ResRef="{Binding Data.OnHeartbeatScript}" Grid.Row="7" Grid.Column="1"/>
 
-                    <TextBlock Text="Low Quality Model" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
-                    <uc:ModelResourceTextbox ResRef="{Binding Data.LowQualityModel1}" Grid.Row="10" Grid.Column="3"/>
+            <TextBlock Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Model 1" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
 
-                    <TextBlock Text="Amount" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.Model1Amount}" Grid.Row="11" Grid.Column="1"/>
+            <TextBlock Text="Regular Model" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
+            <uc:ModelResourceTextbox ResRef="{Binding Data.Model1}" Grid.Row="10" Grid.Column="1"/>
 
-                    <TextBlock Text="Duration" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.Model1Duration}" Grid.Row="11" Grid.Column="3"/>
+            <TextBlock Text="Low Quality Model" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
+            <uc:ModelResourceTextbox ResRef="{Binding Data.LowQualityModel1}" Grid.Row="10" Grid.Column="3"/>
 
-                    <TextBlock Text="Edge Weight" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0"/>
-                    <wpftk:DoubleUpDown Value="{Binding Data.Model1EdgeWeight}" Grid.Row="12" Grid.Column="1" Maximum="1.0" Minimum="0"/>
+            <TextBlock Text="Amount" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.Model1Amount}" Grid.Row="11" Grid.Column="1" Increment="1"/>
 
-                    <TextBlock Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Model 2" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
+            <TextBlock Text="Duration" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.Model1Duration}" Grid.Row="11" Grid.Column="3" Increment="1"/>
 
-                    <TextBlock Text="Regular Model" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="0"/>
-                    <uc:ModelResourceTextbox ResRef="{Binding Data.Model2}" Grid.Row="15" Grid.Column="1"/>
+            <TextBlock Text="Edge Weight" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.Model1EdgeWeight}" Grid.Row="12" Grid.Column="1" Maximum="1.0" Minimum="0"/>
 
-                    <TextBlock Text="Low Quality Model" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="2"/>
-                    <uc:ModelResourceTextbox ResRef="{Binding Data.LowQualityModel2}" Grid.Row="15" Grid.Column="3"/>
+            <TextBlock Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Model 2" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
 
-                    <TextBlock Text="Amount" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="16" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.Model2Amount}" Grid.Row="16" Grid.Column="1"/>
+            <TextBlock Text="Regular Model" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="0"/>
+            <uc:ModelResourceTextbox ResRef="{Binding Data.Model2}" Grid.Row="15" Grid.Column="1"/>
 
-                    <TextBlock Text="Duration" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="16" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.Model2Duration}" Grid.Row="16" Grid.Column="3"/>
+            <TextBlock Text="Low Quality Model" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="2"/>
+            <uc:ModelResourceTextbox ResRef="{Binding Data.LowQualityModel2}" Grid.Row="15" Grid.Column="3"/>
 
-                    <TextBlock Text="Edge Weight" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="17" Grid.Column="0"/>
-                    <wpftk:DoubleUpDown Value="{Binding Data.Model2EdgeWeight}" Grid.Row="17" Grid.Column="1" Maximum="1.0" Minimum="0"/>
+            <TextBlock Text="Amount" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="16" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.Model2Amount}" Grid.Row="16" Grid.Column="1" Increment="1"/>
 
-                    <TextBlock Grid.Row="19" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Model 3" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
+            <TextBlock Text="Duration" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="16" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.Model2Duration}" Grid.Row="16" Grid.Column="3" Increment="1"/>
 
-                    <TextBlock Text="Regular Model" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="20" Grid.Column="0"/>
-                    <uc:ModelResourceTextbox ResRef="{Binding Data.Model3}" Grid.Row="20" Grid.Column="1"/>
+            <TextBlock Text="Edge Weight" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="17" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.Model2EdgeWeight}" Grid.Row="17" Grid.Column="1" Maximum="1.0" Minimum="0"/>
 
-                    <TextBlock Text="Low Quality Model" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="20" Grid.Column="2"/>
-                    <uc:ModelResourceTextbox ResRef="{Binding Data.LowQualityModel3}" Grid.Row="20" Grid.Column="3"/>
+            <TextBlock Grid.Row="19" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Model 3" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
 
-                    <TextBlock Text="Amount" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="21" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.Model3Amount}" Grid.Row="21" Grid.Column="1"/>
+            <TextBlock Text="Regular Model" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="20" Grid.Column="0"/>
+            <uc:ModelResourceTextbox ResRef="{Binding Data.Model3}" Grid.Row="20" Grid.Column="1"/>
 
-                    <TextBlock Text="Duration" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="21" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.Model3Duration}" Grid.Row="21" Grid.Column="3"/>
+            <TextBlock Text="Low Quality Model" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="20" Grid.Column="2"/>
+            <uc:ModelResourceTextbox ResRef="{Binding Data.LowQualityModel3}" Grid.Row="20" Grid.Column="3"/>
 
-                    <TextBlock Text="Edge Weight" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="22" Grid.Column="0"/>
-                    <wpftk:DoubleUpDown Value="{Binding Data.Model3EdgeWeight}" Grid.Row="22" Grid.Column="1" Maximum="1.0" Minimum="0"/>
+            <TextBlock Text="Amount" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="21" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.Model3Amount}" Grid.Row="21" Grid.Column="1" Increment="1"/>
 
-                    <TextBlock Grid.Row="24" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Sound" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
+            <TextBlock Text="Duration" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="21" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.Model3Duration}" Grid.Row="21" Grid.Column="3" Increment="1"/>
 
-                    <TextBlock Text="Impact Sound" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="25" Grid.Column="0"/>
-                    <uc:SoundResourceTextbox ResRef="{Binding Data.ImpactSound}" Grid.Row="25" Grid.Column="1"/>
+            <TextBlock Text="Edge Weight" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="22" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.Model3EdgeWeight}" Grid.Row="22" Grid.Column="1" Maximum="1.0" Minimum="0"/>
 
-                    <TextBlock Text="Loop Sound" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="25" Grid.Column="2"/>
-                    <uc:SoundResourceTextbox ResRef="{Binding Data.LoopSound}" Grid.Row="25" Grid.Column="3"/>
+            <TextBlock Grid.Row="24" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Sound" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
 
-                    <TextBlock Text="Cessation Sound" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="26" Grid.Column="0"/>
-                    <uc:SoundResourceTextbox ResRef="{Binding Data.CessationSound}" Grid.Row="26" Grid.Column="1"/>
+            <TextBlock Text="Impact Sound" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="25" Grid.Column="0"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.ImpactSound}" Grid.Row="25" Grid.Column="1"/>
 
-                    <TextBlock Text="Random Sound" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="27" Grid.Column="0"/>
-                    <uc:SoundResourceTextbox ResRef="{Binding Data.RandomSound}" Grid.Row="27" Grid.Column="1"/>
+            <TextBlock Text="Loop Sound" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="25" Grid.Column="2"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.LoopSound}" Grid.Row="25" Grid.Column="3"/>
 
-                    <TextBlock Text="Random Sound Chance" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="27" Grid.Column="2"/>
-                    <wpftk:DoubleUpDown Value="{Binding Data.RandomSoundChance}" Grid.Row="27" Grid.Column="3" Minimum="0" Maximum="1"/>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-        <TabItem Header="Metadata" Width="100" Height="30" Visibility="{Binding Data.IsReadonly, Converter={StaticResource bool2VisCollapsedInverted}}">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="25"/>
-                    </Grid.RowDefinitions>
+            <TextBlock Text="Cessation Sound" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="26" Grid.Column="0"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.CessationSound}" Grid.Row="26" Grid.Column="1"/>
 
-                    <TextBlock Text="Area Effect Metadata" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+            <TextBlock Text="Random Sound" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="27" Grid.Column="0"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.RandomSound}" Height="22" Grid.Row="27" Grid.Column="1"/>
 
-                    <TextBlock Text="Script Constant" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                    <DockPanel Grid.Row="1" Grid.Column="1">
-                        <TextBox Text="AOE_PER_" BorderThickness="1,1,0,1" IsReadOnly="True" VerticalContentAlignment="Center" Style="{x:Null}" Margin="2,0,0,3"/>
-                        <TextBox Text="{Binding Data.ScriptConstant}" Style="{StaticResource ConstantHintTextboxStyle}" CharacterCasing="Upper" Margin="-2,0,0,3" BorderThickness="0,1,1,1" VerticalContentAlignment="Center"/>
-                    </DockPanel>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-    </TabControl>
+            <TextBlock Text="Random Sound Chance" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="27" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.RandomSoundChance}" Grid.Row="27" Grid.Column="3" Minimum="0" Maximum="1"/>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Metadata" Width="100" Height="30" IsVisible="{Binding !Data.IsReadonly}" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Area Effect Metadata" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <TextBlock Text="Script Constant" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <DockPanel Grid.Row="1" Grid.Column="1">
+              <TextBox Text="AOE_PER_" BorderThickness="1,1,0,1" IsReadOnly="True" VerticalContentAlignment="Center" Margin="2,0,0,3"/>
+              <TextBox Text="{Binding Data.ScriptConstant}" Margin="-2,0,0,3" BorderThickness="0,1,1,1" VerticalContentAlignment="Center" Watermark="*AUTOGENERATED*" TextChanging="ConstantTextbox_TextChanging"/>
+            </DockPanel>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+  </TabControl>
 </local:LanguageAwarePage>

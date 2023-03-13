@@ -2,11 +2,11 @@
 using Eos.Nwn.Tlk;
 using Eos.Repositories;
 using Eos.Services;
-using Prism.Commands;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
-using System.DirectoryServices;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -79,18 +79,19 @@ namespace Eos.ViewModels.Dialogs
             return true;
         }
 
-        public DelegateCommand<ModelSearchViewModel<T>> CloseCommand { get; private set; } = new DelegateCommand<ModelSearchViewModel<T>>(vm =>
+        public ReactiveCommand<ModelSearchViewModel<T>, Unit> CloseCommand { get; private set; } = ReactiveCommand.Create<ModelSearchViewModel<T>>(vm =>
         {
             vm.ResultModel = null;
             WindowService.Close(vm);
         });
 
-        public DelegateCommand<ModelSearchViewModel<T>> OKCommand { get; private set; } = new DelegateCommand<ModelSearchViewModel<T>>(vm =>
+        public ReactiveCommand<ModelSearchViewModel<T>, Unit> OKCommand { get; private set; } = ReactiveCommand.Create<ModelSearchViewModel<T>>(vm =>
         {
             if (vm.ResultModel?.Overrides != null)
             {
                 vm.ResultModel = (T?)MasterRepository.Standard.GetByID(typeof(T), vm.ResultModel?.Overrides ?? Guid.Empty);
             }
+
             WindowService.Close(vm);
         });
     }

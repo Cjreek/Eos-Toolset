@@ -228,8 +228,17 @@ namespace Eos.Repositories
 
         public int? GetBase2DAIndex(BaseModel model, bool returnCustomDataIndex = true)
         {
-            var modelType = model.GetType();
-            return repositoryDict[modelType].GetBase2DAIndex(model, returnCustomDataIndex);
+            if (model is CustomObjectInstance coi)
+            {
+                if (coi.Template != null)
+                    return CustomObjectRepositories[coi.Template].GetBase2DAIndex(model, returnCustomDataIndex);
+                return -1;
+            }
+            else
+            {
+                var modelType = model.GetType();
+                return repositoryDict[modelType].GetBase2DAIndex(model, returnCustomDataIndex);
+            }
         }
 
         public void Clear()

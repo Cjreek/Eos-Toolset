@@ -9,10 +9,12 @@ using System.Collections.Specialized;
 using System.Collections;
 using System.Runtime.CompilerServices;
 using Eos.Models;
+using System.Reflection;
+using Eos.Types;
 
 namespace Eos.Repositories
 {
-    public class Repository<T> : INotifyCollectionChanged, INotifyPropertyChanged, IReadOnlyCollection<T?>, IReadOnlyList<T?>, IEnumerable<T?> where T : INotifyPropertyChanged, new()
+    public class Repository<T> : INotifyCollectionChanged, INotifyPropertyChanged, IReadOnlyCollection<T?>, IReadOnlyList<T?>, IEnumerable<T?>, IList where T : INotifyPropertyChanged, new()
     {
         protected ObservableCollection<T?> internalList = new ObservableCollection<T?>();
         private bool fireChangedEvent = true;
@@ -81,7 +83,8 @@ namespace Eos.Repositories
 
         private void Item_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, sender, 0, 0)); // 0 -> 0 Dummy. Works
+            //RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         protected virtual void Changed()
@@ -113,28 +116,50 @@ namespace Eos.Repositories
         }
 
         public int Count => internalList.Count;
+
+        public bool IsFixedSize => throw new NotImplementedException();
+
+        public bool IsReadOnly => throw new NotImplementedException();
+
+        public bool IsSynchronized => throw new NotImplementedException();
+
+        public object SyncRoot => throw new NotImplementedException();
+
+        object? IList.this[int index] { get => internalList[index]; set { if (value is T) internalList[index] = (T)value; } }
+
         public T? this[int index]
         {
             get { return internalList[index]; }
             set { internalList[index] = value; }
         }
 
-        public int IndexOf(T model)
+        public int IndexOf(T? model)
         {
             return internalList.IndexOf(model);
         }
 
         public void Move(int fromIndex, int toIndex)
         {
-            internalList.Move(fromIndex, toIndex);
+            var element = internalList[fromIndex];
+            BeginUpdate();
+            try
+            {
+                internalList.RemoveAt(fromIndex);
+                internalList.Insert(toIndex, element);
+            }
+            finally
+            {
+                EndUpdate();
+                RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            }
         }
 
-        public bool Contains(T model)
+        public bool Contains(T? model)
         {
             return internalList.Contains(model);
         }
 
-        public virtual void Add(T model)
+        public virtual void Add(T? model)
         {
             internalList.Add(model);
         }
@@ -156,6 +181,45 @@ namespace Eos.Repositories
             internalList.Clear();
             foreach (var item in list)
                 internalList.Add(item);
+        }
+
+        // IList // TODOX: Implement rest, // !
+
+        public int Add(object? value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Contains(object? value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int IndexOf(object? value)
+        {
+            if (value is T model)
+                return internalList.IndexOf(model);
+            return -1;
+        }
+
+        public void Insert(int index, object? value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(object? value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveAt(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CopyTo(Array array, int index)
+        {
+            throw new NotImplementedException();
         }
     }
 }

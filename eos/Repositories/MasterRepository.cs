@@ -141,8 +141,8 @@ namespace Eos.Repositories
             AddDataType(Guid.Parse("a136669b-e618-4be1-9a29-8b76f85c60be"), "None", null, o => null, json => null, to2daIdentity, false, true);
 
             AddDataType(Guid.Parse("0bd1d9ec-7909-4f25-bd98-fa034915c0fb"), "String", typeof(string), o => (string?)o, json => json?.GetValue<string>(), to2daIdentity);
-            AddDataType(Guid.Parse("0212ec84-bd23-441a-8269-713a3d765cbe"), "Integer", typeof(int), o => (int?)o, json => json?.GetValue<int>(), to2daIdentity);
-            AddDataType(Guid.Parse("7dd178ac-c87f-4849-a539-ad9bf2c95220"), "Double", typeof(double), o => (double?)o, json => json?.GetValue<double>(), to2daIdentity);
+            AddDataType(Guid.Parse("0212ec84-bd23-441a-8269-713a3d765cbe"), "Integer", typeof(int), o => { if (o is Decimal d) return Decimal.ToInt32(d); return (int?)o; }, json => json?.GetValue<int>(), to2daIdentity);
+            AddDataType(Guid.Parse("7dd178ac-c87f-4849-a539-ad9bf2c95220"), "Double", typeof(double), o => { if (o is Decimal d) return Decimal.ToDouble(d); return (double?)o; }, json => json?.GetValue<double>(), to2daIdentity);
             AddDataType(Guid.Parse("bd7ee740-d4a5-41b7-bcf6-cf14923e78dc"), "Boolean", typeof(bool), o => (bool?)o ?? false, json => json?.GetValue<bool>() ?? false, to2daIdentity);
 
             AddDataType(Guid.Parse("e4a815d7-78e1-4e12-84e8-129a69cbb951"), "Variant", typeof(VariantValue),

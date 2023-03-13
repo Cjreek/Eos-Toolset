@@ -146,7 +146,7 @@ namespace Eos.Models
         public TargetShape? TargetShape { get; set; }
         public double? TargetSizeX { get; set; }
         public double? TargetSizeY { get; set; }
-        public TargetFlag? TargetingFlags { get; set; }
+        public TargetFlag TargetingFlags { get; set; } = (TargetFlag)0;
 
         protected override void Initialize()
         {
@@ -241,7 +241,7 @@ namespace Eos.Models
             this.TargetShape = JsonToEnum<TargetShape>(json["TargetShape"]);
             this.TargetSizeX = json["TargetSizeX"]?.GetValue<double>();
             this.TargetSizeY = json["TargetSizeY"]?.GetValue<double>();
-            this.TargetingFlags = JsonToEnum<TargetFlag>(json["TargetingFlags"]);
+            this.TargetingFlags = JsonToEnum<TargetFlag>(json["TargetingFlags"]) ?? (TargetFlag)0;
         }
 
         public override JsonObject ToJson()

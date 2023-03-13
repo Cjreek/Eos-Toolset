@@ -2,11 +2,12 @@
 using Eos.Repositories;
 using Eos.Services;
 using Eos.ViewModels.Base;
-using Prism.Commands;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -36,12 +37,12 @@ namespace Eos.ViewModels.Dialogs
             return "New Project";
         }
 
-        public DelegateCommand<NewProjectViewModel> CloseCommand { get; private set; } = new DelegateCommand<NewProjectViewModel>(vm =>
+        public ReactiveCommand<NewProjectViewModel, Unit> CloseCommand { get; private set; } = ReactiveCommand.Create<NewProjectViewModel>(vm =>
         {
             WindowService.Close(vm);
         });
 
-        public DelegateCommand<NewProjectViewModel> OKCommand { get; private set; } = new DelegateCommand<NewProjectViewModel>(vm =>
+        public ReactiveCommand<NewProjectViewModel, Unit> OKCommand { get; private set; } = ReactiveCommand.Create<NewProjectViewModel>(vm =>
         {
             if (vm.ProjectName.Trim() == "")
             {
@@ -67,7 +68,7 @@ namespace Eos.ViewModels.Dialogs
 
         protected override int GetDefaultHeight()
         {
-            return 150;
+            return 120;
         }
     }
 }

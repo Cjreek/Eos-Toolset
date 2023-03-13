@@ -1,33 +1,26 @@
-﻿<UserControl x:Class="Eos.Usercontrols.TLKTextbox"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Eos.Usercontrols"
-             xmlns:ext="clr-namespace:Eos.Extensions"
-             xmlns:types="clr-namespace:Eos.Types"
-             mc:Ignorable="d"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Usercontrols"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Name="ucTLKTextbox"
-             d:DesignHeight="22" d:DesignWidth="800"
-             BorderThickness="0" BorderBrush="Transparent">
-    <UserControl.Resources>
+             x:Class="Eos.Usercontrols.TLKTextbox">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
-                <ResourceDictionary>
-                    <local:TLKConverter x:Key="tlkConverter"/>
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
+          <local:TLKConverter x:Key="tlkConverter" TLKTextbox="{Binding ElementName=ucTLKTextbox}"/>
         </ResourceDictionary>
-    </UserControl.Resources>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
 
-    <Grid>
-        <!--Foreground="{Binding ElementName=ucTLKTextbox, Path=Foreground}"-->
-        <TextBox Grid.Column="0" IsReadOnly="{Binding ElementName=ucTLKTextbox, Path=IsReadonly}"
-                 Background="{Binding ElementName=ucTLKTextbox, Path=Background}" IsTabStop="{Binding ElementName=ucTLKTextbox, Path=IsReadonly, Converter={StaticResource inverter}}"
-                 BorderThickness="{Binding ElementName=ucTLKTextbox, Path=InnerBorderThickness}" BorderBrush="{Binding ElementName=ucTLKTextbox, Path=InnerBorderBrush}"
-                 AcceptsReturn="{Binding ElementName=ucTLKTextbox, Path=AcceptsReturn}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
-                 Text="{Binding ElementName=ucTLKTextbox, Path=ChangedTrigger, Converter={StaticResource tlkConverter}, ConverterParameter={x:Reference selfParam}}"/>
-        <FrameworkElement x:Name="selfParam" Visibility="Collapsed" Tag="{Binding ElementName=ucTLKTextbox}"/>
-    </Grid>
+  <TextBox x:Name="tbText" Grid.Column="0" Text="{Binding ElementName=ucTLKTextbox, Path=ChangedTrigger, Converter={StaticResource tlkConverter}}"
+            TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" AcceptsReturn="{Binding ElementName=ucTLKTextbox, Path=AcceptsReturn}"
+            BorderThickness="{Binding ElementName=ucTLKTextbox, Path=InnerBorderThickness}" BorderBrush="{Binding ElementName=ucTLKTextbox, Path=InnerBorderBrush}"
+            Background="{Binding ElementName=ucTLKTextbox, Path=Background}" IsReadOnly="{Binding ElementName=ucTLKTextbox, Path=IsReadonly}"
+            IsTabStop="{Binding ElementName=ucTLKTextbox, Path=!IsReadonly}"
+            Classes="uc"/>
 </UserControl>

@@ -1,28 +1,67 @@
-﻿using Eos.Models;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.Styling;
+using Eos.Models;
 using Eos.Repositories;
 using Eos.Services;
 using Eos.ViewModels.Base;
 using Eos.ViewModels.Dialogs;
+using Microsoft.VisualBasic;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Reflection;
 
 namespace Eos.Usercontrols
 {
-    /// <summary>
-    /// Interaktionslogik für SkillComboBox.xaml
-    /// </summary>
+    public class EnabledButton : Button, IStyleable
+    {
+        Type IStyleable.StyleKey => typeof(Button);
+
+        static EnabledButton()
+        {
+            IsEnabledProperty.AddOwner<EnabledButton>();
+            IsEnabledProperty.Changed.Subscribe(e =>
+            {
+                if ((e.Sender is EnabledButton) || (e.Sender is ScrollViewer))
+                    e.Sender.SetValue(e.Property, true);
+            });
+        }
+
+        //protected override bool IsEnabledCore => true;
+
+        //public EnabledButton()
+        //{
+        //    this.LayoutUpdated += EnabledButton_LayoutUpdated;
+        //    setter = GetType().GetProperty("IsEffectivelyEnabled")?.GetSetMethod(true);
+        //    update = typeof(InputElement).GetMethod("UpdateIsEffectivelyEnabled", BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.NonPublic, new Type[] { typeof(InputElement) });
+        //}
+
+        //private void ForceEnable()
+        //{
+        //    IsEnabled = true;
+        //    IsHitTestVisible = true;
+        //    this.Focusable = true;
+        //    this.PseudoClasses.Remove(":disabled");
+        //    setter?.Invoke(this, new object[] { true });
+
+        //    update?.Invoke(this, new object?[] { null });
+        //    for (int i = 0; i < VisualChildren.Count; ++i)
+        //    {
+        //        var child = VisualChildren[i] as InputElement;
+
+        //        update?.Invoke(child, new object?[] { null });
+        //    }
+
+        //    InvalidateVisual();
+        //}
+
+        //private void EnabledButton_LayoutUpdated(object? sender, EventArgs e)
+        //{
+        //    ForceEnable();
+        //}
+    }
+
     public partial class SkillComboBox : UserControl
     {
         public SkillComboBox()
@@ -30,18 +69,18 @@ namespace Eos.Usercontrols
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register("SelectedValue", typeof(Skill), typeof(SkillComboBox), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-        public static readonly DependencyProperty IsNullableProperty = DependencyProperty.Register("IsNullable", typeof(bool), typeof(SkillComboBox), new PropertyMetadata(true));
+        public static readonly StyledProperty<Skill?> SelectedValueProperty = AvaloniaProperty.Register<SkillComboBox, Skill?>("SelectedValue", null, false, Avalonia.Data.BindingMode.TwoWay);
+        public static readonly StyledProperty<bool> IsNullableProperty = AvaloniaProperty.Register<SkillComboBox, bool>("IsNullable", true);
 
         public Skill? SelectedValue
         {
-            get { return (Skill)GetValue(SelectedValueProperty); }
+            get { return GetValue(SelectedValueProperty); }
             set { SetValue(SelectedValueProperty, value); }
         }
 
         public bool IsNullable
         {
-            get { return (bool)GetValue(IsNullableProperty); }
+            get { return GetValue(IsNullableProperty); }
             set { SetValue(IsNullableProperty, value); }
         }
 

@@ -95,6 +95,11 @@ namespace Eos.Models.Tables
             _items.Remove(item);
         }
 
+        public bool Contains(T item)
+        {
+            return _items.Contains(item);
+        }
+
         public void Clear()
         {
             _items.Clear();

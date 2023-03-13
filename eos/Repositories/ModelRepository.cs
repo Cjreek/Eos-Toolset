@@ -86,8 +86,10 @@ namespace Eos.Repositories
             return null;
         }
 
-        public override void Add(T model)
+        public override void Add(T? model)
         {
+            if (model == null) return;
+
             if (model.ID == Guid.Empty)
                 model.ID = Guid.NewGuid();
 

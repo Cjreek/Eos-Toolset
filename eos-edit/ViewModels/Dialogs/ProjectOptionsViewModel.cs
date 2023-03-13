@@ -1,8 +1,7 @@
 ﻿using Eos.Nwn.Tlk;
 using Eos.Repositories;
 using Eos.Services;
-using Ookii.Dialogs.Wpf;
-using Prism.Commands;
+using Avalonia.Controls;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
+using ReactiveUI;
+using System.Reactive;
 
 namespace Eos.ViewModels.Dialogs
 {
@@ -37,7 +37,7 @@ namespace Eos.ViewModels.Dialogs
 
         public ProjectOptionsViewModel()
         {
-            DeleteExternalPathCommand = new DelegateCommand<String>(DeleteExternalPath);
+            DeleteExternalPathCommand = ReactiveCommand.Create<String>(DeleteExternalPath);
         }
 
         protected override String GetWindowTitle()
@@ -52,7 +52,7 @@ namespace Eos.ViewModels.Dialogs
 
         protected override int GetDefaultHeight()
         {
-            return 570;
+            return 610;
         }
 
         protected override bool GetCanResize()
@@ -65,7 +65,7 @@ namespace Eos.ViewModels.Dialogs
             SettingsCopy.ExternalFolders.Remove(path);
         }
 
-        public DelegateCommand<ProjectOptionsViewModel> AddExternalPathCommand { get; private set; } = new DelegateCommand<ProjectOptionsViewModel>(vm =>
+        public ReactiveCommand<ProjectOptionsViewModel, Unit> AddExternalPathCommand { get; private set; } = ReactiveCommand.Create<ProjectOptionsViewModel>(vm =>
         {
             if (vm.ExternalPathToAdd.Trim() != "")
             {
@@ -75,14 +75,14 @@ namespace Eos.ViewModels.Dialogs
             }
         });
 
-        public DelegateCommand<String> DeleteExternalPathCommand { get; private set; }
+        public ReactiveCommand<String, Unit> DeleteExternalPathCommand { get; private set; }
 
-        public DelegateCommand<ProjectOptionsViewModel> CloseCommand { get; private set; } = new DelegateCommand<ProjectOptionsViewModel>(vm =>
+        public ReactiveCommand<ProjectOptionsViewModel, Unit> CloseCommand { get; private set; } = ReactiveCommand.Create<ProjectOptionsViewModel>(vm =>
         {
             WindowService.Close(vm);
         });
 
-        public DelegateCommand<ProjectOptionsViewModel> OKCommand { get; private set; } = new DelegateCommand<ProjectOptionsViewModel>(vm =>
+        public ReactiveCommand<ProjectOptionsViewModel, Unit> OKCommand { get; private set; } = ReactiveCommand.Create<ProjectOptionsViewModel>(vm =>
         {
             MasterRepository.Project.OverrideSettings(vm.SettingsCopy);
             WindowService.Close(vm);

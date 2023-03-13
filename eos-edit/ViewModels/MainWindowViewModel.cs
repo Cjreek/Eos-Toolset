@@ -1,27 +1,24 @@
-﻿using Prism.Commands;
-using Eos.Models;
+﻿using Eos.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Data;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using Eos.ViewModels.Base;
 using Eos.Nwn.Tlk;
 using Eos.Services;
-using Eos.Views;
 using System.Globalization;
-using Eos.ViewModels.Dialogs;
 using Eos.Repositories;
 using Eos.Models.Tables;
+using Eos.Config;
+using Eos.ViewModels.Dialogs;
 
 namespace Eos.ViewModels
 {
-    internal class MainViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase
     {
         private ObservableCollection<DataDetailViewModelBase> detailViewList = new ObservableCollection<DataDetailViewModelBase>();
         private Dictionary<object, DataDetailViewModelBase> detailViewDict = new Dictionary<object, DataDetailViewModelBase>();
@@ -31,6 +28,8 @@ namespace Eos.ViewModels
         private bool currentGender;
 
         public ObservableCollection<DataDetailViewModelBase> DetailViewList { get { return detailViewList; } }
+
+        public ModelRepository<Race> Races { get { return MasterRepository.Standard.Races; } }
 
         public TLKLanguage CurrentLanguage
         {
@@ -243,7 +242,7 @@ namespace Eos.ViewModels
             }
         }
 
-        public MainViewModel()
+        public MainWindowViewModel()
         {
             MessageDispatcher.Subscribe(MessageType.NewProject, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.OpenProject, MessageHandler);
@@ -265,7 +264,7 @@ namespace Eos.ViewModels
             MessageDispatcher.Subscribe(MessageType.OpenGlobalSearch, MessageHandler);
         }
 
-        ~MainViewModel()
+        ~MainWindowViewModel()
         {
             MessageDispatcher.Unsubscribe(MessageType.NewProject, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.OpenProject, MessageHandler);

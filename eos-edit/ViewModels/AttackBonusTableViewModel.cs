@@ -1,7 +1,6 @@
 ﻿using Eos.Models.Tables;
 using Eos.Types;
 using Eos.ViewModels.Base;
-using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,0 +1,39 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views.Dialogs"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="200"
+             x:Class="Eos.Views.Dialogs.MessageBox" MinWidth="300"
+             FontSize="11">
+  <UserControl.Resources>
+    <local:ButtonToVisibleConverter x:Key="button2VisConverter"/>
+    <local:IconToIconResourceConverter x:Key="iconToIconResourceConverter"/>
+  </UserControl.Resources>
+  
+  <DockPanel LastChildFill="True">
+    <Grid DockPanel.Dock="Bottom" Background="#FFF0F0F0">
+      <Border BorderThickness="0,1,0,0" BorderBrush="#FFDFDFDF">
+        <DockPanel Height="20" LastChildFill="False" Margin="10">
+          <Button Content="Cancel" DockPanel.Dock="Right" Width="80" Height="26" Margin="0,0,3,0" 
+                  Command="{Binding CancelCommand}" CommandParameter="{Binding}"
+                  IsVisible="{Binding Buttons, Converter={StaticResource button2VisConverter}, ConverterParameter=C}"/>
+          <Button Content="OK" DockPanel.Dock="Right" Width="80" Height="26" Margin="0,0,3,0" 
+                  Command="{Binding OkCommand}" CommandParameter="{Binding}"
+                  IsVisible="{Binding Buttons, Converter={StaticResource button2VisConverter}, ConverterParameter=O}"/>
+          <Button Content="No" DockPanel.Dock="Right" Width="80" Height="26" Margin="0,0,3,0" 
+                  Command="{Binding NoCommand}" CommandParameter="{Binding}"
+                  IsVisible="{Binding Buttons, Converter={StaticResource button2VisConverter}, ConverterParameter=N}"/>
+          <Button Content="Yes" DockPanel.Dock="Right" Width="80" Height="26" Margin="0,0,3,0" 
+                  Command="{Binding YesCommand}" CommandParameter="{Binding}"
+                  IsVisible="{Binding Buttons, Converter={StaticResource button2VisConverter}, ConverterParameter=Y}"/>
+        </DockPanel>
+      </Border>
+    </Grid>
+   
+    <StackPanel Orientation="Horizontal" Margin="10,10,20,20">
+      <Image Width="48" Margin="0,0,10,0" Source="{Binding Icon, Converter={StaticResource iconToIconResourceConverter}}"/>
+      <TextBlock Text="{Binding Message}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+    </StackPanel>
+  </DockPanel>
+</UserControl>

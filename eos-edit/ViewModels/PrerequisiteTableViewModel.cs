@@ -1,9 +1,11 @@
 ﻿using Eos.Models.Tables;
 using Eos.Types;
-using Prism.Commands;
+using Eos.ViewModels.Base;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,14 +15,14 @@ namespace Eos.ViewModels
     {
         public PrerequisiteTableViewModel() : base()
         {
-            DeletePrerequisiteItemCommand = new DelegateCommand<PrerequisiteTableItem>(DeletePrerequisiteItem);
-            AddPrerequisiteItemCommand = new DelegateCommand(AddPrerequisiteItem);
+            DeletePrerequisiteItemCommand = ReactiveCommand.Create<PrerequisiteTableItem>(DeletePrerequisiteItem);
+            AddPrerequisiteItemCommand = ReactiveCommand.Create(AddPrerequisiteItem);
         }
 
         public PrerequisiteTableViewModel(PrerequisiteTable requTable) : base(requTable)
         {
-            DeletePrerequisiteItemCommand = new DelegateCommand<PrerequisiteTableItem>(DeletePrerequisiteItem);
-            AddPrerequisiteItemCommand = new DelegateCommand(AddPrerequisiteItem);
+            DeletePrerequisiteItemCommand = ReactiveCommand.Create<PrerequisiteTableItem>(DeletePrerequisiteItem);
+            AddPrerequisiteItemCommand = ReactiveCommand.Create(AddPrerequisiteItem);
         }
 
         protected override string GetHeader()
@@ -41,7 +43,7 @@ namespace Eos.ViewModels
             NotifyPropertyChanged("Data");
         }
 
-        public DelegateCommand<PrerequisiteTableItem> DeletePrerequisiteItemCommand { get; private set; }
-        public DelegateCommand AddPrerequisiteItemCommand { get; private set; }
+        public ReactiveCommand<PrerequisiteTableItem, Unit> DeletePrerequisiteItemCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> AddPrerequisiteItemCommand { get; private set; }
     }
 }

@@ -1,37 +1,27 @@
-﻿using Eos.Models.Tables;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data.Converters;
+using Avalonia.Media;
 using Eos.Types;
-using Prism.Commands;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Reactive;
 
 namespace Eos.Usercontrols
 {
     class AlignmentValidToVisibilityConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is Alignment alignment)
-                return Alignments.IsValid(alignment) ? Visibility.Hidden : Visibility.Visible;
+                return Alignments.IsValid(alignment) ? false : true;
 
-            return Visibility.Hidden;
+            return false;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
@@ -39,7 +29,7 @@ namespace Eos.Usercontrols
 
     class AlignmentToBoolConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is Alignment alignment && parameter is Alignment alignmentToCheck)
                 return alignment.HasFlag(alignmentToCheck);
@@ -47,28 +37,41 @@ namespace Eos.Usercontrols
             return value;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
     }
 
-    /// <summary>
-    /// Interaktionslogik für AlignmentMatrix.xaml
-    /// </summary>
+    public class AlignmentButtonColorConverter : IMultiValueConverter
+    {
+        public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
+        {
+            if ((values.Count == 2) && (values[0] is bool enabled) && (values[1] is bool check))
+            {
+                if (!enabled)
+                    return check ? Brushes.LightGray : Brushes.DarkGray;
+                else
+                    return check ? Brushes.LightGreen : Brushes.LightCoral;
+            }
+
+            return Brushes.White;
+        }
+    }
+
     public partial class AlignmentMatrix : UserControl
     {
         public AlignmentMatrix()
         {
             InitializeComponent();
-            ToggleAlignmentCommand = new DelegateCommand<Alignment?>(ToggleAlignment);
+            ToggleAlignmentCommand = ReactiveCommand.Create<Alignment?>(ToggleAlignment);
         }
 
-        public static readonly DependencyProperty AlignmentProperty = DependencyProperty.Register("Alignment", typeof(Alignment), typeof(AlignmentMatrix), new FrameworkPropertyMetadata(Alignments.All, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        public static readonly StyledProperty<Alignment> AlignmentProperty = AvaloniaProperty.Register<AlignmentMatrix, Alignment>("Alignment", Alignments.All, false, Avalonia.Data.BindingMode.TwoWay);
 
         public Alignment Alignment
         {
-            get { return (Alignment)GetValue(AlignmentProperty); }
+            get { return GetValue(AlignmentProperty); }
             set { SetValue(AlignmentProperty, value); }
         }
 
@@ -78,6 +81,6 @@ namespace Eos.Usercontrols
                 Alignment = Alignment ^ (alignment ?? (Alignment)0);
         }
 
-        public DelegateCommand<Alignment?> ToggleAlignmentCommand { get; private set; }
+        public ReactiveCommand<Alignment?, Unit> ToggleAlignmentCommand { get; private set; }
     }
 }

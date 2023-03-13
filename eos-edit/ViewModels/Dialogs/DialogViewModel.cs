@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Eos.ViewModels.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Eos.ViewModels.Dialogs
 {
@@ -13,6 +13,7 @@ namespace Eos.ViewModels.Dialogs
         public int DefaultWidth => GetDefaultWidth();
         public int DefaultHeight => GetDefaultHeight();
         public bool CanResize => GetCanResize();
+        public bool AutoSize => GetAutosize();
 
         protected virtual String GetWindowTitle()
         {
@@ -29,7 +30,32 @@ namespace Eos.ViewModels.Dialogs
             return 200;
         }
 
+        protected virtual int GetMinWidth()
+        {
+            return 0;
+        }
+
+        protected virtual int GetMinHeight()
+        {
+            return 0;
+        }
+
+        protected virtual int GetMaxWidth()
+        {
+            return int.MaxValue;
+        }
+
+        protected virtual int GetMaxHeight()
+        {
+            return int.MaxValue;
+        }
+
         protected virtual bool GetCanResize()
+        {
+            return false;
+        }
+
+        protected virtual bool GetAutosize()
         {
             return false;
         }

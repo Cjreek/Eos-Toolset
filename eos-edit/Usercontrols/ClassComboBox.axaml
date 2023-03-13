@@ -1,54 +1,52 @@
-﻿<UserControl x:Class="Eos.Usercontrols.ClassComboBox"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Eos.Usercontrols"
-             xmlns:ext="clr-namespace:Eos.Extensions"
-             xmlns:nwn="clr-namespace:Eos.Nwn;assembly=Eos"
-             mc:Ignorable="d" 
-             x:Name="ucClassComboBox"
-             d:DesignHeight="22" d:DesignWidth="800">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
-    
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-        </Grid.ColumnDefinitions>
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Usercontrols"
+             xmlns:repo="using:Eos.Repositories"
+             xmlns:nwn="using:Eos.Nwn"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Usercontrols.ClassComboBox"
+             x:Name="ucClassComboBox">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
 
-        <Button x:Name="cbClasses" Grid.Column="0" Click="btSearch_Click" HorizontalContentAlignment="Stretch" MinHeight="22">
-            <Button.Content>
-                <StackPanel Orientation="Horizontal" Margin="3,0,0,0">
-                    <Image Grid.Column="0" Width="16" Height="16" Source="{Binding ElementName=ucClassComboBox, Path=SelectedValue.Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}" Margin="0,0,3,0"/>
+  <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ClassComboBox}}}">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="1">
-                        <Run>
-                            <Run.Text>
-                                <MultiBinding Converter="{StaticResource tlkConverterDefault}">
-                                    <Binding ElementName="ucClassComboBox" Path="SelectedValue.TlkDisplayName" Mode="OneWay"/>
-                                </MultiBinding>
-                            </Run.Text>
-                        </Run>
-                        <Run Text="{Binding ElementName=ucClassComboBox, Path=SelectedValue.DisplayHint, Converter={StaticResource hintConverter}, Mode=OneWay}"/>
-                    </TextBlock>
-                </StackPanel>
-            </Button.Content>
-        </Button>
+    <Button x:Name="cbClasses" Grid.Column="0" Click="btSearch_Click" HorizontalContentAlignment="Stretch" MinHeight="22">
+      <Button.Content>
+        <StackPanel Orientation="Horizontal" Margin="3,0,0,0">
+          <Image Grid.Column="0" Width="16" Height="16" Source="{Binding ElementName=ucClassComboBox, Path=SelectedValue.Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}" Margin="0,0,3,0"/>
 
-        <Button x:Name="btClear" Grid.Column="1" Content="🞪" Click="btClear_Click" Margin="1,0,0,0"
-                Height="{Binding ElementName=cbClasses, Path=ActualHeight}" Width="{Binding ElementName=cbClasses, Path=ActualHeight}" 
-                Visibility="{Binding ElementName=ucClassComboBox, Path=IsNullable, Converter={StaticResource bool2VisCollapsed}}"/>
-        <local:ResetIsEnabled Grid.Column="2" Margin="1,0,0,0">
-            <Button x:Name="btGoto" Content="👁" Click="btGoto_Click"
-                Height="{Binding ElementName=cbClasses, Path=ActualHeight}" Width="{Binding ElementName=cbClasses, Path=ActualHeight}"/>
-        </local:ResetIsEnabled>
-    </Grid>
+          <TextBlock Grid.Column="1">
+            <Run>
+              <Run.Text>
+                <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                  <Binding ElementName="ucClassComboBox" Path="SelectedValue.TlkDisplayName" Mode="OneWay"/>
+                </MultiBinding>
+              </Run.Text>
+            </Run>
+            <Run Text="{Binding ElementName=ucClassComboBox, Path=SelectedValue.DisplayHint, Converter={StaticResource hintConverter}, Mode=OneWay}"/>
+          </TextBlock>
+        </StackPanel>
+      </Button.Content>
+    </Button>
+
+    <Button x:Name="btClear" Grid.Column="1" Content="🞪" Click="btClear_Click" Margin="2,0,0,0"
+            Height="{Binding ElementName=cbClasses, Path=Bounds.Height}" Width="{Binding ElementName=cbClasses, Path=Bounds.Height}"
+            IsVisible="{Binding ElementName=ucClassComboBox, Path=IsNullable}"/>
+    <!--<local:ResetIsEnabled >-->
+    <Button x:Name="btGoto" Grid.Column="2" Margin="2,0,0,0" Content="👁" Click="btGoto_Click" Height="{Binding ElementName=cbClasses, Path=Bounds.Height}" Width="{Binding ElementName=cbClasses, Path=Bounds.Height}"/>
+    <!--</local:ResetIsEnabled>-->
+  </Grid>
 </UserControl>

@@ -1,10 +1,11 @@
 ﻿using Eos.Models.Tables;
 using Eos.Types;
 using Eos.ViewModels.Base;
-using Prism.Commands;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,14 +15,14 @@ namespace Eos.ViewModels
     {
         public FeatsTableViewModel() : base()
         {
-            DeleteFeatItemCommand = new DelegateCommand<FeatsTableItem>(DeleteFeatItem);
-            AddFeatItemCommand = new DelegateCommand<FeatListType?>(AddFeatItem);
+            DeleteFeatItemCommand = ReactiveCommand.Create<FeatsTableItem>(DeleteFeatItem);
+            AddFeatItemCommand = ReactiveCommand.Create<FeatListType?>(AddFeatItem);
         }
 
         public FeatsTableViewModel(FeatsTable featsTable) : base(featsTable)
         {
-            DeleteFeatItemCommand = new DelegateCommand<FeatsTableItem>(DeleteFeatItem);
-            AddFeatItemCommand = new DelegateCommand<FeatListType?>(AddFeatItem);
+            DeleteFeatItemCommand = ReactiveCommand.Create<FeatsTableItem>(DeleteFeatItem);
+            AddFeatItemCommand = ReactiveCommand.Create<FeatListType?>(AddFeatItem);
         }
 
         protected override string GetHeader()
@@ -57,7 +58,7 @@ namespace Eos.ViewModels
             this.Data.Remove(item);
         }
 
-        public DelegateCommand<FeatsTableItem> DeleteFeatItemCommand { get; private set; }
-        public DelegateCommand<FeatListType?> AddFeatItemCommand { get; private set; }
+        public ReactiveCommand<FeatsTableItem, Unit> DeleteFeatItemCommand { get; private set; }
+        public ReactiveCommand<FeatListType?, Unit> AddFeatItemCommand { get; private set; }
     }
 }

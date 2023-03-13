@@ -29,6 +29,7 @@ namespace Eos.Models
         private String _hint = "";
         private String _scriptConstant = "";
         private String? _icon;
+        private bool _disabled = false;
         private bool _clearingReferences = false;
         private ModelExtension? _extensions;
         private Dictionary<(BaseModel refObject, String refProperty), BaseModelReference> referenceDict = new Dictionary<(BaseModel refObject, String refProperty), BaseModelReference>();
@@ -60,9 +61,23 @@ namespace Eos.Models
         }
 
         public Guid ID { get; set; }
-        public bool Disabled { get; set; }
+
+        public bool Disabled
+        {
+            get { return _disabled; }
+            set
+            {
+                if (_disabled != value)
+                {
+                    _disabled = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public bool IsReadonly { get; set; } = false;
         public Guid? Overrides { get; set; } = null;
+        public bool IsOverride => Overrides != null;
         public int? Index { get; set; }
 
         public string ScriptConstant
@@ -98,9 +113,11 @@ namespace Eos.Models
                 {
                     _icon = value;
                     NotifyPropertyChanged();
+                    NotifyPropertyChanged(nameof(HasIcon));
                 }
             }
         }
+        public bool HasIcon => (Icon?.Trim() ?? "") != "";
 
         public String Hint
         {
@@ -138,17 +155,46 @@ namespace Eos.Models
 
         private void InitExtensionValues()
         {
-            ExtensionValues.Clear();
-            extensionValueDict.Clear();
-            if (_extensions != null)
+            if (_extensions == null)
             {
+                ExtensionValues.Clear();
+                extensionValueDict.Clear();
+            }
+            else
+            {
+                // Remove missing values
+                foreach (var prop in extensionValueDict.Keys)
+                {
+                    if (!_extensions.Contains(prop))
+                    {
+                        ExtensionValues.Remove(extensionValueDict[prop]);
+                        extensionValueDict.Remove(prop);
+                    }
+                }
+
+                // Add new values
                 foreach (var prop in _extensions.Items)
                 {
                     if (prop != null)
                     {
-                        var valueInstance = new CustomValueInstance(prop);
-                        extensionValueDict[prop] = valueInstance;
-                        ExtensionValues.Add(valueInstance);
+                        if (!extensionValueDict.ContainsKey(prop))
+                        {
+                            var valueInstance = new CustomValueInstance(prop);
+                            extensionValueDict[prop] = valueInstance;
+                            ExtensionValues.Add(valueInstance);
+                        }
+                    }
+                }
+
+                // Reorder
+                for (int i = 0; i < _extensions.Count; i++)
+                {
+                    var prop = _extensions[i];
+                    if (prop != null)
+                    {
+                        var custValue = ExtensionValues.First(val => val.Property == prop);
+                        var index = ExtensionValues.IndexOf(custValue);
+                        ExtensionValues.Move(index, i);
                     }
                 }
             }

@@ -1,38 +1,40 @@
-﻿<UserControl x:Class="Eos.Usercontrols.FlagListbox"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Eos.Usercontrols"
-             xmlns:types="clr-namespace:Eos.Types"
-             xmlns:ext="clr-namespace:Eos.Extensions"
-             x:Name="ucFlagListbox"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ext="using:Eos.Extensions"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Usercontrols.FlagListbox"
+             x:Name="ucFlagListbox">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
+          <ext:FlagToBoolConverter x:Key="flagsToBool"/>
         </ResourceDictionary>
-    </UserControl.Resources>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <ListBox Items="{Binding ElementName=ucFlagListbox, Path=ItemsSource}" BorderBrush="Silver" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Padding="0">
+    <ListBox.ItemsPanel>
+      <ItemsPanelTemplate>
+        <VirtualizingStackPanel Orientation="{Binding ElementName=ucFlagListbox, Path=Orientation}"/>
+      </ItemsPanelTemplate>
+    </ListBox.ItemsPanel>
     
-    <ListBox ItemsSource="{Binding ElementName=ucFlagListbox, Path=ItemsSource}">
-        <ListBox.ItemsPanel>
-            <ItemsPanelTemplate>
-                <VirtualizingStackPanel IsItemsHost="True" Orientation="{Binding ElementName=ucFlagListbox, Path=Orientation}"/>
-            </ItemsPanelTemplate>
-        </ListBox.ItemsPanel>
-        <ListBox.ItemTemplate>
-            <DataTemplate>
-                <Grid>
-                    <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding ElementName=ucFlagListbox, Path=Flags, Converter={StaticResource flagsToBool}, ConverterParameter={x:Reference params}, Mode=TwoWay}"/>
-                    <Grid x:Name="params">
-                        <FrameworkElement x:Name="paramItem" Tag="{Binding Value}"/>
-                        <FrameworkElement x:Name="paramFlags" Tag="{Binding ElementName=ucFlagListbox, Path=Flags}"/>
-                    </Grid>
-                </Grid>
-            </DataTemplate>
-        </ListBox.ItemTemplate>
-    </ListBox>
+    <ListBox.ItemTemplate>
+      <DataTemplate>
+        <Grid>
+          <Grid x:Name="params">
+            <Grid x:Name="paramItem" Tag="{Binding}"/>
+            <Grid x:Name="paramFlags" Tag="{Binding ElementName=ucFlagListbox}"/>            
+          </Grid>
+          
+          <CheckBox Content="{Binding DisplayName}" Tag="{Binding ElementName=ucFlagListbox}" IsChecked="{Binding Path=Value, Converter={StaticResource flagsToBool}, ConverterParameter={ext:Reference params}, Mode=TwoWay}"/>
+        </Grid>
+      </DataTemplate>
+    </ListBox.ItemTemplate>
+  </ListBox>
 </UserControl>

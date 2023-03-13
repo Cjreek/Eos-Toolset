@@ -1,9 +1,11 @@
 ﻿using Eos.Models.Tables;
 using Eos.Types;
-using Prism.Commands;
+using Eos.ViewModels.Base;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,14 +15,14 @@ namespace Eos.ViewModels
     {
         public RacialFeatsTableViewModel() : base()
         {
-            DeleteRacialFeatItemCommand = new DelegateCommand<RacialFeatsTableItem>(DeleteRacialFeatItem);
-            AddRacialFeatItemCommand = new DelegateCommand(AddRacialFeatItem);
+            DeleteRacialFeatItemCommand = ReactiveCommand.Create<RacialFeatsTableItem>(DeleteRacialFeatItem);
+            AddRacialFeatItemCommand = ReactiveCommand.Create(AddRacialFeatItem);
         }
 
         public RacialFeatsTableViewModel(RacialFeatsTable racialFeatsTable) : base(racialFeatsTable)
         {
-            DeleteRacialFeatItemCommand = new DelegateCommand<RacialFeatsTableItem>(DeleteRacialFeatItem);
-            AddRacialFeatItemCommand = new DelegateCommand(AddRacialFeatItem);
+            DeleteRacialFeatItemCommand = ReactiveCommand.Create<RacialFeatsTableItem>(DeleteRacialFeatItem);
+            AddRacialFeatItemCommand = ReactiveCommand.Create(AddRacialFeatItem);
         }
 
         protected override string GetHeader()
@@ -41,7 +43,7 @@ namespace Eos.ViewModels
             NotifyPropertyChanged("Data");
         }
 
-        public DelegateCommand<RacialFeatsTableItem> DeleteRacialFeatItemCommand { get; private set; }
-        public DelegateCommand AddRacialFeatItemCommand { get; private set; }
+        public ReactiveCommand<RacialFeatsTableItem, Unit> DeleteRacialFeatItemCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> AddRacialFeatItemCommand { get; private set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Eos.Nwn.Tlk;
+﻿using Avalonia.Data.Converters;
+using Eos.Nwn.Tlk;
 using Eos.Repositories;
 using System;
 using System.Collections.Generic;
@@ -6,28 +7,26 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Data;
 
 namespace Eos.Extensions
 {
-    [ValueConversion(typeof(TLKStringSet), typeof(String))]
     internal class TLKStringSetConverter : IMultiValueConverter
     {
         private static TLKLanguage DefaultLanguage = MasterRepository.Project.DefaultLanguage;
 
         public bool AlwaysUseDefaultLanguage { get; set; } = false;
 
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
         {
-            if ((values.Length > 0) && (values[0] is String text))
+            if ((values.Count > 0) && (values[0] is String text))
             {
                 return text;
             }
-            if ((values.Length == 1) && (values[0] is TLKStringSet defaultStrings))
+            if ((values.Count == 1) && (values[0] is TLKStringSet defaultStrings))
             {
                 return defaultStrings[DefaultLanguage].Text;
             }
-            else if (values.Length == 3)
+            else if (values.Count == 3)
             {
                 if ((values[0] is TLKStringSet strings) && (values[1] is TLKLanguage lang) && (values[2] is bool gender))
                 {

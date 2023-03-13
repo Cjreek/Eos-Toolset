@@ -1,67 +1,73 @@
-﻿<Application x:Class="Eos.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Eos"
-             xmlns:dialogVM="clr-namespace:Eos.ViewModels.Dialogs"
-             xmlns:dialogViews="clr-namespace:Eos.Views.Dialogs"
-             StartupUri="MainWindow.xaml"
-             Startup="Application_Startup"
-             Exit="Application_Exit">
-    <Application.Resources>
-        <DataTemplate DataType="{x:Type dialogVM:NewProjectViewModel}">
-            <dialogViews:NewProjectView/>
-        </DataTemplate>
+             xmlns:local="using:Eos"
+             xmlns:dialogVM="using:Eos.ViewModels.Dialogs"
+             xmlns:dialogViews="using:Eos.Views.Dialogs"
+             x:Class="Eos.App">
+    <Application.DataTemplates>
+      <local:ViewLocator/>
 
-        <DataTemplate DataType="{x:Type dialogVM:IconSearchViewModel}">
-            <dialogViews:IconSearchView/>
-        </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:NewProjectViewModel}">
+        <dialogViews:NewProjectView/>
+      </DataTemplate>
 
-        <DataTemplate DataType="{x:Type dialogVM:SpellSearchViewModel}">
-            <dialogViews:ModelSearchView/>
-        </DataTemplate>
+      <!--Search ViewModels-->
+      <DataTemplate DataType="{x:Type dialogVM:IconSearchViewModel}">
+        <dialogViews:IconSearchView/>
+      </DataTemplate>
 
-        <DataTemplate DataType="{x:Type dialogVM:FeatSearchViewModel}">
-            <dialogViews:ModelSearchView/>
-        </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:ClassSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:ClassPackageSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:SpellSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:FeatSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:MasterFeatSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:SkillSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:RaceSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:DomainSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:AreaEffectSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:DiseaseSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:PoisonSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:CustomObjectInstanceSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
 
-        <DataTemplate DataType="{x:Type dialogVM:ClassSearchViewModel}">
-            <dialogViews:ModelSearchView/>
-        </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:GlobalSearchViewModel}">
+        <dialogViews:GlobalSearchView/>
+      </DataTemplate>
 
-        <DataTemplate DataType="{x:Type dialogVM:DomainSearchViewModel}">
-            <dialogViews:ModelSearchView/>
-        </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:ProjectOptionsViewModel}">
+        <dialogViews:ProjectOptionsView/>
+      </DataTemplate>
 
-        <DataTemplate DataType="{x:Type dialogVM:RaceSearchViewModel}">
-            <dialogViews:ModelSearchView/>
-        </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:MessageBoxViewModel}">
+        <dialogViews:MessageBox/>
+      </DataTemplate>
+    </Application.DataTemplates>
 
-        <DataTemplate DataType="{x:Type dialogVM:SkillSearchViewModel}">
-            <dialogViews:ModelSearchView/>
-        </DataTemplate>
-
-        <DataTemplate DataType="{x:Type dialogVM:ClassPackageSearchViewModel}">
-            <dialogViews:ModelSearchView/>
-        </DataTemplate>
-
-        <DataTemplate DataType="{x:Type dialogVM:AreaEffectSearchViewModel}">
-            <dialogViews:ModelSearchView/>
-        </DataTemplate>
-        
-        <DataTemplate DataType="{x:Type dialogVM:MasterFeatSearchViewModel}">
-            <dialogViews:ModelSearchView/>
-        </DataTemplate>
-
-        <DataTemplate DataType="{x:Type dialogVM:CustomObjectInstanceSearchViewModel}">
-            <dialogViews:ModelSearchView/>
-        </DataTemplate>
-
-        <DataTemplate DataType="{x:Type dialogVM:GlobalSearchViewModel}">
-            <dialogViews:GlobalSearchView/>
-        </DataTemplate>
-
-        <DataTemplate DataType="{x:Type dialogVM:ProjectOptionsViewModel}">
-            <dialogViews:ProjectOptionsView/>
-        </DataTemplate>
-    </Application.Resources>
+  <Application.Styles>
+    <SimpleTheme/>
+    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Simple.xaml"/>
+  </Application.Styles>
 </Application>

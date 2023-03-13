@@ -1,43 +1,46 @@
-﻿<UserControl x:Class="Eos.Usercontrols.PrerequisiteComboBox"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Eos.Usercontrols"
-             xmlns:repo="clr-namespace:Eos.Repositories;assembly=Eos"
-             xmlns:ext="clr-namespace:Eos.Extensions"
-             x:Name="ucPrerequisiteComboBox"
-             mc:Ignorable="d" 
-             d:DesignHeight="20" d:DesignWidth="800">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
-    
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-        </Grid.ColumnDefinitions>
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:repo="using:Eos.Repositories"
+             xmlns:tables="using:Eos.Models.Tables"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Usercontrols.PrerequisiteComboBox"
+             x:Name="ucPrerequisiteComboBox">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
 
-        <ComboBox x:Name="cbRequTables" Grid.Column="0" ItemsSource="{Binding Source={x:Static repo:MasterRepository.PrerequisiteTables}}" SelectedValue="{Binding ElementName=ucPrerequisiteComboBox, Path=SelectedValue}" DisplayMemberPath="Name">
-            <ComboBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel/>
-                </ItemsPanelTemplate>
-            </ComboBox.ItemsPanel>
-        </ComboBox>
+  <UserControl.DataTemplates>
+    <DataTemplate DataType="{x:Type tables:PrerequisiteTable}">
+      <TextBlock Text="{Binding Name}"/>
+    </DataTemplate>
+  </UserControl.DataTemplates>
 
-        <Button x:Name="btClear" Grid.Column="1" Margin="2,-3,0,0" Content="🞪" Click="btClear_Click"
-                Height="{Binding ElementName=cbRequTables, Path=ActualHeight}" Width="{Binding ElementName=cbRequTables, Path=ActualHeight}" 
-                Visibility="{Binding ElementName=ucPrerequisiteComboBox, Path=IsNullable, Converter={StaticResource bool2VisCollapsed}}"/>
-        <local:ResetIsEnabled Grid.Column="2" Margin="2,-3,0,0">
-            <Button x:Name="btGoto" Content="👁" Click="btGoto_Click"
-			Height="{Binding ElementName=cbRequTables, Path=ActualHeight}" Width="{Binding ElementName=cbRequTables, Path=ActualHeight}"/>
-        </local:ResetIsEnabled>
-    </Grid>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="auto"/>
+      <ColumnDefinition Width="auto"/>
+    </Grid.ColumnDefinitions>
+
+    <ComboBox x:Name="cbRequTables" Grid.Column="0" Items="{Binding Source={x:Static repo:MasterRepository.PrerequisiteTables}}" SelectedItem="{Binding ElementName=ucPrerequisiteComboBox, Path=SelectedValue}" DisplayMemberBinding="{Binding Name}" Padding="3,0,0,0">
+      <ComboBox.ItemsPanel>
+        <ItemsPanelTemplate>
+          <VirtualizingStackPanel/>
+        </ItemsPanelTemplate>
+      </ComboBox.ItemsPanel>
+    </ComboBox>
+
+    <Button x:Name="btClear" Grid.Column="1" Margin="2,0,0,0" Content="🞪" Click="btClear_Click"
+            Height="{Binding ElementName=cbRequTables, Path=Bounds.Height}" Width="{Binding ElementName=cbRequTables, Path=Bounds.Height}"
+            IsVisible="{Binding ElementName=ucPrerequisiteComboBox, Path=IsNullable}"/>
+    <!--<local:ResetIsEnabled >-->
+    <Button x:Name="btGoto" Grid.Column="2" Margin="2,0,0,0" Content="👁" Click="btGoto_Click" Height="{Binding ElementName=cbRequTables, Path=Bounds.Height}" Width="{Binding ElementName=cbRequTables, Path=Bounds.Height}"/>
+    <!--</local:ResetIsEnabled>-->
+  </Grid>
 </UserControl>

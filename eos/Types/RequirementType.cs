@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Eos.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,8 @@ namespace Eos.Types
 {
     public enum RequirementType
     {
+        [IgnoreEnumValue]
+        UNDEFINED,
         ARCSPELL,
         BAB,
         CLASSOR,

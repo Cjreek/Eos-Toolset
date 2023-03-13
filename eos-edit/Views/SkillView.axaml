@@ -1,183 +1,189 @@
-﻿<local:LanguageAwarePage x:Class="Eos.Views.SkillView"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Eos.Views"
-      xmlns:vm="clr-namespace:Eos.ViewModels"
-      xmlns:ext="clr-namespace:Eos.Extensions"
-      xmlns:types="clr-namespace:Eos.Types;assembly=Eos"
-      xmlns:uc="clr-namespace:Eos.Usercontrols"
-      xmlns:nwn="clr-namespace:Eos.Nwn;assembly=Eos"
-      mc:Ignorable="d" 
-      x:Name="page"
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="SkillView">
-    <Page.DataContext>
-        <vm:SkillViewModel/>
-    </Page.DataContext>
-    
-    <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources\StyleResources.xaml"/>
-                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
-                <ResourceDictionary Source="..\Resources\CustomDataTemplateResources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Page.Resources>
+<local:LanguageAwarePage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views"
+             xmlns:vm="using:Eos.ViewModels"
+             xmlns:uc="using:Eos.Usercontrols"
+             xmlns:types="using:Eos.Types"
+             xmlns:ext="using:Eos.Extensions"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Views.SkillView">
+  <Design.DataContext>
+    <vm:SkillViewModel/>
+  </Design.DataContext>
 
-    <TabControl TabStripPlacement="Left" BorderThickness="1,0,0,0" SelectedIndex="{Binding SelectedTabIndex}">
-        <TabItem Header="Info" Width="100" Height="30">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <Grid IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
+  <local:LanguageAwarePage.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+        <ResourceInclude Source="/Assets/CustomDataTemplateResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </local:LanguageAwarePage.Resources>
+
+  <local:LanguageAwarePage.Styles>
+    <Styles>
+      <StyleInclude Source="/Assets/StyleResources.axaml"/>
+    </Styles>
+  </local:LanguageAwarePage.Styles>
+
+  <TabControl TabStripPlacement="Left" BorderThickness="0,1,0,0" SelectedIndex="{Binding SelectedTabIndex}" Padding="0">
+    <TabItem Header="Info" Width="100" Height="30" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,0,0,10">
+              <TextBlock FontSize="22" FontWeight="Bold">
+                <TextBlock.Text>
+                  <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                    <Binding Path="Data.Name"/>
+                  </MultiBinding>
+                </TextBlock.Text>
+              </TextBlock>
+
+              <TextBlock Text=" (Skill ID:" FontSize="16" VerticalAlignment="Center"/>
+              <!--<uc:ResetIsEnabled>-->
+              <TextBox Text="{Binding Data.CalculatedIndex, Mode=OneWay}" BorderThickness="0" FontSize="16" VerticalAlignment="Center" Margin="0" IsReadOnly="True"/>
+              <!--</uc:ResetIsEnabled>-->
+              <TextBlock Text=")" FontSize="16" VerticalAlignment="Center" Margin="0,0,0,0"/>
+            </StackPanel>
+
+            <Grid Grid.Row="1" Grid.Column="0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*" MinWidth="300"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="22"/>
+                <RowDefinition Height="auto" MinHeight="22"/>
+                <RowDefinition Height="auto" MinHeight="22"/>
+                <RowDefinition Height="auto" MinHeight="22"/>
+                <RowDefinition Height="auto" MinHeight="22"/>
+                <RowDefinition Height="*"/>
+              </Grid.RowDefinitions>
+
+              <!--Name-->
+              <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+              <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="0" Grid.Column="1"/>
+
+              <TextBlock Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+              <TextBox Text="{Binding Data.Hint}" Grid.Row="1" Grid.Column="1"/>
+
+              <!--Description-->
+              <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="2" Grid.Column="0"/>
+              <!--<uc:ResetIsEnabled >-->
+              <uc:TLKTextbox Grid.Row="2" Grid.Column="1" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
+              <!--</uc:ResetIsEnabled>-->
+
+              <!--Ability-->
+              <TextBlock Text="Key Ability" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="3" Grid.Column="0"/>
+              <uc:EnumComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.KeyAbility}"/>
+
+              <!--Untrained Usage-->
+              <TextBlock Text="Untrained Usage" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+              <CheckBox IsChecked="{Binding Data.CanUseUntrained}" Grid.Row="4" Grid.Column="1"/>
+
+              <!--Armor Penalty-->
+              <TextBlock Text="Armor Penalty" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+              <CheckBox IsChecked="{Binding Data.UseArmorPenalty}" Grid.Row="5" Grid.Column="1"/>
+
+              <!--Usable by every class-->
+              <TextBlock Text="Usable by every Class" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
+              <CheckBox IsChecked="{Binding Data.AllClassesCanUse}" Grid.Row="6" Grid.Column="1"/>
+
+              <!--Hostile?-->
+              <TextBlock Text="Is Hostile" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
+              <CheckBox IsChecked="{Binding Data.IsHostile}" Grid.Row="7" Grid.Column="1"/>
+
+              <!--Hide from Level up?-->
+              <TextBlock Text="Hide from LevelUp" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
+              <CheckBox IsChecked="{Binding Data.HideFromLevelUp}" Grid.Row="8" Grid.Column="1"/>
+            </Grid>
+
+            <!--Icon-->
+            <uc:IconControl Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" Icon="{Binding Data.Icon}"/>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Extensions" Width="100" Height="30" IsVisible="{Binding !Data.IsReadonly}" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Extension Fields" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <ItemsRepeater Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding Data.ExtensionValues}" ElementPrepared="ItemsRepeater_ElementPrepared">
+              <ItemsRepeater.Layout>
+                <UniformGridLayout ItemsStretch="Fill" Orientation="Horizontal" MaximumRowsOrColumns="2" MinItemHeight="25"/>
+              </ItemsRepeater.Layout>
+
+              <ItemsRepeater.ItemTemplate>
+                <DataTemplate>
+                  <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,0,0,10">
-                        <TextBlock FontSize="22" FontWeight="Bold">
-                            <TextBlock.Text>
-                                <MultiBinding Converter="{StaticResource tlkConverterDefault}">
-                                    <Binding Path="Data.Name"/>
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-
-                        <TextBlock Text=" (Skill ID:" FontSize="16" VerticalAlignment="Center"/>
-                        <uc:ResetIsEnabled>
-                            <TextBox Text="{Binding Data.CalculatedIndex, Mode=OneWay}" BorderThickness="0" FontSize="16" VerticalAlignment="Center" Margin="0" IsReadOnly="True"/>
-                        </uc:ResetIsEnabled>
-                        <TextBlock Text=")" FontSize="16" VerticalAlignment="Center" Margin="-2,0,0,0"/>
-                    </StackPanel>
-
-                    <Grid Grid.Row="1" Grid.Column="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150"/>
-                            <ColumnDefinition Width="*" MinWidth="300"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" MinHeight="25"/>
-                            <RowDefinition Height="auto" MinHeight="25"/>
-                            <RowDefinition Height="auto" MinHeight="25"/>
-                            <RowDefinition Height="auto" MinHeight="25"/>
-                            <RowDefinition Height="auto" MinHeight="25"/>
-                            <RowDefinition Height="auto" MinHeight="22"/>
-                            <RowDefinition Height="auto" MinHeight="22"/>
-                            <RowDefinition Height="auto" MinHeight="22"/>
-                            <RowDefinition Height="auto" MinHeight="22"/>
-                            <RowDefinition Height="auto" MinHeight="22"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <!--Name-->
-                        <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
-                        <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="0" Grid.Column="1"/>
-
-                        <TextBlock Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-                        <TextBox Text="{Binding Data.Hint}" Grid.Row="1" Grid.Column="1"/>
-
-                        <!--Description-->
-                        <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="2" Grid.Column="0"/>
-                        <uc:ResetIsEnabled Grid.Row="2" Grid.Column="1">
-                            <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
-                        </uc:ResetIsEnabled>
-
-                        <!--Ability-->
-                        <TextBlock Text="Key Ability" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="3" Grid.Column="0"/>
-                        <ComboBox ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.KeyAbility}" SelectedValuePath="Value" DisplayMemberPath="DisplayName" Grid.Row="3" Grid.Column="1"/>
-
-                        <!--Untrained Usage-->
-                        <TextBlock Text="Untrained Usage" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
-                        <CheckBox IsChecked="{Binding Data.CanUseUntrained}" Grid.Row="4" Grid.Column="1"/>
-
-                        <!--Armor Penalty-->
-                        <TextBlock Text="Armor Penalty" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
-                        <CheckBox IsChecked="{Binding Data.UseArmorPenalty}" Grid.Row="5" Grid.Column="1"/>
-
-                        <!--Usable by every class-->
-                        <TextBlock Text="Usable by every Class" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
-                        <CheckBox IsChecked="{Binding Data.AllClassesCanUse}" Grid.Row="6" Grid.Column="1"/>
-
-                        <!--Hostile?-->
-                        <TextBlock Text="Is Hostile" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
-                        <CheckBox IsChecked="{Binding Data.IsHostile}" Grid.Row="7" Grid.Column="1"/>
-
-                        <!--Hide from Level up?-->
-                        <TextBlock Text="Hide from LevelUp" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
-                        <CheckBox IsChecked="{Binding Data.HideFromLevelUp}" Grid.Row="8" Grid.Column="1"/>
-                    </Grid>
-
-                    <!--Icon-->
-                    <uc:IconControl Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" Icon="{Binding Data.Icon}"/>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-        <TabItem Header="Extensions" Width="100" Height="30" Visibility="{Binding Data.IsReadonly, Converter={StaticResource bool2VisCollapsedInverted}}">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="150"/>
+                      <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Extension Fields" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Margin="0,3,5,0" Text="{Binding Property.Label}"/>
+                    <ContentPresenter Grid.Column="1" Content="{Binding}" ContentTemplate="{StaticResource templateSelector}"/>
+                  </Grid>
+                </DataTemplate>
+              </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Metadata" Width="100" Height="30" IsVisible="{Binding !Data.IsReadonly}" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
 
-                    <ItemsControl Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Data.ExtensionValues}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="2"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="150"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
+            <TextBlock Text="Skill Metadata" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-                                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Margin="0,0,5,0" Text="{Binding Property.Label}"/>
-                                    <ContentPresenter Grid.Column="1" Content="{Binding}" ContentTemplateSelector="{StaticResource templateSelector}"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-        <TabItem Header="Metadata" Width="100" Height="30" Visibility="{Binding Data.IsReadonly, Converter={StaticResource bool2VisCollapsedInverted}}">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="25"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Text="Skill Metadata" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
-
-                    <TextBlock Text="Script Constant" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                    <DockPanel Grid.Row="1" Grid.Column="1">
-                        <TextBox Text="SKILL_" BorderThickness="1,1,0,1" IsReadOnly="True" VerticalContentAlignment="Center" Style="{x:Null}" Margin="2,0,0,3"/>
-                        <TextBox Text="{Binding Data.ScriptConstant}" Style="{StaticResource ConstantHintTextboxStyle}" CharacterCasing="Upper" Margin="-2,0,0,3" BorderThickness="0,1,1,1" VerticalContentAlignment="Center"/>
-                    </DockPanel>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-    </TabControl>
+            <TextBlock Text="Script Constant" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <DockPanel Grid.Row="1" Grid.Column="1">
+              <TextBox Text="SKILL_" BorderThickness="1,1,0,1" IsReadOnly="True" VerticalContentAlignment="Center" Margin="2,0,0,3"/>
+              <TextBox Text="{Binding Data.ScriptConstant}" Margin="-2,0,0,3" BorderThickness="0,1,1,1" VerticalContentAlignment="Center" Watermark="*AUTOGENERATED*" TextChanging="ConstantTextbox_TextChanging"/>
+            </DockPanel>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+  </TabControl>
 </local:LanguageAwarePage>

@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media;
 
-namespace Eos.ViewModels
+namespace Eos.ViewModels.Base
 {
     internal abstract class DataDetailViewModel<T> : DataDetailViewModelBase where T : BaseModel, new()
     {

@@ -1,11 +1,11 @@
 ﻿using Eos.Nwn;
 using Eos.Repositories;
 using Eos.Services;
-using Prism.Commands;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
-using System.DirectoryServices;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -50,6 +50,11 @@ namespace Eos.ViewModels.Dialogs
             return _searchResult;
         }
 
+        protected override String GetWindowTitle()
+        {
+            return "Search Icon";
+        }
+
         protected override int GetDefaultWidth()
         {
             return 800;
@@ -65,13 +70,13 @@ namespace Eos.ViewModels.Dialogs
             return true;
         }
 
-        public DelegateCommand<IconSearchViewModel> CloseCommand { get; private set; } = new DelegateCommand<IconSearchViewModel>(vm =>
+        public ReactiveCommand<IconSearchViewModel, Unit> CloseCommand { get; private set; } = ReactiveCommand.Create<IconSearchViewModel>(vm =>
         {
             vm.ResultResRef = null;
             WindowService.Close(vm);
         });
 
-        public DelegateCommand<IconSearchViewModel> OKCommand { get; private set; } = new DelegateCommand<IconSearchViewModel>(vm =>
+        public ReactiveCommand<IconSearchViewModel, Unit> OKCommand { get; private set; } = ReactiveCommand.Create<IconSearchViewModel>(vm =>
         {
             WindowService.Close(vm);
         });

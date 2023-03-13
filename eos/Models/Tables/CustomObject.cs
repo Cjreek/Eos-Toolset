@@ -2,10 +2,13 @@
 using Eos.Types;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Eos.Models.Tables
 {
@@ -24,14 +27,32 @@ namespace Eos.Models.Tables
                     dataTypeDefinition.To2DA = o => MasterRepository.Project.CustomObjectRepositories[this].Get2DAIndex((CustomObjectInstance?)o);
                     dataTypeDefinition.FromJson = json => JsonUtils.CreateRefFromJson<CustomObjectInstance>((JsonObject?)json);
                 }
-
                 return dataTypeDefinition;
             }
         }
 
+        public ModelRepository<CustomObjectInstance> InstanceRepository { get; set; }
+
         public event EventHandler? OnChanged;
 
         public String ResourceName { get; set; } = "";
+
+        public CustomObject() : base()
+        {
+            InstanceRepository = MasterRepository.Project.CustomObjectRepositories[this];
+            InstanceRepository.CollectionChanged += InstanceRepository_CollectionChanged;
+        }
+
+        ~CustomObject()
+        {
+            InstanceRepository.CollectionChanged -= InstanceRepository_CollectionChanged;
+        }
+
+        private void InstanceRepository_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if ((e.Action == NotifyCollectionChangedAction.Reset) || (e.Action == NotifyCollectionChangedAction.Move))
+                NotifyPropertyChanged(nameof(InstanceRepository));
+        }
 
         protected override void SetDefaultValues()
         {

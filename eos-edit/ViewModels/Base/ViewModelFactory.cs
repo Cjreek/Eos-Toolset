@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Eos.ViewModels
+namespace Eos.ViewModels.Base
 {
     internal static class ViewModelFactory
     {

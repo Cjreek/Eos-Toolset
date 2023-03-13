@@ -1,22 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using Avalonia.Controls;
+using Avalonia.Data.Converters;
+using System;
+using System.Globalization;
 
-namespace Eos.Views
+namespace Eos.Views.Dialogs
 {
-    /// <summary>
-    /// Interaktionslogik für ViewWindow.xaml
-    /// </summary>
+    public class BoolToAutoSizeConverter : IValueConverter
+    {
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            if (value is bool autosize)
+                return autosize ? SizeToContent.WidthAndHeight : SizeToContent.Manual;
+
+            return SizeToContent.Manual;
+        }
+
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public partial class ViewWindow : Window
     {
         public ViewWindow()

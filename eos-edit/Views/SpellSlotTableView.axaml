@@ -1,133 +1,110 @@
-﻿<local:LanguageAwarePage x:Class="Eos.Views.SpellSlotTableView"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Eos.Views"
-      xmlns:vm="clr-namespace:Eos.ViewModels"     
-      xmlns:wpftk="clr-namespace:Xceed.Wpf.Toolkit;assembly=DotNetProjects.Wpf.Extended.Toolkit"
-      xmlns:ext="clr-namespace:Eos.Extensions"
-      xmlns:uc="clr-namespace:Eos.Usercontrols"
-      mc:Ignorable="d"
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="SavingThrowTableView">
-    <Page.DataContext>
-        <vm:SpellSlotTableViewModel/>
-    </Page.DataContext>
+<local:LanguageAwarePage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views"
+             xmlns:vm="using:Eos.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Views.SpellSlotTableView"
+             x:Name="page">
+  <Design.DataContext>
+    <vm:SpellSlotTableViewModel/>
+  </Design.DataContext>
 
-    <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources\StyleResources.xaml"/>
-                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Page.Resources>
+  <local:LanguageAwarePage.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </local:LanguageAwarePage.Resources>
 
-    <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+  <local:LanguageAwarePage.Styles>
+    <Styles>
+      <StyleInclude Source="/Assets/StyleResources.axaml"/>
+    </Styles>
+  </local:LanguageAwarePage.Styles>
 
-        <TextBlock Text="Spellslot Table" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+  <Border BorderThickness="0,1,0,0" BorderBrush="Silver">
+    <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="100"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}" MaxLength="16"/>
+      <TextBlock Text="Spellslot Table" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
+      <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}" MaxLength="16"/>
 
-        <uc:ResetIsEnabled Grid.Row="3" Grid.Column="1">
-            <ListView ItemsSource="{Binding Data.Items}" IsTabStop="{Binding Data.IsReadonly}">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Level" Width="50">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center" Text="{Binding Level}" Margin="-6,-2,-6,-2"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="0" Width="50">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding SpellLevel0}" Margin="-6,-2,-6,-2"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="1" Width="50">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding SpellLevel1}" Margin="-6,-2,-6,-2"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="2" Width="50">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding SpellLevel2}" Margin="-6,-2,-6,-2"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="3" Width="50">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding SpellLevel3}" Margin="-6,-2,-6,-2"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="4" Width="50">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding SpellLevel4}" Margin="-6,-2,-6,-2"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="5" Width="50">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding SpellLevel5}" Margin="-6,-2,-6,-2"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="6" Width="50">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding SpellLevel6}" Margin="-6,-2,-6,-2"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="7" Width="50">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding SpellLevel7}" Margin="-6,-2,-6,-2"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="8" Width="50">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding SpellLevel8}" Margin="-6,-2,-6,-2"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="9" Width="50">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding SpellLevel9}" Margin="-6,-2,-6,-2"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </uc:ResetIsEnabled>
+      <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+      <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
+
+      <DataGrid Grid.Row="3" Grid.Column="1" Items="{Binding Data.Items}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" Margin="2,0,0,0">
+        <DataGrid.Columns>
+          <DataGridTemplateColumn Header="Level" Width="50">
+            <DataTemplate>
+              <TextBlock VerticalAlignment="Center" Text="{Binding Level}" HorizontalAlignment="Center" Margin="0,1,0,1"/>
+            </DataTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Header="0" Width="50">
+            <DataTemplate>
+              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel0}" Increment="1" Height="22" Margin="2,1,0,1"/>
+            </DataTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Header="1" Width="50">
+            <DataTemplate>
+              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel1}" Increment="1" Height="22" Margin="2,1,0,1"/>
+            </DataTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Header="2" Width="50">
+            <DataTemplate>
+              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel2}" Increment="1" Height="22" Margin="2,1,0,1"/>
+            </DataTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Header="3" Width="50">
+            <DataTemplate>
+              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel3}" Increment="1" Height="22" Margin="2,1,0,1"/>
+            </DataTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Header="4" Width="50">
+            <DataTemplate>
+              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel4}" Increment="1" Height="22" Margin="2,1,0,1"/>
+            </DataTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Header="5" Width="50">
+            <DataTemplate>
+              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel5}" Increment="1" Height="22" Margin="2,1,0,1"/>
+            </DataTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Header="6" Width="50">
+            <DataTemplate>
+              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel6}" Increment="1" Height="22" Margin="2,1,0,1"/>
+            </DataTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Header="7" Width="50">
+            <DataTemplate>
+              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel7}" Increment="1" Height="22" Margin="2,1,0,1"/>
+            </DataTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Header="8" Width="50">
+            <DataTemplate>
+              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel8}" Increment="1" Height="22" Margin="2,1,0,1"/>
+            </DataTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn Header="9" Width="50">
+            <DataTemplate>
+              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel9}" Increment="1" Height="22" Margin="2,1,0,1"/>
+            </DataTemplate>
+          </DataGridTemplateColumn>
+        </DataGrid.Columns>
+      </DataGrid>
     </Grid>
+  </Border>
 </local:LanguageAwarePage>

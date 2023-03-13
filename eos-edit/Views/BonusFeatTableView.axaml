@@ -1,70 +1,63 @@
-﻿<local:LanguageAwarePage x:Class="Eos.Views.BonusFeatTableView"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Eos.Views"
-      xmlns:vm="clr-namespace:Eos.ViewModels"     
-      xmlns:wpftk="clr-namespace:Xceed.Wpf.Toolkit;assembly=DotNetProjects.Wpf.Extended.Toolkit"
-      xmlns:ext="clr-namespace:Eos.Extensions"
-      xmlns:uc="clr-namespace:Eos.Usercontrols"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="BonusFeatTableView">
-    <Page.DataContext>
-        <vm:BonusFeatTableViewModel/>
-    </Page.DataContext>
+<local:LanguageAwarePage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views"
+             xmlns:vm="using:Eos.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Views.BonusFeatTableView"
+             x:Name="page">
+  <Design.DataContext>
+    <vm:BonusFeatTableViewModel/>
+  </Design.DataContext>
 
-    <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources\StyleResources.xaml"/>
-                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Page.Resources>
+  <local:LanguageAwarePage.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </local:LanguageAwarePage.Resources>
 
-    <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+  <local:LanguageAwarePage.Styles>
+    <Styles>
+      <StyleInclude Source="/Assets/StyleResources.axaml"/>
+    </Styles>
+  </local:LanguageAwarePage.Styles>
 
-        <TextBlock Text="Bonus Feat Table" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+  <Border BorderThickness="0,1,0,0" BorderBrush="Silver">
+    <Grid Margin="10">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="100"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}" MaxLength="16"/>
+      <TextBlock Text="Bonus Feat Table" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
+      <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+      <TextBox IsEnabled="{Binding !Data.IsReadonly}" Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}" MaxLength="16"/>
 
-        <uc:ResetIsEnabled Grid.Row="3" Grid.Column="1">
-            <ListView ItemsSource="{Binding Data.Items}" IsTabStop="{Binding Data.IsReadonly}">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Level" Width="50">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center" Text="{Binding Level}" Margin="-6,-2,-6,-2"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Bonus Feats" Width="100">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <wpftk:IntegerUpDown VerticalAlignment="Top" Value="{Binding BonusFeatCount}" Margin="-6,-2,-6,-2"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </uc:ResetIsEnabled>
+      <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+      <TextBox IsEnabled="{Binding !Data.IsReadonly}" Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
+
+      <DataGrid Grid.Row="3" Grid.Column="1" Items="{Binding Data.Items}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" Margin="2,0,0,0">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header="Level" Width="50" Binding="{Binding Level}"/>
+          <DataGridTemplateColumn Header="Bonus Feats" Width="100">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <NumericUpDown IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" VerticalAlignment="Top" Value="{Binding BonusFeatCount}" Increment="1" Height="25"/>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+        </DataGrid.Columns>
+      </DataGrid>
     </Grid>
+  </Border>
 </local:LanguageAwarePage>

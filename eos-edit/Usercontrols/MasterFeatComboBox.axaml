@@ -1,54 +1,51 @@
-﻿<UserControl x:Class="Eos.Usercontrols.MasterFeatComboBox"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Eos.Usercontrols"
-             xmlns:ext="clr-namespace:Eos.Extensions"
-             xmlns:nwn="clr-namespace:Eos.Nwn;assembly=Eos"
-             mc:Ignorable="d" 
-             x:Name="ucMasterFeatComboBox"
-             d:DesignHeight="22" d:DesignWidth="800">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Usercontrols"
+             xmlns:nwn="using:Eos.Nwn"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Usercontrols.MasterFeatComboBox"
+             x:Name="ucMasterFeatComboBox">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
 
-    <Grid DataContext="{x:Reference ucMasterFeatComboBox}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
+  <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:MasterFeatComboBox}}}">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
 
-        <Button x:Name="cbMasterFeats" Grid.Column="0" Click="btSearch_Click" HorizontalContentAlignment="Stretch" MinHeight="22">
-            <Button.Content>
-                <StackPanel Orientation="Horizontal" Margin="3,0,0,0">
-                    <Image Grid.Column="0" Width="16" Height="16" Source="{Binding ElementName=ucMasterFeatComboBox, Path=SelectedValue.Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}" Margin="0,0,3,0"/>
+    <Button x:Name="cbMasterFeats" Grid.Column="0" Click="btSearch_Click" HorizontalContentAlignment="Stretch" MinHeight="22">
+      <Button.Content>
+        <StackPanel Orientation="Horizontal" Margin="3,0,0,0">
+          <Image Grid.Column="0" Width="16" Height="16" Source="{Binding ElementName=ucMasterFeatComboBox, Path=SelectedValue.Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}" Margin="0,0,3,0"/>
 
-                    <TextBlock Grid.Column="1">
-                        <Run>
-                            <Run.Text>
-                                <MultiBinding Converter="{StaticResource tlkConverterDefault}">
-                                    <Binding ElementName="ucMasterFeatComboBox" Path="SelectedValue.TlkDisplayName" Mode="OneWay"/>
-                                </MultiBinding>
-                            </Run.Text>
-                        </Run>
-                        <Run Text="{Binding ElementName=ucMasterFeatComboBox, Path=SelectedValue.DisplayHint, Converter={StaticResource hintConverter}, Mode=OneWay}"/>
-                    </TextBlock>
-                </StackPanel>
-            </Button.Content>
-        </Button>
+          <TextBlock Grid.Column="1">
+            <Run>
+              <Run.Text>
+                <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                  <Binding ElementName="ucMasterFeatComboBox" Path="SelectedValue.TlkDisplayName" Mode="OneWay"/>
+                </MultiBinding>
+              </Run.Text>
+            </Run>
+            <Run Text="{Binding ElementName=ucMasterFeatComboBox, Path=SelectedValue.DisplayHint, Converter={StaticResource hintConverter}, Mode=OneWay}"/>
+          </TextBlock>
+        </StackPanel>
+      </Button.Content>
+    </Button>
 
-        <Button x:Name="btClear" Grid.Column="1" Content="🞪" Click="btClear_Click" Margin="1,0,0,0"
-                Height="{Binding ElementName=cbMasterFeats, Path=ActualHeight}" Width="{Binding ElementName=cbMasterFeats, Path=ActualHeight}" 
-                Visibility="{Binding ElementName=ucMasterFeatComboBox, Path=IsNullable, Converter={StaticResource bool2VisCollapsed}}"/>
-        <local:ResetIsEnabled Grid.Column="2" Margin="1,0,0,0">
-            <Button x:Name="btGoto" Content="👁" Click="btGoto_Click"
-                Height="{Binding ElementName=cbMasterFeats, Path=ActualHeight}" Width="{Binding ElementName=cbMasterFeats, Path=ActualHeight}"/>
-        </local:ResetIsEnabled>
-    </Grid>
+    <Button x:Name="btClear" Grid.Column="1" Content="🞪" Click="btClear_Click" Margin="2,0,0,0"
+            Height="{Binding ElementName=cbMasterFeats, Path=Bounds.Height}" Width="{Binding ElementName=cbMasterFeats, Path=Bounds.Height}"
+            IsVisible="{Binding ElementName=ucMasterFeatComboBox, Path=IsNullable}"/>
+    <!--<local:ResetIsEnabled>-->
+    <Button x:Name="btGoto" Grid.Column="2" Margin="2,0,0,0" Content="👁" Click="btGoto_Click" Height="{Binding ElementName=cbMasterFeats, Path=Bounds.Height}" Width="{Binding ElementName=cbMasterFeats, Path=Bounds.Height}"/>
+    <!--</local:ResetIsEnabled>-->
+  </Grid>
 </UserControl>

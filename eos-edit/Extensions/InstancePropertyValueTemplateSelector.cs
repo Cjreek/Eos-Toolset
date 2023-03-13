@@ -6,12 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows;
+using Avalonia.Markup.Xaml.Templates;
+using Avalonia;
+using Avalonia.Controls.Templates;
+using Avalonia.Controls;
 
 namespace Eos.Extensions
 {
-    public class InstancePropertyValueTemplateSelector : DataTemplateSelector
+    public class InstancePropertyValueTemplateSelector : IDataTemplate
     {
         public DataTemplate? ErrorTemplate { get; set; }
         public DataTemplate? SpaceTemplate { get; set; }
@@ -34,10 +37,23 @@ namespace Eos.Extensions
         public DataTemplate? MasterFeatTemplate { get; set; }
         public DataTemplate? SoundsetTemplate { get; set; }
         public DataTemplate? PackageTemplate { get; set; }
+        public DataTemplate? DiseaseTemplate { get; set; }
+        public DataTemplate? PoisonTemplate { get; set; }
         public DataTemplate? CustomObjectTemplate { get; set; }
         public DataTemplate? CustomEnumTemplate { get; set; }
 
-        public override DataTemplate? SelectTemplate(object item, DependencyObject container)
+        public Control? Build(object? param)
+        {
+            var template = SelectTemplate(param);
+            return template?.Build(param);
+        }
+
+        public bool Match(object? data)
+        {
+            return true;
+        }
+
+        public IDataTemplate? SelectTemplate(object? item)
         {
             DataTypeDefinition? dataTypeDef = null;
             if (item is CustomValueInstance valueInstance)
@@ -87,6 +103,10 @@ namespace Eos.Extensions
                     return SoundsetTemplate ?? ErrorTemplate;
                 if (dataTypeDef.Type == typeof(ClassPackage))
                     return PackageTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(Disease))
+                    return DiseaseTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(Poison))
+                    return PoisonTemplate ?? ErrorTemplate;
 
                 if (dataTypeDef.CustomType is CustomObject customObject)
                     return CustomObjectTemplate ?? ErrorTemplate;

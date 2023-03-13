@@ -1,31 +1,35 @@
-﻿<UserControl x:Class="Eos.Usercontrols.CustomEnumComboBox"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Eos.Usercontrols"
-             xmlns:ext="clr-namespace:Eos.Extensions"
-             xmlns:types="clr-namespace:Eos.Types"
-             mc:Ignorable="d" x:Name="ucCustomEnumComboBox"
-             d:DesignHeight="22" d:DesignWidth="800">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Usercontrols"
+             xmlns:models="using:Eos.Models.Tables"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Usercontrols.CustomEnumComboBox"
+             x:Name="ucCustomEnumComboBox">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
 
+  <UserControl.DataTemplates>
+    <DataTemplate DataType="{x:Type models:CustomEnumItem}">
+      <TextBlock Text="{Binding Label}" VerticalAlignment="Center"/>
+    </DataTemplate>
+  </UserControl.DataTemplates>
 
-    <Grid DataContext="{x:Reference ucCustomEnumComboBox}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="auto"/>
-        </Grid.ColumnDefinitions>
+  <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CustomEnumComboBox}}}">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="auto"/>
+    </Grid.ColumnDefinitions>
 
-        <ComboBox x:Name="cbEnum" Grid.Column="0" ItemsSource="{Binding Path=CustomEnum.Items}" SelectedValue="{Binding Path=SelectedValue, Mode=TwoWay}" DisplayMemberPath="Label"/>
-        <Button x:Name="btClear" Grid.Column="1" Content="🞪" Click="btClear_Click" Margin="1,-3,0,0"
-                Height="{Binding ElementName=cbEnum, Path=ActualHeight}" Width="{Binding ElementName=cbEnum, Path=ActualHeight}"
-                Visibility="{Binding Path=IsNullable, Converter={StaticResource bool2VisCollapsed}}"/>
-    </Grid>
+    <ComboBox x:Name="cbEnum" Grid.Column="0" Items="{Binding Path=CustomEnum.Items}" SelectedItem="{Binding Path=SelectedValue, Mode=TwoWay}" DisplayMemberBinding="{Binding Label}"/>
+    <Button x:Name="btClear" Grid.Column="1" Content="🞪" Click="btClear_Click" Margin="2,0,0,0"
+            Height="{Binding ElementName=cbEnum, Path=Bounds.Height}" Width="{Binding ElementName=cbEnum, Path=Bounds.Height}"
+            IsVisible="{Binding Path=IsNullable}"/>
+  </Grid>
 </UserControl>

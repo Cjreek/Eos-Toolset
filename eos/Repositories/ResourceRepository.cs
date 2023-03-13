@@ -79,6 +79,17 @@ namespace Eos.Repositories
                     filesByTypeDict.Add(res.type, new HashSet<String?>());
                 filesByTypeDict[res.type].Add(res.resRef);
             }
+
+            // Load Icons
+            var iconPrefixes = new HashSet<String>()
+            {
+                "iit_", "ief_", "ife_", "ir_", "is_", "isk_", "iss_"
+            };
+            foreach (var img in filesByTypeDict[NWNResourceType.TGA])
+            {
+                if ((img != null) && ((iconPrefixes.Contains(img.Substring(0, Math.Min(3, img.Length)))) || (iconPrefixes.Contains(img.Substring(0, Math.Min(4, img.Length))))))
+                    AddResource(NWNResourceSource.BIF, img, NWNResourceType.TGA);
+            }
         }
 
         public void Initialize(String nwnBasePath)

@@ -1,5 +1,11 @@
-﻿using System;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.LogicalTree;
+using Avalonia.Markup.Xaml;
+using ReactiveUI;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +13,17 @@ using System.Windows.Markup;
 
 namespace Eos.Extensions
 {
+    public class EnumSourceItem : ReactiveObject
+    {
+        public string? DisplayName { get; set; }
+        public object? Value { get; set; }
+
+        public void RaiseChanged()
+        {
+            IReactiveObjectExtensions.RaisePropertyChanged(this, nameof(Value));
+        }
+    }
+
     public class EnumSourceExtension : MarkupExtension
     {
         private Type? enumType;
@@ -30,13 +47,20 @@ namespace Eos.Extensions
                 {
                     Value = Enum.Parse(enumType, Enum.GetName(enumType, e) ?? "INVALID_ENUM_VALUE"),
                     DisplayName = GetDisplayName(e)
-                }
-                ).ToArray();
+                }).Where(esi => !IgnoreEnumValue(esi.Value)).ToArray();
 
                 return result;
             }
 
             return new object { };
+        }
+
+        private bool IgnoreEnumValue(object? value)
+        {
+            if ((value == null) || (enumType == null)) return true;
+
+            var enumName = Enum.GetName(enumType, value) ?? "INVALID_ENUM_VALUE";
+            return enumType.GetField(enumName)?.GetCustomAttributes(typeof(IgnoreEnumValueAttribute), false).Any() ?? false;
         }
 
         private String GetDisplayName(int value)
@@ -49,12 +73,6 @@ namespace Eos.Extensions
             }
 
             return String.Empty;
-        }
-
-        public class EnumSourceItem
-        {
-            public string? DisplayName { get; set; }
-            public object? Value { get; set; }
         }
     }
 }

@@ -1,212 +1,218 @@
-﻿<local:LanguageAwarePage x:Class="Eos.Views.PolymorphView"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Eos.Views"
-      xmlns:vm="clr-namespace:Eos.ViewModels"
-      xmlns:uc="clr-namespace:Eos.Usercontrols"
-      xmlns:wpftk="clr-namespace:Xceed.Wpf.Toolkit;assembly=DotNetProjects.Wpf.Extended.Toolkit"
-      mc:Ignorable="d" 
-      x:Name="page"
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="PolymorphView">
-    <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources\StyleResources.xaml"/>
-                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
-                <ResourceDictionary Source="..\Resources\CustomDataTemplateResources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Page.Resources>
-    
-    <Page.DataContext>
-        <vm:PolymorphViewModel/>
-    </Page.DataContext>
+<local:LanguageAwarePage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views"
+             xmlns:vm="using:Eos.ViewModels"
+             xmlns:uc="using:Eos.Usercontrols"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Views.PolymorphView">
+  <local:LanguageAwarePage.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+        <ResourceInclude Source="/Assets/CustomDataTemplateResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </local:LanguageAwarePage.Resources>
 
-    <TabControl TabStripPlacement="Left" BorderThickness="1,0,0,0" SelectedIndex="{Binding SelectedTabIndex}">
-        <TabItem Header="Info" Width="100" Height="30">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
+  <local:LanguageAwarePage.Styles>
+    <Styles>
+      <StyleInclude Source="/Assets/StyleResources.axaml"/>
+    </Styles>
+  </local:LanguageAwarePage.Styles>
+
+  <Design.DataContext>
+    <vm:PolymorphViewModel/>
+  </Design.DataContext>
+
+  <TabControl TabStripPlacement="Left" BorderThickness="0,1,0,0" SelectedIndex="{Binding SelectedTabIndex}" Padding="0" Margin="0">
+    <TabItem Header="Info" Width="100" Height="30" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="125"/>
+              <ColumnDefinition Width="*" MinWidth="200"/>
+              <ColumnDefinition Width="125"/>
+              <ColumnDefinition Width="*" MinWidth="200"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="0,0,0,10">
+              <TextBlock Text="Polymorph" FontSize="22" FontWeight="Bold"/>
+
+              <TextBlock Text=" (ID:" FontSize="16" VerticalAlignment="Center"/>
+              <!--<uc:ResetIsEnabled>-->
+              <TextBox Text="{Binding Data.CalculatedIndex, Mode=OneWay}" BorderThickness="0" FontSize="16" VerticalAlignment="Center" Margin="0" IsReadOnly="True"/>
+              <!--</uc:ResetIsEnabled>-->
+              <TextBlock Text=")" FontSize="16" VerticalAlignment="Center" Margin="0,0,0,0"/>
+            </StackPanel>
+
+            <!--Name-->
+            <TextBlock Text="Name" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <TextBox Text="{Binding Data.Name}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+
+            <TextBlock Text="Hint" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+            <TextBox Text="{Binding Data.Hint}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
+
+            <TextBlock Text="Racial Type" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+            <uc:RaceComboBox SelectedValue="{Binding Data.RacialType}" IsNullable="False" Grid.Row="3" Grid.Column="1"/>
+
+            <TextBlock Text="Appearance" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+            <uc:AppearanceComboBox SelectedValue="{Binding Data.Appearance}" IsNullable="False" Grid.Row="3" Grid.Column="3"/>
+
+            <TextBlock Text="Portrait" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+            <uc:PortraitComboBox SelectedValue="{Binding Data.Portrait}" Grid.Row="4" Grid.Column="1"/>
+
+            <TextBlock Text="Portrait ResRef" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
+            <TextBox Text="{Binding Data.PortraitResRef}" Grid.Row="4" Grid.Column="3"/>
+
+            <TextBlock Text="Stats" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="6" Grid.Column="0" FontWeight="Bold" FontSize="16" Grid.ColumnSpan="4"/>
+
+            <TextBlock Text="Strength" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.Strength}" Grid.Row="7" Grid.Column="1" Increment="1"/>
+
+            <TextBlock Text="Constitution" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.Constitution}" Grid.Row="7" Grid.Column="3" Increment="1"/>
+
+            <TextBlock Text="Dexterity" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.Dexterity}" Grid.Row="8" Grid.Column="1" Increment="1"/>
+
+            <TextBlock Text="HP Bonus" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.HPBonus}" Grid.Row="9" Grid.Column="1" Increment="1"/>
+
+            <TextBlock Text="Natural AC Bonus" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.NaturalACBonus}" Grid.Row="9" Grid.Column="3" Increment="1"/>
+
+            <TextBlock Text="Equipment" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="11" Grid.Column="0" FontWeight="Bold" FontSize="16" Grid.ColumnSpan="4"/>
+
+            <TextBlock Text="Creature Weapon 1" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0"/>
+            <TextBox Text="{Binding Data.CreatureWeapon1}" Grid.Row="12" Grid.Column="1"/>
+
+            <TextBlock Text="Creature Weapon 2" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="2"/>
+            <TextBox Text="{Binding Data.CreatureWeapon2}" Grid.Row="12" Grid.Column="3"/>
+
+            <TextBlock Text="Creature Weapon 3" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="0"/>
+            <TextBox Text="{Binding Data.CreatureWeapon3}" Grid.Row="13" Grid.Column="1"/>
+
+            <TextBlock Text="Creature Hide" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="2"/>
+            <TextBox Text="{Binding Data.HideItem}" Grid.Row="13" Grid.Column="3"/>
+
+            <TextBlock Text="Mainhand Weapon" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="0"/>
+            <TextBox Text="{Binding Data.MainHandItem}" Grid.Row="14" Grid.Column="1"/>
+
+            <TextBlock Text="Merge Weapon" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="0"/>
+            <CheckBox IsChecked="{Binding Data.MergeWeapon}" Grid.Row="15" Grid.Column="1"/>
+
+            <TextBlock Text="Merge Armor" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="2"/>
+            <CheckBox IsChecked="{Binding Data.MergeArmor}" Grid.Row="15" Grid.Column="3"/>
+
+            <TextBlock Text="Merge Accessories" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="16" Grid.Column="0"/>
+            <CheckBox IsChecked="{Binding Data.MergeAccessories}" Grid.Row="16" Grid.Column="1"/>
+
+            <TextBlock Text="Spells" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="18" Grid.Column="0" FontWeight="Bold" FontSize="16" Grid.ColumnSpan="4"/>
+
+            <TextBlock Text="Spell 1" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="19" Grid.Column="0"/>
+            <uc:SpellComboBox SelectedValue="{Binding Data.Spell1}" Grid.Row="19" Grid.Column="1"/>
+
+            <TextBlock Text="Spell 2" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="19" Grid.Column="2"/>
+            <uc:SpellComboBox SelectedValue="{Binding Data.Spell2}" Grid.Row="19" Grid.Column="3"/>
+
+            <TextBlock Text="Spell 3" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="20" Grid.Column="0"/>
+            <uc:SpellComboBox SelectedValue="{Binding Data.Spell3}" Grid.Row="20" Grid.Column="1"/>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Extensions" Width="100" Height="30" IsVisible="{Binding !Data.IsReadonly}" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Extension Fields" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <ItemsRepeater Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding Data.ExtensionValues}" ElementPrepared="ItemsRepeater_ElementPrepared">
+              <ItemsRepeater.Layout>
+                <UniformGridLayout ItemsStretch="Fill" Orientation="Horizontal" MaximumRowsOrColumns="2" MinItemHeight="25"/>
+              </ItemsRepeater.Layout>
+
+              <ItemsRepeater.ItemTemplate>
+                <DataTemplate>
+                  <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="125"/>
-                        <ColumnDefinition Width="*" MinWidth="200"/>
-                        <ColumnDefinition Width="125"/>
-                        <ColumnDefinition Width="*" MinWidth="200"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-
-                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="0,0,0,10">
-                        <TextBlock Text="Polymorph" FontSize="22" FontWeight="Bold"/>
-
-                        <TextBlock Text=" (ID:" FontSize="16" VerticalAlignment="Center"/>
-                        <uc:ResetIsEnabled>
-                            <TextBox Text="{Binding Data.CalculatedIndex, Mode=OneWay}" BorderThickness="0" FontSize="16" VerticalAlignment="Center" Margin="0" IsReadOnly="True"/>
-                        </uc:ResetIsEnabled>
-                        <TextBlock Text=")" FontSize="16" VerticalAlignment="Center" Margin="-2,0,0,0"/>
-                    </StackPanel>
-
-                    <!--Name-->
-                    <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-                    <TextBox Text="{Binding Data.Name}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
-
-                    <TextBlock Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
-                    <TextBox Text="{Binding Data.Hint}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
-
-                    <TextBlock Text="Racial Type" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
-                    <uc:RaceComboBox SelectedValue="{Binding Data.RacialType}" IsNullable="False" Grid.Row="3" Grid.Column="1"/>
-
-                    <TextBlock Text="Appearance" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
-                    <uc:AppearanceComboBox SelectedValue="{Binding Data.Appearance}" IsNullable="False" Grid.Row="3" Grid.Column="3"/>
-
-                    <TextBlock Text="Portrait" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
-                    <uc:PortraitComboBox SelectedValue="{Binding Data.Portrait}" Grid.Row="4" Grid.Column="1"/>
-                    
-                    <TextBlock Text="Portrait ResRef" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
-                    <TextBox Text="{Binding Data.PortraitResRef}" Grid.Row="4" Grid.Column="3"/>
-
-                    <TextBlock Text="Stats" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="6" Grid.Column="0" FontWeight="Bold" FontSize="16" Grid.ColumnSpan="4"/>
-
-                    <TextBlock Text="Strength" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.Strength}" Grid.Row="7" Grid.Column="1"/>
-
-                    <TextBlock Text="Constitution" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.Constitution}" Grid.Row="7" Grid.Column="3"/>
-
-                    <TextBlock Text="Dexterity" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.Dexterity}" Grid.Row="8" Grid.Column="1"/>
-
-                    <TextBlock Text="HP Bonus" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.HPBonus}" Grid.Row="9" Grid.Column="1"/>
-
-                    <TextBlock Text="Natural AC Bonus" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.NaturalACBonus}" Grid.Row="9" Grid.Column="3"/>
-
-                    <TextBlock Text="Equipment" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="11" Grid.Column="0" FontWeight="Bold" FontSize="16" Grid.ColumnSpan="4"/>
-
-                    <TextBlock Text="Creature Weapon 1" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0"/>
-                    <TextBox Text="{Binding Data.CreatureWeapon1}" Grid.Row="12" Grid.Column="1"/>
-
-                    <TextBlock Text="Creature Weapon 2" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="2"/>
-                    <TextBox Text="{Binding Data.CreatureWeapon2}" Grid.Row="12" Grid.Column="3"/>
-
-                    <TextBlock Text="Creature Weapon 3" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="0"/>
-                    <TextBox Text="{Binding Data.CreatureWeapon3}" Grid.Row="13" Grid.Column="1"/>
-
-                    <TextBlock Text="Creature Hide" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="2"/>
-                    <TextBox Text="{Binding Data.HideItem}" Grid.Row="13" Grid.Column="3"/>
-
-                    <TextBlock Text="Mainhand Weapon" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="0"/>
-                    <TextBox Text="{Binding Data.MainHandItem}" Grid.Row="14" Grid.Column="1"/>
-
-                    <TextBlock Text="Merge Weapon" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="0"/>
-                    <CheckBox IsChecked="{Binding Data.MergeWeapon}" Grid.Row="15" Grid.Column="1"/>
-
-                    <TextBlock Text="Merge Armor" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="2"/>
-                    <CheckBox IsChecked="{Binding Data.MergeArmor}" Grid.Row="15" Grid.Column="3"/>
-
-                    <TextBlock Text="Merge Accessories" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="16" Grid.Column="0"/>
-                    <CheckBox IsChecked="{Binding Data.MergeAccessories}" Grid.Row="16" Grid.Column="1"/>
-
-                    <TextBlock Text="Spells" Margin="0,0,0,10" HorizontalAlignment="Center" Grid.Row="18" Grid.Column="0" FontWeight="Bold" FontSize="16" Grid.ColumnSpan="4"/>
-
-                    <TextBlock Text="Spell 1" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="19" Grid.Column="0"/>
-                    <uc:SpellComboBox SelectedValue="{Binding Data.Spell1}" Grid.Row="19" Grid.Column="1"/>
-
-                    <TextBlock Text="Spell 2" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="19" Grid.Column="2"/>
-                    <uc:SpellComboBox SelectedValue="{Binding Data.Spell2}" Grid.Row="19" Grid.Column="3"/>
-
-                    <TextBlock Text="Spell 3" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="20" Grid.Column="0"/>
-                    <uc:SpellComboBox SelectedValue="{Binding Data.Spell3}" Grid.Row="20" Grid.Column="1"/>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-        <TabItem Header="Extensions" Width="100" Height="30" Visibility="{Binding Data.IsReadonly, Converter={StaticResource bool2VisCollapsedInverted}}">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="150"/>
+                      <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Extension Fields" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Margin="0,3,5,0" Text="{Binding Property.Label}"/>
+                    <ContentPresenter Grid.Column="1" Content="{Binding}" ContentTemplate="{StaticResource templateSelector}"/>
+                  </Grid>
+                </DataTemplate>
+              </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Metadata" Width="100" Height="30" IsVisible="{Binding !Data.IsReadonly}" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
 
-                    <ItemsControl Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Data.ExtensionValues}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="2"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="150"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
+            <TextBlock Text="Polymorph Metadata" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-                                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Margin="0,0,5,0" Text="{Binding Property.Label}"/>
-                                    <ContentPresenter Grid.Column="1" Content="{Binding}" ContentTemplateSelector="{StaticResource templateSelector}"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-        <TabItem Header="Metadata" Width="100" Height="30" Visibility="{Binding Data.IsReadonly, Converter={StaticResource bool2VisCollapsedInverted}}">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="25"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Text="Polymorph Metadata" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
-
-                    <TextBlock Text="Script Constant" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                    <DockPanel Grid.Row="1" Grid.Column="1">
-                        <TextBox Text="POLYMORPH_TYPE_" BorderThickness="1,1,0,1" IsReadOnly="True" VerticalContentAlignment="Center" Style="{x:Null}" Margin="2,0,0,3"/>
-                        <TextBox Text="{Binding Data.ScriptConstant}" Style="{StaticResource ConstantHintTextboxStyle}" CharacterCasing="Upper" Margin="-2,0,0,3" BorderThickness="0,1,1,1" VerticalContentAlignment="Center"/>
-                    </DockPanel>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-    </TabControl>
+            <TextBlock Text="Script Constant" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <DockPanel Grid.Row="1" Grid.Column="1">
+              <TextBox Text="POLYMORPH_TYPE_" BorderThickness="1,1,0,1" IsReadOnly="True" VerticalContentAlignment="Center" Margin="2,0,0,3"/>
+              <TextBox Text="{Binding Data.ScriptConstant}" Margin="-2,0,0,3" BorderThickness="0,1,1,1" VerticalContentAlignment="Center" Watermark="*AUTOGENERATED*" TextChanging="ConstantTextbox_TextChanging"/>
+            </DockPanel>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+  </TabControl>
 </local:LanguageAwarePage>

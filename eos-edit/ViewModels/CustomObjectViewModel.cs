@@ -1,9 +1,11 @@
 ﻿using Eos.Models.Tables;
 using Eos.Types;
-using Prism.Commands;
+using Eos.ViewModels.Base;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,20 +29,20 @@ namespace Eos.ViewModels
 
         public CustomObjectViewModel() : base()
         {
-            DeleteObjectPropertyCommand = new DelegateCommand<CustomObjectProperty>(DeleteObjectProperty);
-            AddObjectPropertyCommand = new DelegateCommand(AddObjectProperty);
+            DeleteObjectPropertyCommand = ReactiveCommand.Create<CustomObjectProperty>(DeleteObjectProperty);
+            AddObjectPropertyCommand = ReactiveCommand.Create(AddObjectProperty);
 
-            MoveObjectPropertyUpCommand = new DelegateCommand<CustomObjectProperty>(MoveUp);
-            MoveObjectPropertyDownCommand = new DelegateCommand<CustomObjectProperty>(MoveDown);
+            MoveObjectPropertyUpCommand = ReactiveCommand.Create<CustomObjectProperty>(MoveUp);
+            MoveObjectPropertyDownCommand = ReactiveCommand.Create<CustomObjectProperty>(MoveDown);
         }
 
         public CustomObjectViewModel(CustomObject customObject) : base(customObject)
         {
-            DeleteObjectPropertyCommand = new DelegateCommand<CustomObjectProperty>(DeleteObjectProperty);
-            AddObjectPropertyCommand = new DelegateCommand(AddObjectProperty);
+            DeleteObjectPropertyCommand = ReactiveCommand.Create<CustomObjectProperty>(DeleteObjectProperty);
+            AddObjectPropertyCommand = ReactiveCommand.Create(AddObjectProperty);
 
-            MoveObjectPropertyUpCommand = new DelegateCommand<CustomObjectProperty>(MoveUp);
-            MoveObjectPropertyDownCommand = new DelegateCommand<CustomObjectProperty>(MoveDown);
+            MoveObjectPropertyUpCommand = ReactiveCommand.Create<CustomObjectProperty>(MoveUp);
+            MoveObjectPropertyDownCommand = ReactiveCommand.Create<CustomObjectProperty>(MoveDown);
         }
 
         protected override string GetHeader()
@@ -80,10 +82,10 @@ namespace Eos.ViewModels
                 Data.Items.Move(index, index + 1);
         }
 
-        public DelegateCommand<CustomObjectProperty> DeleteObjectPropertyCommand { get; private set; }
-        public DelegateCommand AddObjectPropertyCommand { get; private set; }
+        public ReactiveCommand<CustomObjectProperty, Unit> DeleteObjectPropertyCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> AddObjectPropertyCommand { get; private set; }
 
-        public DelegateCommand<CustomObjectProperty> MoveObjectPropertyUpCommand { get; private set; }
-        public DelegateCommand<CustomObjectProperty> MoveObjectPropertyDownCommand { get; private set; }
+        public ReactiveCommand<CustomObjectProperty, Unit> MoveObjectPropertyUpCommand { get; private set; }
+        public ReactiveCommand<CustomObjectProperty, Unit> MoveObjectPropertyDownCommand { get; private set; }
     }
 }

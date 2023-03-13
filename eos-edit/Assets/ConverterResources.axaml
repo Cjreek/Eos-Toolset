@@ -1,17 +1,11 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:ext="clr-namespace:Eos.Extensions">
-    
-    <ext:NotConverter x:Key="inverter"/>
-    <ext:ResRefConverter x:Key="resRefConverter"/>
-    <ext:TLKStringSetConverter x:Key="tlkConverter" AlwaysUseDefaultLanguage="False"/>
-    <ext:TLKStringSetConverter x:Key="tlkConverterDefault" AlwaysUseDefaultLanguage="True"/>
-    <ext:BoolToVisibilityConverterEx x:Key="bool2VisCollapsed" FalseValue="Collapsed"/>
-    <ext:BoolToVisibilityConverterEx x:Key="bool2VisCollapsedInverted" FalseValue="Collapsed" Inverted="True"/>
-    <ext:FlagToBoolConverter x:Key="flagsToBool"/>
-    <ext:EnumToStringConverter x:Key="enumToString"/>
-    <ext:IsNullConverter x:Key="isNullConverter"/>
-    <ext:HintConverter x:Key="hintConverter"/>
-    <ext:EqualityConverter x:Key="equalityConverter"/>
+                    xmlns:ext="using:Eos.Extensions">
+
+  <ext:ResRefConverter x:Key="resRefConverter"/>
+  <ext:TLKStringSetConverter x:Key="tlkConverter" AlwaysUseDefaultLanguage="False"/>
+  <ext:TLKStringSetConverter x:Key="tlkConverterDefault" AlwaysUseDefaultLanguage="True"/>
+  <ext:EnumToStringConverter x:Key="enumToString"/>
+  <ext:EosHintConverter x:Key="hintConverter"/>
 
 </ResourceDictionary>

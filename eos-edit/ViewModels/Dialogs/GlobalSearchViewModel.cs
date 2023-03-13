@@ -1,11 +1,11 @@
 ﻿using Eos.Models;
 using Eos.Repositories;
 using Eos.Services;
-using Prism.Commands;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
-using System.DirectoryServices;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -59,6 +59,11 @@ namespace Eos.ViewModels.Dialogs
             return _searchResult;
         }
 
+        protected override string GetWindowTitle()
+        {
+            return "Global Search";
+        }
+
         protected override int GetDefaultWidth()
         {
             return 800;
@@ -74,18 +79,19 @@ namespace Eos.ViewModels.Dialogs
             return true;
         }
 
-        public DelegateCommand<GlobalSearchViewModel> CloseCommand { get; private set; } = new DelegateCommand<GlobalSearchViewModel>(vm =>
+        public ReactiveCommand<GlobalSearchViewModel, Unit> CloseCommand { get; private set; } = ReactiveCommand.Create<GlobalSearchViewModel>(vm =>
         {
             vm.ResultModel = null;
             WindowService.Close(vm);
         });
 
-        public DelegateCommand<GlobalSearchViewModel> OKCommand { get; private set; } = new DelegateCommand<GlobalSearchViewModel>(vm =>
+        public ReactiveCommand<GlobalSearchViewModel, Unit> OKCommand { get; private set; } = ReactiveCommand.Create<GlobalSearchViewModel>(vm =>
         {
             if (vm.ResultModel?.Overrides != null)
             {
                 vm.ResultModel = MasterRepository.Standard.GetByID(vm.ResultModel.GetType(), vm.ResultModel?.Overrides ?? Guid.Empty);
             }
+
             WindowService.Close(vm);
         });
     }

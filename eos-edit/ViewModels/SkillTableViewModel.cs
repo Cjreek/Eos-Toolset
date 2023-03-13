@@ -1,9 +1,11 @@
 ﻿using Eos.Models.Tables;
 using Eos.Types;
-using Prism.Commands;
+using Eos.ViewModels.Base;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,14 +15,14 @@ namespace Eos.ViewModels
     {
         public SkillTableViewModel() : base()
         {
-            DeleteSkillItemCommand = new DelegateCommand<SkillsTableItem>(DeleteSkillItem);
-            AddSkillItemCommand = new DelegateCommand(AddSkillItem);
+            DeleteSkillItemCommand = ReactiveCommand.Create<SkillsTableItem>(DeleteSkillItem);
+            AddSkillItemCommand = ReactiveCommand.Create(AddSkillItem);
         }
 
         public SkillTableViewModel(SkillsTable skillTable) : base(skillTable)
         {
-            DeleteSkillItemCommand = new DelegateCommand<SkillsTableItem>(DeleteSkillItem);
-            AddSkillItemCommand = new DelegateCommand(AddSkillItem);
+            DeleteSkillItemCommand = ReactiveCommand.Create<SkillsTableItem>(DeleteSkillItem);
+            AddSkillItemCommand = ReactiveCommand.Create(AddSkillItem);
         }
 
         protected override string GetHeader()
@@ -41,7 +43,7 @@ namespace Eos.ViewModels
             NotifyPropertyChanged("Data");
         }
 
-        public DelegateCommand<SkillsTableItem> DeleteSkillItemCommand { get; private set; }
-        public DelegateCommand AddSkillItemCommand { get; private set; }
+        public ReactiveCommand<SkillsTableItem, Unit> DeleteSkillItemCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> AddSkillItemCommand { get; private set; }
     }
 }

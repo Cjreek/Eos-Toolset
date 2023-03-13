@@ -2,18 +2,18 @@
 using Eos.Models.Tables;
 using Eos.Nwn.Tlk;
 using Eos.ViewModels.Base;
-using Prism.Commands;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 
-namespace Eos.ViewModels
+namespace Eos.ViewModels.Base
 {
     public enum ViewModelQueryResult
     {
@@ -41,23 +41,19 @@ namespace Eos.ViewModels
     public delegate void ErrorEventHandler(ViewModelBase viewModel, ViewModelErrorEventArgs args);
     public delegate void QueryEventHandler(ViewModelBase viewModel, ViewModelQueryEventArgs args);
 
-    public class ViewModelBase : INotifyPropertyChanged
+    public class ViewModelBase : ReactiveObject
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
         public event ErrorEventHandler? OnError;
         public event QueryEventHandler? OnQuery;
 
         protected void DoError(String message)
         {
             OnError?.Invoke(this, new ViewModelErrorEventArgs() { Message = message });
+        }
+
+        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            this.RaisePropertyChanged(propertyName);
         }
 
         protected ViewModelQueryResult DoQuery(String title, String message, ViewModelQueryType type = ViewModelQueryType.Question)
@@ -74,77 +70,77 @@ namespace Eos.ViewModels
         }
 
         // Commands
-        public DelegateCommand<TLKLanguage?> ChangeLanguageCommand { get; private set; } = new DelegateCommand<TLKLanguage?>(lang =>
+        public ReactiveCommand<TLKLanguage?, Unit> ChangeLanguageCommand { get; private set; } = ReactiveCommand.Create<TLKLanguage?>((lang) =>
         {
             MessageDispatcher.Send(MessageType.ChangeLanguage, lang);
         });
 
-        public DelegateCommand NewProjectCommand { get; private set; } = new DelegateCommand(() =>
+        public ReactiveCommand<Unit, Unit> NewProjectCommand { get; private set; } = ReactiveCommand.Create(() =>
         {
             MessageDispatcher.Send(MessageType.NewProject, null);
         });
 
-        public DelegateCommand<String> OpenProjectCommand { get; private set; } = new DelegateCommand<String>(projectFolder =>
+        public ReactiveCommand<String, Unit> OpenProjectCommand { get; private set; } = ReactiveCommand.Create<String>(projectFolder =>
         {
             MessageDispatcher.Send(MessageType.OpenProject, projectFolder);
         });
 
-        public DelegateCommand SaveProjectCommand { get; private set; } = new DelegateCommand(() =>
+        public ReactiveCommand<Unit, Unit> SaveProjectCommand { get; private set; } = ReactiveCommand.Create(() =>
         {
             MessageDispatcher.Send(MessageType.SaveProject, null);
         });
 
-        public DelegateCommand OpenProjectSettingsCommand { get; private set; } = new DelegateCommand(() =>
+        public ReactiveCommand<Unit, Unit> OpenProjectSettingsCommand { get; private set; } = ReactiveCommand.Create(() =>
         {
             MessageDispatcher.Send(MessageType.OpenProjectSettings, null);
         });
 
-        public DelegateCommand<Type> NewDetailCommand { get; private set; } = new DelegateCommand<Type>(detailModelType =>
+        public ReactiveCommand<Type, Unit> NewDetailCommand { get; private set; } = ReactiveCommand.Create<Type>(detailModelType =>
         {
             MessageDispatcher.Send(MessageType.NewDetail, detailModelType);
         });
 
-        public DelegateCommand<CustomObject> NewCustomDetailCommand { get; private set; } = new DelegateCommand<CustomObject>(template =>
+        public ReactiveCommand<CustomObject, Unit> NewCustomDetailCommand { get; private set; } = ReactiveCommand.Create<CustomObject>(template =>
         {
             MessageDispatcher.Send(MessageType.NewCustomDetail, template);
         });
 
-        public DelegateCommand<BaseModel> OverrideDetailCommand { get; private set; } = new DelegateCommand<BaseModel>(originalModel =>
+        public ReactiveCommand<BaseModel, Unit> OverrideDetailCommand { get; private set; } = ReactiveCommand.Create<BaseModel>(originalModel =>
         {
             MessageDispatcher.Send(MessageType.OverrideDetail, originalModel);
         });
 
-        public DelegateCommand<BaseModel> CopyDetailCommand { get; private set; } = new DelegateCommand<BaseModel>(originalModel =>
+        public ReactiveCommand<BaseModel, Unit> CopyDetailCommand { get; private set; } = ReactiveCommand.Create<BaseModel>(originalModel =>
         {
             MessageDispatcher.Send(MessageType.CopyDetail, originalModel);
         });
 
-        public DelegateCommand<object> OpenDetailCommand { get; private set; } = new DelegateCommand<object>(detailModel =>
+        public ReactiveCommand<object, Unit> OpenDetailCommand { get; private set; } = ReactiveCommand.Create<object>(detailModel =>
         {
             MessageDispatcher.Send(MessageType.OpenDetail, detailModel);
         });
 
-        public DelegateCommand<object> OpenDetailSilentCommand { get; private set; } = new DelegateCommand<object>(detailModel =>
+        public ReactiveCommand<object, Unit> OpenDetailSilentCommand { get; private set; } = ReactiveCommand.Create<object>(detailModel =>
         {
             MessageDispatcher.Send(MessageType.OpenDetailSilent, detailModel);
         });
 
-        public DelegateCommand<object> CloseDetailCommand { get; private set; } = new DelegateCommand<object>(detailModel =>
+        public ReactiveCommand<object, Unit> CloseDetailCommand { get; private set; } = ReactiveCommand.Create<object>(detailModel =>
         {
             MessageDispatcher.Send(MessageType.CloseDetail, detailModel);
         });
 
-        public DelegateCommand<object> DeleteDetailCommand { get; private set; } = new DelegateCommand<object>(detailModel =>
+        public ReactiveCommand<object, Unit> DeleteDetailCommand { get; private set; } = ReactiveCommand.Create<object>(detailModel =>
         {
             MessageDispatcher.Send(MessageType.DeleteDetail, detailModel);
         });
 
-        public DelegateCommand<int?> GotoDetailCommand { get; private set; } = new DelegateCommand<int?>(index =>
+        public ReactiveCommand<int?, Unit> GotoDetailCommand { get; private set; } = ReactiveCommand.Create<int?>(index =>
         {
             MessageDispatcher.Send(MessageType.GotoDetail, index);
         });
 
-        public DelegateCommand GlobalSearchCommand { get; private set; } = new DelegateCommand(() =>
+        public ReactiveCommand<Unit, Unit> GlobalSearchCommand { get; private set; } = ReactiveCommand.Create(() =>
         {
             MessageDispatcher.Send(MessageType.OpenGlobalSearch, null);
         });

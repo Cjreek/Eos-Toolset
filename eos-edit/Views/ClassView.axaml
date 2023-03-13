@@ -1,359 +1,361 @@
-﻿<local:LanguageAwarePage x:Class="Eos.Views.ClassView"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Eos.Views"
-      xmlns:vm="clr-namespace:Eos.ViewModels"
-      xmlns:wpftk="clr-namespace:Xceed.Wpf.Toolkit;assembly=DotNetProjects.Wpf.Extended.Toolkit"
-      xmlns:ext="clr-namespace:Eos.Extensions"
-      xmlns:types="clr-namespace:Eos.Types;assembly=Eos"
-      xmlns:uc="clr-namespace:Eos.Usercontrols"
-      xmlns:nwn="clr-namespace:Eos.Nwn;assembly=Eos"
-      mc:Ignorable="d" d:DesignHeight="550" d:DesignWidth="800"
-      x:Name="page" Title="ClassView">
-    <Page.DataContext>
-        <vm:ClassViewModel/>
-    </Page.DataContext>
-    
-    <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources\StyleResources.xaml"/>
-                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
-                <ResourceDictionary Source="..\Resources\CustomDataTemplateResources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Page.Resources>
+<local:LanguageAwarePage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views"
+             xmlns:vm="using:Eos.ViewModels"
+             xmlns:uc="using:Eos.Usercontrols"
+             xmlns:ext="using:Eos.Extensions"
+             xmlns:types="using:Eos.Types"
+             xmlns:repo="using:Eos.Repositories"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Views.ClassView"
+             x:Name="page">
+  <!--<Design.DataContext>
+    <vm:ClassViewModel/>
+  </Design.DataContext>-->
 
-    <TabControl TabStripPlacement="Left" BorderThickness="1,0,0,0" SelectedIndex="{Binding SelectedTabIndex}">
-        <TabItem Header="Info" Width="100" Height="30">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}"> 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+  <local:LanguageAwarePage.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+        <ResourceInclude Source="/Assets/CustomDataTemplateResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </local:LanguageAwarePage.Resources>
+
+  <local:LanguageAwarePage.Styles>
+    <StyleInclude Source="/Assets/StyleResources.axaml"/>
+  </local:LanguageAwarePage.Styles>
+
+  <TabControl TabStripPlacement="Left" BorderThickness="0,1,0,0" SelectedIndex="{Binding SelectedTabIndex}" Padding="0">
+    <TabItem Header="Info" Width="120" Height="30" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="0,0,0,10">
+              <TextBlock FontSize="22" FontWeight="Bold">
+                <TextBlock.Text>
+                  <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                    <Binding Path="Data.Name"/>
+                  </MultiBinding>
+                </TextBlock.Text>
+              </TextBlock>
+
+              <TextBlock Text=" (Class ID: " FontSize="16" VerticalAlignment="Center"/>
+              <TextBox Text="{Binding Data.CalculatedIndex, Mode=OneWay}" Padding="0" MinWidth="0" MinHeight="0" BorderThickness="0" FontSize="16" VerticalAlignment="Center" Margin="0" IsReadOnly="True"/>
+              <TextBlock Text=")" FontSize="16" VerticalAlignment="Center" Margin="0"/>
+            </StackPanel>
+
+            <Grid Grid.Row="1" Grid.Column="0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*" MinWidth="300"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="25" MinHeight="25"/>
+                <RowDefinition Height="25" MinHeight="25"/>
+                <RowDefinition Height="25" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="*"/>
+              </Grid.RowDefinitions>
+
+              <!--Name-->
+              <TextBlock Text="Name" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+              <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1"/>
+
+              <!--Name (Plural)-->
+              <TextBlock Text="Name (Plural)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+              <uc:TLKTextbox TLKStrings="{Binding Data.NamePlural}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="2" Grid.Column="1"/>
+
+              <TextBlock Text="Hint" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+              <TextBox Text="{Binding Data.Hint}" Grid.Row="3" Grid.Column="1"/>
+
+              <!--Description-->
+              <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,3,5,0" Grid.Row="4" Grid.Column="0"/>
+              <uc:TLKTextbox Grid.Row="4" Grid.Column="1" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
+            </Grid>
+
+            <!--Icon-->
+            <uc:IconControl Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" Icon="{Binding Data.Icon}"/>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Properties" Width="120" Height="30" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="130"/>
+              <ColumnDefinition Width="*" MinWidth="150"/>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="*" MinWidth="150"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="25" MinHeight="22"/>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="22"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="22"/>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="22"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="22"/>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Class Properties" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <TextBlock Text="Playable" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <CheckBox IsChecked="{Binding Data.Playable}" Grid.Row="1" Grid.Column="1"/>
+
+            <TextBlock Text="Multiclass XP Penalty" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
+            <CheckBox IsChecked="{Binding Data.MulticlassXPPenalty}" Grid.Row="2" Grid.Column="3"/>
+
+            <TextBlock Text="Primary Ability" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+            <uc:EnumComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.PrimaryAbility}"/>
+
+            <TextBlock Text="Hit Die" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.HitDie}" Grid.Row="3" Grid.Column="1" Increment="1"/>
+
+            <TextBlock Text="Skill Points per Level" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.SkillPointsPerLevel}" Grid.Row="3" Grid.Column="3" Increment="1"/>
+
+            <TextBlock Text="Max. Level" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.MaxLevel}" Grid.Row="4" Grid.Column="1" Increment="1"/>
+
+            <TextBlock Text="Pre Epic max. Level" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.PreEpicMaxLevel}" Grid.Row="4" Grid.Column="3" Increment="1"/>
+
+            <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Alignment" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
+            <uc:AlignmentMatrix Height="130" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4" Alignment="{Binding Data.AllowedAlignments}"/>
+
+            <TextBlock Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Tables" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
+
+            <TextBlock Text="Attack Bonus Table" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
+            <uc:AttackBonusTableComboBox Grid.Row="10" Grid.Column="1" SelectedValue="{Binding Data.AttackBonusTable}" IsNullable="False"/>
+
+            <TextBlock Text="Saving Throws Table" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
+            <uc:SavingThrowTableComboBox Grid.Row="10" Grid.Column="3" SelectedValue="{Binding Data.SavingThrows}" IsNullable="False"/>
+
+            <TextBlock Text="Skills Table" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="0"/>
+            <uc:SkillTableComboBox Grid.Row="11" Grid.Column="1" SelectedValue="{Binding Data.Skills}" IsNullable="False"/>
+
+            <TextBlock Text="Stat Gain Table" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="2"/>
+            <uc:StatGainTableComboBox Grid.Row="11" Grid.Column="3" SelectedValue="{Binding Data.StatGainTable}" IsNullable="True"/>
+
+            <TextBlock Text="Feats Table" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0"/>
+            <uc:FeatTableComboBox Grid.Row="12" Grid.Column="1" SelectedValue="{Binding Data.Feats}" IsNullable="False"/>
+
+            <TextBlock Text="Bonus Feats Table" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="2"/>
+            <uc:BonusFeatTableComboBox Grid.Row="12" Grid.Column="3" SelectedValue="{Binding Data.BonusFeats}" IsNullable="False"/>
+
+            <TextBlock Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Character Creation" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
+
+            <TextBlock Text="Default Package" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="0"/>
+            <uc:PackageComboBox SelectedValue="{Binding Data.DefaultPackage}" Grid.Row="15" Grid.Column="1" IsNullable="False"/>
+
+            <TextBlock Text="Requirements" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="2"/>
+            <uc:PrerequisiteComboBox SelectedValue="{Binding Data.Requirements}" Grid.Row="15" Grid.Column="3" IsNullable="True"/>
+
+            <TextBlock Text="Strength" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="17" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="17" Grid.Column="1" Increment="1"/>
+
+            <TextBlock Text="Intelligence" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="17" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.RecommendedInt}" Grid.Row="17" Grid.Column="3" Increment="1"/>
+
+            <TextBlock Text="Dexterity" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="18" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="18" Grid.Column="1" Increment="1"/>
+
+            <TextBlock Text="Wisdom" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="18" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.RecommendedWis}" Grid.Row="18" Grid.Column="3" Increment="1"/>
+
+            <TextBlock Text="Constitution" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="19" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="19" Grid.Column="1" Increment="1"/>
+
+            <TextBlock Text="Charisma" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="19" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.RecommendedCha}" Grid.Row="19" Grid.Column="3" Increment="1"/>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Spell Casting" Width="120" Height="30" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="140"/>
+              <ColumnDefinition Width="*" MinWidth="150"/>
+              <ColumnDefinition Width="140"/>
+              <ColumnDefinition Width="*" MinWidth="150"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="25" MinHeight="22"/>
+              <RowDefinition Height="25" MinHeight="22"/>
+              <RowDefinition Height="25" MinHeight="22"/>
+              <RowDefinition Height="25" MinHeight="22"/>
+              <RowDefinition Height="25" MinHeight="22"/>
+              <RowDefinition Height="22"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="22"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Spell Casting" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <TextBlock Text="Is Spellcaster" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <CheckBox IsChecked="{Binding Data.IsSpellCaster}" Grid.Row="1" Grid.Column="1"/>
+
+            <TextBlock Text="Arcane" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2"/>
+            <CheckBox IsChecked="{Binding Data.IsArcaneCaster}" Grid.Row="1" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
+
+            <TextBlock Text="Memorize Spells" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+            <CheckBox IsChecked="{Binding Data.MemorizesSpells}" Grid.Row="2" Grid.Column="1" IsEnabled="{Binding Data.IsSpellCaster}"/>
+
+            <TextBlock Text="Restricted by a Spellbook" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
+            <CheckBox IsChecked="{Binding Data.SpellbookRestricted}" Grid.Row="2" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
+
+            <TextBlock Text="Learn from Scrolls" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+            <CheckBox IsChecked="{Binding Data.CanLearnFromScrolls}" Grid.Row="3" Grid.Column="1" IsEnabled="{Binding Data.IsSpellCaster}"/>
+
+            <TextBlock Text="Skip Spell Selection" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+            <CheckBox IsChecked="{Binding Data.SkipSpellSelection}" Grid.Row="3" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
+
+            <TextBlock Text="Picks School" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+            <CheckBox IsChecked="{Binding Data.PicksSchool}" Grid.Row="4" Grid.Column="1" IsEnabled="{Binding Data.IsSpellCaster}"/>
+
+            <TextBlock Text="Picks Domain" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
+            <CheckBox IsChecked="{Binding Data.PicksDomain}" Grid.Row="4" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
+
+            <TextBlock Text="Can cast spontaneously" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+            <CheckBox IsChecked="{Binding Data.CanCastSpontaneously}" Grid.Row="5" Grid.Column="1" IsEnabled="{Binding Data.IsSpellCaster}"/>
+
+            <TextBlock Text="Has spell failure" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
+            <CheckBox IsChecked="{Binding Data.HasSpellFailure}" Grid.Row="5" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
+
+            <TextBlock Grid.Row="7" Grid.Column="0" Text="Spellslot Table" Margin="0,3,5,0" HorizontalAlignment="Right"/>
+            <uc:SpellSlotTableComboBox SelectedValue="{Binding Data.SpellSlots}" Grid.Row="7" Grid.Column="1" IsEnabled="{Binding Data.IsSpellCaster}"/>
+
+            <TextBlock Grid.Row="7" Grid.Column="2" Text="Known Spells Table" Margin="0,3,5,0" HorizontalAlignment="Right"/>
+            <uc:KnownSpellsTableComboBox SelectedValue="{Binding Data.KnownSpells}" Grid.Row="7" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
+
+            <TextBlock Grid.Row="8" Grid.Column="2" Text="Spellbook" Margin="0,3,5,0" HorizontalAlignment="Right"/>
+            <uc:SpellbookComboBox SelectedValue="{Binding Data.Spellbook}" Grid.Row="8" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
+
+            <TextBlock Grid.Row="8" Grid.Column="0" Text="Spellcasting Ability" Margin="0,3,5,0" HorizontalAlignment="Right"/>
+            <uc:EnumComboBox Grid.Row="8" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.SpellcastingAbility}" IsEnabled="{Binding Data.IsSpellCaster}"/>
+
+            <TextBlock Grid.Row="9" Grid.Column="0" Text="Minimum Casting Level" Margin="0,3,5,0" HorizontalAlignment="Right"/>
+            <NumericUpDown Grid.Row="9" Grid.Column="1" Value="{Binding Data.MinCastingLevel}" IsEnabled="{Binding Data.IsSpellCaster}" Increment="1"/>
+
+            <TextBlock Grid.Row="9" Grid.Column="2" Text="Caster Level Multiplier" Margin="0,3,5,0" HorizontalAlignment="Right"/>
+            <NumericUpDown Grid.Row="9" Grid.Column="3" Value="{Binding Data.CasterLevelMultiplier}" IsEnabled="{Binding Data.IsSpellCaster}"/>
+
+            <TextBlock Grid.Row="10" Grid.Column="0" Text="Min. Associate Level" Margin="0,3,5,0" HorizontalAlignment="Right"/>
+            <NumericUpDown Grid.Row="10" Grid.Column="1" Value="{Binding Data.MinAssociateLevel}" IsEnabled="{Binding Data.IsSpellCaster}" Increment="1"/>
+
+            <TextBlock Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Non-Caster Casterlevels" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
+
+            <TextBlock Text="Arcane Caster Level Mod" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.ArcaneCasterLevelMod}" Grid.Row="13" Grid.Column="1" IsEnabled="{Binding Path=!Data.IsSpellCaster}" Increment="1"/>
+
+            <TextBlock Text="Divine Caster Level Mod" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.DivineCasterLevelMod}" Grid.Row="13" Grid.Column="3" IsEnabled="{Binding Path=!Data.IsSpellCaster}" Increment="1"/>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Extensions" Width="120" Height="30" BorderThickness="0,0,0,1" IsVisible="{Binding !Data.IsReadonly}">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Extension Fields" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <ItemsRepeater Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding Data.ExtensionValues}" ElementPrepared="ItemsRepeater_ElementPrepared">
+              <ItemsRepeater.Layout>
+                <UniformGridLayout ItemsStretch="Fill" Orientation="Horizontal" MaximumRowsOrColumns="2" MinItemHeight="25"/>
+              </ItemsRepeater.Layout>
+
+              <ItemsRepeater.ItemTemplate>
+                <DataTemplate>
+                  <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
+                      <ColumnDefinition Width="150"/>
+                      <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="0,0,0,10">
-                        <TextBlock FontSize="22" FontWeight="Bold">
-                            <TextBlock.Text>
-                                <MultiBinding Converter="{StaticResource tlkConverterDefault}">
-                                    <Binding Path="Data.Name"/>
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Margin="0,3,5,0" Text="{Binding Property.Label}"/>
+                    <ContentPresenter Grid.Column="1" Content="{Binding}" ContentTemplate="{StaticResource templateSelector}"/>
+                  </Grid>
+                </DataTemplate>
+              </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Metadata" Width="120" Height="30" BorderThickness="0,0,0,1" IsVisible="{Binding !Data.IsReadonly}">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
 
-                        <TextBlock Text=" (Class ID:" FontSize="16" VerticalAlignment="Center"/>
-                        <uc:ResetIsEnabled>
-                            <TextBox Text="{Binding Data.CalculatedIndex, Mode=OneWay}" BorderThickness="0" FontSize="16" VerticalAlignment="Center" Margin="0" IsReadOnly="True"/>
-                        </uc:ResetIsEnabled>
-                        <TextBlock Text=")" FontSize="16" VerticalAlignment="Center" Margin="-2,0,0,0"/>
-                    </StackPanel>
+            <TextBlock Text="Class Metadata" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-                    <Grid Grid.Row="1" Grid.Column="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150"/>
-                            <ColumnDefinition Width="*" MinWidth="300"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto" MinHeight="25"/>
-                            <RowDefinition Height="auto" MinHeight="25"/>
-                            <RowDefinition Height="auto" MinHeight="25"/>
-                            <RowDefinition Height="auto" MinHeight="25"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <!--Name-->
-                        <TextBlock Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-                        <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1"/>
-
-                        <!--Name (Plural)-->
-                        <TextBlock Text="Name (Plural)" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
-                        <uc:TLKTextbox TLKStrings="{Binding Data.NamePlural}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="2" Grid.Column="1"/>
-
-                        <TextBlock Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
-                        <TextBox Text="{Binding Data.Hint}" Grid.Row="3" Grid.Column="1"/>
-
-                        <!--Description-->
-                        <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="4" Grid.Column="0"/>
-                        <uc:ResetIsEnabled Grid.Row="4" Grid.Column="1">
-                            <uc:TLKTextbox TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
-                        </uc:ResetIsEnabled>
-                    </Grid>
-
-                    <!--Icon-->
-                    <uc:IconControl Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" Icon="{Binding Data.Icon}"/>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-        <TabItem Header="Properties" Width="100" Height="30">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="130"/>
-                        <ColumnDefinition Width="*" MinWidth="150"/>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="*" MinWidth="150"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="22"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="22"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="22"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="22"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Text="Class Properties" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
-
-                    <TextBlock Text="Playable" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-                    <CheckBox IsChecked="{Binding Data.Playable}" Grid.Row="1" Grid.Column="1"/>
-
-                    <TextBlock Text="Multiclass XP Penalty" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
-                    <CheckBox IsChecked="{Binding Data.MulticlassXPPenalty}" Grid.Row="2" Grid.Column="3"/>
-                    
-                    <TextBlock Text="Primary Ability" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
-                    <uc:EnumComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" 
-                                 SelectedValue="{Binding Data.PrimaryAbility}"/>
-
-                    <TextBlock Text="Hit Die" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.HitDie}" Grid.Row="3" Grid.Column="1"/>
-
-                    <TextBlock Text="Skill Points per Level" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.SkillPointsPerLevel}" Grid.Row="3" Grid.Column="3"/>
-
-                    <TextBlock Text="Max. Level" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.MaxLevel}" Grid.Row="4" Grid.Column="1"/>
-
-                    <TextBlock Text="Pre Epic max. Level" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.PreEpicMaxLevel}" Grid.Row="4" Grid.Column="3"/>
-
-                    <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Alignment" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
-                    <uc:AlignmentMatrix Height="130" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4" Alignment="{Binding Data.AllowedAlignments}"/>
-                    
-                    <TextBlock Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Tables" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
-
-                    <TextBlock Text="Attack Bonus Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
-                    <uc:AttackBonusTableComboBox Grid.Row="10" Grid.Column="1" SelectedValue="{Binding Data.AttackBonusTable}" IsNullable="False"/>
-
-                    <TextBlock Text="Saving Throws Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
-                    <uc:SavingThrowTableComboBox Grid.Row="10" Grid.Column="3" SelectedValue="{Binding Data.SavingThrows}" IsNullable="False"/>
-
-                    <TextBlock Text="Skills Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="0"/>
-                    <uc:SkillTableComboBox Grid.Row="11" Grid.Column="1" SelectedValue="{Binding Data.Skills}" IsNullable="False"/>
-
-                    <TextBlock Text="Stat Gain Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="2"/>
-                    <uc:StatGainTableComboBox Grid.Row="11" Grid.Column="3" SelectedValue="{Binding Data.StatGainTable}" IsNullable="True"/>
-
-                    <TextBlock Text="Feats Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0"/>
-                    <uc:FeatTableComboBox Grid.Row="12" Grid.Column="1" SelectedValue="{Binding Data.Feats}" IsNullable="False"/>
-
-                    <TextBlock Text="Bonus Feats Table" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="2"/>
-                    <uc:BonusFeatTableComboBox Grid.Row="12" Grid.Column="3" SelectedValue="{Binding Data.BonusFeats}" IsNullable="False"/>
-
-                    <TextBlock Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Character Creation" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
-
-                    <TextBlock Text="Default Package" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="0"/>
-                    <uc:PackageComboBox SelectedValue="{Binding Data.DefaultPackage}" Grid.Row="15" Grid.Column="1" IsNullable="False"/>
-
-                    <TextBlock Text="Requirements" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="2"/>
-                    <uc:PrerequisiteComboBox SelectedValue="{Binding Data.Requirements}" Grid.Row="15" Grid.Column="3" IsNullable="True"/>
-
-                    <TextBlock Text="Strength" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="17" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="17" Grid.Column="1"/>
-
-                    <TextBlock Text="Intelligence" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="17" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedInt}" Grid.Row="17" Grid.Column="3"/>
-
-                    <TextBlock Text="Dexterity" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="18" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="18" Grid.Column="1"/>
-
-                    <TextBlock Text="Wisdom" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="18" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedWis}" Grid.Row="18" Grid.Column="3"/>
-
-                    <TextBlock Text="Constitution" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="19" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="19" Grid.Column="1"/>
-
-                    <TextBlock Text="Charisma" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="19" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.RecommendedCha}" Grid.Row="19" Grid.Column="3"/>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-        <TabItem Header="Spell Casting" Width="100" Height="30">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="140"/>
-                        <ColumnDefinition Width="*" MinWidth="150"/>
-                        <ColumnDefinition Width="140"/>
-                        <ColumnDefinition Width="*" MinWidth="150"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="auto" MinHeight="22"/>
-                        <RowDefinition Height="22"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="22"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="auto" MinHeight="25"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Text="Spell Casting" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
-
-                    <TextBlock Text="Is Spellcaster" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-                    <CheckBox IsChecked="{Binding Data.IsSpellCaster}" Grid.Row="1" Grid.Column="1"/>
-
-                    <TextBlock Text="Arcane" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2"/>
-                    <CheckBox IsChecked="{Binding Data.IsArcaneCaster}" Grid.Row="1" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
-
-                    <TextBlock Text="Memorize Spells" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
-                    <CheckBox IsChecked="{Binding Data.MemorizesSpells}" Grid.Row="2" Grid.Column="1" IsEnabled="{Binding Data.IsSpellCaster}"/>
-
-                    <TextBlock Text="Restricted by a Spellbook" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
-                    <CheckBox IsChecked="{Binding Data.SpellbookRestricted}" Grid.Row="2" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
-
-                    <TextBlock Text="Learn from Scrolls" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
-                    <CheckBox IsChecked="{Binding Data.CanLearnFromScrolls}" Grid.Row="3" Grid.Column="1" IsEnabled="{Binding Data.IsSpellCaster}"/>
-
-                    <TextBlock Text="Skip Spell Selection" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
-                    <CheckBox IsChecked="{Binding Data.SkipSpellSelection}" Grid.Row="3" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
-
-                    <TextBlock Text="Picks School" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
-                    <CheckBox IsChecked="{Binding Data.PicksSchool}" Grid.Row="4" Grid.Column="1" IsEnabled="{Binding Data.IsSpellCaster}"/>
-
-                    <TextBlock Text="Picks Domain" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
-                    <CheckBox IsChecked="{Binding Data.PicksDomain}" Grid.Row="4" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
-
-                    <TextBlock Text="Can cast spontaneously" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
-                    <CheckBox IsChecked="{Binding Data.CanCastSpontaneously}" Grid.Row="5" Grid.Column="1" IsEnabled="{Binding Data.IsSpellCaster}"/>
-
-                    <TextBlock Text="Has spell failure" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
-                    <CheckBox IsChecked="{Binding Data.HasSpellFailure}" Grid.Row="5" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
-
-                    <TextBlock Grid.Row="7" Grid.Column="0" Text="Spellslot Table" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-                    <uc:SpellSlotTableComboBox SelectedValue="{Binding Data.SpellSlots}" Grid.Row="7" Grid.Column="1" IsEnabled="{Binding Data.IsSpellCaster}"/>
-
-                    <TextBlock Grid.Row="7" Grid.Column="2" Text="Known Spells Table" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-                    <uc:KnownSpellsTableComboBox SelectedValue="{Binding Data.KnownSpells}" Grid.Row="7" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
-
-                    <TextBlock Grid.Row="8" Grid.Column="2" Text="Spellbook" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-                    <uc:SpellbookComboBox SelectedValue="{Binding Data.Spellbook}" Grid.Row="8" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
-
-                    <TextBlock Grid.Row="8" Grid.Column="0" Text="Spellcasting Ability" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-                    <ComboBox Grid.Row="8" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.SpellcastingAbility}" 
-                          SelectedValuePath="Value" DisplayMemberPath="DisplayName" IsEnabled="{Binding Data.IsSpellCaster}"/>
-
-                    <TextBlock Grid.Row="8" Grid.Column="2" Text="Spellbook" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-                    <uc:SpellbookComboBox SelectedValue="{Binding Data.Spellbook}" Grid.Row="8" Grid.Column="3" IsEnabled="{Binding Data.IsSpellCaster}"/>
-
-                    <TextBlock Grid.Row="9" Grid.Column="0" Text="Minimum Casting Level" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-                    <wpftk:IntegerUpDown Grid.Row="9" Grid.Column="1" Value="{Binding Data.MinCastingLevel}" IsEnabled="{Binding Data.IsSpellCaster}"/>
-
-                    <TextBlock Grid.Row="9" Grid.Column="2" Text="Caster Level Multiplier" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-                    <wpftk:DoubleUpDown Grid.Row="9" Grid.Column="3" Value="{Binding Data.CasterLevelMultiplier}" IsEnabled="{Binding Data.IsSpellCaster}"/>
-
-                    <TextBlock Grid.Row="10" Grid.Column="0" Text="Min. Associate Level" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-                    <wpftk:IntegerUpDown Grid.Row="10" Grid.Column="1" Value="{Binding Data.MinAssociateLevel}" IsEnabled="{Binding Data.IsSpellCaster}"/>
-
-                    <TextBlock Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Non-Caster Casterlevels" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
-
-                    <TextBlock Text="Arcane Caster Level Mod" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="0"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.ArcaneCasterLevelMod}" Grid.Row="13" Grid.Column="1" IsEnabled="{Binding Path=Data.IsSpellCaster, Converter={StaticResource inverter}}"/>
-
-                    <TextBlock Text="Divine Caster Level Mod" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="2"/>
-                    <wpftk:IntegerUpDown Value="{Binding Data.DivineCasterLevelMod}" Grid.Row="13" Grid.Column="3" IsEnabled="{Binding Path=Data.IsSpellCaster, Converter={StaticResource inverter}}"/>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-        <TabItem Header="Extensions" Width="100" Height="30" Visibility="{Binding Data.IsReadonly, Converter={StaticResource bool2VisCollapsedInverted}}">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Text="Extension Fields" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
-
-                    <ItemsControl Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Data.ExtensionValues}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="2"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="150"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Margin="0,0,5,0" Text="{Binding Property.Label}"/>
-                                    <ContentPresenter Grid.Column="1" Content="{Binding}" ContentTemplateSelector="{StaticResource templateSelector}"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-        <TabItem Header="Metadata" Width="100" Height="30" Visibility="{Binding Data.IsReadonly, Converter={StaticResource bool2VisCollapsedInverted}}">
-            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <Grid Margin="10" IsEnabled="{Binding Data.IsReadonly, Converter={StaticResource inverter}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="25"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Text="Class Metadata" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
-
-                    <TextBlock Text="Script Constant" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                    <DockPanel Grid.Row="1" Grid.Column="1">
-                        <TextBox Text="CLASS_TYPE_" BorderThickness="1,1,0,1" IsReadOnly="True" VerticalContentAlignment="Center" Style="{x:Null}" Margin="2,0,0,3"/>
-                        <TextBox Text="{Binding Data.ScriptConstant}" Style="{StaticResource ConstantHintTextboxStyle}" CharacterCasing="Upper" Margin="-2,0,0,3" BorderThickness="0,1,1,1" VerticalContentAlignment="Center"/>
-                    </DockPanel>
-                </Grid>
-            </ScrollViewer>
-        </TabItem>
-    </TabControl>
+            <TextBlock Text="Script Constant" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <DockPanel Grid.Row="1" Grid.Column="1">
+              <TextBox Text="CLASS_TYPE_" BorderThickness="1,1,0,1" IsReadOnly="True" VerticalContentAlignment="Center" Margin="2,0,0,3"/>
+              <TextBox x:Name="xxx" Text="{Binding Data.ScriptConstant}" Margin="-2,0,0,3" BorderThickness="0,1,1,1" VerticalContentAlignment="Center" Watermark="*AUTOGENERATED*" TextChanging="ConstantTextbox_TextChanging"/>
+            </DockPanel>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+  </TabControl>
 </local:LanguageAwarePage>

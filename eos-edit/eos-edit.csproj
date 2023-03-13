@@ -1,369 +1,171 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-    <ApplicationIcon>Eos.ico</ApplicationIcon>
+    <!--Avalonia doesen't support TrimMode=link currently,but we are working on that https://github.com/AvaloniaUI/Avalonia/issues/6892 -->
+    <TrimMode>copyused</TrimMode>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <RootNamespace>Eos</RootNamespace>
   </PropertyGroup>
-
   <ItemGroup>
-    <None Remove="Resources\Icons\export16.png" />
-    <None Remove="Resources\Icons\export32.png" />
-    <None Remove="Resources\Icons\female.png" />
-    <None Remove="Resources\Icons\female16.png" />
-    <None Remove="Resources\Icons\import16.png" />
-    <None Remove="Resources\Icons\import32.png" />
-    <None Remove="Resources\Icons\male.png" />
-    <None Remove="Resources\Icons\male16.png" />
-    <None Remove="Resources\Icons\New.png" />
-    <None Remove="Resources\Icons\new16.png" />
-    <None Remove="Resources\Icons\new32.png" />
-    <None Remove="Resources\Icons\Open.png" />
-    <None Remove="Resources\Icons\open16.png" />
-    <None Remove="Resources\Icons\open32.png" />
-    <None Remove="Resources\Icons\Save.png" />
-    <None Remove="Resources\Icons\save16.png" />
-    <None Remove="Resources\Icons\save32.png" />
-    <None Remove="Resources\Icons\search16.png" />
-    <None Remove="Resources\Icons\search32.png" />
-    <None Remove="Resources\Icons\settings16.png" />
-    <None Remove="Resources\Icons\settings32.png" />
-    <None Remove="Resources\Icons\tab.png" />
+    <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Remove="Assets\ConverterResources.axaml" />
+    <AvaloniaResource Remove="Assets\CustomDataTemplateResources.axaml" />
+    <AvaloniaResource Remove="Assets\StyleResources.axaml" />
+    <None Remove=".gitignore" />
+    <None Remove="Assets\Icons\export16.png" />
+    <None Remove="Assets\Icons\export32.png" />
+    <None Remove="Assets\Icons\female16.png" />
+    <None Remove="Assets\Icons\import16.png" />
+    <None Remove="Assets\Icons\import32.png" />
+    <None Remove="Assets\Icons\male16.png" />
+    <None Remove="Assets\Icons\new16.png" />
+    <None Remove="Assets\Icons\new32.png" />
+    <None Remove="Assets\Icons\open16.png" />
+    <None Remove="Assets\Icons\open32.png" />
+    <None Remove="Assets\Icons\save16.png" />
+    <None Remove="Assets\Icons\save32.png" />
+    <None Remove="Assets\Icons\search16.png" />
+    <None Remove="Assets\Icons\search32.png" />
+    <None Remove="Assets\Icons\settings16.png" />
+    <None Remove="Assets\Icons\settings32.png" />
+    <None Remove="Assets\Icons\tab.png" />
   </ItemGroup>
-
   <ItemGroup>
-    <Content Include="Eos.ico" />
+    <PackageReference Include="Avalonia" Version="11.0.999-cibuild0031415-beta" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.0.999-cibuild0031415-beta" />
+    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.0.999-cibuild0031415-beta" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.999-cibuild0031415-beta" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.0.999-cibuild0031415-beta" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.999-cibuild0031415-beta" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.999-cibuild0031415-beta" />
+    <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.999-cibuild0031415-beta" />
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.0.999-build20230226-01" />
+    <PackageReference Include="XamlNameReferenceGenerator" Version="1.6.1" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="DotNetProjects.Extended.Wpf.DataGrid" Version="5.0.103" />
-    <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="5.0.103" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
-    <PackageReference Include="Prism.Core" Version="8.1.97" />
+    <!--This helps with theme dll-s trimming.
+	If you will publish your application in self-contained mode with p:PublishTrimmed=true and it will use Fluent theme Default theme will be trimmed from the output and vice versa.
+	https://github.com/AvaloniaUI/Avalonia/issues/5593 -->
+    <TrimmableAssembly Include="Avalonia.Themes.Fluent" />
+    <TrimmableAssembly Include="Avalonia.Themes.Default" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\eos\eos.csproj" />
   </ItemGroup>
-
   <ItemGroup>
-    <Resource Include="Resources\Icons\export16.png">
+    <AvaloniaXaml Update="Assets\CustomDataTemplateResources.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
+    <AvaloniaResource Update="Assets\Icons\Eos.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\export32.png">
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\error.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\female16.png">
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\export16.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\import16.png">
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\export32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\import32.png">
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\female16.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\male16.png">
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\import16.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\new16.png">
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\import32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\new32.png">
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\info.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\open16.png">
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\male16.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\open32.png">
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\new16.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\save16.png">
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\new32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\save32.png">
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\open16.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\search16.png">
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\open32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\search32.png">
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\question.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\settings16.png">
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\save16.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\settings32.png">
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\save32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Icons\tab.png">
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\search16.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\search32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\settings16.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\settings32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\tab.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\warning.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaXaml Update="Assets\StyleResources.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
+    <AvaloniaXaml Update="Assets\ConverterResources.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
   </ItemGroup>
-
   <ItemGroup>
-    <Compile Update="Usercontrols\PortraitComboBox.xaml.cs">
-      <SubType>Code</SubType>
+    <Compile Update="Usercontrols\PoisonComboBox.axaml.cs">
+      <DependentUpon>PoisonComboBox.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Usercontrols\PolymorphComboBox.xaml.cs">
-      <SubType>Code</SubType>
+    <Compile Update="Usercontrols\DomainComboBox.axaml.cs">
+      <DependentUpon>DomainComboBox.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Usercontrols\VisualEffectComboBox.xaml.cs">
-      <SubType>Code</SubType>
+    <Compile Update="Usercontrols\DiseaseComboBox.axaml.cs">
+      <DependentUpon>DiseaseComboBox.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Usercontrols\AppearanceComboBox.xaml.cs">
-      <SubType>Code</SubType>
+    <Compile Update="Usercontrols\SkillComboBox.axaml.cs">
+      <DependentUpon>SkillComboBox.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Usercontrols\DomainComboBox.xaml.cs">
-      <SubType>Code</SubType>
+    <Compile Update="Usercontrols\RacialFeatsTableComboBox.axaml.cs">
+      <DependentUpon>RacialFeatsTableComboBox.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Usercontrols\CustomEnumComboBox.xaml.cs">
-      <SubType>Code</SubType>
+    <Compile Update="Usercontrols\ClassComboBox.axaml.cs">
+      <DependentUpon>ClassComboBox.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Usercontrols\CustomObjectComboBox.xaml.cs">
-      <SubType>Code</SubType>
+    <Compile Update="Usercontrols\KnownSpellsTableComboBox.axaml.cs">
+      <DependentUpon>KnownSpellsTableComboBox.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Usercontrols\MasterFeatComboBox.xaml.cs">
-      <SubType>Code</SubType>
+    <Compile Update="Usercontrols\AppearanceComboBox.axaml.cs">
+      <DependentUpon>AppearanceComboBox.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Usercontrols\PackageComboBox.xaml.cs">
-      <SubType>Code</SubType>
+    <Compile Update="Usercontrols\SpellComboBox.axaml.cs">
+      <DependentUpon>SpellComboBox.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Usercontrols\RaceComboBox.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Usercontrols\RacialFeatsTableComboBox.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Usercontrols\AreaEffectComboBox.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Usercontrols\PrerequisiteComboBox.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Usercontrols\SoundsetComboBox.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Usercontrols\KnownSpellsTableComboBox.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Usercontrols\SpellSlotTableComboBox.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Usercontrols\StatGainTableComboBox.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Usercontrols\BonusFeatTableComboBox.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Usercontrols\SavingThrowTableComboBox.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Usercontrols\SkillTableComboBox.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Usercontrols\FeatTableComboBox.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Usercontrols\SpellComboBox.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Usercontrols\FeatComboBox.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\CustomObjectInstanceView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\PolymorphView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\ModelExtensionView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\CustomObjectView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\KnownSpellsTableView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\CustomEnumView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\AreaEffectView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\SpellSlotTableView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\SoundsetView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\ClassPackageView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\PrerequisiteTableView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\RacialFeatsTableView.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\StatGainTableView.xaml.cs">
-      <SubType>Code</SubType>
+    <Compile Update="Usercontrols\SpellbookComboBox.axaml.cs">
+      <DependentUpon>SpellbookComboBox.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="Usercontrols\PortraitComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\PolymorphComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\VisualEffectComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\AppearanceComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\DomainComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\CustomEnumComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\CustomObjectComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\MasterFeatComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\PackageComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\RaceComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\RacialFeatsTableComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\AreaEffectComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\PrerequisiteComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\SoundsetComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\KnownSpellsTableComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\SpellSlotTableComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\StatGainTableComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\BonusFeatTableComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\SavingThrowTableComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\SkillTableComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\FeatTableComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\SpellComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Usercontrols\FeatComboBox.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\CustomObjectInstanceView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\PolymorphView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\ModelExtensionView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\CustomObjectView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\KnownSpellsTableView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\CustomEnumView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\AreaEffectView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\SpellSlotTableView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\SoundsetView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\ClassPackageView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\PrerequisiteTableView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\RacialFeatsTableView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\StatGainTableView.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
+  <!--<ItemGroup>
+    <Compile Update="Views\Dialogs\ViewWindow.axaml.cs">
+      <DependentUpon>ViewWindow.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>-->
 </Project>

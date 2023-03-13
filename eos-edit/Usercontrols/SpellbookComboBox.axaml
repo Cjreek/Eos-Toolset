@@ -1,42 +1,46 @@
-﻿<UserControl x:Class="Eos.Usercontrols.SpellbookComboBox"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Eos.Usercontrols"
-             xmlns:repo="clr-namespace:Eos.Repositories;assembly=Eos"
-             x:Name="ucSpellbookComboBox"
-             mc:Ignorable="d" 
-             d:DesignHeight="20" d:DesignWidth="800">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:repo="using:Eos.Repositories"
+             xmlns:models="using:Eos.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Usercontrols.SpellbookComboBox"
+             x:Name="ucSpellbookComboBox">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-        </Grid.ColumnDefinitions>
+  <UserControl.DataTemplates>
+    <DataTemplate DataType="{x:Type models:Spellbook}">
+      <TextBlock Text="{Binding Name}"/>
+    </DataTemplate>
+  </UserControl.DataTemplates>
+    
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="auto"/>
+      <ColumnDefinition Width="auto"/>
+    </Grid.ColumnDefinitions>
 
-        <ComboBox x:Name="cbSpellbooks" Grid.Column="0" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Spellbooks}}" SelectedValue="{Binding ElementName=ucSpellbookComboBox, Path=SelectedValue}" DisplayMemberPath="Name">
-            <ComboBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel/>
-                </ItemsPanelTemplate>
-            </ComboBox.ItemsPanel>
-        </ComboBox>
+    <ComboBox x:Name="cbSpellbooks" Grid.Column="0" Items="{Binding Source={x:Static repo:MasterRepository.Spellbooks}}" SelectedItem="{Binding ElementName=ucSpellbookComboBox, Path=SelectedValue}" DisplayMemberBinding="{Binding Name}" Padding="3,0,0,0">
+      <ComboBox.ItemsPanel>
+        <ItemsPanelTemplate>
+          <VirtualizingStackPanel/>
+        </ItemsPanelTemplate>
+      </ComboBox.ItemsPanel>
+    </ComboBox>
 
-        <Button x:Name="btClear" Grid.Column="1" Margin="2,-3,0,0" Content="🞪" Click="btClear_Click"
-                Height="{Binding ElementName=cbSpellbooks, Path=ActualHeight}" Width="{Binding ElementName=cbSpellbooks, Path=ActualHeight}" 
-                Visibility="{Binding ElementName=ucSpellbookComboBox, Path=IsNullable, Converter={StaticResource bool2VisCollapsed}}"/>
-        <local:ResetIsEnabled Grid.Column="2" Margin="2,-3,0,0">
-            <Button x:Name="btGoto" Content="👁" Click="btGoto_Click"
-                    Height="{Binding ElementName=cbSpellbooks, Path=ActualHeight}" Width="{Binding ElementName=cbSpellbooks, Path=ActualHeight}"/>
-        </local:ResetIsEnabled>
-    </Grid>
+    <Button x:Name="btClear" Grid.Column="1" Margin="2,0,0,0" Content="🞪" Click="btClear_Click"
+            Height="{Binding ElementName=cbSpellbooks, Path=Bounds.Height}" Width="{Binding ElementName=cbSpellbooks, Path=Bounds.Height}" 
+            IsVisible="{Binding ElementName=ucSpellbookComboBox, Path=IsNullable}"/>
+    <!--<local:ResetIsEnabled >-->
+    <Button x:Name="btGoto" Grid.Column="2" Margin="2,0,0,0" Content="👁" Click="btGoto_Click" Height="{Binding ElementName=cbSpellbooks, Path=Bounds.Height}" Width="{Binding ElementName=cbSpellbooks, Path=Bounds.Height}"/>
+    <!--</local:ResetIsEnabled>-->
+  </Grid>
 </UserControl>

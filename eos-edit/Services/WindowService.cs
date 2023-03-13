@@ -1,10 +1,16 @@
-﻿using Eos.ViewModels;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Threading;
+using Eos.ViewModels;
 using Eos.ViewModels.Dialogs;
 using Eos.Views;
+using Eos.Views.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -17,12 +23,17 @@ namespace Eos.Services
         private static Window NewWindow(DialogViewModel viewModel)
         {
             ViewWindow window = new ViewWindow();
-            window.Owner = Application.Current.MainWindow;
-            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            window.Width = viewModel.DefaultWidth;
-            window.Height = viewModel.DefaultHeight;
-            window.Content = viewModel;
-            window.DataContext = viewModel;
+
+            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                window.Width = viewModel.DefaultWidth;
+                window.Height = viewModel.DefaultHeight;
+                window.Content = viewModel;
+                window.DataContext = viewModel;
+                window.CanResize = viewModel.CanResize;
+                window.PlatformImpl?.ShowTaskbarIcon(false);
+            }
 
             return window;
         }
@@ -56,15 +67,29 @@ namespace Eos.Services
             else
             {
                 window = NewWindow(vm);
-                if (!vm.CanResize)
-                {
-                    window.WindowStyle = WindowStyle.SingleBorderWindow;
-                    window.ResizeMode = ResizeMode.NoResize;
-                }
                 windowDict[vm] = window;
 
-                window.ShowDialog();
+                if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                {
+                    if (desktop.MainWindow != null)
+                    {
+                        //await window.ShowDialog(desktop.MainWindow);
+                        using (var source = new CancellationTokenSource())
+                        {
+                            window.ShowDialog(desktop.MainWindow).ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
+                            Dispatcher.UIThread.MainLoop(source.Token);
+                        }
+                    }
+                }
             }
+        }
+
+        public static MessageBoxResult ShowMessage(string message, string title, MessageBoxButtons buttons, MessageBoxIcon icon)
+        {
+            var msgBox = new MessageBoxViewModel(title, message, icon, buttons);
+            WindowService.OpenDialog(msgBox);
+
+            return msgBox.Result;
         }
 
         public static void OpenDialog<T>() where T : DialogViewModel, new()

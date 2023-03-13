@@ -21,6 +21,6 @@ namespace Eos.Types
         [DisplayName("Origin on self")]
         OriginOnSelf = 0x10,
         [DisplayName("Suppress with target")]
-        SuppressWithTarget = 0x20,
+        SuppressWithTarget = 0x20
     }
 }

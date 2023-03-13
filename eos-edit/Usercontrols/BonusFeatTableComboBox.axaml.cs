@@ -1,26 +1,11 @@
-﻿using Eos.Models;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
 using Eos.Models.Tables;
 using Eos.ViewModels.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Eos.Usercontrols
 {
-    /// <summary>
-    /// Interaktionslogik für BonusFeatTableComboBox.xaml
-    /// </summary>
     public partial class BonusFeatTableComboBox : UserControl
     {
         public BonusFeatTableComboBox()
@@ -28,18 +13,18 @@ namespace Eos.Usercontrols
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register("SelectedValue", typeof(BonusFeatsTable), typeof(BonusFeatTableComboBox), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-        public static readonly DependencyProperty IsNullableProperty = DependencyProperty.Register("IsNullable", typeof(bool), typeof(BonusFeatTableComboBox), new PropertyMetadata(true));
+        public static readonly StyledProperty<BonusFeatsTable?> SelectedValueProperty = AvaloniaProperty.Register<BonusFeatTableComboBox, BonusFeatsTable?>("SelectedValue", null, false, Avalonia.Data.BindingMode.TwoWay);
+        public static readonly StyledProperty<bool> IsNullableProperty = AvaloniaProperty.Register<BonusFeatTableComboBox, bool>("IsNullable", true);
 
         public BonusFeatsTable? SelectedValue
         {
-            get { return (BonusFeatsTable)GetValue(SelectedValueProperty); }
+            get { return GetValue(SelectedValueProperty); }
             set { SetValue(SelectedValueProperty, value); }
         }
 
         public bool IsNullable
         {
-            get { return (bool)GetValue(IsNullableProperty); }
+            get { return GetValue(IsNullableProperty); }
             set { SetValue(IsNullableProperty, value); }
         }
 

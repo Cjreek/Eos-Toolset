@@ -360,28 +360,38 @@ namespace Eos.Services
                 {
                     case RequirementType.CLASSOR:
                     case RequirementType.CLASSNOT:
-                        tmpItem.RequirementParam1 = CreateRef<CharacterClass>(preRequTable2da[i].AsInteger("ReqParam1"));
+                        tmpItem.Param1Class = CreateRef<CharacterClass>(preRequTable2da[i].AsInteger("ReqParam1"));
                         break;
 
                     case RequirementType.FEAT:
                     case RequirementType.FEATOR:
-                        tmpItem.RequirementParam1 = CreateRef<Feat>(preRequTable2da[i].AsInteger("ReqParam1"));
+                        tmpItem.Param1Feat = CreateRef<Feat>(preRequTable2da[i].AsInteger("ReqParam1"));
                         break;
 
                     case RequirementType.RACE:
-                        tmpItem.RequirementParam1 = CreateRef<Race>(preRequTable2da[i].AsInteger("ReqParam1"));
+                        tmpItem.Param1Race = CreateRef<Race>(preRequTable2da[i].AsInteger("ReqParam1"));
                         break;
 
                     case RequirementType.SKILL:
-                        tmpItem.RequirementParam1 = CreateRef<Skill>(preRequTable2da[i].AsInteger("ReqParam1"));
+                        tmpItem.Param1Skill = CreateRef<Skill>(preRequTable2da[i].AsInteger("ReqParam1"));
                         break;
 
-                    default:
-                        tmpItem.RequirementParam1 = preRequTable2da[i].AsObject("ReqParam1");
+                    case RequirementType.VAR:
+                        tmpItem.Param1String = preRequTable2da[i].AsString("ReqParam1");
+                        break;
+
+                    case RequirementType.ARCSPELL:
+                    case RequirementType.SPELL:
+                    case RequirementType.BAB:
+                        tmpItem.Param1Int = preRequTable2da[i].AsInteger("ReqParam1");
+                        break;
+
+                    case RequirementType.SAVE:
+                        tmpItem.Param1Save = preRequTable2da[i].AsInteger("ReqParam1");
                         break;
                 }
 
-                tmpItem.RequirementParam2 = preRequTable2da[i].AsObject("ReqParam2");
+                tmpItem.RequirementParam2 = preRequTable2da[i].AsInteger("ReqParam2");
                 preRequTable.Add(tmpItem);
             }
 
@@ -1132,7 +1142,7 @@ namespace Eos.Services
                 tmpSpell.TargetShape = !spells2da[i].IsNull("TargetShape", false) ? Enum.Parse<TargetShape>(spells2da[i].AsString("TargetShape", null) ?? "", true) : null;
                 tmpSpell.TargetSizeX = spells2da[i].AsFloat("TargetSizeX", null);
                 tmpSpell.TargetSizeY = spells2da[i].AsFloat("TargetSizeY", null);
-                tmpSpell.TargetingFlags = (TargetFlag?)spells2da[i].AsInteger("TargetFlags", null);
+                tmpSpell.TargetingFlags = (TargetFlag?)spells2da[i].AsInteger("TargetFlags", null) ?? (TargetFlag)0;
 
                 // Spellbook entries:
                 for (int j = 0; j < spells2da.Columns.Count; j++)
@@ -1550,20 +1560,20 @@ namespace Eos.Services
                     {
                         case RequirementType.CLASSNOT:
                         case RequirementType.CLASSOR:
-                            item.RequirementParam1 = SolveInstance((CharacterClass?)item.RequirementParam1, Standard.Classes);
+                            item.Param1Class = SolveInstance(item.Param1Class, Standard.Classes);
                             break;
 
                         case RequirementType.FEAT:
                         case RequirementType.FEATOR:
-                            item.RequirementParam1 = SolveInstance((Feat?)item.RequirementParam1, Standard.Feats);
+                            item.Param1Feat = SolveInstance(item.Param1Feat, Standard.Feats);
                             break;
 
                         case RequirementType.RACE:
-                            item.RequirementParam1 = SolveInstance((Race?)item.RequirementParam1, Standard.Races);
+                            item.Param1Race = SolveInstance(item.Param1Race, Standard.Races);
                             break;
 
                         case RequirementType.SKILL:
-                            item.RequirementParam1 = SolveInstance((Skill?)item.RequirementParam1, Standard.Skills);
+                            item.Param1Skill = SolveInstance(item.Param1Skill, Standard.Skills);
                             break;
                     }
                 }

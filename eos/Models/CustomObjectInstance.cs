@@ -104,16 +104,45 @@ namespace Eos.Models
 
         private void InitValueDictionary()
         {
-            Values.Clear();
-            if (_template != null)
+            if (_template == null)
             {
+                Values.Clear();
+            }
+            else
+            {
+                // Remove missing values
+                foreach (var prop in valueDict.Keys)
+                {
+                    if ((prop != null) && (!_template.Contains(prop)))
+                    {
+                        Values.Remove(valueDict[prop]);
+                        valueDict.Remove(prop);
+                    }
+                }
+
+                // Add new values
                 foreach (var prop in _template.Items)
                 {
                     if (prop != null)
                     {
-                        var valueInstance = new CustomValueInstance(prop);
-                        valueDict[prop] = valueInstance;
-                        Values.Add(valueInstance);
+                        if (!valueDict.ContainsKey(prop))
+                        {
+                            var valueInstance = new CustomValueInstance(prop);
+                            valueDict[prop] = valueInstance;
+                            Values.Add(valueInstance);
+                        }
+                    }
+                }
+
+                // Reorder
+                for (int i = 0; i < _template.Count; i++)
+                {
+                    var prop = _template[i];
+                    if (prop != null)
+                    {
+                        var custValue = Values.First(val => val.Property == prop);
+                        var index = Values.IndexOf(custValue);
+                        Values.Move(index, i);
                     }
                 }
             }

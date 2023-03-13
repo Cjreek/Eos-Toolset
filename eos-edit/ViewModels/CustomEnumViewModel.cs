@@ -1,9 +1,11 @@
 ﻿using Eos.Models.Tables;
 using Eos.Types;
-using Prism.Commands;
+using Eos.ViewModels.Base;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,14 +15,14 @@ namespace Eos.ViewModels
     {
         public CustomEnumViewModel() : base()
         {
-            DeleteEnumItemCommand = new DelegateCommand<CustomEnumItem>(DeleteEnumItem);
-            AddEnumItemCommand = new DelegateCommand(AddEnumItem);
+            DeleteEnumItemCommand = ReactiveCommand.Create<CustomEnumItem>(DeleteEnumItem);
+            AddEnumItemCommand = ReactiveCommand.Create(AddEnumItem);
         }
 
         public CustomEnumViewModel(CustomEnum customEnum) : base(customEnum)
         {
-            DeleteEnumItemCommand = new DelegateCommand<CustomEnumItem>(DeleteEnumItem);
-            AddEnumItemCommand = new DelegateCommand(AddEnumItem);
+            DeleteEnumItemCommand = ReactiveCommand.Create<CustomEnumItem>(DeleteEnumItem);
+            AddEnumItemCommand = ReactiveCommand.Create(AddEnumItem);
         }
 
         protected override string GetHeader()
@@ -41,7 +43,7 @@ namespace Eos.ViewModels
             NotifyPropertyChanged("Data");
         }
 
-        public DelegateCommand<CustomEnumItem> DeleteEnumItemCommand { get; private set; }
-        public DelegateCommand AddEnumItemCommand { get; private set; }
+        public ReactiveCommand<CustomEnumItem, Unit> DeleteEnumItemCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> AddEnumItemCommand { get; private set; }
     }
 }

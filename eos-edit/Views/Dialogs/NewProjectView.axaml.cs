@@ -1,34 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using Eos.ViewModels;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Dialogs;
+using Avalonia.Interactivity;
+using Eos.Services;
+using Eos.ViewModels.Base;
 using Eos.ViewModels.Dialogs;
-using Ookii.Dialogs.Wpf;
+using System.Threading.Tasks;
 
 namespace Eos.Views.Dialogs
 {
-    /// <summary>
-    /// Interaktionslogik für NewProjectView.xaml
-    /// </summary>
-    public partial class NewProjectView : Page
+    public partial class NewProjectView : UserControl
     {
         public NewProjectView()
         {
             InitializeComponent();
-            this.DataContextChanged += NewProjectView_DataContextChanged;
+            DataContextChanged += NewProjectView_DataContextChanged;
         }
 
-        private void NewProjectView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void NewProjectView_DataContextChanged(object? sender, System.EventArgs e)
         {
             if (DataContext is NewProjectViewModel vm)
                 vm.OnError += Vm_OnError;
@@ -36,17 +26,22 @@ namespace Eos.Views.Dialogs
 
         private void Vm_OnError(ViewModelBase viewModel, ViewModelErrorEventArgs args)
         {
-            MessageBox.Show(Window.GetWindow(this), args.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            WindowService.ShowMessage(args.Message, "Error", MessageBoxButtons.Ok, MessageBoxIcon.Warning);
         }
 
         private void btOpenDlg_Click(object sender, RoutedEventArgs e)
         {
             if (DataContext is NewProjectViewModel vm)
             {
-                VistaFolderBrowserDialog dlg = new VistaFolderBrowserDialog();
-                dlg.ShowNewFolderButton = true;
-                if (dlg.ShowDialog() ?? false)
-                    vm.ProjectFolder = dlg.SelectedPath;
+                if ((Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime app) && (app.MainWindow != null))
+                {
+                    var dlg = new OpenFolderDialog();
+                    dlg.ShowAsync(app.MainWindow).ContinueWith(t =>
+                    {
+                        if (t.Result != null)
+                            vm.ProjectFolder = t.Result;
+                    }, TaskScheduler.FromCurrentSynchronizationContext());
+                }
             }
         }
     }

@@ -1,791 +1,814 @@
-﻿<Page x:Class="Eos.Views.Dialogs.ProjectOptionsView"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Eos.Views.Dialogs"
-      xmlns:ext="clr-namespace:Eos.Extensions"
-      xmlns:tlk="clr-namespace:Eos.Nwn.Tlk;assembly=eos"
-      xmlns:uc="clr-namespace:Eos.Usercontrols"
-      xmlns:vm="clr-namespace:Eos.ViewModels.Dialogs"
-      xmlns:wpftk="clr-namespace:Xceed.Wpf.Toolkit;assembly=DotNetProjects.Wpf.Extended.Toolkit"
-      mc:Ignorable="d" Background="LightGray"
-      d:DesignHeight="560" d:DesignWidth="800"
-      x:Name="page"
-      Title="ProjectOptionsView">
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:uc="using:Eos.Usercontrols"
+             xmlns:tlk="using:Eos.Nwn.Tlk"
+             xmlns:ext="using:Eos.Extensions"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             Background="LightGray"
+             x:Class="Eos.Views.Dialogs.ProjectOptionsView"
+             x:Name="page">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
 
-    <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\..\Resources\StyleResources.xaml"/>
-                <ResourceDictionary Source="..\..\Resources\ConverterResources.xaml"/>
-                <ResourceDictionary Source="..\..\Resources\CustomDataTemplateResources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Page.Resources>
+  <UserControl.Styles>
+    <Styles>
+      <StyleInclude Source="/Assets/StyleResources.axaml"/>
 
-    <!--<Page.DataContext>
-        <vm:ProjectOptionsViewModel/>
-    </Page.DataContext>-->
+      <Style Selector="TextBox">
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+      </Style>
 
-    <DockPanel Margin="0,10,0,0" LastChildFill="True">
-        <Border DockPanel.Dock="Bottom" BorderThickness="0,1,0,0" BorderBrush="Silver" Background="White">
-            <Grid VerticalAlignment="Bottom">
-                <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Margin="0,5,5,5">
-                    <Button Content="Cancel" VerticalAlignment="Center" Width="100" Height="25" Command="{Binding CloseCommand}" CommandParameter="{Binding}"/>
-                    <Button Content="OK" VerticalAlignment="Center" Width="100" Height="25" Margin="3,0,0,0" Command="{Binding OKCommand}" CommandParameter="{Binding}"/>
+      <Style Selector="TextBlock">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+      </Style>
+
+      <Style Selector="NumericUpDown">
+        <Setter Property="VerticalContentAlignment" Value="Bottom"/>
+      </Style>
+      
+      <Style Selector="HeaderedContentControl">
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate>
+              <Border BorderBrush="Silver" BorderThickness="1" CornerRadius="0" Margin="0,10,0,0" Background="White">
+                <StackPanel>
+                  <ContentPresenter Content="{TemplateBinding Header}" Margin="7,-8,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Background="White" Padding="3,0,3,0"/>
+                  <ContentPresenter Content="{TemplateBinding Content}" Padding="5"/>
                 </StackPanel>
+              </Border>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+    </Styles>
+  </UserControl.Styles>
+
+  <DockPanel Margin="0,10,0,0" LastChildFill="True">
+    <Border DockPanel.Dock="Bottom" BorderThickness="0,1,0,0" BorderBrush="Silver" Background="White">
+      <Grid VerticalAlignment="Bottom">
+        <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Margin="0,5,5,5">
+          <Button Content="Cancel" VerticalAlignment="Center" Width="100" Height="25" Command="{Binding CloseCommand}" CommandParameter="{Binding}"/>
+          <Button Content="OK" VerticalAlignment="Center" Width="100" Height="25" Margin="3,0,0,0" Command="{Binding OKCommand}" CommandParameter="{Binding}"/>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <TextBlock DockPanel.Dock="Top" Text="Project Settings" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="10" FontSize="22" FontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextAlignment="Center" Margin="0,0,0,10"/>
+
+    <Border Background="White">
+      <TabControl TabStripPlacement="Left" BorderThickness="1,1,1,0" Background="White" Padding="0">
+        <TabItem Header="Paths" Width="130" Height="30" BorderThickness="0,0,0,1">
+          <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+            <Grid Margin="10">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="108"/>
+                <ColumnDefinition Width="*" MinWidth="150"/>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="auto" MinWidth="150"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+              </Grid.RowDefinitions>
+
+              <TextBlock Grid.Row="0" Grid.Column="0" Text="Name" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0"/>
+              <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ProjectName}"/>
+
+              <TextBlock Grid.Row="0" Grid.Column="2" Text="Default Language" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0"/>
+              <uc:EnumComboBox Grid.Row="0" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type tlk:TLKLanguage}}" SelectedValue="{Binding DefaultLanguage}"/>
+
+              <HeaderedContentControl Header="External Folders" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="100"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="*"/>
+                  </Grid.RowDefinitions>
+
+                  <!--<TextBlock Text="External Folder" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>-->
+                  <DockPanel Grid.Row="0" Grid.Column="1" LastChildFill="True">
+                    <Button x:Name="btOpenDlg" DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbProjectPath, Path=Bounds.Height}" Height="{Binding ElementName=tbProjectPath, Path=Bounds.Height}" VerticalAlignment="Top"/>
+                    <TextBox x:Name="tbProjectPath" Margin="2,0,0,3" Text="{Binding ExternalPathToAdd}" HorizontalAlignment="Stretch"/>
+                  </DockPanel>
+                  <Button Grid.Row="0" Grid.Column="2" Margin="3,0,0,3" Content="Add Path" Command="{Binding AddExternalPathCommand}" CommandParameter="{Binding}"/>
+
+                  <ListBox Grid.Row="1" Grid.Column="1" Padding="0" Margin="2,0,0,0" Height="100" Grid.ColumnSpan="2" Items="{Binding SettingsCopy.ExternalFolders}" SelectedIndex="{Binding SelectedExternalPathIndex}">
+                    <ListBox.ItemTemplate>
+                      <DataTemplate>
+                        <Grid Margin="0">
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                          </Grid.ColumnDefinitions>
+
+                          <TextBlock x:Name="lbiText" Text="{Binding}" Grid.Column="0"/>
+                          <uc:DeleteButton Grid.Column="1" Width="23" Command="{Binding ElementName=page, Path=DataContext.DeleteExternalPathCommand}" CommandParameter="{Binding}"/>
+                        </Grid>
+                      </DataTemplate>
+                    </ListBox.ItemTemplate>
+                  </ListBox>
+                </Grid>
+              </HeaderedContentControl>
+
+              <HeaderedContentControl Header="Export Paths" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Text="2DA Folder" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                  <DockPanel Grid.Row="0" Grid.Column="1" LastChildFill="True">
+                    <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbTwoDAFolder, Path=Bounds.Height}" Height="{Binding ElementName=tbTwoDAFolder, Path=Bounds.Height}" VerticalAlignment="Top" Click="btOpenDlg_Click" Tag="2DA"/>
+                    <TextBox x:Name="tbTwoDAFolder" Margin="0,0,0,3" Text="{Binding SettingsCopy.Export.TwoDAFolder}" HorizontalAlignment="Stretch"/>
+                  </DockPanel>
+
+                  <TextBlock Text="HAK Folder" Grid.Row="1" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                  <DockPanel Grid.Row="1" Grid.Column="1" LastChildFill="True">
+                    <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbHakFolder, Path=Bounds.Height}" Height="{Binding ElementName=tbHakFolder, Path=Bounds.Height}" VerticalAlignment="Top" Click="btOpenDlg_Click" Tag="HAK"/>
+                    <TextBox x:Name="tbHakFolder" Margin="0,0,0,3" Text="{Binding SettingsCopy.Export.HakFolder}" HorizontalAlignment="Stretch"/>
+                  </DockPanel>
+
+                  <TextBlock Text="ERF Folder" Grid.Row="2" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                  <DockPanel Grid.Row="2" Grid.Column="1" LastChildFill="True">
+                    <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbErfFolder, Path=Bounds.Height}" Height="{Binding ElementName=tbErfFolder, Path=Bounds.Height}" VerticalAlignment="Top" Click="btOpenDlg_Click" Tag="ERF"/>
+                    <TextBox x:Name="tbErfFolder" Margin="0,0,0,3" Text="{Binding SettingsCopy.Export.ErfFolder}" HorizontalAlignment="Stretch"/>
+                  </DockPanel>
+
+                  <TextBlock Text="TLK Folder" Grid.Row="3" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                  <DockPanel Grid.Row="3" Grid.Column="1" LastChildFill="True">
+                    <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbTlkFolder, Path=Bounds.Height}" Height="{Binding ElementName=tbTlkFolder, Path=Bounds.Height}" VerticalAlignment="Top" Click="btOpenDlg_Click" Tag="TLK"/>
+                    <TextBox x:Name="tbTlkFolder" Margin="0,0,0,3" Text="{Binding SettingsCopy.Export.TlkFolder}" HorizontalAlignment="Stretch"/>
+                  </DockPanel>
+
+                  <TextBlock Text="Include Folder" Grid.Row="4" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                  <DockPanel Grid.Row="4" Grid.Column="1" LastChildFill="True">
+                    <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbIncFolder, Path=Bounds.Height}" Height="{Binding ElementName=tbIncFolder, Path=Bounds.Height}" VerticalAlignment="Top" Click="btOpenDlg_Click" Tag="INC"/>
+                    <TextBox x:Name="tbIncFolder" Margin="0,0,0,3" Text="{Binding SettingsCopy.Export.IncludeFolder}" HorizontalAlignment="Stretch"/>
+                  </DockPanel>
+
+                  <TextBlock Text="Include Filename" Grid.Row="5" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                  <TextBox Text="{Binding SettingsCopy.Export.IncludeFilename}" Grid.Row="5" Grid.Column="1" MaxLength="16" Margin="0,0,0,3"/>
+                </Grid>
+              </HeaderedContentControl>
+
+              <HeaderedContentControl Header="TLK Export" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Text="Base TLK File" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                  <DockPanel Grid.Row="0" Grid.Column="1" LastChildFill="True">
+                    <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbBaseTlk, Path=Bounds.Height}" Height="{Binding ElementName=tbBaseTlk, Path=Bounds.Height}" VerticalAlignment="Top" Click="btOpenTlk_Click"/>
+                    <TextBox x:Name="tbBaseTlk" Margin="2,0,0,3" Text="{Binding SettingsCopy.Export.BaseTlkFile}" HorizontalAlignment="Stretch"/>
+                  </DockPanel>
+
+                  <TextBlock Text="TLK Offset" Grid.Row="1" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                  <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding SettingsCopy.Export.TlkOffset}" Increment="1"/>
+                </Grid>
+              </HeaderedContentControl>
+
+              <HeaderedContentControl Header="Export Misc" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Text="Lowercase Filenames" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                  <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Export.LowercaseFilenames}" VerticalAlignment="Bottom"/>
+                </Grid>
+              </HeaderedContentControl>
             </Grid>
-        </Border>
-
-        <TextBlock DockPanel.Dock="Top" Text="Project Settings" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="10" FontSize="22" FontWeight="Bold" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextAlignment="Center" Margin="0,0,0,10"/>
-
-        <Border Background="White">
-            <TabControl TabStripPlacement="Left" BorderThickness="1,1,1,0" Background="White">
-                <TabItem Header="Paths" Width="120" Height="30">
-                    <Grid Margin="10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100"/>
-                            <ColumnDefinition Width="*" MinWidth="150"/>
-                            <ColumnDefinition Width="110"/>
-                            <ColumnDefinition Width="auto" MinWidth="150"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" MinHeight="25"/>
-                            <RowDefinition Height="auto" MinHeight="25"/>
-                            <RowDefinition Height="auto" MinHeight="25"/>
-                            <RowDefinition Height="auto" MinHeight="25"/>
-                            <RowDefinition Height="auto" MinHeight="25"/>
-                        </Grid.RowDefinitions>
-
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Name" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding ProjectName}"/>
-
-                        <TextBlock Grid.Row="0" Grid.Column="2" Text="Default Language" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                        <uc:EnumComboBox Grid.Row="0" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type tlk:TLKLanguage}}" SelectedValue="{Binding DefaultLanguage}"/>
-
-                        <GroupBox Header="External Folders" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="93"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="100"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="25"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-
-                                <!--<TextBlock Text="External Folder" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>-->
-                                <DockPanel Grid.Row="0" Grid.Column="1" LastChildFill="True">
-                                    <Button x:Name="btOpenDlg" DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbProjectPath, Path=ActualHeight}" Height="{Binding ElementName=tbProjectPath, Path=ActualHeight}" VerticalAlignment="Top"/>
-                                    <TextBox x:Name="tbProjectPath" Margin="2,0,0,3" Text="{Binding ExternalPathToAdd}" HorizontalAlignment="Stretch"/>
-                                </DockPanel>
-                                <Button Grid.Row="0" Grid.Column="2" Margin="3,0,0,3" Content="Add Path" Command="{Binding AddExternalPathCommand}" CommandParameter="{Binding}"/>
-
-                                <ListBox Grid.Row="1" Grid.Column="1" Height="100" Grid.ColumnSpan="2" ItemsSource="{Binding SettingsCopy.ExternalFolders}" SelectedIndex="{Binding SelectedExternalPathIndex}">
-                                    <ListBox.ItemContainerStyle>
-                                        <Style TargetType="{x:Type ListBoxItem}">
-                                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                        </Style>
-                                    </ListBox.ItemContainerStyle>
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid Margin="0,2">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="auto"/>
-                                                </Grid.ColumnDefinitions>
-                                                
-                                                <TextBlock x:Name="lbiText" Text="{Binding}" Grid.Column="0"/>
-                                                <uc:DeleteButton Grid.Column="1" Width="{Binding ElementName=lbiText, Path=ActualHeight}" Command="{Binding ElementName=page, Path=DataContext.DeleteExternalPathCommand}" CommandParameter="{Binding}"/>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                            </Grid>
-                        </GroupBox>
-
-                        <GroupBox Header="Export Paths" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="93"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="25"/>
-                                    <RowDefinition Height="25"/>
-                                    <RowDefinition Height="25"/>
-                                    <RowDefinition Height="25"/>
-                                    <RowDefinition Height="25"/>
-                                    <RowDefinition Height="25"/>
-                                </Grid.RowDefinitions>
-
-                                <TextBlock Text="2DA Folder" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                <DockPanel Grid.Row="0" Grid.Column="1" LastChildFill="True">
-                                    <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbTwoDAFolder, Path=ActualHeight}" Height="{Binding ElementName=tbTwoDAFolder, Path=ActualHeight}" VerticalAlignment="Top" Click="btOpenDlg_Click" Tag="2DA"/>
-                                    <TextBox x:Name="tbTwoDAFolder" Margin="2,0,0,3" Text="{Binding SettingsCopy.Export.TwoDAFolder}" HorizontalAlignment="Stretch"/>
-                                </DockPanel>
-
-                                <TextBlock Text="HAK Folder" Grid.Row="1" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                <DockPanel Grid.Row="1" Grid.Column="1" LastChildFill="True">
-                                    <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbHakFolder, Path=ActualHeight}" Height="{Binding ElementName=tbHakFolder, Path=ActualHeight}" VerticalAlignment="Top" Click="btOpenDlg_Click" Tag="HAK"/>
-                                    <TextBox x:Name="tbHakFolder" Margin="2,0,0,3" Text="{Binding SettingsCopy.Export.HakFolder}" HorizontalAlignment="Stretch"/>
-                                </DockPanel>
-
-                                <TextBlock Text="ERF Folder" Grid.Row="2" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                <DockPanel Grid.Row="2" Grid.Column="1" LastChildFill="True">
-                                    <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbErfFolder, Path=ActualHeight}" Height="{Binding ElementName=tbErfFolder, Path=ActualHeight}" VerticalAlignment="Top" Click="btOpenDlg_Click" Tag="ERF"/>
-                                    <TextBox x:Name="tbErfFolder" Margin="2,0,0,3" Text="{Binding SettingsCopy.Export.ErfFolder}" HorizontalAlignment="Stretch"/>
-                                </DockPanel>
-
-                                <TextBlock Text="TLK Folder" Grid.Row="3" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                <DockPanel Grid.Row="3" Grid.Column="1" LastChildFill="True">
-                                    <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbTlkFolder, Path=ActualHeight}" Height="{Binding ElementName=tbTlkFolder, Path=ActualHeight}" VerticalAlignment="Top" Click="btOpenDlg_Click" Tag="TLK"/>
-                                    <TextBox x:Name="tbTlkFolder" Margin="2,0,0,3" Text="{Binding SettingsCopy.Export.TlkFolder}" HorizontalAlignment="Stretch"/>
-                                </DockPanel>
-
-                                <TextBlock Text="Include Folder" Grid.Row="4" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                <DockPanel Grid.Row="4" Grid.Column="1" LastChildFill="True">
-                                    <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbIncFolder, Path=ActualHeight}" Height="{Binding ElementName=tbIncFolder, Path=ActualHeight}" VerticalAlignment="Top" Click="btOpenDlg_Click" Tag="INC"/>
-                                    <TextBox x:Name="tbIncFolder" Margin="2,0,0,3" Text="{Binding SettingsCopy.Export.IncludeFolder}" HorizontalAlignment="Stretch"/>
-                                </DockPanel>
-
-                                <TextBlock Text="Include Filename" Grid.Row="5" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                <TextBox Text="{Binding SettingsCopy.Export.IncludeFilename}" Grid.Row="5" Grid.Column="1" MaxLength="16"/>
-                            </Grid>
-                        </GroupBox>
-
-                        <GroupBox Header="TLK Export" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="93"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="25"/>
-                                    <RowDefinition Height="25"/>
-                                </Grid.RowDefinitions>
-
-                                <TextBlock Text="Base TLK File" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                <DockPanel Grid.Row="0" Grid.Column="1" LastChildFill="True">
-                                    <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbBaseTlk, Path=ActualHeight}" Height="{Binding ElementName=tbBaseTlk, Path=ActualHeight}" VerticalAlignment="Top" Click="btOpenTlk_Click"/>
-                                    <TextBox x:Name="tbBaseTlk" Margin="2,0,0,3" Text="{Binding SettingsCopy.Export.BaseTlkFile}" HorizontalAlignment="Stretch"/>
-                                </DockPanel>
-
-                                <TextBlock Text="TLK Offset" Grid.Row="1" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                <wpftk:IntegerUpDown Grid.Row="1" Grid.Column="1" Value="{Binding SettingsCopy.Export.TlkOffset}" TextAlignment="Left"/>
-                            </Grid>
-                        </GroupBox>
-
-                        <GroupBox Header="Export Misc" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="130"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="25"/>
-                                </Grid.RowDefinitions>
-
-                                <TextBlock Text="Lowercase Filenames" Grid.Row="0" Grid.Column="0" Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                                <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Export.LowercaseFilenames}" VerticalAlignment="Bottom"/>
-                            </Grid>
-                        </GroupBox>
-                    </Grid>
-                </TabItem>
-                <TabItem Header="Custom Data" Width="120" Height="30">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                        <DockPanel LastChildFill="False" Margin="10">
-                            <GroupBox DockPanel.Dock="Top" Header="Area Effects">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.AreaEffects.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.AreaEffects.FormatJson}"/>
-
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <wpftk:IntegerUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.AreaEffects.ExportOffset}" TextAlignment="Left"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Classes">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Classes.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Classes.FormatJson}"/>
-
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <wpftk:IntegerUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Classes.ExportOffset}" TextAlignment="Left"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Diseases">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Diseases.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Diseases.FormatJson}"/>
-
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <wpftk:IntegerUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Classes.ExportOffset}" TextAlignment="Left"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Domains">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Domains.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Domains.FormatJson}"/>
-
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <wpftk:IntegerUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Domains.ExportOffset}" TextAlignment="Left"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Feats">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Feats.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Feats.FormatJson}"/>
-
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <wpftk:IntegerUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Feats.ExportOffset}" TextAlignment="Left"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Master Feats">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.MasterFeats.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.MasterFeats.FormatJson}"/>
-
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <wpftk:IntegerUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.MasterFeats.ExportOffset}" TextAlignment="Left"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Packages">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Packages.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Packages.FormatJson}"/>
-
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <wpftk:IntegerUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Packages.ExportOffset}" TextAlignment="Left"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Poisons">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Poisons.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Poisons.FormatJson}"/>
-
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <wpftk:IntegerUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Poisons.ExportOffset}" TextAlignment="Left"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Polymorphs">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Polymorphs.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Polymorphs.FormatJson}"/>
-
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <wpftk:IntegerUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Polymorphs.ExportOffset}" TextAlignment="Left"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Races">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Races.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Races.FormatJson}"/>
-
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <wpftk:IntegerUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Races.ExportOffset}" TextAlignment="Left"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Skills">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Skills.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Skills.FormatJson}"/>
-
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <wpftk:IntegerUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Skills.ExportOffset}" TextAlignment="Left"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Soundsets">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Soundsets.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Soundsets.FormatJson}"/>
-
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <wpftk:IntegerUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Soundsets.ExportOffset}" TextAlignment="Left"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Spellbooks">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Spellbooks.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Spellbooks.FormatJson}"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Spells">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Spells.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Spells.FormatJson}"/>
-
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <wpftk:IntegerUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Spells.ExportOffset}" TextAlignment="Left"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Custom Data">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.CustomData.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.CustomData.FormatJson}"/>
-
-                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <wpftk:IntegerUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.CustomData.ExportOffset}" TextAlignment="Left"/>
-                                </Grid>
-                            </GroupBox>
-                        </DockPanel>
-                    </ScrollViewer>
-                </TabItem>
-                <TabItem Header="Custom Data Tables" Width="120" Height="30">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                        <DockPanel LastChildFill="False" Margin="10">
-                            <GroupBox DockPanel.Dock="Top" Header="Attack Bonus">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.AttackBonusTables.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.AttackBonusTables.FormatJson}"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Bonus Feats">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.BonusFeatTables.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.BonusFeatTables.FormatJson}"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Feats">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.FeatTables.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.FeatTables.FormatJson}"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Known Spells">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.KnownSpellsTables.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.KnownSpellsTables.FormatJson}"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Prerequisites">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.PrerequisiteTables.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.PrerequisiteTables.FormatJson}"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Racial Feats">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.RacialFeatsTables.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.RacialFeatsTables.FormatJson}"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Saving Throws">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.SavesTables.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.SavesTables.FormatJson}"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Skills">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.SkillsTables.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.SkillsTables.FormatJson}"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Spell Slots">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.SpellSlotTables.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.SpellSlotTables.FormatJson}"/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox DockPanel.Dock="Top" Header="Stat Gain">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="75"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="auto"/>
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.StatGainTables.Sorted}"/>
-
-                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
-                                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.StatGainTables.FormatJson}"/>
-                                </Grid>
-                            </GroupBox>
-                        </DockPanel>
-                    </ScrollViewer>
-                </TabItem>
-            </TabControl>
-        </Border>
-    </DockPanel>
-</Page>
+          </Border>
+        </TabItem>
+        <TabItem Header="Custom Data" Width="130" Height="30" BorderThickness="0,0,0,1">
+          <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+              <DockPanel LastChildFill="False" Margin="10">
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Area Effects">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.AreaEffects.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.AreaEffects.FormatJson}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.AreaEffects.ExportOffset}" Increment="1"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Classes">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Classes.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Classes.FormatJson}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Classes.ExportOffset}" Increment="1"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Diseases">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Diseases.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Diseases.FormatJson}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Classes.ExportOffset}" Increment="1"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Domains">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Domains.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Domains.FormatJson}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Domains.ExportOffset}" Increment="1"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Feats">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Feats.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Feats.FormatJson}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Feats.ExportOffset}" Increment="1"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Master Feats">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.MasterFeats.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.MasterFeats.FormatJson}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.MasterFeats.ExportOffset}" Increment="1"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Packages">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Packages.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Packages.FormatJson}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Packages.ExportOffset}" Increment="1"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Poisons">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Poisons.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Poisons.FormatJson}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Poisons.ExportOffset}" Increment="1"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Polymorphs">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Polymorphs.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Polymorphs.FormatJson}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Polymorphs.ExportOffset}" Increment="1"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Races">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Races.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Races.FormatJson}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Races.ExportOffset}" Increment="1"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Skills">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Skills.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Skills.FormatJson}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Skills.ExportOffset}" Increment="1"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Soundsets">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Soundsets.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Soundsets.FormatJson}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Soundsets.ExportOffset}" Increment="1"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Spellbooks">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Spellbooks.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Spellbooks.FormatJson}"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Spells">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Spells.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Spells.FormatJson}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.Spells.ExportOffset}" Increment="1"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Custom Data">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.CustomData.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.CustomData.FormatJson}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <NumericUpDown Grid.Row="2" Grid.Column="1" Value="{Binding SettingsCopy.CustomData.ExportOffset}" Increment="1"/>
+                  </Grid>
+                </HeaderedContentControl>
+              </DockPanel>
+            </Border>
+          </ScrollViewer>
+        </TabItem>
+        <TabItem Header="Custom Data Tables" Width="130" Height="30" BorderThickness="0,0,0,1">
+          <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+              <DockPanel LastChildFill="False" Margin="10">
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Attack Bonus">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.AttackBonusTables.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.AttackBonusTables.FormatJson}"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Bonus Feats">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.BonusFeatTables.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.BonusFeatTables.FormatJson}"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Feats">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.FeatTables.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.FeatTables.FormatJson}"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Known Spells">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.KnownSpellsTables.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.KnownSpellsTables.FormatJson}"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Prerequisites">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.PrerequisiteTables.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.PrerequisiteTables.FormatJson}"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Racial Feats">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.RacialFeatsTables.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.RacialFeatsTables.FormatJson}"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Saving Throws">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.SavesTables.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.SavesTables.FormatJson}"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Skills">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.SkillsTables.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.SkillsTables.FormatJson}"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Spell Slots">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.SpellSlotTables.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.SpellSlotTables.FormatJson}"/>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Stat Gain">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.StatGainTables.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.StatGainTables.FormatJson}"/>
+                  </Grid>
+                </HeaderedContentControl>
+              </DockPanel>
+            </Border>
+          </ScrollViewer>
+        </TabItem>
+      </TabControl>
+    </Border>
+  </DockPanel>
+</UserControl>

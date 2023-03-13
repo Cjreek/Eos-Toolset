@@ -45,7 +45,7 @@ namespace Eos.Models.Tables
             return true;
         }
 
-        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        public void NotifyPropertyChanged([CallerMemberName] string propertyName = "") // TODOX: protected // !
         {
             if (PropertyChanged != null)
             {

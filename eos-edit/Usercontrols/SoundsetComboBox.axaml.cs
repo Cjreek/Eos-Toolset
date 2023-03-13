@@ -1,26 +1,12 @@
-﻿using Eos.Models;
-using Eos.Models.Tables;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data;
+using Avalonia.Interactivity;
+using Eos.Models;
 using Eos.ViewModels.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Eos.Usercontrols
 {
-    /// <summary>
-    /// Interaktionslogik für SoundsetComboBox.xaml
-    /// </summary>
     public partial class SoundsetComboBox : UserControl
     {
         public SoundsetComboBox()
@@ -28,18 +14,18 @@ namespace Eos.Usercontrols
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty SelectedValueProperty = DependencyProperty.Register("SelectedValue", typeof(Soundset), typeof(SoundsetComboBox), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-        public static readonly DependencyProperty IsNullableProperty = DependencyProperty.Register("IsNullable", typeof(bool), typeof(SoundsetComboBox), new PropertyMetadata(true));
+        public static readonly StyledProperty<Soundset?> SelectedValueProperty = AvaloniaProperty.Register<SoundsetComboBox, Soundset?>("SelectedValue", null, false, BindingMode.TwoWay);
+        public static readonly StyledProperty<bool> IsNullableProperty = AvaloniaProperty.Register<SoundsetComboBox, bool>("IsNullable", true);
 
         public Soundset? SelectedValue
         {
-            get { return (Soundset)GetValue(SelectedValueProperty); }
+            get { return GetValue(SelectedValueProperty); }
             set { SetValue(SelectedValueProperty, value); }
         }
 
         public bool IsNullable
         {
-            get { return (bool)GetValue(IsNullableProperty); }
+            get { return GetValue(IsNullableProperty); }
             set { SetValue(IsNullableProperty, value); }
         }
 

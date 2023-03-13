@@ -1,27 +1,26 @@
-﻿<UserControl x:Class="Eos.Usercontrols.IconControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Eos.Usercontrols"
-             xmlns:nwn="clr-namespace:Eos.Nwn;assembly=Eos"
-             mc:Ignorable="d"
-             x:Name="ucIconControl"
-             d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources\ConverterResources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Usercontrols"
+             xmlns:nwn="using:Eos.Nwn"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Usercontrols.IconControl"
+             x:Name="ucIconControl">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+  
+  <StackPanel DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:IconControl}}}">
+    <Border BorderThickness="1" BorderBrush="Black" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Top">
+      <Image Source="{Binding ElementName=ucIconControl, Path=Icon, Mode=OneWay, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}"/>
+    </Border>
 
-    <StackPanel DataContext="{x:Reference ucIconControl}">
-        <Border BorderThickness="1" BorderBrush="Black" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <Image Source="{Binding ElementName=ucIconControl, Path=Icon, Mode=OneWay, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}"/>
-        </Border>
-
-        <Button x:Name="btLoadIcon" Content="Load Icon" HorizontalAlignment="Center" Margin="0,3,0,0" Width="80" Click="btLoadIcon_Click"/>
-        <TextBox Text="{Binding ElementName=ucIconControl, Path=Icon, Mode=OneWay}" Width="80" IsReadOnly="True" Background="Transparent" BorderThickness="0" FontSize="10" Margin="0,3,0,0" TextAlignment="Center"/>
-    </StackPanel>
+    <Button x:Name="btLoadIcon" Content="Load Icon" HorizontalAlignment="Center" Margin="0,3,0,0" Width="80" Click="btLoadIcon_Click"/>
+    <TextBox Text="{Binding ElementName=ucIconControl, Path=Icon, Mode=OneWay}" Width="80" IsReadOnly="True" Background="Transparent" BorderThickness="0" FontSize="10" Margin="0,3,0,0" TextAlignment="Center"/>
+  </StackPanel>
 </UserControl>

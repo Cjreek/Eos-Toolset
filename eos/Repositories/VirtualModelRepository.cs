@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Eos.Repositories
 {
-    public class VirtualModelRepository<T> : IReadOnlyList<T?>, INotifyCollectionChanged where T : BaseModel, new()
+    public class VirtualModelRepository<T> : IReadOnlyList<T?>, INotifyCollectionChanged, IList where T : BaseModel, new()
     {
         private readonly ModelRepository<T>[] repositories;
 
@@ -115,5 +115,69 @@ namespace Eos.Repositories
             if (modelRef == null) return null;
             return GetByID(modelRef.ID);
         }
+
+        // IList
+
+        public int Add(object? value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Contains(object? value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int IndexOf(object? value)
+        {
+            var tmpIndex = 0;
+            for (int i = 0; i < repositories.Length; i++)
+            {
+                for (int j=0; j < repositories[i].Count; j++)
+                {
+                    if (repositories[i][j] == value) return tmpIndex;
+                    tmpIndex++;
+                }
+            }
+
+            return -1;
+        }
+
+        public void Insert(int index, object? value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(object? value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveAt(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CopyTo(Array array, int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsFixedSize => throw new NotImplementedException();
+
+        public bool IsReadOnly => true;
+
+        public int Count => repositories.Sum(list => list.Count);
+
+        public bool IsSynchronized => throw new NotImplementedException();
+
+        public object SyncRoot => throw new NotImplementedException();
+
+        object? IList.this[int index] { get => this[index]; set { } }
     }
 }

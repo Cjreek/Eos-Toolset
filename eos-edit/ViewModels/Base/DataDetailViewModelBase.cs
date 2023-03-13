@@ -1,25 +1,25 @@
-﻿using Eos.ViewModels.Base;
+﻿using Avalonia.Media;
+using Eos.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media;
 
-namespace Eos.ViewModels
+namespace Eos.ViewModels.Base
 {
-    internal abstract class DataDetailViewModelBase : ViewModelBase
+    public abstract class DataDetailViewModelBase : ViewModelBase
     {
         protected abstract String GetHeader();
         public abstract object GetDataObject();
 
-        protected virtual Brush GetEntityColor()
+        protected virtual ISolidColorBrush GetEntityColor()
         {
             return Brushes.White;
         }
 
         public string Header { get { return GetHeader(); } }
-        public Brush EntityColor { get { return GetEntityColor(); } }
+        public ISolidColorBrush EntityColor { get { return GetEntityColor(); } }
         public int SelectedTabIndex { get; set; }
     }
 }

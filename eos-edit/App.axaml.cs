@@ -1,33 +1,43 @@
-﻿using Nwn.Tga;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Markup.Xaml;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using Eos.Config;
 using Eos.Nwn;
 using Eos.Repositories;
-using Eos.ViewModels.Base;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
+using Eos.ViewModels;
+using Eos.Views;
+using Nwn.Tga;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Ink;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System.Runtime.InteropServices;
 
 namespace Eos
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
-        private void Application_Exit(object sender, ExitEventArgs e)
+        public override void Initialize()
         {
-            EosConfig.Save();
+            AvaloniaXamlLoader.Load(this);
         }
 
-        private void Application_Startup(object sender, StartupEventArgs e)
+        public override void OnFrameworkInitializationCompleted()
+        {
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                desktop.Startup += Desktop_Startup;
+                desktop.Exit += Desktop_Exit;
+
+                desktop.MainWindow = new MainWindow
+                {
+                    DataContext = new MainWindowViewModel(),
+                };
+            }
+
+            base.OnFrameworkInitializationCompleted();
+        }
+
+        private void Desktop_Startup(object? sender, ControlledApplicationLifetimeStartupEventArgs e)
         {
             EosConfig.Load();
 
@@ -40,27 +50,32 @@ namespace Eos
 
         private object? TargaResourceLoader(Stream stream)
         {
+            Bitmap? result = null;
             if (stream.Length > 0)
             {
-                TargaImage tga = new TargaImage(stream);
+                TargaImage tga = new TargaImage(stream, true);
 
-                PixelFormat pf = PixelFormats.Default;
+                PixelFormat pf = PixelFormats.Gray8;
                 switch (tga.BitsPerPixel)
                 {
-                    case 8: pf = PixelFormats.Gray8; break;
-                    case 16: pf = PixelFormats.Bgr555; break;
-                    case 24: pf = PixelFormats.Bgr24; break;
-                    case 32: pf = PixelFormats.Bgra32; break; // bgr32
+                    case 8: pf = PixelFormats.Gray8; break; // Wrong
+                    case 16: pf = PixelFormats.Gray8; break; // Wrong
+                    case 24: pf = PixelFormats.Bgra8888; break; // Wrong
+                    case 32: pf = PixelFormats.Bgra8888; break; // bgr32
                 }
 
-                var bmp = BitmapSource.Create(tga.Width, tga.Height, 96, 96, pf, null, tga.ImageData, tga.StrideSize);
-                bmp.Freeze();
-                //tga.Image?.Freeze();
-                //return tga.Image;
-                return bmp;
+                var imageDataPtr = GCHandle.Alloc(tga.ImageData, GCHandleType.Pinned);
+                try
+                {
+                    result = new Bitmap(pf, AlphaFormat.Unpremul, imageDataPtr.AddrOfPinnedObject(), PixelSize.FromSize(new Size(tga.Width, tga.Height), 1.0), new Vector(96, 96), tga.StrideSize);
+                }
+                finally 
+                { 
+                    imageDataPtr.Free(); 
+                }
             }
-            else
-                return null;
+         
+            return result;
         }
 
         private object? ScriptSourceLoader(Stream stream)
@@ -72,6 +87,12 @@ namespace Eos
             }
             else
                 return null;
+        }
+
+        private void Desktop_Exit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
+        {
+            EosConfig.Save();
+            MasterRepository.Cleanup();
         }
     }
 }

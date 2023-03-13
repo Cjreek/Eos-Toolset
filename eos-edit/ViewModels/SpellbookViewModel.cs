@@ -1,11 +1,13 @@
-﻿using Eos.Models;
-using Prism.Commands;
+﻿using Avalonia.Media;
+using Eos.Models;
+using Eos.ViewModels.Base;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media;
 
 namespace Eos.ViewModels
 {
@@ -13,14 +15,14 @@ namespace Eos.ViewModels
     {
         public SpellbookViewModel() : base()
         {
-            AddSpellCommand = new DelegateCommand<int?>(AddSpell);
-            DeleteSpellCommand = new DelegateCommand<SpellbookEntry>(DeleteSpell);
+            AddSpellCommand = ReactiveCommand.Create<int?>(AddSpell);
+            DeleteSpellCommand = ReactiveCommand.Create<SpellbookEntry>(DeleteSpell);
         }
 
         public SpellbookViewModel(Spellbook spellbook) : base(spellbook)
         {
-            AddSpellCommand = new DelegateCommand<int?>(AddSpell);
-            DeleteSpellCommand = new DelegateCommand<SpellbookEntry>(DeleteSpell);
+            AddSpellCommand = ReactiveCommand.Create<int?>(AddSpell);
+            DeleteSpellCommand = ReactiveCommand.Create<SpellbookEntry>(DeleteSpell);
         }
 
         protected override string GetHeader()
@@ -28,7 +30,7 @@ namespace Eos.ViewModels
             return Data.Name + " (Spellbook)";
         }
 
-        protected override Brush GetEntityColor()
+        protected override ISolidColorBrush GetEntityColor()
         {
             return new SolidColorBrush(Color.FromArgb(100, 116, 72, 105));
         }
@@ -44,7 +46,7 @@ namespace Eos.ViewModels
             Data.RemoveSpell(entry);
         }
 
-        public DelegateCommand<int?> AddSpellCommand { get; private set; }
-        public DelegateCommand<SpellbookEntry> DeleteSpellCommand { get; private set; }
+        public ReactiveCommand<int?, Unit> AddSpellCommand { get; private set; }
+        public ReactiveCommand<SpellbookEntry, Unit> DeleteSpellCommand { get; private set; }
     }
 }

@@ -1,9 +1,12 @@
-﻿using Eos.Models.Tables;
+﻿using Avalonia.Threading;
+using Eos.Models.Tables;
 using Eos.Types;
-using Prism.Commands;
+using Eos.ViewModels.Base;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,20 +18,20 @@ namespace Eos.ViewModels
 
         public ModelExtensionViewModel() : base()
         {
-            DeleteExtensionPropertyCommand = new DelegateCommand<CustomObjectProperty>(DeleteExtensionProperty);
-            AddExtensionPropertyCommand = new DelegateCommand(AddExtensionProperty);
+            DeleteExtensionPropertyCommand = ReactiveCommand.Create<CustomObjectProperty>(DeleteExtensionProperty);
+            AddExtensionPropertyCommand = ReactiveCommand.Create(AddExtensionProperty);
 
-            MoveExtensionPropertyUpCommand = new DelegateCommand<CustomObjectProperty>(MoveUp);
-            MoveExtensionPropertyDownCommand = new DelegateCommand<CustomObjectProperty>(MoveDown);
+            MoveExtensionPropertyUpCommand = ReactiveCommand.Create<CustomObjectProperty>(MoveUp);
+            MoveExtensionPropertyDownCommand = ReactiveCommand.Create<CustomObjectProperty>(MoveDown);
         }
 
         public ModelExtensionViewModel(ModelExtension extension) : base(extension)
         {
-            DeleteExtensionPropertyCommand = new DelegateCommand<CustomObjectProperty>(DeleteExtensionProperty);
-            AddExtensionPropertyCommand = new DelegateCommand(AddExtensionProperty);
+            DeleteExtensionPropertyCommand = ReactiveCommand.Create<CustomObjectProperty>(DeleteExtensionProperty);
+            AddExtensionPropertyCommand = ReactiveCommand.Create(AddExtensionProperty);
 
-            MoveExtensionPropertyUpCommand = new DelegateCommand<CustomObjectProperty>(MoveUp);
-            MoveExtensionPropertyDownCommand = new DelegateCommand<CustomObjectProperty>(MoveDown);
+            MoveExtensionPropertyUpCommand = ReactiveCommand.Create<CustomObjectProperty>(MoveUp);
+            MoveExtensionPropertyDownCommand = ReactiveCommand.Create<CustomObjectProperty>(MoveDown);
         }
 
         public void RemoveAllEventsCalling(EventHandler<DeleteCustomPropertyEventArgs> method)
@@ -80,10 +83,10 @@ namespace Eos.ViewModels
                 Data.Items.Move(index, index + 1);
         }
 
-        public DelegateCommand<CustomObjectProperty> DeleteExtensionPropertyCommand { get; private set; }
-        public DelegateCommand AddExtensionPropertyCommand { get; private set; }
+        public ReactiveCommand<CustomObjectProperty, Unit> DeleteExtensionPropertyCommand { get; private set; }
+        public ReactiveCommand<Unit, Unit> AddExtensionPropertyCommand { get; private set; }
 
-        public DelegateCommand<CustomObjectProperty> MoveExtensionPropertyUpCommand { get; private set; }
-        public DelegateCommand<CustomObjectProperty> MoveExtensionPropertyDownCommand { get; private set; }
+        public ReactiveCommand<CustomObjectProperty, Unit> MoveExtensionPropertyUpCommand { get; private set; }
+        public ReactiveCommand<CustomObjectProperty, Unit> MoveExtensionPropertyDownCommand { get; private set; }
     }
 }
