@@ -781,7 +781,7 @@
                     </TreeView>
                 </TabItem>
                 <TabItem x:Name="tabCustom" Header="Custom">
-                    <TreeView x:Name="tvCustom">
+                    <TreeView x:Name="tvCustom" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <TreeView.Resources>
                             <Style TargetType="{x:Type TreeViewItem}">
                                 <Setter Property="FontWeight" Value="Normal"/>
@@ -1251,7 +1251,7 @@
                     </TreeView>
                 </TabItem>
                 <TabItem x:Name="tabAdditional" Header="Additional">
-                    <TreeView x:Name="tvAdditional">
+                    <TreeView x:Name="tvAdditional" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <TreeView.Resources>
                             <HierarchicalDataTemplate DataType="{x:Type tables:CustomObject}" ItemsSource="{Binding Converter={StaticResource customObjectRepositoryConverter}}">
                                 <TextBlock Text="{Binding Path=Name}" ContextMenu="{StaticResource customObjectContextMenu}" Tag="{Binding ElementName=viewModel}"/>

@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Eos.Views.Dialogs"
       xmlns:ext="clr-namespace:Eos.Extensions"
-      xmlns:tlk="clr-namespace:Eos.Nwn.Tlk"
+      xmlns:tlk="clr-namespace:Eos.Nwn.Tlk;assembly=eos"
       xmlns:uc="clr-namespace:Eos.Usercontrols"
       xmlns:vm="clr-namespace:Eos.ViewModels.Dialogs"
       xmlns:wpftk="clr-namespace:Xceed.Wpf.Toolkit;assembly=DotNetProjects.Wpf.Extended.Toolkit"
