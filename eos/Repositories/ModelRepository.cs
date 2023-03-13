@@ -115,6 +115,7 @@ namespace Eos.Repositories
             modelLookup.Clear();
             modelIndexLookup.Clear();
             overrideLookup.Clear();
+            Extensions.Clear();
         }
 
         public override void Remove(T item)

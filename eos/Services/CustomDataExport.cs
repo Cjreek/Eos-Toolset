@@ -74,7 +74,7 @@ namespace Eos.Services
 
         private TwoDimensionalArrayFile? Load2da(String name)
         {
-            var filename = EosConfig.NwnBasePath + @"\ovr\" + name + ".2da";
+            var filename = Path.Combine(EosConfig.NwnBasePath, "ovr", name + ".2da");
             if (File.Exists(filename))
             {
                 using (var fs = File.OpenRead(filename))

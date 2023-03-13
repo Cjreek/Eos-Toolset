@@ -105,12 +105,12 @@ namespace Eos.Types
             var baseResourceFolder = "Resources";
             BaseResourcePath = AppDataPath + baseResourceFolder + Path.DirectorySeparatorChar;
 
-            ExportFolder = @"output\";
+            ExportFolder = @"output" + Path.DirectorySeparatorChar;
             Export2DAFolder = ExportFolder;
-            ExportHAKFolder = ExportFolder + @"hak\";
-            ExportTLKFolder = ExportFolder + @"tlk\";
-            ExportIncludeFolder = ExportFolder + @"include\";
-            ExportERFFolder = ExportFolder + @"erf\";
+            ExportHAKFolder = ExportFolder + @"hak" + Path.DirectorySeparatorChar;
+            ExportTLKFolder = ExportFolder + @"tlk" + Path.DirectorySeparatorChar;
+            ExportIncludeFolder = ExportFolder + @"include" + Path.DirectorySeparatorChar;
+            ExportERFFolder = ExportFolder + @"erf" + Path.DirectorySeparatorChar;
 
             IncludeFilename = "inc_eos";
 
@@ -149,8 +149,8 @@ namespace Eos.Types
             CustomEnumsFilename = "customenums.json";
             CustomObjectsFilename = "customobjects.json";
 
-            IconResourcesFolder = @"icons\";
-            ExternalFilesPath = @"external\";
+            IconResourcesFolder = @"icons" + Path.DirectorySeparatorChar;
+            ExternalFilesPath = @"external" + Path.DirectorySeparatorChar;
 
             RacesFilePath = BaseDataPath + RacesFilename;
             ClassesFilePath = BaseDataPath + ClassesFilename;

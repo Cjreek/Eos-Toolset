@@ -33,7 +33,7 @@ namespace Eos.Services
         private HashSet<String> iconResourceBuffer = new HashSet<String>();
         private TwoDimensionalArrayFile Load2da(String name)
         {
-            var filename = nwnBasePath + @"\ovr\" + name + ".2da";
+            var filename = Path.Combine(nwnBasePath,"ovr", name + ".2da");
             if (File.Exists(filename))
             {
                 using (var fs = File.OpenRead(filename))

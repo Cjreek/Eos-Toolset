@@ -22,7 +22,7 @@ namespace Eos.Nwn.Bif
 
     public class BifCollection
     {
-        private static readonly String BASE_KEY_FILE = @"data\nwn_base.key";
+        private static readonly String BASE_KEY_FILE = Path.Combine("data", "nwn_base.key");
 
         private String _nwnBasePath = "";
         private KeyFile _keyFile = new KeyFile();
