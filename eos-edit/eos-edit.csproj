@@ -7,6 +7,7 @@
     <TrimMode>copyused</TrimMode>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <RootNamespace>Eos</RootNamespace>
+    <ApplicationIcon>Assets\Icons\Eos.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
@@ -31,6 +32,9 @@
     <None Remove="Assets\Icons\settings16.png" />
     <None Remove="Assets\Icons\settings32.png" />
     <None Remove="Assets\Icons\tab.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Icons\Eos.ico" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.999-cibuild0031415-beta" />
