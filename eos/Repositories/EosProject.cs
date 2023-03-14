@@ -303,6 +303,17 @@ namespace Eos.Repositories
             ProjectFolder = projectFolder;
             Name = name;
             DefaultLanguage = defaultLanguage;
+
+            Settings = new ProjectSettings();
+            Settings.Export.TwoDAFolder = Constants.Export2DAFolder;
+            Settings.Export.HakFolder = Constants.ExportHAKFolder;
+            Settings.Export.TlkFolder = Constants.ExportTLKFolder;
+            Settings.Export.ErfFolder = Constants.ExportERFFolder;
+            Settings.Export.IncludeFolder = Constants.ExportIncludeFolder;
+            Settings.Export.IncludeFilename = "eos_inc";
+
+            Settings.ExternalFolders.Add(Constants.ExternalFilesPath);
+
             Save();
 
             Load(ProjectFolder + Name + Constants.ProjectFileExtension);
@@ -478,6 +489,19 @@ namespace Eos.Repositories
             projectFile.Add("CustomData", customDataSettings);
 
             File.WriteAllText(projectFilename, projectFile.ToJsonString(new JsonSerializerOptions(JsonSerializerDefaults.General) { WriteIndented = true }));
+        }
+
+        public void Close()
+        {
+            IsLoaded = false;
+
+            Name = "";
+            ProjectFolder = "";
+
+            Clear();
+
+            EosConfig.LastProject = "";
+            MasterRepository.LoadExternalResources(new string[] { });
         }
 
         public void Load(string projectFilename)

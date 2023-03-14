@@ -25,7 +25,7 @@
   </local:LanguageAwarePage.Styles>
 
   <Border BorderThickness="0,1,0,0" BorderBrush="Silver">
-    <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+    <Grid Margin="10">
       <Grid.RowDefinitions>
         <RowDefinition Height="auto"/>
         <RowDefinition Height="auto"/>
@@ -41,38 +41,38 @@
       <TextBlock Text="Skill Table" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
       <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}" MaxLength="16"/>
+      <TextBox IsEnabled="{Binding !Data.IsReadonly}" Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}" MaxLength="16"/>
 
       <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-      <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
+      <TextBox IsEnabled="{Binding !Data.IsReadonly}" Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
 
       <DataGrid Grid.Row="3" Grid.Column="1" Items="{Binding Data.Items}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" Margin="2,0,0,0">
         <DataGrid.Columns>
           <DataGridTemplateColumn Header="Skill" Width="300">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
-                <uc:SkillComboBox SelectedValue="{Binding Path=Skill}" IsNullable="False" Margin="0,1,0,1"/>
+                <uc:SkillComboBox IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" SelectedValue="{Binding Path=Skill}" IsNullable="False" Margin="0,1,0,1"/>
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn Header="Class?" Width="50">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
-                <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsClassSkill}" VerticalAlignment="Center" Margin="0,1,0,0"/>
+                <CheckBox IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" HorizontalAlignment="Center" IsChecked="{Binding IsClassSkill}" VerticalAlignment="Center" Margin="0,1,0,0"/>
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn Header="" Width="25">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
-                <uc:DeleteButton Command="{Binding ElementName=page, Path=DataContext.DeleteSkillItemCommand}" CommandParameter="{Binding}" Margin="0,1,0,1"/>
+                <uc:DeleteButton IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" Command="{Binding ElementName=page, Path=DataContext.DeleteSkillItemCommand}" CommandParameter="{Binding}" Margin="0,1,0,1"/>
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
         </DataGrid.Columns>
       </DataGrid>
 
-      <Button Grid.Row="4" Grid.Column="1" Content="Add Skill" Width="150" Margin="2,5,0,0" HorizontalAlignment="Left" Command="{Binding AddSkillItemCommand}"/>
+      <Button Grid.Row="4" Grid.Column="1" IsEnabled="{Binding !Data.IsReadonly}" Content="Add Skill" Width="150" Margin="2,5,0,0" HorizontalAlignment="Left" Command="{Binding AddSkillItemCommand}"/>
     </Grid>
   </Border>
 </local:LanguageAwarePage>

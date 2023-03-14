@@ -18,14 +18,14 @@ namespace Eos.Models
         public int FirstSaveDC { get; set; } = 15;
         public int SecondSaveDC { get; set; } = 10;
         public int IncubationHours { get; set; } = 1;
-        public int AbilityDamage1DiceCount { get; set; } = 1;
-        public int AbilityDamage1Dice { get; set; } = 4;
+        public int? AbilityDamage1DiceCount { get; set; } = 1;
+        public int? AbilityDamage1Dice { get; set; } = 4;
         public AbilityType? AbilityDamage1Type { get; set; } = AbilityType.CON;
-        public int AbilityDamage2DiceCount { get; set; } = 0;
-        public int AbilityDamage2Dice { get; set; } = 0;
+        public int? AbilityDamage2DiceCount { get; set; } = 0;
+        public int? AbilityDamage2Dice { get; set; } = 0;
         public AbilityType? AbilityDamage2Type { get; set; } = null;
-        public int AbilityDamage3DiceCount { get; set; } = 0;
-        public int AbilityDamage3Dice { get; set; } = 0;
+        public int? AbilityDamage3DiceCount { get; set; } = 0;
+        public int? AbilityDamage3Dice { get; set; } = 0;
         public AbilityType? AbilityDamage3Type { get; set; } = null;
         public String? IncubationEndScript { get; set; }
         public String? DailyEffectScript { get; set; }
@@ -60,14 +60,14 @@ namespace Eos.Models
             this.FirstSaveDC = json["FirstSaveDC"]?.GetValue<int>() ?? 15;
             this.SecondSaveDC = json["SecondSaveDC"]?.GetValue<int>() ?? 10;
             this.IncubationHours = json["IncubationHours"]?.GetValue<int>() ?? 1;
-            this.AbilityDamage1DiceCount = json["AbilityDamage1DiceCount"]?.GetValue<int>() ?? 1;
-            this.AbilityDamage1Dice = json["AbilityDamage1Dice"]?.GetValue<int>() ?? 4;
+            this.AbilityDamage1DiceCount = json["AbilityDamage1DiceCount"]?.GetValue<int>();
+            this.AbilityDamage1Dice = json["AbilityDamage1Dice"]?.GetValue<int>();
             this.AbilityDamage1Type = JsonToEnum<AbilityType>(json["AbilityDamage1Type"]);
-            this.AbilityDamage2DiceCount = json["AbilityDamage2DiceCount"]?.GetValue<int>() ?? 0;
-            this.AbilityDamage2Dice = json["AbilityDamage2Dice"]?.GetValue<int>() ?? 0;
+            this.AbilityDamage2DiceCount = json["AbilityDamage2DiceCount"]?.GetValue<int>();
+            this.AbilityDamage2Dice = json["AbilityDamage2Dice"]?.GetValue<int>();
             this.AbilityDamage2Type = JsonToEnum<AbilityType>(json["AbilityDamage2Type"]);
-            this.AbilityDamage3DiceCount = json["AbilityDamage3DiceCount"]?.GetValue<int>() ?? 0;
-            this.AbilityDamage3Dice = json["AbilityDamage3Dice"]?.GetValue<int>() ?? 0;
+            this.AbilityDamage3DiceCount = json["AbilityDamage3DiceCount"]?.GetValue<int>();
+            this.AbilityDamage3Dice = json["AbilityDamage3Dice"]?.GetValue<int>();
             this.AbilityDamage3Type = JsonToEnum<AbilityType>(json["AbilityDamage3Type"]);
             this.IncubationEndScript = json["IncubationEndScript"]?.GetValue<String>();
             this.DailyEffectScript = json["DailyEffectScript"]?.GetValue<String>();

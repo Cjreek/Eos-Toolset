@@ -6,7 +6,8 @@
              xmlns:vm="using:Eos.ViewModels"
              xmlns:uc="using:Eos.Usercontrols"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Eos.Views.AttackBonusTableView">
+             x:Class="Eos.Views.AttackBonusTableView"
+             x:Name="page">
   <Design.DataContext>
     <vm:AttackBonusTableViewModel/>
   </Design.DataContext>
@@ -26,7 +27,7 @@
   </local:LanguageAwarePage.Styles>
 
   <Border BorderThickness="0,1,0,0" BorderBrush="Silver">
-    <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+    <Grid Margin="10">
       <Grid.RowDefinitions>
         <RowDefinition Height="auto"/>
         <RowDefinition Height="auto"/>
@@ -41,10 +42,10 @@
       <TextBlock Text="Attack Bonus Table" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
       <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}" MaxLength="16"/>
+      <TextBox Grid.Row="1" Grid.Column="1" IsEnabled="{Binding !Data.IsReadonly}" Text="{Binding Data.Name}" MaxLength="16"/>
 
       <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-      <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
+      <TextBox Grid.Row="2" Grid.Column="1" IsEnabled="{Binding !Data.IsReadonly}" Text="{Binding Data.Hint}"/>
 
       <DataGrid Grid.Row="3" Grid.Column="1" Items="{Binding Data.Items}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" Margin="2,0,0,0">
         <DataGrid.Columns>
@@ -56,7 +57,7 @@
           <DataGridTemplateColumn Header="Attack Bonus" Width="100">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
-                <NumericUpDown VerticalAlignment="Top" Value="{Binding AttackBonus}" Increment="1" Height="22" Margin="0,1,0,1"/>
+                <NumericUpDown IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" VerticalAlignment="Top" Value="{Binding AttackBonus}" Increment="1" Height="22" Margin="0,1,0,1"/>
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>

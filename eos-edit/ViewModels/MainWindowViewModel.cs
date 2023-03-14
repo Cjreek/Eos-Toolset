@@ -94,6 +94,15 @@ namespace Eos.ViewModels
             }
         }
 
+        private void CloseAllProjectDetails()
+        {
+            foreach (var key in detailViewDict.Keys)
+            {
+                if ((key is BaseModel model) && (!model.IsReadonly))
+                    CloseDetail(model);
+            }
+        }
+
         private void DeleteDetail(BaseModel model)
         {
             if (model.ReferenceCount > 0)
@@ -231,6 +240,18 @@ namespace Eos.ViewModels
                         MasterRepository.Project.Save();
                         break;
 
+                    case MessageType.CloseProject:
+                        var result = DoQuery("Save changes?", "Save changes before closing the project?", ViewModelQueryType.Question);
+                        if (result != ViewModelQueryResult.Cancel)
+                        {
+                            if (result == ViewModelQueryResult.Yes)
+                                MasterRepository.Project.Save();
+
+                            CloseAllProjectDetails();
+                            MasterRepository.Project.Close();
+                        }
+                        break;
+
                     case MessageType.OpenProjectSettings:
                         WindowService.OpenDialog<ProjectOptionsViewModel>();
                         break;
@@ -247,6 +268,7 @@ namespace Eos.ViewModels
             MessageDispatcher.Subscribe(MessageType.NewProject, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.OpenProject, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.SaveProject, MessageHandler);
+            MessageDispatcher.Subscribe(MessageType.CloseProject, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.OpenProjectSettings, MessageHandler); 
 
             MessageDispatcher.Subscribe(MessageType.NewDetail, MessageHandler);
@@ -269,6 +291,7 @@ namespace Eos.ViewModels
             MessageDispatcher.Unsubscribe(MessageType.NewProject, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.OpenProject, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.SaveProject, MessageHandler);
+            MessageDispatcher.Unsubscribe(MessageType.CloseProject, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.OpenProjectSettings, MessageHandler);
 
             MessageDispatcher.Unsubscribe(MessageType.NewDetail, MessageHandler);

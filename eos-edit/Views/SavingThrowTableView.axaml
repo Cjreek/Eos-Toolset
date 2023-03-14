@@ -6,7 +6,8 @@
              xmlns:vm="using:Eos.ViewModels"
              xmlns:uc="using:Eos.Usercontrols"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Eos.Views.SavingThrowTableView">
+             x:Class="Eos.Views.SavingThrowTableView"
+             x:Name="page">
   <Design.DataContext>
     <vm:SavingThrowTableViewModel/>
   </Design.DataContext>
@@ -24,7 +25,7 @@
   </local:LanguageAwarePage.Styles>
 
   <Border BorderThickness="0,1,0,0" BorderBrush="Silver">
-    <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+    <Grid Margin="10">
       <Grid.RowDefinitions>
         <RowDefinition Height="auto"/>
         <RowDefinition Height="auto"/>
@@ -39,10 +40,10 @@
       <TextBlock Text="Saving Throw Table" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
       <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}" MaxLength="16"/>
+      <TextBox Grid.Row="1" Grid.Column="1" IsEnabled="{Binding !Data.IsReadonly}" Text="{Binding Data.Name}" MaxLength="16"/>
 
       <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-      <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
+      <TextBox Grid.Row="2" Grid.Column="1" IsEnabled="{Binding !Data.IsReadonly}" Text="{Binding Data.Hint}"/>
 
       <DataGrid Grid.Row="3" Grid.Column="1" Items="{Binding Data.Items}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" Margin="2,0,0,0">
         <DataGrid.Columns>
@@ -54,21 +55,21 @@
           <DataGridTemplateColumn Header="Fort. Save" Width="75">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
-                <NumericUpDown VerticalAlignment="Top" Value="{Binding FortitudeSave}" Increment="1" Height="22" Margin="2,1,0,1"/>
+                <NumericUpDown IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" VerticalAlignment="Top" Value="{Binding FortitudeSave}" Increment="1" Height="22" Margin="2,1,0,1"/>
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn Header="Ref. Save" Width="75">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
-                <NumericUpDown VerticalAlignment="Top" Value="{Binding ReflexSave}" Increment="1" Height="22" Margin="2,1,0,1"/>
+                <NumericUpDown IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" VerticalAlignment="Top" Value="{Binding ReflexSave}" Increment="1" Height="22" Margin="2,1,0,1"/>
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn Header="Will. Save" Width="75">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
-                <NumericUpDown VerticalAlignment="Top" Value="{Binding WillpowerSave}" Increment="1" Height="22" Margin="2,1,0,1"/>
+                <NumericUpDown IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" VerticalAlignment="Top" Value="{Binding WillpowerSave}" Increment="1" Height="22" Margin="2,1,0,1"/>
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>

@@ -26,7 +26,7 @@
   </local:LanguageAwarePage.Styles>
 
   <Border BorderThickness="0,1,0,0" BorderBrush="Silver">
-    <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+    <Grid Margin="10">
       <Grid.RowDefinitions>
         <RowDefinition Height="auto"/>
         <RowDefinition Height="auto"/>
@@ -41,10 +41,10 @@
       <TextBlock Text="Known Spells Table" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
       <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}" MaxLength="16"/>
+      <TextBox Grid.Row="1" Grid.Column="1" IsEnabled="{Binding !Data.IsReadonly}" Text="{Binding Data.Name}" MaxLength="16"/>
 
       <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-      <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
+      <TextBox Grid.Row="2" Grid.Column="1" IsEnabled="{Binding !Data.IsReadonly}" Text="{Binding Data.Hint}"/>
 
       <DataGrid Grid.Row="3" Grid.Column="1" Items="{Binding Data.Items}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" Margin="2,0,0,0">
         <DataGrid.Columns>
@@ -55,52 +55,52 @@
           </DataGridTemplateColumn>
           <DataGridTemplateColumn Header="0" Width="50">
             <DataTemplate>
-              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel0}" Increment="1" Height="22" Margin="2,1,0,1"/>
+              <NumericUpDown IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" VerticalAlignment="Top" Value="{Binding SpellLevel0}" Increment="1" Height="22" Margin="2,1,0,1"/>
             </DataTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn Header="1" Width="50">
             <DataTemplate>
-              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel1}" Increment="1" Height="22" Margin="2,1,0,1"/>
+              <NumericUpDown IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" VerticalAlignment="Top" Value="{Binding SpellLevel1}" Increment="1" Height="22" Margin="2,1,0,1"/>
             </DataTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn Header="2" Width="50">
             <DataTemplate>
-              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel2}" Increment="1" Height="22" Margin="2,1,0,1"/>
+              <NumericUpDown IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" VerticalAlignment="Top" Value="{Binding SpellLevel2}" Increment="1" Height="22" Margin="2,1,0,1"/>
             </DataTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn Header="3" Width="50">
             <DataTemplate>
-              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel3}" Increment="1" Height="22" Margin="2,1,0,1"/>
+              <NumericUpDown IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" VerticalAlignment="Top" Value="{Binding SpellLevel3}" Increment="1" Height="22" Margin="2,1,0,1"/>
             </DataTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn Header="4" Width="50">
             <DataTemplate>
-              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel4}" Increment="1" Height="22" Margin="2,1,0,1"/>
+              <NumericUpDown IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" VerticalAlignment="Top" Value="{Binding SpellLevel4}" Increment="1" Height="22" Margin="2,1,0,1"/>
             </DataTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn Header="5" Width="50">
             <DataTemplate>
-              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel5}" Increment="1" Height="22" Margin="2,1,0,1"/>
+              <NumericUpDown IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" VerticalAlignment="Top" Value="{Binding SpellLevel5}" Increment="1" Height="22" Margin="2,1,0,1"/>
             </DataTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn Header="6" Width="50">
             <DataTemplate>
-              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel6}" Increment="1" Height="22" Margin="2,1,0,1"/>
+              <NumericUpDown IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" VerticalAlignment="Top" Value="{Binding SpellLevel6}" Increment="1" Height="22" Margin="2,1,0,1"/>
             </DataTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn Header="7" Width="50">
             <DataTemplate>
-              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel7}" Increment="1" Height="22" Margin="2,1,0,1"/>
+              <NumericUpDown IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" VerticalAlignment="Top" Value="{Binding SpellLevel7}" Increment="1" Height="22" Margin="2,1,0,1"/>
             </DataTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn Header="8" Width="50">
             <DataTemplate>
-              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel8}" Increment="1" Height="22" Margin="2,1,0,1"/>
+              <NumericUpDown IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" VerticalAlignment="Top" Value="{Binding SpellLevel8}" Increment="1" Height="22" Margin="2,1,0,1"/>
             </DataTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn Header="9" Width="50">
             <DataTemplate>
-              <NumericUpDown VerticalAlignment="Top" Value="{Binding SpellLevel9}" Increment="1" Height="22" Margin="2,1,0,1"/>
+              <NumericUpDown IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" VerticalAlignment="Top" Value="{Binding SpellLevel9}" Increment="1" Height="22" Margin="2,1,0,1"/>
             </DataTemplate>
           </DataGridTemplateColumn>
         </DataGrid.Columns>

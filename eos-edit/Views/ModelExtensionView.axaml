@@ -103,7 +103,7 @@
         </DataGrid.Columns>
       </DataGrid>
 
-      <Button Grid.Row="4" Grid.Column="1" Content="Add Property" Width="150" Margin="2,5,0,0" HorizontalAlignment="Left" Command="{Binding AddExtensionPropertyCommand}"/>
+      <Button Grid.Row="4" Grid.Column="1" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Content="Add Property" Width="150" Margin="2,5,0,0" HorizontalAlignment="Left" Command="{Binding AddExtensionPropertyCommand}"/>
     </Grid>
   </Border>
 </local:LanguageAwarePage>

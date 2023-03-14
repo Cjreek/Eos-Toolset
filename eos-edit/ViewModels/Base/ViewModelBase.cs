@@ -90,6 +90,11 @@ namespace Eos.ViewModels.Base
             MessageDispatcher.Send(MessageType.SaveProject, null);
         });
 
+        public ReactiveCommand<Unit, Unit> CloseProjectCommand { get; private set; } = ReactiveCommand.Create(() =>
+        {
+            MessageDispatcher.Send(MessageType.CloseProject, null);
+        });
+
         public ReactiveCommand<Unit, Unit> OpenProjectSettingsCommand { get; private set; } = ReactiveCommand.Create(() =>
         {
             MessageDispatcher.Send(MessageType.OpenProjectSettings, null);

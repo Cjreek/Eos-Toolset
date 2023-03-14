@@ -226,6 +226,25 @@ namespace Eos.Views
 
         private void mainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            if (MasterRepository.Standard.Classes.Count == 0)
+            {
+                WindowService.ShowMessage("No base game data has been found!\nThe standard game files will now be imported.\nThis may take a minute.", "Game Data Import", MessageBoxButtons.Ok, MessageBoxIcon.Information);
+
+                var oldCursor = this.Cursor;
+                this.Cursor = new Cursor(StandardCursorType.Wait);
+                try
+                {
+                    var import = new GameDataImport();
+                    import.Import(EosConfig.NwnBasePath);
+                }
+                finally
+                {
+                    this.Cursor = oldCursor;
+                }
+
+                WindowService.ShowMessage("Game files have been imported successfully!", "Game Data Import", MessageBoxButtons.Ok, MessageBoxIcon.Information);
+            }
+            
             if ((EosConfig.LastProject != "") && (File.Exists(EosConfig.LastProject)))
                 MessageDispatcher.Send(MessageType.OpenProject, EosConfig.LastProject);
         }
@@ -243,11 +262,6 @@ namespace Eos.Views
                         MessageDispatcher.Send(MessageType.OpenProject, t.Result.First());
                 }, TaskScheduler.FromCurrentSynchronizationContext());
             }
-        }
-
-        private void miSaveProject_Click(object sender, RoutedEventArgs e)
-        {
-            MessageDispatcher.Send(MessageType.SaveProject, null);
         }
 
         private void miImportBaseData_Click(object sender, RoutedEventArgs e)
@@ -294,11 +308,14 @@ namespace Eos.Views
 
         private void mainWindow_Closing(object? sender, WindowClosingEventArgs e)
         {
-            var result = WindowService.ShowMessage("Save changes before exit?", "Save changes?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-            if (result == MessageBoxResult.Yes)
-                MessageDispatcher.Send(MessageType.SaveProject, null);
-            else if (result == MessageBoxResult.Cancel)
-                e.Cancel = true;
+            if (MasterRepository.Project.IsLoaded)
+            {
+                var result = WindowService.ShowMessage("Save changes before exit?", "Save changes?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (result == MessageBoxResult.Yes)
+                    MessageDispatcher.Send(MessageType.SaveProject, null);
+                else if (result == MessageBoxResult.Cancel)
+                    e.Cancel = true;
+            }
         }
     }
 }

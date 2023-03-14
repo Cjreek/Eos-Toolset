@@ -12,6 +12,7 @@ namespace Eos.ViewModels.Base
         NewProject,
         OpenProject,
         SaveProject,
+        CloseProject,
         NewDetail,
         OverrideDetail,
         CopyDetail,

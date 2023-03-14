@@ -45,6 +45,9 @@ namespace Eos.Views.Dialogs
                                 case "INC":
                                     vm.SettingsCopy.Export.IncludeFolder = t.Result;
                                     break;
+                                case "EXT":
+                                    vm.ExternalPathToAdd = t.Result;
+                                    break;
                             }
                         }
                     }, TaskScheduler.FromCurrentSynchronizationContext());
