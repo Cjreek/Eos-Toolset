@@ -87,7 +87,7 @@ namespace Eos.Nwn.Bif
             for (int i = 0; i < fileEntryList.Count; i++)
             {
                 sr.BaseStream.Seek(fileEntryList[i].FilenameOffset, SeekOrigin.Begin);
-                var filename = BinaryHelper.ReadString(sr, fileEntryList[i].FilenameSize);
+                var filename = BinaryHelper.ReadString(sr, fileEntryList[i].FilenameSize).Replace('\\', Path.DirectorySeparatorChar);
                 filenames.Add(filename);
             }
 
