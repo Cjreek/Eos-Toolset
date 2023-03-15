@@ -13,6 +13,7 @@ using Avalonia.Styling;
 using ReactiveUI;
 using Avalonia.VisualTree;
 using System.Reflection;
+using Avalonia.Threading;
 
 namespace Eos.Usercontrols
 {
@@ -130,7 +131,7 @@ namespace Eos.Usercontrols
 
         private static void TriggerChange(TLKTextbox textbox)
         {
-            Task.Run(() => Task.Delay(1)).ContinueWith(a => { textbox.ChangedTrigger = !textbox.ChangedTrigger; }, TaskScheduler.FromCurrentSynchronizationContext());
+            Dispatcher.UIThread.Post(() => textbox.ChangedTrigger = !textbox.ChangedTrigger, DispatcherPriority.Send);
         }
 
         protected override bool IsEnabledCore => true;

@@ -15,7 +15,7 @@ namespace Eos.ViewModels.Base
 
         protected virtual ISolidColorBrush GetEntityColor()
         {
-            return Brushes.White;
+            return Brushes.Transparent;
         }
 
         public string Header { get { return GetHeader(); } }

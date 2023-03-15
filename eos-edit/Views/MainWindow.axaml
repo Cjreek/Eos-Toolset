@@ -18,7 +18,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Eos.Views.MainWindow" MinHeight="300" MinWidth="500"
         Height="700" Width="1100" Loaded="mainWindow_Loaded"
-        x:Name="mainWindow" Tag="Eos Toolset v0.61" FontFamily="Segoe UI"
+        x:Name="mainWindow" Tag="Eos Toolset v0.62" FontFamily="Segoe UI"
         Closing="mainWindow_Closing"
         Icon="/Assets/Icons/Eos.ico">
   <Window.Title>
@@ -101,7 +101,6 @@
     </Style>
 
     <Style Selector="Menu">
-      <Setter Property="Background" Value="#F0F0F0"/>
       <Setter Property="Height" Value="24"/>
     </Style>
 
@@ -115,7 +114,7 @@
     </Style>
 
     <Style Selector="TreeViewItem:pointerover /template/ Grid">
-      <Setter Property="Background" Value="#F0F0F0"/>
+      <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}"/>
     </Style>
   </Window.Styles>
 
@@ -530,7 +529,8 @@
                     <Setter Property="Foreground" Value="DimGray"/>
                   </Style>
                   <Style Selector="StackPanel.override">
-                    <Setter Property="Background" Value="#4087CEFA"/>
+                    <Setter Property="Background" Value="#40FFFF80"/>
+                    <Setter Property="TextElement.FontStyle" Value="Italic"/>
                   </Style>
                   <Style Selector="StackPanel:not(.override)">
                     <Setter Property="Background" Value="Transparent"/>

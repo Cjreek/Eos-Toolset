@@ -2,8 +2,32 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:uc="using:Eos.Usercontrols">
   <Design.PreviewWith>
-      <Border Padding="20">
-          <!-- Add Controls for Previewer Here -->
+      <Border>
+        <UniformGrid Rows="30" Columns="1">
+          <TextBlock Text="ThemeBackgroundBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource ThemeBackgroundBrush}" Height="20" Width="100"/>
+          <TextBlock Text="ThemeBorderLowBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource ThemeBorderLowBrush}" Height="20" Width="100"/>
+          <TextBlock Text="ThemeBorderMidBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource ThemeBorderMidBrush}" Height="20" Width="100"/>
+          <TextBlock Text="ThemeBorderHighBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource ThemeBorderHighBrush}" Height="20" Width="100"/>
+          <TextBlock Text="ThemeControlLowBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource ThemeControlLowBrush}" Height="20" Width="100"/>
+          <TextBlock Text="ThemeControlMidBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource ThemeControlMidBrush}" Height="20" Width="100"/>
+          <TextBlock Text="ThemeControlHighBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource ThemeControlHighBrush}" Height="20" Width="100"/>
+          <TextBlock Text="ThemeControlHighlightLowBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource ThemeControlHighlightLowBrush}" Height="20" Width="100"/>
+          <TextBlock Text="ThemeControlHighlightMidBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource ThemeControlHighlightMidBrush}" Height="20" Width="100"/>
+          <TextBlock Text="ThemeControlHighlightHighBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource ThemeControlHighlightHighBrush}" Height="20" Width="100"/>
+          <TextBlock Text="ThemeForegroundBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource ThemeForegroundBrush}" Height="20" Width="100"/>
+          <TextBlock Text="ThemeForegroundLowBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource ThemeForegroundLowBrush}" Height="20" Width="100"/>
+          <TextBlock Text="ThemeAccentBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource ThemeAccentBrush}" Height="20" Width="100"/>
+          <TextBlock Text="ThemeAccentBrush2" FontSize="8" TextAlignment="Center" Background="{StaticResource ThemeAccentBrush2}" Height="20" Width="100"/>
+          <TextBlock Text="ThemeAccentBrush3" FontSize="8" TextAlignment="Center" Background="{StaticResource ThemeAccentBrush3}" Height="20" Width="100"/>
+          <TextBlock Text="ThemeAccentBrush4" FontSize="8" TextAlignment="Center" Background="{StaticResource ThemeAccentBrush4}" Height="20" Width="100"/>
+          <TextBlock Text="ErrorBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource ErrorBrush}" Height="20" Width="100"/>
+          <TextBlock Text="ErrorLowBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource ErrorLowBrush}" Height="20" Width="100"/>
+          <TextBlock Text="NotificationCardInformationBackgroundBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource NotificationCardBackgroundBrush}" Height="20" Width="100"/>
+          <TextBlock Text="NotificationCardInformationBackgroundBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource NotificationCardInformationBackgroundBrush}" Height="20" Width="100"/>
+          <TextBlock Text="NotificationCardInformationBackgroundBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource NotificationCardSuccessBackgroundBrush}" Height="20" Width="100"/>
+          <TextBlock Text="NotificationCardInformationBackgroundBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource NotificationCardWarningBackgroundBrush}" Height="20" Width="100"/>
+          <TextBlock Text="NotificationCardInformationBackgroundBrush" FontSize="8" TextAlignment="Center" Background="{StaticResource NotificationCardErrorBackgroundBrush}" Height="20" Width="100"/>
+        </UniformGrid>
       </Border>
   </Design.PreviewWith>
 
@@ -18,10 +42,10 @@
         <ControlTheme TargetType="DataGridRow" BasedOn="{StaticResource {x:Type DataGridRow}}">
           <ControlTheme.Children>
             <Style Selector="^:nth-child(odd)">
-              <Setter Property="Background" Value="#FFF8F8F8"/>
+              <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush4}"/>
             </Style>
             <Style Selector="^:nth-child(even)">
-              <Setter Property="Background" Value="White"/>
+              <Setter Property="Background" Value="{DynamicResource ThemeBackgroundBrush}"/>
             </Style>
           </ControlTheme.Children>
         </ControlTheme>
@@ -34,7 +58,7 @@
   </Style>
 
   <Style Selector="DataGridRow /template/ Rectangle#BackgroundRectangle">
-    <Setter Property="Fill" Value="LightSteelBlue"/>
+    <Setter Property="Fill" Value="{DynamicResource ThemeAccentBrush}"/>
   </Style>
 
   <Style Selector="TabItem">
@@ -44,11 +68,15 @@
     <Setter Property="MinWidth" Value="75"/>
     <Setter Property="Margin" Value="0,0,0,0"/>
     <Setter Property="Padding" Value="7,3,7,3"/>
-    <Setter Property="Background" Value="#FFE8E8E8"/>
-    <Setter Property="Foreground" Value="Black"/>
+    <Setter Property="Foreground" Value="{DynamicResource ThemeForegroundBrush}"/>
+    <Setter Property="Background" Value="Transparent"/>
     <Setter Property="HorizontalContentAlignment" Value="Center"/>
     <Setter Property="VerticalContentAlignment" Value="Center"/>
     <Setter Property="BorderBrush" Value="Silver"/>
+  </Style>
+
+  <Style Selector="TabItem /template/ ContentPresenter:pointerover">
+    <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}"/>
   </Style>
 
   <Style Selector="TabControl">
@@ -85,18 +113,17 @@
 
   <Style Selector="Button">
     <Setter Property="MinHeight" Value="0"/>
-    <Setter Property="Background" Value="#FFDDDDDD"/>
     <Setter Property="BorderBrush" Value="Gray"/>
     <Setter Property="BorderThickness" Value="0.5"/>
     <Setter Property="Padding" Value="2"/>
   </Style>
 
-  <Style Selector="Button:pointerover">
-    <Setter Property="Background" Value="#FFBEE6FD"/>
+  <Style Selector="Button:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource ThemeControlHighlightMidBrush}"/>
   </Style>
 
-  <Style Selector="Button:pressed">
-    <Setter Property="Background" Value="#FFFF0000"/>
+  <Style Selector="Button:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource ThemeAccentBrush3}"/>
   </Style>
 
   <Style Selector="RepeatButton">
@@ -135,7 +162,7 @@
 
   <Style Selector="ComboBox">
     <Setter Property="CornerRadius" Value="0"/>
-    <Setter Property="Background" Value="#FFDDDDDD"/>
+    <Setter Property="Background" Value="{DynamicResource ThemeControlMidBrush}"/>
     <Setter Property="BorderBrush" Value="Gray"/>
     <Setter Property="BorderThickness" Value="0.5"/>
   </Style>

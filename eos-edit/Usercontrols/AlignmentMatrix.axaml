@@ -29,7 +29,7 @@
           </ia:EventTriggerBehavior>
         </i:Interaction.Behaviors>
         
-        <TextBlock Margin="5" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content}" FontWeight="Bold" TextAlignment="Center"/>
+        <TextBlock Margin="5" Foreground="Black" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content}" FontWeight="Bold" TextAlignment="Center"/>
       </Border>
     </ControlTemplate>
   </UserControl.Resources>
