@@ -62,6 +62,12 @@
     <AvaloniaXaml Update="Assets\CustomDataTemplateResources.axaml">
       <SubType>Designer</SubType>
     </AvaloniaXaml>
+    <AvaloniaResource Update="Assets\Icons\backup16.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\backup32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Update="Assets\Icons\Eos.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>

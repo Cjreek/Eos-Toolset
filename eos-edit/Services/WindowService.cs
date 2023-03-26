@@ -19,6 +19,7 @@ namespace Eos.Services
     public static class WindowService
     {
         private static Dictionary<DialogViewModel, Window> windowDict = new Dictionary<DialogViewModel, Window>();
+        private static int cursorWaitCount = 0;
 
         private static Window NewWindow(DialogViewModel viewModel)
         {
@@ -103,6 +104,25 @@ namespace Eos.Services
             {
                 window.Close();
                 windowDict.Remove(vm);
+            }
+        }
+
+        public static void BeginWaitCursor()
+        {
+            cursorWaitCount++;
+            if (cursorWaitCount == 1)
+            {
+                // Set Cursor
+            }
+        }
+
+        public static void EndWaitCursor()
+        {
+            cursorWaitCount--;
+            if (cursorWaitCount <= 0)
+            {
+                // Reset Cursor
+                cursorWaitCount = 0;
             }
         }
     }

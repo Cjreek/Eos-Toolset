@@ -170,11 +170,7 @@ namespace Eos.Nwn.TwoDimensionalArray
             }
 
             if (values[columnIndex] is int)
-            {
-                if ((defaultValue == null) && (throwException))
-                    throw new InvalidCastException();
-                return defaultValue;
-            }
+                return values[columnIndex]?.ToString();
 
             return (string?)values[columnIndex];
         }
@@ -204,6 +200,54 @@ namespace Eos.Nwn.TwoDimensionalArray
         public bool IsNull(String columnName, bool throwException = true)
         {
             return IsNull(columns.IndexOf(columnName), throwException);
+        }
+
+        private bool SameValue(object? obj1, object? obj2)
+        {
+            if ((obj1 is string obj1String) && (obj2 is string obj2String))
+                return obj1String.Equals(obj2String, StringComparison.OrdinalIgnoreCase);
+            else if (obj1 != null)
+                return obj1.Equals(obj2);
+            else if (obj2 != null) 
+                return obj2.Equals(obj1);
+
+            return true;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is LineRecord otherRecord)
+            {
+                LineRecord master;
+                LineRecord slave;
+                if (otherRecord.columns.Count > columns.Count)
+                {
+                    master = otherRecord;
+                    slave = this;
+                }
+                else
+                {
+                    master = this;
+                    slave = otherRecord;
+                }
+
+                for (int i=0; i < master.columns.Count; i++)
+                {
+                    var masterColumn = master.columns[i];
+                    if ((slave.columns.IndexOf(masterColumn) == -1) && (!master.IsNull(i, false)))
+                        return false;
+
+                    var masterValue = master.AsObject(masterColumn, null, false);
+                    var slaveValue = slave.AsObject(masterColumn, null, false);
+
+                    if (!SameValue(masterValue, slaveValue))
+                        return false;
+                }
+
+                return true;
+            }
+
+            return false;
         }
     }
 

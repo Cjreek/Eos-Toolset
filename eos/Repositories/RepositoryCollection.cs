@@ -200,6 +200,11 @@ namespace Eos.Repositories
             return repositoryDict[modelType].GetBaseByID(id);
         }
 
+        public BaseModel? GetByIndex(Type modelType, int index)
+        {
+            return repositoryDict[modelType].GetBaseByIndex(index);
+        }
+
         public void Delete(BaseModel model)
         {
             if (model is CustomObjectInstance coi)
@@ -220,8 +225,10 @@ namespace Eos.Repositories
             return repositoryDict[modelType].HasOverride(model);
         }
 
-        public BaseModel? GetOverride(BaseModel model)
+        public BaseModel? GetOverride(BaseModel? model)
         {
+            if (model == null) return null;
+
             var modelType = model.GetType();
             return repositoryDict[modelType].GetOverride(model);
         }

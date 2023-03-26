@@ -102,8 +102,9 @@ namespace Eos.Models
             }
         }
 
-        public void RemoveSpell(SpellbookEntry entry)
+        public void RemoveSpell(SpellbookEntry? entry)
         {
+            if (entry == null) return;
             if (Level0.Remove(entry)) entry.Spell?.RemoveReference(this, "Level0");
             if (Level1.Remove(entry)) entry.Spell?.RemoveReference(this, "Level1");
             if (Level2.Remove(entry)) entry.Spell?.RemoveReference(this, "Level2");
@@ -114,6 +115,50 @@ namespace Eos.Models
             if (Level7.Remove(entry)) entry.Spell?.RemoveReference(this, "Level7");
             if (Level8.Remove(entry)) entry.Spell?.RemoveReference(this, "Level8");
             if (Level9.Remove(entry)) entry.Spell?.RemoveReference(this, "Level9");
+        }
+
+        private SpellbookEntry? FindEntry(ObservableCollection<SpellbookEntry> spellLevel, int spellId)
+        {
+            foreach (var spellEntry in spellLevel)
+            {
+                if (spellEntry.Spell?.Index == spellId) 
+                    return spellEntry;
+            }
+
+            return null;
+        }
+
+        public void RemoveSpellById(int level, int spellId)
+        {
+            switch (level)
+            {
+                case 0: RemoveSpell(FindEntry(Level0, spellId)); break;
+                case 1: RemoveSpell(FindEntry(Level1, spellId)); break;
+                case 2: RemoveSpell(FindEntry(Level2, spellId)); break;
+                case 3: RemoveSpell(FindEntry(Level3, spellId)); break;
+                case 4: RemoveSpell(FindEntry(Level4, spellId)); break;
+                case 5: RemoveSpell(FindEntry(Level5, spellId)); break;
+                case 6: RemoveSpell(FindEntry(Level6, spellId)); break;
+                case 7: RemoveSpell(FindEntry(Level7, spellId)); break;
+                case 8: RemoveSpell(FindEntry(Level8, spellId)); break;
+                case 9: RemoveSpell(FindEntry(Level9, spellId)); break;
+            }
+        }
+
+        public int? GetSpellLevel(int spellId)
+        {
+            var entry = FindEntry(Level0, spellId) ?? 
+                        FindEntry(Level1, spellId) ??
+                        FindEntry(Level2, spellId) ??
+                        FindEntry(Level3, spellId) ??
+                        FindEntry(Level4, spellId) ??
+                        FindEntry(Level5, spellId) ??
+                        FindEntry(Level6, spellId) ??
+                        FindEntry(Level7, spellId) ??
+                        FindEntry(Level8, spellId) ??
+                        FindEntry(Level9, spellId);
+
+            return entry?.Level;
         }
 
         private void ResolveSpellList(ObservableCollection<SpellbookEntry> spellList)

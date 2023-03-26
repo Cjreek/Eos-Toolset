@@ -15,6 +15,7 @@ using Eos.Repositories;
 using Eos.Models.Tables;
 using Eos.Config;
 using Eos.ViewModels.Dialogs;
+using Avalonia.Input;
 
 namespace Eos.ViewModels
 {
@@ -26,6 +27,7 @@ namespace Eos.ViewModels
         private DataDetailViewModelBase? currentView;
         private TLKLanguage currentLanguage;
         private bool currentGender;
+        private bool inProjectUpdate;
 
         public ObservableCollection<DataDetailViewModelBase> DetailViewList { get { return detailViewList; } }
 
@@ -147,6 +149,31 @@ namespace Eos.ViewModels
             MasterRepository.Project.Delete(model);
         }
 
+        private void DoGameDataImport(bool showConfirmationMessage)
+        {
+            if ((!showConfirmationMessage) || (WindowService.ShowMessage("Importing base game data will take a while.\nThe current active project will be saved if you continue!\n\nDo you really want to import the base game data?", "Game Data Import", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) == MessageBoxResult.Yes))
+            {
+                WindowService.BeginWaitCursor();
+                try
+                {
+                    if (MasterRepository.Project.IsLoaded)
+                        MessageDispatcher.Send(MessageType.SaveProject, null);
+
+                    var import = new GameDataImport();
+                    import.Import(EosConfig.NwnBasePath);
+
+                    if (MasterRepository.Project.IsLoaded)
+                        MessageDispatcher.Send(MessageType.OpenProject, EosConfig.LastProject);
+                }
+                finally
+                {
+                    WindowService.EndWaitCursor();
+                }
+
+                WindowService.ShowMessage("Game files have been imported successfully!", "Game Data Import", MessageBoxButtons.Ok, MessageBoxIcon.Information);
+            }
+        }
+
         private void MessageHandler(MessageType type, object? message, object? param)
         {
             if (message is BaseModel model)
@@ -232,8 +259,12 @@ namespace Eos.ViewModels
                         break;
 
                     case MessageType.OpenProject:
-                        MasterRepository.Project.Load((String?)message ?? "");
-                        MessageDispatcher.Send(MessageType.ChangeLanguage, MasterRepository.Project.DefaultLanguage, null);
+                        if (!inProjectUpdate)
+                        {
+                            MasterRepository.Project.Load((String?)message ?? "");
+                            MessageDispatcher.Send(MessageType.ChangeLanguage, MasterRepository.Project.DefaultLanguage, null);
+                            MessageDispatcher.Send(MessageType.UpdateProject, MasterRepository.Project, null);
+                        }
                         break;
 
                     case MessageType.SaveProject:
@@ -252,12 +283,64 @@ namespace Eos.ViewModels
                         }
                         break;
 
+                    case MessageType.UpdateProject:
+                        if (message is EosProject project)
+                        {
+                            inProjectUpdate = true;
+                            try
+                            {
+                                var updateService = new ProjectUpdateService(project);
+                                if (updateService.CheckForUpdates())
+                                {
+                                    if (WindowService.ShowMessage("There is an update available to apply to your project to keep it up-to-date.\n" + 
+                                        "It is recommended to apply the update timely.\n" + "" +
+                                        "A backup of your project will be made before the update!\n\n" + 
+                                        "Do you want to start the update process now?", "Project Update", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) == MessageBoxResult.Yes)
+                                    {
+                                        var canUpdate = true;
+                                        if (updateService.NeedsGameDataUpdate)
+                                        {
+                                            canUpdate = EosConfig.CurrentGameBuildDate > EosConfig.BaseGameDataBuildDate;
+                                            if (canUpdate)
+                                            {
+                                                var gduQuery = DoQuery("Game Data Import", "Before applying the project update(s) the base game data has to be updated\nContinue?", ViewModelQueryType.Question);
+                                                if (gduQuery == ViewModelQueryResult.Yes)
+                                                    MessageDispatcher.Send(MessageType.DoGameDataImport, false, null);
+                                                else
+                                                    canUpdate = false;
+                                            }
+                                        }
+
+                                        if (canUpdate)
+                                        {
+                                            project.CreateBackup();
+                                            if (updateService.ApplyUpdates())
+                                                WindowService.ShowMessage("Project was updated successfully!", "Project Update", MessageBoxButtons.Ok, MessageBoxIcon.Information);
+                                        }
+                                    }
+                                }
+                            }
+                            finally
+                            {
+                                inProjectUpdate = false;
+                            }
+                        }
+                        break;
+
                     case MessageType.OpenProjectSettings:
                         WindowService.OpenDialog<ProjectOptionsViewModel>();
                         break;
 
+                    case MessageType.OpenDataImport:
+                        WindowService.OpenDialog<ImportDialogViewModel>();
+                        break;
+
                     case MessageType.ChangeLanguage:
                         CurrentLanguage = (TLKLanguage?)message ?? CurrentLanguage;
+                        break;
+
+                    case MessageType.DoGameDataImport:
+                        DoGameDataImport((bool?)message ?? true);
                         break;
                 }
             }
@@ -269,7 +352,10 @@ namespace Eos.ViewModels
             MessageDispatcher.Subscribe(MessageType.OpenProject, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.SaveProject, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.CloseProject, MessageHandler);
-            MessageDispatcher.Subscribe(MessageType.OpenProjectSettings, MessageHandler); 
+            MessageDispatcher.Subscribe(MessageType.UpdateProject, MessageHandler);
+
+            MessageDispatcher.Subscribe(MessageType.OpenProjectSettings, MessageHandler);
+            MessageDispatcher.Subscribe(MessageType.OpenDataImport, MessageHandler);
 
             MessageDispatcher.Subscribe(MessageType.NewDetail, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.OverrideDetail, MessageHandler);
@@ -283,6 +369,7 @@ namespace Eos.ViewModels
             MessageDispatcher.Subscribe(MessageType.NewCustomDetail, MessageHandler);
 
             MessageDispatcher.Subscribe(MessageType.ChangeLanguage, MessageHandler);
+            MessageDispatcher.Subscribe(MessageType.DoGameDataImport, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.OpenGlobalSearch, MessageHandler);
         }
 
@@ -292,7 +379,10 @@ namespace Eos.ViewModels
             MessageDispatcher.Unsubscribe(MessageType.OpenProject, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.SaveProject, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.CloseProject, MessageHandler);
+            MessageDispatcher.Unsubscribe(MessageType.UpdateProject, MessageHandler);
+
             MessageDispatcher.Unsubscribe(MessageType.OpenProjectSettings, MessageHandler);
+            MessageDispatcher.Unsubscribe(MessageType.OpenDataImport, MessageHandler);
 
             MessageDispatcher.Unsubscribe(MessageType.NewDetail, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.OverrideDetail, MessageHandler);
@@ -306,6 +396,7 @@ namespace Eos.ViewModels
             MessageDispatcher.Unsubscribe(MessageType.NewCustomDetail, MessageHandler);
 
             MessageDispatcher.Unsubscribe(MessageType.ChangeLanguage, MessageHandler);
+            MessageDispatcher.Unsubscribe(MessageType.DoGameDataImport, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.OpenGlobalSearch, MessageHandler);
         }
     }

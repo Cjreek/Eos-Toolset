@@ -1,4 +1,5 @@
-﻿using Eos.Models;
+﻿using Eos.Config;
+using Eos.Models;
 using Eos.Models.Tables;
 using Eos.Nwn;
 using Eos.Nwn.Bif;
@@ -11,11 +12,13 @@ using Eos.Types;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -31,6 +34,7 @@ namespace Eos.Services
 
         private List<KeyValuePair<TLKStringSet, int?>> tlkBuffer = new List<KeyValuePair<TLKStringSet, int?>>();
         private HashSet<String> iconResourceBuffer = new HashSet<String>();
+
         private TwoDimensionalArrayFile Load2da(String name)
         {
             var filename = Path.Combine(nwnBasePath,"ovr", name + ".2da");
@@ -437,6 +441,9 @@ namespace Eos.Services
                     tmpClass.NamePlural.OriginalIndex = -1;
                     tmpClass.NamePlural[TLKLanguage.English].Text = "Eyes of Grummsh";
                     tmpClass.NamePlural[TLKLanguage.English].TextF = tmpClass.NamePlural[TLKLanguage.English].Text;
+                    tmpClass.Abbreviation.OriginalIndex = -1;
+                    tmpClass.Abbreviation[TLKLanguage.English].Text = "Gru";
+                    tmpClass.Abbreviation[TLKLanguage.English].TextF = tmpClass.Abbreviation[TLKLanguage.English].Text;
                     tmpClass.Description.OriginalIndex = -1;
                     tmpClass.Description[TLKLanguage.English].Text = "(PRESTIGE CLASS)\r\nWorshipers of the Orc deity Gruumsh that have put out their own right eye in a bloody and painful ritual. These living martyrs to Gruumsh are some of the toughest orcs and half-orcs in the world.\r\nThe eye of Gruumsh is a true prestige class in the sense that all orcs respect those who achieve it.\r\nBarbarians gain the most value from this prestige class, since it encourages raging as a fighting style\r\n\r\n- Hit Die: d12\r\n- Proficiencies: Simple and Martial Weapons, Light, and Medium Armor Proficiency, Shields\r\n- Skill Points: 2 + Int Modifier.\r\n\r\nREQUIREMENTS:\r\n\r\nAlignment: Chaotic evil, choatic neutral, neutral evil, or neutral.\r\nRace: Half-Orc or Orc\r\nFeats: Exotic Weapon Proficiency (Double Axe), Weapon Focus (Double Axe).\r\nBase Attack Bonus: +6\r\n\r\nABILITIES:\r\n\r\nLevel\r\n1: Blind-Fight.\r\n Command the Horde\r\n Rage 1/day.\r\n2. Swing Blindly - The character's rage's become more powerful granting a +4 strength bonus, while also suffering a -4 armor bonus while raging.\r\n3: Ritual Scarring - Through frequent disfiguration of his own skin, the eye of Gruumsh gains a +1 natural armor bonus.\r\n4: Blinding Spittle - The character can spit their stomach acid into a target's eyes 2/day.\r\n Rage 2/day.\r\n5: Blindsight - The character gains blindsight in a 5 foot radius.\r\n6: Ritual Scarring - The eye of Gruumsh's natural armor bonus increases to +2.\r\n7: Blinding Spittle 4/day.\r\n8: Blindsight 10 foot radius.\r\n Rage 3/day.\r\n9: Ritual Scarring - The eye of Gruumsh's natural armor bonus increases to +3.\r\n10: Sight of Gruumsh - The character gains a +2 morale bonus on all saving throws.";
                     tmpClass.Description[TLKLanguage.English].TextF = tmpClass.Description[TLKLanguage.English].Text;
@@ -462,6 +469,9 @@ namespace Eos.Services
                     tmpClass.NamePlural.OriginalIndex = -1;
                     tmpClass.NamePlural[TLKLanguage.English].Text = "Shou Disciples";
                     tmpClass.NamePlural[TLKLanguage.English].TextF = tmpClass.NamePlural[TLKLanguage.English].Text;
+                    tmpClass.Abbreviation.OriginalIndex = -1;
+                    tmpClass.Abbreviation[TLKLanguage.English].Text = "Sho";
+                    tmpClass.Abbreviation[TLKLanguage.English].TextF = tmpClass.Abbreviation[TLKLanguage.English].Text;
                     tmpClass.Description.OriginalIndex = -1;
                     tmpClass.Description[TLKLanguage.English].Text = "(PRESTIGE CLASS)\r\nShou disciples are martial artists who have studied or observed the monks of Kara-Tur and seek to emulate their style. Focusing more on the martial aspects of a monk's training, they sacrifice the enlightenment and supernatural abilities of the true ascetic. Shou disciples fight with martial weapons and often wear armor, instantly marking them as different from monks.\r\n\r\n- Hit Die: d10\r\n- Proficiencies: Martial and Monk Weapons, Light Armor Proficiency.\r\n- Skill Points: 2 + Int Modifier.\r\n\r\nREQUIREMENTS:\r\n\r\nFeats: Dodge, Improved Unarmed Strike, Weapon Focus (Unarmed Strike)\r\nBase Attack Bonus: +3\r\nSkills: Tumble 4 ranks\r\nBase Reflex Save: +2\r\n\r\nABILITIES:\r\n\r\nLevel\r\n1: Shou Disciple Dodge Bonus +1 (replaces the normal +1 dodge feat bonus).\r\n Unarmed Strike - The character deals 1d6 of unarmed damage. A Shou disciple with levels in the monk class will use the better of the two damage ranges, or the unarmed damage calculated by combining his Shou disciple and monk levels and using the unarmed damage of a monk of the resulting level if it produces a better result.\r\n Wearing light armor does not interfere with any of the Shou disciple's class abilities, but shields and medium or heavy armor do.\r\n2: Unarmed Strike - The character deals 1d8 of unarmed damage.\r\n Shou Disciple Dodge Bonus +2\r\n Bonus Feat - Chosen from the following list if the prerequisites are met: Deflect Arrows, Expertise, Improved Initiative, Improved Knockdown, Mobility, Power Attack, Spring Attack, Weapon Finesse and Weapon Specialization.\r\n3: Unarmed Strike - The character deals 1d10 of unarmed damage.\r\n Martial Flurry (light) - The character gains the ability to use any light melee weapon for his flurry of blows.\r\n4: Shou Disciple Dodge Bonus +3\r\n Bonus Feat - Chosen from the following list if the prerequisites are met: Deflect Arrows, Expertise, Improved Initiative, Improved Knockdown, Mobility, Power Attack, Spring Attack, Weapon Finesse and Weapon Specialization.\r\n5: Unarmed Strike - The character deals 2d6 of unarmed damage.\r\n Martial Flurry (any) - The character gains the ability to use any melee weapon for his flurry of blows.";
                     tmpClass.Description[TLKLanguage.English].TextF = tmpClass.Description[TLKLanguage.English].Text;
@@ -497,6 +507,7 @@ namespace Eos.Services
                     continue;
                 }
                 SetText(tmpClass.NamePlural, classes2da[i].AsInteger("Plural"));
+                SetText(tmpClass.Abbreviation, classes2da[i].AsInteger("Short", 0));
                 SetText(tmpClass.Description, classes2da[i].AsInteger("Description"));
 
                 tmpClass.Icon = AddIconResource(classes2da[i].AsString("Icon"));
@@ -1180,13 +1191,13 @@ namespace Eos.Services
                 tmpDisease.IncubationHours = disease2da[i].AsInteger("Incu_Hours") ?? 1;
                 tmpDisease.AbilityDamage1Dice = disease2da[i].AsInteger("Dice_1");
                 tmpDisease.AbilityDamage1DiceCount = disease2da[i].AsInteger("Dam_1");
-                tmpDisease.AbilityDamage1Type = !disease2da[i].IsNull("Type_1") ? (AbilityType)Enum.ToObject(typeof(SpellType), disease2da[i].AsInteger("Type_1") ?? 0) : null;
+                tmpDisease.AbilityDamage1Type = !disease2da[i].IsNull("Type_1") ? (AbilityType)Enum.ToObject(typeof(AbilityType), disease2da[i].AsInteger("Type_1") ?? 0) : null;
                 tmpDisease.AbilityDamage2Dice = disease2da[i].AsInteger("Dice_2");
                 tmpDisease.AbilityDamage2DiceCount = disease2da[i].AsInteger("Dam_2");
-                tmpDisease.AbilityDamage2Type = !disease2da[i].IsNull("Type_2") ? (AbilityType)Enum.ToObject(typeof(SpellType), disease2da[i].AsInteger("Type_2") ?? 0) : null;
+                tmpDisease.AbilityDamage2Type = !disease2da[i].IsNull("Type_2") ? (AbilityType)Enum.ToObject(typeof(AbilityType), disease2da[i].AsInteger("Type_2") ?? 0) : null;
                 tmpDisease.AbilityDamage3Dice = disease2da[i].AsInteger("Dice_3");
                 tmpDisease.AbilityDamage3DiceCount = disease2da[i].AsInteger("Dam_3");
-                tmpDisease.AbilityDamage3Type = !disease2da[i].IsNull("Type_3") ? (AbilityType)Enum.ToObject(typeof(SpellType), disease2da[i].AsInteger("Type_3") ?? 0) : null;
+                tmpDisease.AbilityDamage3Type = !disease2da[i].IsNull("Type_3") ? (AbilityType)Enum.ToObject(typeof(AbilityType), disease2da[i].AsInteger("Type_3") ?? 0) : null;
                 tmpDisease.IncubationEndScript = disease2da[i].AsString("End_Incu_Script");
                 tmpDisease.DailyEffectScript = disease2da[i].AsString("24_Hour_Script");
 
@@ -1683,6 +1694,26 @@ namespace Eos.Services
             Standard.RacialFeatsTables.Clear();
         }
 
+        private DateTime GetBuildDate(string nwnBasePath)
+        {
+            DateTime buildDate = DateTime.MinValue;
+
+            var buildTxtContents = File.ReadAllLines(Path.Combine(nwnBasePath, "bin", "win32", "build.txt"));
+            if (buildTxtContents.Length > 1)
+            {
+                var buildDateStr = buildTxtContents[1];
+
+                var match = Regex.Match(buildDateStr, "((Mon|Tue|Wed|Thu|Fri|Sat|Sun) *(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) *[0-9]{1,2} *[0-9]{2}:[0-9]{2}:[0-9]{2}) *(\\w+) *([0-9]{4})");
+                if (match.Success)
+                {
+                    buildDateStr = match.Groups[1].Value + " " + match.Groups[5].Value;
+                    buildDate = DateTime.ParseExact(buildDateStr, "ddd MMM d HH:mm:ss yyyy", new CultureInfo("en-US"));
+                }
+            }
+
+            return buildDate;
+        }
+
         public void Import(string nwnBasePath)
         {
             this.nwnBasePath = nwnBasePath;
@@ -1729,6 +1760,9 @@ namespace Eos.Services
 
             SaveToJson();
             ImportIcons();
+
+            EosConfig.BaseGameDataBuildDate = GetBuildDate(nwnBasePath);
+            EosConfig.Save();
         }
     }
 }

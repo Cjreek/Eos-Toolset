@@ -61,6 +61,10 @@
         <dialogViews:ProjectOptionsView/>
       </DataTemplate>
 
+      <DataTemplate DataType="{x:Type dialogVM:ImportDialogViewModel}">
+        <dialogViews:ImportDialogView/>
+      </DataTemplate>
+
       <DataTemplate DataType="{x:Type dialogVM:MessageBoxViewModel}">
         <dialogViews:MessageBox/>
       </DataTemplate>

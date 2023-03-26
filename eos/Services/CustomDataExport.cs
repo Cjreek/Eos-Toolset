@@ -166,6 +166,7 @@ namespace Eos.Services
                         cls.NameLower[lang].TextF = cls.NameLower[lang].TextF.ToLower();
                     }
                     AddTLKString(cls.NameLower);
+                    AddTLKString(cls.Abbreviation);
 
                     AddTLKString(cls.Description);
                 }
@@ -701,6 +702,7 @@ namespace Eos.Services
             var classes2da = Load2da("classes");
             if (classes2da != null)
             {
+                classes2da.Columns.AddColumn("Short");
                 classes2da.Columns.AddColumn("SkipSpellSelection");
                 classes2da.Columns.SetHex("AlignRestrict");
                 classes2da.Columns.SetHex("AlignRstrctType");
@@ -739,6 +741,7 @@ namespace Eos.Services
 
                         var record = classes2da[index];
                         record.Set("Label", cls.Name[project.DefaultLanguage].Text.Replace(" ", "_"));
+                        record.Set("Short", GetTLKIndex(cls.Abbreviation));
                         record.Set("Name", GetTLKIndex(cls.Name));
                         record.Set("Plural", GetTLKIndex(cls.NamePlural));
                         record.Set("Lower", GetTLKIndex(cls.NameLower));
@@ -1527,6 +1530,41 @@ namespace Eos.Services
             }
         }
 
+        private int GetSubFeatId(Spell subSpell)
+        {
+            if (subSpell.ParentSpell == null) return -1;
+
+            if (subSpell.ParentSpell.SubSpell1 == subSpell)
+                return 1;
+            if (subSpell.ParentSpell.SubSpell2 == subSpell)
+                return 2;
+            if (subSpell.ParentSpell.SubSpell3 == subSpell)
+                return 3;
+            if (subSpell.ParentSpell.SubSpell4 == subSpell)
+                return 4;
+            if (subSpell.ParentSpell.SubSpell5 == subSpell)
+                return 5;
+            if (subSpell.ParentSpell.SubSpell6 == subSpell)
+                return 6;
+            if (subSpell.ParentSpell.SubSpell7 == subSpell)
+                return 7;
+            if (subSpell.ParentSpell.SubSpell8 == subSpell)
+                return 8;
+
+            return -1;
+        }
+
+        private Feat? GetSpellFeat(Spell spell)
+        {
+            foreach (var feat in MasterRepository.Feats)
+            {
+                if ((feat != null) && (feat.OnUseEffect == spell))
+                    return feat;
+            }
+
+            return null;
+        }
+
         private void ExportSpells(EosProject project)
         {
             if ((project.Spells.Count == 0) && (project.Spellbooks.Count == 0)) return;
@@ -1649,13 +1687,19 @@ namespace Eos.Services
                         record.Set("HostileSetting", spell.IsHostile);
                         if (spell.Type == SpellType.Feat)
                         {
-                            // TODO: Make less painful
-                            foreach (var feat in MasterRepository.Feats)
+                            if (spell.ParentSpell != null)
                             {
-                                if ((feat != null) && (feat.OnUseEffect == spell))
+                                var parentFeat = GetSpellFeat(spell.ParentSpell);
+                                var subFeatId = GetSubFeatId(spell);
+
+                                record.Set("FeatID", (0x10000 * subFeatId) + project.Feats.Get2DAIndex(parentFeat));
+                            }
+                            else
+                            {
+                                var spellFeat = GetSpellFeat(spell);
+                                if (spellFeat != null)
                                 {
-                                    record.Set("FeatID", project.Feats.Get2DAIndex(feat));
-                                    break;
+                                    record.Set("FeatID", project.Feats.Get2DAIndex(spellFeat));
                                 }
                             }
                         }
@@ -2068,14 +2112,14 @@ namespace Eos.Services
             ExportPrerequisiteTables(project);
 
             ExportClasses(project);
-            ExportClassPackages(project);
+            //ExportClassPackages(project);
             ExportDiseases(project);
             ExportDomains(project);
             ExportFeats(project);
             ExportPoisons(project);
             ExportRaces(project);
             ExportSkills(project);
-            ExportSoundsets(project);
+            //ExportSoundsets(project);
             ExportSpells(project);
             ExportAreaEffects(project);
             ExportPolymorphs(project);

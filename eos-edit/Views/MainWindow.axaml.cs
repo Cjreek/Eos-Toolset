@@ -264,29 +264,7 @@ namespace Eos.Views
 
         private void miImportBaseData_Click(object sender, RoutedEventArgs e)
         {
-            if (WindowService.ShowMessage("Importing base game data will take a while.\nThe current active project will be saved if you continue!\n\nDo you really want to import the base game data?", "Game Data Import", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) == MessageBoxResult.Yes)
-            {
-                var oldCursor = this.Cursor;
-
-                this.Cursor = new Cursor(StandardCursorType.Wait);
-                try
-                {
-                    if (MasterRepository.Project.IsLoaded)
-                        MessageDispatcher.Send(MessageType.SaveProject, null);
-
-                    var import = new GameDataImport();
-                    import.Import(EosConfig.NwnBasePath);
-
-                    if (MasterRepository.Project.IsLoaded)
-                        MessageDispatcher.Send(MessageType.OpenProject, EosConfig.LastProject);
-                }
-                finally
-                {
-                    this.Cursor = oldCursor;
-                }
-
-                WindowService.ShowMessage("Game files have been imported successfully!", "Game Data Import", MessageBoxButtons.Ok, MessageBoxIcon.Information);
-            }
+            MessageDispatcher.Send(MessageType.DoGameDataImport, true, null);
         }
 
         private void miExportProject_Click(object sender, RoutedEventArgs e)
@@ -297,6 +275,14 @@ namespace Eos.Views
             export.Export(MasterRepository.Project);
 
             WindowService.ShowMessage("Export successful!", "Export successful", MessageBoxButtons.Ok, MessageBoxIcon.Information);
+        }
+
+        private void miBackupProject_Click(object sender, RoutedEventArgs e)
+        {
+            MessageDispatcher.Send(MessageType.SaveProject, null);
+            MasterRepository.Project.CreateBackup();
+
+            WindowService.ShowMessage("Backup successful!", "Backup successful", MessageBoxButtons.Ok, MessageBoxIcon.Information);
         }
 
         private void miExit_Click(object sender, RoutedEventArgs e)

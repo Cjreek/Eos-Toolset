@@ -14,6 +14,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.IO.Compression;
 
 namespace Eos.Repositories
 {
@@ -162,11 +163,26 @@ namespace Eos.Repositories
         }
     }
 
-    public class ProjectSettings
+    public class ProjectSettings : INotifyPropertyChanged
     {
+        private string _backupFolder = "";
         public ObservableCollection<String> ExternalFolders { get; set; } = new ObservableCollection<String>();
 
         public ProjectSettingsExport Export { get; private set; } = new ProjectSettingsExport();
+
+        public string BackupFolder
+        {
+            get { return _backupFolder; }
+            set
+            {
+                if (_backupFolder != value)
+                {
+                    _backupFolder = value;
+                    if (!_backupFolder.EndsWith(Path.DirectorySeparatorChar)) _backupFolder += Path.DirectorySeparatorChar;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
 
         public ProjectSettingsCustomData Appearances { get; private set; } = new ProjectSettingsCustomData(15100);
         public ProjectSettingsCustomData AreaEffects { get; private set; } = new ProjectSettingsCustomData(47);
@@ -202,6 +218,8 @@ namespace Eos.Repositories
         {
             ProjectSettings clone = (ProjectSettings)this.MemberwiseClone();
             clone.ExternalFolders = new ObservableCollection<String>(this.ExternalFolders);
+            clone.BackupFolder = this.BackupFolder;
+
             clone.Export = this.Export.Clone();
 
             clone.Appearances = this.Appearances.Clone();
@@ -235,10 +253,21 @@ namespace Eos.Repositories
 
             return clone;
         }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
 
     public class EosProject : RepositoryCollection
     {
+        private string _projectFilename = "";
         private string _projectFolder = "";
         private string _name = "";
         private bool _isLoaded = false;
@@ -293,9 +322,8 @@ namespace Eos.Repositories
             }
         }
         public TLKLanguage DefaultLanguage { get; set; } = TLKLanguage.English;
-
+        public int Version { get; set; } = 0;
         
-
         public void CreateNew(string projectFolder, string name, TLKLanguage defaultLanguage)
         {
             Clear();
@@ -303,6 +331,8 @@ namespace Eos.Repositories
             ProjectFolder = projectFolder;
             Name = name;
             DefaultLanguage = defaultLanguage;
+
+            Settings.BackupFolder = Constants.BackupFolder;
 
             Settings = new ProjectSettings();
             Settings.Export.TwoDAFolder = Constants.Export2DAFolder;
@@ -333,15 +363,18 @@ namespace Eos.Repositories
 
         private void LoadProjectFile(string projectFilename)
         {
+            _projectFilename = projectFilename;
             ProjectFolder = Path.GetDirectoryName(projectFilename) ?? "";
 
             Settings.ExternalFolders.Clear();
 
-            Settings.Export.HakFolder = ProjectFolder + Constants.ExportHAKFolder;
-            Settings.Export.TlkFolder = ProjectFolder + Constants.ExportTLKFolder;
-            Settings.Export.TwoDAFolder = ProjectFolder + Constants.Export2DAFolder;
-            Settings.Export.IncludeFolder = ProjectFolder + Constants.ExportIncludeFolder;
-            Settings.Export.ErfFolder = ProjectFolder + Constants.ExportERFFolder;
+            Settings.BackupFolder = Constants.BackupFolder;
+
+            Settings.Export.HakFolder = Constants.ExportHAKFolder;
+            Settings.Export.TlkFolder = Constants.ExportTLKFolder;
+            Settings.Export.TwoDAFolder = Constants.Export2DAFolder;
+            Settings.Export.IncludeFolder = Constants.ExportIncludeFolder;
+            Settings.Export.ErfFolder = Constants.ExportERFFolder;
             Settings.Export.IncludeFilename = Constants.IncludeFilename;
 
             var fs = new FileStream(projectFilename, FileMode.Open, FileAccess.Read);
@@ -349,6 +382,7 @@ namespace Eos.Repositories
             {
                 if (JsonNode.Parse(fs) is JsonObject projectJson)
                 {
+                    Version = projectJson["Version"]?.GetValue<int>() ?? 0;
                     Name = projectJson["Name"]?.GetValue<String>() ?? "";
                     DefaultLanguage = Enum.Parse<TLKLanguage>(projectJson["DefaultLanguage"]?.GetValue<string>() ?? "");
 
@@ -364,13 +398,15 @@ namespace Eos.Repositories
                         }
                     }
 
+                    Settings.BackupFolder = projectJson["BackupFolder"]?.GetValue<string>() ?? Constants.BackupFolder;
+
                     var exportJson = projectJson["Export"];
                     Settings.Export.LowercaseFilenames = exportJson?["LowercaseFilenames"]?.GetValue<bool>() ?? false;
-                    Settings.Export.HakFolder = exportJson?["HakFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.ExportHAKFolder;
-                    Settings.Export.ErfFolder = exportJson?["ErfFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.ExportERFFolder;
-                    Settings.Export.TlkFolder = exportJson?["TlkFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.ExportTLKFolder;
-                    Settings.Export.TwoDAFolder = exportJson?["TwoDAFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.Export2DAFolder;
-                    Settings.Export.IncludeFolder = exportJson?["IncludeFolder"]?.GetValue<string>() ?? ProjectFolder + Constants.ExportIncludeFolder;
+                    Settings.Export.HakFolder = exportJson?["HakFolder"]?.GetValue<string>() ?? Constants.ExportHAKFolder;
+                    Settings.Export.ErfFolder = exportJson?["ErfFolder"]?.GetValue<string>() ?? Constants.ExportERFFolder;
+                    Settings.Export.TlkFolder = exportJson?["TlkFolder"]?.GetValue<string>() ?? Constants.ExportTLKFolder;
+                    Settings.Export.TwoDAFolder = exportJson?["TwoDAFolder"]?.GetValue<string>() ?? Constants.Export2DAFolder;
+                    Settings.Export.IncludeFolder = exportJson?["IncludeFolder"]?.GetValue<string>() ?? Constants.ExportIncludeFolder;
                     Settings.Export.BaseTlkFile = exportJson?["BaseTlkFile"]?.GetValue<string>() ?? "";
                     Settings.Export.TlkOffset = exportJson?["TlkOffset"]?.GetValue<int>() ?? 0;
                     Settings.Export.IncludeFilename = exportJson?["IncludeFilename"]?.GetValue<string>() ?? Constants.IncludeFilename;
@@ -414,7 +450,7 @@ namespace Eos.Repositories
             }
 
             if (Settings.ExternalFolders.Count == 0)
-                Settings.ExternalFolders.Add(ProjectFolder + Constants.ExternalFilesPath);
+                Settings.ExternalFolders.Add(Constants.ExternalFilesPath);
 
             Directory.SetCurrentDirectory(ProjectFolder);
         }
@@ -431,7 +467,7 @@ namespace Eos.Repositories
         private void SaveProjectFile(string projectFilename)
         {
             JsonObject projectFile = new JsonObject();
-            projectFile.Add("FileFormatVersion", 1);
+            projectFile.Add("Version", Version);
             projectFile.Add("Name", Name);
             projectFile.Add("DefaultLanguage", Enum.GetName(DefaultLanguage));
 
@@ -442,6 +478,8 @@ namespace Eos.Repositories
                     externalFolders.Add(folder);
             }
             projectFile.Add("ExternalFolders", externalFolders);
+
+            projectFile.Add("BackupFolder", Settings.BackupFolder);
 
             var export = new JsonObject();
             export.Add("LowercaseFilenames", Settings.Export.LowercaseFilenames);
@@ -495,6 +533,7 @@ namespace Eos.Repositories
         {
             IsLoaded = false;
 
+            Version = 0;
             Name = "";
             ProjectFolder = "";
 
@@ -502,6 +541,59 @@ namespace Eos.Repositories
 
             EosConfig.LastProject = "";
             MasterRepository.LoadExternalResources(new string[] { });
+        }
+
+        public void CreateBackup()
+        {
+            var backupFilename = $"{Settings.BackupFolder}{Name}_v{Version}_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.zip";
+            Directory.CreateDirectory(Path.GetDirectoryName(backupFilename) ?? "");
+
+            using (var backupFileStream = new FileStream(ProjectFolder + backupFilename, FileMode.CreateNew))
+            {
+                using (var zip = new ZipArchive(backupFileStream, ZipArchiveMode.Create))
+                {
+                    zip.CreateEntryFromFile(_projectFilename, Path.GetFileName(_projectFilename));
+
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.RacesFilename, Constants.RacesFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.ClassesFilename, Constants.ClassesFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.DomainsFilename, Constants.DomainsFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.SpellsFilename, Constants.SpellsFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.FeatsFilename, Constants.FeatsFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.SkillsFilename, Constants.SkillsFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.DiseasesFilename, Constants.DiseasesFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.PoisonsFilename, Constants.PoisonsFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.SpellbooksFilename, Constants.SpellbooksFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.AreaEffectsFilename, Constants.AreaEffectsFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.MasterFeatsFilename, Constants.MasterFeatsFilename);
+
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.AppearancesFilename, Constants.AppearancesFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.PortraitsFilename, Constants.PortraitsFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.VisualEffectsFilename, Constants.VisualEffectsFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.ClassPackagesFilename, Constants.ClassPackagesFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.SoundsetsFilename, Constants.SoundsetsFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.PolymorphsFilename, Constants.PolymorphsFilename);
+
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.AttackBonusTablesFilename, Constants.AttackBonusTablesFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.BonusFeatTablesFilename, Constants.BonusFeatTablesFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.FeatTablesFilename, Constants.FeatTablesFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.SavingThrowTablesFilename, Constants.SavingThrowTablesFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.SkillTablesFilename, Constants.SkillTablesFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.PrerequisiteTablesFilename, Constants.PrerequisiteTablesFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.SpellSlotTablesFilename, Constants.SpellSlotTablesFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.KnownSpellsTablesFilename, Constants.KnownSpellsTablesFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.StatGainTablesFilename, Constants.StatGainTablesFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.RacialFeatsTablesFilename, Constants.RacialFeatsTablesFilename);
+
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.CustomEnumsFilename, Constants.CustomEnumsFilename);
+                    zip.CreateEntryFromFile(ProjectFolder + Constants.CustomObjectsFilename, Constants.CustomObjectsFilename);
+
+                    foreach (var template in CustomObjects)
+                    {
+                        if (template != null)
+                            zip.CreateEntryFromFile(ProjectFolder + template.ResourceName + ".json", template.ResourceName + ".json");
+                    }
+                }
+            }
         }
 
         public void Load(string projectFilename)

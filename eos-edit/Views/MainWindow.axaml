@@ -18,7 +18,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Eos.Views.MainWindow" MinHeight="300" MinWidth="500"
         Height="700" Width="1100" Loaded="mainWindow_Loaded"
-        x:Name="mainWindow" Tag="Eos Toolset v0.62" FontFamily="Segoe UI"
+        x:Name="mainWindow" Tag="Eos Toolset v0.63" FontFamily="Segoe UI"
         Closing="mainWindow_Closing"
         Icon="/Assets/Icons/Eos.ico">
   <Window.Title>
@@ -444,17 +444,21 @@
           </MenuItem.Icon>
         </MenuItem>
         <Separator/>
-        <MenuItem x:Name="miImportBaseData" Header="Import Game Files" Click="miImportBaseData_Click">
-          <MenuItem.Icon>
-            <Image Source="/Assets/Icons/import32.png"/>
-          </MenuItem.Icon>
-        </MenuItem>
+        
         <MenuItem x:Name="miExportProject" Header="Export Project" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miExportProject_Click">
           <MenuItem.Icon>
             <Image Source="/Assets/Icons/export32.png"/>
           </MenuItem.Icon>
         </MenuItem>
+
+        <MenuItem x:Name="miBackupProject" Header="Create Backup" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miBackupProject_Click">
+          <MenuItem.Icon>
+            <Image Source="/Assets/Icons/backup32.png"/>
+          </MenuItem.Icon>
+        </MenuItem>
+        
         <Separator/>
+        
         <MenuItem x:Name="miExit" Header="Exit" Click="miExit_Click"/>
       </MenuItem>
 
@@ -463,6 +467,18 @@
           <MenuItem.Icon>
             <Image Source="/Assets/Icons/search32.png"/>
           </MenuItem.Icon>
+        </MenuItem>
+        
+        <MenuItem x:Name="miImportBaseData" Header="Import Game Files" Click="miImportBaseData_Click">
+          <MenuItem.Icon>
+            <Image Source="/Assets/Icons/import32.png"/>
+          </MenuItem.Icon>
+        </MenuItem>
+
+        <MenuItem x:Name="miImport" Header="Import HAKs/2DAs" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Command="{Binding ElementName=mainWindow, Path=DataContext.OpenDataImportCommand}">
+          <!--<MenuItem.Icon>
+            <Image Source="/Assets/Icons/search32.png"/>
+          </MenuItem.Icon>-->
         </MenuItem>
       </MenuItem>
     </Menu>

@@ -149,5 +149,10 @@ namespace Eos.ViewModels.Base
         {
             MessageDispatcher.Send(MessageType.OpenGlobalSearch, null);
         });
+
+        public ReactiveCommand<Unit, Unit> OpenDataImportCommand { get; private set; } = ReactiveCommand.Create(() =>
+        {
+            MessageDispatcher.Send(MessageType.OpenDataImport, null);
+        });
     }
 }

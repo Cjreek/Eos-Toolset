@@ -31,6 +31,7 @@ namespace Eos.Models
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet NameLower { get; set; } = new TLKStringSet();
         public TLKStringSet NamePlural { get; set; } = new TLKStringSet();
+        public TLKStringSet Abbreviation { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
         public int HitDie { get; set; } = 8;
         public int SkillPointsPerLevel { get; set; } = 4;
@@ -188,6 +189,7 @@ namespace Eos.Models
             base.FromJson(json);
             this.Name.FromJson(json["Name"]?.AsObject());
             this.NamePlural.FromJson(json["NamePlural"]?.AsObject());
+            this.Abbreviation.FromJson(json["Abbreviation"]?.AsObject());
             this.Description.FromJson(json["Description"]?.AsObject());
             this.Icon = json["Icon"]?.GetValue<String>();
             this.HitDie = json["HitDie"]?.GetValue<int>() ?? 1;
@@ -238,6 +240,7 @@ namespace Eos.Models
             var classJson = base.ToJson();
             classJson.Add("Name", this.Name.ToJson());
             classJson.Add("NamePlural", this.NamePlural.ToJson());
+            classJson.Add("Abbreviation", this.Abbreviation.ToJson());
             classJson.Add("Description", this.Description.ToJson());
             classJson.Add("Icon", this.Icon);
             classJson.Add("HitDie", this.HitDie);

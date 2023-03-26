@@ -14,6 +14,8 @@ namespace Eos.Types
         public static readonly String BaseResourcePath;
         public static readonly String ConfigPath;
 
+        public static readonly String BackupFolder;
+
         public static readonly String ExportFolder;
         public static readonly String Export2DAFolder;
         public static readonly String ExportTLKFolder;
@@ -105,12 +107,14 @@ namespace Eos.Types
             var baseResourceFolder = "Resources";
             BaseResourcePath = AppDataPath + baseResourceFolder + Path.DirectorySeparatorChar;
 
-            ExportFolder = @"output" + Path.DirectorySeparatorChar;
+            BackupFolder = "backup" + Path.DirectorySeparatorChar;
+
+            ExportFolder = "output" + Path.DirectorySeparatorChar;
             Export2DAFolder = ExportFolder;
-            ExportHAKFolder = ExportFolder + @"hak" + Path.DirectorySeparatorChar;
-            ExportTLKFolder = ExportFolder + @"tlk" + Path.DirectorySeparatorChar;
-            ExportIncludeFolder = ExportFolder + @"include" + Path.DirectorySeparatorChar;
-            ExportERFFolder = ExportFolder + @"erf" + Path.DirectorySeparatorChar;
+            ExportHAKFolder = ExportFolder + "hak" + Path.DirectorySeparatorChar;
+            ExportTLKFolder = ExportFolder + "tlk" + Path.DirectorySeparatorChar;
+            ExportIncludeFolder = ExportFolder + "include" + Path.DirectorySeparatorChar;
+            ExportERFFolder = ExportFolder + "erf" + Path.DirectorySeparatorChar;
 
             IncludeFilename = "inc_eos";
 

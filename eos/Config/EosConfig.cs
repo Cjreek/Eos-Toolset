@@ -3,11 +3,13 @@ using Eos.Types;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -23,6 +25,8 @@ namespace Eos.Config
     public static class EosConfig
     {
         public static String NwnBasePath { get; private set; } = "";
+        public static DateTime BaseGameDataBuildDate { get; set; }
+        public static DateTime CurrentGameBuildDate { get; private set; }
         public static String LastProject { get; set; } = "";
         public static TabLayout TabLayout { get; set; } = TabLayout.Multiline;
 
@@ -153,6 +157,26 @@ namespace Eos.Config
             return "";
         }
 
+        private static DateTime GetGameBuildDate()
+        {
+            DateTime buildDate = DateTime.MinValue;
+
+            var buildTxtContents = File.ReadAllLines(Path.Combine(NwnBasePath, "bin", "win32", "build.txt"));
+            if (buildTxtContents.Length > 1)
+            {
+                var buildDateStr = buildTxtContents[1];
+
+                var match = Regex.Match(buildDateStr, "((Mon|Tue|Wed|Thu|Fri|Sat|Sun) *(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) *[0-9]{1,2} *[0-9]{2}:[0-9]{2}:[0-9]{2}) *(\\w+) *([0-9]{4})");
+                if (match.Success)
+                {
+                    buildDateStr = match.Groups[1].Value + " " + match.Groups[5].Value;
+                    buildDate = DateTime.ParseExact(buildDateStr, "ddd MMM d HH:mm:ss yyyy", new CultureInfo("en-US"));
+                }
+            }
+
+            return buildDate;
+        }
+
         public static void Load()
         {
             if (File.Exists(Constants.ConfigPath))
@@ -163,6 +187,7 @@ namespace Eos.Config
                     if (JsonNode.Parse(fs) is JsonObject configJson)
                     {
                         NwnBasePath = configJson[nameof(NwnBasePath)]?.GetValue<String>() ?? "";
+                        BaseGameDataBuildDate = configJson[nameof(BaseGameDataBuildDate)]?.GetValue<DateTime>() ?? DateTime.MinValue;
                         LastProject = configJson[nameof(LastProject)]?.GetValue<String>() ?? "";
                         TabLayout = JsonToEnum<TabLayout>(configJson[nameof(TabLayout)]) ?? TabLayout.Multiline;
                     }
@@ -174,12 +199,15 @@ namespace Eos.Config
             }
             if (NwnBasePath == String.Empty)
                 NwnBasePath = FindNwnBasePath();
+
+            CurrentGameBuildDate = GetGameBuildDate();
         }
 
         public static void Save()
         {
             JsonObject configJson = new JsonObject();
             configJson.Add(nameof(NwnBasePath), NwnBasePath);
+            configJson.Add(nameof(BaseGameDataBuildDate), BaseGameDataBuildDate);
             configJson.Add(nameof(LastProject), LastProject);
             configJson.Add(nameof(TabLayout), EnumToJson(TabLayout));
 

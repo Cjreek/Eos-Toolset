@@ -9,10 +9,13 @@ namespace Eos.ViewModels.Base
     public enum MessageType
     {
         ChangeLanguage,
+        DoGameDataImport,
+
         NewProject,
         OpenProject,
         SaveProject,
         CloseProject,
+        UpdateProject,
         NewDetail,
         OverrideDetail,
         CopyDetail,
@@ -22,8 +25,10 @@ namespace Eos.ViewModels.Base
         DeleteDetail,
         NewCustomDetail,
         GotoDetail,
+
         OpenGlobalSearch,
-        OpenProjectSettings
+        OpenProjectSettings,
+        OpenDataImport
     }
 
     public delegate void MessageHandler(MessageType type, object? message, object? param);

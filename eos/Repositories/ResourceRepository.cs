@@ -162,6 +162,9 @@ namespace Eos.Repositories
                             var resRef = filename.Substring(0, filename.Length - ext.Length);
 
                             AddResource(NWNResourceSource.External, resRef, resType, file, true);
+                            if (!filesByTypeDict.ContainsKey(resType))
+                                filesByTypeDict.Add(resType, new HashSet<string?>());
+
                             if (!filesByTypeDict[resType].Contains(resRef))
                                 filesByTypeDict[resType].Add(resRef);
                         }

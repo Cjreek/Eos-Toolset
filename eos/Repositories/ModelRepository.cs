@@ -78,9 +78,9 @@ namespace Eos.Repositories
             return overrideLookup.ContainsKey(model.ID);
         }
 
-        public BaseModel? GetOverride(BaseModel model)
+        public BaseModel? GetOverride(BaseModel? model)
         {
-            if (overrideLookup.ContainsKey(model.ID))
+            if ((model != null) && (overrideLookup.ContainsKey(model.ID)))
                 return GetByID(overrideLookup[model.ID]);
 
             return null;
@@ -247,6 +247,12 @@ namespace Eos.Repositories
         public BaseModel? GetBaseByID(Guid id)
         {
             modelLookup.TryGetValue(id, out T? result);
+            return result;
+        }
+
+        public BaseModel? GetBaseByIndex(int index)
+        {
+            modelIndexLookup.TryGetValue(index, out T? result);
             return result;
         }
 
