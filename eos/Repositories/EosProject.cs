@@ -15,6 +15,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.IO.Compression;
+using Eos.Services;
 
 namespace Eos.Repositories
 {
@@ -331,6 +332,7 @@ namespace Eos.Repositories
             ProjectFolder = projectFolder;
             Name = name;
             DefaultLanguage = defaultLanguage;
+            Version = ProjectUpdateService.GetHighestSupportedVersion();
 
             Settings.BackupFolder = Constants.BackupFolder;
 

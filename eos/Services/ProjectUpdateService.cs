@@ -15,7 +15,7 @@ namespace Eos.Services
         private int _nextUpdateIndex = -1;
         private bool _needsGameDataUpdate;
 
-        private List<Update> updateList = new List<Update>()
+        private static List<Update> updateList = new List<Update>()
         {
             new Update0630(),
         };
@@ -31,20 +31,28 @@ namespace Eos.Services
         {
             _needsGameDataUpdate = false;
             _nextUpdateIndex = updateList.Count;
-            for (int i = updateList.Count - 1; i >= 0; i--)
+            var indexDone = false;
+            for (int i = 0; i < updateList.Count; i++)
             {
-                if (EosConfig.BaseGameDataBuildDate < updateList[i].GameDataMinimumBuildDate)
-                {
-                    if (updateList[i].GameDataMinimumBuildDate > EosConfig.CurrentGameBuildDate) // Needs higher version than available
-                        break;
-
-                    _needsGameDataUpdate = true;
-                }
-
                 if (updateList[i].Version > _project.Version)
-                    _nextUpdateIndex = i;
-                else
-                    break;
+                {
+                    if (EosConfig.BaseGameDataBuildDate < updateList[i].GameDataMinimumBuildDate)
+                    {
+                        if (updateList[i].GameDataMinimumBuildDate > EosConfig.CurrentGameBuildDate) // Needs higher version than available
+                            break;
+                        
+                        _needsGameDataUpdate = true;
+                    }
+
+                    if (!indexDone)
+                    {
+                        _nextUpdateIndex = i;
+                        indexDone = true;
+                    }
+
+                    if ((indexDone) && (NeedsGameDataUpdate))
+                        break;
+                }
             }
 
             return _nextUpdateIndex < updateList.Count;
@@ -65,6 +73,20 @@ namespace Eos.Services
             }
 
             return true;
+        }
+
+        public static int GetHighestSupportedVersion()
+        {
+            var result = 0;
+            for (int i = updateList.Count - 1; i >= 0; i--)
+            {
+                if (EosConfig.BaseGameDataBuildDate < updateList[i].GameDataMinimumBuildDate)
+                    break;
+
+                result = updateList[i].Version;
+            }
+
+            return result;
         }
     }
 }
