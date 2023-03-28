@@ -63,14 +63,20 @@ namespace Eos.Services
 
         private void Import2da(string filename)
         {
+            Log.Info("Loading 2DA: {0}", filename);
+
             var data = new TwoDimensionalArrayFile();
             data.Load(filename);
             Set2da(Path.GetFileNameWithoutExtension(filename), data);
         }
 
-        private void ExportToExternalPath(ErfResource resource, ErfFile sourceHak)
+        private void ImportToExternalPath(ErfResource resource, ErfFile sourceHak)
         {
-            using (var fileStream = File.Create(Path.Combine(_externalDataPath, resource.ResRef + "." + resource.ResourceType.ToString().ToLower())))
+            var fileExt = resource.ResourceType.ToString().ToLower().Replace("twoda", "2da");
+
+            Log.Info("Importing external file: \"{0}\"", Path.Combine(_externalDataPath, resource.ResRef + "." + fileExt));
+            
+            using (var fileStream = File.Create(Path.Combine(_externalDataPath, resource.ResRef + "." + fileExt)))
             {
                 var resStream = sourceHak.Read(resource.ResRef, resource.ResourceType);
                 resStream.CopyTo(fileStream);
@@ -78,13 +84,10 @@ namespace Eos.Services
             }
         }
 
-        private void MarkForExternalExport(ErfFile sourceHak, ErfResource resource)
-        {
-
-        }
-
         public void ImportHak(string filename)
         {
+            Log.Info("Loading HAK: {0}", filename);
+
             var hak = new ErfFile();
             hak.Load(filename);
             try
@@ -187,7 +190,10 @@ namespace Eos.Services
             if (customDataDict.ContainsKey(tableName.ToLower()))
             {
                 if ((originalModel == null) || ((originalModel != null) && (_importOverrides) && ((originalOverride == null) || (_replaceOverrides))))
+                {
+                    Log.Info("Importing 2DA: {0}.2da", tableName);
                     result = importTableFunc(tableName, result != null ? tableGuid : Guid.NewGuid());
+                }
                 customDataDict.Remove(tableName.ToLower());
             }
 
@@ -250,6 +256,8 @@ namespace Eos.Services
             if (customDataDict.TryGetValue("racialtypes", out var races2da))
             {
                 customDataDict.Remove("racialtypes");
+
+                Log.Info("Importing 2DA: racialtypes.2da");
 
                 var originalRaces2da = LoadOriginal2da("racialtypes");
                 for (int i = 0; i < races2da.Count; i++)
@@ -577,6 +585,8 @@ namespace Eos.Services
             {
                 customDataDict.Remove("classes");
 
+                Log.Info("Importing 2DA: classes.2da");
+
                 var originalClasses2da = LoadOriginal2da("classes");
                 for (int i = 0; i < classes2da.Count; i++)
                 {
@@ -679,6 +689,8 @@ namespace Eos.Services
             {
                 customDataDict.Remove("domains");
 
+                Log.Info("Importing 2DA: domains.2da");
+
                 var originalDomains2da = LoadOriginal2da("domains");
                 for (int i = 0; i < domains2da.Count; i++)
                 {
@@ -717,6 +729,8 @@ namespace Eos.Services
             {
                 customDataDict.Remove("skills");
 
+                Log.Info("Importing 2DA: skills.2da");
+
                 var originalSkills2da = LoadOriginal2da("skills");
                 for (int i = 0; i < skills2da.Count; i++)
                 {
@@ -747,6 +761,8 @@ namespace Eos.Services
             if (customDataDict.TryGetValue("feat", out var feat2da))
             {
                 customDataDict.Remove("feat");
+
+                Log.Info("Importing 2DA: feat.2da");
 
                 var originalFeat2da = LoadOriginal2da("feat");
                 for (int i = 0; i < feat2da.Count; i++)
@@ -807,6 +823,8 @@ namespace Eos.Services
             if (customDataDict.TryGetValue("spells", out var spells2da))
             {
                 customDataDict.Remove("spells");
+
+                Log.Info("Importing 2DA: spells.2da");
 
                 var spellbooksToOverride = new Dictionary<string, Spellbook>();
 
@@ -944,6 +962,8 @@ namespace Eos.Services
             {
                 customDataDict.Remove("disease");
 
+                Log.Info("Importing 2DA: disease.2da");
+
                 var originalDisease2da = LoadOriginal2da("disease");
                 for (int i = 0; i < disease2da.Count; i++)
                 {
@@ -981,6 +1001,8 @@ namespace Eos.Services
             {
                 customDataDict.Remove("poison");
 
+                Log.Info("Importing 2DA: poison.2da");
+
                 var originalPoison2da = LoadOriginal2da("poison");
                 for (int i = 0; i < poison2da.Count; i++)
                 {
@@ -1016,6 +1038,8 @@ namespace Eos.Services
             if (customDataDict.TryGetValue("vfx_persistent", out var aoe2da))
             {
                 customDataDict.Remove("vfx_persistent");
+
+                Log.Info("Importing 2DA: vfx_persistent.2da");
 
                 var originalAoe2da = LoadOriginal2da("vfx_persistent");
                 for (int i = 0; i < aoe2da.Count; i++)
@@ -1069,6 +1093,8 @@ namespace Eos.Services
             {
                 customDataDict.Remove("masterfeats");
 
+                Log.Info("Importing 2DA: masterfeats.2da");
+
                 var originalMasterFeats2da = LoadOriginal2da("masterfeats");
                 for (int i = 0; i < masterFeats2da.Count; i++)
                 {
@@ -1093,6 +1119,8 @@ namespace Eos.Services
             {
                 // customDataDict.Remove("appearance"); // TODO: uncomment when appearances are fully supported
 
+                Log.Info("Importing 2DA: appearance.2da");
+
                 var originalAppearance2da = LoadOriginal2da("appearance");
                 for (int i = 0; i < appearance2da.Count; i++)
                 {
@@ -1114,6 +1142,8 @@ namespace Eos.Services
             if (customDataDict.TryGetValue("visualeffects", out var vfx2da))
             {
                 // customDataDict.Remove("visualeffects"); // TODO: uncomment when visualeffects are fully supported
+
+                Log.Info("Importing 2DA: visualeffects.2da");
 
                 var originalVfx2da = LoadOriginal2da("visualeffects");
                 for (int i = 0; i < vfx2da.Count; i++)
@@ -1137,6 +1167,8 @@ namespace Eos.Services
             if (customDataDict.TryGetValue("packages", out var packages2da))
             {
                 // customDataDict.Remove("packages"); // TODO: uncomment when packages are fully supported
+
+                Log.Info("Importing 2DA: packages.2da");
 
                 var originalPackages2da = LoadOriginal2da("packages");
                 for (int i = 0; i < packages2da.Count; i++)
@@ -1174,6 +1206,8 @@ namespace Eos.Services
             {
                 // customDataDict.Remove("soundset"); // TODO: uncomment when soundsets are fully supported
 
+                Log.Info("Importing 2DA: soundset.2da");
+
                 var originalSoundset2da = LoadOriginal2da("soundset");
                 for (int i = 0; i < soundset2da.Count; i++)
                 {
@@ -1199,6 +1233,8 @@ namespace Eos.Services
             if (customDataDict.TryGetValue("polymorph", out var polymorph2da))
             {
                 customDataDict.Remove("polymorph");
+
+                Log.Info("Importing 2DA: polymorph.2da");
 
                 var originalPolymorph2da = LoadOriginal2da("polymorph");
                 for (int i = 0; i < polymorph2da.Count; i++)
@@ -1244,6 +1280,8 @@ namespace Eos.Services
             {
                 //customDataDict.Remove("portraits"); // TODO: uncomment when portraits are fully supported
 
+                Log.Info("Importing 2DA: portraits.2da");
+
                 var originalPortraits2da = LoadOriginal2da("portraits");
                 for (int i = 0; i < portraits2da.Count; i++)
                 {
@@ -1280,6 +1318,8 @@ namespace Eos.Services
 
         private void ResolveDependencies()
         {
+            Log.Info("Resolving object dependencies...");
+
             // Classes
             foreach (var cls in _importCollection.Classes)
             {
@@ -1452,6 +1492,8 @@ namespace Eos.Services
 
         private void TransferImportedData()
         {
+            Log.Info("Transfering imported data into project...");
+
             // Races
             foreach (var race in _importCollection.Races)
             {
@@ -1963,8 +2005,10 @@ namespace Eos.Services
             }
         }
 
-        private void ExportExternalData()
+        private void ImportExternalData()
         {
+            Log.Info("Importing external data...");
+
             foreach (var file in _importFiles)
             {
                 var extension = Path.GetExtension(file).ToLower();
@@ -1977,7 +2021,7 @@ namespace Eos.Services
                         for (int i = 0; i < hak.Count; i++)
                         {
                             if ((hak[i].ResourceType != NWNResourceType.TWODA) || (customDataDict.ContainsKey(hak[i].ResRef.ToLower())))
-                                ExportToExternalPath(hak[i], hak);
+                                ImportToExternalPath(hak[i], hak);
                         }
                     }
                     finally
@@ -1990,49 +2034,60 @@ namespace Eos.Services
 
         public void DoImport()
         {
-            gameDataTlk.Load(EosConfig.NwnBasePath);
-            gameDataBif.Load(EosConfig.NwnBasePath);
-
-            foreach (var file in _importFiles)
+            Log.Info("Importing data...");
+            try
             {
-                var extension = Path.GetExtension(file).ToLower();
-                if ((extension == ".hak") || (extension == ".erf"))
-                    ImportHak(file);
-                else if (extension == ".2da")
-                    Import2da(file);
+                gameDataTlk.Load(EosConfig.NwnBasePath);
+                gameDataBif.Load(EosConfig.NwnBasePath);
+
+                foreach (var file in _importFiles)
+                {
+                    var extension = Path.GetExtension(file).ToLower();
+                    if ((extension == ".hak") || (extension == ".erf"))
+                        ImportHak(file);
+                    else if (extension == ".2da")
+                        Import2da(file);
+                }
+
+                ImportRaces();
+                ImportClasses();
+                ImportDomains();
+                ImportSkills();
+                ImportFeats();
+                ImportSpells();
+                ImportDiseases();
+                ImportPoisons();
+                ImportAreaOfEffects();
+                ImportMasterFeats();
+
+                ImportAppearances();
+                ImportVisualEffects();
+                ImportClassPackages();
+                ImportSoundsets();
+                ImportPolymorphs();
+                ImportPortraits();
+
+                ImportText();
+
+                var continueImport = true;
+                ImportPreview?.Invoke(this, _importCollection, ref continueImport);
+
+                if (continueImport)
+                {
+                    ResolveDependencies();
+                    TransferImportedData();
+                    ImportExternalData();
+
+                    MasterRepository.Resources.LoadExternalResources(MasterRepository.Project.Settings.ExternalFolders);
+                }
+            }
+            catch(Exception e)
+            {
+                Log.Error(e.Message);
+                throw;
             }
 
-            ImportRaces();
-            ImportClasses();
-            ImportDomains();
-            ImportSkills();
-            ImportFeats();
-            ImportSpells();
-            ImportDiseases();
-            ImportPoisons();
-            ImportAreaOfEffects();
-            ImportMasterFeats();
-
-            ImportAppearances();
-            ImportVisualEffects();
-            ImportClassPackages();
-            ImportSoundsets();
-            ImportPolymorphs();
-            ImportPortraits();
-
-            ImportText();
-
-            var continueImport = true;
-            ImportPreview?.Invoke(this, _importCollection, ref continueImport);
-
-            if (continueImport)
-            {
-                ResolveDependencies();
-                TransferImportedData();
-                ExportExternalData();
-
-                MasterRepository.Resources.LoadExternalResources(MasterRepository.Project.Settings.ExternalFolders);
-            }
+            Log.Info("Importing successful!");
         }
     }
 }

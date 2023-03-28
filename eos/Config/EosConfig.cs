@@ -1,4 +1,5 @@
 ﻿using Eos.Nwn.Tlk;
+using Eos.Services;
 using Eos.Types;
 using Microsoft.Win32;
 using System;
@@ -55,7 +56,11 @@ namespace Eos.Config
             string path;
             
             path = Environment.GetEnvironmentVariable("NWN_ROOT") ?? "";
-            if ((path != "") && (Directory.Exists(path))) return path;
+            if ((path != "") && (Directory.Exists(path)))
+            {
+                Log.Info("Found installation via NWN_ROOT at: {0}", path);
+                return path;
+            }
 
             // Steam
             var steamPath = Path.Combine("Steam", "steamapps", "common", "Neverwinter Nights");
@@ -66,7 +71,10 @@ namespace Eos.Config
                     path = Path.Combine(Environment.GetEnvironmentVariable("PROGRAMFILES(X86)") ?? "", steamPath);
 
                 if (Directory.Exists(Path.Combine(path, "data")))
+                {
+                    Log.Info("Found Steam installation at: {0}", path);
                     return path;
+                }
             }
             else if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
@@ -74,7 +82,10 @@ namespace Eos.Config
                 path = Path.Combine(home, ".local", "share", steamPath);
 
                 if (Directory.Exists(Path.Combine(path, "data")))
+                {
+                    Log.Info("Found Steam installation at: {0}", path);
                     return path;
+                }
             }
             else if (Environment.OSVersion.Platform == PlatformID.Other)
             {
@@ -82,7 +93,10 @@ namespace Eos.Config
                 path = Path.Combine(home, "Library", "Application Support", steamPath);
 
                 if (Directory.Exists(Path.Combine(path, "data")))
+                {
+                    Log.Info("Found Steam installation at: {0}", path);
                     return path;
+                }
             }
 
             // Beamdog
@@ -106,6 +120,8 @@ namespace Eos.Config
 
             if ((settingsFile != "") && (File.Exists(settingsFile)))
             {
+                Log.Info("Found Beamdog settings.json at: {0}", path);
+
                 var fs = new FileStream(settingsFile, FileMode.Open, FileAccess.Read);
                 try
                 {
@@ -120,11 +136,17 @@ namespace Eos.Config
 
                                 var release00829 = Path.Combine(folderStr, "00829");
                                 if (Directory.Exists(Path.Combine(release00829, "data")))
+                                {
+                                    Log.Info("Found Beamdog installation at: {0}", release00829);
                                     return release00829;
+                                }
 
                                 var release00785 = Path.Combine(folderStr, "00785");
                                 if (Directory.Exists(Path.Combine(release00785, "data")))
+                                {
+                                    Log.Info("Found Beamdog installation at: {0}", release00785);
                                     return release00785;
+                                }
                             }
                         }
                     }
@@ -143,7 +165,10 @@ namespace Eos.Config
                     path = Path.Combine(Environment.GetEnvironmentVariable("PROGRAMFILES(X86)") ?? "", "GOG Galaxy", "Games", "Neverwinter Nights Enhanced Edition");
 
                 if (Directory.Exists(Path.Combine(path, "data")))
+                {
+                    Log.Info("Found GOG installation at: {0}", path);
                     return path;
+                }
             }
             else
             {
@@ -151,56 +176,86 @@ namespace Eos.Config
                 path = Path.Combine(home, "GOG Games", "Neverwinter Nights Enhanced Edition");
 
                 if (Directory.Exists(Path.Combine(path, "data")))
+                {
+                    Log.Info("Found GOG installation at: {0}", path);
                     return path;
+                }
             }
 
             return "";
         }
 
-        private static DateTime GetGameBuildDate()
+        public static DateTime GetGameBuildDate(string nwnBasePath)
         {
+            Log.Info("Detecting game build date...");
+
             DateTime buildDate = DateTime.MinValue;
-
-            var buildTxtContents = File.ReadAllLines(Path.Combine(NwnBasePath, "bin", "win32", "build.txt"));
-            if (buildTxtContents.Length > 1)
+            try
             {
-                var buildDateStr = buildTxtContents[1];
-
-                var match = Regex.Match(buildDateStr, "((Mon|Tue|Wed|Thu|Fri|Sat|Sun) *(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) *[0-9]{1,2} *[0-9]{2}:[0-9]{2}:[0-9]{2}) *(\\w+) *([0-9]{4})");
-                if (match.Success)
+                var buildTxtContents = File.ReadAllLines(Path.Combine(nwnBasePath, "bin", "win32", "build.txt"));
+                if (buildTxtContents.Length > 1)
                 {
-                    buildDateStr = match.Groups[1].Value + " " + match.Groups[5].Value;
-                    buildDate = DateTime.ParseExact(buildDateStr, "ddd MMM d HH:mm:ss yyyy", new CultureInfo("en-US"));
+                    var buildDateStr = Regex.Replace(buildTxtContents[1], " {2,}", " ");
+
+                    var match = Regex.Match(buildDateStr, "((Mon|Tue|Wed|Thu|Fri|Sat|Sun) *(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) *[0-9]{1,2} *[0-9]{2}:[0-9]{2}:[0-9]{2}) *(\\w+) *([0-9]{4})");
+                    if (match.Success)
+                    {
+                        buildDateStr = match.Groups[1].Value + " " + match.Groups[5].Value;
+                        buildDate = DateTime.ParseExact(buildDateStr, "ddd MMM d HH:mm:ss yyyy", new CultureInfo("en-US"));
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+            }
+
+            if (buildDate == DateTime.MinValue)
+                Log.Warning("No valid build date found! This might create problems when updating projects.");
+            else
+                Log.Info("Build date found: {0}", buildDate);
 
             return buildDate;
         }
 
         public static void Load()
         {
+            Log.Info("Loading config from \"{0}\"", Constants.ConfigPath);
             if (File.Exists(Constants.ConfigPath))
             {
-                var fs = new FileStream(Constants.ConfigPath, FileMode.Open, FileAccess.Read);
                 try
                 {
-                    if (JsonNode.Parse(fs) is JsonObject configJson)
+                    var fs = new FileStream(Constants.ConfigPath, FileMode.Open, FileAccess.Read);
+                    try
                     {
-                        NwnBasePath = configJson[nameof(NwnBasePath)]?.GetValue<String>() ?? "";
-                        BaseGameDataBuildDate = configJson[nameof(BaseGameDataBuildDate)]?.GetValue<DateTime>() ?? DateTime.MinValue;
-                        LastProject = configJson[nameof(LastProject)]?.GetValue<String>() ?? "";
-                        TabLayout = JsonToEnum<TabLayout>(configJson[nameof(TabLayout)]) ?? TabLayout.Multiline;
+                        if (JsonNode.Parse(fs) is JsonObject configJson)
+                        {
+                            NwnBasePath = configJson[nameof(NwnBasePath)]?.GetValue<String>() ?? "";
+                            BaseGameDataBuildDate = configJson[nameof(BaseGameDataBuildDate)]?.GetValue<DateTime>() ?? DateTime.MinValue;
+                            LastProject = configJson[nameof(LastProject)]?.GetValue<String>() ?? "";
+                            TabLayout = JsonToEnum<TabLayout>(configJson[nameof(TabLayout)]) ?? TabLayout.Multiline;
+                        }
+                    }
+                    finally
+                    {
+                        fs.Close();
                     }
                 }
-                finally
+                catch (Exception e)
                 {
-                    fs.Close();
+                    Log.Error(e.Message);
+                    throw;
                 }
             }
             if (NwnBasePath == String.Empty)
+            {
+                Log.Info("NwnBasePath is empty -> Searching for NWN installation...");
                 NwnBasePath = FindNwnBasePath();
+            }
 
-            CurrentGameBuildDate = GetGameBuildDate();
+            CurrentGameBuildDate = GetGameBuildDate(NwnBasePath);
+
+            Log.Info("Config loaded successfully!");
         }
 
         public static void Save()

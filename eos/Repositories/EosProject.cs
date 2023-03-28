@@ -379,76 +379,84 @@ namespace Eos.Repositories
             Settings.Export.ErfFolder = Constants.ExportERFFolder;
             Settings.Export.IncludeFilename = Constants.IncludeFilename;
 
-            var fs = new FileStream(projectFilename, FileMode.Open, FileAccess.Read);
             try
             {
-                if (JsonNode.Parse(fs) is JsonObject projectJson)
+                var fs = new FileStream(projectFilename, FileMode.Open, FileAccess.Read);
+                try
                 {
-                    Version = projectJson["Version"]?.GetValue<int>() ?? 0;
-                    Name = projectJson["Name"]?.GetValue<String>() ?? "";
-                    DefaultLanguage = Enum.Parse<TLKLanguage>(projectJson["DefaultLanguage"]?.GetValue<string>() ?? "");
+                    if (JsonNode.Parse(fs) is JsonObject projectJson)
+                    {
+                        Version = projectJson["Version"]?.GetValue<int>() ?? 0;
+                        Name = projectJson["Name"]?.GetValue<String>() ?? "";
+                        DefaultLanguage = Enum.Parse<TLKLanguage>(projectJson["DefaultLanguage"]?.GetValue<string>() ?? "");
 
-                    var foldersJson = projectJson["ExternalFolders"]?.AsArray();
-                    if (foldersJson != null)
-                    { 
-                        foreach (var folderJson in foldersJson)
+                        var foldersJson = projectJson["ExternalFolders"]?.AsArray();
+                        if (foldersJson != null)
                         {
-                            if (folderJson == null) continue;
-                            var folder = folderJson.GetValue<String>();
-                            if (!folder.EndsWith(Path.DirectorySeparatorChar)) folder += Path.DirectorySeparatorChar;
-                            Settings.ExternalFolders.Add(folder);
+                            foreach (var folderJson in foldersJson)
+                            {
+                                if (folderJson == null) continue;
+                                var folder = folderJson.GetValue<String>();
+                                if (!folder.EndsWith(Path.DirectorySeparatorChar)) folder += Path.DirectorySeparatorChar;
+                                Settings.ExternalFolders.Add(folder);
+                            }
                         }
+
+                        Settings.BackupFolder = projectJson["BackupFolder"]?.GetValue<string>() ?? Constants.BackupFolder;
+
+                        var exportJson = projectJson["Export"];
+                        Settings.Export.LowercaseFilenames = exportJson?["LowercaseFilenames"]?.GetValue<bool>() ?? false;
+                        Settings.Export.HakFolder = exportJson?["HakFolder"]?.GetValue<string>() ?? Constants.ExportHAKFolder;
+                        Settings.Export.ErfFolder = exportJson?["ErfFolder"]?.GetValue<string>() ?? Constants.ExportERFFolder;
+                        Settings.Export.TlkFolder = exportJson?["TlkFolder"]?.GetValue<string>() ?? Constants.ExportTLKFolder;
+                        Settings.Export.TwoDAFolder = exportJson?["TwoDAFolder"]?.GetValue<string>() ?? Constants.Export2DAFolder;
+                        Settings.Export.IncludeFolder = exportJson?["IncludeFolder"]?.GetValue<string>() ?? Constants.ExportIncludeFolder;
+                        Settings.Export.BaseTlkFile = exportJson?["BaseTlkFile"]?.GetValue<string>() ?? "";
+                        Settings.Export.TlkOffset = exportJson?["TlkOffset"]?.GetValue<int>() ?? 0;
+                        Settings.Export.IncludeFilename = exportJson?["IncludeFilename"]?.GetValue<string>() ?? Constants.IncludeFilename;
+
+                        var customDataJson = projectJson["CustomData"];
+                        LoadCustomDataSettings(Settings.Appearances, customDataJson?["AreaEffects"]);
+                        LoadCustomDataSettings(Settings.AreaEffects, customDataJson?["AreaEffects"]);
+                        LoadCustomDataSettings(Settings.Classes, customDataJson?["Classes"]);
+                        LoadCustomDataSettings(Settings.Diseases, customDataJson?["Diseases"]);
+                        LoadCustomDataSettings(Settings.Domains, customDataJson?["Domains"]);
+                        LoadCustomDataSettings(Settings.Feats, customDataJson?["Feats"]);
+                        LoadCustomDataSettings(Settings.MasterFeats, customDataJson?["MasterFeats"]);
+                        LoadCustomDataSettings(Settings.Packages, customDataJson?["Packages"]);
+                        LoadCustomDataSettings(Settings.Poisons, customDataJson?["Poisons"]);
+                        LoadCustomDataSettings(Settings.Polymorphs, customDataJson?["Polymorphs"]);
+                        LoadCustomDataSettings(Settings.Portraits, customDataJson?["Portraits"]);
+                        LoadCustomDataSettings(Settings.Races, customDataJson?["Races"]);
+                        LoadCustomDataSettings(Settings.Skills, customDataJson?["Skills"]);
+                        LoadCustomDataSettings(Settings.Soundsets, customDataJson?["Soundsets"]);
+                        LoadCustomDataSettings(Settings.Spellbooks, customDataJson?["Spellbooks"]);
+                        LoadCustomDataSettings(Settings.Spells, customDataJson?["Spells"]);
+                        LoadCustomDataSettings(Settings.VisualEffects, customDataJson?["VisualEffects"]);
+
+                        LoadCustomDataSettings(Settings.AttackBonusTables, customDataJson?["AttackBonusTables"]);
+                        LoadCustomDataSettings(Settings.BonusFeatTables, customDataJson?["BonusFeatTables"]);
+                        LoadCustomDataSettings(Settings.FeatTables, customDataJson?["FeatTables"]);
+                        LoadCustomDataSettings(Settings.KnownSpellsTables, customDataJson?["KnownSpellsTables"]);
+                        LoadCustomDataSettings(Settings.PrerequisiteTables, customDataJson?["PrerequisiteTables"]);
+                        LoadCustomDataSettings(Settings.RacialFeatsTables, customDataJson?["RacialFeatsTables"]);
+                        LoadCustomDataSettings(Settings.SavesTables, customDataJson?["SavesTables"]);
+                        LoadCustomDataSettings(Settings.SkillsTables, customDataJson?["SkillsTables"]);
+                        LoadCustomDataSettings(Settings.SpellSlotTables, customDataJson?["SpellSlotTables"]);
+                        LoadCustomDataSettings(Settings.StatGainTables, customDataJson?["StatGainTables"]);
+
+                        LoadCustomDataSettings(Settings.CustomData, customDataJson?["Custom"]);
                     }
-
-                    Settings.BackupFolder = projectJson["BackupFolder"]?.GetValue<string>() ?? Constants.BackupFolder;
-
-                    var exportJson = projectJson["Export"];
-                    Settings.Export.LowercaseFilenames = exportJson?["LowercaseFilenames"]?.GetValue<bool>() ?? false;
-                    Settings.Export.HakFolder = exportJson?["HakFolder"]?.GetValue<string>() ?? Constants.ExportHAKFolder;
-                    Settings.Export.ErfFolder = exportJson?["ErfFolder"]?.GetValue<string>() ?? Constants.ExportERFFolder;
-                    Settings.Export.TlkFolder = exportJson?["TlkFolder"]?.GetValue<string>() ?? Constants.ExportTLKFolder;
-                    Settings.Export.TwoDAFolder = exportJson?["TwoDAFolder"]?.GetValue<string>() ?? Constants.Export2DAFolder;
-                    Settings.Export.IncludeFolder = exportJson?["IncludeFolder"]?.GetValue<string>() ?? Constants.ExportIncludeFolder;
-                    Settings.Export.BaseTlkFile = exportJson?["BaseTlkFile"]?.GetValue<string>() ?? "";
-                    Settings.Export.TlkOffset = exportJson?["TlkOffset"]?.GetValue<int>() ?? 0;
-                    Settings.Export.IncludeFilename = exportJson?["IncludeFilename"]?.GetValue<string>() ?? Constants.IncludeFilename;
-
-                    var customDataJson = projectJson["CustomData"];
-                    LoadCustomDataSettings(Settings.Appearances, customDataJson?["AreaEffects"]);
-                    LoadCustomDataSettings(Settings.AreaEffects, customDataJson?["AreaEffects"]);
-                    LoadCustomDataSettings(Settings.Classes, customDataJson?["Classes"]);
-                    LoadCustomDataSettings(Settings.Diseases, customDataJson?["Diseases"]);
-                    LoadCustomDataSettings(Settings.Domains, customDataJson?["Domains"]);
-                    LoadCustomDataSettings(Settings.Feats, customDataJson?["Feats"]);
-                    LoadCustomDataSettings(Settings.MasterFeats, customDataJson?["MasterFeats"]);
-                    LoadCustomDataSettings(Settings.Packages, customDataJson?["Packages"]);
-                    LoadCustomDataSettings(Settings.Poisons, customDataJson?["Poisons"]);
-                    LoadCustomDataSettings(Settings.Polymorphs, customDataJson?["Polymorphs"]);
-                    LoadCustomDataSettings(Settings.Portraits, customDataJson?["Portraits"]);
-                    LoadCustomDataSettings(Settings.Races, customDataJson?["Races"]);
-                    LoadCustomDataSettings(Settings.Skills, customDataJson?["Skills"]);
-                    LoadCustomDataSettings(Settings.Soundsets, customDataJson?["Soundsets"]);
-                    LoadCustomDataSettings(Settings.Spellbooks, customDataJson?["Spellbooks"]);
-                    LoadCustomDataSettings(Settings.Spells, customDataJson?["Spells"]);
-                    LoadCustomDataSettings(Settings.VisualEffects, customDataJson?["VisualEffects"]);
-
-                    LoadCustomDataSettings(Settings.AttackBonusTables, customDataJson?["AttackBonusTables"]);
-                    LoadCustomDataSettings(Settings.BonusFeatTables, customDataJson?["BonusFeatTables"]);
-                    LoadCustomDataSettings(Settings.FeatTables, customDataJson?["FeatTables"]);
-                    LoadCustomDataSettings(Settings.KnownSpellsTables, customDataJson?["KnownSpellsTables"]);
-                    LoadCustomDataSettings(Settings.PrerequisiteTables, customDataJson?["PrerequisiteTables"]);
-                    LoadCustomDataSettings(Settings.RacialFeatsTables, customDataJson?["RacialFeatsTables"]);
-                    LoadCustomDataSettings(Settings.SavesTables, customDataJson?["SavesTables"]);
-                    LoadCustomDataSettings(Settings.SkillsTables, customDataJson?["SkillsTables"]);
-                    LoadCustomDataSettings(Settings.SpellSlotTables, customDataJson?["SpellSlotTables"]);
-                    LoadCustomDataSettings(Settings.StatGainTables, customDataJson?["StatGainTables"]);
-
-                    LoadCustomDataSettings(Settings.CustomData, customDataJson?["Custom"]);
+                }
+                finally
+                {
+                    fs.Close();
                 }
             }
-            finally
+            catch(Exception e)
             {
-                fs.Close();
+                Log.Error(e.Message);
+                throw;
             }
 
             if (Settings.ExternalFolders.Count == 0)
@@ -468,67 +476,75 @@ namespace Eos.Repositories
 
         private void SaveProjectFile(string projectFilename)
         {
-            JsonObject projectFile = new JsonObject();
-            projectFile.Add("Version", Version);
-            projectFile.Add("Name", Name);
-            projectFile.Add("DefaultLanguage", Enum.GetName(DefaultLanguage));
-
-            var externalFolders = new JsonArray();
-            foreach (var folder in Settings.ExternalFolders)
+            try
             {
-                if (folder != null)
-                    externalFolders.Add(folder);
+                JsonObject projectFile = new JsonObject();
+                projectFile.Add("Version", Version);
+                projectFile.Add("Name", Name);
+                projectFile.Add("DefaultLanguage", Enum.GetName(DefaultLanguage));
+
+                var externalFolders = new JsonArray();
+                foreach (var folder in Settings.ExternalFolders)
+                {
+                    if (folder != null)
+                        externalFolders.Add(folder);
+                }
+                projectFile.Add("ExternalFolders", externalFolders);
+
+                projectFile.Add("BackupFolder", Settings.BackupFolder);
+
+                var export = new JsonObject();
+                export.Add("LowercaseFilenames", Settings.Export.LowercaseFilenames);
+                export.Add("HakFolder", Settings.Export.HakFolder);
+                export.Add("ErfFolder", Settings.Export.ErfFolder);
+                export.Add("TwoDAFolder", Settings.Export.TwoDAFolder);
+                export.Add("TlkFolder", Settings.Export.TlkFolder);
+                export.Add("IncludeFolder", Settings.Export.IncludeFolder);
+                export.Add("BaseTlkFile", Settings.Export.BaseTlkFile);
+                export.Add("TlkOffset", Settings.Export.TlkOffset);
+                export.Add("IncludeFilename", Settings.Export.IncludeFilename);
+                projectFile.Add("Export", export);
+
+                var customDataSettings = new JsonObject();
+                SaveCustomDataSettings(Settings.Appearances, "Appearances", customDataSettings);
+                SaveCustomDataSettings(Settings.AreaEffects, "AreaEffects", customDataSettings);
+                SaveCustomDataSettings(Settings.Classes, "Classes", customDataSettings);
+                SaveCustomDataSettings(Settings.Diseases, "Diseases", customDataSettings);
+                SaveCustomDataSettings(Settings.Domains, "Domains", customDataSettings);
+                SaveCustomDataSettings(Settings.Feats, "Feats", customDataSettings);
+                SaveCustomDataSettings(Settings.MasterFeats, "MasterFeats", customDataSettings);
+                SaveCustomDataSettings(Settings.Packages, "Packages", customDataSettings);
+                SaveCustomDataSettings(Settings.Poisons, "Poisons", customDataSettings);
+                SaveCustomDataSettings(Settings.Polymorphs, "Polymorphs", customDataSettings);
+                SaveCustomDataSettings(Settings.Portraits, "Portraits", customDataSettings);
+                SaveCustomDataSettings(Settings.Races, "Races", customDataSettings);
+                SaveCustomDataSettings(Settings.Skills, "Skills", customDataSettings);
+                SaveCustomDataSettings(Settings.Soundsets, "Soundsets", customDataSettings);
+                SaveCustomDataSettings(Settings.Spellbooks, "Spellbooks", customDataSettings);
+                SaveCustomDataSettings(Settings.Spells, "Spells", customDataSettings);
+                SaveCustomDataSettings(Settings.VisualEffects, "VisualEffects", customDataSettings);
+
+                SaveCustomDataSettings(Settings.BonusFeatTables, "BonusFeatTables", customDataSettings);
+                SaveCustomDataSettings(Settings.AttackBonusTables, "AttackBonusTables", customDataSettings);
+                SaveCustomDataSettings(Settings.FeatTables, "FeatTables", customDataSettings);
+                SaveCustomDataSettings(Settings.KnownSpellsTables, "KnownSpellsTables", customDataSettings);
+                SaveCustomDataSettings(Settings.PrerequisiteTables, "PrerequisiteTables", customDataSettings);
+                SaveCustomDataSettings(Settings.RacialFeatsTables, "RacialFeatsTables", customDataSettings);
+                SaveCustomDataSettings(Settings.SavesTables, "SavesTables", customDataSettings);
+                SaveCustomDataSettings(Settings.SkillsTables, "SkillsTables", customDataSettings);
+                SaveCustomDataSettings(Settings.SpellSlotTables, "SpellSlotTables", customDataSettings);
+                SaveCustomDataSettings(Settings.StatGainTables, "StatGainTables", customDataSettings);
+
+                SaveCustomDataSettings(Settings.CustomData, "Custom", customDataSettings);
+                projectFile.Add("CustomData", customDataSettings);
+
+                File.WriteAllText(projectFilename, projectFile.ToJsonString(new JsonSerializerOptions(JsonSerializerDefaults.General) { WriteIndented = true }));
             }
-            projectFile.Add("ExternalFolders", externalFolders);
-
-            projectFile.Add("BackupFolder", Settings.BackupFolder);
-
-            var export = new JsonObject();
-            export.Add("LowercaseFilenames", Settings.Export.LowercaseFilenames);
-            export.Add("HakFolder", Settings.Export.HakFolder);
-            export.Add("ErfFolder", Settings.Export.ErfFolder);
-            export.Add("TwoDAFolder", Settings.Export.TwoDAFolder);
-            export.Add("TlkFolder", Settings.Export.TlkFolder);
-            export.Add("IncludeFolder", Settings.Export.IncludeFolder);
-            export.Add("BaseTlkFile", Settings.Export.BaseTlkFile);
-            export.Add("TlkOffset", Settings.Export.TlkOffset);
-            export.Add("IncludeFilename", Settings.Export.IncludeFilename);
-            projectFile.Add("Export", export);
-
-            var customDataSettings = new JsonObject();
-            SaveCustomDataSettings(Settings.Appearances, "Appearances", customDataSettings);
-            SaveCustomDataSettings(Settings.AreaEffects, "AreaEffects", customDataSettings);
-            SaveCustomDataSettings(Settings.Classes, "Classes", customDataSettings);
-            SaveCustomDataSettings(Settings.Diseases, "Diseases", customDataSettings);
-            SaveCustomDataSettings(Settings.Domains, "Domains", customDataSettings);
-            SaveCustomDataSettings(Settings.Feats, "Feats", customDataSettings);
-            SaveCustomDataSettings(Settings.MasterFeats, "MasterFeats", customDataSettings);
-            SaveCustomDataSettings(Settings.Packages, "Packages", customDataSettings);
-            SaveCustomDataSettings(Settings.Poisons, "Poisons", customDataSettings);
-            SaveCustomDataSettings(Settings.Polymorphs, "Polymorphs", customDataSettings);
-            SaveCustomDataSettings(Settings.Portraits, "Portraits", customDataSettings);
-            SaveCustomDataSettings(Settings.Races, "Races", customDataSettings);
-            SaveCustomDataSettings(Settings.Skills, "Skills", customDataSettings);
-            SaveCustomDataSettings(Settings.Soundsets, "Soundsets", customDataSettings);
-            SaveCustomDataSettings(Settings.Spellbooks, "Spellbooks", customDataSettings);
-            SaveCustomDataSettings(Settings.Spells, "Spells", customDataSettings);
-            SaveCustomDataSettings(Settings.VisualEffects, "VisualEffects", customDataSettings);
-
-            SaveCustomDataSettings(Settings.BonusFeatTables, "BonusFeatTables", customDataSettings);
-            SaveCustomDataSettings(Settings.AttackBonusTables, "AttackBonusTables", customDataSettings);
-            SaveCustomDataSettings(Settings.FeatTables, "FeatTables", customDataSettings);
-            SaveCustomDataSettings(Settings.KnownSpellsTables, "KnownSpellsTables", customDataSettings);
-            SaveCustomDataSettings(Settings.PrerequisiteTables, "PrerequisiteTables", customDataSettings);
-            SaveCustomDataSettings(Settings.RacialFeatsTables, "RacialFeatsTables", customDataSettings);
-            SaveCustomDataSettings(Settings.SavesTables, "SavesTables", customDataSettings);
-            SaveCustomDataSettings(Settings.SkillsTables, "SkillsTables", customDataSettings);
-            SaveCustomDataSettings(Settings.SpellSlotTables, "SpellSlotTables", customDataSettings);
-            SaveCustomDataSettings(Settings.StatGainTables, "StatGainTables", customDataSettings);
-
-            SaveCustomDataSettings(Settings.CustomData, "Custom", customDataSettings);
-            projectFile.Add("CustomData", customDataSettings);
-
-            File.WriteAllText(projectFilename, projectFile.ToJsonString(new JsonSerializerOptions(JsonSerializerDefaults.General) { WriteIndented = true }));
+            catch(Exception e)
+            {
+                Log.Error(e.Message);
+                throw;
+            }
         }
 
         public void Close()
@@ -544,55 +560,63 @@ namespace Eos.Repositories
             EosConfig.LastProject = "";
             MasterRepository.LoadExternalResources(new string[] { });
         }
+        
+        private void AddZipEntry(ZipArchive zip, string filename, string entryName)
+        {
+            if (File.Exists(filename))
+                zip.CreateEntryFromFile(filename, entryName);
+        }
 
         public void CreateBackup()
         {
             var backupFilename = $"{Settings.BackupFolder}{Name}_v{Version}_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.zip";
             Directory.CreateDirectory(Path.GetDirectoryName(backupFilename) ?? "");
 
+            Log.Info("Creating project backup: \"{0}\"", Path.GetFullPath(backupFilename));
+
             using (var backupFileStream = new FileStream(ProjectFolder + backupFilename, FileMode.CreateNew))
             {
                 using (var zip = new ZipArchive(backupFileStream, ZipArchiveMode.Create))
                 {
-                    zip.CreateEntryFromFile(_projectFilename, Path.GetFileName(_projectFilename));
+                    AddZipEntry(zip, _projectFilename, Path.GetFileName(_projectFilename));
 
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.RacesFilename, Constants.RacesFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.ClassesFilename, Constants.ClassesFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.DomainsFilename, Constants.DomainsFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.SpellsFilename, Constants.SpellsFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.FeatsFilename, Constants.FeatsFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.SkillsFilename, Constants.SkillsFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.DiseasesFilename, Constants.DiseasesFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.PoisonsFilename, Constants.PoisonsFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.SpellbooksFilename, Constants.SpellbooksFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.AreaEffectsFilename, Constants.AreaEffectsFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.MasterFeatsFilename, Constants.MasterFeatsFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.RacesFilename, Constants.RacesFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.ClassesFilename, Constants.ClassesFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.DomainsFilename, Constants.DomainsFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.SpellsFilename, Constants.SpellsFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.FeatsFilename, Constants.FeatsFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.SkillsFilename, Constants.SkillsFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.DiseasesFilename, Constants.DiseasesFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.PoisonsFilename, Constants.PoisonsFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.SpellbooksFilename, Constants.SpellbooksFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.AreaEffectsFilename, Constants.AreaEffectsFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.MasterFeatsFilename, Constants.MasterFeatsFilename);
 
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.AppearancesFilename, Constants.AppearancesFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.PortraitsFilename, Constants.PortraitsFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.VisualEffectsFilename, Constants.VisualEffectsFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.ClassPackagesFilename, Constants.ClassPackagesFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.SoundsetsFilename, Constants.SoundsetsFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.PolymorphsFilename, Constants.PolymorphsFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.AppearancesFilename, Constants.AppearancesFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.PortraitsFilename, Constants.PortraitsFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.VisualEffectsFilename, Constants.VisualEffectsFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.ClassPackagesFilename, Constants.ClassPackagesFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.SoundsetsFilename, Constants.SoundsetsFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.PolymorphsFilename, Constants.PolymorphsFilename);
 
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.AttackBonusTablesFilename, Constants.AttackBonusTablesFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.BonusFeatTablesFilename, Constants.BonusFeatTablesFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.FeatTablesFilename, Constants.FeatTablesFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.SavingThrowTablesFilename, Constants.SavingThrowTablesFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.SkillTablesFilename, Constants.SkillTablesFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.PrerequisiteTablesFilename, Constants.PrerequisiteTablesFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.SpellSlotTablesFilename, Constants.SpellSlotTablesFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.KnownSpellsTablesFilename, Constants.KnownSpellsTablesFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.StatGainTablesFilename, Constants.StatGainTablesFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.RacialFeatsTablesFilename, Constants.RacialFeatsTablesFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.AttackBonusTablesFilename, Constants.AttackBonusTablesFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.BonusFeatTablesFilename, Constants.BonusFeatTablesFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.FeatTablesFilename, Constants.FeatTablesFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.SavingThrowTablesFilename, Constants.SavingThrowTablesFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.SkillTablesFilename, Constants.SkillTablesFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.PrerequisiteTablesFilename, Constants.PrerequisiteTablesFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.SpellSlotTablesFilename, Constants.SpellSlotTablesFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.KnownSpellsTablesFilename, Constants.KnownSpellsTablesFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.StatGainTablesFilename, Constants.StatGainTablesFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.RacialFeatsTablesFilename, Constants.RacialFeatsTablesFilename);
 
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.CustomEnumsFilename, Constants.CustomEnumsFilename);
-                    zip.CreateEntryFromFile(ProjectFolder + Constants.CustomObjectsFilename, Constants.CustomObjectsFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.CustomEnumsFilename, Constants.CustomEnumsFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.CustomObjectsFilename, Constants.CustomObjectsFilename);
 
                     foreach (var template in CustomObjects)
                     {
                         if (template != null)
-                            zip.CreateEntryFromFile(ProjectFolder + template.ResourceName + ".json", template.ResourceName + ".json");
+                            AddZipEntry(zip, ProjectFolder + template.ResourceName + ".json", template.ResourceName + ".json");
                     }
                 }
             }
@@ -600,92 +624,104 @@ namespace Eos.Repositories
 
         public void Load(string projectFilename)
         {
+            Log.Info("Loading project file: \"{0}\"", projectFilename);
+
             Clear();
 
             LoadProjectFile(projectFilename);
+            Log.Info("Project version: {0}", Version);
 
-            CustomEnums.LoadFromFile(ProjectFolder + Constants.CustomEnumsFilename);
-            CustomObjects.LoadFromFile(ProjectFolder + Constants.CustomObjectsFilename);
-
-            CustomEnums.ResolveReferences();
-            CustomObjects.ResolveReferences();
-
-            foreach (var customObj in CustomObjects)
+            Log.Info("Loading project data...");
+            try
             {
-                if (customObj != null)
-                    CustomObjectRepositories.AddRepository(customObj);
+                CustomEnums.LoadFromFile(ProjectFolder + Constants.CustomEnumsFilename);
+                CustomObjects.LoadFromFile(ProjectFolder + Constants.CustomObjectsFilename);
+
+                CustomEnums.ResolveReferences();
+                CustomObjects.ResolveReferences();
+
+                foreach (var customObj in CustomObjects)
+                {
+                    if (customObj != null)
+                        CustomObjectRepositories.AddRepository(customObj);
+                }
+
+                Races.LoadFromFile(ProjectFolder + Constants.RacesFilename);
+                Classes.LoadFromFile(ProjectFolder + Constants.ClassesFilename);
+                Domains.LoadFromFile(ProjectFolder + Constants.DomainsFilename);
+                Spells.LoadFromFile(ProjectFolder + Constants.SpellsFilename);
+                Feats.LoadFromFile(ProjectFolder + Constants.FeatsFilename);
+                Skills.LoadFromFile(ProjectFolder + Constants.SkillsFilename);
+                Diseases.LoadFromFile(ProjectFolder + Constants.DiseasesFilename);
+                Poisons.LoadFromFile(ProjectFolder + Constants.PoisonsFilename);
+                Spellbooks.LoadFromFile(ProjectFolder + Constants.SpellbooksFilename);
+                AreaEffects.LoadFromFile(ProjectFolder + Constants.AreaEffectsFilename);
+                MasterFeats.LoadFromFile(ProjectFolder + Constants.MasterFeatsFilename);
+
+                Appearances.LoadFromFile(ProjectFolder + Constants.AppearancesFilename);
+                VisualEffects.LoadFromFile(ProjectFolder + Constants.VisualEffectsFilename);
+                ClassPackages.LoadFromFile(ProjectFolder + Constants.ClassPackagesFilename);
+                Soundsets.LoadFromFile(ProjectFolder + Constants.SoundsetsFilename);
+                Polymorphs.LoadFromFile(ProjectFolder + Constants.PolymorphsFilename);
+                Portraits.LoadFromFile(ProjectFolder + Constants.PortraitsFilename);
+
+                AttackBonusTables.LoadFromFile(ProjectFolder + Constants.AttackBonusTablesFilename);
+                BonusFeatTables.LoadFromFile(ProjectFolder + Constants.BonusFeatTablesFilename);
+                FeatTables.LoadFromFile(ProjectFolder + Constants.FeatTablesFilename);
+                SavingThrowTables.LoadFromFile(ProjectFolder + Constants.SavingThrowTablesFilename);
+                SkillTables.LoadFromFile(ProjectFolder + Constants.SkillTablesFilename);
+                PrerequisiteTables.LoadFromFile(ProjectFolder + Constants.PrerequisiteTablesFilename);
+                SpellSlotTables.LoadFromFile(ProjectFolder + Constants.SpellSlotTablesFilename);
+                KnownSpellsTables.LoadFromFile(ProjectFolder + Constants.KnownSpellsTablesFilename);
+                StatGainTables.LoadFromFile(ProjectFolder + Constants.StatGainTablesFilename);
+                RacialFeatsTables.LoadFromFile(ProjectFolder + Constants.RacialFeatsTablesFilename);
+
+                foreach (var template in CustomObjects)
+                {
+                    if (template != null)
+                        CustomObjectRepositories[template].LoadFromFile(ProjectFolder + template.ResourceName + ".json");
+                }
+
+                Races.ResolveReferences();
+                Classes.ResolveReferences();
+                Domains.ResolveReferences();
+                Spells.ResolveReferences();
+                Feats.ResolveReferences();
+                Skills.ResolveReferences();
+                Diseases.ResolveReferences();
+                Poisons.ResolveReferences();
+                Spellbooks.ResolveReferences();
+                AreaEffects.ResolveReferences();
+                MasterFeats.ResolveReferences();
+
+                Appearances.ResolveReferences();
+                VisualEffects.ResolveReferences();
+                ClassPackages.ResolveReferences();
+                Soundsets.ResolveReferences();
+                Polymorphs.ResolveReferences();
+                Portraits.ResolveReferences();
+
+                AttackBonusTables.ResolveReferences();
+                BonusFeatTables.ResolveReferences();
+                FeatTables.ResolveReferences();
+                SavingThrowTables.ResolveReferences();
+                SkillTables.ResolveReferences();
+                PrerequisiteTables.ResolveReferences();
+                SpellSlotTables.ResolveReferences();
+                KnownSpellsTables.ResolveReferences();
+                StatGainTables.ResolveReferences();
+                RacialFeatsTables.ResolveReferences();
+
+                foreach (var template in CustomObjects)
+                {
+                    if (template != null)
+                        CustomObjectRepositories[template].ResolveReferences();
+                }
             }
-
-            Races.LoadFromFile(ProjectFolder + Constants.RacesFilename);
-            Classes.LoadFromFile(ProjectFolder + Constants.ClassesFilename);
-            Domains.LoadFromFile(ProjectFolder + Constants.DomainsFilename);
-            Spells.LoadFromFile(ProjectFolder + Constants.SpellsFilename);
-            Feats.LoadFromFile(ProjectFolder + Constants.FeatsFilename);
-            Skills.LoadFromFile(ProjectFolder + Constants.SkillsFilename);
-            Diseases.LoadFromFile(ProjectFolder + Constants.DiseasesFilename);
-            Poisons.LoadFromFile(ProjectFolder + Constants.PoisonsFilename);
-            Spellbooks.LoadFromFile(ProjectFolder + Constants.SpellbooksFilename);
-            AreaEffects.LoadFromFile(ProjectFolder + Constants.AreaEffectsFilename);
-            MasterFeats.LoadFromFile(ProjectFolder + Constants.MasterFeatsFilename);
-
-            Appearances.LoadFromFile(ProjectFolder + Constants.AppearancesFilename);
-            VisualEffects.LoadFromFile(ProjectFolder + Constants.VisualEffectsFilename);
-            ClassPackages.LoadFromFile(ProjectFolder + Constants.ClassPackagesFilename);
-            Soundsets.LoadFromFile(ProjectFolder + Constants.SoundsetsFilename);
-            Polymorphs.LoadFromFile(ProjectFolder + Constants.PolymorphsFilename);
-            Portraits.LoadFromFile(ProjectFolder + Constants.PortraitsFilename);
-
-            AttackBonusTables.LoadFromFile(ProjectFolder + Constants.AttackBonusTablesFilename);
-            BonusFeatTables.LoadFromFile(ProjectFolder + Constants.BonusFeatTablesFilename);
-            FeatTables.LoadFromFile(ProjectFolder + Constants.FeatTablesFilename);
-            SavingThrowTables.LoadFromFile(ProjectFolder + Constants.SavingThrowTablesFilename);
-            SkillTables.LoadFromFile(ProjectFolder + Constants.SkillTablesFilename);
-            PrerequisiteTables.LoadFromFile(ProjectFolder + Constants.PrerequisiteTablesFilename);
-            SpellSlotTables.LoadFromFile(ProjectFolder + Constants.SpellSlotTablesFilename);
-            KnownSpellsTables.LoadFromFile(ProjectFolder + Constants.KnownSpellsTablesFilename);
-            StatGainTables.LoadFromFile(ProjectFolder + Constants.StatGainTablesFilename);
-            RacialFeatsTables.LoadFromFile(ProjectFolder + Constants.RacialFeatsTablesFilename);
-
-            foreach (var template in CustomObjects)
+            catch (Exception e)
             {
-                if (template != null)
-                    CustomObjectRepositories[template].LoadFromFile(ProjectFolder + template.ResourceName + ".json");
-            }
-
-            Races.ResolveReferences();
-            Classes.ResolveReferences();
-            Domains.ResolveReferences();
-            Spells.ResolveReferences();
-            Feats.ResolveReferences();
-            Skills.ResolveReferences();
-            Diseases.ResolveReferences();
-            Poisons.ResolveReferences();
-            Spellbooks.ResolveReferences();
-            AreaEffects.ResolveReferences();
-            MasterFeats.ResolveReferences();
-
-            Appearances.ResolveReferences();
-            VisualEffects.ResolveReferences();
-            ClassPackages.ResolveReferences();
-            Soundsets.ResolveReferences();
-            Polymorphs.ResolveReferences();
-            Portraits.ResolveReferences();
-
-            AttackBonusTables.ResolveReferences();
-            BonusFeatTables.ResolveReferences();
-            FeatTables.ResolveReferences();
-            SavingThrowTables.ResolveReferences();
-            SkillTables.ResolveReferences();
-            PrerequisiteTables.ResolveReferences();
-            SpellSlotTables.ResolveReferences();
-            KnownSpellsTables.ResolveReferences();
-            StatGainTables.ResolveReferences();
-            RacialFeatsTables.ResolveReferences();
-
-            foreach (var template in CustomObjects)
-            {
-                if (template != null)
-                    CustomObjectRepositories[template].ResolveReferences();
+                Log.Error(e.Message);
+                throw;
             }
 
             if (Settings.Appearances.Sorted) Appearances.Sort(d => d?.Name);
@@ -715,56 +751,72 @@ namespace Eos.Repositories
             if (Settings.StatGainTables.Sorted) StatGainTables.Sort(d => d?.Name);
             if (Settings.VisualEffects.Sorted) VisualEffects.Sort(d => d?.Name);
 
+            Log.Info("Loading project resources...");
+            MasterRepository.LoadExternalResources(Settings.ExternalFolders);
+
             IsLoaded = true;
             EosConfig.LastProject = projectFilename;
-            MasterRepository.LoadExternalResources(Settings.ExternalFolders);
+
+            Log.Info("Project \"{0}\" loaded successfully!", Name);
         }
 
         public void Save()
         {
+            Log.Info("Saving project file: \"{0}\"", ProjectFolder + Name + Constants.ProjectFileExtension);
             SaveProjectFile(ProjectFolder + Name + Constants.ProjectFileExtension);
 
             if (!Directory.Exists(ProjectFolder + Constants.ExternalFilesPath))
                 Directory.CreateDirectory(ProjectFolder + Constants.ExternalFilesPath);
 
-            Races.SaveToFile(ProjectFolder + Constants.RacesFilename, Settings.Races.FormatJson);
-            Classes.SaveToFile(ProjectFolder + Constants.ClassesFilename, Settings.Classes.FormatJson);
-            Domains.SaveToFile(ProjectFolder + Constants.DomainsFilename, Settings.Domains.FormatJson);
-            Spells.SaveToFile(ProjectFolder + Constants.SpellsFilename, Settings.Spells.FormatJson);
-            Feats.SaveToFile(ProjectFolder + Constants.FeatsFilename, Settings.Feats.FormatJson);
-            Skills.SaveToFile(ProjectFolder + Constants.SkillsFilename, Settings.Skills.FormatJson);
-            Diseases.SaveToFile(ProjectFolder + Constants.DiseasesFilename, Settings.Diseases.FormatJson);
-            Poisons.SaveToFile(ProjectFolder + Constants.PoisonsFilename, Settings.Poisons.FormatJson);
-            Spellbooks.SaveToFile(ProjectFolder + Constants.SpellbooksFilename, Settings.Spellbooks.FormatJson);
-            AreaEffects.SaveToFile(ProjectFolder + Constants.AreaEffectsFilename, Settings.AreaEffects.FormatJson);
-            MasterFeats.SaveToFile(ProjectFolder + Constants.MasterFeatsFilename, Settings.MasterFeats.FormatJson);
-
-            Appearances.SaveToFile(ProjectFolder + Constants.AppearancesFilename, Settings.Appearances.FormatJson);
-            Portraits.SaveToFile(ProjectFolder + Constants.PortraitsFilename, Settings.Portraits.FormatJson);
-            VisualEffects.SaveToFile(ProjectFolder + Constants.VisualEffectsFilename, Settings.VisualEffects.FormatJson);
-            ClassPackages.SaveToFile(ProjectFolder + Constants.ClassPackagesFilename, Settings.Packages.FormatJson);
-            Soundsets.SaveToFile(ProjectFolder + Constants.SoundsetsFilename, Settings.Soundsets.FormatJson);
-            Polymorphs.SaveToFile(ProjectFolder + Constants.PolymorphsFilename, Settings.Polymorphs.FormatJson);
-
-            AttackBonusTables.SaveToFile(ProjectFolder + Constants.AttackBonusTablesFilename, Settings.AttackBonusTables.FormatJson);
-            BonusFeatTables.SaveToFile(ProjectFolder + Constants.BonusFeatTablesFilename, Settings.BonusFeatTables.FormatJson);
-            FeatTables.SaveToFile(ProjectFolder + Constants.FeatTablesFilename, Settings.FeatTables.FormatJson);
-            SavingThrowTables.SaveToFile(ProjectFolder + Constants.SavingThrowTablesFilename, Settings.SavesTables.FormatJson);
-            SkillTables.SaveToFile(ProjectFolder + Constants.SkillTablesFilename, Settings.SkillsTables.FormatJson);
-            PrerequisiteTables.SaveToFile(ProjectFolder + Constants.PrerequisiteTablesFilename, Settings.PrerequisiteTables.FormatJson);
-            SpellSlotTables.SaveToFile(ProjectFolder + Constants.SpellSlotTablesFilename, Settings.SpellSlotTables.FormatJson);
-            KnownSpellsTables.SaveToFile(ProjectFolder + Constants.KnownSpellsTablesFilename, Settings.KnownSpellsTables.FormatJson);
-            StatGainTables.SaveToFile(ProjectFolder + Constants.StatGainTablesFilename, Settings.StatGainTables.FormatJson);
-            RacialFeatsTables.SaveToFile(ProjectFolder + Constants.RacialFeatsTablesFilename, Settings.RacialFeatsTables.FormatJson);
-
-            CustomEnums.SaveToFile(ProjectFolder + Constants.CustomEnumsFilename, Settings.CustomData.FormatJson);
-            CustomObjects.SaveToFile(ProjectFolder + Constants.CustomObjectsFilename, Settings.CustomData.FormatJson);
-
-            foreach (var template in CustomObjects)
+            Log.Info("Saving project data...");
+            try
             {
-                if (template != null)
-                    CustomObjectRepositories[template].SaveToFile(ProjectFolder + template.ResourceName + ".json", Settings.CustomData.FormatJson);
+                Races.SaveToFile(ProjectFolder + Constants.RacesFilename, Settings.Races.FormatJson);
+                Classes.SaveToFile(ProjectFolder + Constants.ClassesFilename, Settings.Classes.FormatJson);
+                Domains.SaveToFile(ProjectFolder + Constants.DomainsFilename, Settings.Domains.FormatJson);
+                Spells.SaveToFile(ProjectFolder + Constants.SpellsFilename, Settings.Spells.FormatJson);
+                Feats.SaveToFile(ProjectFolder + Constants.FeatsFilename, Settings.Feats.FormatJson);
+                Skills.SaveToFile(ProjectFolder + Constants.SkillsFilename, Settings.Skills.FormatJson);
+                Diseases.SaveToFile(ProjectFolder + Constants.DiseasesFilename, Settings.Diseases.FormatJson);
+                Poisons.SaveToFile(ProjectFolder + Constants.PoisonsFilename, Settings.Poisons.FormatJson);
+                Spellbooks.SaveToFile(ProjectFolder + Constants.SpellbooksFilename, Settings.Spellbooks.FormatJson);
+                AreaEffects.SaveToFile(ProjectFolder + Constants.AreaEffectsFilename, Settings.AreaEffects.FormatJson);
+                MasterFeats.SaveToFile(ProjectFolder + Constants.MasterFeatsFilename, Settings.MasterFeats.FormatJson);
+
+                Appearances.SaveToFile(ProjectFolder + Constants.AppearancesFilename, Settings.Appearances.FormatJson);
+                Portraits.SaveToFile(ProjectFolder + Constants.PortraitsFilename, Settings.Portraits.FormatJson);
+                VisualEffects.SaveToFile(ProjectFolder + Constants.VisualEffectsFilename, Settings.VisualEffects.FormatJson);
+                ClassPackages.SaveToFile(ProjectFolder + Constants.ClassPackagesFilename, Settings.Packages.FormatJson);
+                Soundsets.SaveToFile(ProjectFolder + Constants.SoundsetsFilename, Settings.Soundsets.FormatJson);
+                Polymorphs.SaveToFile(ProjectFolder + Constants.PolymorphsFilename, Settings.Polymorphs.FormatJson);
+
+                AttackBonusTables.SaveToFile(ProjectFolder + Constants.AttackBonusTablesFilename, Settings.AttackBonusTables.FormatJson);
+                BonusFeatTables.SaveToFile(ProjectFolder + Constants.BonusFeatTablesFilename, Settings.BonusFeatTables.FormatJson);
+                FeatTables.SaveToFile(ProjectFolder + Constants.FeatTablesFilename, Settings.FeatTables.FormatJson);
+                SavingThrowTables.SaveToFile(ProjectFolder + Constants.SavingThrowTablesFilename, Settings.SavesTables.FormatJson);
+                SkillTables.SaveToFile(ProjectFolder + Constants.SkillTablesFilename, Settings.SkillsTables.FormatJson);
+                PrerequisiteTables.SaveToFile(ProjectFolder + Constants.PrerequisiteTablesFilename, Settings.PrerequisiteTables.FormatJson);
+                SpellSlotTables.SaveToFile(ProjectFolder + Constants.SpellSlotTablesFilename, Settings.SpellSlotTables.FormatJson);
+                KnownSpellsTables.SaveToFile(ProjectFolder + Constants.KnownSpellsTablesFilename, Settings.KnownSpellsTables.FormatJson);
+                StatGainTables.SaveToFile(ProjectFolder + Constants.StatGainTablesFilename, Settings.StatGainTables.FormatJson);
+                RacialFeatsTables.SaveToFile(ProjectFolder + Constants.RacialFeatsTablesFilename, Settings.RacialFeatsTables.FormatJson);
+
+                CustomEnums.SaveToFile(ProjectFolder + Constants.CustomEnumsFilename, Settings.CustomData.FormatJson);
+                CustomObjects.SaveToFile(ProjectFolder + Constants.CustomObjectsFilename, Settings.CustomData.FormatJson);
+
+                foreach (var template in CustomObjects)
+                {
+                    if (template != null)
+                        CustomObjectRepositories[template].SaveToFile(ProjectFolder + template.ResourceName + ".json", Settings.CustomData.FormatJson);
+                }
             }
+            catch(Exception e)
+            {
+                Log.Error(e.Message);
+                throw;
+            }
+
+            Log.Info("Project \"{0}\" saved successfully!", Name);
         }
     }
 }

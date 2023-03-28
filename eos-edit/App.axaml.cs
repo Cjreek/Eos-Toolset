@@ -6,6 +6,7 @@ using Avalonia.Platform;
 using Eos.Config;
 using Eos.Nwn;
 using Eos.Repositories;
+using Eos.Services;
 using Eos.ViewModels;
 using Eos.Views;
 using Nwn.Tga;
@@ -19,6 +20,7 @@ namespace Eos
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
+            Log.Info("Initializing Eos-Toolset");
         }
 
         public override void OnFrameworkInitializationCompleted()
@@ -35,6 +37,8 @@ namespace Eos
             }
 
             base.OnFrameworkInitializationCompleted();
+
+            Log.Info("Avalonia Framework initialization completed");
         }
 
         private void Desktop_Startup(object? sender, ControlledApplicationLifetimeStartupEventArgs e)
@@ -46,6 +50,8 @@ namespace Eos
             MasterRepository.Resources.RegisterResourceLoader(NWNResourceType.NSS, ScriptSourceLoader);
 
             MasterRepository.Load();
+
+            Log.Info("Initialization complete!");
         }
 
         private object? TargaResourceLoader(Stream stream)

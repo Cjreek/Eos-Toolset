@@ -4,6 +4,7 @@ using Eos.Nwn.Bif;
 using Eos.Nwn.Tlk;
 using Eos.Nwn.TwoDimensionalArray;
 using Eos.Repositories.Models;
+using Eos.Services;
 using Eos.Types;
 using System;
 using System.Collections;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
@@ -231,6 +233,7 @@ namespace Eos.Repositories
 
         public static void LoadExternalResources(IEnumerable<String> externalBasePath)
         {
+            Log.Info("Loading external resources from: {0}", string.Join(", ", externalBasePath.Select(path => "\"" + path + "\"")));
             resources.LoadExternalResources(externalBasePath);
         }
 
@@ -306,64 +309,75 @@ namespace Eos.Repositories
 
         public static void Load()
         {
-            Standard.Races.LoadFromFile(Constants.RacesFilePath);
-            Standard.Classes.LoadFromFile(Constants.ClassesFilePath);
-            Standard.Domains.LoadFromFile(Constants.DomainsFilePath);
-            Standard.Spells.LoadFromFile(Constants.SpellsFilePath);
-            Standard.Feats.LoadFromFile(Constants.FeatsFilePath);
-            Standard.Skills.LoadFromFile(Constants.SkillsFilePath);
-            Standard.Diseases.LoadFromFile(Constants.DiseasesFilePath);
-            Standard.Poisons.LoadFromFile(Constants.PoisonsFilePath);
-            Standard.Spellbooks.LoadFromFile(Constants.SpellbooksFilePath);
-            Standard.AreaEffects.LoadFromFile(Constants.AreaEffectsFilePath);
-            Standard.MasterFeats.LoadFromFile(Constants.MasterFeatsFilePath);
+            Log.Info("Loading imported base game data...");
+            try
+            {
+                Standard.Races.LoadFromFile(Constants.RacesFilePath);
+                Standard.Classes.LoadFromFile(Constants.ClassesFilePath);
+                Standard.Domains.LoadFromFile(Constants.DomainsFilePath);
+                Standard.Spells.LoadFromFile(Constants.SpellsFilePath);
+                Standard.Feats.LoadFromFile(Constants.FeatsFilePath);
+                Standard.Skills.LoadFromFile(Constants.SkillsFilePath);
+                Standard.Diseases.LoadFromFile(Constants.DiseasesFilePath);
+                Standard.Poisons.LoadFromFile(Constants.PoisonsFilePath);
+                Standard.Spellbooks.LoadFromFile(Constants.SpellbooksFilePath);
+                Standard.AreaEffects.LoadFromFile(Constants.AreaEffectsFilePath);
+                Standard.MasterFeats.LoadFromFile(Constants.MasterFeatsFilePath);
 
-            Standard.Appearances.LoadFromFile(Constants.AppearancesFilePath);
-            Standard.Portraits.LoadFromFile(Constants.PortraitsFilePath);
-            Standard.VisualEffects.LoadFromFile(Constants.VisualEffectsFilePath);
-            Standard.ClassPackages.LoadFromFile(Constants.ClassPackagesFilePath);
-            Standard.Soundsets.LoadFromFile(Constants.SoundsetsFilePath);
-            Standard.Polymorphs.LoadFromFile(Constants.PolymorphsFilePath);
+                Standard.Appearances.LoadFromFile(Constants.AppearancesFilePath);
+                Standard.Portraits.LoadFromFile(Constants.PortraitsFilePath);
+                Standard.VisualEffects.LoadFromFile(Constants.VisualEffectsFilePath);
+                Standard.ClassPackages.LoadFromFile(Constants.ClassPackagesFilePath);
+                Standard.Soundsets.LoadFromFile(Constants.SoundsetsFilePath);
+                Standard.Polymorphs.LoadFromFile(Constants.PolymorphsFilePath);
 
-            Standard.AttackBonusTables.LoadFromFile(Constants.AttackBonusTablesFilePath);
-            Standard.BonusFeatTables.LoadFromFile(Constants.BonusFeatTablesFilePath);
-            Standard.FeatTables.LoadFromFile(Constants.FeatTablesFilePath);
-            Standard.SavingThrowTables.LoadFromFile(Constants.SavingThrowTablesFilePath);
-            Standard.SkillTables.LoadFromFile(Constants.SkillTablesFilePath);
-            Standard.PrerequisiteTables.LoadFromFile(Constants.PrerequisiteTablesFilePath);
-            Standard.SpellSlotTables.LoadFromFile(Constants.SpellSlotTablesFilePath);
-            Standard.KnownSpellsTables.LoadFromFile(Constants.KnownSpellsTablesFilePath);
-            Standard.StatGainTables.LoadFromFile(Constants.StatGainTablesFilePath);
-            Standard.RacialFeatsTables.LoadFromFile(Constants.RacialFeatsTablesFilePath);
+                Standard.AttackBonusTables.LoadFromFile(Constants.AttackBonusTablesFilePath);
+                Standard.BonusFeatTables.LoadFromFile(Constants.BonusFeatTablesFilePath);
+                Standard.FeatTables.LoadFromFile(Constants.FeatTablesFilePath);
+                Standard.SavingThrowTables.LoadFromFile(Constants.SavingThrowTablesFilePath);
+                Standard.SkillTables.LoadFromFile(Constants.SkillTablesFilePath);
+                Standard.PrerequisiteTables.LoadFromFile(Constants.PrerequisiteTablesFilePath);
+                Standard.SpellSlotTables.LoadFromFile(Constants.SpellSlotTablesFilePath);
+                Standard.KnownSpellsTables.LoadFromFile(Constants.KnownSpellsTablesFilePath);
+                Standard.StatGainTables.LoadFromFile(Constants.StatGainTablesFilePath);
+                Standard.RacialFeatsTables.LoadFromFile(Constants.RacialFeatsTablesFilePath);
 
-            Standard.Races.ResolveReferences();
-            Standard.Classes.ResolveReferences();
-            Standard.Domains.ResolveReferences();
-            Standard.Spells.ResolveReferences();
-            Standard.Feats.ResolveReferences();
-            Standard.Skills.ResolveReferences();
-            Standard.Diseases.ResolveReferences();
-            Standard.Poisons.ResolveReferences();
-            Standard.Spellbooks.ResolveReferences();
-            Standard.AreaEffects.ResolveReferences();
-            Standard.MasterFeats.ResolveReferences();
+                Standard.Races.ResolveReferences();
+                Standard.Classes.ResolveReferences();
+                Standard.Domains.ResolveReferences();
+                Standard.Spells.ResolveReferences();
+                Standard.Feats.ResolveReferences();
+                Standard.Skills.ResolveReferences();
+                Standard.Diseases.ResolveReferences();
+                Standard.Poisons.ResolveReferences();
+                Standard.Spellbooks.ResolveReferences();
+                Standard.AreaEffects.ResolveReferences();
+                Standard.MasterFeats.ResolveReferences();
 
-            Standard.Appearances.ResolveReferences();
-            Standard.Portraits.ResolveReferences();
-            Standard.ClassPackages.ResolveReferences();
-            Standard.Soundsets.ResolveReferences();
-            Standard.Polymorphs.ResolveReferences();
+                Standard.Appearances.ResolveReferences();
+                Standard.Portraits.ResolveReferences();
+                Standard.ClassPackages.ResolveReferences();
+                Standard.Soundsets.ResolveReferences();
+                Standard.Polymorphs.ResolveReferences();
 
-            Standard.AttackBonusTables.ResolveReferences();
-            Standard.BonusFeatTables.ResolveReferences();
-            Standard.FeatTables.ResolveReferences();
-            Standard.SavingThrowTables.ResolveReferences();
-            Standard.SkillTables.ResolveReferences();
-            Standard.PrerequisiteTables.ResolveReferences();
-            Standard.SpellSlotTables.ResolveReferences();
-            Standard.KnownSpellsTables.ResolveReferences();
-            Standard.StatGainTables.ResolveReferences();
-            Standard.RacialFeatsTables.ResolveReferences();
+                Standard.AttackBonusTables.ResolveReferences();
+                Standard.BonusFeatTables.ResolveReferences();
+                Standard.FeatTables.ResolveReferences();
+                Standard.SavingThrowTables.ResolveReferences();
+                Standard.SkillTables.ResolveReferences();
+                Standard.PrerequisiteTables.ResolveReferences();
+                Standard.SpellSlotTables.ResolveReferences();
+                Standard.KnownSpellsTables.ResolveReferences();
+                Standard.StatGainTables.ResolveReferences();
+                Standard.RacialFeatsTables.ResolveReferences();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+                throw;
+            }
+
+            Log.Info("Imported base game data loaded successfully!");
         }
     }
 }

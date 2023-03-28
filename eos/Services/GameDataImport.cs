@@ -37,18 +37,28 @@ namespace Eos.Services
 
         private TwoDimensionalArrayFile Load2da(String name)
         {
-            var filename = Path.Combine(nwnBasePath,"ovr", name + ".2da");
-            if (File.Exists(filename))
+            try
             {
-                using (var fs = File.OpenRead(filename))
+                var filename = Path.Combine(nwnBasePath, "ovr", name + ".2da");
+                if (File.Exists(filename))
                 {
-                    return new TwoDimensionalArrayFile(fs);
+                    Log.Info("Loading 2DA: {0}", filename);
+                    using (var fs = File.OpenRead(filename))
+                    {
+                        return new TwoDimensionalArrayFile(fs);
+                    }
+                }
+                else
+                {
+                    Log.Info("Loading 2DA: {0}.2da", name);
+                    var resource = bif.ReadResource(name, NWNResourceType.TWODA);
+                    return new TwoDimensionalArrayFile(resource.RawData);
                 }
             }
-            else
+            catch(Exception e)
             {
-                var resource = bif.ReadResource(name, NWNResourceType.TWODA);
-                return new TwoDimensionalArrayFile(resource.RawData);
+                Log.Error(e.Message);
+                throw;
             }
         }
 
@@ -1449,6 +1459,8 @@ namespace Eos.Services
 
         private void ResolveDependencies()
         {
+            Log.Info("Resolving object dependencies...");
+
             // Classes
             foreach (var cls in Standard.Classes)
             {
@@ -1621,6 +1633,8 @@ namespace Eos.Services
 
         private void SaveToJson()
         {
+            Log.Info("Saving imported data...");
+
             if (!Directory.Exists(Constants.BaseDataPath))
                 Directory.CreateDirectory(Constants.BaseDataPath);
 
@@ -1657,6 +1671,8 @@ namespace Eos.Services
 
         private void ImportIcons()
         {
+            Log.Info("Importing referenced icons...");
+
             if (!Directory.Exists(Constants.IconResourcesFilePath))
                 Directory.CreateDirectory(Constants.IconResourcesFilePath);
 
@@ -1694,75 +1710,66 @@ namespace Eos.Services
             Standard.RacialFeatsTables.Clear();
         }
 
-        private DateTime GetBuildDate(string nwnBasePath)
-        {
-            DateTime buildDate = DateTime.MinValue;
-
-            var buildTxtContents = File.ReadAllLines(Path.Combine(nwnBasePath, "bin", "win32", "build.txt"));
-            if (buildTxtContents.Length > 1)
-            {
-                var buildDateStr = buildTxtContents[1];
-
-                var match = Regex.Match(buildDateStr, "((Mon|Tue|Wed|Thu|Fri|Sat|Sun) *(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) *[0-9]{1,2} *[0-9]{2}:[0-9]{2}:[0-9]{2}) *(\\w+) *([0-9]{4})");
-                if (match.Success)
-                {
-                    buildDateStr = match.Groups[1].Value + " " + match.Groups[5].Value;
-                    buildDate = DateTime.ParseExact(buildDateStr, "ddd MMM d HH:mm:ss yyyy", new CultureInfo("en-US"));
-                }
-            }
-
-            return buildDate;
-        }
-
         public void Import(string nwnBasePath)
         {
-            this.nwnBasePath = nwnBasePath;
-            tlk.Load(nwnBasePath);
-            bif.Load(nwnBasePath);
+            Log.Info("Importing base game data...");
+            try
+            {
+                this.nwnBasePath = nwnBasePath;
+                tlk.Load(nwnBasePath);
+                bif.Load(nwnBasePath);
 
-            ClearTables();
+                ClearTables();
 
-            ImportRaces();
-            ImportClasses();
-            ImportDomains();
-            ImportSkills();
-            ImportFeats();
-            ImportSpells();
-            ImportDiseases();
-            ImportPoisons();
-            ImportAreaOfEffects();
-            ImportMasterFeats();
+                ImportRaces();
+                ImportClasses();
+                ImportDomains();
+                ImportSkills();
+                ImportFeats();
+                ImportSpells();
+                ImportDiseases();
+                ImportPoisons();
+                ImportAreaOfEffects();
+                ImportMasterFeats();
 
-            ImportAppearances();
-            ImportVisualEffects();
-            ImportClassPackages();
-            ImportSoundsets();
-            ImportPolymorphs();
-            ImportPortraits();
+                ImportAppearances();
+                ImportVisualEffects();
+                ImportClassPackages();
+                ImportSoundsets();
+                ImportPolymorphs();
+                ImportPortraits();
 
-            ImportText();
+                ImportText();
 
-            ResolveDependencies();
+                ResolveDependencies();
 
-            Standard.Domains.Sort(d => d?.Name[TLKLanguage.English].Text);
-            Standard.Skills.Sort(s => s?.Name[TLKLanguage.English].Text);
-            Standard.Feats.Sort(f => f?.Name[TLKLanguage.English].Text);
-            Standard.Spells.Sort(s => s?.Name[TLKLanguage.English].Text);
-            Standard.Diseases.Sort(d => d?.Name[TLKLanguage.English].Text);
-            Standard.Poisons.Sort(p => p?.Name[TLKLanguage.English].Text);
-            Standard.Spellbooks.Sort(p => p?.Name);
+                Standard.Domains.Sort(d => d?.Name[TLKLanguage.English].Text);
+                Standard.Skills.Sort(s => s?.Name[TLKLanguage.English].Text);
+                Standard.Feats.Sort(f => f?.Name[TLKLanguage.English].Text);
+                Standard.Spells.Sort(s => s?.Name[TLKLanguage.English].Text);
+                Standard.Diseases.Sort(d => d?.Name[TLKLanguage.English].Text);
+                Standard.Poisons.Sort(p => p?.Name[TLKLanguage.English].Text);
+                Standard.Spellbooks.Sort(p => p?.Name);
 
-            Standard.AreaEffects.Sort(p => p?.Name);
-            Standard.Polymorphs.Sort(p => p?.Name);
-            Standard.Appearances.Sort(p => p?.Name[TLKLanguage.English].Text);
-            Standard.ClassPackages.Sort(p => p?.Name[TLKLanguage.English].Text);
-            Standard.Soundsets.Sort(p => p?.Name[TLKLanguage.English].Text);
+                Standard.AreaEffects.Sort(p => p?.Name);
+                Standard.Polymorphs.Sort(p => p?.Name);
+                Standard.Appearances.Sort(p => p?.Name[TLKLanguage.English].Text);
+                Standard.ClassPackages.Sort(p => p?.Name[TLKLanguage.English].Text);
+                Standard.Soundsets.Sort(p => p?.Name[TLKLanguage.English].Text);
 
-            SaveToJson();
-            ImportIcons();
+                SaveToJson();
+                ImportIcons();
 
-            EosConfig.BaseGameDataBuildDate = GetBuildDate(nwnBasePath);
-            EosConfig.Save();
+                EosConfig.BaseGameDataBuildDate = EosConfig.GetGameBuildDate(nwnBasePath);
+                EosConfig.Save();
+            }
+            catch(Exception e)
+            {
+                Log.Error(e.Message);
+                throw;
+            }
+
+            Log.Info("Base game data import successful!");
         }
     }
 }

@@ -9,6 +9,7 @@ using System.IO;
 using System.Text.Json.Nodes;
 using Eos.Models.Tables;
 using System.Text.Json;
+using Eos.Services;
 
 namespace Eos.Repositories
 {
@@ -143,85 +144,104 @@ namespace Eos.Repositories
 
         public void LoadFromFile(string filename)
         {
-            Clear();
-            if (File.Exists(filename))
+            try
             {
-                var fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
-                try
+                Clear();
+                if (File.Exists(filename))
                 {
-                    if (JsonNode.Parse(fs) is JsonObject jsonRepository)
+                    Log.Info("Loading \"{0}\"", filename);
+
+                    var fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+                    try
                     {
-                        var extensions = jsonRepository["Extensions"]?.AsArray();
-                        if (extensions != null)
+                        if (JsonNode.Parse(fs) is JsonObject jsonRepository)
                         {
-                            for (int i = 0; i < extensions.Count; i++)
+                            var extensions = jsonRepository["Extensions"]?.AsArray();
+                            if (extensions != null)
                             {
-                                if (extensions[i] is JsonObject jsonObj)
+                                for (int i = 0; i < extensions.Count; i++)
                                 {
-                                    var prop = new CustomObjectProperty();
-                                    prop.FromJson(jsonObj);
-                                    prop.ResolveReferences();
-                                    Extensions.Add(prop);
+                                    if (extensions[i] is JsonObject jsonObj)
+                                    {
+                                        var prop = new CustomObjectProperty();
+                                        prop.FromJson(jsonObj);
+                                        prop.ResolveReferences();
+                                        Extensions.Add(prop);
+                                    }
                                 }
                             }
-                        }
 
-                        var items = jsonRepository["Items"]?.AsArray();
-                        if (items != null)
-                        {
-                            for (int i = 0; i < items.Count; i++)
+                            var items = jsonRepository["Items"]?.AsArray();
+                            if (items != null)
                             {
-                                if (items[i] is JsonObject jsonObj)
+                                for (int i = 0; i < items.Count; i++)
                                 {
-                                    var newModel = BaseModel.CreateFromJson<T>(jsonObj, Extensions);
-                                    Add(newModel);
+                                    if (items[i] is JsonObject jsonObj)
+                                    {
+                                        var newModel = BaseModel.CreateFromJson<T>(jsonObj, Extensions);
+                                        Add(newModel);
+                                    }
                                 }
                             }
-                        }
 
-                        int nextIndex = GetNextFreeIndex(0);
-                        for (int i=0; i < internalList.Count; i++)
-                        {
-                            var model = internalList[i];
-                            if (model != null && model.Index == null)
+                            int nextIndex = GetNextFreeIndex(0);
+                            for (int i = 0; i < internalList.Count; i++)
                             {
-                                model.Index = nextIndex;
-                                modelIndexLookup.Add(model.Index ?? 0, model);
-                                nextIndex = GetNextFreeIndex(nextIndex);
+                                var model = internalList[i];
+                                if (model != null && model.Index == null)
+                                {
+                                    model.Index = nextIndex;
+                                    modelIndexLookup.Add(model.Index ?? 0, model);
+                                    nextIndex = GetNextFreeIndex(nextIndex);
+                                }
                             }
                         }
                     }
+                    finally
+                    {
+                        fs.Close();
+                    }
                 }
-                finally
-                {
-                    fs.Close();
-                }
+            }
+            catch(Exception e)
+            {
+                Log.Error(e.Message);
+                throw;
             }
         }
 
         public void SaveToFile(string filename, bool writeIndented = false)
         {
-            var jsonRepo = new JsonObject();
-
-            var extensionArr = new JsonArray();
-            foreach (var item in Extensions.Items)
+            Log.Info("Saving \"{0}\"", filename);
+            try
             {
-                if (item == null) continue;
-                extensionArr.Add(item.ToJson());
-            }
-            jsonRepo.Add("Extensions", extensionArr);
+                var jsonRepo = new JsonObject();
 
-            var jsonArr = new JsonArray();
-            foreach (var entity in this)
+                var extensionArr = new JsonArray();
+                foreach (var item in Extensions.Items)
+                {
+                    if (item == null) continue;
+                    extensionArr.Add(item.ToJson());
+                }
+                jsonRepo.Add("Extensions", extensionArr);
+
+                var jsonArr = new JsonArray();
+                foreach (var entity in this)
+                {
+                    if (entity != null)
+                        jsonArr.Add(entity.ToJson());
+                }
+                jsonRepo.Add("Items", jsonArr);
+
+                var serializeOptions = new JsonSerializerOptions();
+                serializeOptions.WriteIndented = writeIndented;
+                File.WriteAllText(filename, jsonRepo.ToJsonString(serializeOptions));
+            }
+            catch (Exception e)
             {
-                if (entity != null)
-                    jsonArr.Add(entity.ToJson());
+                Log.Error(e.Message);
+                throw;
             }
-            jsonRepo.Add("Items", jsonArr);
-
-            var serializeOptions = new JsonSerializerOptions();
-            serializeOptions.WriteIndented = writeIndented;
-            File.WriteAllText(filename, jsonRepo.ToJsonString(serializeOptions));
         }
 
         public void ResolveReferences()

@@ -265,6 +265,8 @@ namespace Eos.Services
 
         private void ExportTLKs(EosProject project)
         {
+            Log.Info("Exporting TLK: \"{0}\"", Path.GetFullPath(project.Settings.Export.TlkFolder + project.Name.ToLower().Replace(' ', '_') + ".tlk"));
+
             CollectTLKEntries(project);
 
             var tlkFile = new TlkFile();
@@ -287,6 +289,8 @@ namespace Eos.Services
             {
                 if (table != null)
                 {
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da"));
+
                     var td2 = new TwoDimensionalArrayFile();
                     td2.New("BAB");
                     foreach (var item in table.Items)
@@ -312,6 +316,8 @@ namespace Eos.Services
             {
                 if (table != null)
                 {
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da"));
+
                     var td2 = new TwoDimensionalArrayFile();
                     td2.New("Bonus");
                     foreach (var item in table.Items)
@@ -342,6 +348,8 @@ namespace Eos.Services
             {
                 if (table != null)
                 {
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da"));
+
                     var td2 = new TwoDimensionalArrayFile();
                     td2.New(columns);
                     foreach (var item in table.Items)
@@ -376,6 +384,8 @@ namespace Eos.Services
             {
                 if (table != null)
                 {
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da"));
+
                     var td2 = new TwoDimensionalArrayFile();
                     td2.New(columns);
                     foreach (var item in table.Items)
@@ -414,6 +424,8 @@ namespace Eos.Services
             {
                 if (table != null)
                 {
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da"));
+
                     var td2 = new TwoDimensionalArrayFile();
                     td2.New(columns);
                     foreach (var item in table.Items)
@@ -454,6 +466,8 @@ namespace Eos.Services
             {
                 if (table != null)
                 {
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da"));
+
                     var td2 = new TwoDimensionalArrayFile();
                     td2.New(columns);
                     foreach (var item in table.Items)
@@ -552,6 +566,8 @@ namespace Eos.Services
             {
                 if (table != null)
                 {
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da"));
+
                     var td2 = new TwoDimensionalArrayFile();
                     td2.New(columns);
                     foreach (var item in table.Items)
@@ -583,6 +599,8 @@ namespace Eos.Services
             {
                 if (table != null)
                 {
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da"));
+
                     var td2 = new TwoDimensionalArrayFile();
                     td2.New(columns);
                     foreach (var item in table.Items)
@@ -616,6 +634,8 @@ namespace Eos.Services
             {
                 if (table != null)
                 {
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da"));
+
                     var td2 = new TwoDimensionalArrayFile();
                     td2.New(columns);
                     foreach (var item in table.Items)
@@ -665,6 +685,8 @@ namespace Eos.Services
             {
                 if (table != null)
                 {
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da"));
+
                     var td2 = new TwoDimensionalArrayFile();
                     td2.New(columns);
                     foreach (var item in table.Items)
@@ -698,6 +720,8 @@ namespace Eos.Services
         private void ExportClasses(EosProject project)
         {
             if (project.Classes.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "classes.2da"));
 
             var classes2da = Load2da("classes");
             if (classes2da != null)
@@ -810,6 +834,8 @@ namespace Eos.Services
         {
             if (project.ClassPackages.Count == 0) return;
 
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "packages.2da"));
+
             var packages2da = Load2da("packages");
             if (packages2da != null)
             {
@@ -860,6 +886,8 @@ namespace Eos.Services
         private void ExportDiseases(EosProject project)
         {
             if (project.Diseases.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "disease.2da"));
 
             var disease2da = Load2da("disease");
             if (disease2da != null)
@@ -922,6 +950,8 @@ namespace Eos.Services
         {
             if (project.Domains.Count == 0) return;
 
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "domains.2da"));
+
             var domains2da = Load2da("domains");
             if (domains2da != null)
             {
@@ -983,6 +1013,8 @@ namespace Eos.Services
         {
             if (project.MasterFeats.Count == 0) return;
 
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "masterfeats.2da"));
+
             var masterFeats2da = Load2da("masterfeats");
             if (masterFeats2da != null)
             {
@@ -1023,6 +1055,8 @@ namespace Eos.Services
         private void ExportFeats(EosProject project)
         {
             if (project.Feats.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "feat.2da"));
 
             var feat2da = Load2da("feat");
             if (feat2da != null)
@@ -1116,6 +1150,8 @@ namespace Eos.Services
         {
             if (project.Poisons.Count == 0) return;
 
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "poison.2da"));
+
             var poison2da = Load2da("poison");
             if (poison2da != null)
             {
@@ -1175,6 +1211,8 @@ namespace Eos.Services
         private void ExportRaces(EosProject project)
         {
             if (project.Races.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "racialtypes.2da"));
 
             var racialtypes2da = Load2da("racialtypes");
             if (racialtypes2da != null)
@@ -1257,6 +1295,8 @@ namespace Eos.Services
         {
             if (project.Skills.Count == 0) return;
 
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "skills.2da"));
+
             var skills2da = Load2da("skills");
             if (skills2da != null)
             {
@@ -1314,6 +1354,8 @@ namespace Eos.Services
         private void ExportAreaEffects(EosProject project)
         {
             if (project.AreaEffects.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "vfx_persistent.2da"));
 
             var aoe2da = Load2da("vfx_persistent");
             if (aoe2da != null)
@@ -1400,6 +1442,8 @@ namespace Eos.Services
         {
             if (project.Polymorphs.Count == 0) return;
 
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "polymorph.2da"));
+
             var polymorph2da = Load2da("polymorph");
             if (polymorph2da != null)
             {
@@ -1469,6 +1513,8 @@ namespace Eos.Services
         private void ExportSoundsets(EosProject project)
         {
             if (project.Soundsets.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "soundset.2da"));
 
             var soundset2da = Load2da("soundset");
             if (soundset2da != null)
@@ -1568,6 +1614,8 @@ namespace Eos.Services
         private void ExportSpells(EosProject project)
         {
             if ((project.Spells.Count == 0) && (project.Spellbooks.Count == 0)) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "spells.2da"));
 
             var spells2da = Load2da("spells");
             if (spells2da != null)
@@ -1760,7 +1808,9 @@ namespace Eos.Services
             foreach (var template in project.CustomObjects)
             {
                 if (template == null) continue;
-                
+
+                Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + template.ResourceName.ToLower() + ".2da"));
+
                 var repo = project.CustomObjectRepositories[template];
                 if (repo.Count == 0) return;
 
@@ -1859,6 +1909,8 @@ namespace Eos.Services
 
         private void ExportIncludeFile(EosProject project)
         {
+            Log.Info("Exporting include file: \"{0}\"", Path.GetFullPath(project.Settings.Export.IncludeFolder + project.Settings.Export.IncludeFilename + ".nss"));
+
             var incFile = new List<String>();
 
             // Races
@@ -2052,6 +2104,8 @@ namespace Eos.Services
 
         private void CreateHAK(EosProject project)
         {
+            Log.Info("Exporting HAK file: \"{0}\"", Path.GetFullPath(project.Settings.Export.HakFolder + CleanString(project.Name, false).ToLower() + ".hak"));
+
             var hak = new ErfFile();
             hak.Description[project.DefaultLanguage].Text = project.Name + "\n\n";
             foreach (var key in hakResources.Keys)
@@ -2070,6 +2124,8 @@ namespace Eos.Services
 
         private void CreateERF(EosProject project)
         {
+            Log.Info("Exporting ERF file: \"{0}\"", Path.GetFullPath(project.Settings.Export.ErfFolder + CleanString(project.Name, false).ToLower() + ".erf"));
+
             var erf = new ErfFile();
             erf.Description[project.DefaultLanguage].Text = project.Name + "\n\n";
             foreach (var key in erfResources.Keys)
@@ -2091,46 +2147,57 @@ namespace Eos.Services
 
         public void Export(EosProject project)
         {
-            tableDataDict.Clear();
-            modelIndices.Clear();
+            Log.Info("Exporting project \"{0}\"...", project.Name);
+            try
+            {
+                tableDataDict.Clear();
+                modelIndices.Clear();
 
-            Directory.CreateDirectory(project.Settings.Export.TwoDAFolder);
-            Directory.CreateDirectory(project.Settings.Export.HakFolder);
-            Directory.CreateDirectory(project.Settings.Export.TlkFolder);
+                Directory.CreateDirectory(project.Settings.Export.TwoDAFolder);
+                Directory.CreateDirectory(project.Settings.Export.HakFolder);
+                Directory.CreateDirectory(project.Settings.Export.TlkFolder);
 
-            ExportTLKs(project);
+                ExportTLKs(project);
 
-            ExportAttackBonusTables(project);
-            ExportBonusFeatsTables(project);
-            ExportStatGainTables(project);
-            ExportSpellSlotTables(project);
-            ExportKnownSpellsTables(project);
-            ExportSavingThrowTables(project);
-            ExportSkillsTables(project);
-            ExportRacialFeatsTables(project);
-            ExportFeatsTables(project);
-            ExportPrerequisiteTables(project);
+                ExportAttackBonusTables(project);
+                ExportBonusFeatsTables(project);
+                ExportStatGainTables(project);
+                ExportSpellSlotTables(project);
+                ExportKnownSpellsTables(project);
+                ExportSavingThrowTables(project);
+                ExportSkillsTables(project);
+                ExportRacialFeatsTables(project);
+                ExportFeatsTables(project);
+                ExportPrerequisiteTables(project);
 
-            ExportClasses(project);
-            //ExportClassPackages(project);
-            ExportDiseases(project);
-            ExportDomains(project);
-            ExportFeats(project);
-            ExportPoisons(project);
-            ExportRaces(project);
-            ExportSkills(project);
-            //ExportSoundsets(project);
-            ExportSpells(project);
-            ExportAreaEffects(project);
-            ExportPolymorphs(project);
-            ExportMasterFeats(project);
+                ExportClasses(project);
+                //ExportClassPackages(project);
+                ExportDiseases(project);
+                ExportDomains(project);
+                ExportFeats(project);
+                ExportPoisons(project);
+                ExportRaces(project);
+                ExportSkills(project);
+                //ExportSoundsets(project);
+                ExportSpells(project);
+                ExportAreaEffects(project);
+                ExportPolymorphs(project);
+                ExportMasterFeats(project);
 
-            ExportCustomObjects(project);
+                ExportCustomObjects(project);
 
-            ExportIncludeFile(project);
+                ExportIncludeFile(project);
 
-            CreateHAK(project);
-            CreateERF(project);
+                CreateHAK(project);
+                CreateERF(project);
+            }
+            catch(Exception e)
+            {
+                Log.Error(e.Message);
+                throw;
+            }
+
+            Log.Info("Project export successful!");
         }
     }
 }

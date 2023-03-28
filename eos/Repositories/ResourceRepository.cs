@@ -11,6 +11,7 @@ using System.Threading;
 using System.Collections.Concurrent;
 using Eos.Types;
 using Eos.Extensions;
+using Eos.Services;
 
 namespace Eos.Repositories
 {
@@ -72,6 +73,8 @@ namespace Eos.Repositories
 
         private void LoadBif(String nwnBasePath)
         {
+            Log.Info("Loading resources from game data...");
+
             bif.Load(nwnBasePath);
             foreach (var res in bif.Resources)
             {
@@ -94,12 +97,16 @@ namespace Eos.Repositories
 
         public void Initialize(String nwnBasePath)
         {
+            Log.Info("Initializing resource repository...");
+
             filesByTypeDict.Clear();
 
             LoadBif(nwnBasePath);
 
             resourceLoaderThread = new Thread(ResourceLoaderThread);
             resourceLoaderThread.Start();
+
+            Log.Info("Resource repository initialization complete!");
         }
 
         private NWNResourceType ExtensionToResourceType(string extension)

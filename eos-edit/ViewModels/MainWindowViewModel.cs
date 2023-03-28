@@ -261,6 +261,8 @@ namespace Eos.ViewModels
                     case MessageType.OpenProject:
                         if (!inProjectUpdate)
                         {
+                            CloseAllProjectDetails();
+
                             MasterRepository.Project.Load((String?)message ?? "");
                             MessageDispatcher.Send(MessageType.ChangeLanguage, MasterRepository.Project.DefaultLanguage, null);
                             MessageDispatcher.Send(MessageType.UpdateProject, MasterRepository.Project, null);

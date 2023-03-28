@@ -1,4 +1,6 @@
-﻿using Eos.Services;
+﻿using Eos.Repositories;
+using Eos.Services;
+using Eos.ViewModels.Base;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -167,6 +169,8 @@ namespace Eos.ViewModels.Dialogs
                 vm.DoError("You have to chose an external path where other files will be extracted to!");
                 return;
             }
+
+            MasterRepository.Project.CreateBackup();
 
             var importService = new ImportService(vm.Files, vm.TlkFile, vm.OverrideSettingIndex > 0, vm.OverrideSettingIndex == 2, vm.NewDataSettingIndex > 0, vm.ExtractOther ? vm.ExtractTo : "");
             importService.DoImport();
