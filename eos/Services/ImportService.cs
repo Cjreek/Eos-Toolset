@@ -274,7 +274,7 @@ namespace Eos.Services
                     SetText(tmpRace.Description, races2da[i].AsInteger("Description"));
                     SetText(tmpRace.Biography, races2da[i].AsInteger("Biography"));
 
-                    tmpRace.Icon = AddIconResource(races2da[i].AsString("Icon"));
+                    tmpRace.Icon = AddIconResource(races2da[i].AsString("Icon", ""));
                     tmpRace.Appearance = CreateRef<Appearance>(races2da[i].AsInteger("Appearance"));
                     tmpRace.StrAdjustment = races2da[i].AsInteger("StrAdjust") ?? 0;
                     tmpRace.DexAdjustment = races2da[i].AsInteger("DexAdjust") ?? 0;
@@ -290,16 +290,16 @@ namespace Eos.Services
                     tmpRace.ToolsetDefaultClass = CreateRef<CharacterClass>(races2da[i].AsInteger("ToolsetDefaultClass"));
                     tmpRace.CRModifier = races2da[i].AsFloat("CRModifier") ?? 1.0;
 
-                    tmpRace.NameGenTableA = races2da[i].AsString("NameGenTableA");
-                    tmpRace.NameGenTableB = races2da[i].AsString("NameGenTableB");
+                    tmpRace.NameGenTableA = races2da[i].AsString("NameGenTableA", "");
+                    tmpRace.NameGenTableB = races2da[i].AsString("NameGenTableB", "");
 
-                    tmpRace.FirstLevelExtraFeats = races2da[i].AsInteger("ExtraFeatsAtFirstLevel") ?? 0;
-                    tmpRace.ExtraSkillPointsPerLevel = races2da[i].AsInteger("ExtraSkillPointsPerLevel") ?? 0;
-                    tmpRace.FirstLevelSkillPointsMultiplier = races2da[i].AsInteger("FirstLevelSkillPointsMultiplier");
-                    tmpRace.FirstLevelAbilityPoints = races2da[i].AsInteger("AbilitiesPointBuyNumber");
-                    tmpRace.FeatEveryNthLevel = races2da[i].AsInteger("NormalFeatEveryNthLevel");
-                    tmpRace.FeatEveryNthLevelCount = races2da[i].AsInteger("NumberNormalFeatsEveryNthLevel");
-                    tmpRace.SkillPointModifierAbility = Enum.Parse<AbilityType>(races2da[i].AsString("SkillPointModifierAbility") ?? "", true);
+                    tmpRace.FirstLevelExtraFeats = races2da[i].AsInteger("ExtraFeatsAtFirstLevel", 0) ?? 0;
+                    tmpRace.ExtraSkillPointsPerLevel = races2da[i].AsInteger("ExtraSkillPointsPerLevel", 0) ?? 0;
+                    tmpRace.FirstLevelSkillPointsMultiplier = races2da[i].AsInteger("FirstLevelSkillPointsMultiplier", 4);
+                    tmpRace.FirstLevelAbilityPoints = races2da[i].AsInteger("AbilitiesPointBuyNumber", 30);
+                    tmpRace.FeatEveryNthLevel = races2da[i].AsInteger("NormalFeatEveryNthLevel", 3);
+                    tmpRace.FeatEveryNthLevelCount = races2da[i].AsInteger("NumberNormalFeatsEveryNthLevel", 1);
+                    tmpRace.SkillPointModifierAbility = Enum.Parse<AbilityType>(races2da[i].AsString("SkillPointModifierAbility", "INT") ?? "INT", true);
                     tmpRace.FavoredEnemyFeat = CreateRef<Feat>(races2da[i].AsInteger("FavoredEnemyFeat", null));
                     tmpRace.Feats = GetOrImportTable(races2da[i].AsString("FeatsTable"), ImportRacialFeatsTable);
 
@@ -597,7 +597,7 @@ namespace Eos.Services
                     tmpClass.Index = i;
 
                     if (!SetText(tmpClass.Name, classes2da[i].AsInteger("Name"))) continue;
-                    SetText(tmpClass.Abbreviation, classes2da[i].AsInteger("Short", 0));
+                    SetText(tmpClass.Abbreviation, classes2da[i].AsInteger("Short", null));
                     SetText(tmpClass.NamePlural, classes2da[i].AsInteger("Plural"));
                     SetText(tmpClass.Description, classes2da[i].AsInteger("Description"));
 

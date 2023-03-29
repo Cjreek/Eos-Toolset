@@ -94,6 +94,8 @@ namespace Nwn.Tga
                         for (int i = 0; i < rleCount; i++)
                         {
                             row.AddRange(reader.ReadBytes(bytesPerPixel));
+                            if ((bytesPerPixel == 3) && (force32Bit))
+                                row.Add(0xFF);
 
                             bytesRead += bytesPerPixel;
                             rowBytesRead += bytesPerPixel;

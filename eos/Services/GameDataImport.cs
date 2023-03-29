@@ -517,7 +517,7 @@ namespace Eos.Services
                     continue;
                 }
                 SetText(tmpClass.NamePlural, classes2da[i].AsInteger("Plural"));
-                SetText(tmpClass.Abbreviation, classes2da[i].AsInteger("Short", 0));
+                SetText(tmpClass.Abbreviation, classes2da[i].AsInteger("Short", null));
                 SetText(tmpClass.Description, classes2da[i].AsInteger("Description"));
 
                 tmpClass.Icon = AddIconResource(classes2da[i].AsString("Icon"));
