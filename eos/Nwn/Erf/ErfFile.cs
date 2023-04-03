@@ -94,6 +94,20 @@ namespace Eos.Nwn.Erf
         private Dictionary<(string, NWNResourceType), ErfResourceKey> resourceKeys = new Dictionary<(string, NWNResourceType), ErfResourceKey>();
         private List<ErfResource> resources = new List<ErfResource>();
 
+        private Dictionary<TLKLanguage, Encoding> languageEncodings = new Dictionary<TLKLanguage, Encoding>
+        {
+            { TLKLanguage.English, Encoding.GetEncoding(1252) },
+            { TLKLanguage.French, Encoding.GetEncoding(1252) },
+            { TLKLanguage.German, Encoding.GetEncoding(1252) },
+            { TLKLanguage.Italian, Encoding.GetEncoding(1252) },
+            { TLKLanguage.Spanish, Encoding.GetEncoding(1252) },
+            { TLKLanguage.Polish, Encoding.GetEncoding(1250) },
+            { TLKLanguage.Korean, Encoding.GetEncoding(949) },
+            { TLKLanguage.ChineseTraditional, Encoding.GetEncoding(950) },
+            { TLKLanguage.ChineseSimplified, Encoding.GetEncoding(936) },
+            { TLKLanguage.Japanese, Encoding.GetEncoding(932) },
+        };
+
         public int Count => resources.Count;
         public ErfResource this[int index] => resources[index];
 
@@ -180,7 +194,7 @@ namespace Eos.Nwn.Erf
                     strElement.LanguageID = ((UInt32)lang) * 2;
                     strElement.StringSize = (UInt32)Description[lang].Text.Length + 1;
                     BinaryHelper.Write(writer, strElement);
-                    BinaryHelper.WriteString(writer, Description[lang].Text);
+                    BinaryHelper.WriteString(writer, Description[lang].Text, languageEncodings[lang]);
 
                     strSegmentSize += (UInt32)(Marshal.SizeOf<ErfStringElement>() + strElement.StringSize);
                     langCount++;
@@ -192,7 +206,7 @@ namespace Eos.Nwn.Erf
                     strElement.LanguageID = ((UInt32)lang) * 2 + 1;
                     strElement.StringSize = (UInt32)Description[lang].TextF.Length + 1;
                     BinaryHelper.Write(writer, strElement);
-                    BinaryHelper.WriteString(writer, Description[lang].TextF);
+                    BinaryHelper.WriteString(writer, Description[lang].TextF, languageEncodings[lang]);
 
                     strSegmentSize += (UInt32)(Marshal.SizeOf<ErfStringElement>() + strElement.StringSize);
                     langCount++;

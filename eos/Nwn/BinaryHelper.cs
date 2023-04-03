@@ -51,9 +51,9 @@ namespace Eos.Nwn
             return new String(stream.ReadChars(length)).Trim('\0');
         }
 
-        public static void WriteString(BinaryWriter stream, String data, bool writeNullbyte = true)
+        public static void WriteString(BinaryWriter stream, String data, Encoding encoding, bool writeNullbyte = true)
         {
-            stream.Write(data.ToCharArray());
+            stream.Write(encoding.GetBytes(data));
             if (writeNullbyte)
                 stream.Write('\0');
         }

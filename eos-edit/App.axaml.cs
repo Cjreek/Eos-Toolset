@@ -12,6 +12,7 @@ using Eos.Views;
 using Nwn.Tga;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Eos
 {
@@ -25,6 +26,7 @@ namespace Eos
 
         public override void OnFrameworkInitializationCompleted()
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.Startup += Desktop_Startup;

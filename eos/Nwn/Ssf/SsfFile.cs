@@ -64,7 +64,7 @@ namespace Eos.Nwn.Ssf
 
         public void Load(Stream stream)
         {
-            var reader = new BinaryReader(stream, Encoding.Latin1);
+            var reader = new BinaryReader(stream, Encoding.GetEncoding(1252));
             var header = BinaryHelper.Read<SsfHeader>(reader);
 
             var offsetArray = new int[header.EntryCount];

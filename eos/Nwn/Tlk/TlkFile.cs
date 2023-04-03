@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Eos.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -49,6 +50,19 @@ namespace Eos.Nwn.Tlk
 
         private Dictionary<int, String> cache = new Dictionary<int, string>();
         private List<String> strings = new List<string>();
+        private Dictionary<TLKLanguage, Encoding> languageEncodings = new Dictionary<TLKLanguage, Encoding>
+        {
+            { TLKLanguage.English, Encoding.GetEncoding(1252) },
+            { TLKLanguage.French, Encoding.GetEncoding(1252) },
+            { TLKLanguage.German, Encoding.GetEncoding(1252) },
+            { TLKLanguage.Italian, Encoding.GetEncoding(1252) },
+            { TLKLanguage.Spanish, Encoding.GetEncoding(1252) },
+            { TLKLanguage.Polish, Encoding.GetEncoding(1250) },
+            { TLKLanguage.Korean, Encoding.GetEncoding(949) },
+            { TLKLanguage.ChineseTraditional, Encoding.GetEncoding(950) },
+            { TLKLanguage.ChineseSimplified, Encoding.GetEncoding(936) },
+            { TLKLanguage.Japanese, Encoding.GetEncoding(932) },
+        };
 
         public void New(TLKLanguage language)
         {
@@ -61,10 +75,14 @@ namespace Eos.Nwn.Tlk
 
         public void Load(String tlkFile, bool writeable = false)
         {
-            fileStream = new FileStream(tlkFile, FileMode.Open, FileAccess.Read);
-            reader = new BinaryReader(fileStream, Encoding.Latin1);
-            header = BinaryHelper.Read<TlkHeader>(reader);
+            using (fileStream = new FileStream(tlkFile, FileMode.Open, FileAccess.Read))
+            {
+                reader = new BinaryReader(fileStream, Encoding.Default);
+                header = BinaryHelper.Read<TlkHeader>(reader);
+            };
 
+            fileStream = new FileStream(tlkFile, FileMode.Open, FileAccess.Read);
+            reader = new BinaryReader(fileStream, languageEncodings[header.LanguageId]);
             if (writeable)
             {
                 int lastNonNullIndex = -1;
@@ -74,7 +92,7 @@ namespace Eos.Nwn.Tlk
                         lastNonNullIndex = i;
                 }
 
-                for (int i=0; i <= lastNonNullIndex; i++)
+                for (int i = 0; i <= lastNonNullIndex; i++)
                 {
                     strings.Add(GetString(i));
                 }
@@ -154,7 +172,7 @@ namespace Eos.Nwn.Tlk
                 strEntry.VolumeVariance = 0;
                 strEntry.PitchVariance = 0;
                 strEntry.OffsetToString = offset;
-                strEntry.StringSize = (UInt32)strings[i].Length;
+                strEntry.StringSize = (UInt32)languageEncodings[header.LanguageId].GetByteCount(strings[i]); //(UInt32)strings[i].Length;
                 strEntry.SoundLength = 0;
                 BinaryHelper.Write(writer, strEntry);
 
@@ -162,7 +180,9 @@ namespace Eos.Nwn.Tlk
             }
 
             for (int i = 0; i < strings.Count; i++)
-                BinaryHelper.WriteString(writer, strings[i], false);
+            {
+                BinaryHelper.WriteString(writer, strings[i], languageEncodings[header.LanguageId], false);
+            }
         }
 
         public void Save(String filename)

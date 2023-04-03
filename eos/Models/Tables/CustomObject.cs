@@ -50,8 +50,9 @@ namespace Eos.Models.Tables
 
         private void InstanceRepository_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            if ((e.Action == NotifyCollectionChangedAction.Reset) || (e.Action == NotifyCollectionChangedAction.Move))
-                NotifyPropertyChanged(nameof(InstanceRepository));
+            // Suddenly works ??
+            //if ((e.Action == NotifyCollectionChangedAction.Reset) || (e.Action == NotifyCollectionChangedAction.Move))
+            //    NotifyPropertyChanged(nameof(InstanceRepository));
         }
 
         protected override void SetDefaultValues()

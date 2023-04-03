@@ -83,8 +83,7 @@ namespace Eos.Repositories
 
         private void Item_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, sender, 0, 0)); // 0 -> 0 Dummy. Works
-            //RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         protected virtual void Changed()

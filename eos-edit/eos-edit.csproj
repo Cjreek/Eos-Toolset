@@ -46,6 +46,7 @@
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.999-cibuild0031415-beta" />
     <PackageReference Include="Avalonia.Themes.Simple" Version="11.0.999-cibuild0031415-beta" />
     <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.0.999-build20230226-01" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0-preview.2.23128.3" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.6.1" />
   </ItemGroup>
   <ItemGroup>
