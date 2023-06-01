@@ -105,11 +105,11 @@
             <TextBlock Text="Spell School" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
             <uc:EnumComboBox Grid.Row="8" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:SpellSchool}}" SelectedValue="{Binding Data.SpellSchool}" IsNullable="True"/>
 
-            <TextBlock Text="Companion" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2" IsVisible="{Binding !Data.ForClass.IsArcaneCaster}"/>
-            <uc:CompanionComboBox Grid.Row="8" Grid.Column="3" SelectedValue="{Binding Data.AssociateCompanion}" IsEnabled="{Binding Data.ForClass.IsSpellCaster}" IsVisible="{Binding !Data.ForClass.IsArcaneCaster}"/>
+            <TextBlock Text="Companion" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2" IsVisible="{Binding !Data.ForClass.IsArcaneCaster, FallbackValue=false}"/>
+            <uc:CompanionComboBox Grid.Row="8" Grid.Column="3" SelectedValue="{Binding Data.AssociateCompanion}" IsEnabled="{Binding Data.ForClass.IsSpellCaster}" IsVisible="{Binding !Data.ForClass.IsArcaneCaster, FallbackValue=false}"/>
 
-            <TextBlock Text="Familiar" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2" IsVisible="{Binding Data.ForClass.IsArcaneCaster}"/>
-            <uc:FamiliarComboBox Grid.Row="8" Grid.Column="3" SelectedValue="{Binding Data.AssociateFamiliar}" IsEnabled="{Binding Data.ForClass.IsSpellCaster}" IsVisible="{Binding Data.ForClass.IsArcaneCaster}"/>
+            <TextBlock Text="Familiar" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2" IsVisible="{Binding Data.ForClass.IsArcaneCaster, FallbackValue=true}"/>
+            <uc:FamiliarComboBox Grid.Row="8" Grid.Column="3" SelectedValue="{Binding Data.AssociateFamiliar}" IsEnabled="{Binding Data.ForClass.IsSpellCaster}" IsVisible="{Binding Data.ForClass.IsArcaneCaster, FallbackValue=true}"/>
 
             <TextBlock Text="Spell Preferences" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
             <uc:SpellPreferencesTableComboBox Grid.Row="9" Grid.Column="1" SelectedValue="{Binding Data.SpellPreferences}" IsNullable="True"/>

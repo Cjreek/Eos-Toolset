@@ -27,6 +27,7 @@ namespace Eos.Models
         private ClassPackage? _defaultPackage;
         private StatGainTable? _statGainTable;
         private Spellbook? _spellbook;
+        private bool _isArcaneCaster = true;
 
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet NameLower { get; set; } = new TLKStringSet();
@@ -126,7 +127,18 @@ namespace Eos.Models
         public bool PicksDomain { get; set; } = false;
         public bool PicksSchool { get; set; } = false;
         public bool CanLearnFromScrolls { get; set; } = false;
-        public bool IsArcaneCaster { get; set; } = true;
+        public bool IsArcaneCaster
+        {
+            get { return _isArcaneCaster; }
+            set
+            {
+                if (_isArcaneCaster != value)
+                {
+                    _isArcaneCaster = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
         public bool HasSpellFailure { get; set; } = true;
         public AbilityType SpellcastingAbility { get; set; } = AbilityType.INT;
         public Spellbook? Spellbook

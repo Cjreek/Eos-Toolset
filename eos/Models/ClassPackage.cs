@@ -30,7 +30,11 @@ namespace Eos.Models
         public CharacterClass? ForClass
         {
             get { return _forClass; }
-            set { Set(ref _forClass, value); }
+            set 
+            { 
+                Set(ref _forClass, value);
+                NotifyPropertyChanged();
+            }
         }
         public AbilityType? PreferredAbility { get; set; }
         public int Gold { get; set; }
