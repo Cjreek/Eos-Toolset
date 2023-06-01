@@ -20,6 +20,14 @@ namespace Eos.Models.Tables
             set { Set(ref _feat, value); }
         }
 
+        public RacialFeatsTableItem() : base()
+        {
+        }
+
+        public RacialFeatsTableItem(RacialFeatsTable parentTable) : base(parentTable)
+        {
+        }
+
         public override void ResolveReferences()
         {
             Feat = MasterRepository.Feats.Resolve(Feat);
@@ -27,12 +35,13 @@ namespace Eos.Models.Tables
 
         public override void FromJson(JsonObject json)
         {
+            base.FromJson(json);
             this.Feat = CreateRefFromJson<Feat>(json["Feat"]?.AsObject());
         }
 
         public override JsonObject ToJson()
         {
-            var json = new JsonObject();
+            var json = base.ToJson();
             json.Add("Feat", this.Feat?.ToJsonRef());
 
             return json;

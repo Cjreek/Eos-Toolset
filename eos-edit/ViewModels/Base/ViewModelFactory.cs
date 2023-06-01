@@ -36,13 +36,49 @@ namespace Eos.ViewModels.Base
                 return new AreaEffectViewModel(aoe);
             if (model is MasterFeat masterFeat)
                 return new MasterFeatViewModel(masterFeat);
+            if (model is BaseItem baseItem)
+                return new BaseItemViewModel(baseItem);
 
             if (model is ClassPackage classPackage)
                 return new ClassPackageViewModel(classPackage);
             if (model is Soundset soundset)
                 return new SoundsetViewModel(soundset);
+            if (model is Appearance appearance)
+                return new AppearanceViewModel(appearance);
+            if (model is AppearanceSoundset appearanceSoundset)
+                return new AppearanceSoundsetViewModel(appearanceSoundset);
+            if (model is WeaponSound weaponSound)
+                return new WeaponSoundViewModel(weaponSound);
+            if (model is InventorySound inventorySound)
+                return new InventorySoundViewModel(inventorySound);
             if (model is Polymorph polymorph)
                 return new PolymorphViewModel(polymorph);
+            if (model is Companion companion)
+                return new CompanionViewModel(companion);
+            if (model is Familiar familiar)
+                return new FamiliarViewModel(familiar);
+            if (model is Trap trap)
+                return new TrapViewModel(trap);
+            if (model is Portrait portrait)
+                return new PortraitViewModel(portrait);
+            if (model is ItemProperty itemProperty)
+                return new ItemPropertyViewModel(itemProperty);
+            if (model is ItemPropertyTable itemPropertyTable)
+                return new ItemPropertyTableViewModel(itemPropertyTable);
+            if (model is ItemPropertyCostTable itemPropertyCostTable)
+                return new ItemPropertyCostTableViewModel(itemPropertyCostTable);
+            if (model is ItemPropertyParam itemPropertyParam)
+                return new ItemPropertyParamViewModel(itemPropertyParam);
+            if (model is ItemPropertySet itemPropertySet)
+                return new ItemPropertySetViewModel(itemPropertySet);
+            if (model is VisualEffect vfx)
+                return new VisualEffectViewModel(vfx);
+            if (model is ProgrammedEffect progFX)
+                return new ProgrammedEffectViewModel(progFX);
+            if (model is DamageType damageType)
+                return new DamageTypeViewModel(damageType);
+            if (model is DamageTypeGroup damageTypeGroup)
+                return new DamageTypeGroupViewModel(damageTypeGroup);
 
             if (model is FeatsTable featsTable)
                 return new FeatsTableViewModel(featsTable);
@@ -64,6 +100,14 @@ namespace Eos.ViewModels.Base
                 return new SpellSlotTableViewModel(spellSlotsTable);
             if (model is KnownSpellsTable knownSpellsTable)
                 return new KnownSpellsTableViewModel(knownSpellsTable);
+            if (model is PackageSpellPreferencesTable spellPrefsTable)
+                return new PackageSpellPreferencesTableViewModel(spellPrefsTable);
+            if (model is PackageFeatPreferencesTable featPrefsTable)
+                return new PackageFeatPreferencesTableViewModel(featPrefsTable);
+            if (model is PackageSkillPreferencesTable skillPrefsTable)
+                return new PackageSkillPreferencesTableViewModel(skillPrefsTable);
+            if (model is PackageEquipmentTable equipmentTable)
+                return new PackageEquipmentTableViewModel(equipmentTable);
 
             if (model is CustomEnum customEnum)
                 return new CustomEnumViewModel(customEnum);

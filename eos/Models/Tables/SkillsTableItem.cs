@@ -22,6 +22,14 @@ namespace Eos.Models.Tables
 
         public bool IsClassSkill { get; set; }
 
+        public SkillsTableItem() : base()
+        {
+        }
+
+        public SkillsTableItem(SkillsTable parentTable) : base(parentTable)
+        {
+        }
+
         public override void ResolveReferences()
         {
             Skill = MasterRepository.Skills.Resolve(Skill);
@@ -29,13 +37,14 @@ namespace Eos.Models.Tables
 
         public override void FromJson(JsonObject json)
         {
+            base.FromJson(json);
             this.Skill = CreateRefFromJson<Skill>(json["Skill"]?.AsObject());
             this.IsClassSkill = json["IsClassSkill"]?.GetValue<bool>() ?? false;
         }
 
         public override JsonObject ToJson()
         {
-            var json = new JsonObject();
+            var json = base.ToJson();
             json.Add("Skill", this.Skill?.ToJsonRef());
             json.Add("IsClassSkill", this.IsClassSkill);
 

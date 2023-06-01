@@ -10,6 +10,9 @@
       <DataTemplate DataType="{x:Type dialogVM:NewProjectViewModel}">
         <dialogViews:NewProjectView/>
       </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:InputBasePathDialogViewModel}">
+        <dialogViews:InputBasePathDialogView/>
+      </DataTemplate>
 
       <!--Search ViewModels-->
       <DataTemplate DataType="{x:Type dialogVM:IconSearchViewModel}">
@@ -43,10 +46,52 @@
       <DataTemplate DataType="{x:Type dialogVM:AreaEffectSearchViewModel}">
         <dialogViews:ModelSearchView/>
       </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:AppearanceSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:AppearanceSoundsetSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:WeaponSoundSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
       <DataTemplate DataType="{x:Type dialogVM:DiseaseSearchViewModel}">
         <dialogViews:ModelSearchView/>
       </DataTemplate>
       <DataTemplate DataType="{x:Type dialogVM:PoisonSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:TrapSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:FamiliarSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:CompanionSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:BaseItemSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:ProgrammedEffectSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:ItemPropertySetSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:ItemPropertySearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:ItemPropertyParamSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:InventorySoundSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:DamageTypeSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:DamageTypeGroupSearchViewModel}">
         <dialogViews:ModelSearchView/>
       </DataTemplate>
       <DataTemplate DataType="{x:Type dialogVM:CustomObjectInstanceSearchViewModel}">
@@ -73,5 +118,6 @@
   <Application.Styles>
     <SimpleTheme/>
     <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Simple.xaml"/>
+    <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Simple/Simple.xaml"/>
   </Application.Styles>
 </Application>

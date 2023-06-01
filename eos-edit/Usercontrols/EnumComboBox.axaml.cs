@@ -17,6 +17,7 @@ namespace Eos.Usercontrols
         public static readonly StyledProperty<object?> ItemsSourceProperty = AvaloniaProperty.Register<EnumComboBox, object?>("ItemsSource");
         public static readonly StyledProperty<object?> SelectedValueProperty = AvaloniaProperty.Register<EnumComboBox, object?>("SelectedValue", null, false, Avalonia.Data.BindingMode.TwoWay);
         public static readonly StyledProperty<bool> IsNullableProperty = AvaloniaProperty.Register<EnumComboBox, bool>("IsNullable");
+        public static readonly StyledProperty<int> SelectedIndexProperty = AvaloniaProperty.Register<EnumComboBox, int>("SelectedIndex");
 
         public object? ItemsSource
         {

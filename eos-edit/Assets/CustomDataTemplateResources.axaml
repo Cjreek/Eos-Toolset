@@ -4,6 +4,7 @@
                     xmlns:uc="using:Eos.Usercontrols"
                     xmlns:repo="using:Eos.Repositories"
                     xmlns:types="using:Eos.Types"
+                    xmlns:config="using:Eos.Config"
                     xmlns:i="using:Avalonia.Xaml.Interactivity"
                     xmlns:ia="using:Avalonia.Xaml.Interactions.Core">
   
@@ -27,7 +28,10 @@
   <DataTemplate x:Key="strTemplate">
     <TextBox Text="{Binding Value}" Height="22" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"/>
   </DataTemplate>
-
+  <DataTemplate x:Key="tlkTemplate">
+    <uc:TLKTextbox TLKStrings="{Binding Value}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}"/>
+  </DataTemplate>
+  
   <DataTemplate x:Key="raceTemplate">
     <uc:RaceComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
   </DataTemplate>
@@ -55,6 +59,9 @@
   <DataTemplate x:Key="vfxTemplate">
     <uc:VisualEffectComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
   </DataTemplate>
+  <DataTemplate x:Key="progFXTemplate">
+    <uc:ProgrammedEffectComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+  </DataTemplate>
   <DataTemplate x:Key="portraitTemplate">
     <uc:PortraitComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
   </DataTemplate>
@@ -75,6 +82,36 @@
   </DataTemplate>
   <DataTemplate x:Key="poisonTemplate">
     <uc:PoisonComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+  </DataTemplate>
+  <DataTemplate x:Key="trapTemplate">
+    <uc:TrapComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+  </DataTemplate>
+  <DataTemplate x:Key="baseItemTemplate">
+    <uc:BaseItemComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+  </DataTemplate>
+  <DataTemplate x:Key="itemPropertyTemplate">
+    <uc:ItemPropertyComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+  </DataTemplate>
+  <DataTemplate x:Key="appearanceSoundsetTemplate">
+    <uc:AppearanceSoundsetComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+  </DataTemplate>
+  <DataTemplate x:Key="weaponSoundTemplate">
+    <uc:WeaponSoundComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+  </DataTemplate>
+  <DataTemplate x:Key="inventorySoundTemplate">
+    <uc:InventorySoundComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+  </DataTemplate>
+  <DataTemplate x:Key="companionTemplate">
+    <uc:CompanionComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+  </DataTemplate>
+  <DataTemplate x:Key="familiarTemplate">
+    <uc:FamiliarComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+  </DataTemplate>
+  <DataTemplate x:Key="damageTypeTemplate">
+    <uc:DamageTypeComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
+  </DataTemplate>
+  <DataTemplate x:Key="damageTypeGroupTemplate">
+    <uc:DamageTypeGroupComboBox SelectedValue="{Binding Value}" IsNullable="True"/>
   </DataTemplate>
 
   <DataTemplate x:Key="customObjectTemplate">
@@ -100,6 +137,7 @@
                                               DoubleTemplate="{StaticResource doubleTemplate}"
                                               BoolTemplate="{StaticResource boolTemplate}"
                                               StringTemplate="{StaticResource strTemplate}"
+                                              TlkTemplate="{StaticResource tlkTemplate}"
                                               RaceTemplate="{StaticResource raceTemplate}"
                                               ClassTemplate="{StaticResource classTemplate}"
                                               SkillTemplate="{StaticResource skillTemplate}"
@@ -107,8 +145,26 @@
                                               DomainTemplate="{StaticResource domainTemplate}"
                                               SpellTemplate="{StaticResource spellTemplate}"
                                               AreaEffectTemplate="{StaticResource aoeTemplate}"
+                                              AppearanceTemplate="{StaticResource appearanceTemplate}"
+                                              VisualEffectTemplate="{StaticResource vfxTemplate}"
+                                              PortraitTemplate="{StaticResource portraitTemplate}"
+                                              PolymorphTemplate="{StaticResource polymorphTemplate}"
+                                              MasterFeatTemplate="{StaticResource masterfeatTemplate}"
+                                              SoundsetTemplate="{StaticResource soundsetTemplate}"
+                                              PackageTemplate="{StaticResource packageTemplate}" 
                                               DiseaseTemplate="{StaticResource diseaseTemplate}"
                                               PoisonTemplate="{StaticResource poisonTemplate}"
+                                              TrapTemplate="{StaticResource trapTemplate}"
+                                              DamageTypeTemplate="{StaticResource damageTypeTemplate}"
+                                              DamageTypeGroupTemplate="{StaticResource damageTypeGroupTemplate}"
+                                              BaseItemTemplate="{StaticResource baseItemTemplate}"
+                                              ProgrammedEffectTemplate="{StaticResource progFXTemplate}"
+                                              AppearanceSoundsetTemplate="{StaticResource appearanceSoundsetTemplate}"
+                                              ItemPropertyTemplate="{StaticResource itemPropertyTemplate}"
+                                              WeaponSoundTemplate="{StaticResource weaponSoundTemplate}"
+                                              InventorySoundTemplate="{StaticResource inventorySoundTemplate}"
+                                              CompanionTemplate="{StaticResource companionTemplate}"
+                                              FamiliarTemplate="{StaticResource familiarTemplate}"
                                               CustomObjectTemplate="{StaticResource customObjectVariantTemplate}"
                                               CustomEnumTemplate="{StaticResource customEnumVariantTemplate}"/>
 
@@ -151,6 +207,7 @@
                                               DoubleTemplate="{StaticResource doubleTemplate}"
                                               BoolTemplate="{StaticResource boolTemplate}"
                                               StringTemplate="{StaticResource strTemplate}"
+                                              TlkTemplate="{StaticResource tlkTemplate}"
                                               VariantTemplate="{StaticResource variantTemplate}"
                                               RaceTemplate="{StaticResource raceTemplate}"
                                               ClassTemplate="{StaticResource classTemplate}"
@@ -168,6 +225,17 @@
                                               PackageTemplate="{StaticResource packageTemplate}"
                                               DiseaseTemplate="{StaticResource diseaseTemplate}"
                                               PoisonTemplate="{StaticResource poisonTemplate}"
+                                              TrapTemplate="{StaticResource trapTemplate}"
+                                              DamageTypeTemplate="{StaticResource damageTypeTemplate}"
+                                              DamageTypeGroupTemplate="{StaticResource damageTypeGroupTemplate}"
+                                              BaseItemTemplate="{StaticResource baseItemTemplate}"
+                                              ProgrammedEffectTemplate="{StaticResource progFXTemplate}"
+                                              AppearanceSoundsetTemplate="{StaticResource appearanceSoundsetTemplate}"
+                                              ItemPropertyTemplate="{StaticResource itemPropertyTemplate}"
+                                              WeaponSoundTemplate="{StaticResource weaponSoundTemplate}"
+                                              InventorySoundTemplate="{StaticResource inventorySoundTemplate}"
+                                              CompanionTemplate="{StaticResource companionTemplate}"
+                                              FamiliarTemplate="{StaticResource familiarTemplate}"
                                               CustomObjectTemplate="{StaticResource customObjectTemplate}"
                                               CustomEnumTemplate="{StaticResource customEnumTemplate}"/>
 </ResourceDictionary>

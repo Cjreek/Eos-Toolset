@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="using:Eos.Views"
              xmlns:uc="using:Eos.Usercontrols"
+             xmlns:config="using:Eos.Config"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Eos.Views.DomainView"
              x:Name="page">
@@ -70,7 +71,7 @@
 
               <!--Name-->
               <TextBlock Text="Name" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-              <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1"/>
+              <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" Grid.Row="1" Grid.Column="1"/>
 
               <TextBlock Text="Hint" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
               <TextBox Text="{Binding Data.Hint}" Grid.Row="2" Grid.Column="1"/>
@@ -78,7 +79,7 @@
               <!--Description-->
               <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,3,5,0" Grid.Row="3" Grid.Column="0"/>
               <!--<uc:ResetIsEnabled Grid.Row="3" Grid.Column="1">-->
-              <uc:TLKTextbox Grid.Row="3" Grid.Column="1" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
+              <uc:TLKTextbox Grid.Row="3" Grid.Column="1" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
               <!--</uc:ResetIsEnabled>-->
 
               <!--Granted Feat-->

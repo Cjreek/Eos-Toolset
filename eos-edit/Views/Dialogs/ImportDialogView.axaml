@@ -34,19 +34,7 @@
 
       <DockPanel Grid.Column="0" Margin="10">
         <TextBlock DockPanel.Dock="Top" Text="Files" TextAlignment="Center" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
-
-        <Grid DockPanel.Dock="Bottom" Margin="0,5,27,0" Height="25">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="32"/>
-            <ColumnDefinition Width="90"/>
-          </Grid.ColumnDefinitions>
-
-          <TextBox Grid.Column="0" Text="{Binding InputFilePath}" Classes="uc"/>
-          
-          <Button Grid.Column="1" Margin="5,0,0,0" Content="..." Click="btSelectFile_Click"/>
-          <Button Grid.Column="2" Margin="5,0,0,0" Content="Add File" Command="{Binding AddFileCommand}" CommandParameter="{Binding}"/>
-        </Grid>
+        <Button DockPanel.Dock="Bottom" Margin="0,5,0,0" Content="Add Files" Click="btSelectFile_Click" Width="150" HorizontalAlignment="Left"/>
 
         <DockPanel>
           <DockPanel DockPanel.Dock="Right" Margin="3,0,0,0" LastChildFill="False">

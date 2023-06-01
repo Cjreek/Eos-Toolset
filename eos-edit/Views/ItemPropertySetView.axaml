@@ -1,0 +1,78 @@
+<local:LanguageAwarePage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views"
+             xmlns:vm="using:Eos.ViewModels"
+             xmlns:uc="using:Eos.Usercontrols"
+             xmlns:model="using:Eos.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Views.ItemPropertySetView"
+             x:Name="page">
+  <local:LanguageAwarePage.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </local:LanguageAwarePage.Resources>
+
+  <local:LanguageAwarePage.Styles>
+    <Styles>
+      <StyleInclude Source="/Assets/StyleResources.axaml"/>
+    </Styles>
+  </local:LanguageAwarePage.Styles>
+
+  <Border BorderThickness="0,1,0,0" BorderBrush="Silver">
+    <Grid Margin="10">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="auto"/>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="100"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <TextBlock Text="Item Property Category" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+      <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}" MaxLength="16">
+        <TextBox.IsEnabled>
+          <MultiBinding Converter="{x:Static BoolConverters.And}">
+            <Binding Path="!Data.IsReadonly"/>
+            <Binding Path="!Data.IsOverride"/>
+          </MultiBinding>
+        </TextBox.IsEnabled>
+      </TextBox>
+
+      <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+      <TextBox IsEnabled="{Binding !Data.IsReadonly}" Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
+
+      <DataGrid Grid.Row="3" Grid.Column="1" Items="{Binding Data.ItemProperties}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" Margin="2,0,0,0">
+        <DataGrid.Columns>
+          <DataGridTemplateColumn Header="Item Property" Width="300">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <uc:ItemPropertyComboBox IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" SelectedValue="{Binding Path=ItemProperty}" IsNullable="False" Margin="2,0,0,2"/>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+
+          <DataGridTemplateColumn Header="" Width="30">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <uc:DeleteButton IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" Command="{Binding ElementName=page, Path=DataContext.DeleteItemPropertyItemCommand}" CommandParameter="{Binding}" Margin="2,0,3,2"/>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+        </DataGrid.Columns>
+      </DataGrid>
+
+      <Button IsEnabled="{Binding !Data.IsReadonly}" Grid.Row="4" Grid.Column="1" Content="Add Item Property" Width="150" Margin="2,5,0,0" HorizontalAlignment="Left" Command="{Binding AddItemPropertyItemCommand}"/>
+    </Grid>
+  </Border>
+</local:LanguageAwarePage>

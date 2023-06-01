@@ -9,6 +9,11 @@ namespace Eos.Models.Tables
 {
     public class FeatsTable : BaseTable<FeatsTableItem>
     {
+        protected override string GetTypeName()
+        {
+            return "Feats Table";
+        }
+
         protected override void SetDefaultValues()
         {
             Name = "CLS_FEAT_NEW";

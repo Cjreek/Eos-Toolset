@@ -9,6 +9,11 @@ namespace Eos.Models.Tables
 {
     public class AttackBonusTable : BaseTable<AttackBonusTableItem>
     {
+        protected override string GetTypeName()
+        {
+            return "Attack Bonus Table";
+        }
+
         protected override void SetDefaultValues()
         {
             Name = "CLS_ATK_NEW";

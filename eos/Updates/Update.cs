@@ -10,7 +10,8 @@ namespace Eos.Updates
     internal abstract class Update
     {
         public virtual int Version => 0;
-        public virtual DateTime? GameDataMinimumBuildDate => null;
+        public virtual DateTime GameDataMinimumBuildDate => DateTime.MinValue;
+        public virtual bool ForceGameDataUpdate => false;
 
         public abstract void Apply(EosProject project);
     }

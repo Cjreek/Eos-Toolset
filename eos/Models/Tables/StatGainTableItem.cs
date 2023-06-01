@@ -18,8 +18,17 @@ namespace Eos.Models.Tables
         public int? Charisma { get; set; }
         public int? NaturalAC { get; set; }
 
+        public StatGainTableItem() : base()
+        {
+        }
+
+        public StatGainTableItem(StatGainTable parentTable) : base(parentTable)
+        {
+        }
+
         public override void FromJson(JsonObject json)
         {
+            base.FromJson(json);
             this.Level = json["Level"]?.GetValue<int>() ?? 0;
             this.Strength = json["Strength"]?.GetValue<int>();
             this.Dexterity = json["Dexterity"]?.GetValue<int>();
@@ -32,7 +41,7 @@ namespace Eos.Models.Tables
 
         public override JsonObject ToJson()
         {
-            var json = new JsonObject();
+            var json = base.ToJson();
             json.Add("Level", this.Level);
             json.Add("Strength", this.Strength);
             json.Add("Dexterity", this.Dexterity);

@@ -20,7 +20,7 @@
       <Image Source="{Binding ElementName=ucIconControl, Path=Icon, Mode=OneWay, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}"/>
     </Border>
 
-    <Button x:Name="btLoadIcon" Content="Change Icon" HorizontalAlignment="Center" Margin="0,3,0,0" Width="80" Click="btLoadIcon_Click"/>
-    <TextBox Text="{Binding ElementName=ucIconControl, Path=Icon, Mode=OneWay}" Width="80" IsReadOnly="True" Background="Transparent" BorderThickness="0" FontSize="10" Margin="0,3,0,0" TextAlignment="Center"/>
+    <Button x:Name="btLoadIcon" Content="Change Icon" HorizontalAlignment="Center" Margin="0,3,0,0" Width="80" Click="btLoadIcon_Click" IsVisible="{Binding ElementName=ucIconControl, Path=!IsReadonly, Mode=OneWay}"/>
+    <TextBox Text="{Binding ElementName=ucIconControl, Path=Icon, Mode=OneWay}" Width="80" IsReadOnly="True" Background="Transparent" BorderThickness="0" FontSize="10" Margin="0,3,0,0" TextAlignment="Center" IsVisible="{Binding ElementName=ucIconControl, Path=!IsReadonly, Mode=OneWay}"/>
   </StackPanel>
 </UserControl>

@@ -14,10 +14,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Resources;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Eos.Services
 {
@@ -42,10 +44,11 @@ namespace Eos.Services
         private RepositoryCollection _importCollection = new RepositoryCollection(true);
 
         private Dictionary<String, TwoDimensionalArrayFile> customDataDict = new Dictionary<string, TwoDimensionalArrayFile>();
+        private Dictionary<String, SsfFile> ssfDict = new Dictionary<string, SsfFile>();
 
         public event ImportPreviewEventHandler? ImportPreview;
 
-        public ImportService(IEnumerable<string> files, string tlkFile, bool importOverrides, bool replaceOverrides, bool importNewData, string externalDataPath) 
+        public ImportService(IEnumerable<string> files, string tlkFile, bool importOverrides, bool replaceOverrides, bool importNewData, string externalDataPath)
         {
             _importFiles = files;
             _tlkFile = new TlkFile();
@@ -75,7 +78,7 @@ namespace Eos.Services
             var fileExt = resource.ResourceType.ToString().ToLower().Replace("twoda", "2da");
 
             Log.Info("Importing external file: \"{0}\"", Path.Combine(_externalDataPath, resource.ResRef + "." + fileExt));
-            
+
             using (var fileStream = File.Create(Path.Combine(_externalDataPath, resource.ResRef + "." + fileExt)))
             {
                 var resStream = sourceHak.Read(resource.ResRef, resource.ResourceType);
@@ -99,6 +102,12 @@ namespace Eos.Services
                         var data = new TwoDimensionalArrayFile();
                         data.Load(hak.Read(hak[i].ResRef, hak[i].ResourceType));
                         Set2da(hak[i].ResRef, data);
+                    }
+                    else if (hak[i].ResourceType == NWNResourceType.SSF)
+                    {
+                        var ssf = new SsfFile();
+                        ssf.Load(hak.Read(hak[i].ResRef, hak[i].ResourceType));
+                        ssfDict[hak[i].ResRef.ToLower()] = ssf;
                     }
                 }
             }
@@ -213,6 +222,7 @@ namespace Eos.Services
             {
                 var tmpItem = new RacialFeatsTableItem();
                 tmpItem.ParentTable = tmpRacialFeatsTable;
+                tmpItem.SourceLabel = racialFeatTable2da[i].AsString("FeatLabel") ?? "";
                 tmpItem.Feat = CreateRef<Feat>(racialFeatTable2da[i].AsInteger("FeatIndex"));
                 tmpRacialFeatsTable.Add(tmpItem);
             }
@@ -222,7 +232,7 @@ namespace Eos.Services
             return tmpRacialFeatsTable;
         }
 
-        private bool ImportRecord<T>(int index, TwoDimensionalArrayFile import2DA, TwoDimensionalArrayFile origina2DA, out Guid recordId) where T: BaseModel
+        private bool ImportRecord<T>(int index, TwoDimensionalArrayFile import2DA, TwoDimensionalArrayFile origina2DA, out Guid recordId) where T : BaseModel
         {
             recordId = Guid.Empty;
             var result = false;
@@ -267,6 +277,7 @@ namespace Eos.Services
                     var tmpRace = new Race();
                     tmpRace.ID = recordId;
                     tmpRace.Index = i;
+                    tmpRace.SourceLabel = races2da[i].AsString("Label");
 
                     if (!SetText(tmpRace.Name, races2da[i].AsInteger("Name"))) continue;
                     SetText(tmpRace.NamePlural, races2da[i].AsInteger("NamePlural"));
@@ -344,6 +355,7 @@ namespace Eos.Services
             {
                 var tmpItem = new FeatsTableItem();
                 tmpItem.ParentTable = tmpFeatsTable;
+                tmpItem.SourceLabel = featTable2da[i].AsString("FeatLabel") ?? "";
                 tmpItem.Feat = CreateRef<Feat>(featTable2da[i].AsInteger("FeatIndex"));
                 tmpItem.FeatList = (FeatListType)Enum.ToObject(typeof(FeatListType), featTable2da[i].AsInteger("List") ?? 0);
                 tmpItem.GrantedOnLevel = featTable2da[i].AsInteger("GrantedOnLevel") ?? -1;
@@ -417,6 +429,7 @@ namespace Eos.Services
             {
                 var tmpItem = new SkillsTableItem();
                 tmpItem.ParentTable = skillTable;
+                tmpItem.SourceLabel = skillTable2da[i].AsString("SkillLabel") ?? "";
                 tmpItem.Skill = CreateRef<Skill>(skillTable2da[i].AsInteger("SkillIndex"));
                 tmpItem.IsClassSkill = skillTable2da[i].AsBoolean("ClassSkill");
                 skillTable.Add(tmpItem);
@@ -504,6 +517,7 @@ namespace Eos.Services
             {
                 var tmpItem = new PrerequisiteTableItem();
                 tmpItem.ParentTable = preRequTable;
+                tmpItem.SourceLabel = preRequTable2da[i].AsString("LABEL") ?? ""; 
                 tmpItem.RequirementType = Enum.Parse<RequirementType>(preRequTable2da[i].AsString("ReqType") ?? "", true);
 
                 switch (tmpItem.RequirementType)
@@ -595,6 +609,7 @@ namespace Eos.Services
                     var tmpClass = new CharacterClass();
                     tmpClass.ID = recordId;
                     tmpClass.Index = i;
+                    tmpClass.SourceLabel = classes2da[i].AsString("Label");
 
                     if (!SetText(tmpClass.Name, classes2da[i].AsInteger("Name"))) continue;
                     SetText(tmpClass.Abbreviation, classes2da[i].AsInteger("Short", null));
@@ -604,7 +619,7 @@ namespace Eos.Services
                     tmpClass.Icon = AddIconResource(classes2da[i].AsString("Icon"));
                     tmpClass.HitDie = classes2da[i].AsInteger("HitDie") ?? 0;
                     tmpClass.SkillPointsPerLevel = classes2da[i].AsInteger("SkillPointBase") ?? 0;
-                    
+
                     tmpClass.AttackBonusTable = GetOrImportTable(classes2da[i].AsString("AttackBonusTable"), ImportAttackBonusTable);
                     tmpClass.Feats = GetOrImportTable(classes2da[i].AsString("FeatsTable"), ImportFeatsTable);
                     tmpClass.SavingThrows = GetOrImportTable(classes2da[i].AsString("SavingThrowTable"), ImportSavingThrowTable);
@@ -699,6 +714,7 @@ namespace Eos.Services
                     var tmpDomain = new Domain();
                     tmpDomain.ID = recordId;
                     tmpDomain.Index = i;
+                    tmpDomain.SourceLabel = domains2da[i].AsString("Label");
 
                     if (!SetText(tmpDomain.Name, domains2da[i].AsInteger("Name"))) continue;
                     SetText(tmpDomain.Description, domains2da[i].AsInteger("Description"));
@@ -739,6 +755,7 @@ namespace Eos.Services
                     var tmpSkill = new Skill();
                     tmpSkill.ID = recordId;
                     tmpSkill.Index = i;
+                    tmpSkill.SourceLabel = skills2da[i].AsString("Label");
 
                     if (!SetText(tmpSkill.Name, skills2da[i].AsInteger("Name"))) continue;
                     SetText(tmpSkill.Description, skills2da[i].AsInteger("Description"));
@@ -772,8 +789,9 @@ namespace Eos.Services
                     var tmpFeat = new Feat();
                     tmpFeat.ID = recordId;
                     tmpFeat.Index = i;
+                    tmpFeat.SourceLabel = feat2da[i].AsString("LABEL");
 
-                    if (!SetText(tmpFeat.Name, feat2da[i].AsInteger("FEAT"))) continue; 
+                    if (!SetText(tmpFeat.Name, feat2da[i].AsInteger("FEAT"))) continue;
                     SetText(tmpFeat.Description, feat2da[i].AsInteger("DESCRIPTION"));
 
                     tmpFeat.Icon = AddIconResource(feat2da[i].AsString("ICON"));
@@ -836,6 +854,7 @@ namespace Eos.Services
                     var tmpSpell = new Spell();
                     tmpSpell.ID = recordId;
                     tmpSpell.Index = i;
+                    tmpSpell.SourceLabel = spells2da[i].AsString("Label");
 
                     if (!SetText(tmpSpell.Name, spells2da[i].AsInteger("Name"))) continue;
                     SetText(tmpSpell.Description, spells2da[i].AsInteger("SpellDesc"));
@@ -901,7 +920,7 @@ namespace Eos.Services
                     tmpSpell.TargetSizeY = spells2da[i].AsFloat("TargetSizeY", null);
                     tmpSpell.TargetingFlags = (TargetFlag?)spells2da[i].AsInteger("TargetFlags", null) ?? (TargetFlag)0;
 
-                    
+
                     for (int j = 0; j < spells2da.Columns.Count; j++)
                     {
                         // Entries for new Spellbooks: 
@@ -947,7 +966,7 @@ namespace Eos.Services
                             }
                         }
                     }
-                    
+
                     _importCollection.Spells.Add(tmpSpell);
                 }
 
@@ -972,6 +991,7 @@ namespace Eos.Services
                     var tmpDisease = new Disease();
                     tmpDisease.ID = recordId;
                     tmpDisease.Index = i;
+                    tmpDisease.SourceLabel = disease2da[i].AsString("Label");
 
                     if (!SetText(tmpDisease.Name, disease2da[i].AsInteger("Name"))) continue;
 
@@ -1011,6 +1031,7 @@ namespace Eos.Services
                     var tmpPoison = new Poison();
                     tmpPoison.ID = recordId;
                     tmpPoison.Index = i;
+                    tmpPoison.SourceLabel = poison2da[i].AsString("Label");
 
                     if (!SetText(tmpPoison.Name, poison2da[i].AsInteger("Name"))) continue;
 
@@ -1049,6 +1070,7 @@ namespace Eos.Services
                     var tmpAreaEffect = new AreaEffect();
                     tmpAreaEffect.ID = recordId;
                     tmpAreaEffect.Index = i;
+                    tmpAreaEffect.SourceLabel = aoe2da[i].AsString("LABEL");
 
                     tmpAreaEffect.Name = aoe2da[i].AsString("LABEL") ?? "";
                     if (aoe2da[i].IsNull("SHAPE")) continue;
@@ -1103,6 +1125,7 @@ namespace Eos.Services
                     var tmpMasterFeat = new MasterFeat();
                     tmpMasterFeat.ID = recordId;
                     tmpMasterFeat.Index = i;
+                    tmpMasterFeat.SourceLabel = masterFeats2da[i].AsString("LABEL");
 
                     if (!SetText(tmpMasterFeat.Name, masterFeats2da[i].AsInteger("STRREF"))) continue;
                     SetText(tmpMasterFeat.Description, masterFeats2da[i].AsInteger("DESCRIPTION"));
@@ -1113,11 +1136,101 @@ namespace Eos.Services
             }
         }
 
+        private void ImportBaseItems()
+        {
+            if (customDataDict.TryGetValue("baseitems", out var baseitems2da))
+            {
+                customDataDict.Remove("baseitems");
+
+                Log.Info("Importing 2DA: baseitems.2da");
+
+                var originalBaseitems2da = LoadOriginal2da("baseitems");
+                for (int i = 0; i < baseitems2da.Count; i++)
+                {
+                    if (!ImportRecord<BaseItem>(i, baseitems2da, originalBaseitems2da, out var recordId)) continue;
+
+                    var tmpBaseItem = new BaseItem();
+                    tmpBaseItem.ID = recordId;
+                    tmpBaseItem.Index = i;
+                    tmpBaseItem.SourceLabel = baseitems2da[i].AsString("label");
+
+                    if (!SetText(tmpBaseItem.Name, baseitems2da[i].AsInteger("Name"))) continue;
+                    SetText(tmpBaseItem.Description, baseitems2da[i].AsInteger("Description"));
+                    SetText(tmpBaseItem.StatsText, baseitems2da[i].AsInteger("BaseItemStatRef"));
+                    tmpBaseItem.Icon = AddIconResource(baseitems2da[i].AsString("DefaultIcon"));
+                    tmpBaseItem.InventorySlotWidth = baseitems2da[i].AsInteger("InvSlotWidth") ?? 1;
+                    tmpBaseItem.InventorySlotHeight = baseitems2da[i].AsInteger("InvSlotHeight") ?? 1;
+                    tmpBaseItem.EquipableSlots = (InventorySlots)(baseitems2da[i].AsInteger("EquipableSlots") ?? 0);
+                    tmpBaseItem.CanRotateIcon = baseitems2da[i].AsBoolean("CanRotateIcon");
+                    tmpBaseItem.ModelType = (ItemModelType)Enum.ToObject(typeof(ItemModelType), baseitems2da[i].AsInteger("ModelType") ?? 0);
+                    tmpBaseItem.ItemModel = baseitems2da[i].AsString("ItemClass") ?? "";
+                    tmpBaseItem.GenderSpecific = baseitems2da[i].AsBoolean("GenderSpecific");
+                    tmpBaseItem.Part1Alpha = baseitems2da[i].IsNull("Part1EnvMap") ? null : (AlphaChannelUsageType)Enum.ToObject(typeof(AlphaChannelUsageType), baseitems2da[i].AsInteger("Part1EnvMap") ?? 0);
+                    tmpBaseItem.Part2Alpha = baseitems2da[i].IsNull("Part2EnvMap") ? null : (AlphaChannelUsageType)Enum.ToObject(typeof(AlphaChannelUsageType), baseitems2da[i].AsInteger("Part2EnvMap") ?? 0);
+                    tmpBaseItem.Part3Alpha = baseitems2da[i].IsNull("Part3EnvMap") ? null : (AlphaChannelUsageType)Enum.ToObject(typeof(AlphaChannelUsageType), baseitems2da[i].AsInteger("Part3EnvMap") ?? 0);
+                    tmpBaseItem.DefaultModel = baseitems2da[i].AsString("DefaultModel") ?? "";
+                    tmpBaseItem.IsContainer = baseitems2da[i].AsBoolean("Container");
+                    tmpBaseItem.WeaponWieldType = (WeaponWieldType)Enum.ToObject(typeof(WeaponWieldType), baseitems2da[i].AsInteger("WeaponWield") ?? 0);
+                    tmpBaseItem.WeaponDamageType = (WeaponDamageType)Enum.ToObject(typeof(WeaponDamageType), baseitems2da[i].AsInteger("WeaponType") ?? 0);
+                    tmpBaseItem.WeaponSize = baseitems2da[i].IsNull("WeaponSize") ? null : (WeaponSize)Enum.ToObject(typeof(WeaponSize), baseitems2da[i].AsInteger("WeaponSize") ?? 0);
+                    tmpBaseItem.AmmunitionBaseItem = CreateRef<BaseItem>(baseitems2da[i].AsInteger("RangedWeapon"));
+                    tmpBaseItem.PreferredAttackDistance = baseitems2da[i].AsFloat("PrefAttackDist");
+                    tmpBaseItem.MinimumModelCount = baseitems2da[i].AsInteger("MinRange") ?? 10;
+                    tmpBaseItem.MaximumModelCount = baseitems2da[i].AsInteger("MaxRange") ?? 100;
+                    tmpBaseItem.DamageDiceCount = baseitems2da[i].AsInteger("NumDice");
+                    tmpBaseItem.DamageDice = baseitems2da[i].AsInteger("DieToRoll");
+                    tmpBaseItem.CriticalThreatRange = baseitems2da[i].AsInteger("CritThreat");
+                    tmpBaseItem.CriticalMultiplier = baseitems2da[i].AsInteger("CritHitMult");
+                    tmpBaseItem.Category = (ItemCategory)Enum.ToObject(typeof(ItemCategory), baseitems2da[i].AsInteger("Category") ?? 0);
+                    tmpBaseItem.BaseCost = baseitems2da[i].AsFloat("BaseCost") ?? 0.0;
+                    tmpBaseItem.MaxStackSize = baseitems2da[i].AsInteger("Stacking") ?? 1;
+                    tmpBaseItem.ItemCostMultiplier = baseitems2da[i].AsFloat("ItemMultiplier") ?? 1.0;
+                    tmpBaseItem.InventorySound = CreateRef<InventorySound>(baseitems2da[i].AsInteger("InvSoundType"));
+                    tmpBaseItem.MaxSpellProperties = baseitems2da[i].AsInteger("MaxProps") ?? 8;
+                    tmpBaseItem.MinSpellProperties = baseitems2da[i].AsInteger("MinProps") ?? 0;
+                    tmpBaseItem.ItemPropertySet = CreateRef<ItemPropertySet>(baseitems2da[i].AsInteger("PropColumn"));
+                    tmpBaseItem.StorePanel = baseitems2da[i].IsNull("StorePanel") ? null : (StorePanelType)Enum.ToObject(typeof(StorePanelType), baseitems2da[i].AsInteger("StorePanel") ?? 0);
+                    tmpBaseItem.RequiredFeat1 = CreateRef<Feat>(baseitems2da[i].AsInteger("ReqFeat0"));
+                    tmpBaseItem.RequiredFeat2 = CreateRef<Feat>(baseitems2da[i].AsInteger("ReqFeat1"));
+                    tmpBaseItem.RequiredFeat3 = CreateRef<Feat>(baseitems2da[i].AsInteger("ReqFeat2"));
+                    tmpBaseItem.RequiredFeat4 = CreateRef<Feat>(baseitems2da[i].AsInteger("ReqFeat3"));
+                    tmpBaseItem.RequiredFeat5 = CreateRef<Feat>(baseitems2da[i].AsInteger("ReqFeat4"));
+                    tmpBaseItem.ArmorClassType = baseitems2da[i].IsNull("AC_Enchant") ? null : (ArmorClassType)Enum.ToObject(typeof(ArmorClassType), baseitems2da[i].AsInteger("AC_Enchant") ?? 0);
+                    tmpBaseItem.BaseShieldAC = baseitems2da[i].AsInteger("BaseAC") ?? 0;
+                    tmpBaseItem.ArmorCheckPenalty = baseitems2da[i].AsInteger("ArmorCheckPen") ?? 0;
+                    tmpBaseItem.DefaultChargeCount = baseitems2da[i].AsInteger("ChargesStarting") ?? 0;
+                    tmpBaseItem.GroundModelRotation = (ItemModelRotation)Enum.ToObject(typeof(ItemModelRotation), baseitems2da[i].AsInteger("RotateOnGround") ?? 0);
+                    tmpBaseItem.Weight = (baseitems2da[i].AsInteger("TenthLBS") ?? 0) / 10.0;
+                    tmpBaseItem.WeaponSound = CreateRef<WeaponSound>(baseitems2da[i].AsInteger("WeaponMatType"));
+                    tmpBaseItem.AmmunitionType = baseitems2da[i].IsNull("AmmunitionType") ? null : (AmmunitionType)Enum.ToObject(typeof(AmmunitionType), baseitems2da[i].AsInteger("AmmunitionType") ?? 0);
+                    tmpBaseItem.QuickbarBehaviour = (QuickbarBehaviour)Enum.ToObject(typeof(QuickbarBehaviour), baseitems2da[i].AsInteger("QBBehaviour") ?? 0);
+                    tmpBaseItem.ArcaneSpellFailure = baseitems2da[i].AsInteger("ArcaneSpellFailure");
+                    tmpBaseItem.LeftSlashAnimationPercent = baseitems2da[i].AsInteger("%AnimSlashL");
+                    tmpBaseItem.RightSlashAnimationPercent = baseitems2da[i].AsInteger("%AnimSlashR");
+                    tmpBaseItem.StraightSlashAnimationPercent = baseitems2da[i].AsInteger("%AnimSlashS");
+                    tmpBaseItem.StorePanelOrder = baseitems2da[i].AsInteger("StorePanelSort");
+                    tmpBaseItem.ItemLevelRestrictionStackSize = baseitems2da[i].AsInteger("ILRStackSize") ?? 1;
+                    tmpBaseItem.WeaponFocusFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("WeaponFocusFeat"));
+                    tmpBaseItem.EpicWeaponFocusFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("EpicWeaponFocusFeat"));
+                    tmpBaseItem.WeaponSpecializationFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("WeaponSpecializationFeat"));
+                    tmpBaseItem.EpicWeaponSpecializationFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("EpicWeaponSpecializationFeat"));
+                    tmpBaseItem.ImprovedCriticalFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("WeaponImprovedCriticalFeat"));
+                    tmpBaseItem.OverwhelmingCriticalFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("EpicWeaponOverwhelmingCriticalFeat"));
+                    tmpBaseItem.DevastatingCriticalFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("EpicWeaponDevastatingCriticalFeat"));
+                    tmpBaseItem.WeaponOfChoiceFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("WeaponOfChoiceFeat"));
+                    tmpBaseItem.IsMonkWeapon = baseitems2da[i].AsBoolean("IsMonkWeapon");
+                    tmpBaseItem.WeaponFinesseMinimumCreatureSize = baseitems2da[i].IsNull("WeaponFinesseMinimumCreatureSize") ? null : (SizeCategory)Enum.ToObject(typeof(SizeCategory), baseitems2da[i].AsInteger("WeaponFinesseMinimumCreatureSize") ?? 0);
+
+                    _importCollection.BaseItems.Add(tmpBaseItem);
+                }
+            }
+        }
+
         private void ImportAppearances()
         {
             if (customDataDict.TryGetValue("appearance", out var appearance2da))
             {
-                // customDataDict.Remove("appearance"); // TODO: uncomment when appearances are fully supported
+                customDataDict.Remove("appearance");
 
                 Log.Info("Importing 2DA: appearance.2da");
 
@@ -1129,10 +1242,163 @@ namespace Eos.Services
                     var tmpAppearance = new Appearance();
                     tmpAppearance.ID = recordId;
                     tmpAppearance.Index = i;
+                    tmpAppearance.SourceLabel = appearance2da[i].AsString("LABEL");
 
                     if (!SetText(tmpAppearance.Name, appearance2da[i].AsInteger("STRING_REF"))) continue;
+                    tmpAppearance.RaceModel = appearance2da[i].AsString("RACE") ?? "";
+                    tmpAppearance.EnvironmentMap = appearance2da[i].AsString("ENVMAP") ?? "";
+                    tmpAppearance.BloodColor = Enum.Parse<BloodColor>(appearance2da[i].AsString("BLOODCOLR") ?? "R", true);
+                    var modelType = (appearance2da[i].AsString("MODELTYPE") ?? "").ToUpper();
+                    for (int j = 0; j < modelType.Length; j++)
+                    {
+                        if (modelType[j] == 'W')
+                            tmpAppearance.CanHaveWings = true;
+                        else if (modelType[j] == 'T')
+                            tmpAppearance.CanHaveTails = true;
+                        else
+                            tmpAppearance.ModelType = Enum.Parse<ModelType>(modelType[j].ToString(), true);
+                    }
+                    tmpAppearance.WeaponScale = appearance2da[i].AsFloat("WEAPONSCALE");
+                    tmpAppearance.WingTailScale = appearance2da[i].AsFloat("WING_TAIL_SCALE");
+                    tmpAppearance.HelmetScaleMale = appearance2da[i].AsFloat("HELMET_SCALE_M");
+                    tmpAppearance.HelmetScaleFemale = appearance2da[i].AsFloat("HELMET_SCALE_F");
+                    tmpAppearance.MovementRate = Enum.Parse<MovementRate>(appearance2da[i].AsString("MOVERATE") ?? "NORM", true);
+                    tmpAppearance.WalkAnimationDistance = appearance2da[i].AsFloat("WALKDIST") ?? tmpAppearance.WalkAnimationDistance;
+                    tmpAppearance.RunAnimationDistance = appearance2da[i].AsFloat("RUNDIST") ?? tmpAppearance.RunAnimationDistance;
+                    tmpAppearance.PersonalSpaceRadius = appearance2da[i].AsFloat("PERSPACE") ?? tmpAppearance.PersonalSpaceRadius;
+                    tmpAppearance.CreaturePersonalSpaceRadius = appearance2da[i].AsFloat("CREPERSPACE") ?? tmpAppearance.CreaturePersonalSpaceRadius;
+                    tmpAppearance.CameraHeight = appearance2da[i].AsFloat("HEIGHT") ?? tmpAppearance.CameraHeight;
+                    tmpAppearance.HitDistance = appearance2da[i].AsFloat("HITDIST") ?? tmpAppearance.HitDistance;
+                    tmpAppearance.PreferredAttackDistance = appearance2da[i].AsFloat("PREFATCKDIST") ?? tmpAppearance.PreferredAttackDistance;
+                    tmpAppearance.TargetHeight = Enum.Parse<TargetHeight>(appearance2da[i].AsString("TARGETHEIGHT") ?? "H", true);
+                    tmpAppearance.AbortAttackAnimationOnParry = appearance2da[i].AsBoolean("ABORTONPARRY");
+                    tmpAppearance.HasLegs = appearance2da[i].AsBoolean("HASLEGS");
+                    tmpAppearance.HasArms = appearance2da[i].AsBoolean("HASARMS");
+                    tmpAppearance.Portrait = appearance2da[i].AsString("PORTRAIT");
+                    tmpAppearance.SizeCategory = !appearance2da[i].IsNull("SIZECATEGORY") ? (SizeCategory)Enum.ToObject(typeof(SoundsetType), appearance2da[i].AsInteger("SIZECATEGORY") ?? 0) : SizeCategory.Medium;
+                    tmpAppearance.PerceptionRange = !appearance2da[i].IsNull("PERCEPTIONDIST") ? (PerceptionDistance)Enum.ToObject(typeof(PerceptionDistance), appearance2da[i].AsInteger("PERCEPTIONDIST") ?? 0) : PerceptionDistance.Medium;
+                    tmpAppearance.FootstepSound = !appearance2da[i].IsNull("FOOTSTEPTYPE") ? (FootstepSound)Enum.ToObject(typeof(FootstepSound), appearance2da[i].AsInteger("FOOTSTEPTYPE") ?? 0) : FootstepSound.Normal;
+                    tmpAppearance.AppearanceSoundset = CreateRef<AppearanceSoundset>(appearance2da[i].AsInteger("SOUNDAPPTYPE"));
+                    tmpAppearance.HeadTracking = appearance2da[i].AsBoolean("HEADTRACK");
+                    tmpAppearance.HorizontalHeadTrackingRange = appearance2da[i].AsInteger("HEAD_ARC_H") ?? tmpAppearance.HorizontalHeadTrackingRange;
+                    tmpAppearance.VerticalHeadTrackingRange = appearance2da[i].AsInteger("HEAD_ARC_V") ?? tmpAppearance.VerticalHeadTrackingRange;
+                    tmpAppearance.ModelHeadNodeName = appearance2da[i].AsString("HEAD_NAME") ?? tmpAppearance.ModelHeadNodeName;
+                    tmpAppearance.BodyBag = !appearance2da[i].IsNull("SIZECATEGORY") ? (BodyBag)Enum.ToObject(typeof(BodyBag), appearance2da[i].AsInteger("BODY_BAG") ?? 0) : BodyBag.Default;
+                    tmpAppearance.Targetable = appearance2da[i].AsBoolean("TARGETABLE");
 
                     _importCollection.Appearances.Add(tmpAppearance);
+                }
+            }
+        }
+
+        private void ImportAppearanceSoundsets()
+        {
+            if (customDataDict.TryGetValue("appearancesndset", out var appearancesndset2da))
+            {
+                customDataDict.Remove("appearancesndset");
+
+                Log.Info("Importing 2DA: appearancesndset.2da");
+
+                var originalAppearanceSoundset2da = LoadOriginal2da("appearancesndset");
+                for (int i = 0; i < appearancesndset2da.Count; i++)
+                {
+                    if (!ImportRecord<AppearanceSoundset>(i, appearancesndset2da, originalAppearanceSoundset2da, out var recordId)) continue;
+
+                    var tmpAppearanceSoundset = new AppearanceSoundset();
+                    tmpAppearanceSoundset.ID = recordId;
+                    tmpAppearanceSoundset.Index = i;
+                    tmpAppearanceSoundset.SourceLabel = appearancesndset2da[i].AsString("Label");
+
+                    if (appearancesndset2da[i].IsNull("Label")) continue;
+                    tmpAppearanceSoundset.Name = appearancesndset2da[i].AsString("Label") ?? "";
+                    tmpAppearanceSoundset.ArmorType = appearancesndset2da[i].IsNull("ArmorType") ? null : Enum.Parse<ArmorType>(appearancesndset2da[i].AsString("ArmorType") ?? "", true);
+                    tmpAppearanceSoundset.LeftAttack = CreateRef<WeaponSound>(appearancesndset2da[i].AsInteger("WeapTypeL"));
+                    tmpAppearanceSoundset.RightAttack = CreateRef<WeaponSound>(appearancesndset2da[i].AsInteger("WeapTypeR"));
+                    tmpAppearanceSoundset.StraightAttack = CreateRef<WeaponSound>(appearancesndset2da[i].AsInteger("WeapTypeS"));
+                    tmpAppearanceSoundset.LowCloseAttack = CreateRef<WeaponSound>(appearancesndset2da[i].AsInteger("WeapTypeClsLw"));
+                    tmpAppearanceSoundset.HighCloseAttack = CreateRef<WeaponSound>(appearancesndset2da[i].AsInteger("WeapTypeClsH"));
+                    tmpAppearanceSoundset.ReachAttack = CreateRef<WeaponSound>(appearancesndset2da[i].AsInteger("WeapTypeRch"));
+                    tmpAppearanceSoundset.Miss = CreateRef<WeaponSound>(appearancesndset2da[i].AsInteger("MissIndex"));
+                    tmpAppearanceSoundset.Looping = appearancesndset2da[i].AsString("Looping");
+                    tmpAppearanceSoundset.FallForward = appearancesndset2da[i].AsString("FallFwd");
+                    tmpAppearanceSoundset.FallBackward = appearancesndset2da[i].AsString("FallBck");
+
+                    _importCollection.AppearanceSoundsets.Add(tmpAppearanceSoundset);
+                }
+            }
+        }
+
+        private void ImportWeaponSounds()
+        {
+            if (customDataDict.TryGetValue("weaponsounds", out var weaponsounds2da))
+            {
+                customDataDict.Remove("weaponsounds");
+
+                Log.Info("Importing 2DA: weaponsounds.2da");
+
+                var originalWeaponSounds2da = LoadOriginal2da("weaponsounds");
+                for (int i = 0; i < weaponsounds2da.Count; i++)
+                {
+                    if (!ImportRecord<WeaponSound>(i, weaponsounds2da, originalWeaponSounds2da, out var recordId)) continue;
+
+                    var tmpWeaponSound = new WeaponSound();
+                    tmpWeaponSound.ID = recordId;
+                    tmpWeaponSound.Index = i;
+                    tmpWeaponSound.SourceLabel = weaponsounds2da[i].AsString("Label");
+
+                    if (weaponsounds2da[i].IsNull("Label")) continue;
+                    tmpWeaponSound.Name = weaponsounds2da[i].AsString("Label") ?? "";
+                    tmpWeaponSound.Leather0 = weaponsounds2da[i].AsString("Leather0", null);
+                    tmpWeaponSound.Leather1 = weaponsounds2da[i].AsString("Leather1", null);
+                    tmpWeaponSound.Chain0 = weaponsounds2da[i].AsString("Chain0", null);
+                    tmpWeaponSound.Chain1 = weaponsounds2da[i].AsString("Chain1", null);
+                    tmpWeaponSound.Plate0 = weaponsounds2da[i].AsString("Plate0", null);
+                    tmpWeaponSound.Plate1 = weaponsounds2da[i].AsString("Plate1", null);
+                    tmpWeaponSound.Stone0 = weaponsounds2da[i].AsString("Stone0", null);
+                    tmpWeaponSound.Stone1 = weaponsounds2da[i].AsString("Stone1", null);
+                    tmpWeaponSound.Wood0 = weaponsounds2da[i].AsString("Wood0", null);
+                    tmpWeaponSound.Wood1 = weaponsounds2da[i].AsString("Wood1", null);
+                    tmpWeaponSound.Chitin0 = weaponsounds2da[i].AsString("Chitin0", null);
+                    tmpWeaponSound.Chitin1 = weaponsounds2da[i].AsString("Chitin1", null);
+                    tmpWeaponSound.Scale0 = weaponsounds2da[i].AsString("Scale0", null);
+                    tmpWeaponSound.Scale1 = weaponsounds2da[i].AsString("Scale1", null);
+                    tmpWeaponSound.Ethereal0 = weaponsounds2da[i].AsString("Ethereal0", null);
+                    tmpWeaponSound.Ethereal1 = weaponsounds2da[i].AsString("Ethereal1", null);
+                    tmpWeaponSound.Crystal0 = weaponsounds2da[i].AsString("Crystal0", null);
+                    tmpWeaponSound.Crystal1 = weaponsounds2da[i].AsString("Crystal1", null);
+                    tmpWeaponSound.Miss0 = weaponsounds2da[i].AsString("Miss0", null);
+                    tmpWeaponSound.Miss1 = weaponsounds2da[i].AsString("Miss1", null);
+                    tmpWeaponSound.Parry = weaponsounds2da[i].AsString("Parry0", null);
+                    tmpWeaponSound.Critical = weaponsounds2da[i].AsString("Critical0", null);
+
+                    _importCollection.WeaponSounds.Add(tmpWeaponSound);
+                }
+            }
+        }
+
+        private void ImportInventorySounds()
+        {
+            if (customDataDict.TryGetValue("inventorysnds", out var inventorysnds2da))
+            {
+                customDataDict.Remove("inventorysnds");
+
+                Log.Info("Importing 2DA: inventorysnds.2da");
+
+                var originalInventorySounds2da = LoadOriginal2da("inventorysnds");
+                for (int i = 0; i < inventorysnds2da.Count; i++)
+                {
+                    if (!ImportRecord<InventorySound>(i, inventorysnds2da, originalInventorySounds2da, out var recordId)) continue;
+
+                    var tmpInventorySound = new InventorySound();
+                    tmpInventorySound.ID = recordId;
+                    tmpInventorySound.Index = i;
+                    tmpInventorySound.SourceLabel = inventorysnds2da[i].AsString("Label");
+
+                    if (inventorysnds2da[i].IsNull("Label")) continue;
+                    tmpInventorySound.Name = inventorysnds2da[i].AsString("Label") ?? "";
+                    tmpInventorySound.Sound = inventorysnds2da[i].AsString("InventorySound") ?? "";
+
+                    _importCollection.InventorySounds.Add(tmpInventorySound);
                 }
             }
         }
@@ -1141,7 +1407,7 @@ namespace Eos.Services
         {
             if (customDataDict.TryGetValue("visualeffects", out var vfx2da))
             {
-                // customDataDict.Remove("visualeffects"); // TODO: uncomment when visualeffects are fully supported
+                customDataDict.Remove("visualeffects");
 
                 Log.Info("Importing 2DA: visualeffects.2da");
 
@@ -1153,20 +1419,258 @@ namespace Eos.Services
                     var tmpVfx = new VisualEffect();
                     tmpVfx.ID = recordId;
                     tmpVfx.Index = i;
+                    tmpVfx.SourceLabel = vfx2da[i].AsString("Label");
 
                     if (vfx2da[i].IsNull("Type_FD")) continue;
                     tmpVfx.Name = vfx2da[i].AsString("Label") ?? "";
+                    tmpVfx.Type = Enum.Parse<VisualEffectType>(vfx2da[i].AsString("Type_FD") ?? "F", true);
+                    tmpVfx.OrientWithGround = vfx2da[i].AsBoolean("OrientWithGround");
+                    tmpVfx.ImpactHeadEffect = vfx2da[i].AsString("Imp_HeadCon_Node");
+                    tmpVfx.ImpactImpactEffect = vfx2da[i].AsString("Imp_Impact_Node");
+                    tmpVfx.ImpactRootSmallEffect = vfx2da[i].AsString("Imp_Root_S_Node");
+                    tmpVfx.ImpactRootMediumEffect = vfx2da[i].AsString("Imp_Root_M_Node");
+                    tmpVfx.ImpactRootLargeEffect = vfx2da[i].AsString("Imp_Root_L_Node");
+                    tmpVfx.ImpactRootHugeEffect = vfx2da[i].AsString("Imp_Root_H_Node");
+                    tmpVfx.ImpactProgFX = CreateRef<ProgrammedEffect>(vfx2da[i].AsInteger("ProgFX_Impact"));
+                    tmpVfx.ImpactSound = vfx2da[i].AsString("SoundImpact");
+                    tmpVfx.DurationProgFX = CreateRef<ProgrammedEffect>(vfx2da[i].AsInteger("ProgFX_Duration"));
+                    tmpVfx.DurationSound = vfx2da[i].AsString("SoundDuration");
+                    tmpVfx.CessationProgFX = CreateRef<ProgrammedEffect>(vfx2da[i].AsInteger("ProgFX_Cessation"));
+                    tmpVfx.CessationSound = vfx2da[i].AsString("SoundCessastion");
+                    tmpVfx.CessationHeadEffect = vfx2da[i].AsString("Ces_HeadCon_Node");
+                    tmpVfx.CessationImpactEffect = vfx2da[i].AsString("Ces_Impact_Node");
+                    tmpVfx.CessationRootSmallEffect = vfx2da[i].AsString("Ces_Root_S_Node");
+                    tmpVfx.CessationRootMediumEffect = vfx2da[i].AsString("Ces_Root_M_Node");
+                    tmpVfx.CessationRootLargeEffect = vfx2da[i].AsString("Ces_Root_L_Node");
+                    tmpVfx.CessationRootHugeEffect = vfx2da[i].AsString("Ces_Root_H_Node");
+                    tmpVfx.ShakeType = (VFXShakeType)Enum.ToObject(typeof(VFXShakeType), vfx2da[i].AsInteger("ShakeType") ?? (int)VFXShakeType.None);
+                    tmpVfx.ShakeDelay = vfx2da[i].AsFloat("ShakeDelay");
+                    tmpVfx.ShakeDuration = vfx2da[i].AsFloat("ShakeDuration");
+                    tmpVfx.LowViolenceModel = vfx2da[i].AsString("LowViolence");
+                    tmpVfx.LowQualityModel = vfx2da[i].AsString("LowQuality");
+                    tmpVfx.OrientWithObject = vfx2da[i].AsBoolean("OrientWithObject");
 
                     _importCollection.VisualEffects.Add(tmpVfx);
                 }
             }
         }
 
+        private void ImportProgrammedEffects()
+        {
+            if (customDataDict.TryGetValue("progfx", out var progFX2da))
+            {
+                customDataDict.Remove("progfx");
+
+                Log.Info("Importing 2DA: progfx.2da");
+
+                var originalProgFX2da = LoadOriginal2da("progfx");
+                for (int i = 0; i < progFX2da.Count; i++)
+                {
+                    if (!ImportRecord<ProgrammedEffect>(i, progFX2da, originalProgFX2da, out var recordId)) continue;
+
+                    var tmpProgFX = new ProgrammedEffect();
+                    tmpProgFX.ID = recordId;
+                    tmpProgFX.Index = i;
+                    tmpProgFX.SourceLabel = progFX2da[i].AsString("Label");
+
+                    if (progFX2da[i].IsNull("Label")) continue;
+                    tmpProgFX.Name = progFX2da[i].AsString("Label") ?? "";
+                    tmpProgFX.Type = (ProgrammedEffectType?)progFX2da[i].AsInteger("Type") ?? ProgrammedEffectType.Invalid;
+
+                    switch (tmpProgFX.Type)
+                    {
+                        case ProgrammedEffectType.SkinOverlay:
+                            tmpProgFX.T1ModelName = progFX2da[i].AsString("Param1") ?? "";
+                            tmpProgFX.T1ArmorType = Enum.Parse<ArmorType>(progFX2da[i].AsString("Param2") ?? "leather", true);
+                            tmpProgFX.T1OnHitVFX = CreateRef<VisualEffect>(progFX2da[i].AsInteger("Param3"));
+                            tmpProgFX.T1OnHitVFXSmall = CreateRef<VisualEffect>(progFX2da[i].AsInteger("Param4"));
+                            break;
+
+                        case ProgrammedEffectType.EnvironmentMapping:
+                            tmpProgFX.T2EnvironmentMap = progFX2da[i].AsString("Param1") ?? "";
+                            break;
+
+                        case ProgrammedEffectType.GlowEffect:
+                            var colorR = Convert.ToUInt32((progFX2da[i].AsFloat("Param1") ?? 0.0) * 255.0);
+                            var colorG = Convert.ToUInt32((progFX2da[i].AsFloat("Param2") ?? 0.0) * 255.0);
+                            var colorB = Convert.ToUInt32((progFX2da[i].AsFloat("Param3") ?? 0.0) * 255.0);
+                            tmpProgFX.T3GlowColor = colorB | (colorG << 8) | (colorR << 16);
+                            break;
+
+                        case ProgrammedEffectType.Lighting:
+                            tmpProgFX.T4LightModelAnimation = progFX2da[i].AsString("Param1") ?? "";
+                            tmpProgFX.T4AnimationSpeed = progFX2da[i].AsFloat("Param2") ?? 1.0;
+                            tmpProgFX.T4CastShadows = progFX2da[i].AsBoolean("Param3");
+                            tmpProgFX.T4Priority = progFX2da[i].AsInteger("Param4") ?? 20;
+                            tmpProgFX.T4RemoveCloseToOtherLights = progFX2da[i].AsBoolean("Param5");
+                            tmpProgFX.T4RemoveAllOtherLights = progFX2da[i].AsBoolean("Param6");
+                            tmpProgFX.T4LightModel = progFX2da[i].AsString("Param7") ?? "";
+                            break;
+
+                        case ProgrammedEffectType.AlphaTransparency:
+                            tmpProgFX.T5OpacityFrom = progFX2da[i].AsFloat("Param1") ?? 0.0;
+
+                            var tcRed = progFX2da[i].AsFloat("Param2") ?? 0;
+                            var tcGreen = progFX2da[i].AsFloat("Param3") ?? 0;
+                            var tcBlue = progFX2da[i].AsFloat("Param4") ?? 0;
+                            tmpProgFX.T5TransparencyColorKeepRed = (tcRed == -1);
+                            tmpProgFX.T5TransparencyColorKeepGreen = (tcGreen == -1);
+                            tmpProgFX.T5TransparencyColorKeepBlue = (tcBlue == -1);
+
+                            uint transColorR = 0;
+                            uint transColorG = 0;
+                            uint transColorB = 0;
+                            if (!tmpProgFX.T5TransparencyColorKeepRed)
+                                transColorR = Convert.ToUInt32(tcRed * 255.0);
+                            if (!tmpProgFX.T5TransparencyColorKeepRed)
+                                transColorG = Convert.ToUInt32(tcGreen * 255.0);
+                            if (!tmpProgFX.T5TransparencyColorKeepRed)
+                                transColorB = Convert.ToUInt32(tcBlue * 255.0);
+                            tmpProgFX.T5TransparencyColor = transColorB | (transColorG << 8) | (transColorR << 16);
+
+                            tmpProgFX.T5FadeInterval = progFX2da[i].AsInteger("Param5") ?? 1000;
+                            tmpProgFX.T5OpacityTo = progFX2da[i].AsFloat("Param6") ?? 1.0;
+                            break;
+
+                        case ProgrammedEffectType.PulsingAura:
+                            var color1R = Convert.ToUInt32((progFX2da[i].AsFloat("Param1") ?? 0.0) * 255.0);
+                            var color1G = Convert.ToUInt32((progFX2da[i].AsFloat("Param2") ?? 0.0) * 255.0);
+                            var color1B = Convert.ToUInt32((progFX2da[i].AsFloat("Param3") ?? 0.0) * 255.0);
+                            tmpProgFX.T6Color1 = color1B | (color1G << 8) | (color1R << 16);
+                            var color2R = Convert.ToUInt32((progFX2da[i].AsFloat("Param4") ?? 0.0) * 255.0);
+                            var color2G = Convert.ToUInt32((progFX2da[i].AsFloat("Param5") ?? 0.0) * 255.0);
+                            var color2B = Convert.ToUInt32((progFX2da[i].AsFloat("Param6") ?? 0.0) * 255.0);
+                            tmpProgFX.T6Color2 = color2B | (color2G << 8) | (color2R << 16);
+                            tmpProgFX.T6FadeDuration = progFX2da[i].AsInteger("Param7") ?? 1000;
+                            break;
+
+                        case ProgrammedEffectType.Beam:
+                            tmpProgFX.T7BeamModel = progFX2da[i].AsString("Param1") ?? "";
+                            tmpProgFX.T7BeamAnimation = progFX2da[i].AsString("Param2") ?? "";
+                            break;
+
+                        case ProgrammedEffectType.MIRV:
+                            tmpProgFX.T10ProjectileModel = progFX2da[i].AsString("Param1") ?? "";
+                            tmpProgFX.T10Spell = CreateRef<Spell>(progFX2da[i].AsInteger("Param2"));
+                            tmpProgFX.T10Orientation = (ProjectileOrientation?)progFX2da[i].AsInteger("Param3") ?? ProjectileOrientation.None;
+                            tmpProgFX.T10ProjectilePath = (ProjectilePath?)progFX2da[i].AsInteger("Param4") ?? ProjectilePath.Default;
+                            tmpProgFX.T10TravelTime = Enum.Parse<ProjectileTravelTime>(progFX2da[i].AsString("Param5") ?? "log", true);
+                            break;
+
+                        case ProgrammedEffectType.VariantMIRV:
+                            tmpProgFX.T11ProjectileModel = progFX2da[i].AsString("Param1") ?? "";
+                            tmpProgFX.T11FireSound = progFX2da[i].AsString("Param2") ?? "";
+                            tmpProgFX.T11ImpactSound = progFX2da[i].AsString("Param3") ?? "";
+                            tmpProgFX.T11ProjectilePath = (ProjectilePath?)progFX2da[i].AsInteger("Param4") ?? ProjectilePath.Default;
+                            break;
+
+                        case ProgrammedEffectType.SpellCastFailure:
+                            tmpProgFX.T12ModelNode = progFX2da[i].AsString("Param1") ?? "";
+                            tmpProgFX.T12EffectModel = progFX2da[i].AsString("Param2") ?? "";
+                            break;
+                    }
+
+                    _importCollection.ProgrammedEffects.Add(tmpProgFX);
+                }
+            }
+        }
+
+        private PackageSpellPreferencesTable ImportSpellPreferencesTable(string tablename, Guid guid)
+        {
+            var spellPreferencesTable2da = customDataDict[tablename.ToLower()];
+
+            var tmpSpellPreferencesTable = new PackageSpellPreferencesTable();
+            tmpSpellPreferencesTable.ID = guid;
+            tmpSpellPreferencesTable.Name = tablename.ToUpper();
+
+            tmpSpellPreferencesTable.Clear();
+            for (int i = 0; i < spellPreferencesTable2da.Count; i++)
+            {
+                var tmpItem = new PackageSpellPreferencesTableItem();
+                tmpItem.ParentTable = tmpSpellPreferencesTable;
+                tmpItem.SourceLabel = spellPreferencesTable2da[i].AsString("Label") ?? "";
+                tmpItem.Spell = CreateRef<Spell>(spellPreferencesTable2da[i].AsInteger("SpellIndex"));
+                tmpSpellPreferencesTable.Add(tmpItem);
+            }
+
+            _importCollection.SpellPreferencesTables.Add(tmpSpellPreferencesTable);
+
+            return tmpSpellPreferencesTable;
+        }
+
+        private PackageFeatPreferencesTable ImportFeatPreferencesTable(string tablename, Guid guid)
+        {
+            var featPreferencesTable2da = customDataDict[tablename.ToLower()];
+
+            var tmpFeatPreferencesTable = new PackageFeatPreferencesTable();
+            tmpFeatPreferencesTable.ID = guid;
+            tmpFeatPreferencesTable.Name = tablename.ToUpper();
+
+            tmpFeatPreferencesTable.Clear();
+            for (int i = 0; i < featPreferencesTable2da.Count; i++)
+            {
+                var tmpItem = new PackageFeatPreferencesTableItem();
+                tmpItem.ParentTable = tmpFeatPreferencesTable;
+                tmpItem.SourceLabel = featPreferencesTable2da[i].AsString("Label") ?? "";
+                tmpItem.Feat = CreateRef<Feat>(featPreferencesTable2da[i].AsInteger("FeatIndex"));
+                tmpFeatPreferencesTable.Add(tmpItem);
+            }
+
+            _importCollection.FeatPreferencesTables.Add(tmpFeatPreferencesTable);
+
+            return tmpFeatPreferencesTable;
+        }
+
+        private PackageSkillPreferencesTable ImportSkillPreferencesTable(string tablename, Guid guid)
+        {
+            var skillPreferencesTable2da = customDataDict[tablename.ToLower()];
+
+            var tmpSkillPreferencesTable = new PackageSkillPreferencesTable();
+            tmpSkillPreferencesTable.ID = guid;
+            tmpSkillPreferencesTable.Name = tablename.ToUpper();
+
+            tmpSkillPreferencesTable.Clear();
+            for (int i = 0; i < skillPreferencesTable2da.Count; i++)
+            {
+                var tmpItem = new PackageSkillPreferencesTableItem();
+                tmpItem.ParentTable = tmpSkillPreferencesTable;
+                tmpItem.SourceLabel = skillPreferencesTable2da[i].AsString("Label") ?? "";
+                tmpItem.Skill = CreateRef<Skill>(skillPreferencesTable2da[i].AsInteger("SkillIndex"));
+                tmpSkillPreferencesTable.Add(tmpItem);
+            }
+
+            _importCollection.SkillPreferencesTables.Add(tmpSkillPreferencesTable);
+
+            return tmpSkillPreferencesTable;
+        }
+
+        private PackageEquipmentTable ImportPackageEquipmentTable(string tablename, Guid guid)
+        {
+            var equipmentTable2da = customDataDict[tablename.ToLower()];
+
+            var tmpEquipmentTable = new PackageEquipmentTable();
+            tmpEquipmentTable.ID = guid;
+            tmpEquipmentTable.Name = tablename.ToUpper();
+
+            tmpEquipmentTable.Clear();
+            for (int i = 0; i < equipmentTable2da.Count; i++)
+            {
+                var tmpItem = new PackageEquipmentTableItem();
+                tmpItem.ParentTable = tmpEquipmentTable;
+                tmpItem.BlueprintResRef = equipmentTable2da[i].AsString("Label") ?? "";
+                tmpEquipmentTable.Add(tmpItem);
+            }
+
+            _importCollection.PackageEquipmentTables.Add(tmpEquipmentTable);
+
+            return tmpEquipmentTable;
+        }
+
         private void ImportClassPackages()
         {
             if (customDataDict.TryGetValue("packages", out var packages2da))
             {
-                // customDataDict.Remove("packages"); // TODO: uncomment when packages are fully supported
+                customDataDict.Remove("packages");
 
                 Log.Info("Importing 2DA: packages.2da");
 
@@ -1178,6 +1682,7 @@ namespace Eos.Services
                     var tmpPackage = new ClassPackage();
                     tmpPackage.ID = recordId;
                     tmpPackage.Index = i;
+                    tmpPackage.SourceLabel = packages2da[i].AsString("Label");
 
                     if (!SetText(tmpPackage.Name, packages2da[i].AsInteger("Name"))) continue;
                     SetText(tmpPackage.Description, packages2da[i].AsInteger("Description"));
@@ -1188,11 +1693,12 @@ namespace Eos.Services
                     tmpPackage.SpellSchool = !packages2da[i].IsNull("School") ? (SpellSchool)Enum.ToObject(typeof(SpellSchool), packages2da[i].AsInteger("School") ?? 0) : null;
                     tmpPackage.Domain1 = CreateRef<Domain>(packages2da[i].AsInteger("Domain1", -1));
                     tmpPackage.Domain2 = CreateRef<Domain>(packages2da[i].AsInteger("Domain2", -1));
-                    tmpPackage.Associate = IntPtr.Zero; // ! (Associate)
-                    tmpPackage.SpellPreferences = IntPtr.Zero; // ! (SpellPref2DA)
-                    tmpPackage.FeatPreferences = IntPtr.Zero; // ! (FeatPref2DA)
-                    tmpPackage.SkillPreferences = IntPtr.Zero; // ! (SkillPref2DA)
-                    tmpPackage.StartingEquipment = IntPtr.Zero; // ! (Equip2DA)
+                    tmpPackage.AssociateCompanion = CreateRef<Companion>(packages2da[i].AsInteger("Associate", -1));
+                    tmpPackage.AssociateFamiliar = CreateRef<Familiar>(packages2da[i].AsInteger("Associate", -1));
+                    tmpPackage.SpellPreferences = GetOrImportTable(packages2da[i].AsString("SpellPref2DA"), ImportSpellPreferencesTable);
+                    tmpPackage.FeatPreferences = GetOrImportTable(packages2da[i].AsString("FeatPref2DA"), ImportFeatPreferencesTable);
+                    tmpPackage.SkillPreferences = GetOrImportTable(packages2da[i].AsString("SkillPref2DA"), ImportSkillPreferencesTable);
+                    tmpPackage.StartingEquipment = GetOrImportTable(packages2da[i].AsString("Equip2DA"), ImportPackageEquipmentTable);
                     tmpPackage.Playable = packages2da[i].AsBoolean("PlayerClass");
 
                     _importCollection.ClassPackages.Add(tmpPackage);
@@ -1204,7 +1710,7 @@ namespace Eos.Services
         {
             if (customDataDict.TryGetValue("soundset", out var soundset2da))
             {
-                // customDataDict.Remove("soundset"); // TODO: uncomment when soundsets are fully supported
+                customDataDict.Remove("soundset");
 
                 Log.Info("Importing 2DA: soundset.2da");
 
@@ -1216,12 +1722,28 @@ namespace Eos.Services
                     var tmpSoundset = new Soundset();
                     tmpSoundset.ID = recordId;
                     tmpSoundset.Index = i;
+                    tmpSoundset.SourceLabel = soundset2da[i].AsString("LABEL");
 
                     if (!SetText(tmpSoundset.Name, soundset2da[i].AsInteger("STRREF"))) continue;
 
                     tmpSoundset.Gender = !soundset2da[i].IsNull("GENDER") ? (Gender)Enum.ToObject(typeof(Gender), soundset2da[i].AsInteger("GENDER") ?? 0) : Gender.Male;
                     tmpSoundset.Type = !soundset2da[i].IsNull("TYPE") ? (SoundsetType)Enum.ToObject(typeof(SoundsetType), soundset2da[i].AsInteger("TYPE") ?? 0) : SoundsetType.Player;
                     tmpSoundset.SoundsetResource = soundset2da[i].AsString("RESREF") ?? "";
+
+                    if (ssfDict.TryGetValue(tmpSoundset.SoundsetResource.ToLower(), out var ssf))
+                        ssfDict.Remove(tmpSoundset.SoundsetResource.ToLower());
+                    else
+                        ssf = new SsfFile(gameDataBif.ReadResource(tmpSoundset.SoundsetResource, NWNResourceType.SSF).RawData);
+
+                    for (int j = 0; j < ssf.Data.Count; j++)
+                    {
+                        var soundsetEntry = tmpSoundset.Entries.GetByType((SoundsetEntryType)j);
+                        if (soundsetEntry != null)
+                        {
+                            SetText(soundsetEntry.Text, ssf.Data[j].StringRef >= 0x01000000 ? null : (int)ssf.Data[j].StringRef);
+                            soundsetEntry.SoundFile = new string(ssf.Data[j].ResRef).Trim('\0');
+                        }
+                    }
 
                     _importCollection.Soundsets.Add(tmpSoundset);
                 }
@@ -1244,6 +1766,7 @@ namespace Eos.Services
                     var tmpPolymorph = new Polymorph();
                     tmpPolymorph.ID = recordId;
                     tmpPolymorph.Index = i;
+                    tmpPolymorph.SourceLabel = polymorph2da[i].AsString("Name");
 
                     if (polymorph2da[i].IsNull("Name")) continue;
                     tmpPolymorph.Name = polymorph2da[i].AsString("Name") ?? "";
@@ -1274,11 +1797,155 @@ namespace Eos.Services
             }
         }
 
+        private void ImportCompanions()
+        {
+            if (customDataDict.TryGetValue("hen_companion", out var companions2da))
+            {
+                customDataDict.Remove("hen_companion");
+
+                Log.Info("Importing 2DA: hen_companion.2da");
+
+                var originalCompanions2da = LoadOriginal2da("hen_companion");
+                for (int i = 0; i < companions2da.Count; i++)
+                {
+                    if (!ImportRecord<Companion>(i, companions2da, originalCompanions2da, out var recordId)) continue;
+
+                    var tmpCompanion = new Companion();
+                    tmpCompanion.ID = recordId;
+                    tmpCompanion.Index = i;
+                    tmpCompanion.SourceLabel = companions2da[i].AsString("NAME");
+
+                    if (!SetText(tmpCompanion.Name, companions2da[i].AsInteger("STRREF"))) continue;
+                    SetText(tmpCompanion.Description, companions2da[i].AsInteger("DESCRIPTION"));
+                    tmpCompanion.Template = companions2da[i].AsString("BASERESREF") ?? "";
+
+                    _importCollection.Companions.Add(tmpCompanion);
+                }
+            }
+        }
+
+        private void ImportFamiliars()
+        {
+            if (customDataDict.TryGetValue("hen_familiar", out var familiars2da))
+            {
+                customDataDict.Remove("hen_familiar");
+
+                Log.Info("Importing 2DA: hen_familiar.2da");
+
+                var originalFamiliars2da = LoadOriginal2da("hen_familiar");
+                for (int i = 0; i < familiars2da.Count; i++)
+                {
+                    if (!ImportRecord<Familiar>(i, familiars2da, originalFamiliars2da, out var recordId)) continue;
+
+                    var tmpFamiliar = new Familiar();
+                    tmpFamiliar.ID = recordId;
+                    tmpFamiliar.Index = i;
+                    tmpFamiliar.SourceLabel = familiars2da[i].AsString("NAME");
+
+                    if (!SetText(tmpFamiliar.Name, familiars2da[i].AsInteger("STRREF"))) continue;
+                    SetText(tmpFamiliar.Description, familiars2da[i].AsInteger("DESCRIPTION"));
+                    tmpFamiliar.Template = familiars2da[i].AsString("BASERESREF") ?? "";
+
+                    _importCollection.Familiars.Add(tmpFamiliar);
+                }
+            }
+        }
+
+        private void ImportTraps()
+        {
+            if (customDataDict.TryGetValue("traps", out var traps2da))
+            {
+                customDataDict.Remove("traps");
+
+                Log.Info("Importing 2DA: traps.2da");
+
+                var originalTraps2da = LoadOriginal2da("traps");
+                for (int i = 0; i < traps2da.Count; i++)
+                {
+                    if (!ImportRecord<Trap>(i, traps2da, originalTraps2da, out var recordId)) continue;
+
+                    var tmpTrap = new Trap();
+                    tmpTrap.ID = recordId;
+                    tmpTrap.Index = i;
+                    tmpTrap.SourceLabel = traps2da[i].AsString("Label");
+
+                    if (!SetText(tmpTrap.Name, traps2da[i].AsInteger("TrapName"))) continue;
+                    tmpTrap.TrapScript = traps2da[i].AsString("TrapScript") ?? "";
+                    tmpTrap.SetDC = traps2da[i].AsInteger("SetDC") ?? 10;
+                    tmpTrap.DetectDC = traps2da[i].AsInteger("DetectDCMod") ?? 10;
+                    tmpTrap.DisarmDC = traps2da[i].AsInteger("DisarmDCMod") ?? 10;
+                    tmpTrap.BlueprintResRef = traps2da[i].AsString("ResRef") ?? "";
+                    tmpTrap.Icon = traps2da[i].AsString("IconResRef") ?? "";
+
+                    _importCollection.Traps.Add(tmpTrap);
+                }
+            }
+        }
+
+        private void ImportDamageTypes()
+        {
+            if (customDataDict.TryGetValue("damagetypes", out var damagetypes2da))
+            {
+                customDataDict.Remove("damagetypes");
+
+                Log.Info("Importing 2DA: damagetypes.2da");
+
+                var originalDamageTypes2da = LoadOriginal2da("damagetypes");
+                for (int i = 0; i < damagetypes2da.Count; i++)
+                {
+                    if (!ImportRecord<DamageType>(i, damagetypes2da, originalDamageTypes2da, out var recordId)) continue;
+
+                    var tmpDamageType = new DamageType();
+                    tmpDamageType.ID = recordId;
+                    tmpDamageType.Index = i;
+                    tmpDamageType.SourceLabel = damagetypes2da[i].AsString("Label");
+
+                    if (!SetText(tmpDamageType.Name, damagetypes2da[i].AsInteger("CharsheetStrref"))) continue;
+                    tmpDamageType.Group = CreateRef<DamageTypeGroup>(damagetypes2da[i].AsInteger("DamageTypeGroup"));
+
+                    _importCollection.DamageTypes.Add(tmpDamageType);
+                }
+            }
+        }
+
+        private void ImportDamageTypeGroups()
+        {
+            if (customDataDict.TryGetValue("damagetypegroups", out var damagetypeGroups2da))
+            {
+                customDataDict.Remove("damagetypegroups");
+
+                Log.Info("Importing 2DA: damagetypegroups.2da");
+
+                var originalDamageTypeGroups2da = LoadOriginal2da("damagetypegroups");
+                for (int i = 0; i < damagetypeGroups2da.Count; i++)
+                {
+                    if (!ImportRecord<DamageTypeGroup>(i, damagetypeGroups2da, originalDamageTypeGroups2da, out var recordId)) continue;
+
+                    var tmpDamageTypeGroup = new DamageTypeGroup();
+                    tmpDamageTypeGroup.ID = recordId;
+                    tmpDamageTypeGroup.Index = i;
+                    tmpDamageTypeGroup.SourceLabel = damagetypeGroups2da[i].AsString("Label");
+
+                    if (!SetText(tmpDamageTypeGroup.FeedbackText, damagetypeGroups2da[i].AsInteger("FeedbackStrref"))) continue;
+                    tmpDamageTypeGroup.Name = damagetypeGroups2da[i].AsString("Label") ?? "";
+                    if (!damagetypeGroups2da[i].IsNull("ColorR") && !damagetypeGroups2da[i].IsNull("ColorG") && !damagetypeGroups2da[i].IsNull("ColorB"))
+                    {
+                        var colorR = Convert.ToUInt32(damagetypeGroups2da[i].AsInteger("ColorR")) & 0xFF;
+                        var colorG = Convert.ToUInt32(damagetypeGroups2da[i].AsInteger("ColorG")) & 0xFF;
+                        var colorB = Convert.ToUInt32(damagetypeGroups2da[i].AsInteger("ColorB")) & 0xFF;
+                        tmpDamageTypeGroup.Color = colorB | (colorG << 8) | (colorR << 16);
+                    }
+
+                    _importCollection.DamageTypeGroups.Add(tmpDamageTypeGroup);
+                }
+            }
+        }
+
         private void ImportPortraits()
         {
             if (customDataDict.TryGetValue("portraits", out var portraits2da))
             {
-                //customDataDict.Remove("portraits"); // TODO: uncomment when portraits are fully supported
+                customDataDict.Remove("portraits");
 
                 Log.Info("Importing 2DA: portraits.2da");
 
@@ -1290,9 +1957,15 @@ namespace Eos.Services
                     var tmpPortrait = new Portrait();
                     tmpPortrait.ID = recordId;
                     tmpPortrait.Index = i;
+                    tmpPortrait.SourceLabel = portraits2da[i].AsString("BaseResRef");
 
                     if (portraits2da[i].IsNull("BaseResRef")) continue;
                     tmpPortrait.ResRef = portraits2da[i].AsString("BaseResRef") ?? "";
+                    tmpPortrait.LowGoreResRef = portraits2da[i].AsString("LowGore");
+                    tmpPortrait.Gender = (PortraitGender?)portraits2da[i].AsInteger("Sex") ?? PortraitGender.Male;
+                    tmpPortrait.PlaceableType = (PlaceableType?)portraits2da[i].AsInteger("InanimateType");
+                    tmpPortrait.Race = CreateRef<Race>(portraits2da[i].AsInteger("Race"));
+                    tmpPortrait.IsPlayerPortrait = !portraits2da[i].AsBoolean("Plot");
 
                     _importCollection.Portraits.Add(tmpPortrait);
                 }
@@ -1480,6 +2153,61 @@ namespace Eos.Services
                 package.ForClass = SolveInstance(package.ForClass);
                 package.Domain1 = SolveInstance(package.Domain1);
                 package.Domain2 = SolveInstance(package.Domain2);
+
+                if (package.ForClass != null && package.ForClass.IsSpellCaster)
+                {
+                    if (package.ForClass.IsArcaneCaster)
+                    {
+                        package.AssociateCompanion = null;
+                        package.AssociateFamiliar = SolveInstance(package.AssociateFamiliar); ;
+                    }
+                    else
+                    {
+                        package.AssociateCompanion = SolveInstance(package.AssociateCompanion);
+                        package.AssociateFamiliar = null;
+                    }
+                }
+                else
+                {
+                    package.AssociateCompanion = null;
+                    package.AssociateFamiliar = null;
+                }
+            }
+
+            // Package Spell Preferences Tables
+            foreach (var spellPrefsTable in _importCollection.SpellPreferencesTables)
+            {
+                if (spellPrefsTable == null) continue;
+                for (int i = 0; i < spellPrefsTable.Count; i++)
+                {
+                    var item = spellPrefsTable[i];
+                    if (item == null) continue;
+                    item.Spell = SolveInstance(item.Spell);
+                }
+            }
+
+            // Package Feat Preferences Tables
+            foreach (var featPrefsTable in _importCollection.FeatPreferencesTables)
+            {
+                if (featPrefsTable == null) continue;
+                for (int i = 0; i < featPrefsTable.Count; i++)
+                {
+                    var item = featPrefsTable[i];
+                    if (item == null) continue;
+                    item.Feat = SolveInstance(item.Feat);
+                }
+            }
+
+            // Package Skill Preferences Tables
+            foreach (var skillPrefsTable in _importCollection.SkillPreferencesTables)
+            {
+                if (skillPrefsTable == null) continue;
+                for (int i = 0; i < skillPrefsTable.Count; i++)
+                {
+                    var item = skillPrefsTable[i];
+                    if (item == null) continue;
+                    item.Skill = SolveInstance(item.Skill);
+                }
             }
 
             // Area Effects
@@ -1487,6 +2215,74 @@ namespace Eos.Services
             {
                 if (aoe == null) continue;
                 aoe.VisualEffect = SolveInstance(aoe.VisualEffect);
+            }
+
+            // Appearances
+            foreach (var appearance in _importCollection.Appearances)
+            {
+                if (appearance == null) continue;
+                appearance.AppearanceSoundset = SolveInstance(appearance.AppearanceSoundset);
+            }
+
+            // Appearance Soundsets
+            foreach (var appearanceSoundset in _importCollection.AppearanceSoundsets)
+            {
+                if (appearanceSoundset == null) continue;
+                appearanceSoundset.LeftAttack = SolveInstance(appearanceSoundset.LeftAttack);
+                appearanceSoundset.RightAttack = SolveInstance(appearanceSoundset.RightAttack);
+                appearanceSoundset.StraightAttack = SolveInstance(appearanceSoundset.StraightAttack);
+                appearanceSoundset.LowCloseAttack = SolveInstance(appearanceSoundset.LowCloseAttack);
+                appearanceSoundset.HighCloseAttack = SolveInstance(appearanceSoundset.HighCloseAttack);
+                appearanceSoundset.ReachAttack = SolveInstance(appearanceSoundset.ReachAttack);
+                appearanceSoundset.Miss = SolveInstance(appearanceSoundset.Miss);
+            }
+
+            // Base Items
+            foreach (var baseItem in _importCollection.BaseItems)
+            {
+                if (baseItem == null) continue;
+                baseItem.AmmunitionBaseItem = SolveInstance(baseItem.AmmunitionBaseItem);
+                baseItem.InventorySound = SolveInstance(baseItem.InventorySound);
+                baseItem.ItemPropertySet = SolveInstance(baseItem.ItemPropertySet);
+                baseItem.RequiredFeat1 = SolveInstance(baseItem.RequiredFeat1);
+                baseItem.RequiredFeat2 = SolveInstance(baseItem.RequiredFeat2);
+                baseItem.RequiredFeat3 = SolveInstance(baseItem.RequiredFeat3);
+                baseItem.RequiredFeat4 = SolveInstance(baseItem.RequiredFeat4);
+                baseItem.RequiredFeat5 = SolveInstance(baseItem.RequiredFeat5);
+                baseItem.WeaponSound = SolveInstance(baseItem.WeaponSound);
+                baseItem.WeaponFocusFeat = SolveInstance(baseItem.WeaponFocusFeat);
+                baseItem.EpicWeaponFocusFeat = SolveInstance(baseItem.EpicWeaponFocusFeat);
+                baseItem.WeaponSpecializationFeat = SolveInstance(baseItem.WeaponSpecializationFeat);
+                baseItem.EpicWeaponSpecializationFeat = SolveInstance(baseItem.EpicWeaponSpecializationFeat);
+                baseItem.ImprovedCriticalFeat = SolveInstance(baseItem.ImprovedCriticalFeat);
+                baseItem.OverwhelmingCriticalFeat = SolveInstance(baseItem.OverwhelmingCriticalFeat);
+                baseItem.DevastatingCriticalFeat = SolveInstance(baseItem.DevastatingCriticalFeat);
+                baseItem.WeaponOfChoiceFeat = SolveInstance(baseItem.WeaponOfChoiceFeat);
+            }
+
+            // Visual Effects
+            foreach (var vfx in _importCollection.VisualEffects)
+            {
+                if (vfx == null) continue;
+                vfx.ImpactProgFX = SolveInstance(vfx.ImpactProgFX);
+                vfx.DurationProgFX = SolveInstance(vfx.DurationProgFX);
+                vfx.CessationProgFX = SolveInstance(vfx.CessationProgFX);
+            }
+
+            // Programmed Effects
+            foreach (var progFX in _importCollection.ProgrammedEffects)
+            {
+                if (progFX == null) continue;
+                progFX.T1OnHitVFX = SolveInstance(progFX.T1OnHitVFX);
+                progFX.T1OnHitVFXSmall = SolveInstance(progFX.T1OnHitVFXSmall);
+                progFX.T10Spell = SolveInstance(progFX.T10Spell);
+            }
+
+            // Damage Types
+            foreach (var damageType in _importCollection.DamageTypes)
+            {
+                if (damageType == null) continue;
+                damageType.Group = SolveInstance(damageType.Group);
             }
         }
 
@@ -1700,6 +2496,25 @@ namespace Eos.Services
                 MasterRepository.Project.Poisons.Add(poison);
             }
 
+            // Base Items
+            foreach (var baseItem in _importCollection.BaseItems)
+            {
+                if (baseItem == null) continue;
+
+                var standardBaseItem = MasterRepository.Standard.BaseItems.GetByID(baseItem.ID);
+                if (standardBaseItem != null)
+                {
+                    baseItem.ID = Guid.Empty;
+                    baseItem.Overrides = standardBaseItem.ID;
+
+                    var projectOverrideBaseItem = MasterRepository.Project.GetOverride(standardBaseItem);
+                    if (projectOverrideBaseItem != null)
+                        MasterRepository.Project.BaseItems.Remove(projectOverrideBaseItem);
+                }
+
+                MasterRepository.Project.BaseItems.Add(baseItem);
+            }
+
             // Area Effects
             foreach (var aoe in _importCollection.AreaEffects)
             {
@@ -1736,6 +2551,63 @@ namespace Eos.Services
                 }
 
                 MasterRepository.Project.Polymorphs.Add(polymorph);
+            }
+
+            // Companions
+            foreach (var companion in _importCollection.Companions)
+            {
+                if (companion == null) continue;
+
+                var standardCompanion = MasterRepository.Standard.Companions.GetByID(companion.ID);
+                if (standardCompanion != null)
+                {
+                    companion.ID = Guid.Empty;
+                    companion.Overrides = standardCompanion.ID;
+
+                    var projectOverrideCompanion = MasterRepository.Project.GetOverride(standardCompanion);
+                    if (projectOverrideCompanion != null)
+                        MasterRepository.Project.Companions.Remove(projectOverrideCompanion);
+                }
+
+                MasterRepository.Project.Companions.Add(companion);
+            }
+
+            // Familiars
+            foreach (var familiar in _importCollection.Familiars)
+            {
+                if (familiar == null) continue;
+
+                var standardFamiliar = MasterRepository.Standard.Familiars.GetByID(familiar.ID);
+                if (standardFamiliar != null)
+                {
+                    familiar.ID = Guid.Empty;
+                    familiar.Overrides = standardFamiliar.ID;
+
+                    var projectOverrideFamiliar = MasterRepository.Project.GetOverride(standardFamiliar);
+                    if (projectOverrideFamiliar != null)
+                        MasterRepository.Project.Familiars.Remove(projectOverrideFamiliar);
+                }
+
+                MasterRepository.Project.Familiars.Add(familiar);
+            }
+
+            // Traps
+            foreach (var trap in _importCollection.Traps)
+            {
+                if (trap == null) continue;
+
+                var standardTrap = MasterRepository.Standard.Traps.GetByID(trap.ID);
+                if (standardTrap != null)
+                {
+                    trap.ID = Guid.Empty;
+                    trap.Overrides = standardTrap.ID;
+
+                    var projectOverrideTrap = MasterRepository.Project.GetOverride(standardTrap);
+                    if (projectOverrideTrap != null)
+                        MasterRepository.Project.Traps.Remove(projectOverrideTrap);
+                }
+
+                MasterRepository.Project.Traps.Add(trap);
             }
 
             // Soundsets
@@ -1795,6 +2667,63 @@ namespace Eos.Services
                 MasterRepository.Project.Appearances.Add(appearance);
             }
 
+            // Appearance Soundsets
+            foreach (var appearanceSoundset in _importCollection.AppearanceSoundsets)
+            {
+                if (appearanceSoundset == null) continue;
+
+                var standardAppearanceSoundset = MasterRepository.Standard.AppearanceSoundsets.GetByID(appearanceSoundset.ID);
+                if (standardAppearanceSoundset != null)
+                {
+                    appearanceSoundset.ID = Guid.Empty;
+                    appearanceSoundset.Overrides = standardAppearanceSoundset.ID;
+
+                    var projectOverrideAppearanceSoundset = MasterRepository.Project.GetOverride(standardAppearanceSoundset);
+                    if (projectOverrideAppearanceSoundset != null)
+                        MasterRepository.Project.AppearanceSoundsets.Remove(projectOverrideAppearanceSoundset);
+                }
+
+                MasterRepository.Project.AppearanceSoundsets.Add(appearanceSoundset);
+            }
+
+            // Weapon Sounds
+            foreach (var weaponSound in _importCollection.WeaponSounds)
+            {
+                if (weaponSound == null) continue;
+
+                var standardWeaponSound = MasterRepository.Standard.WeaponSounds.GetByID(weaponSound.ID);
+                if (standardWeaponSound != null)
+                {
+                    weaponSound.ID = Guid.Empty;
+                    weaponSound.Overrides = standardWeaponSound.ID;
+
+                    var projectOverrideWeaponSound = MasterRepository.Project.GetOverride(standardWeaponSound);
+                    if (projectOverrideWeaponSound != null)
+                        MasterRepository.Project.WeaponSounds.Remove(projectOverrideWeaponSound);
+                }
+
+                MasterRepository.Project.WeaponSounds.Add(weaponSound);
+            }
+
+            // Inventory Sounds
+            foreach (var inventorySound in _importCollection.InventorySounds)
+            {
+                if (inventorySound == null) continue;
+
+                var standardInventorySound = MasterRepository.Standard.InventorySounds.GetByID(inventorySound.ID);
+                if (standardInventorySound != null)
+                {
+                    inventorySound.ID = Guid.Empty;
+                    inventorySound.Overrides = standardInventorySound.ID;
+
+                    var projectOverrideInventorySound = MasterRepository.Project.GetOverride(standardInventorySound);
+                    if (projectOverrideInventorySound != null)
+                        MasterRepository.Project.InventorySounds.Remove(projectOverrideInventorySound);
+                }
+
+                MasterRepository.Project.InventorySounds.Add(inventorySound);
+            }
+
             // Portraits
             foreach (var portrait in _importCollection.Portraits)
             {
@@ -1812,6 +2741,63 @@ namespace Eos.Services
                 }
 
                 MasterRepository.Project.Portraits.Add(portrait);
+            }
+
+            // Programmed Effects
+            foreach (var progFX in _importCollection.ProgrammedEffects)
+            {
+                if (progFX == null) continue;
+
+                var standardProgFX = MasterRepository.Standard.ProgrammedEffects.GetByID(progFX.ID);
+                if (standardProgFX != null)
+                {
+                    progFX.ID = Guid.Empty;
+                    progFX.Overrides = standardProgFX.ID;
+
+                    var projectOverrideProgFX = MasterRepository.Project.GetOverride(standardProgFX);
+                    if (projectOverrideProgFX != null)
+                        MasterRepository.Project.ProgrammedEffects.Remove(projectOverrideProgFX);
+                }
+
+                MasterRepository.Project.ProgrammedEffects.Add(progFX);
+            }
+
+            // Damage Types
+            foreach (var damageType in _importCollection.DamageTypes)
+            {
+                if (damageType == null) continue;
+
+                var standardDamageType = MasterRepository.Standard.DamageTypes.GetByID(damageType.ID);
+                if (standardDamageType != null)
+                {
+                    damageType.ID = Guid.Empty;
+                    damageType.Overrides = standardDamageType.ID;
+
+                    var projectOverrideDamageType = MasterRepository.Project.GetOverride(standardDamageType);
+                    if (projectOverrideDamageType != null)
+                        MasterRepository.Project.DamageTypes.Remove(projectOverrideDamageType);
+                }
+
+                MasterRepository.Project.DamageTypes.Add(damageType);
+            }
+
+            // Damage Type Groups
+            foreach (var damageTypeGroup in _importCollection.DamageTypeGroups)
+            {
+                if (damageTypeGroup == null) continue;
+
+                var standardDamageTypeGroup = MasterRepository.Standard.DamageTypeGroups.GetByID(damageTypeGroup.ID);
+                if (standardDamageTypeGroup != null)
+                {
+                    damageTypeGroup.ID = Guid.Empty;
+                    damageTypeGroup.Overrides = standardDamageTypeGroup.ID;
+
+                    var projectOverrideDamageTypeGroup = MasterRepository.Project.GetOverride(standardDamageTypeGroup);
+                    if (projectOverrideDamageTypeGroup != null)
+                        MasterRepository.Project.DamageTypeGroups.Remove(projectOverrideDamageTypeGroup);
+                }
+
+                MasterRepository.Project.DamageTypeGroups.Add(damageTypeGroup);
             }
 
             // Racial Feats
@@ -2003,6 +2989,82 @@ namespace Eos.Services
 
                 MasterRepository.Project.KnownSpellsTables.Add(knownSpellsTable);
             }
+
+            // Package Spell Preferences
+            foreach (var spellPrefTable in _importCollection.SpellPreferencesTables)
+            {
+                if (spellPrefTable == null) continue;
+
+                var standardSpellPrefsTable = MasterRepository.Standard.SpellPreferencesTables.GetByID(spellPrefTable.ID);
+                if (standardSpellPrefsTable != null)
+                {
+                    spellPrefTable.ID = Guid.Empty;
+                    spellPrefTable.Overrides = standardSpellPrefsTable.ID;
+
+                    var projectOverrideSpellPrefTable = MasterRepository.Project.GetOverride(standardSpellPrefsTable);
+                    if (projectOverrideSpellPrefTable != null)
+                        MasterRepository.Project.SpellPreferencesTables.Remove(projectOverrideSpellPrefTable);
+                }
+
+                MasterRepository.Project.SpellPreferencesTables.Add(spellPrefTable);
+            }
+
+            // Package Feat Preferences
+            foreach (var featPrefTable in _importCollection.FeatPreferencesTables)
+            {
+                if (featPrefTable == null) continue;
+
+                var standardFeatPrefsTable = MasterRepository.Standard.FeatPreferencesTables.GetByID(featPrefTable.ID);
+                if (standardFeatPrefsTable != null)
+                {
+                    featPrefTable.ID = Guid.Empty;
+                    featPrefTable.Overrides = standardFeatPrefsTable.ID;
+
+                    var projectOverrideFeatPrefTable = MasterRepository.Project.GetOverride(standardFeatPrefsTable);
+                    if (projectOverrideFeatPrefTable != null)
+                        MasterRepository.Project.FeatPreferencesTables.Remove(projectOverrideFeatPrefTable);
+                }
+
+                MasterRepository.Project.FeatPreferencesTables.Add(featPrefTable);
+            }
+
+            // Package Skill Preferences
+            foreach (var skillPrefTable in _importCollection.SkillPreferencesTables)
+            {
+                if (skillPrefTable == null) continue;
+
+                var standardSkillPrefsTable = MasterRepository.Standard.SkillPreferencesTables.GetByID(skillPrefTable.ID);
+                if (standardSkillPrefsTable != null)
+                {
+                    skillPrefTable.ID = Guid.Empty;
+                    skillPrefTable.Overrides = standardSkillPrefsTable.ID;
+
+                    var projectOverrideSkillPrefTable = MasterRepository.Project.GetOverride(standardSkillPrefsTable);
+                    if (projectOverrideSkillPrefTable != null)
+                        MasterRepository.Project.SkillPreferencesTables.Remove(projectOverrideSkillPrefTable);
+                }
+
+                MasterRepository.Project.SkillPreferencesTables.Add(skillPrefTable);
+            }
+
+            // Package Equipment
+            foreach (var equipmentTable in _importCollection.PackageEquipmentTables)
+            {
+                if (equipmentTable == null) continue;
+
+                var standardEquipmentTable = MasterRepository.Standard.PackageEquipmentTables.GetByID(equipmentTable.ID);
+                if (standardEquipmentTable != null)
+                {
+                    equipmentTable.ID = Guid.Empty;
+                    equipmentTable.Overrides = standardEquipmentTable.ID;
+
+                    var projectOverrideEquipmentTable = MasterRepository.Project.GetOverride(standardEquipmentTable);
+                    if (projectOverrideEquipmentTable != null)
+                        MasterRepository.Project.PackageEquipmentTables.Remove(projectOverrideEquipmentTable);
+                }
+
+                MasterRepository.Project.PackageEquipmentTables.Add(equipmentTable);
+            }
         }
 
         private void ImportExternalData()
@@ -2020,8 +3082,11 @@ namespace Eos.Services
                     {
                         for (int i = 0; i < hak.Count; i++)
                         {
-                            if ((hak[i].ResourceType != NWNResourceType.TWODA) || (customDataDict.ContainsKey(hak[i].ResRef.ToLower())))
+                            if (((hak[i].ResourceType != NWNResourceType.TWODA) || (customDataDict.ContainsKey(hak[i].ResRef.ToLower()))) &&
+                                ((hak[i].ResourceType != NWNResourceType.SSF) || (ssfDict.ContainsKey(hak[i].ResRef.ToLower()))))
+                            {
                                 ImportToExternalPath(hak[i], hak);
+                            }
                         }
                     }
                     finally
@@ -2059,13 +3124,23 @@ namespace Eos.Services
                 ImportPoisons();
                 ImportAreaOfEffects();
                 ImportMasterFeats();
+                ImportBaseItems();
+                ImportClassPackages();
 
                 ImportAppearances();
+                ImportAppearanceSoundsets();
+                ImportWeaponSounds();
+                ImportInventorySounds();
                 ImportVisualEffects();
-                ImportClassPackages();
+                ImportProgrammedEffects();
                 ImportSoundsets();
                 ImportPolymorphs();
                 ImportPortraits();
+                ImportCompanions();
+                ImportFamiliars();
+                ImportTraps();
+                ImportDamageTypes();
+                ImportDamageTypeGroups();
 
                 ImportText();
 

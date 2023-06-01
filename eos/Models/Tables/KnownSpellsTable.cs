@@ -8,6 +8,11 @@ namespace Eos.Models.Tables
 {
     public class KnownSpellsTable : BaseTable<KnownSpellsTableItem>
     {
+        protected override string GetTypeName()
+        {
+            return "Known Spells Table";
+        }
+
         protected override void SetDefaultValues()
         {
             Name = "CLS_SPKN_NEW";

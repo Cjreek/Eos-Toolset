@@ -8,6 +8,11 @@ namespace Eos.Models.Tables
 {
     public class StatGainTable : BaseTable<StatGainTableItem>
     {
+        protected override string GetTypeName()
+        {
+            return "Statgain Table";
+        }
+
         protected override void SetDefaultValues()
         {
             Name = "CLS_STAT_NEW";

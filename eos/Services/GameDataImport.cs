@@ -12,6 +12,7 @@ using Eos.Types;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Formats.Asn1;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -78,7 +79,7 @@ namespace Eos.Services
 
         private bool SetText(TLKStringSet str, int? strRef)
         {
-            var result = strRef != null;
+            var result = (strRef != null) && (strRef != 0);
             if (result)
             {
                 str.OriginalIndex = strRef;
@@ -120,6 +121,7 @@ namespace Eos.Services
             {
                 var tmpItem = new RacialFeatsTableItem();
                 tmpItem.ParentTable = tmpRacialFeatsTable;
+                tmpItem.SourceLabel = racialFeatTable2da[i].AsString("FeatLabel") ?? "";
                 tmpItem.Feat = CreateRef<Feat>(racialFeatTable2da[i].AsInteger("FeatIndex"));
                 tmpRacialFeatsTable.Add(tmpItem);
             }
@@ -137,6 +139,7 @@ namespace Eos.Services
                 var tmpRace = new Race();
                 tmpRace.ID = GenerateGuid("racialtypes", i);
                 tmpRace.Index = i;
+                tmpRace.SourceLabel = races2da[i].AsString("Label");
 
                 if (!SetText(tmpRace.Name, races2da[i].AsInteger("Name"))) continue;
                 SetText(tmpRace.NamePlural, races2da[i].AsInteger("NamePlural"));
@@ -220,6 +223,7 @@ namespace Eos.Services
             {
                 var tmpItem = new FeatsTableItem();
                 tmpItem.ParentTable = tmpFeatsTable;
+                tmpItem.SourceLabel = featTable2da[i].AsString("FeatLabel") ?? "";
                 tmpItem.Feat = CreateRef<Feat>(featTable2da[i].AsInteger("FeatIndex"));
                 tmpItem.FeatList = (FeatListType)Enum.ToObject(typeof(FeatListType), featTable2da[i].AsInteger("List") ?? 0);
                 tmpItem.GrantedOnLevel = featTable2da[i].AsInteger("GrantedOnLevel") ?? -1;
@@ -287,6 +291,7 @@ namespace Eos.Services
             {
                 var tmpItem = new SkillsTableItem();
                 tmpItem.ParentTable = skillTable;
+                tmpItem.SourceLabel = skillTable2da[i].AsString("SkillLabel") ?? "";
                 tmpItem.Skill = CreateRef<Skill>(skillTable2da[i].AsInteger("SkillIndex"));
                 tmpItem.IsClassSkill = skillTable2da[i].AsBoolean("ClassSkill");
                 skillTable.Add(tmpItem);
@@ -368,6 +373,7 @@ namespace Eos.Services
             {
                 var tmpItem = new PrerequisiteTableItem();
                 tmpItem.ParentTable = preRequTable;
+                tmpItem.SourceLabel = preRequTable2da[i].AsString("LABEL") ?? "";
                 tmpItem.RequirementType = Enum.Parse<RequirementType>(preRequTable2da[i].AsString("ReqType") ?? "", true);
 
                 switch (tmpItem.RequirementType)
@@ -510,6 +516,7 @@ namespace Eos.Services
                 var tmpClass = new CharacterClass();
                 tmpClass.ID = GenerateGuid("classes", i);
                 tmpClass.Index = i;
+                tmpClass.SourceLabel = classes2da[i].AsString("Label");
 
                 if (!SetText(tmpClass.Name, classes2da[i].AsInteger("Name")))
                 {
@@ -684,6 +691,7 @@ namespace Eos.Services
                 var tmpDomain = new Domain();
                 tmpDomain.ID = GenerateGuid("domains", i);
                 tmpDomain.Index = i;
+                tmpDomain.SourceLabel = domains2da[i].AsString("Label");
 
                 if (!SetText(tmpDomain.Name, domains2da[i].AsInteger("Name"))) continue;
                 SetText(tmpDomain.Description, domains2da[i].AsInteger("Description"));
@@ -717,6 +725,7 @@ namespace Eos.Services
                 var tmpSkill = new Skill();
                 tmpSkill.ID = GenerateGuid("skills", i);
                 tmpSkill.Index = i;
+                tmpSkill.SourceLabel = skills2da[i].AsString("Label");
 
                 if (!SetText(tmpSkill.Name, skills2da[i].AsInteger("Name"))) continue;
                 SetText(tmpSkill.Description, skills2da[i].AsInteger("Description"));
@@ -1021,12 +1030,836 @@ namespace Eos.Services
                 var tmpMasterFeat = new MasterFeat();
                 tmpMasterFeat.ID = GenerateGuid("masterfeats", i);
                 tmpMasterFeat.Index = i;
+                tmpMasterFeat.SourceLabel = masterFeats2da[i].AsString("LABEL");
 
                 if (!SetText(tmpMasterFeat.Name, masterFeats2da[i].AsInteger("STRREF"))) continue;
                 SetText(tmpMasterFeat.Description, masterFeats2da[i].AsInteger("DESCRIPTION"));
                 tmpMasterFeat.Icon = AddIconResource(masterFeats2da[i].AsString("ICON"));
 
                 Standard.MasterFeats.Add(tmpMasterFeat);
+            }
+        }
+
+        private void ImportBaseItems()
+        {
+            var baseitems2da = Load2da("baseitems");
+
+            Standard.BaseItems.Clear();
+            for (int i = 0; i < baseitems2da.Count; i++)
+            {
+                var tmpBaseItem = new BaseItem();
+                tmpBaseItem.ID = GenerateGuid("baseitems", i);
+                tmpBaseItem.Index = i;
+                tmpBaseItem.SourceLabel = baseitems2da[i].AsString("label");
+
+                if (!SetText(tmpBaseItem.Name, baseitems2da[i].AsInteger("Name"))) continue;
+                SetText(tmpBaseItem.Description, baseitems2da[i].AsInteger("Description"));
+                SetText(tmpBaseItem.StatsText, baseitems2da[i].AsInteger("BaseItemStatRef"));
+                tmpBaseItem.Icon = AddIconResource(baseitems2da[i].AsString("DefaultIcon"));
+                tmpBaseItem.InventorySlotWidth = baseitems2da[i].AsInteger("InvSlotWidth") ?? 1;
+                tmpBaseItem.InventorySlotHeight = baseitems2da[i].AsInteger("InvSlotHeight") ?? 1;
+                tmpBaseItem.EquipableSlots = (InventorySlots)(baseitems2da[i].AsInteger("EquipableSlots") ?? 0);
+                tmpBaseItem.CanRotateIcon = baseitems2da[i].AsBoolean("CanRotateIcon");
+                tmpBaseItem.ModelType = (ItemModelType)Enum.ToObject(typeof(ItemModelType), baseitems2da[i].AsInteger("ModelType") ?? 0);
+                tmpBaseItem.ItemModel = baseitems2da[i].AsString("ItemClass") ?? "";
+                tmpBaseItem.GenderSpecific = baseitems2da[i].AsBoolean("GenderSpecific");
+                tmpBaseItem.Part1Alpha = baseitems2da[i].IsNull("Part1EnvMap") ? null : (AlphaChannelUsageType)Enum.ToObject(typeof(AlphaChannelUsageType), baseitems2da[i].AsInteger("Part1EnvMap") ?? 0);
+                tmpBaseItem.Part2Alpha = baseitems2da[i].IsNull("Part2EnvMap") ? null : (AlphaChannelUsageType)Enum.ToObject(typeof(AlphaChannelUsageType), baseitems2da[i].AsInteger("Part2EnvMap") ?? 0);
+                tmpBaseItem.Part3Alpha = baseitems2da[i].IsNull("Part3EnvMap") ? null : (AlphaChannelUsageType)Enum.ToObject(typeof(AlphaChannelUsageType), baseitems2da[i].AsInteger("Part3EnvMap") ?? 0);
+                tmpBaseItem.DefaultModel = baseitems2da[i].AsString("DefaultModel") ?? "";
+                tmpBaseItem.IsContainer = baseitems2da[i].AsBoolean("Container");
+                tmpBaseItem.WeaponWieldType = (WeaponWieldType)Enum.ToObject(typeof(WeaponWieldType), baseitems2da[i].AsInteger("WeaponWield") ?? 0);
+                tmpBaseItem.WeaponDamageType = (WeaponDamageType)Enum.ToObject(typeof(WeaponDamageType), baseitems2da[i].AsInteger("WeaponType") ?? 0);
+                tmpBaseItem.WeaponSize = baseitems2da[i].IsNull("WeaponSize") ? null : (WeaponSize)Enum.ToObject(typeof(WeaponSize), baseitems2da[i].AsInteger("WeaponSize") ?? 0);
+                tmpBaseItem.AmmunitionBaseItem = CreateRef<BaseItem>(baseitems2da[i].AsInteger("RangedWeapon"));
+                tmpBaseItem.PreferredAttackDistance = baseitems2da[i].AsFloat("PrefAttackDist");
+                tmpBaseItem.MinimumModelCount = baseitems2da[i].AsInteger("MinRange") ?? 10;
+                tmpBaseItem.MaximumModelCount = baseitems2da[i].AsInteger("MaxRange") ?? 100;
+                tmpBaseItem.DamageDiceCount = baseitems2da[i].AsInteger("NumDice");
+                tmpBaseItem.DamageDice = baseitems2da[i].AsInteger("DieToRoll");
+                tmpBaseItem.CriticalThreatRange = baseitems2da[i].AsInteger("CritThreat");
+                tmpBaseItem.CriticalMultiplier = baseitems2da[i].AsInteger("CritHitMult");
+                tmpBaseItem.Category = (ItemCategory)Enum.ToObject(typeof(ItemCategory), baseitems2da[i].AsInteger("Category") ?? 0);
+                tmpBaseItem.BaseCost = baseitems2da[i].AsFloat("BaseCost") ?? 0.0;
+                tmpBaseItem.MaxStackSize = baseitems2da[i].AsInteger("Stacking") ?? 1;
+                tmpBaseItem.ItemCostMultiplier = baseitems2da[i].AsFloat("ItemMultiplier") ?? 1.0;
+                tmpBaseItem.InventorySound = CreateRef<InventorySound>(baseitems2da[i].AsInteger("InvSoundType"));
+                tmpBaseItem.MaxSpellProperties = baseitems2da[i].AsInteger("MaxProps") ?? 8;
+                tmpBaseItem.MinSpellProperties = baseitems2da[i].AsInteger("MinProps") ?? 0;
+                tmpBaseItem.ItemPropertySet = CreateRef<ItemPropertySet>(baseitems2da[i].AsInteger("PropColumn"));
+                tmpBaseItem.StorePanel = baseitems2da[i].IsNull("StorePanel") ? null : (StorePanelType)Enum.ToObject(typeof(StorePanelType), baseitems2da[i].AsInteger("StorePanel") ?? 0);
+                tmpBaseItem.RequiredFeat1 = CreateRef<Feat>(baseitems2da[i].AsInteger("ReqFeat0"));
+                tmpBaseItem.RequiredFeat2 = CreateRef<Feat>(baseitems2da[i].AsInteger("ReqFeat1"));
+                tmpBaseItem.RequiredFeat3 = CreateRef<Feat>(baseitems2da[i].AsInteger("ReqFeat2"));
+                tmpBaseItem.RequiredFeat4 = CreateRef<Feat>(baseitems2da[i].AsInteger("ReqFeat3"));
+                tmpBaseItem.RequiredFeat5 = CreateRef<Feat>(baseitems2da[i].AsInteger("ReqFeat4"));
+                tmpBaseItem.ArmorClassType = baseitems2da[i].IsNull("AC_Enchant") ? null : (ArmorClassType)Enum.ToObject(typeof(ArmorClassType), baseitems2da[i].AsInteger("AC_Enchant") ?? 0);
+                tmpBaseItem.BaseShieldAC = baseitems2da[i].AsInteger("BaseAC") ?? 0;
+                tmpBaseItem.ArmorCheckPenalty = baseitems2da[i].AsInteger("ArmorCheckPen") ?? 0;
+                tmpBaseItem.DefaultChargeCount = baseitems2da[i].AsInteger("ChargesStarting") ?? 0;
+                tmpBaseItem.GroundModelRotation = (ItemModelRotation)Enum.ToObject(typeof(ItemModelRotation), baseitems2da[i].AsInteger("RotateOnGround") ?? 0);
+                tmpBaseItem.Weight = (baseitems2da[i].AsInteger("TenthLBS") ?? 0) / 10.0;
+                tmpBaseItem.WeaponSound = CreateRef<WeaponSound>(baseitems2da[i].AsInteger("WeaponMatType"));
+                tmpBaseItem.AmmunitionType = baseitems2da[i].IsNull("AmmunitionType") ? null : (AmmunitionType)Enum.ToObject(typeof(AmmunitionType), baseitems2da[i].AsInteger("AmmunitionType") ?? 0);
+                tmpBaseItem.QuickbarBehaviour = (QuickbarBehaviour)Enum.ToObject(typeof(QuickbarBehaviour), baseitems2da[i].AsInteger("QBBehaviour") ?? 0);
+                tmpBaseItem.ArcaneSpellFailure = baseitems2da[i].AsInteger("ArcaneSpellFailure");
+                tmpBaseItem.LeftSlashAnimationPercent = baseitems2da[i].AsInteger("%AnimSlashL");
+                tmpBaseItem.RightSlashAnimationPercent = baseitems2da[i].AsInteger("%AnimSlashR");
+                tmpBaseItem.StraightSlashAnimationPercent = baseitems2da[i].AsInteger("%AnimSlashS");
+                tmpBaseItem.StorePanelOrder = baseitems2da[i].AsInteger("StorePanelSort");
+                tmpBaseItem.ItemLevelRestrictionStackSize = baseitems2da[i].AsInteger("ILRStackSize") ?? 1;
+                tmpBaseItem.WeaponFocusFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("WeaponFocusFeat"));
+                tmpBaseItem.EpicWeaponFocusFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("EpicWeaponFocusFeat"));
+                tmpBaseItem.WeaponSpecializationFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("WeaponSpecializationFeat"));
+                tmpBaseItem.EpicWeaponSpecializationFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("EpicWeaponSpecializationFeat"));
+                tmpBaseItem.ImprovedCriticalFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("WeaponImprovedCriticalFeat"));
+                tmpBaseItem.OverwhelmingCriticalFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("EpicWeaponOverwhelmingCriticalFeat"));
+                tmpBaseItem.DevastatingCriticalFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("EpicWeaponDevastatingCriticalFeat"));
+                tmpBaseItem.WeaponOfChoiceFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("WeaponOfChoiceFeat"));
+                tmpBaseItem.IsMonkWeapon = baseitems2da[i].AsBoolean("IsMonkWeapon");
+                tmpBaseItem.WeaponFinesseMinimumCreatureSize = baseitems2da[i].IsNull("WeaponFinesseMinimumCreatureSize") ? null : (SizeCategory)Enum.ToObject(typeof(SizeCategory), baseitems2da[i].AsInteger("WeaponFinesseMinimumCreatureSize") ?? 0);
+
+                Standard.BaseItems.Add(tmpBaseItem);
+            }
+        }
+
+        private void ImportFeatsPTColumns(ItemPropertyTable table)
+        { 
+            table.CustomColumn01.Label = "Cost";
+            table.CustomColumn01.Column = "Cost";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(double));
+
+            table.CustomColumn02.Label = "Feat";
+            table.CustomColumn02.Column = "FeatIndex";
+            table.CustomColumn02.DataType = MasterRepository.GetDataTypeByType(typeof(Feat));
+        }
+
+        private void ImportFeatsPTValues(LineRecord record, ItemPropertyTableItem item)
+        {
+            item.CustomColumnValue01.Value = record.AsFloat("Cost");
+            item.CustomColumnValue02.Value = CreateRef<Feat>(record.AsInteger("FeatIndex"));
+        }
+
+        private void ImportSpellsPTColumns(ItemPropertyTable table)
+        {
+            table.CustomColumn01.Label = "Caster Level";
+            table.CustomColumn01.Column = "CasterLvl";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(int));
+
+            table.CustomColumn02.Label = "Innate Level";
+            table.CustomColumn02.Column = "InnateLvl";
+            table.CustomColumn02.DataType = MasterRepository.GetDataTypeByType(typeof(double));
+
+            table.CustomColumn03.Label = "Cost";
+            table.CustomColumn03.Column = "Cost";
+            table.CustomColumn03.DataType = MasterRepository.GetDataTypeByType(typeof(int));
+
+            table.CustomColumn04.Label = "Spell";
+            table.CustomColumn04.Column = "SpellIndex";
+            table.CustomColumn04.DataType = MasterRepository.GetDataTypeByType(typeof(Spell));
+
+            table.CustomColumn05.Label = "Potion";
+            table.CustomColumn05.Column = "PotionUse";
+            table.CustomColumn05.DataType = MasterRepository.GetDataTypeByType(typeof(bool));
+
+            table.CustomColumn06.Label = "Wand";
+            table.CustomColumn06.Column = "WandUse";
+            table.CustomColumn06.DataType = MasterRepository.GetDataTypeByType(typeof(bool));
+
+            table.CustomColumn07.Label = "General";
+            table.CustomColumn07.Column = "GeneralUse";
+            table.CustomColumn07.DataType = MasterRepository.GetDataTypeByType(typeof(bool));
+
+            table.CustomColumn08.Label = "Icon";
+            table.CustomColumn08.Column = "Icon";
+            table.CustomColumn08.DataType = MasterRepository.GetDataTypeById(new Guid("e4897c44-4117-45d4-b3fc-37b82fd88247")); // Resource Reference
+        }
+
+        private void ImportSpellsPTValues(LineRecord record, ItemPropertyTableItem item)
+        {
+            item.CustomColumnValue01.Value = record.AsInteger("CasterLvl");
+            item.CustomColumnValue02.Value = record.AsFloat("InnateLvl");
+            item.CustomColumnValue03.Value = record.AsInteger("Cost");
+            item.CustomColumnValue04.Value = CreateRef<Spell>(record.AsInteger("SpellIndex"));
+            item.CustomColumnValue05.Value = record.AsBoolean("PotionUse");
+            item.CustomColumnValue06.Value = record.AsBoolean("WandUse");
+            item.CustomColumnValue07.Value = record.AsBoolean("GeneralUse");
+            item.CustomColumnValue08.Value = record.AsString("Icon");
+        }
+
+        private void ImportDamageTypesPTColumns(ItemPropertyTable table)
+        {
+            table.CustomColumn01.Label = "Cost";
+            table.CustomColumn01.Column = "Cost";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(double));
+
+            table.CustomColumn02.Label = "VisualFX";
+            table.CustomColumn02.Column = "VisualFX";
+            table.CustomColumn02.DataType = MasterRepository.GetDataTypeByType(typeof(int)); // ! iprp_visualfx --> PAIN
+        }
+
+        private void ImportDamageTypesPTValues(LineRecord record, ItemPropertyTableItem item)
+        {
+            item.CustomColumnValue01.Value = record.AsFloat("Cost");
+            item.CustomColumnValue02.Value = record.AsInteger("VisualFX"); // ! iprp_visualfx --> PAIN
+        }
+
+        private void ImportCostOnlyPTColumns(ItemPropertyTable table)
+        {
+            table.CustomColumn01.Label = "Cost";
+            table.CustomColumn01.Column = "Cost";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(double));
+        }
+
+        private void ImportCostOnlyPTValues(LineRecord record, ItemPropertyTableItem item)
+        {
+            item.CustomColumnValue01.Value = record.AsFloat("Cost");
+        }
+
+        private void ImportOnHitPTColumns(ItemPropertyTable table)
+        {
+            table.CustomColumn01.Label = "Cost";
+            table.CustomColumn01.Column = "Cost";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(double));
+
+            table.CustomColumn02.Label = "Param Table";
+            table.CustomColumn02.Column = "Param1ResRef";
+            table.CustomColumn02.DataType = MasterRepository.GetDataTypeByType(typeof(ItemPropertyParam));
+        }
+
+        private void ImportOnHitPTValues(LineRecord record, ItemPropertyTableItem item)
+        {
+            item.CustomColumnValue01.Value = record.AsFloat("Cost");
+            item.CustomColumnValue02.Value = CreateRef<ItemPropertyParam>(record.AsInteger("Param1ResRef"));
+        }
+
+        private void ImportSpellSchoolPTColumns(ItemPropertyTable table)
+        {
+            table.CustomColumn01.Label = "Cost";
+            table.CustomColumn01.Column = "Cost";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(double));
+
+            table.CustomColumn02.Label = "Letter";
+            table.CustomColumn02.Column = "Letter";
+            table.CustomColumn02.DataType = MasterRepository.GetDataTypeByType(typeof(string));
+        }
+
+        private void ImportSpellSchoolPTValues(LineRecord record, ItemPropertyTableItem item)
+        {
+            item.CustomColumnValue01.Value = record.AsFloat("Cost");
+            item.CustomColumnValue02.Value = record.AsString("Letter");
+        }
+
+        private void ImportAmmoTypePTColumns(ItemPropertyTable table)
+        {
+            table.CustomColumn01.Label = "AmmoType";
+            table.CustomColumn01.Column = "AmmoType";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(BaseItem));
+        }
+
+        private void ImportAmmoTypePTValues(LineRecord record, ItemPropertyTableItem item)
+        {
+            item.CustomColumnValue01.Value = CreateRef<BaseItem>(record.AsInteger("AmmoType"));
+        }
+
+        private void ImportMonsterHitPTColumns(ItemPropertyTable table)
+        {
+            table.CustomColumn01.Label = "Cost";
+            table.CustomColumn01.Column = "Cost";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(double));
+
+            table.CustomColumn02.Label = "Param1 Table";
+            table.CustomColumn02.Column = "Param1ResRef";
+            table.CustomColumn02.DataType = MasterRepository.GetDataTypeByType(typeof(ItemPropertyParam));
+
+            table.CustomColumn03.Label = "Param2 Table";
+            table.CustomColumn03.Column = "Param2ResRef";
+            table.CustomColumn03.DataType = MasterRepository.GetDataTypeByType(typeof(ItemPropertyParam));
+        }
+
+        private void ImportMonsterHitPTValues(LineRecord record, ItemPropertyTableItem item)
+        {
+            item.CustomColumnValue01.Value = record.AsFloat("Cost");
+            item.CustomColumnValue02.Value = CreateRef<ItemPropertyParam>(record.AsInteger("Param1ResRef"));
+            item.CustomColumnValue03.Value = CreateRef<ItemPropertyParam>(record.AsInteger("Param2ResRef"));
+        }
+
+        private void ImportOnHitSpellPTColumns(ItemPropertyTable table)
+        {
+            table.CustomColumn01.Label = "SpellIndex";
+            table.CustomColumn01.Column = "SpellIndex";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(Spell));
+
+            table.CustomColumn02.Label = "Cost";
+            table.CustomColumn02.Column = "Cost";
+            table.CustomColumn02.DataType = MasterRepository.GetDataTypeByType(typeof(double));
+        }
+
+        private void ImportOnHitSpellPTValues(LineRecord record, ItemPropertyTableItem item)
+        {
+            item.CustomColumnValue01.Value = CreateRef<Spell>(record.AsInteger("SpellIndex"));
+            item.CustomColumnValue02.Value = record.AsFloat("Cost");
+        }
+
+        private void ImportVisualFXPTColumns(ItemPropertyTable table)
+        {
+            table.CustomColumn01.Label = "Model Suffix";
+            table.CustomColumn01.Column = "ModelSuffix";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeById(new Guid("e4897c44-4117-45d4-b3fc-37b82fd88247")); // Resource Reference
+        }
+
+        private void ImportVisualFXPTValues(LineRecord record, ItemPropertyTableItem item)
+        {
+            item.CustomColumnValue01.Value = record.AsString("ModelSuffix");
+        }
+
+        private void ImportOnHitDurPTColumns(ItemPropertyTable table)
+        {
+            table.CustomColumn01.Label = "Cost";
+            table.CustomColumn01.Column = "Cost";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(double));
+
+            table.CustomColumn02.Label = "Effect Chance";
+            table.CustomColumn02.Column = "EffectChance";
+            table.CustomColumn02.DataType = MasterRepository.GetDataTypeByType(typeof(int));
+
+            table.CustomColumn03.Label = "Duration (Rounds)";
+            table.CustomColumn03.Column = "DurationRounds";
+            table.CustomColumn03.DataType = MasterRepository.GetDataTypeByType(typeof(int));
+        }
+
+        private void ImportOnHitDurPTValues(LineRecord record, ItemPropertyTableItem item)
+        {
+            item.CustomColumnValue01.Value = record.AsFloat("Cost");
+            item.CustomColumnValue02.Value = record.AsInteger("EffectChance");
+            item.CustomColumnValue03.Value = record.AsInteger("DurationRounds");
+        }
+
+        private void ImportWeightIncPTColumns(ItemPropertyTable table)
+        {
+            table.CustomColumn01.Label = "Value";
+            table.CustomColumn01.Column = "Value";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(int));
+        }
+
+        private void ImportWeightIncPTValues(LineRecord record, ItemPropertyTableItem item)
+        {
+            item.CustomColumnValue01.Value = record.AsInteger("Value");
+        }
+
+        private void ImportItemPropertyTable(string tablename, Guid guid)
+        {
+            if (!tablename.StartsWith("iprp_", StringComparison.OrdinalIgnoreCase)) return;
+            if (((ItemPropertyTableRepository)Standard.ItemPropertyTables).Contains(tablename)) return;
+
+            var iprpTable2da = Load2da(tablename.ToLower());
+
+            var iprpTable = new ItemPropertyTable();
+            iprpTable.ID = guid;
+            iprpTable.Name = tablename;
+
+            switch (tablename.ToLower())
+            {
+                case "iprp_feats":
+                    ImportFeatsPTColumns(iprpTable);
+                    break;
+                case "iprp_spells":
+                    ImportSpellsPTColumns(iprpTable);
+                    break;
+                case "iprp_damagetype":
+                    ImportDamageTypesPTColumns(iprpTable);
+                    break;
+                case "iprp_protection":
+                case "iprp_immunity":
+                case "iprp_saveelement":
+                case "iprp_traps":
+                    ImportCostOnlyPTColumns(iprpTable);
+                    break;
+                case "iprp_onhit":
+                    ImportOnHitPTColumns(iprpTable);
+                    break;
+                case "iprp_spellshl":
+                    ImportSpellSchoolPTColumns(iprpTable);
+                    break;
+                case "iprp_ammotype":
+                    ImportAmmoTypePTColumns(iprpTable);
+                    break;
+                case "iprp_monsterhit":
+                    ImportMonsterHitPTColumns(iprpTable);
+                    break;
+                case "iprp_onhitspell":
+                    ImportOnHitSpellPTColumns(iprpTable);
+                    break;
+                case "iprp_visualfx":
+                    ImportVisualFXPTColumns(iprpTable);
+                    break;
+                case "iprp_onhitdur":
+                    ImportOnHitDurPTColumns(iprpTable);
+                    break;
+                case "iprp_weightinc":
+                    ImportWeightIncPTColumns(iprpTable);
+                    break;
+            }
+
+            iprpTable.Clear();
+            for (int i = 0; i < iprpTable2da.Count; i++)
+            {
+                var tmpItem = new ItemPropertyTableItem(iprpTable);
+                if (iprpTable2da.Columns.IndexOf("Label") != -1)
+                    tmpItem.SourceLabel = iprpTable2da[i].AsString("Label") ?? "";
+
+                SetText(tmpItem.Name, iprpTable2da[i].AsInteger("Name"));
+                switch (tablename.ToLower())
+                {
+                    case "iprp_feats":
+                        ImportFeatsPTValues(iprpTable2da[i], tmpItem);
+                        break;
+                    case "iprp_spells":
+                        ImportSpellsPTValues(iprpTable2da[i], tmpItem);
+                        break;
+                    case "iprp_damagetype":
+                        ImportDamageTypesPTValues(iprpTable2da[i], tmpItem);
+                        break;
+                    case "iprp_protection":
+                    case "iprp_immunity":
+                    case "iprp_saveelement":
+                    case "iprp_traps":
+                        ImportCostOnlyPTValues(iprpTable2da[i], tmpItem);
+                        break;
+                    case "iprp_onhit":
+                        ImportOnHitPTValues(iprpTable2da[i], tmpItem);
+                        break;
+                    case "iprp_spellshl":
+                        ImportSpellSchoolPTValues(iprpTable2da[i], tmpItem);
+                        break;
+                    case "iprp_ammotype":
+                        ImportAmmoTypePTValues(iprpTable2da[i], tmpItem);
+                        break;
+                    case "iprp_monsterhit":
+                        ImportMonsterHitPTValues(iprpTable2da[i], tmpItem);
+                        break;
+                    case "iprp_onhitspell":
+                        ImportOnHitSpellPTValues(iprpTable2da[i], tmpItem);
+                        break;
+                    case "iprp_visualfx":
+                        ImportVisualFXPTValues(iprpTable2da[i], tmpItem);
+                        break;
+                    case "iprp_onhitdur":
+                        ImportOnHitDurPTValues(iprpTable2da[i], tmpItem);
+                        break;
+                    case "iprp_weightinc":
+                        ImportWeightIncPTValues(iprpTable2da[i], tmpItem);
+                        break;
+                }
+
+                iprpTable.Add(tmpItem);
+            }
+
+            Standard.ItemPropertyTables.Add(iprpTable);
+        }
+
+        private void ImportItemProperties()
+        {
+            var itemprops2da = Load2da("itemprops");
+
+            Standard.ItemPropertySets.Clear();
+            for (int i = 0; i < itemprops2da.Columns.Count; i++)
+            {
+                var match = Regex.Match(itemprops2da.Columns[i], "^([0-9]+)_(\\w+)$");
+                if (match.Success)
+                {
+                    int number = int.Parse(match.Groups[1].Value);
+
+                    var tmpItemPropertySet = new ItemPropertySet();
+                    tmpItemPropertySet.ID = GenerateGuid("propertysets", number);
+                    tmpItemPropertySet.Index = number;
+                    tmpItemPropertySet.Name = match.Groups[2].Value;
+
+                    for (int j = 0; j < itemprops2da.Count; j++)
+                    {
+                        if (itemprops2da[j].AsBoolean(i))
+                        {
+                            var item = new ItemPropertySetEntry(tmpItemPropertySet);
+                            item.ItemProperty = CreateRef<ItemProperty>(j);
+
+                            tmpItemPropertySet.ItemProperties.Add(item);
+                        }
+                    }
+
+                    Standard.ItemPropertySets.Add(tmpItemPropertySet);
+                }
+            }
+
+            var itempropdef2da = Load2da("itempropdef");
+            Standard.ItemProperties.Clear();
+            for (int i = 0; i < itempropdef2da.Count; i++)
+            {
+                var tmpItemProperty = new ItemProperty();
+                tmpItemProperty.ID = GenerateGuid("itempropdef", i);
+                tmpItemProperty.Index = i;
+                tmpItemProperty.SourceLabel = itempropdef2da[i].AsString("Label");
+
+                if (!SetText(tmpItemProperty.Name, itempropdef2da[i].AsInteger("Name"))) continue;
+                SetText(tmpItemProperty.PropertyText, itempropdef2da[i].AsInteger("GameStrRef"));
+                SetText(tmpItemProperty.Description, itempropdef2da[i].AsInteger("Description"));
+                tmpItemProperty.Cost = itempropdef2da[i].AsFloat("Cost") ?? 1.0;
+
+                // SubTypes
+                tmpItemProperty.SubTypeResRef = itempropdef2da[i].AsString("SubTypeResRef") ?? "";
+                if (tmpItemProperty.SubTypeResRef != null)
+                {
+                    var subTypeTableGuid = GenerateGuid(tmpItemProperty.SubTypeResRef.ToLower(), 0);
+                    if (!Standard.ItemPropertyTables.Contains(subTypeTableGuid))
+                        ImportItemPropertyTable(tmpItemProperty.SubTypeResRef, subTypeTableGuid);
+                    tmpItemProperty.SubType = Standard.ItemPropertyTables.GetByID(subTypeTableGuid);
+                }
+
+                tmpItemProperty.CostTable = CreateRef<ItemPropertyCostTable>(itempropdef2da[i].AsInteger("CostTableResRef"));
+                tmpItemProperty.Param = CreateRef<ItemPropertyParam>(itempropdef2da[i].AsInteger("Param1ResRef"));
+
+                Standard.ItemProperties.Add(tmpItemProperty);
+            }
+        }
+
+        private void ImportValueOnlyCTColumns(ItemPropertyCostTable table)
+        {
+            table.CustomColumn01.Label = "Value";
+            table.CustomColumn01.Column = "Value";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(int));
+        }
+
+        private void ImportValueOnlyCTValues(LineRecord record, ItemPropertyCostTableItem item)
+        {
+            item.CustomColumnValue01.Value = record.AsInteger("Value");
+        }
+
+        private void ImportMeleeCostCTColumns(ItemPropertyCostTable table)
+        {
+            table.CustomColumn01.Label = "Value";
+            table.CustomColumn01.Column = "Value";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(int));
+
+            table.CustomColumn02.Label = "VFX";
+            table.CustomColumn02.Column = "VFX";
+            table.CustomColumn02.DataType = MasterRepository.GetDataTypeByType(typeof(bool));
+        }
+
+        private void ImportMeleeCostCTValues(LineRecord record, ItemPropertyCostTableItem item)
+        {
+            item.CustomColumnValue01.Value = record.AsInteger("Value");
+            item.CustomColumnValue02.Value = record.AsBoolean("VFX");
+        }
+
+        private void ImportChargeCostCTColumns(ItemPropertyCostTable table)
+        {
+            table.CustomColumn01.Label = "Potion";
+            table.CustomColumn01.Column = "PotionCost";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(bool));
+
+            table.CustomColumn02.Label = "Wand";
+            table.CustomColumn02.Column = "WandCost";
+            table.CustomColumn02.DataType = MasterRepository.GetDataTypeByType(typeof(bool));
+        }
+
+        private void ImportChargeCostCTValues(LineRecord record, ItemPropertyCostTableItem item)
+        {
+            item.CustomColumnValue01.Value = record.AsBoolean("PotionCost");
+            item.CustomColumnValue02.Value = record.AsBoolean("WandCost");
+        }
+
+        private void ImportDamageCostCTColumns(ItemPropertyCostTable table)
+        {
+            table.CustomColumn01.Label = "#Dice";
+            table.CustomColumn01.Column = "NumDice";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(int));
+
+            table.CustomColumn02.Label = "Die";
+            table.CustomColumn02.Column = "Die";
+            table.CustomColumn02.DataType = MasterRepository.GetDataTypeByType(typeof(int));
+
+            table.CustomColumn03.Label = "Rank";
+            table.CustomColumn03.Column = "Rank";
+            table.CustomColumn03.DataType = MasterRepository.GetDataTypeByType(typeof(int));
+
+            table.CustomColumn04.Label = "Ingame Text";
+            table.CustomColumn04.Column = "GameString";
+            table.CustomColumn04.DataType = MasterRepository.GetDataTypeByType(typeof(TLKStringSet));
+
+            table.CustomColumn05.Label = "VFX";
+            table.CustomColumn05.Column = "VFX";
+            table.CustomColumn05.DataType = MasterRepository.GetDataTypeByType(typeof(bool));
+        }
+
+        private void ImportDamageCostCTValues(LineRecord record, ItemPropertyCostTableItem item)
+        {
+            
+            item.CustomColumnValue01.Value = record.AsInteger("NumDice");
+            item.CustomColumnValue02.Value = record.AsInteger("Die");
+            item.CustomColumnValue03.Value = record.AsInteger("Rank");
+
+            var gameStr = record.AsInteger("GameString");
+            if (gameStr != null)
+            {
+                var tlkGameStr = new TLKStringSet();
+                SetText(tlkGameStr, gameStr);
+                item.CustomColumnValue04.Value = tlkGameStr;
+            }
+             
+            item.CustomColumnValue05.Value = record.AsBoolean("VFX");
+        }
+
+        private void ImportAmountOnlyCTColumns(ItemPropertyCostTable table)
+        {
+            table.CustomColumn01.Label = "Amount";
+            table.CustomColumn01.Column = "Amount";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(int));
+        }
+
+        private void ImportAmountOnlyCTValues(LineRecord record, ItemPropertyCostTableItem item)
+        {
+            item.CustomColumnValue01.Value = record.AsInteger("Amount");
+        }
+
+        private void ImportFloatValueOnlyCTColumns(ItemPropertyCostTable table)
+        {
+            table.CustomColumn01.Label = "Value";
+            table.CustomColumn01.Column = "Value";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(double));
+        }
+
+        private void ImportFloatValueOnlyCTValues(LineRecord record, ItemPropertyCostTableItem item)
+        {
+            item.CustomColumnValue01.Value = record.AsFloat("Value");
+        }
+
+        private void ImportAmmoCostCTColumns(ItemPropertyCostTable table)
+        {
+            table.CustomColumn01.Label = "Arrow Blueprint";
+            table.CustomColumn01.Column = "Arrow";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeById(new Guid("e4897c44-4117-45d4-b3fc-37b82fd88247")); // Resource Reference
+
+            table.CustomColumn02.Label = "Bolt Blueprint";
+            table.CustomColumn02.Column = "Bolt";
+            table.CustomColumn02.DataType = MasterRepository.GetDataTypeById(new Guid("e4897c44-4117-45d4-b3fc-37b82fd88247")); // Resource Reference
+
+            table.CustomColumn03.Label = "Bullet Blueprint";
+            table.CustomColumn03.Column = "Bullet";
+            table.CustomColumn03.DataType = MasterRepository.GetDataTypeById(new Guid("e4897c44-4117-45d4-b3fc-37b82fd88247")); // Resource Reference
+        }
+
+        private void ImportAmmoCostCTValues(LineRecord record, ItemPropertyCostTableItem item)
+        {
+            item.CustomColumnValue01.Value = record.AsString("Arrow");
+            item.CustomColumnValue02.Value = record.AsString("Bolt");
+            item.CustomColumnValue03.Value = record.AsString("Bullet");
+        }
+
+        private void ImportSpellCostCTColumns(ItemPropertyCostTable table)
+        {
+            table.CustomColumn01.Label = "Spell";
+            table.CustomColumn01.Column = "SpellIndex";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(Spell));
+        }
+
+        private void ImportSpellCostCTValues(LineRecord record, ItemPropertyCostTableItem item)
+        {
+            item.CustomColumnValue01.Value = CreateRef<Spell>(record.AsInteger("SpellIndex"));
+        }
+
+        private void ImportTrapCostCTColumns(ItemPropertyCostTable table)
+        {
+            table.CustomColumn01.Label = "Minor";
+            table.CustomColumn01.Column = "Minor";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(Trap));
+
+            table.CustomColumn02.Label = "Average";
+            table.CustomColumn02.Column = "Average";
+            table.CustomColumn02.DataType = MasterRepository.GetDataTypeByType(typeof(Trap));
+
+            table.CustomColumn03.Label = "Strong";
+            table.CustomColumn03.Column = "Strong";
+            table.CustomColumn03.DataType = MasterRepository.GetDataTypeByType(typeof(Trap));
+
+            table.CustomColumn04.Label = "Deadly";
+            table.CustomColumn04.Column = "Deadly";
+            table.CustomColumn04.DataType = MasterRepository.GetDataTypeByType(typeof(Trap));
+
+            table.CustomColumn05.Label = "Epic";
+            table.CustomColumn05.Column = "Epic";
+            table.CustomColumn05.DataType = MasterRepository.GetDataTypeByType(typeof(Trap));
+        }
+
+        private void ImportTrapCostCTValues(LineRecord record, ItemPropertyCostTableItem item)
+        {
+            item.CustomColumnValue01.Value = CreateRef<Trap>(record.AsInteger("Minor"));
+            item.CustomColumnValue02.Value = CreateRef<Trap>(record.AsInteger("Average"));
+            item.CustomColumnValue03.Value = CreateRef<Trap>(record.AsInteger("Strong"));
+            item.CustomColumnValue04.Value = CreateRef<Trap>(record.AsInteger("Deadly"));
+            item.CustomColumnValue05.Value = CreateRef<Trap>(record.AsInteger("Epic"));
+        }
+
+        private void ImportMonstCostCTColumns(ItemPropertyCostTable table)
+        {
+            table.CustomColumn01.Label = "#Dice";
+            table.CustomColumn01.Column = "NumDice";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(int));
+
+            table.CustomColumn02.Label = "Die";
+            table.CustomColumn02.Column = "Die";
+            table.CustomColumn02.DataType = MasterRepository.GetDataTypeByType(typeof(int));
+        }
+
+        private void ImportMonstCostCTValues(LineRecord record, ItemPropertyCostTableItem item)
+        {
+
+            item.CustomColumnValue01.Value = record.AsInteger("NumDice");
+            item.CustomColumnValue02.Value = record.AsInteger("Die");
+        }
+
+        private void ImportItemPropertyCostTables()
+        {
+            var costTable2da = Load2da("iprp_costtable");
+            Standard.ItemPropertyCostTables.Clear();
+            for (int i = 0; i < costTable2da.Count; i++)
+            {
+                var tmpCostTable = new ItemPropertyCostTable();
+                tmpCostTable.ID = GenerateGuid("iprp_costtable", i);
+                tmpCostTable.Index = i;
+                tmpCostTable.SourceLabel = costTable2da[i].AsString("Label");
+
+                if (costTable2da[i].IsNull("Name")) continue;
+                tmpCostTable.Name = costTable2da[i].AsString("Name") ?? "";
+                tmpCostTable.ClientLoad = costTable2da[i].AsBoolean("ClientLoad");
+
+                var costPropTable2da = Load2da(tmpCostTable.Name);
+
+                switch (tmpCostTable.Name.ToLower())
+                {
+                    case "iprp_bonuscost":
+                    case "iprp_immuncost":
+                    case "iprp_srcost":
+                    case "iprp_neg5cost":
+                    case "iprp_neg10cost":
+                    case "iprp_damvulcost":
+                    case "iprp_onhitcost":
+                    case "iprp_skillcost":
+                    case "iprp_arcspell":
+                        ImportValueOnlyCTColumns(tmpCostTable);
+                        break;
+                    case "iprp_meleecost":
+                        ImportMeleeCostCTColumns(tmpCostTable);
+                        break;
+                    case "iprp_chargecost":
+                        ImportChargeCostCTColumns(tmpCostTable);
+                        break;
+                    case "iprp_damagecost":
+                        ImportDamageCostCTColumns(tmpCostTable);
+                        break;
+                    case "iprp_soakcost":
+                    case "iprp_resistcost":
+                        ImportAmountOnlyCTColumns(tmpCostTable);
+                        break;
+                    case "iprp_weightcost":
+                    case "iprp_redcost":
+                        ImportFloatValueOnlyCTColumns(tmpCostTable);
+                        break;
+                    case "iprp_ammocost":
+                        ImportAmmoCostCTColumns(tmpCostTable);
+                        break;
+                    case "iprp_spellcost":
+                        ImportSpellCostCTColumns(tmpCostTable);
+                        break;
+                    case "iprp_trapcost":
+                        ImportTrapCostCTColumns(tmpCostTable);
+                        break;
+                    case "iprp_monstcost":
+                        ImportMonstCostCTColumns(tmpCostTable);
+                        break;
+                }
+
+                tmpCostTable.Clear();
+                for (int j = 0; j < costPropTable2da.Count; j++)
+                {
+                    var tmpItem = new ItemPropertyCostTableItem(tmpCostTable);
+                    if (costPropTable2da.Columns.IndexOf("Label") != -1)
+                        tmpItem.SourceLabel = costPropTable2da[j].AsString("Label") ?? "";
+
+                    SetText(tmpItem.Name, costPropTable2da[j].AsInteger("Name"));
+                    tmpItem.Cost = costPropTable2da[j].AsFloat("Cost") ?? 1.0;
+                    switch (tmpCostTable.Name.ToLower())
+                    {
+                        case "iprp_bonuscost":
+                        case "iprp_immuncost":
+                        case "iprp_srcost":
+                        case "iprp_neg5cost":
+                        case "iprp_neg10cost":
+                        case "iprp_damvulcost":
+                        case "iprp_onhitcost":
+                        case "iprp_skillcost":
+                        case "iprp_arcspell":
+                            ImportValueOnlyCTValues(costPropTable2da[j], tmpItem);
+                            break;
+                        case "iprp_meleecost":
+                            ImportMeleeCostCTValues(costPropTable2da[j], tmpItem);
+                            break;
+                        case "iprp_chargecost":
+                            ImportChargeCostCTValues(costPropTable2da[j], tmpItem);
+                            break;
+                        case "iprp_damagecost":
+                            ImportDamageCostCTValues(costPropTable2da[j], tmpItem);
+                            break;
+                        case "iprp_soakcost":
+                        case "iprp_resistcost":
+                            ImportAmountOnlyCTValues(costPropTable2da[j], tmpItem);
+                            break;
+                        case "iprp_weightcost":
+                        case "iprp_redcost":
+                            ImportFloatValueOnlyCTValues(costPropTable2da[j], tmpItem);
+                            break;
+                        case "iprp_ammocost":
+                            ImportAmmoCostCTValues(costPropTable2da[j], tmpItem);
+                            break;
+                        case "iprp_spellcost":
+                            ImportSpellCostCTValues(costPropTable2da[j], tmpItem);
+                            break;
+                        case "iprp_trapcost":
+                            ImportTrapCostCTValues(costPropTable2da[j], tmpItem);
+                            break;
+                        case "iprp_monstcost":
+                            ImportMonstCostCTValues(costPropTable2da[j], tmpItem);
+                            break;
+                    }
+
+                    tmpCostTable.Add(tmpItem);
+                }
+
+                Standard.ItemPropertyCostTables.Add(tmpCostTable);
+            }
+        }
+
+        private void ImportItemPropertyParams()
+        {
+            var paramTable2da = Load2da("iprp_paramtable");
+            Standard.ItemPropertyParams.Clear();
+            for (int i = 0; i < paramTable2da.Count; i++)
+            {
+                var tmpParam = new ItemPropertyParam();
+                tmpParam.ID = GenerateGuid("iprp_paramtable", i);
+                tmpParam.Index = i;
+                tmpParam.SourceLabel = paramTable2da[i].AsString("Lable");
+
+                if (!SetText(tmpParam.Name, paramTable2da[i].AsInteger("Name"))) continue;
+
+                tmpParam.TableResRef = paramTable2da[i].AsString("TableResRef") ?? "";
+                if (tmpParam.TableResRef != "")
+                {
+                    var paramTableGuid = GenerateGuid(tmpParam.TableResRef.ToLower(), 0);
+                    if (!Standard.ItemPropertyTables.Contains(paramTableGuid))
+                        ImportItemPropertyTable(tmpParam.TableResRef, paramTableGuid);
+                    tmpParam.ItemPropertyTable = Standard.ItemPropertyTables.GetByID(paramTableGuid);
+                }
+
+                Standard.ItemPropertyParams.Add(tmpParam);
             }
         }
 
@@ -1040,6 +1873,7 @@ namespace Eos.Services
                 var tmpFeat = new Feat();
                 tmpFeat.ID = GenerateGuid("feat", i);
                 tmpFeat.Index = i;
+                tmpFeat.SourceLabel = feat2da[i].AsString("LABEL");
 
                 if (!SetText(tmpFeat.Name, feat2da[i].AsInteger("FEAT")))
                 {
@@ -1100,6 +1934,7 @@ namespace Eos.Services
                 var tmpSpell = new Spell();
                 tmpSpell.ID = GenerateGuid("spells", i);
                 tmpSpell.Index = i;
+                tmpSpell.SourceLabel = spells2da[i].AsString("Label");
 
                 if (!SetText(tmpSpell.Name, spells2da[i].AsInteger("Name"))) continue;
                 SetText(tmpSpell.Description, spells2da[i].AsInteger("SpellDesc"));
@@ -1177,7 +2012,6 @@ namespace Eos.Services
                     }
                 }
 
-
                 Standard.Spells.Add(tmpSpell);
             }
             Standard.Spells.EndUpdate();
@@ -1193,6 +2027,7 @@ namespace Eos.Services
                 var tmpDisease = new Disease();
                 tmpDisease.ID = GenerateGuid("disease", i);
                 tmpDisease.Index = i;
+                tmpDisease.SourceLabel = disease2da[i].AsString("Label");
 
                 if (!SetText(tmpDisease.Name, disease2da[i].AsInteger("Name"))) continue;
 
@@ -1225,6 +2060,7 @@ namespace Eos.Services
                 var tmpPoison = new Poison();
                 tmpPoison.ID = GenerateGuid("poison", i);
                 tmpPoison.Index = i;
+                tmpPoison.SourceLabel = poison2da[i].AsString("Label");
 
                 if (!SetText(tmpPoison.Name, poison2da[i].AsInteger("Name"))) continue;
 
@@ -1246,6 +2082,88 @@ namespace Eos.Services
             }
         }
 
+        private void ImportPackageSpellPreferences(string tablename, Guid guid)
+        {
+            var spellPreference2da = Load2da(tablename.ToLower());
+
+            var packageSpellPrefs = new PackageSpellPreferencesTable();
+            packageSpellPrefs.ID = guid;
+            packageSpellPrefs.Name = tablename;
+
+            packageSpellPrefs.Items.Clear();
+            for (int i = 0; i < spellPreference2da.Count; i++)
+            {
+                var tmpItem = new PackageSpellPreferencesTableItem();
+                tmpItem.ParentTable = packageSpellPrefs;
+                tmpItem.SourceLabel = spellPreference2da[i].AsString("Label") ?? "";
+                tmpItem.Spell = CreateRef<Spell>(spellPreference2da[i].AsInteger("SpellIndex"));
+                packageSpellPrefs.Items.Add(tmpItem);
+            }
+
+            Standard.SpellPreferencesTables.Add(packageSpellPrefs);
+        }
+
+        private void ImportPackageFeatPreferences(string tablename, Guid guid)
+        {
+            var featPreference2da = Load2da(tablename.ToLower());
+
+            var packageFeatPrefs = new PackageFeatPreferencesTable();
+            packageFeatPrefs.ID = guid;
+            packageFeatPrefs.Name = tablename;
+
+            packageFeatPrefs.Items.Clear();
+            for (int i = 0; i < featPreference2da.Count; i++)
+            {
+                var tmpItem = new PackageFeatPreferencesTableItem();
+                tmpItem.ParentTable = packageFeatPrefs;
+                tmpItem.SourceLabel = featPreference2da[i].AsString("Label") ?? "";
+                tmpItem.Feat = CreateRef<Feat>(featPreference2da[i].AsInteger("FeatIndex"));
+                packageFeatPrefs.Items.Add(tmpItem);
+            }
+
+            Standard.FeatPreferencesTables.Add(packageFeatPrefs);
+        }
+
+        private void ImportPackageSkillPreferences(string tablename, Guid guid)
+        {
+            var skillPreference2da = Load2da(tablename.ToLower());
+
+            var packageSkillPrefs = new PackageSkillPreferencesTable();
+            packageSkillPrefs.ID = guid;
+            packageSkillPrefs.Name = tablename;
+
+            packageSkillPrefs.Items.Clear();
+            for (int i = 0; i < skillPreference2da.Count; i++)
+            {
+                var tmpItem = new PackageSkillPreferencesTableItem();
+                tmpItem.ParentTable = packageSkillPrefs;
+                tmpItem.Skill = CreateRef<Skill>(skillPreference2da[i].AsInteger("SkillIndex"));
+                packageSkillPrefs.Items.Add(tmpItem);
+            }
+
+            Standard.SkillPreferencesTables.Add(packageSkillPrefs);
+        }
+
+        private void ImportPackageEquipmentTable(string tablename, Guid guid)
+        {
+            var packageEquipment2da = Load2da(tablename.ToLower());
+
+            var packageEquipment = new PackageEquipmentTable();
+            packageEquipment.ID = guid;
+            packageEquipment.Name = tablename;
+
+            packageEquipment.Items.Clear();
+            for (int i = 0; i < packageEquipment2da.Count; i++)
+            {
+                var tmpItem = new PackageEquipmentTableItem();
+                tmpItem.ParentTable = packageEquipment;
+                tmpItem.BlueprintResRef = packageEquipment2da[i].AsString("Label") ?? "";
+                packageEquipment.Items.Add(tmpItem);
+            }
+
+            Standard.PackageEquipmentTables.Add(packageEquipment);
+        }
+
         private void ImportClassPackages()
         {
             var packages2da = Load2da("packages");
@@ -1256,6 +2174,7 @@ namespace Eos.Services
                 var tmpPackage = new ClassPackage();
                 tmpPackage.ID = GenerateGuid("packages", i);
                 tmpPackage.Index = i;
+                tmpPackage.SourceLabel = packages2da[i].AsString("Label");
 
                 if (!SetText(tmpPackage.Name, packages2da[i].AsInteger("Name"))) continue;
                 SetText(tmpPackage.Description, packages2da[i].AsInteger("Description"));
@@ -1266,11 +2185,49 @@ namespace Eos.Services
                 tmpPackage.SpellSchool = !packages2da[i].IsNull("School") ? (SpellSchool)Enum.ToObject(typeof(SpellSchool), packages2da[i].AsInteger("School") ?? 0) : null;
                 tmpPackage.Domain1 = CreateRef<Domain>(packages2da[i].AsInteger("Domain1", -1));
                 tmpPackage.Domain2 = CreateRef<Domain>(packages2da[i].AsInteger("Domain2", -1));
-                tmpPackage.Associate = IntPtr.Zero; // ! (Associate)
-                tmpPackage.SpellPreferences = IntPtr.Zero; // ! (SpellPref2DA)
-                tmpPackage.FeatPreferences = IntPtr.Zero; // ! (FeatPref2DA)
-                tmpPackage.SkillPreferences = IntPtr.Zero; // ! (SkillPref2DA)
-                tmpPackage.StartingEquipment = IntPtr.Zero; // ! (Equip2DA)
+                tmpPackage.AssociateCompanion = CreateRef<Companion>(packages2da[i].AsInteger("Associate", -1));
+                tmpPackage.AssociateFamiliar = CreateRef<Familiar>(packages2da[i].AsInteger("Associate", -1));
+
+                // Spell Preferences
+                var spellPreferences = packages2da[i].AsString("SpellPref2DA");
+                if (spellPreferences != null)
+                {
+                    var spellPreferencesGuid = GenerateGuid(spellPreferences.ToLower(), 0);
+                    if (!Standard.SpellPreferencesTables.Contains(spellPreferencesGuid))
+                        ImportPackageSpellPreferences(spellPreferences, spellPreferencesGuid);
+                    tmpPackage.SpellPreferences = Standard.SpellPreferencesTables.GetByID(spellPreferencesGuid);
+                }
+
+                // Feat Preferences
+                var featPreferences = packages2da[i].AsString("FeatPref2DA");
+                if (featPreferences != null)
+                {
+                    var featPreferencesGuid = GenerateGuid(featPreferences.ToLower(), 0);
+                    if (!Standard.FeatPreferencesTables.Contains(featPreferencesGuid))
+                        ImportPackageFeatPreferences(featPreferences, featPreferencesGuid);
+                    tmpPackage.FeatPreferences = Standard.FeatPreferencesTables.GetByID(featPreferencesGuid);
+                }
+
+                // Skill Preferences
+                var skillPreferences = packages2da[i].AsString("SkillPref2DA");
+                if (skillPreferences != null)
+                {
+                    var skillPreferencesGuid = GenerateGuid(skillPreferences.ToLower(), 0);
+                    if (!Standard.SkillPreferencesTables.Contains(skillPreferencesGuid))
+                        ImportPackageSkillPreferences(skillPreferences, skillPreferencesGuid);
+                    tmpPackage.SkillPreferences = Standard.SkillPreferencesTables.GetByID(skillPreferencesGuid);
+                }
+
+                // Equipment
+                var packageEquipment = packages2da[i].AsString("Equip2DA");
+                if (packageEquipment != null)
+                {
+                    var packageEquipmentGuid = GenerateGuid(packageEquipment.ToLower(), 0);
+                    if (!Standard.SkillPreferencesTables.Contains(packageEquipmentGuid))
+                        ImportPackageEquipmentTable(packageEquipment, packageEquipmentGuid);
+                    tmpPackage.StartingEquipment = Standard.PackageEquipmentTables.GetByID(packageEquipmentGuid);
+                }
+
                 tmpPackage.Playable = packages2da[i].AsBoolean("PlayerClass");
 
                 Standard.ClassPackages.Add(tmpPackage);
@@ -1287,6 +2244,7 @@ namespace Eos.Services
                 var tmpAreaEffect = new AreaEffect();
                 tmpAreaEffect.ID = GenerateGuid("vfx_persistent", i);
                 tmpAreaEffect.Index = i;
+                tmpAreaEffect.SourceLabel = aoe2da[i].AsString("LABEL");
 
                 tmpAreaEffect.Name = aoe2da[i].AsString("LABEL") ?? "";
                 if (aoe2da[i].IsNull("SHAPE")) continue;
@@ -1334,6 +2292,7 @@ namespace Eos.Services
                 var tmpSoundset = new Soundset();
                 tmpSoundset.ID = GenerateGuid("soundset", i);
                 tmpSoundset.Index = i;
+                tmpSoundset.SourceLabel = soundset2da[i].AsString("LABEL");
 
                 if (!SetText(tmpSoundset.Name, soundset2da[i].AsInteger("STRREF"))) continue;
 
@@ -1367,6 +2326,7 @@ namespace Eos.Services
                 var tmpPolymorph = new Polymorph();
                 tmpPolymorph.ID = GenerateGuid("polymorph", i);
                 tmpPolymorph.Index = i;
+                tmpPolymorph.SourceLabel = polymorph2da[i].AsString("Name");
 
                 if (polymorph2da[i].IsNull("Name")) continue;
                 tmpPolymorph.Name = polymorph2da[i].AsString("Name") ?? "";
@@ -1406,10 +2366,142 @@ namespace Eos.Services
                 var tmpAppearance = new Appearance();
                 tmpAppearance.ID = GenerateGuid("appearance", i);
                 tmpAppearance.Index = i;
+                tmpAppearance.SourceLabel = appearance2da[i].AsString("LABEL");
 
                 if (!SetText(tmpAppearance.Name, appearance2da[i].AsInteger("STRING_REF"))) continue;
+                tmpAppearance.RaceModel = appearance2da[i].AsString("RACE") ?? "";
+                tmpAppearance.EnvironmentMap = appearance2da[i].AsString("ENVMAP") ?? "";
+                tmpAppearance.BloodColor = Enum.Parse<BloodColor>(appearance2da[i].AsString("BLOODCOLR") ?? "R", true);
+                var modelType = (appearance2da[i].AsString("MODELTYPE") ?? "").ToUpper();
+                for (int j = 0; j < modelType.Length; j++)
+                {
+                    if (modelType[j] == 'W')
+                        tmpAppearance.CanHaveWings = true;
+                    else if (modelType[j] == 'T')
+                        tmpAppearance.CanHaveTails = true;
+                    else
+                        tmpAppearance.ModelType = Enum.Parse<ModelType>(modelType[j].ToString(), true);
+                }
+                tmpAppearance.WeaponScale = appearance2da[i].AsFloat("WEAPONSCALE");
+                tmpAppearance.WingTailScale = appearance2da[i].AsFloat("WING_TAIL_SCALE");
+                tmpAppearance.HelmetScaleMale = appearance2da[i].AsFloat("HELMET_SCALE_M");
+                tmpAppearance.HelmetScaleFemale = appearance2da[i].AsFloat("HELMET_SCALE_F");
+                tmpAppearance.MovementRate = Enum.Parse<MovementRate>(appearance2da[i].AsString("MOVERATE") ?? "NORM", true);
+                tmpAppearance.WalkAnimationDistance = appearance2da[i].AsFloat("WALKDIST") ?? tmpAppearance.WalkAnimationDistance;
+                tmpAppearance.RunAnimationDistance = appearance2da[i].AsFloat("RUNDIST") ?? tmpAppearance.RunAnimationDistance;
+                tmpAppearance.PersonalSpaceRadius = appearance2da[i].AsFloat("PERSPACE") ?? tmpAppearance.PersonalSpaceRadius;
+                tmpAppearance.CreaturePersonalSpaceRadius = appearance2da[i].AsFloat("CREPERSPACE") ?? tmpAppearance.CreaturePersonalSpaceRadius;
+                tmpAppearance.CameraHeight = appearance2da[i].AsFloat("HEIGHT") ?? tmpAppearance.CameraHeight;
+                tmpAppearance.HitDistance = appearance2da[i].AsFloat("HITDIST") ?? tmpAppearance.HitDistance;
+                tmpAppearance.PreferredAttackDistance = appearance2da[i].AsFloat("PREFATCKDIST") ?? tmpAppearance.PreferredAttackDistance;
+                tmpAppearance.TargetHeight = Enum.Parse<TargetHeight>(appearance2da[i].AsString("TARGETHEIGHT") ?? "H", true);
+                tmpAppearance.AbortAttackAnimationOnParry = appearance2da[i].AsBoolean("ABORTONPARRY");
+                tmpAppearance.HasLegs = appearance2da[i].AsBoolean("HASLEGS");
+                tmpAppearance.HasArms = appearance2da[i].AsBoolean("HASARMS");
+                tmpAppearance.Portrait = appearance2da[i].AsString("PORTRAIT");
+                tmpAppearance.SizeCategory = !appearance2da[i].IsNull("SIZECATEGORY") ? (SizeCategory)Enum.ToObject(typeof(SoundsetType), appearance2da[i].AsInteger("SIZECATEGORY") ?? 0) : SizeCategory.Medium;
+                tmpAppearance.PerceptionRange = !appearance2da[i].IsNull("PERCEPTIONDIST") ? (PerceptionDistance)Enum.ToObject(typeof(PerceptionDistance), appearance2da[i].AsInteger("PERCEPTIONDIST") ?? 0) : PerceptionDistance.Medium;
+                tmpAppearance.FootstepSound = !appearance2da[i].IsNull("FOOTSTEPTYPE") ? (FootstepSound)Enum.ToObject(typeof(FootstepSound), appearance2da[i].AsInteger("FOOTSTEPTYPE") ?? 0) : FootstepSound.Normal;
+                tmpAppearance.AppearanceSoundset = CreateRef<AppearanceSoundset>(appearance2da[i].AsInteger("SOUNDAPPTYPE"));
+                tmpAppearance.HeadTracking = appearance2da[i].AsBoolean("HEADTRACK");
+                tmpAppearance.HorizontalHeadTrackingRange = appearance2da[i].AsInteger("HEAD_ARC_H") ?? tmpAppearance.HorizontalHeadTrackingRange;
+                tmpAppearance.VerticalHeadTrackingRange = appearance2da[i].AsInteger("HEAD_ARC_V") ?? tmpAppearance.VerticalHeadTrackingRange;
+                tmpAppearance.ModelHeadNodeName = appearance2da[i].AsString("HEAD_NAME") ?? tmpAppearance.ModelHeadNodeName;
+                tmpAppearance.BodyBag = !appearance2da[i].IsNull("SIZECATEGORY") ? (BodyBag)Enum.ToObject(typeof(BodyBag), appearance2da[i].AsInteger("BODY_BAG") ?? 0) : BodyBag.Default;
+                tmpAppearance.Targetable = appearance2da[i].AsBoolean("TARGETABLE");
 
                 Standard.Appearances.Add(tmpAppearance);
+            }
+        }
+
+        private void ImportAppearanceSoundsets()
+        {
+            var appearancesndset2da = Load2da("appearancesndset");
+
+            Standard.AppearanceSoundsets.Clear();
+            for (int i = 0; i < appearancesndset2da.Count; i++)
+            {
+                var tmpAppearanceSoundset = new AppearanceSoundset();
+                tmpAppearanceSoundset.ID = GenerateGuid("appearancesndset", i);
+                tmpAppearanceSoundset.Index = i;
+                tmpAppearanceSoundset.SourceLabel = appearancesndset2da[i].AsString("Label");
+
+                if (appearancesndset2da[i].IsNull("Label")) continue;
+                tmpAppearanceSoundset.Name = appearancesndset2da[i].AsString("Label") ?? "";
+                tmpAppearanceSoundset.ArmorType = appearancesndset2da[i].IsNull("ArmorType") ? null : Enum.Parse<ArmorType>(appearancesndset2da[i].AsString("ArmorType") ?? "", true);
+                tmpAppearanceSoundset.LeftAttack = CreateRef<WeaponSound>(appearancesndset2da[i].AsInteger("WeapTypeL"));
+                tmpAppearanceSoundset.RightAttack = CreateRef<WeaponSound>(appearancesndset2da[i].AsInteger("WeapTypeR"));
+                tmpAppearanceSoundset.StraightAttack = CreateRef<WeaponSound>(appearancesndset2da[i].AsInteger("WeapTypeS"));
+                tmpAppearanceSoundset.LowCloseAttack = CreateRef<WeaponSound>(appearancesndset2da[i].AsInteger("WeapTypeClsLw"));
+                tmpAppearanceSoundset.HighCloseAttack = CreateRef<WeaponSound>(appearancesndset2da[i].AsInteger("WeapTypeClsH"));
+                tmpAppearanceSoundset.ReachAttack = CreateRef<WeaponSound>(appearancesndset2da[i].AsInteger("WeapTypeRch"));
+                tmpAppearanceSoundset.Miss = CreateRef<WeaponSound>(appearancesndset2da[i].AsInteger("MissIndex"));
+                tmpAppearanceSoundset.Looping = appearancesndset2da[i].AsString("Looping");
+                tmpAppearanceSoundset.FallForward = appearancesndset2da[i].AsString("FallFwd");
+                tmpAppearanceSoundset.FallBackward = appearancesndset2da[i].AsString("FallBck");
+
+                Standard.AppearanceSoundsets.Add(tmpAppearanceSoundset);
+            }
+        }
+
+        private void ImportWeaponSounds()
+        {
+            var weaponsounds2da = Load2da("weaponsounds");
+
+            Standard.WeaponSounds.Clear();
+            for (int i = 0; i < weaponsounds2da.Count; i++)
+            {
+                var tmpWeaponSound = new WeaponSound();
+                tmpWeaponSound.ID = GenerateGuid("weaponsounds", i);
+                tmpWeaponSound.Index = i;
+                tmpWeaponSound.SourceLabel = weaponsounds2da[i].AsString("Label");
+
+                if (weaponsounds2da[i].IsNull("Label")) continue;
+                tmpWeaponSound.Name = weaponsounds2da[i].AsString("Label") ?? "";
+                tmpWeaponSound.Leather0 = weaponsounds2da[i].AsString("Leather0");
+                tmpWeaponSound.Leather1 = weaponsounds2da[i].AsString("Leather1");
+                tmpWeaponSound.Chain0 = weaponsounds2da[i].AsString("Chain0");
+                tmpWeaponSound.Chain1 = weaponsounds2da[i].AsString("Chain1");
+                tmpWeaponSound.Plate0 = weaponsounds2da[i].AsString("Plate0");
+                tmpWeaponSound.Plate1 = weaponsounds2da[i].AsString("Plate1");
+                tmpWeaponSound.Stone0 = weaponsounds2da[i].AsString("Stone0");
+                tmpWeaponSound.Stone1 = weaponsounds2da[i].AsString("Stone1");
+                tmpWeaponSound.Wood0 = weaponsounds2da[i].AsString("Wood0");
+                tmpWeaponSound.Wood1 = weaponsounds2da[i].AsString("Wood1");
+                tmpWeaponSound.Chitin0 = weaponsounds2da[i].AsString("Chitin0");
+                tmpWeaponSound.Chitin1 = weaponsounds2da[i].AsString("Chitin1");
+                tmpWeaponSound.Scale0 = weaponsounds2da[i].AsString("Scale0");
+                tmpWeaponSound.Scale1 = weaponsounds2da[i].AsString("Scale1");
+                tmpWeaponSound.Ethereal0 = weaponsounds2da[i].AsString("Ethereal0");
+                tmpWeaponSound.Ethereal1 = weaponsounds2da[i].AsString("Ethereal1");
+                tmpWeaponSound.Crystal0 = weaponsounds2da[i].AsString("Crystal0");
+                tmpWeaponSound.Crystal1 = weaponsounds2da[i].AsString("Crystal1");
+                tmpWeaponSound.Miss0 = weaponsounds2da[i].AsString("Miss0");
+                tmpWeaponSound.Miss1 = weaponsounds2da[i].AsString("Miss1");
+                tmpWeaponSound.Parry = weaponsounds2da[i].AsString("Parry0");
+                tmpWeaponSound.Critical = weaponsounds2da[i].AsString("Critical0");
+
+                Standard.WeaponSounds.Add(tmpWeaponSound);
+            }
+        }
+
+        public void ImportInventorySounds()
+        {
+            var inventorysnds2da = Load2da("inventorysnds");
+
+            Standard.InventorySounds.Clear();
+            for (int i = 0; i < inventorysnds2da.Count; i++)
+            {
+                var tmpInventorySound = new InventorySound();
+                tmpInventorySound.ID = GenerateGuid("inventorysnds", i);
+                tmpInventorySound.Index = i;
+                tmpInventorySound.SourceLabel = inventorysnds2da[i].AsString("Label");
+
+                if (inventorysnds2da[i].IsNull("Label")) continue;
+                tmpInventorySound.Name = inventorysnds2da[i].AsString("Label") ?? "";
+                tmpInventorySound.Sound = inventorysnds2da[i].AsString("InventorySound") ?? "";
+
+                Standard.InventorySounds.Add(tmpInventorySound);
             }
         }
 
@@ -1423,9 +2515,36 @@ namespace Eos.Services
                 var tmpVfx = new VisualEffect();
                 tmpVfx.ID = GenerateGuid("visualeffects", i);
                 tmpVfx.Index = i;
+                tmpVfx.SourceLabel = vfx2da[i].AsString("Label");
 
                 if (vfx2da[i].IsNull("Type_FD")) continue;
                 tmpVfx.Name = vfx2da[i].AsString("Label") ?? "";
+                tmpVfx.Type = Enum.Parse<VisualEffectType>(vfx2da[i].AsString("Type_FD") ?? "F", true);
+                tmpVfx.OrientWithGround = vfx2da[i].AsBoolean("OrientWithGround");
+                tmpVfx.ImpactHeadEffect = vfx2da[i].AsString("Imp_HeadCon_Node");
+                tmpVfx.ImpactImpactEffect = vfx2da[i].AsString("Imp_Impact_Node");
+                tmpVfx.ImpactRootSmallEffect = vfx2da[i].AsString("Imp_Root_S_Node");
+                tmpVfx.ImpactRootMediumEffect = vfx2da[i].AsString("Imp_Root_M_Node");
+                tmpVfx.ImpactRootLargeEffect = vfx2da[i].AsString("Imp_Root_L_Node");
+                tmpVfx.ImpactRootHugeEffect = vfx2da[i].AsString("Imp_Root_H_Node");
+                tmpVfx.ImpactProgFX = CreateRef<ProgrammedEffect>(vfx2da[i].AsInteger("ProgFX_Impact"));
+                tmpVfx.ImpactSound = vfx2da[i].AsString("SoundImpact");
+                tmpVfx.DurationProgFX = CreateRef<ProgrammedEffect>(vfx2da[i].AsInteger("ProgFX_Duration"));
+                tmpVfx.DurationSound = vfx2da[i].AsString("SoundDuration");
+                tmpVfx.CessationProgFX = CreateRef<ProgrammedEffect>(vfx2da[i].AsInteger("ProgFX_Cessation"));
+                tmpVfx.CessationSound = vfx2da[i].AsString("SoundCessastion");
+                tmpVfx.CessationHeadEffect = vfx2da[i].AsString("Ces_HeadCon_Node");
+                tmpVfx.CessationImpactEffect = vfx2da[i].AsString("Ces_Impact_Node");
+                tmpVfx.CessationRootSmallEffect = vfx2da[i].AsString("Ces_Root_S_Node");
+                tmpVfx.CessationRootMediumEffect = vfx2da[i].AsString("Ces_Root_M_Node");
+                tmpVfx.CessationRootLargeEffect = vfx2da[i].AsString("Ces_Root_L_Node");
+                tmpVfx.CessationRootHugeEffect = vfx2da[i].AsString("Ces_Root_H_Node");
+                tmpVfx.ShakeType = (VFXShakeType)Enum.ToObject(typeof(VFXShakeType), vfx2da[i].AsInteger("ShakeType") ?? (int)VFXShakeType.None);
+                tmpVfx.ShakeDelay = vfx2da[i].AsFloat("ShakeDelay");
+                tmpVfx.ShakeDuration = vfx2da[i].AsFloat("ShakeDuration");
+                tmpVfx.LowViolenceModel = vfx2da[i].AsString("LowViolence");
+                tmpVfx.LowQualityModel = vfx2da[i].AsString("LowQuality");
+                tmpVfx.OrientWithObject = vfx2da[i].AsBoolean("OrientWithObject");
 
                 Standard.VisualEffects.Add(tmpVfx);
             }
@@ -1441,11 +2560,239 @@ namespace Eos.Services
                 var tmpPortrait = new Portrait();
                 tmpPortrait.ID = GenerateGuid("portraits", i);
                 tmpPortrait.Index = i;
+                tmpPortrait.SourceLabel = portraits2da[i].AsString("BaseResRef");
 
                 if (portraits2da[i].IsNull("BaseResRef")) continue;
                 tmpPortrait.ResRef = portraits2da[i].AsString("BaseResRef") ?? "";
+                tmpPortrait.LowGoreResRef = portraits2da[i].AsString("LowGore");
+                tmpPortrait.Gender = (PortraitGender?)portraits2da[i].AsInteger("Sex") ?? PortraitGender.Male;
+                tmpPortrait.PlaceableType = (PlaceableType?)portraits2da[i].AsInteger("InanimateType");
+                tmpPortrait.Race = CreateRef<Race>(portraits2da[i].AsInteger("Race"));
+                tmpPortrait.IsPlayerPortrait = !portraits2da[i].AsBoolean("Plot");
 
                 Standard.Portraits.Add(tmpPortrait);
+            }
+        }
+
+        private void ImportCompanions()
+        {
+            var companions2da = Load2da("hen_companion");
+
+            Standard.Companions.Clear();
+            for (int i = 0; i < companions2da.Count; i++)
+            {
+                var tmpCompanion = new Companion();
+                tmpCompanion.ID = GenerateGuid("hen_companion", i);
+                tmpCompanion.Index = i;
+                tmpCompanion.SourceLabel = companions2da[i].AsString("NAME");
+
+                if (!SetText(tmpCompanion.Name, companions2da[i].AsInteger("STRREF"))) continue;
+                SetText(tmpCompanion.Description, companions2da[i].AsInteger("DESCRIPTION"));
+                tmpCompanion.Template = companions2da[i].AsString("BASERESREF") ?? "";
+
+                Standard.Companions.Add(tmpCompanion);
+            }
+        }
+
+        private void ImportFamiliars()
+        {
+            var familiars2da = Load2da("hen_familiar");
+
+            Standard.Familiars.Clear();
+            for (int i = 0; i < familiars2da.Count; i++)
+            {
+                var tmpFamiliar = new Familiar();
+                tmpFamiliar.ID = GenerateGuid("hen_familiar", i);
+                tmpFamiliar.Index = i;
+                tmpFamiliar.SourceLabel = familiars2da[i].AsString("NAME");
+
+                if (!SetText(tmpFamiliar.Name, familiars2da[i].AsInteger("STRREF"))) continue;
+                SetText(tmpFamiliar.Description, familiars2da[i].AsInteger("DESCRIPTION"));
+                tmpFamiliar.Template = familiars2da[i].AsString("BASERESREF") ?? "";
+
+                Standard.Familiars.Add(tmpFamiliar);
+            }
+        }
+
+        private void ImportTraps()
+        {
+            var traps2da = Load2da("traps");
+
+            Standard.Traps.Clear();
+            for (int i = 0; i < traps2da.Count; i++)
+            {
+                var tmpTrap = new Trap();
+                tmpTrap.ID = GenerateGuid("traps", i);
+                tmpTrap.Index = i;
+                tmpTrap.SourceLabel = traps2da[i].AsString("Label");
+
+                if (!SetText(tmpTrap.Name, traps2da[i].AsInteger("TrapName"))) continue;
+                tmpTrap.TrapScript = traps2da[i].AsString("TrapScript") ?? "";
+                tmpTrap.SetDC = traps2da[i].AsInteger("SetDC") ?? 10;
+                tmpTrap.DetectDC = traps2da[i].AsInteger("DetectDCMod") ?? 10;
+                tmpTrap.DisarmDC = traps2da[i].AsInteger("DisarmDCMod") ?? 10;
+                tmpTrap.BlueprintResRef = traps2da[i].AsString("ResRef") ?? "";
+                tmpTrap.Icon = traps2da[i].AsString("IconResRef") ?? "";
+
+                Standard.Traps.Add(tmpTrap);
+            }
+        }
+
+        private void ImportProgrammedEffects()
+        {
+            var progFX2da = Load2da("progfx");
+
+            Standard.ProgrammedEffects.Clear();
+            for (int i = 0; i < progFX2da.Count; i++)
+            {
+                var tmpProgFX = new ProgrammedEffect();
+                tmpProgFX.ID = GenerateGuid("progfx", i);
+                tmpProgFX.Index = i;
+                tmpProgFX.SourceLabel = progFX2da[i].AsString("Label");
+
+                if (progFX2da[i].IsNull("Label")) continue;
+                tmpProgFX.Name = progFX2da[i].AsString("Label") ?? "";
+                tmpProgFX.Type = (ProgrammedEffectType?)progFX2da[i].AsInteger("Type") ?? ProgrammedEffectType.Invalid;
+                
+                switch (tmpProgFX.Type)
+                {
+                    case ProgrammedEffectType.SkinOverlay:
+                        tmpProgFX.T1ModelName = progFX2da[i].AsString("Param1") ?? "";
+                        tmpProgFX.T1ArmorType = Enum.Parse<ArmorType>(progFX2da[i].AsString("Param2") ?? "leather", true);
+                        tmpProgFX.T1OnHitVFX = CreateRef<VisualEffect>(progFX2da[i].AsInteger("Param3"));
+                        tmpProgFX.T1OnHitVFXSmall = CreateRef<VisualEffect>(progFX2da[i].AsInteger("Param4"));
+                        break;
+
+                    case ProgrammedEffectType.EnvironmentMapping:
+                        tmpProgFX.T2EnvironmentMap = progFX2da[i].AsString("Param1") ?? "";
+                        break;
+
+                    case ProgrammedEffectType.GlowEffect:
+                        var colorR = Convert.ToUInt32((progFX2da[i].AsFloat("Param1") ?? 0.0) * 255.0);
+                        var colorG = Convert.ToUInt32((progFX2da[i].AsFloat("Param2") ?? 0.0) * 255.0);
+                        var colorB = Convert.ToUInt32((progFX2da[i].AsFloat("Param3") ?? 0.0) * 255.0);
+                        tmpProgFX.T3GlowColor = colorB | (colorG << 8) | (colorR << 16);
+                        break;
+
+                    case ProgrammedEffectType.Lighting:
+                        tmpProgFX.T4LightModelAnimation = progFX2da[i].AsString("Param1") ?? "";
+                        tmpProgFX.T4AnimationSpeed = progFX2da[i].AsFloat("Param2") ?? 1.0;
+                        tmpProgFX.T4CastShadows = progFX2da[i].AsBoolean("Param3");
+                        tmpProgFX.T4Priority = progFX2da[i].AsInteger("Param4") ?? 20;
+                        tmpProgFX.T4RemoveCloseToOtherLights = progFX2da[i].AsBoolean("Param5");
+                        tmpProgFX.T4RemoveAllOtherLights = progFX2da[i].AsBoolean("Param6");
+                        tmpProgFX.T4LightModel = progFX2da[i].AsString("Param7") ?? "";
+                        break;
+
+                    case ProgrammedEffectType.AlphaTransparency:
+                        tmpProgFX.T5OpacityFrom = progFX2da[i].AsFloat("Param1") ?? 0.0;
+
+                        var tcRed = progFX2da[i].AsFloat("Param2") ?? 0;
+                        var tcGreen = progFX2da[i].AsFloat("Param3") ?? 0;
+                        var tcBlue = progFX2da[i].AsFloat("Param4") ?? 0;
+                        tmpProgFX.T5TransparencyColorKeepRed = (tcRed == -1);
+                        tmpProgFX.T5TransparencyColorKeepGreen = (tcGreen == -1);
+                        tmpProgFX.T5TransparencyColorKeepBlue = (tcBlue == -1);
+
+                        uint transColorR = 0;
+                        uint transColorG = 0;
+                        uint transColorB = 0;
+                        if (!tmpProgFX.T5TransparencyColorKeepRed)
+                            transColorR = Convert.ToUInt32(tcRed * 255.0);
+                        if (!tmpProgFX.T5TransparencyColorKeepRed)
+                            transColorG = Convert.ToUInt32(tcGreen * 255.0);
+                        if (!tmpProgFX.T5TransparencyColorKeepRed)
+                            transColorB = Convert.ToUInt32(tcBlue * 255.0);
+                        tmpProgFX.T5TransparencyColor = transColorB | (transColorG << 8) | (transColorR << 16);
+
+                        tmpProgFX.T5FadeInterval = progFX2da[i].AsInteger("Param5") ?? 1000;
+                        tmpProgFX.T5OpacityTo = progFX2da[i].AsFloat("Param6") ?? 1.0;
+                        break;
+
+                    case ProgrammedEffectType.PulsingAura:
+                        var color1R = Convert.ToUInt32((progFX2da[i].AsFloat("Param1") ?? 0.0) * 255.0);
+                        var color1G = Convert.ToUInt32((progFX2da[i].AsFloat("Param2") ?? 0.0) * 255.0);
+                        var color1B = Convert.ToUInt32((progFX2da[i].AsFloat("Param3") ?? 0.0) * 255.0);
+                        tmpProgFX.T6Color1 = color1B | (color1G << 8) | (color1R << 16);
+                        var color2R = Convert.ToUInt32((progFX2da[i].AsFloat("Param4") ?? 0.0) * 255.0);
+                        var color2G = Convert.ToUInt32((progFX2da[i].AsFloat("Param5") ?? 0.0) * 255.0);
+                        var color2B = Convert.ToUInt32((progFX2da[i].AsFloat("Param6") ?? 0.0) * 255.0);
+                        tmpProgFX.T6Color2 = color2B | (color2G << 8) | (color2R << 16);
+                        tmpProgFX.T6FadeDuration = progFX2da[i].AsInteger("Param7") ?? 1000;
+                        break;
+
+                    case ProgrammedEffectType.Beam:
+                        tmpProgFX.T7BeamModel = progFX2da[i].AsString("Param1") ?? "";
+                        tmpProgFX.T7BeamAnimation = progFX2da[i].AsString("Param2") ?? "";
+                        break;
+
+                    case ProgrammedEffectType.MIRV:
+                        tmpProgFX.T10ProjectileModel = progFX2da[i].AsString("Param1") ?? "";
+                        tmpProgFX.T10Spell = CreateRef<Spell>(progFX2da[i].AsInteger("Param2"));
+                        tmpProgFX.T10Orientation = (ProjectileOrientation?)progFX2da[i].AsInteger("Param3") ?? ProjectileOrientation.None;
+                        tmpProgFX.T10ProjectilePath = (ProjectilePath?)progFX2da[i].AsInteger("Param4") ?? ProjectilePath.Default;
+                        tmpProgFX.T10TravelTime = Enum.Parse<ProjectileTravelTime>(progFX2da[i].AsString("Param5") ?? "log", true);
+                        break;
+
+                    case ProgrammedEffectType.VariantMIRV:
+                        tmpProgFX.T11ProjectileModel = progFX2da[i].AsString("Param1") ?? "";
+                        tmpProgFX.T11FireSound = progFX2da[i].AsString("Param2") ?? "";
+                        tmpProgFX.T11ImpactSound = progFX2da[i].AsString("Param3") ?? "";
+                        tmpProgFX.T11ProjectilePath = (ProjectilePath?)progFX2da[i].AsInteger("Param4") ?? ProjectilePath.Default;
+                        break;
+
+                    case ProgrammedEffectType.SpellCastFailure:
+                        tmpProgFX.T12ModelNode = progFX2da[i].AsString("Param1") ?? "";
+                        tmpProgFX.T12EffectModel = progFX2da[i].AsString("Param2") ?? "";
+                        break;
+                }
+
+                Standard.ProgrammedEffects.Add(tmpProgFX);
+            }
+        }
+
+        private void ImportDamageTypes()
+        {
+            var damagetypes2da = Load2da("damagetypes");
+
+            Standard.DamageTypes.Clear();
+            for (int i = 0; i < damagetypes2da.Count; i++)
+            {
+                var tmpDamageType = new DamageType();
+                tmpDamageType.ID = GenerateGuid("damagetypes", i);
+                tmpDamageType.Index = i;
+                tmpDamageType.SourceLabel = damagetypes2da[i].AsString("Label");
+
+                if (!SetText(tmpDamageType.Name, damagetypes2da[i].AsInteger("CharsheetStrref"))) continue;
+                tmpDamageType.Group = CreateRef<DamageTypeGroup>(damagetypes2da[i].AsInteger("DamageTypeGroup"));
+               
+                Standard.DamageTypes.Add(tmpDamageType);
+            }
+        }
+
+        private void ImportDamageTypeGroups()
+        {
+            var damagetypegroups2da = Load2da("damagetypegroups");
+
+            Standard.DamageTypeGroups.Clear();
+            for (int i = 0; i < damagetypegroups2da.Count; i++)
+            {
+                var tmpDamageTypeGroup = new DamageTypeGroup();
+                tmpDamageTypeGroup.ID = GenerateGuid("damagetypegroups", i);
+                tmpDamageTypeGroup.Index = i;
+                tmpDamageTypeGroup.SourceLabel = damagetypegroups2da[i].AsString("Label");
+
+                if (!SetText(tmpDamageTypeGroup.FeedbackText, damagetypegroups2da[i].AsInteger("FeedbackStrref"))) continue;
+                tmpDamageTypeGroup.Name = damagetypegroups2da[i].AsString("Label") ?? "";
+                if (!damagetypegroups2da[i].IsNull("ColorR") && !damagetypegroups2da[i].IsNull("ColorG") && !damagetypegroups2da[i].IsNull("ColorB"))
+                {
+                    var colorR = Convert.ToUInt32(damagetypegroups2da[i].AsInteger("ColorR")) & 0xFF;
+                    var colorG = Convert.ToUInt32(damagetypegroups2da[i].AsInteger("ColorG")) & 0xFF;
+                    var colorB = Convert.ToUInt32(damagetypegroups2da[i].AsInteger("ColorB")) & 0xFF;
+                    tmpDamageTypeGroup.Color = colorB | (colorG << 8) | (colorR << 16);
+                }
+
+                Standard.DamageTypeGroups.Add(tmpDamageTypeGroup);
             }
         }
 
@@ -1455,6 +2802,20 @@ namespace Eos.Services
                 return null;
             else
                 return repository.GetByIndex(instance.Index ?? -1);
+        }
+
+        private object? SolveCustomValue(object? value, CustomObjectProperty prop)
+        {
+            if ((value is VariantValue varValue) && (varValue.Value is BaseModel varModel))
+            {
+                varValue.Value = MasterRepository.Standard.GetByIndex(varModel.GetType(), varModel.Index ?? -1);
+            }
+            else if (value is BaseModel model)
+            {
+                return MasterRepository.Standard.GetByIndex(model.GetType(), model.Index ?? -1);
+            }
+
+            return value;
         }
 
         private void ResolveDependencies()
@@ -1621,6 +2982,61 @@ namespace Eos.Services
                 package.ForClass = SolveInstance(package.ForClass, Standard.Classes);
                 package.Domain1 = SolveInstance(package.Domain1, Standard.Domains);
                 package.Domain2 = SolveInstance(package.Domain2, Standard.Domains);
+
+                if (package.ForClass != null && package.ForClass.IsSpellCaster)
+                {
+                    if (package.ForClass.IsArcaneCaster)
+                    {
+                        package.AssociateCompanion = null;
+                        package.AssociateFamiliar = SolveInstance(package.AssociateFamiliar, Standard.Familiars); ;
+                    }
+                    else
+                    {
+                        package.AssociateCompanion = SolveInstance(package.AssociateCompanion, Standard.Companions);
+                        package.AssociateFamiliar = null;
+                    }
+                }
+                else
+                {
+                    package.AssociateCompanion = null;
+                    package.AssociateFamiliar = null;
+                }
+            }
+
+            // Package Spell Preferences
+            foreach (var spellPrefs in Standard.SpellPreferencesTables)
+            {
+                if (spellPrefs == null) continue;
+                for (int i = 0; i < spellPrefs.Items.Count; i++)
+                {
+                    var item = spellPrefs[i];
+                    if (item == null) continue;
+                    item.Spell = SolveInstance(item.Spell, Standard.Spells);
+                }
+            }
+
+            // Package Feat Preferences
+            foreach (var featPrefs in Standard.FeatPreferencesTables)
+            {
+                if (featPrefs == null) continue;
+                for (int i = 0; i < featPrefs.Items.Count; i++)
+                {
+                    var item = featPrefs[i];
+                    if (item == null) continue;
+                    item.Feat = SolveInstance(item.Feat, Standard.Feats);
+                }
+            }
+
+            // Package Skill Preferences
+            foreach (var skillPrefs in Standard.SkillPreferencesTables)
+            {
+                if (skillPrefs == null) continue;
+                for (int i = 0; i < skillPrefs.Items.Count; i++)
+                {
+                    var item = skillPrefs[i];
+                    if (item == null) continue;
+                    item.Skill = SolveInstance(item.Skill, Standard.Skills);
+                }
             }
 
             // Area Effects
@@ -1628,6 +3044,146 @@ namespace Eos.Services
             {
                 if (aoe == null) continue;
                 aoe.VisualEffect = SolveInstance(aoe.VisualEffect, Standard.VisualEffects);
+            }
+
+            // Appearances
+            foreach (var appearance in Standard.Appearances)
+            {
+                if (appearance == null) continue;
+                appearance.AppearanceSoundset = SolveInstance(appearance.AppearanceSoundset, Standard.AppearanceSoundsets);
+            }
+
+            // Appearance Soundsets
+            foreach (var appearanceSoundset in Standard.AppearanceSoundsets)
+            {
+                if (appearanceSoundset == null) continue;
+                appearanceSoundset.LeftAttack = SolveInstance(appearanceSoundset.LeftAttack, Standard.WeaponSounds);
+                appearanceSoundset.RightAttack = SolveInstance(appearanceSoundset.RightAttack, Standard.WeaponSounds);
+                appearanceSoundset.StraightAttack = SolveInstance(appearanceSoundset.StraightAttack, Standard.WeaponSounds);
+                appearanceSoundset.HighCloseAttack = SolveInstance(appearanceSoundset.HighCloseAttack, Standard.WeaponSounds);
+                appearanceSoundset.LowCloseAttack = SolveInstance(appearanceSoundset.LowCloseAttack, Standard.WeaponSounds);
+                appearanceSoundset.ReachAttack = SolveInstance(appearanceSoundset.ReachAttack, Standard.WeaponSounds);
+                appearanceSoundset.Miss = SolveInstance(appearanceSoundset.Miss, Standard.WeaponSounds);
+            }
+
+            // Base Items
+            foreach (var baseItem in Standard.BaseItems)
+            {
+                if (baseItem == null) continue;
+                baseItem.AmmunitionBaseItem = SolveInstance(baseItem.AmmunitionBaseItem, Standard.BaseItems);
+                baseItem.InventorySound = SolveInstance(baseItem.InventorySound, Standard.InventorySounds);
+                baseItem.ItemPropertySet = SolveInstance(baseItem.ItemPropertySet, Standard.ItemPropertySets);
+                baseItem.RequiredFeat1 = SolveInstance(baseItem.RequiredFeat1, Standard.Feats);
+                baseItem.RequiredFeat2 = SolveInstance(baseItem.RequiredFeat2, Standard.Feats);
+                baseItem.RequiredFeat3 = SolveInstance(baseItem.RequiredFeat3, Standard.Feats);
+                baseItem.RequiredFeat4 = SolveInstance(baseItem.RequiredFeat4, Standard.Feats);
+                baseItem.RequiredFeat5 = SolveInstance(baseItem.RequiredFeat5, Standard.Feats);
+                baseItem.WeaponSound = SolveInstance(baseItem.WeaponSound, Standard.WeaponSounds);
+                baseItem.WeaponFocusFeat = SolveInstance(baseItem.WeaponFocusFeat, Standard.Feats);
+                baseItem.EpicWeaponFocusFeat = SolveInstance(baseItem.EpicWeaponFocusFeat, Standard.Feats);
+                baseItem.WeaponSpecializationFeat = SolveInstance(baseItem.WeaponSpecializationFeat, Standard.Feats);
+                baseItem.EpicWeaponSpecializationFeat = SolveInstance(baseItem.EpicWeaponSpecializationFeat, Standard.Feats);
+                baseItem.ImprovedCriticalFeat = SolveInstance(baseItem.ImprovedCriticalFeat, Standard.Feats);
+                baseItem.OverwhelmingCriticalFeat = SolveInstance(baseItem.OverwhelmingCriticalFeat, Standard.Feats);
+                baseItem.DevastatingCriticalFeat = SolveInstance(baseItem.DevastatingCriticalFeat, Standard.Feats);
+                baseItem.WeaponOfChoiceFeat = SolveInstance(baseItem.WeaponOfChoiceFeat, Standard.Feats);
+            }
+
+            // Portraits
+            foreach (var portrait in Standard.Portraits)
+            {
+                if (portrait == null) continue;
+                portrait.Race = SolveInstance(portrait.Race, Standard.Races);
+            }
+
+            // Visual Effects
+            foreach (var vfx in Standard.VisualEffects)
+            {
+                if (vfx == null) continue;
+                vfx.ImpactProgFX = SolveInstance(vfx.ImpactProgFX, Standard.ProgrammedEffects);
+                vfx.DurationProgFX = SolveInstance(vfx.DurationProgFX, Standard.ProgrammedEffects);
+                vfx.CessationProgFX = SolveInstance(vfx.CessationProgFX, Standard.ProgrammedEffects);
+            }
+
+            // ProgFX
+            foreach (var progfx in Standard.ProgrammedEffects)
+            {
+                if (progfx == null) continue;
+                progfx.T1OnHitVFX = SolveInstance(progfx.T1OnHitVFX, Standard.VisualEffects);
+                progfx.T1OnHitVFXSmall = SolveInstance(progfx.T1OnHitVFXSmall, Standard.VisualEffects);
+                progfx.T10Spell = SolveInstance(progfx.T10Spell, Standard.Spells);
+            }
+
+            // Damage Types
+            foreach (var damageType in Standard.DamageTypes)
+            {
+                if (damageType == null) continue;
+                damageType.Group = SolveInstance(damageType.Group, Standard.DamageTypeGroups);
+            }
+
+            // Item Properties
+            foreach (var itemProp in Standard.ItemProperties)
+            {
+                if (itemProp == null) continue;
+                itemProp.CostTable = SolveInstance(itemProp.CostTable, Standard.ItemPropertyCostTables);
+                itemProp.Param = SolveInstance(itemProp.Param, Standard.ItemPropertyParams);
+            }
+
+            // Item Property Sets
+            foreach (var itemPropSet in Standard.ItemPropertySets)
+            {
+                if (itemPropSet == null) continue;
+
+                for (int i = 0; i < itemPropSet.ItemProperties.Count; i++)
+                {
+                    var item = itemPropSet.ItemProperties[i];
+                    if (item == null) continue;
+                    item.ItemProperty = SolveInstance(item.ItemProperty, Standard.ItemProperties);
+                }
+            }
+
+            // Item Property Tables
+            foreach (var propTable in Standard.ItemPropertyTables)
+            {
+                if (propTable == null) continue;
+
+                foreach (var tableItem in propTable.Items)
+                {
+                    if (tableItem == null) continue;
+
+                    tableItem.CustomColumnValue01.Value = SolveCustomValue(tableItem.CustomColumnValue01.Value, propTable.CustomColumn01);
+                    tableItem.CustomColumnValue02.Value = SolveCustomValue(tableItem.CustomColumnValue02.Value, propTable.CustomColumn02);
+                    tableItem.CustomColumnValue03.Value = SolveCustomValue(tableItem.CustomColumnValue03.Value, propTable.CustomColumn03);
+                    tableItem.CustomColumnValue04.Value = SolveCustomValue(tableItem.CustomColumnValue04.Value, propTable.CustomColumn04);
+                    tableItem.CustomColumnValue05.Value = SolveCustomValue(tableItem.CustomColumnValue05.Value, propTable.CustomColumn05);
+                    tableItem.CustomColumnValue06.Value = SolveCustomValue(tableItem.CustomColumnValue06.Value, propTable.CustomColumn06);
+                    tableItem.CustomColumnValue07.Value = SolveCustomValue(tableItem.CustomColumnValue07.Value, propTable.CustomColumn07);
+                    tableItem.CustomColumnValue08.Value = SolveCustomValue(tableItem.CustomColumnValue08.Value, propTable.CustomColumn08);
+                    tableItem.CustomColumnValue09.Value = SolveCustomValue(tableItem.CustomColumnValue09.Value, propTable.CustomColumn09);
+                    tableItem.CustomColumnValue10.Value = SolveCustomValue(tableItem.CustomColumnValue10.Value, propTable.CustomColumn10);
+                }
+            }
+
+            // Item Property CostTables
+            foreach (var costTable in Standard.ItemPropertyCostTables)
+            {
+                if (costTable == null) continue;
+
+                foreach (var tableItem in costTable.Items)
+                {
+                    if (tableItem == null) continue;
+
+                    tableItem.CustomColumnValue01.Value = SolveCustomValue(tableItem.CustomColumnValue01.Value, costTable.CustomColumn01);
+                    tableItem.CustomColumnValue02.Value = SolveCustomValue(tableItem.CustomColumnValue02.Value, costTable.CustomColumn02);
+                    tableItem.CustomColumnValue03.Value = SolveCustomValue(tableItem.CustomColumnValue03.Value, costTable.CustomColumn03);
+                    tableItem.CustomColumnValue04.Value = SolveCustomValue(tableItem.CustomColumnValue04.Value, costTable.CustomColumn04);
+                    tableItem.CustomColumnValue05.Value = SolveCustomValue(tableItem.CustomColumnValue05.Value, costTable.CustomColumn05);
+                    tableItem.CustomColumnValue06.Value = SolveCustomValue(tableItem.CustomColumnValue06.Value, costTable.CustomColumn06);
+                    tableItem.CustomColumnValue07.Value = SolveCustomValue(tableItem.CustomColumnValue07.Value, costTable.CustomColumn07);
+                    tableItem.CustomColumnValue08.Value = SolveCustomValue(tableItem.CustomColumnValue08.Value, costTable.CustomColumn08);
+                    tableItem.CustomColumnValue09.Value = SolveCustomValue(tableItem.CustomColumnValue09.Value, costTable.CustomColumn09);
+                    tableItem.CustomColumnValue10.Value = SolveCustomValue(tableItem.CustomColumnValue10.Value, costTable.CustomColumn10);
+                }
             }
         }
 
@@ -1649,13 +3205,25 @@ namespace Eos.Services
             Standard.Spellbooks.SaveToFile(Constants.SpellbooksFilePath);
             Standard.AreaEffects.SaveToFile(Constants.AreaEffectsFilePath);
             Standard.MasterFeats.SaveToFile(Constants.MasterFeatsFilePath);
+            Standard.BaseItems.SaveToFile(Constants.BaseItemsFilePath);
+            Standard.ItemPropertySets.SaveToFile(Constants.ItemPropertySetsFilePath);
+            Standard.ItemProperties.SaveToFile(Constants.ItemPropertiesFilePath);
 
             Standard.Appearances.SaveToFile(Constants.AppearancesFilePath);
+            Standard.AppearanceSoundsets.SaveToFile(Constants.AppearanceSoundsetsFilePath);
+            Standard.WeaponSounds.SaveToFile(Constants.WeaponSoundsFilePath);
+            Standard.InventorySounds.SaveToFile(Constants.InventorySoundsFilePath);
             Standard.Portraits.SaveToFile(Constants.PortraitsFilePath);
             Standard.VisualEffects.SaveToFile(Constants.VisualEffectsFilePath);
             Standard.ClassPackages.SaveToFile(Constants.ClassPackagesFilePath);
             Standard.Soundsets.SaveToFile(Constants.SoundsetsFilePath);
             Standard.Polymorphs.SaveToFile(Constants.PolymorphsFilePath);
+            Standard.Companions.SaveToFile(Constants.CompanionsFilePath);
+            Standard.Familiars.SaveToFile(Constants.FamiliarsFilePath);
+            Standard.Traps.SaveToFile(Constants.TrapsFilePath);
+            Standard.ProgrammedEffects.SaveToFile(Constants.ProgrammedEffectsFilePath);
+            Standard.DamageTypes.SaveToFile(Constants.DamageTypesFilePath);
+            Standard.DamageTypeGroups.SaveToFile(Constants.DamageTypeGroupsFilePath);
 
             Standard.AttackBonusTables.SaveToFile(Constants.AttackBonusTablesFilePath);
             Standard.BonusFeatTables.SaveToFile(Constants.BonusFeatTablesFilePath);
@@ -1667,6 +3235,14 @@ namespace Eos.Services
             Standard.KnownSpellsTables.SaveToFile(Constants.KnownSpellsTablesFilePath);
             Standard.StatGainTables.SaveToFile(Constants.StatGainTablesFilePath);
             Standard.RacialFeatsTables.SaveToFile(Constants.RacialFeatsTablesFilePath);
+            Standard.SpellPreferencesTables.SaveToFile(Constants.SpellPreferencesTablesFilePath);
+            Standard.FeatPreferencesTables.SaveToFile(Constants.FeatPreferencesTablesFilePath);
+            Standard.SkillPreferencesTables.SaveToFile(Constants.SkillPreferencesTablesFilePath);
+            Standard.PackageEquipmentTables.SaveToFile(Constants.PackageEquipmentTablesFilePath);
+
+            Standard.ItemPropertyTables.SaveToFile(Constants.ItemPropertyTablesFilePath);
+            Standard.ItemPropertyCostTables.SaveToFile(Constants.ItemPropertyCostTablesFilePath);
+            Standard.ItemPropertyParams.SaveToFile(Constants.ItemPropertyParamsFilePath);
         }
 
         private void ImportIcons()
@@ -1708,6 +3284,12 @@ namespace Eos.Services
             Standard.KnownSpellsTables.Clear();
             Standard.StatGainTables.Clear();
             Standard.RacialFeatsTables.Clear();
+            Standard.SpellPreferencesTables.Clear();
+            Standard.FeatPreferencesTables.Clear();
+            Standard.SkillPreferencesTables.Clear();
+            Standard.PackageEquipmentTables.Clear();
+            Standard.ItemPropertyTables.Clear();
+            Standard.ItemPropertyCostTables.Clear();
         }
 
         public void Import(string nwnBasePath)
@@ -1731,13 +3313,26 @@ namespace Eos.Services
                 ImportPoisons();
                 ImportAreaOfEffects();
                 ImportMasterFeats();
+                ImportBaseItems();
+                ImportItemProperties();
+                ImportItemPropertyCostTables();
+                ImportItemPropertyParams();
+                ImportClassPackages();
 
                 ImportAppearances();
+                ImportAppearanceSoundsets();
+                ImportWeaponSounds();
+                ImportInventorySounds();
                 ImportVisualEffects();
-                ImportClassPackages();
                 ImportSoundsets();
                 ImportPolymorphs();
                 ImportPortraits();
+                ImportCompanions();
+                ImportFamiliars();
+                ImportTraps();
+                ImportProgrammedEffects();
+                ImportDamageTypes();
+                ImportDamageTypeGroups();
 
                 ImportText();
 
@@ -1750,12 +3345,17 @@ namespace Eos.Services
                 Standard.Diseases.Sort(d => d?.Name[TLKLanguage.English].Text);
                 Standard.Poisons.Sort(p => p?.Name[TLKLanguage.English].Text);
                 Standard.Spellbooks.Sort(p => p?.Name);
+                Standard.BaseItems.Sort(p => p?.Name[TLKLanguage.English].Text);
 
                 Standard.AreaEffects.Sort(p => p?.Name);
                 Standard.Polymorphs.Sort(p => p?.Name);
                 Standard.Appearances.Sort(p => p?.Name[TLKLanguage.English].Text);
                 Standard.ClassPackages.Sort(p => p?.Name[TLKLanguage.English].Text);
                 Standard.Soundsets.Sort(p => p?.Name[TLKLanguage.English].Text);
+
+                Standard.SpellPreferencesTables.Sort(p => p?.Name);
+                Standard.FeatPreferencesTables.Sort(p => p?.Name);
+                Standard.SkillPreferencesTables.Sort(p => p?.Name);
 
                 SaveToJson();
                 ImportIcons();

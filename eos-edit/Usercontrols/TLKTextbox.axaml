@@ -20,7 +20,8 @@
   <TextBox x:Name="tbText" Grid.Column="0" Text="{Binding ElementName=ucTLKTextbox, Path=ChangedTrigger, Converter={StaticResource tlkConverter}}"
             TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" AcceptsReturn="{Binding ElementName=ucTLKTextbox, Path=AcceptsReturn}"
             BorderThickness="{Binding ElementName=ucTLKTextbox, Path=InnerBorderThickness}" BorderBrush="{Binding ElementName=ucTLKTextbox, Path=InnerBorderBrush}"
-            Background="{Binding ElementName=ucTLKTextbox, Path=Background}" IsReadOnly="{Binding ElementName=ucTLKTextbox, Path=IsReadonly}"
+            IsReadOnly="{Binding ElementName=ucTLKTextbox, Path=IsReadonly}"
             IsTabStop="{Binding ElementName=ucTLKTextbox, Path=!IsReadonly}"
+            IsEnabled="{Binding ElementName=ucTLKTextbox, Path=IsEnabled}"
             Classes="uc"/>
 </UserControl>

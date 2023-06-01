@@ -8,7 +8,8 @@ namespace Eos.Types
 {
     public enum ProjectileOrientation
     {
-        Path,
-        Target
+        None = 0,
+        Target = 1,
+        Path = 2,
     }
 }

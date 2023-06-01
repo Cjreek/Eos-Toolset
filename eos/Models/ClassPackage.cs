@@ -1,4 +1,5 @@
-﻿using Eos.Nwn.Tlk;
+﻿using Eos.Models.Tables;
+using Eos.Nwn.Tlk;
 using Eos.Repositories;
 using Eos.Types;
 using System;
@@ -17,6 +18,12 @@ namespace Eos.Models
         private CharacterClass? _forClass;
         private Domain? _domain1;
         private Domain? _domain2;
+        private Companion? _associateCompanion;
+        private Familiar? _associateFamiliar;
+        private PackageSpellPreferencesTable? _spellPreferences;
+        private PackageFeatPreferencesTable? _featPreferences;
+        private PackageSkillPreferencesTable? _skillPreferences;
+        private PackageEquipmentTable? _startingEquipment;
 
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
@@ -38,11 +45,41 @@ namespace Eos.Models
             get { return _domain2; }
             set { Set(ref _domain2, value); }
         }
-        public IntPtr Associate { get; set; }
-        public IntPtr SpellPreferences { get; set; }
-        public IntPtr FeatPreferences { get; set; }
-        public IntPtr SkillPreferences { get; set; }
-        public IntPtr StartingEquipment { get; set; }
+        public Companion? AssociateCompanion
+        {
+            get { return _associateCompanion; }
+            set { Set(ref _associateCompanion, value); }
+        }
+        public Familiar? AssociateFamiliar
+        {
+            get { return _associateFamiliar; }
+            set { Set(ref _associateFamiliar, value); }
+        }
+
+        public PackageSpellPreferencesTable? SpellPreferences
+        {
+            get { return _spellPreferences; }
+            set { Set(ref _spellPreferences, value); }
+        }
+
+        public PackageFeatPreferencesTable? FeatPreferences
+        {
+            get { return _featPreferences; }
+            set { Set(ref _featPreferences, value); }
+        }
+
+        public PackageSkillPreferencesTable? SkillPreferences
+        {
+            get { return _skillPreferences; }
+            set { Set(ref _skillPreferences, value); }
+        }
+
+        public PackageEquipmentTable? StartingEquipment
+        {
+            get { return _startingEquipment; }
+            set { Set(ref _startingEquipment, value); }
+        }
+
         public bool Playable { get; set; }
 
         protected override void Initialize()
@@ -64,8 +101,13 @@ namespace Eos.Models
 
         protected override void SetDefaultValues()
         {
-            Name[MasterRepository.Project.DefaultLanguage].Text = "New Class Package";
-            Name[MasterRepository.Project.DefaultLanguage].TextF = "New Class Package";
+            Name[MasterRepository.Project.DefaultLanguage].Text = "New Package";
+            Name[MasterRepository.Project.DefaultLanguage].TextF = "New Package";
+        }
+
+        public override String GetLabel()
+        {
+            return Name;
         }
 
         public override void ResolveReferences()
@@ -74,6 +116,12 @@ namespace Eos.Models
             ForClass = Resolve(ForClass, MasterRepository.Classes);
             Domain1 = Resolve(Domain1, MasterRepository.Domains);
             Domain2 = Resolve(Domain2, MasterRepository.Domains);
+            AssociateCompanion = Resolve(AssociateCompanion, MasterRepository.Companions);
+            AssociateFamiliar = Resolve(AssociateFamiliar, MasterRepository.Familiars);
+            SpellPreferences = Resolve(SpellPreferences, MasterRepository.SpellPreferencesTables);
+            FeatPreferences = Resolve(FeatPreferences, MasterRepository.FeatPreferencesTables);
+            SkillPreferences = Resolve(SkillPreferences, MasterRepository.SkillPreferencesTables);
+            StartingEquipment = Resolve(StartingEquipment, MasterRepository.PackageEquipmentTables);
         }
 
         public override void FromJson(JsonObject json)
@@ -87,11 +135,12 @@ namespace Eos.Models
             this.SpellSchool = JsonToEnum<SpellSchool>(json["SpellSchool"]);
             this.Domain1 = CreateRefFromJson<Domain>(json["Domain1"]?.AsObject());
             this.Domain2 = CreateRefFromJson<Domain>(json["Domain2"]?.AsObject());
-            this.Associate = IntPtr.Zero; // !
-            this.SpellPreferences = IntPtr.Zero; // !
-            this.FeatPreferences = IntPtr.Zero; // !
-            this.SkillPreferences = IntPtr.Zero; // !
-            this.StartingEquipment = IntPtr.Zero; // !
+            this.AssociateCompanion = CreateRefFromJson<Companion>(json["AssociateCompanion"]?.AsObject());
+            this.AssociateFamiliar = CreateRefFromJson<Familiar>(json["AssociateFamiliar"]?.AsObject());
+            this.SpellPreferences = CreateRefFromJson<PackageSpellPreferencesTable>(json["SpellPreferences"]?.AsObject());
+            this.FeatPreferences = CreateRefFromJson<PackageFeatPreferencesTable>(json["FeatPreferences"]?.AsObject());
+            this.SkillPreferences = CreateRefFromJson<PackageSkillPreferencesTable>(json["SkillPreferences"]?.AsObject());
+            this.StartingEquipment = CreateRefFromJson<PackageEquipmentTable>(json["StartingEquipment"]?.AsObject());
             this.Playable = json["Playable"]?.GetValue<bool>() ?? true;
         }
 
@@ -106,11 +155,12 @@ namespace Eos.Models
             packageJson.Add("SpellSchool", EnumToJson(this.SpellSchool));
             packageJson.Add("Domain1", CreateJsonRef(this.Domain1));
             packageJson.Add("Domain2", CreateJsonRef(this.Domain2));
-            packageJson.Add("Associate", null); // !
-            packageJson.Add("SpellPreferences", null); // !
-            packageJson.Add("FeatPreferences", null); // !
-            packageJson.Add("SkillPreferences", null); // !
-            packageJson.Add("StartingEquipment", null); // !
+            packageJson.Add("AssociateCompanion", CreateJsonRef(this.AssociateCompanion));
+            packageJson.Add("AssociateFamiliar", CreateJsonRef(this.AssociateFamiliar));
+            packageJson.Add("SpellPreferences", CreateJsonRef(this.SpellPreferences));
+            packageJson.Add("FeatPreferences", CreateJsonRef(this.FeatPreferences));
+            packageJson.Add("SkillPreferences", CreateJsonRef(this.SkillPreferences));
+            packageJson.Add("StartingEquipment", CreateJsonRef(this.StartingEquipment));
             packageJson.Add("Playable", this.Playable);
 
             return packageJson;

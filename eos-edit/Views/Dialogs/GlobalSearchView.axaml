@@ -53,34 +53,7 @@
               <StackPanel Orientation="Horizontal" Margin="3,1,3,1">
                 <Image Width="24" Height="24" Source="{Binding Icon, Converter={StaticResource resRefConverter}, ConverterParameter={x:Static nwn:NWNResourceType.TGA}}" Margin="0,0,3,0"/>
 
-                <TextBlock Text="{Binding Label}" VerticalAlignment="Center">
-                  <!--<TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                      <Setter Property="Visibility" Value="Collapsed"/>
-                      <Style.Triggers>
-                        <DataTrigger Binding="{Binding ElementName=page, Path=DataContext.IsTableSearch}" Value="True">
-                          <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                      </Style.Triggers>
-                    </Style>
-                  </TextBlock.Style>-->
-                </TextBlock>
-
                 <TextBlock VerticalAlignment="Center">
-                  <!--<TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                      <Setter Property="FontStyle" Value="Italic"/>
-                      <Style.Triggers>
-                        <DataTrigger Binding="{Binding Overrides}" Value="{x:Null}">
-                          <Setter Property="FontStyle" Value="Normal"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding ElementName=page, Path=DataContext.IsTableSearch}" Value="True">
-                          <Setter Property="Visibility" Value="Collapsed"/>
-                        </DataTrigger>
-                      </Style.Triggers>
-                    </Style>
-                  </TextBlock.Style>-->
-
                   <Run>
                     <Run.Text>
                       <MultiBinding Converter="{StaticResource tlkConverterDefault}">
@@ -94,7 +67,7 @@
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTextColumn Header="Type" Width="90" Binding="{Binding Path=TypeName}"/>
+        <DataGridTextColumn Header="Type" Width="130" Binding="{Binding Path=TypeName}"/>
         <DataGridTextColumn Header="ID" Width="40" Binding="{Binding Path=CalculatedIndex, Mode=OneWay}"/>
       </DataGrid.Columns>
     </DataGrid>

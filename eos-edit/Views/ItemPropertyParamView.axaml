@@ -1,0 +1,129 @@
+<local:LanguageAwarePage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views"
+             xmlns:uc="using:Eos.Usercontrols"
+             xmlns:vm="using:Eos.ViewModels"
+             xmlns:types="using:Eos.Types"
+             xmlns:ext="using:Eos.Extensions"
+             xmlns:config="using:Eos.Config"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Views.ItemPropertyParamView"
+             x:Name="page">
+  <local:LanguageAwarePage.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+        <ResourceInclude Source="/Assets/CustomDataTemplateResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </local:LanguageAwarePage.Resources>
+
+  <local:LanguageAwarePage.Styles>
+    <Styles>
+      <StyleInclude Source="/Assets/StyleResources.axaml"/>
+    </Styles>
+  </local:LanguageAwarePage.Styles>
+
+  <Design.DataContext>
+    <vm:PoisonViewModel/>
+  </Design.DataContext>
+
+  <TabControl TabStripPlacement="Left" BorderThickness="0,1,0,0" SelectedIndex="{Binding SelectedTabIndex}" Padding="0">
+    <TabItem Header="Info" Width="100" Height="30" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="*" MinWidth="150"/>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="*" MinWidth="150"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="0,0,0,10">
+              <TextBlock FontSize="22" FontWeight="Bold">
+                <TextBlock.Text>
+                  <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                    <Binding Path="Data.Name"/>
+                  </MultiBinding>
+                </TextBlock.Text>
+              </TextBlock>
+
+              <TextBlock Text=" (Item Property Param ID:" FontSize="16" VerticalAlignment="Center"/>
+              <!--<uc:ResetIsEnabled>-->
+              <TextBox Text="{Binding Data.CalculatedIndex, Mode=OneWay}" BorderThickness="0" FontSize="16" VerticalAlignment="Center" Margin="0" IsReadOnly="True"/>
+              <!--</uc:ResetIsEnabled>-->
+              <TextBlock Text=")" FontSize="16" VerticalAlignment="Center" Margin="0,0,0,0"/>
+            </StackPanel>
+
+            <!--Name-->
+            <TextBlock Text="Name" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+
+            <TextBlock Text="Hint" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+            <TextBox Text="{Binding Data.Hint}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
+
+            <TextBlock Text="Item Property Table" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+            <uc:ItemPropertyTableComboBox SelectedValue="{Binding Data.ItemPropertyTable}" Grid.Row="3" Grid.Column="1"/>
+
+            <!--<TextBlock Text="OR: Table ResRef" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>-->
+            <TextBlock Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2">
+              <Run Text="OR:    " FontWeight="Bold"/>
+              <Run Text="Table ResRef"/>
+            </TextBlock>
+            <TextBox Text="{Binding Data.TableResRef}" Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="3" IsEnabled="{Binding Data.ItemPropertyTable, Converter={x:Static ObjectConverters.IsNull}}"/>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Extensions" Width="100" Height="30" IsVisible="{Binding !Data.IsReadonly}" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Extension Fields" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <ItemsRepeater Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding Data.ExtensionValues}" ElementPrepared="ItemsRepeater_ElementPrepared">
+              <ItemsRepeater.Layout>
+                <UniformGridLayout ItemsStretch="Fill" Orientation="Horizontal" MaximumRowsOrColumns="2" MinItemHeight="25"/>
+              </ItemsRepeater.Layout>
+
+              <ItemsRepeater.ItemTemplate>
+                <DataTemplate>
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="150"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Margin="0,3,5,0" Text="{Binding Property.Label}"/>
+                    <ContentPresenter Grid.Column="1" Content="{Binding}" ContentTemplate="{StaticResource templateSelector}"/>
+                  </Grid>
+                </DataTemplate>
+              </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+  </TabControl>
+</local:LanguageAwarePage>

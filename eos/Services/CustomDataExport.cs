@@ -3,6 +3,7 @@ using Eos.Models;
 using Eos.Models.Tables;
 using Eos.Nwn;
 using Eos.Nwn.Erf;
+using Eos.Nwn.Ssf;
 using Eos.Nwn.Tlk;
 using Eos.Nwn.TwoDimensionalArray;
 using Eos.Repositories;
@@ -14,6 +15,7 @@ using System.Diagnostics;
 using System.Drawing.Text;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -30,6 +32,7 @@ namespace Eos.Services
             public TwoDimensionalArrayFile? Data { get; set; } = null;
         }
 
+        private TlkCollection dialogTlk = new TlkCollection();
         private Dictionary<Guid, TableData> tableDataDict = new Dictionary<Guid, TableData>();
         private Dictionary<Guid, int> modelIndices = new Dictionary<Guid, int>();
         private Dictionary<TLKStringSet, int> customTLKIndices = new Dictionary<TLKStringSet, int>();
@@ -102,7 +105,6 @@ namespace Eos.Services
 
         private void AddTLKString(TLKStringSet tlk)
         {
-            //if ((tlk.OriginalIndex ?? -1) < 0)
             var isEmpty = true;
             foreach (var lang in Enum.GetValues<TLKLanguage>())
             {
@@ -113,7 +115,23 @@ namespace Eos.Services
                 }
             }
 
-            if (!isEmpty)
+            var isDifferent = true;
+            if ((tlk.OriginalIndex ?? -1) >= 0)
+            {
+                isDifferent = false;
+                foreach (var lang in Enum.GetValues<TLKLanguage>())
+                {
+                    var originalTextM = dialogTlk.GetString(lang, false, tlk.OriginalIndex);
+                    var originalTextF = dialogTlk.GetString(lang, true, tlk.OriginalIndex);
+                    if ((tlk[lang].Text.Trim() != originalTextM?.Trim()) || (tlk[lang].TextF.Trim() != originalTextF?.Trim()))
+                    {
+                        isDifferent = true;
+                        break;
+                    }
+                }
+            }
+
+            if ((!isEmpty) && (isDifferent))
                 customTLKIndices.Add(tlk, -1);
         }
 
@@ -261,6 +279,139 @@ namespace Eos.Services
                     AddTLKString(spell.AlternativeCastMessage);
                 }
             }
+
+            // Appearances
+            foreach (var appearance in project.Appearances)
+            {
+                if (appearance != null)
+                {
+                    AddTLKString(appearance.Name);
+                }
+            }
+
+            // BaseItems
+            foreach (var baseItem in project.BaseItems)
+            {
+                if (baseItem != null)
+                {
+                    AddTLKString(baseItem.Name);
+                    AddTLKString(baseItem.Description);
+                    AddTLKString(baseItem.StatsText);
+                }
+            }
+
+            // Companions
+            foreach (var companion in project.Companions)
+            {
+                if (companion != null)
+                {
+                    AddTLKString(companion.Name);
+                    AddTLKString(companion.Description);
+                }
+            }
+
+            // Familiars
+            foreach (var familiar in project.Familiars)
+            {
+                if (familiar != null)
+                {
+                    AddTLKString(familiar.Name);
+                    AddTLKString(familiar.Description);
+                }
+            }
+
+            // Traps
+            foreach (var trap in project.Traps)
+            {
+                if (trap != null)
+                {
+                    AddTLKString(trap.Name);
+                }
+            }
+
+            // Damage Types
+            foreach (var damageType in project.DamageTypes)
+            {
+                if (damageType != null)
+                {
+                    AddTLKString(damageType.Name);
+                }
+            }
+
+            // Damage Type Groups
+            foreach (var damageTypeGroup in project.DamageTypeGroups)
+            {
+                if (damageTypeGroup != null)
+                {
+                    AddTLKString(damageTypeGroup.FeedbackText);
+                }
+            }
+
+            // Item Properties
+            foreach (var itemProp in project.ItemProperties)
+            {
+                if (itemProp != null)
+                {
+                    AddTLKString(itemProp.Name);
+                    AddTLKString(itemProp.PropertyText);
+                    AddTLKString(itemProp.Description);
+                }
+            }
+
+            // Item Property Tables
+            foreach (var ipTable in project.ItemPropertyTables)
+            {
+                if (ipTable != null)
+                {
+                    foreach (var item in ipTable.Items)
+                    {
+                        if (item == null) continue;
+
+                        AddTLKString(item.Name);
+                        if (item.CustomColumnValue01.Value is TLKStringSet tlk01) AddTLKString(tlk01);
+                        if (item.CustomColumnValue02.Value is TLKStringSet tlk02) AddTLKString(tlk02);
+                        if (item.CustomColumnValue03.Value is TLKStringSet tlk03) AddTLKString(tlk03);
+                        if (item.CustomColumnValue04.Value is TLKStringSet tlk04) AddTLKString(tlk04);
+                        if (item.CustomColumnValue05.Value is TLKStringSet tlk05) AddTLKString(tlk05);
+                        if (item.CustomColumnValue06.Value is TLKStringSet tlk06) AddTLKString(tlk06);
+                        if (item.CustomColumnValue07.Value is TLKStringSet tlk07) AddTLKString(tlk07);
+                        if (item.CustomColumnValue08.Value is TLKStringSet tlk08) AddTLKString(tlk08);
+                        if (item.CustomColumnValue09.Value is TLKStringSet tlk09) AddTLKString(tlk09);
+                        if (item.CustomColumnValue10.Value is TLKStringSet tlk10) AddTLKString(tlk10);
+                    }
+                }
+            }
+
+            // Item Property Cost Tables
+            foreach (var ipcTable in project.ItemPropertyCostTables)
+            {
+                if (ipcTable != null)
+                {
+                    foreach (var item in ipcTable.Items)
+                    {
+                        if (item == null) continue;
+
+                        AddTLKString(item.Name);
+                        if (item.CustomColumnValue01.Value is TLKStringSet tlk01) AddTLKString(tlk01);
+                        if (item.CustomColumnValue02.Value is TLKStringSet tlk02) AddTLKString(tlk02);
+                        if (item.CustomColumnValue03.Value is TLKStringSet tlk03) AddTLKString(tlk03);
+                        if (item.CustomColumnValue04.Value is TLKStringSet tlk04) AddTLKString(tlk04);
+                        if (item.CustomColumnValue05.Value is TLKStringSet tlk05) AddTLKString(tlk05);
+                        if (item.CustomColumnValue06.Value is TLKStringSet tlk06) AddTLKString(tlk06);
+                        if (item.CustomColumnValue07.Value is TLKStringSet tlk07) AddTLKString(tlk07);
+                        if (item.CustomColumnValue08.Value is TLKStringSet tlk08) AddTLKString(tlk08);
+                        if (item.CustomColumnValue09.Value is TLKStringSet tlk09) AddTLKString(tlk09);
+                        if (item.CustomColumnValue10.Value is TLKStringSet tlk10) AddTLKString(tlk10);
+                    }
+                }
+            }
+
+            // Item Property Params
+            foreach (var ipParam in project.ItemPropertyParams)
+            {
+                if (ipParam != null)
+                    AddTLKString(ipParam.Name);
+            }
         }
 
         private void ExportTLKs(EosProject project)
@@ -303,7 +454,7 @@ namespace Eos.Services
                     }
 
                     var filename = project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da";
-                    td2.Save(filename);
+                    td2.Save(filename, project.Settings.Export.Compress2DA);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
                 }
@@ -330,7 +481,7 @@ namespace Eos.Services
                     }
 
                     var filename = project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da";
-                    td2.Save(filename);
+                    td2.Save(filename, project.Settings.Export.Compress2DA);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
                 }
@@ -366,7 +517,7 @@ namespace Eos.Services
                     }
 
                     var filename = project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da";
-                    td2.Save(filename);
+                    td2.Save(filename, project.Settings.Export.Compress2DA);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
                 }
@@ -405,7 +556,7 @@ namespace Eos.Services
                     }
 
                     var filename = project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da";
-                    td2.Save(filename);
+                    td2.Save(filename, project.Settings.Export.Compress2DA);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
                 }
@@ -448,7 +599,7 @@ namespace Eos.Services
                     }
 
                     var filename = project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da";
-                    td2.Save(filename);
+                    td2.Save(filename, project.Settings.Export.Compress2DA);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
                 }
@@ -548,7 +699,7 @@ namespace Eos.Services
                     }
 
                     var filename = project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da";
-                    td2.Save(filename);
+                    td2.Save(filename, project.Settings.Export.Compress2DA);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
                 }
@@ -581,7 +732,7 @@ namespace Eos.Services
                     }
 
                     var filename = project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da";
-                    td2.Save(filename);
+                    td2.Save(filename, project.Settings.Export.Compress2DA);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
                 }
@@ -616,7 +767,7 @@ namespace Eos.Services
                     }
 
                     var filename = project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da";
-                    td2.Save(filename);
+                    td2.Save(filename, project.Settings.Export.Compress2DA);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
                 }
@@ -638,19 +789,154 @@ namespace Eos.Services
 
                     var td2 = new TwoDimensionalArrayFile();
                     td2.New(columns);
+                    td2.Columns.SetMaxLength("SkillLabel", project.Settings.Export.LabelMaxLength);
                     foreach (var item in table.Items)
                     {
                         if (item != null)
                         {
                             var rec = td2.AddRecord();
-                            rec.Set("SkillLabel", item.Skill?.Name[project.DefaultLanguage].Text.Replace(" ", ""));
+                            rec.Set("SkillLabel", MakeLabel(item.Skill?.Name[project.DefaultLanguage].Text, ""));
                             rec.Set("SkillIndex", project.Skills.Get2DAIndex(item.Skill));
                             rec.Set("ClassSkill", item.IsClassSkill ? 1 : 0);
                         }
                     }
 
                     var filename = project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da";
-                    td2.Save(filename);
+                    td2.Save(filename, project.Settings.Export.Compress2DA);
+
+                    AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
+                }
+            }
+        }
+
+        private void ExportSpellPreferencesTables(EosProject project)
+        {
+            var columns = new String[]
+            {
+                "SpellIndex", "Label",
+            };
+
+            foreach (var table in project.SpellPreferencesTables)
+            {
+                if (table != null)
+                {
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da"));
+
+                    var td2 = new TwoDimensionalArrayFile();
+                    td2.New(columns);
+                    td2.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+                    foreach (var item in table.Items)
+                    {
+                        if ((item != null) && (item.IsValid()))
+                        {
+                            var rec = td2.AddRecord();
+                            rec.Set("SpellIndex", project.Spells.Get2DAIndex(item.Spell));
+                            rec.Set("Label", MakeLabel(item.Spell?.Name[project.DefaultLanguage].Text, "_"));
+                        }
+                    }
+
+                    var filename = project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da";
+                    td2.Save(filename, project.Settings.Export.Compress2DA);
+
+                    AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
+                }
+            }
+        }
+
+        private void ExportFeatPreferencesTables(EosProject project)
+        {
+            var columns = new String[]
+            {
+                "FeatIndex", "Label",
+            };
+
+            foreach (var table in project.FeatPreferencesTables)
+            {
+                if (table != null)
+                {
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da"));
+
+                    var td2 = new TwoDimensionalArrayFile();
+                    td2.New(columns);
+                    td2.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+                    foreach (var item in table.Items)
+                    {
+                        if ((item != null) && (item.IsValid()))
+                        {
+                            var rec = td2.AddRecord();
+                            rec.Set("FeatIndex", project.Feats.Get2DAIndex(item.Feat));
+                            rec.Set("Label", MakeLabel(item.Feat?.Name[project.DefaultLanguage].Text, "_"));
+                        }
+                    }
+
+                    var filename = project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da";
+                    td2.Save(filename, project.Settings.Export.Compress2DA);
+
+                    AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
+                }
+            }
+        }
+
+        private void ExportSkillPreferencesTables(EosProject project)
+        {
+            var columns = new String[]
+            {
+                "SkillIndex", "Label",
+            };
+
+            foreach (var table in project.SkillPreferencesTables)
+            {
+                if (table != null)
+                {
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da"));
+
+                    var td2 = new TwoDimensionalArrayFile();
+                    td2.New(columns);
+                    td2.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+                    foreach (var item in table.Items)
+                    {
+                        if ((item != null) && (item.IsValid()))
+                        {
+                            var rec = td2.AddRecord();
+                            rec.Set("SkillIndex", project.Skills.Get2DAIndex(item.Skill));
+                            rec.Set("Label", MakeLabel(item.Skill?.Name[project.DefaultLanguage].Text, ""));
+                        }
+                    }
+
+                    var filename = project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da";
+                    td2.Save(filename, project.Settings.Export.Compress2DA);
+
+                    AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
+                }
+            }
+        }
+
+        private void ExportPackageEquipmentTables(EosProject project)
+        {
+            var columns = new String[]
+            {
+                "Label",
+            };
+
+            foreach (var table in project.PackageEquipmentTables)
+            {
+                if (table != null)
+                {
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da"));
+
+                    var td2 = new TwoDimensionalArrayFile();
+                    td2.New(columns);
+                    foreach (var item in table.Items)
+                    {
+                        if ((item != null) && (item.IsValid()))
+                        {
+                            var rec = td2.AddRecord();
+                            rec.Set("Label", item.BlueprintResRef);
+                        }
+                    }
+
+                    var filename = project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da";
+                    td2.Save(filename, project.Settings.Export.Compress2DA);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
                 }
@@ -710,7 +996,7 @@ namespace Eos.Services
                     }
 
                     var filename = project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da";
-                    td2.Save(filename);
+                    td2.Save(filename, project.Settings.Export.Compress2DA);
 
                     AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
                 }
@@ -730,6 +1016,7 @@ namespace Eos.Services
                 classes2da.Columns.AddColumn("SkipSpellSelection");
                 classes2da.Columns.SetHex("AlignRestrict");
                 classes2da.Columns.SetHex("AlignRstrctType");
+
                 if (project.Settings.Export.LowercaseFilenames)
                 {
                     classes2da.Columns.SetLowercase("Icon");
@@ -743,6 +1030,8 @@ namespace Eos.Services
                     classes2da.Columns.SetLowercase("PreReqTable");
                     classes2da.Columns.SetLowercase("StatGainTable");
                 }
+
+                classes2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
 
                 AddExtensionColumns(classes2da, project.Classes.Extensions);
 
@@ -764,7 +1053,7 @@ namespace Eos.Services
                         }
 
                         var record = classes2da[index];
-                        record.Set("Label", cls.Name[project.DefaultLanguage].Text.Replace(" ", "_"));
+                        record.Set("Label", MakeLabel(cls.Name[project.DefaultLanguage].Text, "_"));
                         record.Set("Short", GetTLKIndex(cls.Abbreviation));
                         record.Set("Name", GetTLKIndex(cls.Name));
                         record.Set("Plural", GetTLKIndex(cls.NamePlural));
@@ -824,7 +1113,7 @@ namespace Eos.Services
                 }
 
                 var filename = project.Settings.Export.TwoDAFolder + "classes.2da";
-                classes2da.Save(filename);
+                classes2da.Save(filename, project.Settings.Export.Compress2DA);
 
                 AddHAKResource("classes", NWNResourceType.TWODA, filename);
             }
@@ -839,6 +1128,18 @@ namespace Eos.Services
             var packages2da = Load2da("packages");
             if (packages2da != null)
             {
+                if (project.Settings.Export.LowercaseFilenames)
+                {
+                    packages2da.Columns.SetLowercase("SpellPref2DA");
+                    packages2da.Columns.SetLowercase("FeatPref2DA");
+                    packages2da.Columns.SetLowercase("SkillPref2DA");
+                    packages2da.Columns.SetLowercase("Equip2DA");
+                }
+
+                packages2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
+                AddExtensionColumns(packages2da, project.ClassPackages.Extensions);
+
                 foreach (var package in project.ClassPackages.OrderBy(package => package?.Index))
                 {
                     if (package != null)
@@ -857,7 +1158,7 @@ namespace Eos.Services
                         }
 
                         var record = packages2da[index];
-                        record.Set("Label", package.Name[project.DefaultLanguage].Text.Replace(" ", "_"));
+                        record.Set("Label", MakeLabel(package.Name[project.DefaultLanguage].Text, "_"));
                         record.Set("Name", GetTLKIndex(package.Name));
                         record.Set("Description", GetTLKIndex(package.Description));
                         record.Set("ClassID", project.Classes.Get2DAIndex(package.ForClass));
@@ -866,18 +1167,26 @@ namespace Eos.Services
                         record.Set("School", (int?)package.SpellSchool);
                         record.Set("Domain1", project.Domains.Get2DAIndex(package.Domain1));
                         record.Set("Domain2", project.Domains.Get2DAIndex(package.Domain1));
-                        record.Set("Associate", null); // TODO
-                        record.Set("SpellPref2DA", null); // TODO
-                        record.Set("FeatPref2DA", null); // TODO
-                        record.Set("SkillPref2DA", null); // TODO
-                        record.Set("Equip2DA", null); // TODO
+
+                        if (package.ForClass?.IsSpellCaster ?? false)
+                        {
+                            if (package.ForClass.IsArcaneCaster)
+                                record.Set("Associate", project.Familiars.Get2DAIndex(package.AssociateFamiliar));
+                            else
+                                record.Set("Associate", project.Companions.Get2DAIndex(package.AssociateCompanion));
+                        }
+
+                        record.Set("SpellPref2DA", package.SpellPreferences?.Name); // TODO
+                        record.Set("FeatPref2DA", package.FeatPreferences?.Name); // TODO
+                        record.Set("SkillPref2DA", package.SkillPreferences?.Name); // TODO
+                        record.Set("Equip2DA", package.StartingEquipment?.Name); // TODO
                         record.Set("Soundset", 0);
                         record.Set("PlayerClass", package.Playable);
                     }
                 }
 
                 var filename = project.Settings.Export.TwoDAFolder + "packages.2da";
-                packages2da.Save(filename);
+                packages2da.Save(filename, project.Settings.Export.Compress2DA);
 
                 AddHAKResource("packages", NWNResourceType.TWODA, filename);
             }
@@ -897,7 +1206,9 @@ namespace Eos.Services
                     disease2da.Columns.SetLowercase("End_Incu_Script");
                     disease2da.Columns.SetLowercase("24_Hour_Script");
                 }
-                
+
+                disease2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
                 AddExtensionColumns(disease2da, project.Diseases.Extensions);
                 foreach (var disease in project.Diseases.OrderBy(disease => disease?.Index))
                 {
@@ -917,7 +1228,7 @@ namespace Eos.Services
                         }
 
                         var record = disease2da[index];
-                        record.Set("Label", disease.Name[project.DefaultLanguage].Text.Replace(" ", "_"));
+                        record.Set("Label", MakeLabel(disease.Name[project.DefaultLanguage].Text, "_"));
                         record.Set("Name", GetTLKIndex(disease.Name));
                         record.Set("First_Save", disease.FirstSaveDC);
                         record.Set("Subs_Save", disease.SecondSaveDC);
@@ -940,7 +1251,7 @@ namespace Eos.Services
                 }
 
                 var filename = project.Settings.Export.TwoDAFolder + "disease.2da";
-                disease2da.Save(filename);
+                disease2da.Save(filename, project.Settings.Export.Compress2DA);
 
                 AddHAKResource("disease", NWNResourceType.TWODA, filename);
             }
@@ -962,6 +1273,8 @@ namespace Eos.Services
                     domains2da.Columns.SetLowercase("Icon");
                 }
 
+                domains2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
                 AddExtensionColumns(domains2da, project.Domains.Extensions);
                 foreach (var domain in project.Domains.OrderBy(domain => domain?.Index))
                 {
@@ -981,7 +1294,7 @@ namespace Eos.Services
                         }
 
                         var record = domains2da[index];
-                        record.Set("Label", domain.Name[project.DefaultLanguage].Text.Replace(" ", "_").ToUpper());
+                        record.Set("Label", MakeLabel(domain.Name[project.DefaultLanguage].Text, "_")?.ToUpper());
                         record.Set("Name", GetTLKIndex(domain.Name));
                         record.Set("Description", GetTLKIndex(domain.Description));
                         record.Set("Icon", domain.Icon);
@@ -1003,7 +1316,7 @@ namespace Eos.Services
                 }
 
                 var filename = project.Settings.Export.TwoDAFolder + "domains.2da";
-                domains2da.Save(filename);
+                domains2da.Save(filename, project.Settings.Export.Compress2DA);
 
                 AddHAKResource("domains", NWNResourceType.TWODA, filename);
             }
@@ -1046,7 +1359,7 @@ namespace Eos.Services
                 }
 
                 var filename = project.Settings.Export.TwoDAFolder + "masterfeats.2da";
-                masterFeats2da.Save(filename);
+                masterFeats2da.Save(filename, project.Settings.Export.Compress2DA);
 
                 AddHAKResource("masterfeats", NWNResourceType.TWODA, filename);
             }
@@ -1065,6 +1378,8 @@ namespace Eos.Services
                 {
                     feat2da.Columns.SetLowercase("Icon");
                 }
+
+                feat2da.Columns.SetMaxLength("LABEL", project.Settings.Export.LabelMaxLength);
 
                 AddExtensionColumns(feat2da, project.Feats.Extensions);
                 foreach (var feat in project.Feats.OrderBy(feat => feat?.Index))
@@ -1091,7 +1406,7 @@ namespace Eos.Services
                             continue;
                         }
 
-                        record.Set("LABEL", feat.Name[project.DefaultLanguage].Text.Replace(" ", "_"));
+                        record.Set("LABEL", MakeLabel(feat.Name[project.DefaultLanguage].Text, "_"));
                         record.Set("FEAT", GetTLKIndex(feat.Name));
                         record.Set("DESCRIPTION", GetTLKIndex(feat.Description));
                         record.Set("Icon", feat.Icon);
@@ -1140,7 +1455,7 @@ namespace Eos.Services
                 }
 
                 var filename = project.Settings.Export.TwoDAFolder + "feat.2da";
-                feat2da.Save(filename);
+                feat2da.Save(filename, project.Settings.Export.Compress2DA);
 
                 AddHAKResource("feat", NWNResourceType.TWODA, filename);
             }
@@ -1162,6 +1477,8 @@ namespace Eos.Services
                     poison2da.Columns.SetLowercase("VFX_Impact");
                 }
 
+                poison2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
                 AddExtensionColumns(poison2da, project.Poisons.Extensions);
                 foreach (var poison in project.Poisons.OrderBy(poison => poison?.Index))
                 {
@@ -1181,7 +1498,7 @@ namespace Eos.Services
                         }
 
                         var record = poison2da[index];
-                        record.Set("Label", poison.Name[project.DefaultLanguage].Text.Replace(" ", "_"));
+                        record.Set("Label", MakeLabel(poison.Name[project.DefaultLanguage].Text, "_"));
                         record.Set("Name", GetTLKIndex(poison.Name));
                         record.Set("Save_DC", poison.SaveDC);
                         record.Set("Handle_DC", poison.HandleDC);
@@ -1202,7 +1519,7 @@ namespace Eos.Services
                 }
 
                 var filename = project.Settings.Export.TwoDAFolder + "poison.2da";
-                poison2da.Save(filename);
+                poison2da.Save(filename, project.Settings.Export.Compress2DA);
 
                 AddHAKResource("poison", NWNResourceType.TWODA, filename);
             }
@@ -1226,6 +1543,8 @@ namespace Eos.Services
                     racialtypes2da.Columns.SetLowercase("NameGenTableB");
                 }
 
+                racialtypes2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
                 AddExtensionColumns(racialtypes2da, project.Races.Extensions);
                 foreach (var race in project.Races.OrderBy(race => race?.Index))
                 {
@@ -1245,7 +1564,7 @@ namespace Eos.Services
                         }
 
                         var record = racialtypes2da[index];
-                        record.Set("Label", race.Name[project.DefaultLanguage].Text.Replace(" ", "_"));
+                        record.Set("Label", MakeLabel(race.Name[project.DefaultLanguage].Text, "_"));
                         record.Set("Abrev", race.Name[project.DefaultLanguage].Text.Substring(0, 2));
                         record.Set("Name", GetTLKIndex(race.Name));
                         record.Set("ConverName", GetTLKIndex(race.Adjective));
@@ -1285,7 +1604,7 @@ namespace Eos.Services
                 }
 
                 var filename = project.Settings.Export.TwoDAFolder + "racialtypes.2da";
-                racialtypes2da.Save(filename);
+                racialtypes2da.Save(filename, project.Settings.Export.Compress2DA);
 
                 AddHAKResource("racialtypes", NWNResourceType.TWODA, filename);
             }
@@ -1307,6 +1626,8 @@ namespace Eos.Services
                     skills2da.Columns.SetLowercase("Icon");
                 }
 
+                skills2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
                 AddExtensionColumns(skills2da, project.Skills.Extensions);
                 foreach (var skill in project.Skills.OrderBy(skill => skill?.Index))
                 {
@@ -1326,7 +1647,7 @@ namespace Eos.Services
                         }
 
                         var record = skills2da[index];
-                        record.Set("Label", skill.Name[project.DefaultLanguage].Text.Replace(" ", ""));
+                        record.Set("Label", MakeLabel(skill.Name[project.DefaultLanguage].Text, ""));
                         record.Set("Name", GetTLKIndex(skill.Name));
                         record.Set("Description", GetTLKIndex(skill.Description));
                         record.Set("Icon", skill.Icon);
@@ -1345,7 +1666,7 @@ namespace Eos.Services
                 }
 
                 var filename = project.Settings.Export.TwoDAFolder + "skills.2da";
-                skills2da.Save(filename);
+                skills2da.Save(filename, project.Settings.Export.Compress2DA);
 
                 AddHAKResource("skills", NWNResourceType.TWODA, filename);
             }
@@ -1432,9 +1753,295 @@ namespace Eos.Services
                 }
 
                 var filename = project.Settings.Export.TwoDAFolder + "vfx_persistent.2da";
-                aoe2da.Save(filename);
+                aoe2da.Save(filename, project.Settings.Export.Compress2DA);
 
                 AddHAKResource("vfx_persistent", NWNResourceType.TWODA, filename);
+            }
+        }
+
+        private void ExportAppearanceSoundsets(EosProject project)
+        {
+            if (project.AppearanceSoundsets.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "appearancesndset.2da"));
+
+            var appearancesndset2da = Load2da("appearancesndset");
+            if (appearancesndset2da != null)
+            {
+                if (project.Settings.Export.LowercaseFilenames)
+                {
+                    appearancesndset2da.Columns.SetLowercase("Looping");
+                    appearancesndset2da.Columns.SetLowercase("FallFwd");
+                    appearancesndset2da.Columns.SetLowercase("FallBck");
+                }
+
+                appearancesndset2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
+                AddExtensionColumns(appearancesndset2da, project.AppearanceSoundsets.Extensions);
+                foreach (var appearanceSoundset in project.AppearanceSoundsets.OrderBy(appearanceSoundset => appearanceSoundset?.Index))
+                {
+                    if (appearanceSoundset != null)
+                    {
+                        var index = -1;
+                        if (appearanceSoundset.Overrides != null)
+                            index = MasterRepository.Standard.AppearanceSoundsets.GetByID(appearanceSoundset.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.AppearanceSoundsets.GetCustomDataStartIndex() + appearanceSoundset.Index >= appearancesndset2da.Count)
+                            {
+                                appearancesndset2da.AddRecord();
+                            }
+
+                            index = project.AppearanceSoundsets.GetCustomDataStartIndex() + (appearanceSoundset.Index ?? 0);
+                        }
+
+                        var record = appearancesndset2da[index];
+                        record.Set("Label", MakeLabel(appearanceSoundset.Name, "_"));
+                        record.Set("ArmorType", appearanceSoundset.ArmorType?.ToString().ToLower());
+                        record.Set("WeapTypeL", project.WeaponSounds.Get2DAIndex(appearanceSoundset.LeftAttack));
+                        record.Set("WeapTypeR", project.WeaponSounds.Get2DAIndex(appearanceSoundset.RightAttack));
+                        record.Set("WeapTypeS", project.WeaponSounds.Get2DAIndex(appearanceSoundset.StraightAttack));
+                        record.Set("WeapTypeClsLw", project.WeaponSounds.Get2DAIndex(appearanceSoundset.LowCloseAttack));
+                        record.Set("WeapTypeClsH", project.WeaponSounds.Get2DAIndex(appearanceSoundset.HighCloseAttack));
+                        record.Set("WeapTypeRch", project.WeaponSounds.Get2DAIndex(appearanceSoundset.ReachAttack));
+                        record.Set("MissIndex", project.WeaponSounds.Get2DAIndex(appearanceSoundset.Miss));
+                        record.Set("Looping", appearanceSoundset.Looping);
+                        record.Set("FallFwd", appearanceSoundset.FallForward);
+                        record.Set("FallBck", appearanceSoundset.FallBackward);
+
+                        WriteExtensionValues(record, appearanceSoundset.ExtensionValues);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "appearancesndset.2da";
+                appearancesndset2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("appearancesndset", NWNResourceType.TWODA, filename);
+            }
+        }
+
+        private void ExportAppearances(EosProject project)
+        {
+            if (project.Appearances.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "appearance.2da"));
+
+            var appearance2da = Load2da("appearance");
+            if (appearance2da != null)
+            {
+                if (project.Settings.Export.LowercaseFilenames)
+                {
+                    //appearance2da.Columns.SetLowercase("RACE");
+                    appearance2da.Columns.SetLowercase("PORTRAIT");
+                }
+
+                appearance2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
+                AddExtensionColumns(appearance2da, project.Appearances.Extensions);
+                foreach (var appearance in project.Appearances.OrderBy(appearance => appearance?.Index))
+                {
+                    if (appearance != null)
+                    {
+                        var index = -1;
+                        if (appearance.Overrides != null)
+                            index = MasterRepository.Standard.Appearances.GetByID(appearance.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.Appearances.GetCustomDataStartIndex() + appearance.Index >= appearance2da.Count)
+                            {
+                                appearance2da.AddRecord();
+                            }
+
+                            index = project.Appearances.GetCustomDataStartIndex() + (appearance.Index ?? 0);
+                        }
+
+                        var record = appearance2da[index];
+                        record.Set("Label", MakeLabel(appearance.Name[project.DefaultLanguage].Text, "_"));
+                        record.Set("STRING_REF", GetTLKIndex(appearance.Name));
+                        record.Set("NAME", appearance.Name[project.DefaultLanguage].Text.Replace(" ", "_"));
+                        record.Set("RACE", appearance.RaceModel);
+                        record.Set("ENVMAP", appearance.EnvironmentMap);
+                        record.Set("BLOODCOLR", appearance.BloodColor.ToString());
+
+                        var modelType = appearance.ModelType.ToString();
+                        if (appearance.CanHaveWings) modelType += "W";
+                        if (appearance.CanHaveTails) modelType += "T";
+                        record.Set("MODELTYPE", modelType);
+
+                        record.Set("WEAPONSCALE", appearance.WeaponScale);
+                        record.Set("WING_TAIL_SCALE", appearance.WingTailScale);
+                        record.Set("HELMET_SCALE_M", appearance.HelmetScaleMale);
+                        record.Set("HELMET_SCALE_F", appearance.HelmetScaleFemale);
+                        record.Set("MOVERATE", appearance.MovementRate.ToString());
+                        record.Set("WALKDIST", appearance.WalkAnimationDistance);
+                        record.Set("RUNDIST", appearance.RunAnimationDistance);
+                        record.Set("PERSPACE", appearance.PersonalSpaceRadius);
+                        record.Set("CREPERSPACE", appearance.CreaturePersonalSpaceRadius);
+                        record.Set("HEIGHT", appearance.CameraHeight);
+                        record.Set("HITDIST", appearance.HitDistance);
+                        record.Set("PREFATCKDIST", appearance.PreferredAttackDistance);
+                        record.Set("TARGETHEIGHT", appearance.TargetHeight.ToString());
+                        record.Set("ABORTONPARRY", appearance.AbortAttackAnimationOnParry);
+                        record.Set("RACIALTYPE", 0); // ?
+                        record.Set("HASLEGS", appearance.HasLegs);
+                        record.Set("HASARMS", appearance.HasArms);
+                        record.Set("PORTRAIT", appearance.Portrait);
+                        record.Set("SIZECATEGORY", (int)appearance.SizeCategory);
+                        record.Set("PERCEPTIONDIST", (int)appearance.PerceptionRange);
+                        record.Set("FOOTSTEPTYPE", (int)appearance.FootstepSound);
+                        record.Set("SOUNDAPPTYPE", project.AppearanceSoundsets.Get2DAIndex(appearance.AppearanceSoundset));
+                        record.Set("HEADTRACK", appearance.HeadTracking);
+                        record.Set("HEAD_ARC_H", appearance.HorizontalHeadTrackingRange);
+                        record.Set("HEAD_ARC_V", appearance.VerticalHeadTrackingRange);
+                        record.Set("HEAD_NAME", appearance.ModelHeadNodeName);
+                        record.Set("BODY_BAG", (int)appearance.BodyBag);
+                        record.Set("TARGETABLE", appearance.Targetable);
+
+                        WriteExtensionValues(record, appearance.ExtensionValues);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "appearance.2da";
+                appearance2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("appearance", NWNResourceType.TWODA, filename);
+            }
+        }
+
+
+        private void ExportWeaponSounds(EosProject project)
+        {
+            if (project.WeaponSounds.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "weaponsounds.2da"));
+
+            var weaponsounds2da = Load2da("weaponsounds");
+            if (weaponsounds2da != null)
+            {
+                if (project.Settings.Export.LowercaseFilenames)
+                {
+                    weaponsounds2da.Columns.SetLowercase("Leather0");
+                    weaponsounds2da.Columns.SetLowercase("Leather1");
+                    weaponsounds2da.Columns.SetLowercase("Chain0");
+                    weaponsounds2da.Columns.SetLowercase("Chain1");
+                    weaponsounds2da.Columns.SetLowercase("Plate0");
+                    weaponsounds2da.Columns.SetLowercase("Plate1");
+                    weaponsounds2da.Columns.SetLowercase("Stone0");
+                    weaponsounds2da.Columns.SetLowercase("Stone1");
+                    weaponsounds2da.Columns.SetLowercase("Wood0");
+                    weaponsounds2da.Columns.SetLowercase("Wood1");
+                    weaponsounds2da.Columns.SetLowercase("Chitin0");
+                    weaponsounds2da.Columns.SetLowercase("Chitin1");
+                    weaponsounds2da.Columns.SetLowercase("Scale0");
+                    weaponsounds2da.Columns.SetLowercase("Scale1");
+                    weaponsounds2da.Columns.SetLowercase("Ethereal0");
+                    weaponsounds2da.Columns.SetLowercase("Ethereal1");
+                    weaponsounds2da.Columns.SetLowercase("Crystal0");
+                    weaponsounds2da.Columns.SetLowercase("Crystal1");
+                    weaponsounds2da.Columns.SetLowercase("Miss0");
+                    weaponsounds2da.Columns.SetLowercase("Miss1");
+                    weaponsounds2da.Columns.SetLowercase("Parry0");
+                    weaponsounds2da.Columns.SetLowercase("Critical0");
+                }
+
+                AddExtensionColumns(weaponsounds2da, project.WeaponSounds.Extensions);
+                foreach (var weaponSound in project.WeaponSounds.OrderBy(weaponSound => weaponSound?.Index))
+                {
+                    if (weaponSound != null)
+                    {
+                        var index = -1;
+                        if (weaponSound.Overrides != null)
+                            index = MasterRepository.Standard.WeaponSounds.GetByID(weaponSound.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.WeaponSounds.GetCustomDataStartIndex() + weaponSound.Index >= weaponsounds2da.Count)
+                            {
+                                weaponsounds2da.AddRecord();
+                            }
+
+                            index = project.WeaponSounds.GetCustomDataStartIndex() + (weaponSound.Index ?? 0);
+                        }
+
+                        var record = weaponsounds2da[index];
+                        record.Set("Label", weaponSound.Name);
+                        record.Set("Leather0", weaponSound.Leather0);
+                        record.Set("Leather1", weaponSound.Leather1);
+                        record.Set("Chain0", weaponSound.Chain0);
+                        record.Set("Chain1", weaponSound.Chain1);
+                        record.Set("Plate0", weaponSound.Plate0);
+                        record.Set("Plate1", weaponSound.Plate1);
+                        record.Set("Stone0", weaponSound.Stone0);
+                        record.Set("Stone1", weaponSound.Stone1);
+                        record.Set("Wood0", weaponSound.Wood0);
+                        record.Set("Wood1", weaponSound.Wood1);
+                        record.Set("Chitin0", weaponSound.Chitin0);
+                        record.Set("Chitin1", weaponSound.Chitin1);
+                        record.Set("Scale0", weaponSound.Scale0);
+                        record.Set("Scale1", weaponSound.Scale1);
+                        record.Set("Ethereal0", weaponSound.Ethereal0);
+                        record.Set("Ethereal1", weaponSound.Ethereal1);
+                        record.Set("Crystal0", weaponSound.Crystal0);
+                        record.Set("Crystal1", weaponSound.Crystal1);
+                        record.Set("Miss0", weaponSound.Miss0);
+                        record.Set("Miss1", weaponSound.Miss1);
+                        record.Set("Parry0", weaponSound.Parry);
+                        record.Set("Critical0", weaponSound.Critical);
+
+                        WriteExtensionValues(record, weaponSound.ExtensionValues);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "weaponsounds.2da";
+                weaponsounds2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("weaponsounds", NWNResourceType.TWODA, filename);
+            }
+        }
+
+        private void ExportInventorySounds(EosProject project)
+        {
+            if (project.InventorySounds.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "inventorysnds.2da"));
+
+            var inventorysounds2da = Load2da("inventorysnds");
+            if (inventorysounds2da != null)
+            {
+                if (project.Settings.Export.LowercaseFilenames)
+                {
+                    inventorysounds2da.Columns.SetLowercase("InventorySound");
+                }
+
+                AddExtensionColumns(inventorysounds2da, project.InventorySounds.Extensions);
+                foreach (var inventorySound in project.InventorySounds.OrderBy(inventorySound => inventorySound?.Index))
+                {
+                    if (inventorySound != null)
+                    {
+                        var index = -1;
+                        if (inventorySound.Overrides != null)
+                            index = MasterRepository.Standard.InventorySounds.GetByID(inventorySound.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.InventorySounds.GetCustomDataStartIndex() + inventorySound.Index >= inventorysounds2da.Count)
+                            {
+                                inventorysounds2da.AddRecord();
+                            }
+
+                            index = project.InventorySounds.GetCustomDataStartIndex() + (inventorySound.Index ?? 0);
+                        }
+
+                        var record = inventorysounds2da[index];
+                        record.Set("Label", inventorySound.Name);
+                        record.Set("InventorySound", inventorySound.Sound);
+
+                        WriteExtensionValues(record, inventorySound.ExtensionValues);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "inventorysnds.2da";
+                inventorysounds2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("inventorysnds", NWNResourceType.TWODA, filename);
             }
         }
 
@@ -1504,7 +2111,7 @@ namespace Eos.Services
                 }
 
                 var filename = project.Settings.Export.TwoDAFolder + "polymorph.2da";
-                polymorph2da.Save(filename);
+                polymorph2da.Save(filename, project.Settings.Export.Compress2DA);
 
                 AddHAKResource("polymorph", NWNResourceType.TWODA, filename);
             }
@@ -1523,7 +2130,9 @@ namespace Eos.Services
                 {
                     soundset2da.Columns.SetLowercase("RESREF");
                 }
-                
+
+                soundset2da.Columns.SetMaxLength("LABEL", project.Settings.Export.LabelMaxLength);
+
                 foreach (var soundset in project.Soundsets.OrderBy(soundset => soundset?.Index))
                 {
                     if (soundset != null)
@@ -1542,21 +2151,1050 @@ namespace Eos.Services
                         }
 
                         var record = soundset2da[index];
-                        record.Set("LABEL", soundset.Name[project.DefaultLanguage].Text.Replace(" ", ""));
+                        record.Set("LABEL", MakeLabel(soundset.Name[project.DefaultLanguage].Text, ""));
                         record.Set("RESREF", soundset.SoundsetResource);
                         record.Set("STRREF", GetTLKIndex(soundset.Name));
                         record.Set("GENDER", (int)soundset.Gender);
                         record.Set("TYPE", (int)soundset.Type);
+
+                        var ssfFile = new SsfFile();
+                        for (int i = 0; i < soundset.Entries.Count; i++)
+                            ssfFile.Set((SoundsetEntryType)i, GetTLKIndex(soundset.Entries[i].Text), soundset.Entries[i].SoundFile);
+                        var ssfFilename = project.Settings.Export.SsfFolder + soundset.SoundsetResource + ".ssf";
+                        ssfFile.Save(ssfFilename);
+
+                        AddHAKResource(soundset.SoundsetResource, NWNResourceType.SSF, ssfFilename);
                     }
                 }
 
                 var filename = project.Settings.Export.TwoDAFolder + "soundset.2da";
-                soundset2da.Save(filename);
+                soundset2da.Save(filename, project.Settings.Export.Compress2DA);
 
                 AddHAKResource("soundset", NWNResourceType.TWODA, filename);
             }
+        }
 
-            // TODO: Export soundset files
+        private void ExportBaseItems(EosProject project)
+        {
+            if (project.BaseItems.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "baseitems.2da"));
+
+            var baseitems2da = Load2da("baseitems");
+            if (baseitems2da != null)
+            {
+                if (project.Settings.Export.LowercaseFilenames)
+                {
+                    baseitems2da.Columns.SetLowercase("DefaultModel");
+                    baseitems2da.Columns.SetLowercase("DefaultIcon");
+                }
+                baseitems2da.Columns.SetHex("EquipableSlots");
+
+                AddExtensionColumns(baseitems2da, project.BaseItems.Extensions);
+                foreach (var baseItem in project.BaseItems.OrderBy(feat => feat?.Index))
+                {
+                    if (baseItem != null)
+                    {
+                        var index = -1;
+                        if (baseItem.Overrides != null)
+                            index = MasterRepository.Standard.BaseItems.GetByID(baseItem.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.BaseItems.GetCustomDataStartIndex() + baseItem.Index >= baseitems2da.Count)
+                            {
+                                baseitems2da.AddRecord();
+                            }
+
+                            index = project.BaseItems.GetCustomDataStartIndex() + (baseItem.Index ?? 0);
+                        }
+
+                        var record = baseitems2da[index];
+                        record.Set("Name", GetTLKIndex(baseItem.Name));
+                        record.Set("label", baseItem.Name[project.DefaultLanguage].Text.Replace(" ", ""));
+                        record.Set("InvSlotWidth", baseItem.InventorySlotWidth);
+                        record.Set("InvSlotHeight", baseItem.InventorySlotHeight);
+                        record.Set("EquipableSlots", (int)baseItem.EquipableSlots);
+                        record.Set("CanRotateIcon", baseItem.CanRotateIcon);
+                        record.Set("ModelType", (int)baseItem.ModelType);
+                        record.Set("ItemClass", baseItem.ItemModel);
+                        record.Set("GenderSpecific", baseItem.GenderSpecific);
+                        record.Set("Part1EnvMap", (int?)baseItem.Part1Alpha);
+                        record.Set("Part2EnvMap", (int?)baseItem.Part2Alpha);
+                        record.Set("Part3EnvMap", (int?)baseItem.Part3Alpha);
+                        record.Set("DefaultModel", baseItem.DefaultModel);
+                        record.Set("DefaultIcon", baseItem.Icon);
+                        record.Set("Container", baseItem.IsContainer);
+                        record.Set("WeaponWield", baseItem.WeaponWieldType == WeaponWieldType.Standard ? null : (int)baseItem.WeaponWieldType);
+                        record.Set("WeaponType", (int?)baseItem.WeaponDamageType == null ? 0 : (int?)baseItem.WeaponDamageType);
+                        record.Set("WeaponSize", (int?)baseItem.WeaponSize);
+                        record.Set("RangedWeapon", project.BaseItems.Get2DAIndex(baseItem.AmmunitionBaseItem));
+                        record.Set("PrefAttackDist", baseItem.PreferredAttackDistance);
+                        record.Set("MinRange", baseItem.MinimumModelCount);
+                        record.Set("MaxRange", baseItem.MaximumModelCount);
+                        record.Set("NumDice", baseItem.DamageDiceCount);
+                        record.Set("DieToRoll", baseItem.DamageDice);
+                        record.Set("CritThreat", baseItem.CriticalThreatRange);
+                        record.Set("CritHitMult", baseItem.CriticalMultiplier);
+                        record.Set("Category", baseItem.Category == ItemCategory.None ? null : (int)baseItem.Category);
+                        record.Set("BaseCost", baseItem.BaseCost);
+                        record.Set("Stacking", baseItem.MaxStackSize);
+                        record.Set("ItemMultiplier", baseItem.ItemCostMultiplier);
+                        record.Set("Description", GetTLKIndex(baseItem.Description));
+                        record.Set("InvSoundType", project.InventorySounds.Get2DAIndex(baseItem.InventorySound));
+                        record.Set("MaxProps", baseItem.MaxSpellProperties);
+                        record.Set("MinProps", baseItem.MinSpellProperties);
+                        record.Set("PropColumn", project.ItemPropertySets.Get2DAIndex(baseItem.ItemPropertySet));
+                        record.Set("StorePanel", (int?)baseItem.StorePanel);
+                        record.Set("ReqFeat0", project.Feats.Get2DAIndex(baseItem.RequiredFeat1));
+                        record.Set("ReqFeat1", project.Feats.Get2DAIndex(baseItem.RequiredFeat2));
+                        record.Set("ReqFeat2", project.Feats.Get2DAIndex(baseItem.RequiredFeat3));
+                        record.Set("ReqFeat3", project.Feats.Get2DAIndex(baseItem.RequiredFeat4));
+                        record.Set("ReqFeat4", project.Feats.Get2DAIndex(baseItem.RequiredFeat5));
+                        record.Set("AC_Enchant", (int?)baseItem.ArmorClassType);
+                        record.Set("BaseAC", baseItem.BaseShieldAC);
+                        record.Set("ArmorCheckPen", baseItem.ArmorCheckPenalty);
+                        record.Set("BaseItemStatRef", GetTLKIndex(baseItem.StatsText));
+                        record.Set("ChargesStarting", baseItem.DefaultChargeCount);
+                        record.Set("RotateOnGround", (int)baseItem.GroundModelRotation);
+                        record.Set("TenthLBS", (int)(baseItem.Weight * 10));
+                        record.Set("WeaponMatType", project.WeaponSounds.Get2DAIndex(baseItem.WeaponSound));
+                        record.Set("AmmunitionType", (int?)baseItem.AmmunitionType);
+                        record.Set("QBBehaviour", baseItem.QuickbarBehaviour == QuickbarBehaviour.Default ? null : (int)baseItem.QuickbarBehaviour);
+                        record.Set("ArcaneSpellFailure", baseItem.ArcaneSpellFailure);
+                        record.Set("%AnimSlashL", baseItem.LeftSlashAnimationPercent);
+                        record.Set("%AnimSlashR", baseItem.RightSlashAnimationPercent);
+                        record.Set("%AnimSlashS", baseItem.StraightSlashAnimationPercent);
+                        record.Set("StorePanelSort", baseItem.StorePanelOrder);
+                        record.Set("ILRStackSize", baseItem.ItemLevelRestrictionStackSize);
+                        record.Set("WeaponFocusFeat", project.Feats.Get2DAIndex(baseItem.WeaponFocusFeat));
+                        record.Set("EpicWeaponFocusFeat", project.Feats.Get2DAIndex(baseItem.EpicWeaponFocusFeat));
+                        record.Set("WeaponSpecializationFeat", project.Feats.Get2DAIndex(baseItem.WeaponSpecializationFeat));
+                        record.Set("EpicWeaponSpecializationFeat", project.Feats.Get2DAIndex(baseItem.EpicWeaponSpecializationFeat));
+                        record.Set("WeaponImprovedCriticalFeat", project.Feats.Get2DAIndex(baseItem.ImprovedCriticalFeat));
+                        record.Set("EpicWeaponOverwhelmingCriticalFeat", project.Feats.Get2DAIndex(baseItem.OverwhelmingCriticalFeat));
+                        record.Set("EpicWeaponDevastatingCriticalFeat", project.Feats.Get2DAIndex(baseItem.DevastatingCriticalFeat));
+                        record.Set("WeaponOfChoiceFeat", project.Feats.Get2DAIndex(baseItem.WeaponOfChoiceFeat));
+                        record.Set("IsMonkWeapon", baseItem.IsMonkWeapon ? true : null);
+                        record.Set("WeaponFinesseMinimumCreatureSize", (int?)baseItem.WeaponFinesseMinimumCreatureSize);
+
+                        WriteExtensionValues(record, baseItem.ExtensionValues);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "baseitems.2da";
+                baseitems2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("baseitems", NWNResourceType.TWODA, filename);
+            }
+        }
+
+        private void ExportCompanions(EosProject project)
+        {
+            if (project.Companions.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "hen_companion.2da"));
+
+            var companions2da = Load2da("hen_companion");
+            if (companions2da != null)
+            {
+                if (project.Settings.Export.LowercaseFilenames)
+                {
+                    companions2da.Columns.SetLowercase("BASERESREF");
+                }
+
+                companions2da.Columns.SetMaxLength("NAME", project.Settings.Export.LabelMaxLength);
+
+                AddExtensionColumns(companions2da, project.Companions.Extensions);
+                foreach (var companion in project.Companions.OrderBy(companion => companion?.Index))
+                {
+                    if (companion != null)
+                    {
+                        var index = -1;
+                        if (companion.Overrides != null)
+                            index = MasterRepository.Standard.Companions.GetByID(companion.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.Companions.GetCustomDataStartIndex() + companion.Index >= companions2da.Count)
+                            {
+                                companions2da.AddRecord();
+                            }
+
+                            index = project.Companions.GetCustomDataStartIndex() + (companion.Index ?? 0);
+                        }
+
+                        var record = companions2da[index];
+                        record.Set("NAME", MakeLabel(companion.Name[project.DefaultLanguage].Text, "_"));
+                        record.Set("BASERESREF", companion.Template);
+                        record.Set("STRREF", GetTLKIndex(companion.Name));
+                        record.Set("DESCRIPTION", GetTLKIndex(companion.Description));
+
+                        WriteExtensionValues(record, companion.ExtensionValues);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "hen_companion.2da";
+                companions2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("hen_companion", NWNResourceType.TWODA, filename);
+            }
+        }
+
+        private void ExportFamiliars(EosProject project)
+        {
+            if (project.Familiars.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "hen_familiar.2da"));
+
+            var familiars2da = Load2da("hen_familiar");
+            if (familiars2da != null)
+            {
+                if (project.Settings.Export.LowercaseFilenames)
+                {
+                    familiars2da.Columns.SetLowercase("BASERESREF");
+                }
+
+                familiars2da.Columns.SetMaxLength("NAME", project.Settings.Export.LabelMaxLength);
+
+                AddExtensionColumns(familiars2da, project.Familiars.Extensions);
+                foreach (var familiar in project.Familiars.OrderBy(familiar => familiar?.Index))
+                {
+                    if (familiar != null)
+                    {
+                        var index = -1;
+                        if (familiar.Overrides != null)
+                            index = MasterRepository.Standard.Familiars.GetByID(familiar.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.Familiars.GetCustomDataStartIndex() + familiar.Index >= familiars2da.Count)
+                            {
+                                familiars2da.AddRecord();
+                            }
+
+                            index = project.Familiars.GetCustomDataStartIndex() + (familiar.Index ?? 0);
+                        }
+
+                        var record = familiars2da[index];
+                        record.Set("NAME", MakeLabel(familiar.Name[project.DefaultLanguage].Text, "_"));
+                        record.Set("BASERESREF", familiar.Template);
+                        record.Set("STRREF", GetTLKIndex(familiar.Name));
+                        record.Set("DESCRIPTION", GetTLKIndex(familiar.Description));
+
+                        WriteExtensionValues(record, familiar.ExtensionValues);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "hen_familiar.2da";
+                familiars2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("hen_familiar", NWNResourceType.TWODA, filename);
+            }
+        }
+
+        private void ExportTraps(EosProject project)
+        {
+            if (project.Traps.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "traps.2da"));
+
+            var traps2da = Load2da("traps");
+            if (traps2da != null)
+            {
+                if (project.Settings.Export.LowercaseFilenames)
+                {
+                    traps2da.Columns.SetLowercase("TrapScript");
+                    traps2da.Columns.SetLowercase("ResRef");
+                    traps2da.Columns.SetLowercase("IconResRef");
+                }
+
+                traps2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
+                AddExtensionColumns(traps2da, project.Traps.Extensions);
+                foreach (var trap in project.Traps.OrderBy(trap => trap?.Index))
+                {
+                    if (trap != null)
+                    {
+                        var index = -1;
+                        if (trap.Overrides != null)
+                            index = MasterRepository.Standard.Traps.GetByID(trap.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.Traps.GetCustomDataStartIndex() + trap.Index >= traps2da.Count)
+                            {
+                                traps2da.AddRecord();
+                            }
+
+                            index = project.Traps.GetCustomDataStartIndex() + (trap.Index ?? 0);
+                        }
+
+                        var record = traps2da[index];
+                        record.Set("Label", MakeLabel(trap.Name[project.DefaultLanguage].Text, ""));
+                        record.Set("TrapScript", trap.TrapScript);
+                        record.Set("SetDC", trap.SetDC);
+                        record.Set("DetectDCMod", trap.DetectDC);
+                        record.Set("DisarmDCMod", trap.DisarmDC);
+                        record.Set("TrapName", GetTLKIndex(trap.Name));
+                        record.Set("ResRef", trap.BlueprintResRef);
+                        record.Set("IconResRef", trap.Icon);
+
+                        WriteExtensionValues(record, trap.ExtensionValues);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "traps.2da";
+                traps2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("traps", NWNResourceType.TWODA, filename);
+            }
+        }
+
+        private void ExportVisualEffects(EosProject project)
+        {
+            if (project.VisualEffects.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "visualeffects.2da"));
+
+            var vfx2da = Load2da("visualeffects");
+            if (vfx2da != null)
+            {
+                if (project.Settings.Export.LowercaseFilenames)
+                {
+                    vfx2da.Columns.SetLowercase("Imp_HeadCon_Node");
+                    vfx2da.Columns.SetLowercase("Imp_Impact_Node");
+                    vfx2da.Columns.SetLowercase("Imp_Root_S_Node");
+                    vfx2da.Columns.SetLowercase("Imp_Root_M_Node");
+                    vfx2da.Columns.SetLowercase("Imp_Root_L_Node");
+                    vfx2da.Columns.SetLowercase("Imp_Root_H_Node");
+                    vfx2da.Columns.SetLowercase("SoundImpact");
+                    vfx2da.Columns.SetLowercase("SoundDuration");
+                    vfx2da.Columns.SetLowercase("SoundCessastion");
+                    vfx2da.Columns.SetLowercase("Ces_HeadCon_Node");
+                    vfx2da.Columns.SetLowercase("Ces_Impact_Node");
+                    vfx2da.Columns.SetLowercase("Ces_Root_S_Node");
+                    vfx2da.Columns.SetLowercase("Ces_Root_M_Node");
+                    vfx2da.Columns.SetLowercase("Ces_Root_L_Node");
+                    vfx2da.Columns.SetLowercase("Ces_Root_H_Node");
+                    vfx2da.Columns.SetLowercase("LowViolence");
+                    vfx2da.Columns.SetLowercase("LowQuality");
+                }
+
+                vfx2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
+                AddExtensionColumns(vfx2da, project.VisualEffects.Extensions);
+                foreach (var vfx in project.VisualEffects.OrderBy(vfx => vfx?.Index))
+                {
+                    if (vfx != null)
+                    {
+                        var index = -1;
+                        if (vfx.Overrides != null)
+                            index = MasterRepository.Standard.VisualEffects.GetByID(vfx.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.VisualEffects.GetCustomDataStartIndex() + vfx.Index >= vfx2da.Count)
+                            {
+                                vfx2da.AddRecord();
+                            }
+
+                            index = project.VisualEffects.GetCustomDataStartIndex() + (vfx.Index ?? 0);
+                        }
+
+                        var record = vfx2da[index];
+                        record.Set("Label", MakeLabel(vfx.Name, ""));
+                        record.Set("Type_FD", vfx.Type.ToString());
+                        record.Set("OrientWithGround", vfx.OrientWithGround);
+                        record.Set("Imp_HeadCon_Node", vfx.ImpactHeadEffect);
+                        record.Set("Imp_Impact_Node", vfx.ImpactImpactEffect);
+                        record.Set("Imp_Root_S_Node", vfx.ImpactRootSmallEffect);
+                        record.Set("Imp_Root_M_Node", vfx.ImpactRootMediumEffect);
+                        record.Set("Imp_Root_L_Node", vfx.ImpactRootLargeEffect);
+                        record.Set("Imp_Root_H_Node", vfx.ImpactRootHugeEffect);
+                        record.Set("ProgFX_Impact", project.ProgrammedEffects.Get2DAIndex(vfx.ImpactProgFX));
+                        record.Set("SoundImpact", vfx.ImpactSound);
+                        record.Set("ProgFX_Duration", project.ProgrammedEffects.Get2DAIndex(vfx.DurationProgFX));
+                        record.Set("SoundDuration", vfx.DurationSound);
+                        record.Set("ProgFX_Cessation", project.ProgrammedEffects.Get2DAIndex(vfx.CessationProgFX));
+                        record.Set("SoundCessastion", vfx.CessationSound);
+                        record.Set("Ces_HeadCon_Node", vfx.CessationHeadEffect);
+                        record.Set("Ces_Impact_Node", vfx.CessationImpactEffect);
+                        record.Set("Ces_Root_S_Node", vfx.CessationRootSmallEffect);
+                        record.Set("Ces_Root_M_Node", vfx.CessationRootMediumEffect);
+                        record.Set("Ces_Root_L_Node", vfx.CessationRootLargeEffect);
+                        record.Set("Ces_Root_H_Node", vfx.CessationRootHugeEffect);
+                        record.Set("ShakeType", vfx.ShakeType == VFXShakeType.None ? null : (int)vfx.ShakeType);
+                        record.Set("ShakeDelay", vfx.ShakeDelay);
+                        record.Set("ShakeDuration", vfx.ShakeDuration);
+                        record.Set("LowViolence", vfx.LowViolenceModel);
+                        record.Set("LowQuality", vfx.LowQualityModel);
+                        record.Set("OrientWithObject", vfx.OrientWithObject);
+
+                        WriteExtensionValues(record, vfx.ExtensionValues);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "visualeffects.2da";
+                vfx2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("visualeffects", NWNResourceType.TWODA, filename);
+            }
+        }
+
+        private void ExportProgrammedEffects(EosProject project)
+        {
+            if (project.ProgrammedEffects.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "progfx.2da"));
+
+            var progFX2da = Load2da("progfx");
+            if (progFX2da != null)
+            {
+                var exportLowercase = project.Settings.Export.LowercaseFilenames;
+
+                progFX2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
+                AddExtensionColumns(progFX2da, project.ProgrammedEffects.Extensions);
+                foreach (var progFX in project.ProgrammedEffects.OrderBy(progFX => progFX?.Index))
+                {
+                    if (progFX != null)
+                    {
+                        var index = -1;
+                        if (progFX.Overrides != null)
+                            index = MasterRepository.Standard.ProgrammedEffects.GetByID(progFX.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.ProgrammedEffects.GetCustomDataStartIndex() + progFX.Index >= progFX2da.Count)
+                            {
+                                progFX2da.AddRecord();
+                            }
+
+                            index = project.ProgrammedEffects.GetCustomDataStartIndex() + (progFX.Index ?? 0);
+                        }
+
+                        var record = progFX2da[index];
+                        record.Set("Label", MakeLabel(progFX.Name, ""));
+                        record.Set("Type", progFX.Type == ProgrammedEffectType.Invalid ? null : (int)progFX.Type);
+                        switch (progFX.Type)
+                        {
+                            case ProgrammedEffectType.SkinOverlay:
+                                record.Set("Param1", exportLowercase ? progFX.T1ModelName.ToLower() : progFX.T1ModelName);
+                                record.Set("Param2", progFX.T1ArmorType.ToString().ToLower());
+                                record.Set("Param3", project.VisualEffects.Get2DAIndex(progFX.T1OnHitVFX));
+                                record.Set("Param4", project.VisualEffects.Get2DAIndex(progFX.T1OnHitVFXSmall));
+                                break;
+
+                            case ProgrammedEffectType.EnvironmentMapping:
+                                record.Set("Param1", exportLowercase ? progFX.T2EnvironmentMap.ToLower() : progFX.T2EnvironmentMap);
+                                break;
+
+                            case ProgrammedEffectType.GlowEffect:
+                                var glowR = (progFX.T3GlowColor >> 16) & 0xFF;
+                                var glowG = (progFX.T3GlowColor >> 8)  & 0xFF;
+                                var glowB = (progFX.T3GlowColor)       & 0xFF;
+                                record.Set("Param1", Math.Round(glowR / 255.0, 2));
+                                record.Set("Param2", Math.Round(glowG / 255.0, 2));
+                                record.Set("Param3", Math.Round(glowB / 255.0, 2));
+                                break;
+
+                            case ProgrammedEffectType.Lighting:
+                                record.Set("Param1", progFX.T4LightModelAnimation);
+                                record.Set("Param2", progFX.T4AnimationSpeed);
+                                record.Set("Param3", progFX.T4CastShadows);
+                                record.Set("Param4", progFX.T4Priority);
+                                record.Set("Param5", progFX.T4RemoveCloseToOtherLights);
+                                record.Set("Param6", progFX.T4RemoveAllOtherLights);
+                                record.Set("Param7", exportLowercase ? progFX.T4LightModel.ToLower() : progFX.T4LightModel);
+                                break;
+
+                            case ProgrammedEffectType.AlphaTransparency:
+                                record.Set("Param1", progFX.T5OpacityFrom);
+                                var alphaR = (progFX.T5TransparencyColor >> 16) & 0xFF;
+                                var alphaG = (progFX.T5TransparencyColor >> 8) & 0xFF;
+                                var alphaB = (progFX.T5TransparencyColor) & 0xFF;
+                                
+                                if (progFX.T5TransparencyColorKeepRed)
+                                    record.Set("Param2", -1);
+                                else
+                                    record.Set("Param2", Math.Round(alphaR / 255.0, 2));
+
+                                if (progFX.T5TransparencyColorKeepGreen)
+                                    record.Set("Param3", -1);
+                                else
+                                    record.Set("Param3", Math.Round(alphaG / 255.0, 2));
+
+                                if (progFX.T5TransparencyColorKeepBlue)
+                                    record.Set("Param4", -1);
+                                else
+                                    record.Set("Param4", Math.Round(alphaB / 255.0, 2));
+
+                                record.Set("Param5", progFX.T5FadeInterval);
+                                record.Set("Param6", progFX.T5OpacityTo);
+                                break;
+
+                            case ProgrammedEffectType.PulsingAura:
+                                var aura1R = (progFX.T6Color1 >> 16) & 0xFF;
+                                var aura1G = (progFX.T6Color1 >> 8) & 0xFF;
+                                var aura1B = (progFX.T6Color1) & 0xFF;
+                                record.Set("Param1", Math.Round(aura1R / 255.0, 2));
+                                record.Set("Param2", Math.Round(aura1G / 255.0, 2));
+                                record.Set("Param3", Math.Round(aura1B / 255.0, 2));
+                                var aura2R = (progFX.T6Color2 >> 16) & 0xFF;
+                                var aura2G = (progFX.T6Color2 >> 8) & 0xFF;
+                                var aura2B = (progFX.T6Color2) & 0xFF;
+                                record.Set("Param4", Math.Round(aura2R / 255.0, 2));
+                                record.Set("Param5", Math.Round(aura2G / 255.0, 2));
+                                record.Set("Param6", Math.Round(aura2B / 255.0, 2));
+                                record.Set("Param7", progFX.T6FadeDuration);
+                                break;
+
+                            case ProgrammedEffectType.Beam:
+                                record.Set("Param1", exportLowercase ? progFX.T7BeamModel.ToLower() : progFX.T7BeamModel);
+                                record.Set("Param2", progFX.T7BeamAnimation);
+                                break;
+
+                            case ProgrammedEffectType.MIRV:
+                                record.Set("Param1", exportLowercase ? progFX.T10ProjectileModel.ToLower() : progFX.T10ProjectileModel);
+                                record.Set("Param2", project.Spells.Get2DAIndex(progFX.T10Spell));
+                                record.Set("Param3", (int)progFX.T10Orientation);
+                                record.Set("Param4", (int)progFX.T10ProjectilePath);
+                                record.Set("Param5", progFX.T10TravelTime.ToString().ToLower());
+                                break;
+
+                            case ProgrammedEffectType.VariantMIRV:
+                                record.Set("Param1", exportLowercase ? progFX.T11ProjectileModel.ToLower() : progFX.T11ProjectileModel);
+                                record.Set("Param2", progFX.T11FireSound);
+                                record.Set("Param3", progFX.T11ImpactSound);
+                                record.Set("Param4", (int)progFX.T11ProjectilePath);
+                                break;
+
+                            case ProgrammedEffectType.SpellCastFailure:
+                                record.Set("Param1", progFX.T12ModelNode);
+                                record.Set("Param2", exportLowercase ? progFX.T12EffectModel.ToLower() : progFX.T12EffectModel);
+                                break;
+                        }
+
+                        WriteExtensionValues(record, progFX.ExtensionValues);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "progfx.2da";
+                progFX2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("progfx", NWNResourceType.TWODA, filename);
+            }
+        }
+
+        private void ExportItemProperties(EosProject project)
+        {
+            if (project.ItemProperties.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "itempropdef.2da"));
+
+            var itempropdef2da = Load2da("itempropdef");
+            if (itempropdef2da != null)
+            {
+                if (project.Settings.Export.LowercaseFilenames)
+                {
+                    itempropdef2da.Columns.SetLowercase("SubTypeResRef");
+                }
+
+                AddExtensionColumns(itempropdef2da, project.ItemProperties.Extensions);
+                foreach (var itemProp in project.ItemProperties.OrderBy(itemProp => itemProp?.Index))
+                {
+                    if (itemProp != null)
+                    {
+                        var index = -1;
+                        if (itemProp.Overrides != null)
+                            index = MasterRepository.Standard.ItemProperties.GetByID(itemProp.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.ItemProperties.GetCustomDataStartIndex() + itemProp.Index >= itempropdef2da.Count)
+                            {
+                                itempropdef2da.AddRecord();
+                            }
+
+                            index = project.ItemProperties.GetCustomDataStartIndex() + (itemProp.Index ?? 0);
+                        }
+
+                        var record = itempropdef2da[index];
+                        record.Set("Name", GetTLKIndex(itemProp.Name));
+                        record.Set("Label", itemProp.Name[project.DefaultLanguage].Text.Replace(" ", ""));
+                        if (itemProp.SubType != null)
+                            record.Set("SubTypeResRef", itemProp.SubType.Name.Trim());
+                        else
+                            record.Set("SubTypeResRef", itemProp.SubTypeResRef.Trim());
+                        record.Set("Cost", itemProp.Cost);
+                        record.Set("CostTableResRef", project.ItemPropertyCostTables.Get2DAIndex(itemProp.CostTable));
+                        record.Set("Param1ResRef", project.ItemPropertyParams.Get2DAIndex(itemProp.Param));
+                        record.Set("GameStrRef", GetTLKIndex(itemProp.PropertyText));
+                        record.Set("Description", GetTLKIndex(itemProp.Description));
+
+                        WriteExtensionValues(record, itemProp.ExtensionValues);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "itempropdef.2da";
+                itempropdef2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("itempropdef", NWNResourceType.TWODA, filename);
+            }
+        }
+
+        private void ExportItemPropertyCategories(EosProject project)
+        {
+            if ((project.ItemPropertySets.Count == 0) && (!project.ItemProperties.Any(ip => (ip != null) && (ip.Overrides == null)))) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "itemprops.2da"));
+
+            var itemprops2da = Load2da("itemprops");
+            if (itemprops2da != null)
+            {
+                itemprops2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
+                // Add missing rows 
+                foreach (var itemProp in project.ItemProperties.OrderBy(itemProp => itemProp?.Index))
+                {
+                    if (itemProp != null)
+                    {
+                        var index = -1;
+                        if (itemProp.Overrides != null)
+                            index = MasterRepository.Standard.ItemProperties.GetByID(itemProp.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.ItemProperties.GetCustomDataStartIndex() + itemProp.Index >= itemprops2da.Count)
+                            {
+                                itemprops2da.AddRecord();
+                            }
+
+                            index = project.ItemProperties.GetCustomDataStartIndex() + (itemProp.Index ?? 0);
+                        }
+
+                        var record = itemprops2da[index];
+                        record.Set("StringRef", GetTLKIndex(itemProp.Name));
+                        record.Set("Label", MakeLabel(itemProp.Name[project.DefaultLanguage].Text, ""));
+                    }
+                }
+
+                // Write column data (property sets)
+                foreach (var itemPropSet in project.ItemPropertySets.OrderBy(itemPropSet => itemPropSet?.Index))
+                {
+                    if (itemPropSet != null)
+                    {
+                        var index = -1;
+                        if (itemPropSet.Overrides != null)
+                            index = MasterRepository.Standard.ItemPropertySets.GetByID(itemPropSet.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            index = project.ItemPropertySets.GetCustomDataStartIndex() + (itemPropSet.Index ?? 0);
+                            itemprops2da.Columns.InsertColumn(index, $"{index}_{itemPropSet.Name.Replace(" ", "_")}");
+                        }
+
+                        // Set column to null
+                        for (int i=0; i < itemprops2da.Count; i++)
+                            itemprops2da[i].Set(index, null);
+
+                        foreach (var itemPropSetItem in itemPropSet.ItemProperties)
+                        {
+                            if (itemPropSetItem?.ItemProperty == null) continue;
+
+                            var propIndex = -1;
+                            if (itemPropSetItem.ItemProperty.Overrides != null)
+                                propIndex = MasterRepository.Standard.ItemProperties.GetByID(itemPropSetItem.ItemProperty.Overrides ?? Guid.Empty)?.Index ?? -1;
+                            else if (itemPropSetItem.ItemProperty.IsReadonly)
+                                propIndex = itemPropSetItem.ItemProperty.Index ?? -1;
+                            else
+                                propIndex = project.ItemProperties.GetCustomDataStartIndex() + (itemPropSetItem.ItemProperty.Index ?? 0);
+
+                            itemprops2da[propIndex].Set(index, true);
+                        }
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "itemprops.2da";
+                itemprops2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("itemprops", NWNResourceType.TWODA, filename);
+            }
+        }
+
+        private void ExportItemPropertyTables(EosProject project)
+        {
+            foreach (var table in project.ItemPropertyTables)
+            {
+                if (table != null)
+                {
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da"));
+
+                    var columns = new List<String>
+                    {
+                        "Name", "Label",
+                    };
+
+                    var custColumns = new List<CustomObjectProperty>
+                    {
+                        table.CustomColumn01,
+                        table.CustomColumn02,
+                        table.CustomColumn03,
+                        table.CustomColumn04,
+                        table.CustomColumn05,
+                        table.CustomColumn06,
+                        table.CustomColumn07,
+                        table.CustomColumn08,
+                        table.CustomColumn09,
+                        table.CustomColumn10,
+                    };
+
+                    for (int i = 0; i < custColumns.Count; i++)
+                    {
+                        if (custColumns[i].Column.Trim() == "") break;
+                        columns.Add(custColumns[i].Column.Trim());
+                    }
+
+                    var td2 = new TwoDimensionalArrayFile();
+                    td2.New(columns.ToArray());
+
+                    if (project.Settings.Export.LowercaseFilenames)
+                    {
+                        for (int i = 0; i < custColumns.Count; i++)
+                        {
+                            if (custColumns[i].Column.Trim() == "") break;
+
+                            if (custColumns[i].DataType?.ID.Equals(new Guid("e4897c44-4117-45d4-b3fc-37b82fd88247")) ?? false)
+                                td2.Columns.SetLowercase(custColumns[i].Column.Trim());
+                        }
+                    }
+
+                    td2.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
+                    foreach (var item in table.Items)
+                    {
+                        if (item != null)
+                        {
+                            var rec = td2.AddRecord();
+                            rec.Set("Name", GetTLKIndex(item.Name));
+                            rec.Set("Label", MakeLabel(item.Name[project.DefaultLanguage].Text, ""));
+
+                            var custValues = new List<CustomValueInstance>
+                            {
+                                item.CustomColumnValue01,
+                                item.CustomColumnValue02,
+                                item.CustomColumnValue03,
+                                item.CustomColumnValue04,
+                                item.CustomColumnValue05,
+                                item.CustomColumnValue06,
+                                item.CustomColumnValue07,
+                                item.CustomColumnValue08,
+                                item.CustomColumnValue09,
+                                item.CustomColumnValue10,
+                            };
+
+                            for (int i = 0; i < custColumns.Count; i++)
+                            {
+                                if (custColumns[i].Column.Trim() == "") break;
+                                if (custColumns[i].DataType?.To2DA == null) continue;
+
+                                if (custValues[i].Value is TLKStringSet tlkValue)
+                                    rec.Set(custColumns[i].Column.Trim(), GetTLKIndex(tlkValue));
+                                else
+                                    rec.Set(custColumns[i].Column.Trim(), custColumns[i].DataType?.To2DA(custValues[i].Value));
+                            }
+                        }
+                    }
+
+                    var filename = project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da";
+                    td2.Save(filename, project.Settings.Export.Compress2DA);
+
+                    AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
+                }
+            }
+        }
+
+        private void ExportItemPropertyCostTables(EosProject project)
+        {
+            if (project.ItemPropertyCostTables.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "iprp_costtable.2da"));
+
+            var costtable2da = Load2da("iprp_costtable");
+            if (costtable2da != null)
+            {
+                if (project.Settings.Export.LowercaseFilenames)
+                {
+                    costtable2da.Columns.SetLowercase("Name");
+                }
+
+                AddExtensionColumns(costtable2da, project.ItemPropertyCostTables.Extensions);
+                foreach (var costTable in project.ItemPropertyCostTables.OrderBy(costTable => costTable?.Index))
+                {
+                    if (costTable != null)
+                    {
+                        var index = -1;
+                        if (costTable.Overrides != null)
+                            index = MasterRepository.Standard.ItemPropertyCostTables.GetByID(costTable.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.ItemPropertyCostTables.GetCustomDataStartIndex() + costTable.Index >= costtable2da.Count)
+                            {
+                                costtable2da.AddRecord();
+                            }
+
+                            index = project.ItemPropertyCostTables.GetCustomDataStartIndex() + (costTable.Index ?? 0);
+                        }
+
+                        var record = costtable2da[index];
+                        record.Set("Name", costTable.Name);
+                        record.Set("Label", costTable.Name); // !
+                        record.Set("ClientLoad", costTable.ClientLoad);
+
+                        WriteExtensionValues(record, costTable.ExtensionValues);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "iprp_costtable.2da";
+                costtable2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("iprp_costtable", NWNResourceType.TWODA, filename);
+            }
+
+            // Export tables
+            foreach (var table in project.ItemPropertyCostTables)
+            {
+                if (table != null)
+                {
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da"));
+
+                    var columns = new List<String>
+                    {
+                        "Name", "Label", "Cost"
+                    };
+
+                    var custColumns = new List<CustomObjectProperty>
+                    {
+                        table.CustomColumn01,
+                        table.CustomColumn02,
+                        table.CustomColumn03,
+                        table.CustomColumn04,
+                        table.CustomColumn05,
+                        table.CustomColumn06,
+                        table.CustomColumn07,
+                        table.CustomColumn08,
+                        table.CustomColumn09,
+                        table.CustomColumn10,
+                    };
+
+                    for (int i = 0; i < custColumns.Count; i++)
+                    {
+                        if (custColumns[i].Column.Trim() == "") break;
+                        columns.Add(custColumns[i].Column.Trim());
+                    }
+
+                    var td2 = new TwoDimensionalArrayFile();
+                    td2.New(columns.ToArray());
+
+                    if (project.Settings.Export.LowercaseFilenames)
+                    {
+                        for (int i = 0; i < custColumns.Count; i++)
+                        {
+                            if (custColumns[i].Column.Trim() == "") break;
+
+                            if (custColumns[i].DataType?.ID.Equals(new Guid("e4897c44-4117-45d4-b3fc-37b82fd88247")) ?? false)
+                                td2.Columns.SetLowercase(custColumns[i].Column.Trim());
+                        }
+                    }
+
+                    td2.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
+                    foreach (var item in table.Items)
+                    {
+                        if (item != null)
+                        {
+                            var rec = td2.AddRecord();
+                            rec.Set("Name", GetTLKIndex(item.Name));
+                            rec.Set("Label", MakeLabel(item.Name[project.DefaultLanguage].Text, ""));
+                            rec.Set("Cost", item.Cost);
+
+                            var custValues = new List<CustomValueInstance>
+                            {
+                                item.CustomColumnValue01,
+                                item.CustomColumnValue02,
+                                item.CustomColumnValue03,
+                                item.CustomColumnValue04,
+                                item.CustomColumnValue05,
+                                item.CustomColumnValue06,
+                                item.CustomColumnValue07,
+                                item.CustomColumnValue08,
+                                item.CustomColumnValue09,
+                                item.CustomColumnValue10,
+                            };
+
+                            for (int i = 0; i < custColumns.Count; i++)
+                            {
+                                if (custColumns[i].Column.Trim() == "") break;
+                                if (custColumns[i].DataType?.To2DA == null) continue;
+
+                                if (custValues[i].Value is TLKStringSet tlkValue)
+                                    rec.Set(custColumns[i].Column.Trim(), GetTLKIndex(tlkValue));
+                                else
+                                    rec.Set(custColumns[i].Column.Trim(), custColumns[i].DataType?.To2DA(custValues[i].Value));
+                            }
+                        }
+                    }
+
+                    var filename = project.Settings.Export.TwoDAFolder + table.Name.ToLower() + ".2da";
+                    td2.Save(filename, project.Settings.Export.Compress2DA);
+
+                    AddHAKResource(table.Name.ToLower(), NWNResourceType.TWODA, filename);
+                }
+            }
+        }
+
+        private void ExportItemPropertiyParams(EosProject project)
+        {
+            if (project.ItemPropertyParams.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "iprp_paramtable.2da"));
+
+            var paramtable2da = Load2da("iprp_paramtable");
+            if (paramtable2da != null)
+            {
+                if (project.Settings.Export.LowercaseFilenames)
+                {
+                    paramtable2da.Columns.SetLowercase("TableResRef");
+                }
+
+                paramtable2da.Columns.SetMaxLength("Lable", project.Settings.Export.LabelMaxLength);
+
+                AddExtensionColumns(paramtable2da, project.ItemPropertyParams.Extensions);
+                foreach (var paramTable in project.ItemPropertyParams.OrderBy(paramTable => paramTable?.Index))
+                {
+                    if (paramTable != null)
+                    {
+                        var index = -1;
+                        if (paramTable.Overrides != null)
+                            index = MasterRepository.Standard.ItemPropertyParams.GetByID(paramTable.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.ItemPropertyParams.GetCustomDataStartIndex() + paramTable.Index >= paramtable2da.Count)
+                            {
+                                paramtable2da.AddRecord();
+                            }
+
+                            index = project.ItemPropertyParams.GetCustomDataStartIndex() + (paramTable.Index ?? 0);
+                        }
+
+                        var record = paramtable2da[index];
+                        record.Set("Name", GetTLKIndex(paramTable.Name));
+                        record.Set("Lable", MakeLabel(paramTable.Name[project.DefaultLanguage].Text, "")); // "Lable" is NOT an typo! At least not in my code
+
+                        if (paramTable.ItemPropertyTable != null)
+                            record.Set("TableResRef", paramTable.ItemPropertyTable.Name.Trim());
+                        else
+                            record.Set("TableResRef", paramTable.TableResRef.Trim());
+
+                        WriteExtensionValues(record, paramTable.ExtensionValues);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "iprp_paramtable.2da";
+                paramtable2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("iprp_paramtable", NWNResourceType.TWODA, filename);
+            }
+        }
+
+        private void ExportDamageTypes(EosProject project)
+        {
+            if (project.DamageTypes.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "damagetypes.2da"));
+
+            var damagetypes2da = Load2da("damagetypes");
+            if (damagetypes2da != null)
+            {
+                damagetypes2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
+                AddExtensionColumns(damagetypes2da, project.DamageTypes.Extensions);
+                foreach (var damageType in project.DamageTypes.OrderBy(damageType => damageType?.Index))
+                {
+                    if (damageType != null)
+                    {
+                        var index = -1;
+                        if (damageType.Overrides != null)
+                            index = MasterRepository.Standard.DamageTypes.GetByID(damageType.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.DamageTypes.GetCustomDataStartIndex() + damageType.Index >= damagetypes2da.Count)
+                            {
+                                damagetypes2da.AddRecord();
+                            }
+
+                            index = project.DamageTypes.GetCustomDataStartIndex() + (damageType.Index ?? 0);
+                        }
+
+                        var record = damagetypes2da[index];
+                        record.Set("Label", MakeLabel(damageType.Name[project.DefaultLanguage].Text, ""));
+                        record.Set("CharsheetStrref", GetTLKIndex(damageType.Name));
+                        record.Set("DamageTypeGroup", project.DamageTypeGroups.Get2DAIndex(damageType.Group));
+
+                        WriteExtensionValues(record, damageType.ExtensionValues);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "damagetypes.2da";
+                damagetypes2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("damagetypes", NWNResourceType.TWODA, filename);
+            }
+        }
+
+        private void ExportDamageTypeGroups(EosProject project)
+        {
+            if (project.DamageTypeGroups.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "damagetypegroups.2da"));
+
+            var damagetypegroups2da = Load2da("damagetypegroups");
+            if (damagetypegroups2da != null)
+            {
+                damagetypegroups2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
+                AddExtensionColumns(damagetypegroups2da, project.DamageTypeGroups.Extensions);
+                foreach (var damageTypeGroup in project.DamageTypeGroups.OrderBy(damageTypeGroup => damageTypeGroup?.Index))
+                {
+                    if (damageTypeGroup != null)
+                    {
+                        var index = -1;
+                        if (damageTypeGroup.Overrides != null)
+                            index = MasterRepository.Standard.DamageTypeGroups.GetByID(damageTypeGroup.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.DamageTypeGroups.GetCustomDataStartIndex() + damageTypeGroup.Index >= damagetypegroups2da.Count)
+                            {
+                                damagetypegroups2da.AddRecord();
+                            }
+
+                            index = project.DamageTypeGroups.GetCustomDataStartIndex() + (damageTypeGroup.Index ?? 0);
+                        }
+
+                        var record = damagetypegroups2da[index];
+                        record.Set("Label", MakeLabel(damageTypeGroup.SourceLabel, ""));
+                        record.Set("FeedbackStrref", GetTLKIndex(damageTypeGroup.FeedbackText));
+                        if (damageTypeGroup.Color != null)
+                        {
+                            var colorR = (damageTypeGroup.Color >> 16) & 0xFF;
+                            var colorG = (damageTypeGroup.Color >> 8) & 0xFF;
+                            var colorB = (damageTypeGroup.Color) & 0xFF;
+                            record.Set("ColorR", colorR);
+                            record.Set("ColorG", colorG);
+                            record.Set("ColorB", colorB);
+                        }
+
+                        WriteExtensionValues(record, damageTypeGroup.ExtensionValues);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "damagetypegroups.2da";
+                damagetypegroups2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("damagetypegroups", NWNResourceType.TWODA, filename);
+            }
         }
 
         private void SetSpellbookSpellLevels(EosProject project, Spellbook spellbook, ObservableCollection<SpellbookEntry> spellLevel, int level, TwoDimensionalArrayFile spells2da)
@@ -1656,6 +3294,8 @@ namespace Eos.Services
                     spells2da.Columns.SetLowercase("ProjSound");
                 }
 
+                spells2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
                 AddExtensionColumns(spells2da, project.Spells.Extensions);
                 foreach (var spell in project.Spells.OrderBy(spell => spell?.Index))
                 {
@@ -1681,7 +3321,7 @@ namespace Eos.Services
                             continue;
                         }
 
-                        record.Set("Label", spell.Name[project.DefaultLanguage].Text.Replace(" ", "_"));
+                        record.Set("Label", MakeLabel(spell.Name[project.DefaultLanguage].Text, "_"));
                         record.Set("Name", GetTLKIndex(spell.Name));
                         record.Set("IconResRef", spell.Icon);
                         record.Set("School", spell.School.ToString());
@@ -1717,7 +3357,7 @@ namespace Eos.Services
                         record.Set("ProjType", spell.ProjectileType?.ToString().ToLower());
                         record.Set("ProjSpwnPoint", spell.ProjectileSpawnPoint?.ToString().ToLower());
                         record.Set("ProjSound", spell.ProjectileSound);
-                        record.Set("ProjOrientation", spell.ProjectileOrientation?.ToString().ToLower());
+                        record.Set("ProjOrientation", (spell.ProjectileOrientation ?? ProjectileOrientation.None) != ProjectileOrientation.None ? spell.ProjectileOrientation?.ToString().ToLower() : null);
                         // ImmunityType (Unused)
                         // ItemImmunity (Unused)
                         record.Set("SubRadSpell1", project.Spells.Get2DAIndex(spell.SubSpell1));
@@ -1797,7 +3437,7 @@ namespace Eos.Services
                 }
 
                 var filename = project.Settings.Export.TwoDAFolder + "spells.2da";
-                spells2da.Save(filename);
+                spells2da.Save(filename, project.Settings.Export.Compress2DA);
 
                 AddHAKResource("spells", NWNResourceType.TWODA, filename);
             }
@@ -1824,6 +3464,8 @@ namespace Eos.Services
                 }
                 custom2da.New(columns.ToArray());
 
+                custom2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
                 foreach (var instance in repo.OrderBy(instance => instance?.Index))
                 {
                     if (instance == null) continue;
@@ -1836,7 +3478,7 @@ namespace Eos.Services
 
                     if (!instance.Disabled)
                     {
-                        rec.Set("Label", instance.Label);
+                        rec.Set("Label", MakeLabel(instance.Label, "_"));
                         foreach (var value in instance.Values)
                         {
                             if ((!value.Property.DataType?.IsVisualOnly ?? false) && (value.Property.DataType?.To2DA != null))
@@ -1846,7 +3488,7 @@ namespace Eos.Services
                 }
 
                 var filename = project.Settings.Export.TwoDAFolder + template.ResourceName.ToLower() + ".2da";
-                custom2da.Save(filename);
+                custom2da.Save(filename, project.Settings.Export.Compress2DA);
 
                 AddHAKResource(template.ResourceName.ToLower(), NWNResourceType.TWODA, filename);
             }
@@ -1881,7 +3523,12 @@ namespace Eos.Services
                 if (model.ScriptConstant != "")
                     result = prefix + CleanString(model.ScriptConstant);
                 else
-                    result = prefix + CleanString(model.TlkDisplayName ?? "");
+                {
+                    var name = model.TlkDisplayName ?? model.GetLabel();
+                    if (name.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                        name = name.Substring(prefix.Length);
+                    result = prefix + CleanString(name);
+                }
 
                 if (generatedConstants.Contains(result))
                 {
@@ -1902,6 +3549,25 @@ namespace Eos.Services
 
                 generatedConstants.Add(result);
                 modelScriptConstants.Add(model, result);
+            }
+
+            return result;
+        }
+
+        private string? MakeLabel(string? name, string separator)
+        {
+            var result = name;
+            if (result != null)
+            {
+                result = result.Replace(" ", separator);
+                result = result.Replace(":", separator);
+                result = result.Replace("_", separator);
+
+                result = result.Replace("(", "");
+                result = result.Replace(")", "");
+                result = result.Replace("'", "");
+                result = result.Replace("+", "");
+                result = result.Replace("-", "");
             }
 
             return result;
@@ -2071,7 +3737,7 @@ namespace Eos.Services
             var customSoundsets = project.Soundsets.Where(soundset => soundset != null && soundset.Overrides == null);
             if (customSoundsets.Any())
             {
-                incFile.Add("// Area Effects");
+                incFile.Add("// Soundsets");
                 foreach (var soundset in customSoundsets)
                 {
                     if (soundset == null) continue;
@@ -2091,6 +3757,90 @@ namespace Eos.Services
                     if (polymorph == null) continue;
                     var index = project.Polymorphs.GetCustomDataStartIndex() + polymorph.Index;
                     incFile.Add("const int " + GetScriptConstant("POLYMORPH_TYPE_", polymorph) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Appearances
+            var customAppearances = project.Appearances.Where(appearance => appearance != null && appearance.Overrides == null);
+            if (customAppearances.Any())
+            {
+                incFile.Add("// Appearances");
+                foreach (var appearance in customAppearances)
+                {
+                    if (appearance == null) continue;
+                    var index = project.Appearances.GetCustomDataStartIndex() + appearance.Index;
+                    incFile.Add("const int " + GetScriptConstant("APPEARANCE_TYPE_", appearance) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Base Items
+            var customBaseItems = project.BaseItems.Where(baseItem => baseItem != null && baseItem.Overrides == null);
+            if (customBaseItems.Any())
+            {
+                incFile.Add("// Base Items");
+                foreach (var baseItem in customBaseItems)
+                {
+                    if (baseItem == null) continue;
+                    var index = project.BaseItems.GetCustomDataStartIndex() + baseItem.Index;
+                    incFile.Add("const int " + GetScriptConstant("BASE_ITEM_", baseItem) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Companions
+            var customCompanions = project.Companions.Where(companion => companion != null && companion.Overrides == null);
+            if (customCompanions.Any())
+            {
+                incFile.Add("// Companions");
+                foreach (var companion in customCompanions)
+                {
+                    if (companion == null) continue;
+                    var index = project.Companions.GetCustomDataStartIndex() + companion.Index;
+                    incFile.Add("const int " + GetScriptConstant("ANIMAL_COMPANION_CREATURE_TYPE_", companion) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Familiars
+            var customFamiliars = project.Familiars.Where(familiar => familiar != null && familiar.Overrides == null);
+            if (customFamiliars.Any())
+            {
+                incFile.Add("// Familiars");
+                foreach (var familiar in customFamiliars)
+                {
+                    if (familiar == null) continue;
+                    var index = project.Familiars.GetCustomDataStartIndex() + familiar.Index;
+                    incFile.Add("const int " + GetScriptConstant("FAMILIAR_CREATURE_TYPE_", familiar) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Traps
+            var customTraps = project.Traps.Where(trap => trap != null && trap.Overrides == null);
+            if (customTraps.Any())
+            {
+                incFile.Add("// Traps");
+                foreach (var trap in customTraps)
+                {
+                    if (trap == null) continue;
+                    var index = project.Traps.GetCustomDataStartIndex() + trap.Index;
+                    incFile.Add("const int " + GetScriptConstant("TRAP_BASE_TYPE_", trap) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // Item Properties
+            var customItemProperties = project.ItemProperties.Where(itemProp => itemProp != null && itemProp.Overrides == null);
+            if (customItemProperties.Any())
+            {
+                incFile.Add("// Item Properties");
+                foreach (var itemProp in customItemProperties)
+                {
+                    if (itemProp == null) continue;
+                    var index = project.ItemProperties.GetCustomDataStartIndex() + itemProp.Index;
+                    incFile.Add("const int " + GetScriptConstant("ITEM_PROPERTY_", itemProp) + " = " + index.ToString() + ";");
                 }
                 incFile.Add("");
             }
@@ -2150,12 +3900,16 @@ namespace Eos.Services
             Log.Info("Exporting project \"{0}\"...", project.Name);
             try
             {
+                dialogTlk.Load(EosConfig.NwnBasePath);
+
                 tableDataDict.Clear();
                 modelIndices.Clear();
 
                 Directory.CreateDirectory(project.Settings.Export.TwoDAFolder);
+                Directory.CreateDirectory(project.Settings.Export.SsfFolder);
                 Directory.CreateDirectory(project.Settings.Export.HakFolder);
                 Directory.CreateDirectory(project.Settings.Export.TlkFolder);
+                Directory.CreateDirectory(project.Settings.Export.IncludeFolder);
 
                 ExportTLKs(project);
 
@@ -2169,20 +3923,41 @@ namespace Eos.Services
                 ExportRacialFeatsTables(project);
                 ExportFeatsTables(project);
                 ExportPrerequisiteTables(project);
+                ExportSpellPreferencesTables(project);
+                ExportFeatPreferencesTables(project);
+                ExportSkillPreferencesTables(project);
+                ExportPackageEquipmentTables(project);
 
                 ExportClasses(project);
-                //ExportClassPackages(project);
+                ExportClassPackages(project);
                 ExportDiseases(project);
                 ExportDomains(project);
                 ExportFeats(project);
                 ExportPoisons(project);
                 ExportRaces(project);
                 ExportSkills(project);
-                //ExportSoundsets(project);
+                ExportSoundsets(project);
                 ExportSpells(project);
                 ExportAreaEffects(project);
+                ExportAppearances(project);
+                ExportAppearanceSoundsets(project);
+                ExportWeaponSounds(project);
+                ExportInventorySounds(project);
                 ExportPolymorphs(project);
                 ExportMasterFeats(project);
+                ExportBaseItems(project);
+                ExportCompanions(project);
+                ExportFamiliars(project);
+                ExportTraps(project);
+                ExportVisualEffects(project);
+                ExportProgrammedEffects(project);
+                ExportItemProperties(project);
+                ExportItemPropertyCategories(project);
+                ExportItemPropertyTables(project);
+                ExportItemPropertyCostTables(project);
+                ExportItemPropertiyParams(project);
+                ExportDamageTypes(project);
+                ExportDamageTypeGroups(project);
 
                 ExportCustomObjects(project);
 

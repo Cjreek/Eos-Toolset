@@ -91,15 +91,6 @@ namespace Eos.ViewModels.Dialogs
             WindowService.Close(vm);
         });
 
-        public ReactiveCommand<ImportDialogViewModel, Unit> AddFileCommand { get; private set; } = ReactiveCommand.Create<ImportDialogViewModel>(vm =>
-        {
-            if (vm.InputFilePath.Trim() != "")
-            {
-                vm.Files.Add(vm.InputFilePath);
-                vm.InputFilePath = "";
-            }
-        });
-
         public ReactiveCommand<ImportDialogViewModel, Unit> DeleteFileCommand { get; private set; } = ReactiveCommand.Create<ImportDialogViewModel>(vm =>
         {
             if ((vm.SelectedFile >= 0) && (vm.SelectedFile < vm.Files.Count))

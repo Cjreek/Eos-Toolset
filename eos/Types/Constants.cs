@@ -18,6 +18,7 @@ namespace Eos.Types
 
         public static readonly String ExportFolder;
         public static readonly String Export2DAFolder;
+        public static readonly String ExportSSFFolder;
         public static readonly String ExportTLKFolder;
         public static readonly String ExportHAKFolder;
         public static readonly String ExportIncludeFolder;
@@ -38,13 +39,25 @@ namespace Eos.Types
         public static readonly String SpellbooksFilename;
         public static readonly String AreaEffectsFilename;
         public static readonly String MasterFeatsFilename;
+        public static readonly String BaseItemsFilename;
+        public static readonly String ItemPropertySetsFilename;
+        public static readonly String ItemPropertiesFilename;
 
         public static readonly String AppearancesFilename;
+        public static readonly String AppearanceSoundsetsFilename;
+        public static readonly String WeaponSoundsFilename;
+        public static readonly String InventorySoundsFilename;
         public static readonly String PortraitsFilename;
         public static readonly String VisualEffectsFilename;
         public static readonly String ClassPackagesFilename;
         public static readonly String SoundsetsFilename;
         public static readonly String PolymorphsFilename;
+        public static readonly String CompanionsFilename;
+        public static readonly String FamiliarsFilename;
+        public static readonly String TrapsFilename;
+        public static readonly String ProgrammedEffectsFilename;
+        public static readonly String DamageTypesFilename;
+        public static readonly String DamageTypeGroupsFilename;
 
         public static readonly String AttackBonusTablesFilename;
         public static readonly String BonusFeatTablesFilename;
@@ -56,6 +69,13 @@ namespace Eos.Types
         public static readonly String KnownSpellsTablesFilename;
         public static readonly String StatGainTablesFilename;
         public static readonly String RacialFeatsTablesFilename;
+        public static readonly String SpellPreferencesTablesFilename;
+        public static readonly String FeatPreferencesTablesFilename;
+        public static readonly String SkillPreferencesTablesFilename;
+        public static readonly String PackageEquipmentTablesFilename;
+        public static readonly String ItemPropertyTablesFilename;
+        public static readonly String ItemPropertyCostTablesFilename;
+        public static readonly String ItemPropertyParamsFilename;
 
         public static readonly String CustomEnumsFilename;
         public static readonly String CustomObjectsFilename;
@@ -74,13 +94,25 @@ namespace Eos.Types
         public static readonly String SpellbooksFilePath;
         public static readonly String AreaEffectsFilePath;
         public static readonly String MasterFeatsFilePath;
+        public static readonly String BaseItemsFilePath;
+        public static readonly String ItemPropertySetsFilePath;
+        public static readonly String ItemPropertiesFilePath;
 
         public static readonly String AppearancesFilePath;
+        public static readonly String AppearanceSoundsetsFilePath;
+        public static readonly String WeaponSoundsFilePath;
+        public static readonly String InventorySoundsFilePath;
         public static readonly String PortraitsFilePath;
         public static readonly String VisualEffectsFilePath; 
         public static readonly String ClassPackagesFilePath;
         public static readonly String SoundsetsFilePath;
         public static readonly String PolymorphsFilePath;
+        public static readonly String CompanionsFilePath;
+        public static readonly String FamiliarsFilePath;
+        public static readonly String TrapsFilePath;
+        public static readonly String ProgrammedEffectsFilePath;
+        public static readonly String DamageTypesFilePath;
+        public static readonly String DamageTypeGroupsFilePath;
 
         public static readonly String AttackBonusTablesFilePath;
         public static readonly String BonusFeatTablesFilePath;
@@ -92,6 +124,13 @@ namespace Eos.Types
         public static readonly String KnownSpellsTablesFilePath;
         public static readonly String StatGainTablesFilePath;
         public static readonly String RacialFeatsTablesFilePath;
+        public static readonly String SpellPreferencesTablesFilePath;
+        public static readonly String FeatPreferencesTablesFilePath;
+        public static readonly String SkillPreferencesTablesFilePath;
+        public static readonly String PackageEquipmentTablesFilePath;
+        public static readonly String ItemPropertyTablesFilePath;
+        public static readonly String ItemPropertyCostTablesFilePath;
+        public static readonly String ItemPropertyParamsFilePath;
 
         public static readonly String IconResourcesFilePath;
 
@@ -111,6 +150,7 @@ namespace Eos.Types
 
             ExportFolder = "output" + Path.DirectorySeparatorChar;
             Export2DAFolder = ExportFolder;
+            ExportSSFFolder = ExportFolder;
             ExportHAKFolder = ExportFolder + "hak" + Path.DirectorySeparatorChar;
             ExportTLKFolder = ExportFolder + "tlk" + Path.DirectorySeparatorChar;
             ExportIncludeFolder = ExportFolder + "include" + Path.DirectorySeparatorChar;
@@ -131,13 +171,25 @@ namespace Eos.Types
             SpellbooksFilename = "spellbooks.json";
             AreaEffectsFilename = "areaeffects.json";
             MasterFeatsFilename = "masterfeats.json";
+            BaseItemsFilename = "baseitems.json";
+            ItemPropertySetsFilename = "itempropsets.json";
+            ItemPropertiesFilename = "itemproperties.json";
 
             AppearancesFilename = "appearances.json";
+            AppearanceSoundsetsFilename = "appearancesoundsets.json";
+            WeaponSoundsFilename = "weaponsounds.json";
+            InventorySoundsFilename = "inventorysounds.json";
             PortraitsFilename = "portraits.json";
             VisualEffectsFilename = "vfx.json";
             ClassPackagesFilename = "packages.json";
             SoundsetsFilename = "soundsets.json";
             PolymorphsFilename = "polymorphs.json";
+            CompanionsFilename = "companions.json";
+            FamiliarsFilename = "familiars.json";
+            TrapsFilename = "traps.json";
+            ProgrammedEffectsFilename = "progfx.json";
+            DamageTypesFilename = "damagetypes.json";
+            DamageTypeGroupsFilename = "damagetypegroups.json";
 
             AttackBonusTablesFilename = "tables_bab.json";
             BonusFeatTablesFilename = "tables_bonusfeats.json";
@@ -149,6 +201,13 @@ namespace Eos.Types
             KnownSpellsTablesFilename = "tables_knownspells.json";
             StatGainTablesFilename = "tables_statgain.json";
             RacialFeatsTablesFilename = "tables_racialfeats.json";
+            SpellPreferencesTablesFilename = "package_spells.json";
+            FeatPreferencesTablesFilename = "package_feats.json";
+            SkillPreferencesTablesFilename = "package_skills.json";
+            PackageEquipmentTablesFilename = "package_equipment.json";
+            ItemPropertyTablesFilename = "iprp_tables.json";
+            ItemPropertyCostTablesFilename = "iprp_costtables.json";
+            ItemPropertyParamsFilename = "iprp_params.json";
 
             CustomEnumsFilename = "customenums.json";
             CustomObjectsFilename = "customobjects.json";
@@ -167,13 +226,25 @@ namespace Eos.Types
             SpellbooksFilePath = BaseDataPath + SpellbooksFilename;
             AreaEffectsFilePath = BaseDataPath + AreaEffectsFilename;
             MasterFeatsFilePath = BaseDataPath + MasterFeatsFilename;
+            BaseItemsFilePath= BaseDataPath + BaseItemsFilename;
+            ItemPropertySetsFilePath = BaseDataPath + ItemPropertySetsFilename;
+            ItemPropertiesFilePath = BaseDataPath + ItemPropertiesFilename;
 
             AppearancesFilePath = BaseDataPath + AppearancesFilename;
+            AppearanceSoundsetsFilePath = BaseDataPath + AppearanceSoundsetsFilename;
+            WeaponSoundsFilePath = BaseDataPath + WeaponSoundsFilename;
+            InventorySoundsFilePath = BaseDataPath + InventorySoundsFilename;
             PortraitsFilePath = BaseDataPath + PortraitsFilename;
             VisualEffectsFilePath = BaseDataPath + VisualEffectsFilename;
             ClassPackagesFilePath = BaseDataPath + ClassPackagesFilename;
             SoundsetsFilePath = BaseDataPath + SoundsetsFilename;
             PolymorphsFilePath = BaseDataPath + PolymorphsFilename;
+            CompanionsFilePath = BaseDataPath + CompanionsFilename;
+            FamiliarsFilePath = BaseDataPath + FamiliarsFilename;
+            TrapsFilePath = BaseDataPath + TrapsFilename;
+            ProgrammedEffectsFilePath = BaseDataPath + ProgrammedEffectsFilename;
+            DamageTypesFilePath = BaseDataPath + DamageTypesFilename;
+            DamageTypeGroupsFilePath = BaseDataPath + DamageTypeGroupsFilename;
 
             AttackBonusTablesFilePath = BaseDataPath + AttackBonusTablesFilename;
             BonusFeatTablesFilePath = BaseDataPath + BonusFeatTablesFilename;
@@ -185,6 +256,13 @@ namespace Eos.Types
             KnownSpellsTablesFilePath = BaseDataPath + KnownSpellsTablesFilename;
             StatGainTablesFilePath = BaseDataPath + StatGainTablesFilename;
             RacialFeatsTablesFilePath = BaseDataPath + RacialFeatsTablesFilename;
+            SpellPreferencesTablesFilePath = BaseDataPath + SpellPreferencesTablesFilename;
+            FeatPreferencesTablesFilePath = BaseDataPath + FeatPreferencesTablesFilename;
+            SkillPreferencesTablesFilePath = BaseDataPath + SkillPreferencesTablesFilename;
+            PackageEquipmentTablesFilePath = BaseDataPath + PackageEquipmentTablesFilename;
+            ItemPropertyTablesFilePath = BaseDataPath + ItemPropertyTablesFilename;
+            ItemPropertyCostTablesFilePath = BaseDataPath + ItemPropertyCostTablesFilename;
+            ItemPropertyParamsFilePath = BaseDataPath + ItemPropertyParamsFilename;
 
             IconResourcesFilePath = BaseDataPath + IconResourcesFolder;
         }

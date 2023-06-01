@@ -38,6 +38,14 @@ namespace Eos.Models.Tables
 
         public FeatMenu Menu { get; set; } = FeatMenu.NoMenuEntry;
 
+        public FeatsTableItem() : base()
+        {
+        }
+
+        public FeatsTableItem(FeatsTable parentTable) : base(parentTable)
+        {
+        }
+
         public override void ResolveReferences()
         {
             Feat = MasterRepository.Feats.Resolve(Feat);
@@ -45,6 +53,7 @@ namespace Eos.Models.Tables
 
         public override void FromJson(JsonObject json)
         {
+            base.FromJson(json);
             this.Feat = CreateRefFromJson<Feat>(json["Feat"]?.AsObject());
             this.FeatList = JsonToEnum<FeatListType>(json["FeatList"]) ?? FeatListType.GeneralFeat;
             this.GrantedOnLevel = json["GrantedOnLevel"]?.GetValue<int>() ?? -1;
@@ -53,7 +62,7 @@ namespace Eos.Models.Tables
 
         public override JsonObject ToJson()
         {
-            var json = new JsonObject();
+            var json = base.ToJson();
             json.Add("Feat", this.Feat?.ToJsonRef());
             json.Add("FeatList", EnumToJson(this.FeatList));
             json.Add("GrantedOnLevel", this.GrantedOnLevel);

@@ -1,0 +1,399 @@
+<local:LanguageAwarePage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views"
+             xmlns:uc="using:Eos.Usercontrols"
+             xmlns:ext="using:Eos.Extensions"
+             xmlns:types="using:Eos.Types"
+             xmlns:config="using:Eos.Config"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
+             x:Class="Eos.Views.ProgrammedEffectView"
+             x:Name="page">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+        <ResourceInclude Source="/Assets/CustomDataTemplateResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <local:LanguageAwarePage.Styles>
+    <StyleInclude Source="/Assets/StyleResources.axaml"/>
+  </local:LanguageAwarePage.Styles>
+
+  <TabControl TabStripPlacement="Left" BorderThickness="0,1,0,0" SelectedIndex="{Binding SelectedTabIndex}" Padding="0">
+    <TabItem Header="Info" Width="120" Height="30" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="120"/>
+              <ColumnDefinition Width="*" MinWidth="150"/>
+              <ColumnDefinition Width="130"/>
+              <ColumnDefinition Width="*" MinWidth="150"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="15"/>
+              <RowDefinition Height="*" MinHeight="25"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="0,0,0,10">
+              <TextBlock FontSize="22" FontWeight="Bold">
+                <TextBlock.Text>
+                  <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                    <Binding Path="Data.Name"/>
+                  </MultiBinding>
+                </TextBlock.Text>
+              </TextBlock>
+
+              <TextBlock Text=" (ProgFX ID:" FontSize="16" VerticalAlignment="Center"/>
+              <!--<uc:ResetIsEnabled>-->
+              <TextBox Text="{Binding Data.CalculatedIndex, Mode=OneWay}" BorderThickness="0" FontSize="16" VerticalAlignment="Center" Margin="0" IsReadOnly="True"/>
+              <!--</uc:ResetIsEnabled>-->
+              <TextBlock Text=")" FontSize="16" VerticalAlignment="Center" Margin="0,0,0,0"/>
+            </StackPanel>
+
+            <!--Name-->
+            <TextBlock Text="Name" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <TextBox Text="{Binding Data.Name}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+
+            <TextBlock Text="Hint" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+            <TextBox Text="{Binding Data.Hint}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
+
+            <TextBlock Text="Type" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+            <uc:EnumComboBox x:Name="cbTyp" Grid.Row="3" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:ProgrammedEffectType}}" SelectedValue="{Binding Data.Type}"/>
+
+            <TabControl Grid.Row="5" Padding="0" Grid.Column="0" Grid.ColumnSpan="4" BorderThickness="0" SelectedIndex="{Binding ElementName=cbTyp, Path=SelectedIndex}">
+              <!--Skin Overlay-->
+              <TabItem Header="Skin Overlay" IsVisible="False">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Text="Model Name" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                  <uc:ModelResourceTextbox ResRef="{Binding Data.T1ModelName}" Grid.Row="0" Grid.Column="1"/>
+
+                  <TextBlock Text="Armor Type" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"/>
+                  <uc:EnumComboBox Grid.Row="0" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type types:ArmorType}}" SelectedValue="{Binding Data.T1ArmorType}"/>
+
+                  <TextBlock Text="OnHit VFX" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                  <uc:VisualEffectComboBox SelectedValue="{Binding Data.T1OnHitVFX}" Grid.Row="1" Grid.Column="1"/>
+
+                  <TextBlock Text="OnHit VFX (Small)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2"/>
+                  <uc:VisualEffectComboBox SelectedValue="{Binding Data.T1OnHitVFXSmall}" Grid.Row="1" Grid.Column="3"/>
+                </Grid>
+              </TabItem>
+              
+              <!--Environment Mapping-->
+              <TabItem Header="Environment Mapping" IsVisible="False">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Text="Environment Map" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                  <uc:ModelResourceTextbox ResRef="{Binding Data.T2EnvironmentMap}" Grid.Row="0" Grid.Column="1"/>
+                </Grid>
+              </TabItem>
+              
+              <!--Glow Effect-->
+              <TabItem Header="Glow Effect" IsVisible="False">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Text="Glow Color" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                  <Border x:Name="glowColorParent" Grid.Row="0" Grid.Column="1" BorderThickness="0,0.5,0.5,0.5" BorderBrush="Silver" Padding="0" Margin="2,0,0,3">
+                    <ColorPicker Margin="0" BorderThickness="0" Width="{Binding ElementName=glowColorParent, Path=Bounds.Width}" ColorSpectrumShape="Box" IsAccentColorsVisible="False" IsColorPaletteVisible="False" IsHexInputVisible="False" Color="{Binding Data.T3GlowColor, Converter={StaticResource colorConverter}}" IsAlphaEnabled="False" IsAlphaVisible="False" HorizontalAlignment="Left" Height="25"/>
+                  </Border>
+                </Grid>
+              </TabItem>
+
+              <!--Add/Remove Lighting-->
+              <TabItem Header="Add/Remove Lighting" IsVisible="False">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Text="Light Model" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                  <uc:ModelResourceTextbox ResRef="{Binding Data.T4LightModel}" Grid.Row="0" Grid.Column="1"/>
+
+                  <TextBlock Text="Priority" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"/>
+                  <NumericUpDown Value="{Binding Data.T4Priority}" Increment="1" Grid.Row="0" Grid.Column="3"/>
+
+                  <TextBlock Text="Model Animation" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                  <TextBox Text="{Binding Data.T4LightModelAnimation}" Grid.Row="1" Grid.Column="1"/>
+
+                  <TextBlock Text="Animation Speed" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2"/>
+                  <NumericUpDown Value="{Binding Data.T4AnimationSpeed}" Grid.Row="1" Grid.Column="3"/>
+
+                  <TextBlock Text="Remove other Lights" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+                  <CheckBox IsChecked="{Binding Data.T4RemoveAllOtherLights}" Grid.Row="2" Grid.Column="1"/>
+                  
+                  <TextBlock Text="Remove near other Lights" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
+                  <CheckBox IsChecked="{Binding Data.T4RemoveCloseToOtherLights}" Grid.Row="2" Grid.Column="3"/>
+
+                  <TextBlock Text="Cast Shadows" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+                  <CheckBox IsChecked="{Binding Data.T4CastShadows}" Grid.Row="3" Grid.Column="1"/>
+                </Grid>
+              </TabItem>
+
+              <!--Alpha Transparency-->
+              <TabItem Header="Alpha Transparency" IsVisible="False">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Text="Color" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                  <Border x:Name="alphaColorParent" Grid.Row="0" Grid.Column="1" BorderThickness="0,0.5,0.5,0.5" BorderBrush="Silver" Padding="0" Margin="2,0,0,3">
+                    <ColorPicker Margin="0" BorderThickness="0" Width="{Binding ElementName=alphaColorParent, Path=Bounds.Width}" ColorSpectrumShape="Box" IsAccentColorsVisible="False" IsColorPaletteVisible="False" IsHexInputVisible="False" Color="{Binding Data.T5TransparencyColor, Converter={StaticResource colorConverter}}" IsAlphaEnabled="False" IsAlphaVisible="False" HorizontalAlignment="Left" Height="25"/>
+                  </Border>
+
+                  <TextBlock Text="Keep Color Channel" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"/>
+                  <UniformGrid Columns="3" Grid.Row="0" Grid.Column="3" Margin="2,0,0,3">
+                    <ToggleButton Content="R" IsChecked="{Binding Data.T5TransparencyColorKeepRed}" Margin="0,0,2,0" Background="Red" FontWeight="Bold"/>
+                    <ToggleButton Content="G" IsChecked="{Binding Data.T5TransparencyColorKeepGreen}" Margin="0,0,2,0" Background="Green" FontWeight="Bold"/>
+                    <ToggleButton Content="B" IsChecked="{Binding Data.T5TransparencyColorKeepBlue}" Margin="0,0,2,0" Background="#C00000FF" FontWeight="Bold"/>
+                  </UniformGrid>
+
+                  <TextBlock Text="Opacity From" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                  <NumericUpDown Value="{Binding Data.T5OpacityFrom}" Grid.Row="1" Grid.Column="1"/>
+
+                  <TextBlock Text="Opacity To" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2"/>
+                  <NumericUpDown Value="{Binding Data.T5OpacityTo}" Grid.Row="1" Grid.Column="3"/>
+
+                  <TextBlock Text="Fade Interval" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+                  <NumericUpDown Value="{Binding Data.T5FadeInterval}" Grid.Row="2" Grid.Column="1"/>
+                </Grid>
+              </TabItem>
+
+              <!--Pulsing Aura-->
+              <TabItem Header="Pulsing Aura" IsVisible="False">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Text="Color 1" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                  <Border x:Name="aura1ColorParent" Grid.Row="0" Grid.Column="1" BorderThickness="0,0.5,0.5,0.5" BorderBrush="Silver" Padding="0" Margin="2,0,0,3">
+                    <ColorPicker Margin="0" BorderThickness="0" Width="{Binding ElementName=aura1ColorParent, Path=Bounds.Width}" ColorSpectrumShape="Box" IsAccentColorsVisible="False" IsColorPaletteVisible="False" IsHexInputVisible="False" Color="{Binding Data.T6Color1, Converter={StaticResource colorConverter}}" IsAlphaEnabled="False" IsAlphaVisible="False" HorizontalAlignment="Left" Height="25"/>
+                  </Border>
+
+                  <TextBlock Text="Color 2" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"/>
+                  <Border x:Name="aura2ColorParent" Grid.Row="0" Grid.Column="3" BorderThickness="0,0.5,0.5,0.5" BorderBrush="Silver" Padding="0" Margin="2,0,0,3">
+                    <ColorPicker Margin="0" BorderThickness="0" Width="{Binding ElementName=aura2ColorParent, Path=Bounds.Width}" ColorSpectrumShape="Box" IsAccentColorsVisible="False" IsColorPaletteVisible="False" IsHexInputVisible="False" Color="{Binding Data.T6Color2, Converter={StaticResource colorConverter}}" IsAlphaEnabled="False" IsAlphaVisible="False" HorizontalAlignment="Left" Height="25"/>
+                  </Border>
+
+                  <TextBlock Text="Fade Duration" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                  <NumericUpDown Value="{Binding Data.T6FadeDuration}" Increment="1" Grid.Row="1" Grid.Column="1"/>
+                </Grid>
+              </TabItem>
+
+              <!--Beam-->
+              <TabItem Header="Beam" IsVisible="False">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Text="Beam Model" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                  <uc:ModelResourceTextbox ResRef="{Binding Data.T7BeamModel}" Grid.Row="0" Grid.Column="1"/>
+
+                  <TextBlock Text="Animation" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"/>
+                  <uc:ModelResourceTextbox ResRef="{Binding Data.T7BeamAnimation}" Grid.Row="0" Grid.Column="3"/>
+                </Grid>
+              </TabItem>
+
+              <!--Stop Model Rendering-->
+              <TabItem Header="Stop Model Rendering" IsVisible="False"/>
+
+              <!--Chunk Model-->
+              <TabItem Header="Chunk Model" IsVisible="False"/>
+
+              <!--MIRV Projectile-->
+              <TabItem Header="MIRV Projectile" IsVisible="False">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Text="Projectile Model" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                  <uc:ModelResourceTextbox ResRef="{Binding Data.T10ProjectileModel}" Grid.Row="0" Grid.Column="1"/>
+
+                  <TextBlock Text="Spell" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"/>
+                  <uc:SpellComboBox SelectedValue="{Binding Data.T10Spell}" Grid.Row="0" Grid.Column="3"/>
+
+                  <TextBlock Text="Projectile Orientation" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                  <uc:EnumComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:ProjectileOrientation}}" SelectedValue="{Binding Data.T10Orientation}"/>
+
+                  <TextBlock Text="Projectile Path" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2"/>
+                  <uc:EnumComboBox Grid.Row="1" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type types:ProjectilePath}}" SelectedValue="{Binding Data.T10ProjectilePath}"/>
+
+                  <TextBlock Text="Travel Time" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+                  <uc:EnumComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:ProjectileTravelTime}}" SelectedValue="{Binding Data.T10TravelTime}"/>
+                </Grid>
+              </TabItem>
+
+              <!--Variant MIRV Projectile-->
+              <TabItem Header="Variant MIRV Projectile" IsVisible="False">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Text="Projectile Model" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                  <uc:ModelResourceTextbox ResRef="{Binding Data.T11ProjectileModel}" Grid.Row="0" Grid.Column="1"/>
+
+                  <TextBlock Text="Projectile Path" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"/>
+                  <uc:EnumComboBox Grid.Row="0" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type types:ProjectilePath}}" SelectedValue="{Binding Data.T11ProjectilePath}"/>
+
+                  <TextBlock Text="Fire Sound" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                  <uc:ModelResourceTextbox ResRef="{Binding Data.T11FireSound}" Grid.Row="1" Grid.Column="1"/>
+
+                  <TextBlock Text="Impact Sound" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2"/>
+                  <uc:ModelResourceTextbox ResRef="{Binding Data.T11ImpactSound}" Grid.Row="1" Grid.Column="3"/>
+                </Grid>
+              </TabItem>
+
+              <!--Spellcast Failure-->
+              <TabItem Header="Spellcast Failure" IsVisible="False">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="*" MinWidth="150"/>
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Text="Failure Model" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                  <uc:ModelResourceTextbox ResRef="{Binding Data.T12EffectModel}" Grid.Row="0" Grid.Column="1"/>
+
+                  <TextBlock Text="Model Node" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"/>
+                  <TextBox Text="{Binding Data.T12ModelNode}" Grid.Row="0" Grid.Column="3"/>
+                </Grid>
+              </TabItem>
+
+              <!--Freeze Animation-->
+              <TabItem Header="Freeze Animation" IsVisible="False"/>
+            </TabControl>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Extensions" Width="120" Height="30" BorderThickness="0,0,0,1" IsVisible="{Binding !Data.IsReadonly}">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Extension Fields" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <ItemsRepeater Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding Data.ExtensionValues}" ElementPrepared="ItemsRepeater_ElementPrepared">
+              <ItemsRepeater.Layout>
+                <UniformGridLayout ItemsStretch="Fill" Orientation="Horizontal" MaximumRowsOrColumns="2" MinItemHeight="25"/>
+              </ItemsRepeater.Layout>
+
+              <ItemsRepeater.ItemTemplate>
+                <DataTemplate>
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="150"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Margin="0,3,5,0" Text="{Binding Property.Label}"/>
+                    <ContentPresenter Grid.Column="1" Content="{Binding}" ContentTemplate="{StaticResource templateSelector}"/>
+                  </Grid>
+                </DataTemplate>
+              </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+  </TabControl>
+</local:LanguageAwarePage>

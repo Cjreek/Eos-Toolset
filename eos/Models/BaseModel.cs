@@ -26,9 +26,10 @@ namespace Eos.Models
 
     public class BaseModel : INotifyPropertyChanged
     {
-        private String _hint = "";
-        private String _scriptConstant = "";
-        private String? _icon;
+        private string _hint = "";
+        private string _scriptConstant = "";
+        private string? _sourceLabel;
+        private string? _icon;
         private bool _disabled = false;
         private bool _clearingReferences = false;
         private ModelExtension? _extensions;
@@ -80,19 +81,6 @@ namespace Eos.Models
         public bool IsOverride => Overrides != null;
         public int? Index { get; set; }
 
-        public string ScriptConstant
-        {
-            get { return _scriptConstant; }
-            set
-            {
-                if (_scriptConstant != value)
-                {
-                    _scriptConstant = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
         public int? CalculatedIndex
         {
             get
@@ -132,6 +120,33 @@ namespace Eos.Models
             }
         }
 
+        // Metadata
+        public string ScriptConstant
+        {
+            get { return _scriptConstant; }
+            set
+            {
+                if (_scriptConstant != value)
+                {
+                    _scriptConstant = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public string? SourceLabel
+        {
+            get { return _sourceLabel; }
+            set
+            {
+                if (_sourceLabel != value)
+                {
+                    _sourceLabel = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         protected virtual TLKStringSet? GetTlkDisplayName()
         {
             return null;
@@ -147,6 +162,8 @@ namespace Eos.Models
                 return selfOverride?.Hint ?? this.Hint;
             }
         }
+
+        public String Label => GetLabel();
 
         protected virtual String GetTypeName()
         {
@@ -281,6 +298,7 @@ namespace Eos.Models
             result.Add("Disabled", this.Disabled);
             result.Add("Hint", this.Hint);
             result.Add("ScriptConstant", this.ScriptConstant);
+            result.Add("SourceLabel", this.SourceLabel);
 
             var extensionValues = new JsonObject();
             foreach (var prop in extensionValueDict.Keys)
@@ -301,6 +319,7 @@ namespace Eos.Models
             this.Disabled = json["Disabled"]?.GetValue<bool?>() ?? false;
             this.Hint = json["Hint"]?.GetValue<String>() ?? "";
             this.ScriptConstant = json["ScriptConstant"]?.GetValue<String>() ?? "";
+            this.SourceLabel = json["SourceLabel"]?.GetValue<String>() ?? "";
 
             var extensionValues = json["ExtensionValues"]?.AsObject();
             if (extensionValues != null)

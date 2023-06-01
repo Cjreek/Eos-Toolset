@@ -12,21 +12,6 @@ namespace Eos.Views
 {
     public class LanguageAwarePage : UserControl
     {
-        public static readonly StyledProperty<TLKLanguage> TLKLanguageProperty = AvaloniaProperty.Register<LanguageAwarePage, TLKLanguage>("TLKLanguage", default, false, Avalonia.Data.BindingMode.TwoWay);
-        public static readonly StyledProperty<bool> GenderProperty = AvaloniaProperty.Register<LanguageAwarePage, bool>("Gender", false, false, Avalonia.Data.BindingMode.TwoWay);
-
-        public TLKLanguage TLKLanguage
-        {
-            get { return GetValue(TLKLanguageProperty); }
-            set { SetValue(TLKLanguageProperty, value); }
-        }
-
-        public bool Gender
-        {
-            get { return GetValue(GenderProperty); }
-            set { SetValue(GenderProperty, value); }
-        }
-
         private string? FilterCharacters(string? text)
         {
             if (text == null) return null;

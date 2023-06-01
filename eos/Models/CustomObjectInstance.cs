@@ -48,6 +48,16 @@ namespace Eos.Models
         {
             Property = property;
             Value = value;
+
+            Property.PropertyChanged += Property_PropertyChanged;
+        }
+
+        private void Property_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Property.DataType))
+            {
+                Value = null;
+            }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

@@ -18,6 +18,7 @@ namespace Eos.Services
         private static List<Update> updateList = new List<Update>()
         {
             new Update0630(),
+            new Update0640(),
         };
 
         public bool NeedsGameDataUpdate => _needsGameDataUpdate;

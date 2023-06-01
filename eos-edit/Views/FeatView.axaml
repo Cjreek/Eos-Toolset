@@ -7,6 +7,7 @@
              xmlns:uc="using:Eos.Usercontrols"
              xmlns:types="using:Eos.Types"
              xmlns:ext="using:Eos.Extensions"
+             xmlns:config="using:Eos.Config"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Eos.Views.FeatView"
              x:Name="page">
@@ -82,7 +83,7 @@
 
               <!--Name-->
               <TextBlock Text="Name" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-              <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+              <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
 
               <CheckBox Content="Disable" Grid.Row="1" Grid.Column="3" Margin="3,-2,0,0" IsChecked="{Binding Data.Disabled}"/>
 
@@ -93,7 +94,7 @@
               <!--Description-->
               <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,0,5,0" Grid.Row="3" Grid.Column="0"/>
               <!--<uc:ResetIsEnabled >-->
-              <uc:TLKTextbox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
+              <uc:TLKTextbox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
               <!--</uc:ResetIsEnabled>-->
 
               <!--Master Feat-->

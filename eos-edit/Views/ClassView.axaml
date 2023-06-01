@@ -7,6 +7,7 @@
              xmlns:uc="using:Eos.Usercontrols"
              xmlns:ext="using:Eos.Extensions"
              xmlns:types="using:Eos.Types"
+             xmlns:config="using:Eos.Config"
              xmlns:repo="using:Eos.Repositories"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Eos.Views.ClassView"
@@ -73,22 +74,23 @@
 
               <!--Name-->
               <TextBlock Text="Name" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-              <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1"/>
+              <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" Grid.Row="1" Grid.Column="1"/>
 
+              
               <!--Name (Plural)-->
               <TextBlock Text="Name (Plural)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
-              <uc:TLKTextbox TLKStrings="{Binding Data.NamePlural}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="2" Grid.Column="1"/>
+              <uc:TLKTextbox TLKStrings="{Binding Data.NamePlural}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" Grid.Row="2" Grid.Column="1"/>
 
               <!--Abbreviation-->
               <TextBlock Text="Abbreviation" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
-              <uc:TLKTextbox TLKStrings="{Binding Data.Abbreviation}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="3" Grid.Column="1"/>
+              <uc:TLKTextbox TLKStrings="{Binding Data.Abbreviation}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" Grid.Row="3" Grid.Column="1"/>
 
               <TextBlock Text="Hint" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
               <TextBox Text="{Binding Data.Hint}" Grid.Row="4" Grid.Column="1"/>
 
               <!--Description-->
               <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,3,5,0" Grid.Row="5" Grid.Column="0"/>
-              <uc:TLKTextbox Grid.Row="5" Grid.Column="1" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
+              <uc:TLKTextbox Grid.Row="5" Grid.Column="1" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
             </Grid>
 
             <!--Icon-->

@@ -161,6 +161,13 @@ namespace Eos.Views
 
                             if (container != null)
                             {
+                                var tmpItem = container;
+                                while (tmpItem.Parent is TreeViewItem tvi)
+                                {
+                                    tvi.IsExpanded = true;
+                                    tmpItem = tvi;
+                                }
+
                                 container.BringIntoView();
                                 tvAdditional.SelectedItems = null;
                                 container.IsSelected = true;
@@ -184,6 +191,13 @@ namespace Eos.Views
 
                             if (container != null)
                             {
+                                var tmpItem = container;
+                                while (tmpItem.Parent is TreeViewItem tvi)
+                                {
+                                    tvi.IsExpanded = true;
+                                    tmpItem = tvi;
+                                }
+
                                 container.BringIntoView();
                                 tvCustom.SelectedItems = null;
                                 container.IsSelected = true;
@@ -207,6 +221,13 @@ namespace Eos.Views
 
                             if (container != null)
                             {
+                                var tmpItem = container;
+                                while (tmpItem.Parent is TreeViewItem tvi)
+                                {
+                                    tvi.IsExpanded = true;
+                                    tmpItem = tvi;
+                                }
+
                                 container.BringIntoView();
                                 tvStandard.SelectedItems = null;
                                 container.IsSelected = true;
@@ -224,23 +245,29 @@ namespace Eos.Views
 
         private void mainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            if (EosConfig.NwnBasePath == "")
+            {
+                var basePathInputViewModel = new InputBasePathDialogViewModel();
+                WindowService.OpenDialog<InputBasePathDialogViewModel>(basePathInputViewModel);
+
+                if (basePathInputViewModel.BasePath != "")
+                {
+                    EosConfig.OverrideNwnBasePath(basePathInputViewModel.BasePath);
+                    EosConfig.Save();
+
+                    if (Application.Current is App app)
+                        app.InitializeRepositories();
+                    else
+                        Environment.Exit(0);
+                }
+                else
+                    Environment.Exit(0);
+            }
+
             if (MasterRepository.Standard.Classes.Count == 0)
             {
                 WindowService.ShowMessage("No base game data has been found!\nThe standard game files will now be imported.\nThis may take a minute.", "Game Data Import", MessageBoxButtons.Ok, MessageBoxIcon.Information);
-
-                var oldCursor = this.Cursor;
-                this.Cursor = new Cursor(StandardCursorType.Wait);
-                try
-                {
-                    var import = new GameDataImport();
-                    import.Import(EosConfig.NwnBasePath);
-                }
-                finally
-                {
-                    this.Cursor = oldCursor;
-                }
-
-                WindowService.ShowMessage("Game files have been imported successfully!", "Game Data Import", MessageBoxButtons.Ok, MessageBoxIcon.Information);
+                MessageDispatcher.Send(MessageType.DoGameDataImport, false, null);
             }
             
             if ((EosConfig.LastProject != "") && (File.Exists(EosConfig.LastProject)))

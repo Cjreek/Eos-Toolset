@@ -14,8 +14,17 @@ namespace Eos.Models.Tables
         public int ReflexSave { get; set; }
         public int WillpowerSave { get; set; }
 
+        public SavingThrowTableItem() : base()
+        {
+        }
+
+        public SavingThrowTableItem(SavingThrowTable parentTable) : base(parentTable)
+        {
+        }
+
         public override void FromJson(JsonObject json)
         {
+            base.FromJson(json);
             this.Level = json["Level"]?.GetValue<int>() ?? 1;
             this.FortitudeSave = json["FortitudeSave"]?.GetValue<int>() ?? 0;
             this.ReflexSave = json["ReflexSave"]?.GetValue<int>() ?? 0;
@@ -24,7 +33,7 @@ namespace Eos.Models.Tables
 
         public override JsonObject ToJson()
         {
-            var json = new JsonObject();
+            var json = base.ToJson();
             json.Add("Level", this.Level);
             json.Add("FortitudeSave", this.FortitudeSave);
             json.Add("ReflexSave", this.ReflexSave);

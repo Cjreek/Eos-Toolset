@@ -102,6 +102,12 @@
     <AvaloniaResource Update="Assets\Icons\new32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\nwn16.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\nwn32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
     <AvaloniaResource Update="Assets\Icons\open16.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
@@ -109,6 +115,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Update="Assets\Icons\question.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AvaloniaResource>
+    <AvaloniaResource Update="Assets\Icons\restore16.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
     <AvaloniaResource Update="Assets\Icons\save16.png">
@@ -141,8 +150,75 @@
     <AvaloniaXaml Update="Assets\ConverterResources.axaml">
       <SubType>Designer</SubType>
     </AvaloniaXaml>
+    <AvaloniaXaml Update="Usercontrols\WeaponSoundComboBox.axaml">
+      <SubType>Designer</SubType>
+    </AvaloniaXaml>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Usercontrols\AppearanceSoundsetComboBox.axaml.cs">
+      <DependentUpon>AppearanceSoundsetComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\BaseItemComboBox.axaml.cs">
+      <DependentUpon>BaseItemComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\DamageTypeComboBox.axaml.cs">
+      <DependentUpon>DamageTypeComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\DamageTypeGroupComboBox.axaml.cs">
+      <DependentUpon>DamageTypeGroupComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\ItemPropertyComboBox.axaml.cs">
+      <DependentUpon>ItemPropertyComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\ItemPropertyCostTableComboBox.axaml.cs">
+      <DependentUpon>ItemPropertyCostTableComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\ItemPropertyParamComboBox.axaml.cs">
+      <DependentUpon>ItemPropertyParamComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\ProgrammedEffectComboBox.axaml.cs">
+      <DependentUpon>ProgrammedEffectComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\TrapComboBox.axaml.cs">
+      <DependentUpon>TrapComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\FamiliarComboBox.axaml.cs">
+      <DependentUpon>FamiliarComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\PackageEquipmentTableComboBox.axaml.cs">
+      <DependentUpon>PackageEquipmentTableComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\ItemPropertyTableComboBox.axaml.cs">
+      <DependentUpon>ItemPropertyTableComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\SkillPreferencesTableComboBox.axaml.cs">
+      <DependentUpon>SkillPreferencesTableComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\ItemPropertySetComboBox.axaml.cs">
+      <DependentUpon>ItemPropertySetComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\InventorySoundComboBox.axaml.cs">
+      <DependentUpon>InventorySoundComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\AppearanceComboBox.axaml.cs">
+      <DependentUpon>AppearanceComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\CompanionComboBox.axaml.cs">
+      <DependentUpon>CompanionComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\FeatPreferencesTableComboBox.axaml.cs">
+      <DependentUpon>FeatPreferencesTableComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\DataTypeComboBox.axaml.cs">
+      <DependentUpon>DataTypeComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\SpellPreferencesTableComboBox.axaml.cs">
+      <DependentUpon>SpellPreferencesTableComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Usercontrols\WeaponSoundComboBox.axaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>WeaponSoundComboBox.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Usercontrols\PoisonComboBox.axaml.cs">
       <DependentUpon>PoisonComboBox.axaml</DependentUpon>
     </Compile>
@@ -164,14 +240,80 @@
     <Compile Update="Usercontrols\KnownSpellsTableComboBox.axaml.cs">
       <DependentUpon>KnownSpellsTableComboBox.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Usercontrols\AppearanceComboBox.axaml.cs">
-      <DependentUpon>AppearanceComboBox.axaml</DependentUpon>
-    </Compile>
     <Compile Update="Usercontrols\SpellComboBox.axaml.cs">
       <DependentUpon>SpellComboBox.axaml</DependentUpon>
     </Compile>
     <Compile Update="Usercontrols\SpellbookComboBox.axaml.cs">
       <DependentUpon>SpellbookComboBox.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\AppearanceSoundsetView.axaml.cs">
+      <DependentUpon>AppearanceSoundsetView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\BaseItemView.axaml.cs">
+      <DependentUpon>BaseItemView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\DamageTypeGroupView.axaml.cs">
+      <DependentUpon>DamageTypeGroupView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\DamageTypeView.axaml.cs">
+      <DependentUpon>DamageTypeView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ProgrammedEffectView.axaml.cs">
+      <DependentUpon>ProgrammedEffectView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\VisualEffectView.axaml.cs">
+      <DependentUpon>VisualEffectView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Dialogs\InputBasePathDialogView.axaml.cs">
+      <DependentUpon>InputBasePathDialogView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ItemPropertyCostTableView.axaml.cs">
+      <DependentUpon>ItemPropertyCostTableView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ItemPropertyParamView.axaml.cs">
+      <DependentUpon>ItemPropertyParamView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ItemPropertySetView.axaml.cs">
+      <DependentUpon>ItemPropertySetView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\TrapView.axaml.cs">
+      <DependentUpon>TrapView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ItemPropertyView.axaml.cs">
+      <DependentUpon>ItemPropertyView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ItemPropertyTableView.axaml.cs">
+      <DependentUpon>ItemPropertyTableView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\PortraitView.axaml.cs">
+      <DependentUpon>PortraitView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FamiliarView.axaml.cs">
+      <DependentUpon>FamiliarView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\CompanionView.axaml.cs">
+      <DependentUpon>CompanionView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\InventorySoundView.axaml.cs">
+      <DependentUpon>InventorySoundView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\PackageSkillPreferencesTableView.axaml.cs">
+      <DependentUpon>PackageSkillPreferencesTableView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\PackageFeatPreferencesTableView.axaml.cs">
+      <DependentUpon>PackageFeatPreferencesTableView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\PackageEquipmentTableView.axaml.cs">
+      <DependentUpon>PackageEquipmentTableView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\PackageSpellPreferencesTableView.axaml.cs">
+      <DependentUpon>PackageSpellPreferencesTableView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\WeaponSoundView.axaml.cs">
+      <DependentUpon>WeaponSoundView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\AppearanceView.axaml.cs">
+      <DependentUpon>AppearanceView.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <!--<ItemGroup>

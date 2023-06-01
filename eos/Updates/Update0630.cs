@@ -11,7 +11,7 @@ namespace Eos.Updates
     internal class Update0630 : Update
     {
         public override int Version => 630;
-        public override DateTime? GameDataMinimumBuildDate => new DateTime(2022, 07, 26); // 6273521c
+        public override DateTime GameDataMinimumBuildDate => new DateTime(2022, 07, 26); // 6273521c
 
         public override void Apply(EosProject project)
         {

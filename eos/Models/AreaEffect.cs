@@ -15,6 +15,7 @@ namespace Eos.Models
     public class AreaEffect : BaseModel
     {
         private String _name = "";
+        private VisualEffect? _visualEffect;
 
         public String Name
         {
@@ -37,7 +38,11 @@ namespace Eos.Models
         public String? OnExitScript { get; set; }
         public String? OnHeartbeatScript { get; set; }
         public bool OrientWithGround { get; set; }
-        public VisualEffect? VisualEffect { get; set; }
+        public VisualEffect? VisualEffect
+        {
+            get { return _visualEffect; }
+            set { Set(ref _visualEffect, value); }
+        }
         public String? Model1 { get; set; }
         public String? LowQualityModel1 { get; set; }
         public int? Model1Amount { get; set; }
@@ -62,6 +67,11 @@ namespace Eos.Models
         public override String GetLabel()
         {
             return Name;
+        }
+
+        protected override string GetTypeName()
+        {
+            return "Area Effect";
         }
 
         protected override void SetDefaultValues()

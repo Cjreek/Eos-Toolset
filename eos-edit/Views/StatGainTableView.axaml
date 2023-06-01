@@ -40,7 +40,14 @@
       <TextBlock Text="StatGain Table" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
       <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-      <TextBox Grid.Row="1" Grid.Column="1" IsEnabled="{Binding !Data.IsReadonly}" Text="{Binding Data.Name}" MaxLength="16"/>
+      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}" MaxLength="16">
+        <TextBox.IsEnabled>
+          <MultiBinding Converter="{x:Static BoolConverters.And}">
+            <Binding Path="!Data.IsReadonly"/>
+            <Binding Path="!Data.IsOverride"/>
+          </MultiBinding>
+        </TextBox.IsEnabled>
+      </TextBox>
 
       <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
       <TextBox Grid.Row="2" Grid.Column="1" IsEnabled="{Binding !Data.IsReadonly}" Text="{Binding Data.Hint}"/>

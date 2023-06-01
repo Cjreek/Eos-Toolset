@@ -1,0 +1,509 @@
+<local:LanguageAwarePage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views"
+             xmlns:uc="using:Eos.Usercontrols"
+             xmlns:ext="using:Eos.Extensions"
+             xmlns:types="using:Eos.Types"
+             xmlns:config="using:Eos.Config"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Views.BaseItemView"
+             x:Name="page">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+        <ResourceInclude Source="/Assets/CustomDataTemplateResources.axaml"/>
+        <ResourceDictionary>
+          <local:CritRangeDisplayConverter x:Key="CritRangeDisplayConverter"/>
+        </ResourceDictionary>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <local:LanguageAwarePage.Styles>
+    <StyleInclude Source="/Assets/StyleResources.axaml"/>
+  </local:LanguageAwarePage.Styles>
+
+  <TabControl TabStripPlacement="Left" BorderThickness="0,1,0,0" SelectedIndex="{Binding SelectedTabIndex}" Padding="0">
+    <TabItem Header="Info" Width="120" Height="30" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="0,0,0,10">
+              <TextBlock FontSize="22" FontWeight="Bold">
+                <TextBlock.Text>
+                  <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                    <Binding Path="Data.Name"/>
+                  </MultiBinding>
+                </TextBlock.Text>
+              </TextBlock>
+
+              <TextBlock Text=" Base Item" FontSize="22" VerticalAlignment="Center" FontWeight="Bold"/>
+              <TextBlock Text=" (ID:" FontSize="16" VerticalAlignment="Center"/>
+              <!--<uc:ResetIsEnabled>-->
+              <TextBox Text="{Binding Data.CalculatedIndex, Mode=OneWay}" BorderThickness="0" FontSize="16" VerticalAlignment="Center" Margin="0" IsReadOnly="True"/>
+              <!--</uc:ResetIsEnabled>-->
+              <TextBlock Text=")" FontSize="16" VerticalAlignment="Center" Margin="0,0,0,0"/>
+            </StackPanel>
+
+            <Grid Grid.Row="1" Grid.Column="0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*" MinWidth="300"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="*"/>
+              </Grid.RowDefinitions>
+
+              <!--Name-->
+              <TextBlock Text="Name" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+              <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" Grid.Row="1" Grid.Column="1"/>
+
+              <TextBlock Text="Hint" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+              <TextBox Text="{Binding Data.Hint}" Grid.Row="2" Grid.Column="1"/>
+
+              <!--Description-->
+              <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,3,5,0" Grid.Row="3" Grid.Column="0"/>
+              <!--<uc:ResetIsEnabled Grid.Row="3" Grid.Column="1">-->
+              <uc:TLKTextbox Grid.Row="3" Grid.Column="1" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" AcceptsReturn="True" Height="100" IsReadonly="{Binding Data.IsReadonly}"/>
+              <!--</uc:ResetIsEnabled>-->
+
+              <TextBlock Text="Stats Text" HorizontalAlignment="Right" Margin="0,3,5,0" Grid.Row="4" Grid.Column="0"/>
+              <uc:TLKTextbox Grid.Row="4" Grid.Column="1" TLKStrings="{Binding Data.StatsText}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
+
+              <TextBlock Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Requirements" Margin="100,0,0,10" FontWeight="Bold" FontSize="16"/>
+
+              <Grid Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="80"/>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="80"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="auto" MinHeight="25"/>
+                  <RowDefinition Height="auto" MinHeight="25"/>
+                  <RowDefinition Height="auto" MinHeight="25"/>
+                  <RowDefinition Height="auto" MinHeight="25"/>
+                </Grid.RowDefinitions>
+                
+                <TextBlock Text="Feat 1" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                <uc:FeatComboBox SelectedValue="{Binding Data.RequiredFeat1}" Grid.Row="0" Grid.Column="1"/>
+
+                <TextBlock Text="Feat 4" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"/>
+                <uc:FeatComboBox SelectedValue="{Binding Data.RequiredFeat4}" Grid.Row="0" Grid.Column="3"/>
+
+                <TextBlock Text="Feat 2" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                <uc:FeatComboBox SelectedValue="{Binding Data.RequiredFeat2}" Grid.Row="1" Grid.Column="1"/>
+
+                <TextBlock Text="Feat 5" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2"/>
+                <uc:FeatComboBox SelectedValue="{Binding Data.RequiredFeat5}" Grid.Row="1" Grid.Column="3"/>
+
+                <TextBlock Text="Feat 3" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+                <uc:FeatComboBox SelectedValue="{Binding Data.RequiredFeat3}" Grid.Row="2" Grid.Column="1"/>
+              </Grid>
+            </Grid>
+
+            <uc:IconControl Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" Icon="{Binding Data.Icon}"/>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Visual" Width="120" Height="30" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="120"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="120"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Base Item Visuals" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <TextBlock Text="Item Model" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+            <uc:ModelResourceTextbox ResRef="{Binding Data.ItemModel}" Grid.Row="2" Grid.Column="1"/>
+
+            <TextBlock Text="Default Model" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
+            <uc:ModelResourceTextbox ResRef="{Binding Data.DefaultModel}" Grid.Row="2" Grid.Column="3"/>
+
+            <TextBlock Text="Model Type" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+            <uc:EnumComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:ItemModelType}}" SelectedValue="{Binding Data.ModelType}"/>
+
+            <TextBlock Text="Can Rotate Icon" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+            <CheckBox Grid.Row="3" Grid.Column="3" IsChecked="{Binding Data.CanRotateIcon}"/>
+
+            <TextBlock Text="Min. Model Count" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+            <NumericUpDown Grid.Row="4" Grid.Column="1" Value="{Binding Data.MinimumModelCount}" Increment="1"/>
+            
+            <TextBlock Text="Max. Model Count" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
+            <NumericUpDown Grid.Row="4" Grid.Column="3" Value="{Binding Data.MaximumModelCount}" Increment="1"/>
+
+            <TextBlock Text="Part 1 Alpha" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+            <uc:EnumComboBox Grid.Row="5" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:AlphaChannelUsageType}}" SelectedValue="{Binding Data.Part1Alpha}" IsNullable="True"/>
+
+            <TextBlock Text="Part 2 Alpha" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
+            <uc:EnumComboBox Grid.Row="5" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type types:AlphaChannelUsageType}}" SelectedValue="{Binding Data.Part2Alpha}" IsNullable="True"/>
+
+            <TextBlock Text="Part 3 Alpha" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
+            <uc:EnumComboBox Grid.Row="6" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:AlphaChannelUsageType}}" SelectedValue="{Binding Data.Part3Alpha}" IsNullable="True"/>
+
+            <TextBlock Text="Left Slash Anim%" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
+            <NumericUpDown Grid.Row="7" Grid.Column="1" Value="{Binding Data.LeftSlashAnimationPercent}" Increment="1"/>
+
+            <TextBlock Text="Right Slash Anim%" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="2"/>
+            <NumericUpDown Grid.Row="7" Grid.Column="3" Value="{Binding Data.RightSlashAnimationPercent}" Increment="1"/>
+
+            <TextBlock Text="Straight Slash Anim%" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
+            <NumericUpDown Grid.Row="8" Grid.Column="1" Value="{Binding Data.StraightSlashAnimationPercent}" Increment="1"/>
+
+            <TextBlock Text="Inventory Sound" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
+            <uc:InventorySoundComboBox SelectedValue="{Binding Data.InventorySound}" Grid.Row="9" Grid.Column="1"/>
+
+            <TextBlock Text="Ground Rotation" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
+            <uc:EnumComboBox Grid.Row="9" Grid.Column="9" ItemsSource="{ext:EnumSource {x:Type types:ItemModelRotation}}" SelectedValue="{Binding Data.GroundModelRotation}" IsNullable="True"/>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Properties" Width="120" Height="30" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="120"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="140"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Base Item Properties" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <TextBlock Text="Item Category" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+            <uc:EnumComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:ItemCategory}}" SelectedValue="{Binding Data.Category}"/>
+
+            <TextBlock Text="Property Category" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
+            <uc:ItemPropertySetComboBox SelectedValue="{Binding Data.ItemPropertySet}" Grid.Row="2" Grid.Column="3"/>
+
+            <TextBlock Text="Inventory Width" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.InventorySlotWidth}" Increment="1" Grid.Row="3" Grid.Column="1"/>
+
+            <TextBlock Text="Inventory Height" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.InventorySlotHeight}" Increment="1" Grid.Row="3" Grid.Column="3"/>
+
+            <TextBlock Text="Equipable Slots" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+            <uc:FlagListbox ItemsSource="{ext:EnumSource {x:Type types:InventorySlots}}" Flags="{Binding Data.EquipableSlots}" Orientation="Vertical" Grid.Row="4" Grid.Column="1"/>
+
+            <Grid Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="140"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="25" MinHeight="25"/>
+                <RowDefinition Height="25" MinHeight="25"/>
+                <RowDefinition Height="25" MinHeight="25"/>
+                <RowDefinition Height="25" MinHeight="25"/>
+                <RowDefinition Height="25" MinHeight="25"/>
+                <RowDefinition Height="25" MinHeight="25"/>
+                <RowDefinition Height="25" MinHeight="25"/>
+                <RowDefinition Height="25" MinHeight="25"/>
+                <RowDefinition Height="25" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+                <RowDefinition Height="auto" MinHeight="25"/>
+              </Grid.RowDefinitions>
+
+              <TextBlock Text="Store Panel" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+              <uc:EnumComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:StorePanelType}}" SelectedValue="{Binding Data.StorePanel}"/>
+
+              <TextBlock Text="Store Panel Order" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+              <NumericUpDown Value="{Binding Data.StorePanelOrder}" Increment="1" Grid.Row="1" Grid.Column="1"/>
+
+              <TextBlock Text="Weight" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+              <NumericUpDown Value="{Binding Data.Weight}" Increment="0.1" Grid.Row="2" Grid.Column="1"/>
+
+              <TextBlock Text="Default Charges" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+              <NumericUpDown Value="{Binding Data.DefaultChargeCount}" Increment="1" Grid.Row="3" Grid.Column="1"/>
+
+              <TextBlock Text="Max. Stack Size" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+              <NumericUpDown Value="{Binding Data.MaxStackSize}" Increment="1" Grid.Row="4" Grid.Column="1"/>
+
+              <TextBlock Text="Value calc. Stack Size" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+              <NumericUpDown Value="{Binding Data.ItemLevelRestrictionStackSize}" Increment="1" Grid.Row="5" Grid.Column="1"/>
+
+              <TextBlock Text="Base Cost" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
+              <NumericUpDown Value="{Binding Data.BaseCost}" Increment="0.1" Grid.Row="6" Grid.Column="1"/>
+
+              <TextBlock Text="Cost Multiplier" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
+              <NumericUpDown Value="{Binding Data.ItemCostMultiplier}" Increment="0.1" Grid.Row="7" Grid.Column="1"/>
+
+              <TextBlock Text="Min. Spell Properties" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
+              <NumericUpDown Value="{Binding Data.MinSpellProperties}" Increment="1" Grid.Row="8" Grid.Column="1"/>
+
+              <TextBlock Text="Max. Spell Properties" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
+              <NumericUpDown Value="{Binding Data.MaxSpellProperties}" Increment="1" Grid.Row="9" Grid.Column="1"/>
+
+              <TextBlock Text="Quickbar Behaviour" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
+              <uc:EnumComboBox Grid.Row="10" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:QuickbarBehaviour}}" SelectedValue="{Binding Data.QuickbarBehaviour}"/>
+
+              <TextBlock Text="Gender Specific" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="0"/>
+              <CheckBox IsChecked="{Binding Data.GenderSpecific}" Grid.Row="11" Grid.Column="1"/>
+
+              <TextBlock Text="Is Container" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0"/>
+              <CheckBox IsChecked="{Binding Data.IsContainer}" Grid.Row="12" Grid.Column="1"/>
+            </Grid>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Weapon" Width="120" Height="30" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="140"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="160"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Weapon Properties" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <TextBlock Text="Wield Type" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <uc:EnumComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:WeaponWieldType}}" SelectedValue="{Binding Data.WeaponWieldType}"/>
+
+            <TextBlock Text="Damage Type" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2"/>
+            <uc:EnumComboBox Grid.Row="1" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type types:WeaponDamageType}}" SelectedValue="{Binding Data.WeaponDamageType}" IsNullable="True"/>
+
+            <TextBlock Text="Size" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+            <uc:EnumComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:WeaponSize}}" SelectedValue="{Binding Data.WeaponSize}" IsNullable="True"/>
+
+            <TextBlock Text="Pref. Attack Distance" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.PreferredAttackDistance}" Increment="0.1" Grid.Row="2" Grid.Column="3"/>
+
+            <TextBlock Text="Damage Dice Count" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.DamageDiceCount}" Increment="1" Grid.Row="3" Grid.Column="1"/>
+
+            <TextBlock Text="Damage Dice" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.DamageDice}" Increment="1" Grid.Row="3" Grid.Column="3"/>
+
+            <TextBlock Text="Threat Range" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+            <Grid Grid.Row="4" Grid.Column="1">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="40"/>
+              </Grid.ColumnDefinitions>
+              <NumericUpDown Value="{Binding Data.CriticalThreatRange}" Increment="1" Grid.Column="0" Minimum="1" Maximum="19"/>
+              <TextBlock Text="{Binding Data.CriticalThreatRange, Converter={StaticResource CritRangeDisplayConverter}, Mode=OneWay}" TextAlignment="Center" Margin="0,3,0,0" Grid.Column="1"/>
+            </Grid>
+
+            <TextBlock Text="Critical Multiplier" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.CriticalMultiplier}" Increment="1" Grid.Row="4" Grid.Column="3"/>
+
+            <TextBlock Text="Ammo Type" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+            <uc:EnumComboBox Grid.Row="5" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:AmmunitionType}}" SelectedValue="{Binding Data.AmmunitionType}" IsNullable="True"/>
+
+            <TextBlock Text="Ammo Item" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
+            <uc:BaseItemComboBox Grid.Row="5" Grid.Column="3" SelectedValue="{Binding Data.AmmunitionBaseItem}" IsNullable="True"/>
+
+            <TextBlock Text="Weapon Sound" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
+            <uc:WeaponSoundComboBox SelectedValue="{Binding Data.WeaponSound}" Grid.Row="6" Grid.Column="1"/>
+
+            <TextBlock Text="Monk Weapon" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="2"/>
+            <CheckBox IsChecked="{Binding Data.IsMonkWeapon}" Grid.Row="6" Grid.Column="3"/>
+
+            <TextBlock Text="Finesse min. Size" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
+            <uc:EnumComboBox Grid.Row="7" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:SizeCategory}}" SelectedValue="{Binding Data.WeaponFinesseMinimumCreatureSize}" IsNullable="True"/>
+
+            <TextBlock Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Feats" Margin="0,0,0,10" FontWeight="Bold" FontSize="16"/>
+
+            <TextBlock Text="Weapon Focus" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
+            <uc:FeatComboBox SelectedValue="{Binding Data.WeaponFocusFeat}" Grid.Row="10" Grid.Column="1"/>
+
+            <TextBlock Text="Epic Weapon Focus" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
+            <uc:FeatComboBox SelectedValue="{Binding Data.EpicWeaponFocusFeat}" Grid.Row="10" Grid.Column="3"/>
+
+            <TextBlock Text="Weapon Specialization" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="0"/>
+            <uc:FeatComboBox SelectedValue="{Binding Data.WeaponSpecializationFeat}" Grid.Row="11" Grid.Column="1"/>
+
+            <TextBlock Text="Epic Weapon Specialization" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="2"/>
+            <uc:FeatComboBox SelectedValue="{Binding Data.EpicWeaponSpecializationFeat}" Grid.Row="11" Grid.Column="3"/>
+
+            <TextBlock Text="Improved Critical" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0"/>
+            <uc:FeatComboBox SelectedValue="{Binding Data.ImprovedCriticalFeat}" Grid.Row="12" Grid.Column="1"/>
+
+            <TextBlock Text="Overwhelming Critical" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="2"/>
+            <uc:FeatComboBox SelectedValue="{Binding Data.OverwhelmingCriticalFeat}" Grid.Row="12" Grid.Column="3"/>
+
+            <TextBlock Text="Devastating Critical" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="0"/>
+            <uc:FeatComboBox SelectedValue="{Binding Data.DevastatingCriticalFeat}" Grid.Row="13" Grid.Column="1"/>
+
+            <TextBlock Text="Weapon of Choice" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="0"/>
+            <uc:FeatComboBox SelectedValue="{Binding Data.WeaponOfChoiceFeat}" Grid.Row="14" Grid.Column="1"/>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Armor" Width="120" Height="30" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="140"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="160"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Armor Properties" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <TextBlock Text="AC Type" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <uc:EnumComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:ArmorClassType}}" SelectedValue="{Binding Data.ArmorClassType}"/>
+
+            <TextBlock Text="Base Shield AC" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.BaseShieldAC}" Increment="1" Grid.Row="1" Grid.Column="3"/>
+
+            <TextBlock Text="Armor Check Penalty" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+            <NumericUpDown Value="{Binding Data.ArmorCheckPenalty}" Increment="1" Grid.Row="2" Grid.Column="1"/>
+
+            <TextBlock Text="Arcane Spell Failure" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
+            <NumericUpDown Value="{Binding Data.ArcaneSpellFailure}" Increment="1" Grid.Row="2" Grid.Column="3"/>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Extensions" Width="120" Height="30" BorderThickness="0,0,0,1" IsVisible="{Binding !Data.IsReadonly}">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Extension Fields" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <ItemsRepeater Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding Data.ExtensionValues}" ElementPrepared="ItemsRepeater_ElementPrepared">
+              <ItemsRepeater.Layout>
+                <UniformGridLayout ItemsStretch="Fill" Orientation="Horizontal" MaximumRowsOrColumns="2" MinItemHeight="25"/>
+              </ItemsRepeater.Layout>
+
+              <ItemsRepeater.ItemTemplate>
+                <DataTemplate>
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="150"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Margin="0,3,5,0" Text="{Binding Property.Label}"/>
+                    <ContentPresenter Grid.Column="1" Content="{Binding}" ContentTemplate="{StaticResource templateSelector}"/>
+                  </Grid>
+                </DataTemplate>
+              </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Metadata" Width="120" Height="30" BorderThickness="0,0,0,1" IsVisible="{Binding !Data.IsReadonly}">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Base Item Metadata" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <TextBlock Text="Script Constant" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <DockPanel Grid.Row="1" Grid.Column="1">
+              <TextBox Text="BASE_ITEM_" BorderThickness="1,1,0,1" IsReadOnly="True" VerticalContentAlignment="Center" Margin="2,0,0,3"/>
+              <TextBox Text="{Binding Data.ScriptConstant}" Margin="-2,0,0,3" BorderThickness="0,1,1,1" VerticalContentAlignment="Center" Watermark="*AUTOGENERATED*" TextChanging="ConstantTextbox_TextChanging"/>
+            </DockPanel>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+  </TabControl>
+</local:LanguageAwarePage>

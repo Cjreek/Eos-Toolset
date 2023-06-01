@@ -7,5 +7,6 @@
   <ext:TLKStringSetConverter x:Key="tlkConverterDefault" AlwaysUseDefaultLanguage="True"/>
   <ext:EnumToStringConverter x:Key="enumToString"/>
   <ext:EosHintConverter x:Key="hintConverter"/>
+  <ext:ColorConverter x:Key="colorConverter"/>
 
 </ResourceDictionary>

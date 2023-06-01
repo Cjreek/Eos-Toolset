@@ -1,0 +1,95 @@
+<local:LanguageAwarePage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views"
+             xmlns:vm="using:Eos.ViewModels"
+             xmlns:uc="using:Eos.Usercontrols"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Views.PackageFeatPreferencesTableView"
+             x:Name="page">
+  <Design.DataContext>
+    <vm:PackageFeatPreferencesTableViewModel/>
+  </Design.DataContext>
+
+  <local:LanguageAwarePage.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </local:LanguageAwarePage.Resources>
+
+  <local:LanguageAwarePage.Styles>
+    <StyleInclude Source="/Assets/StyleResources.axaml"/>
+  </local:LanguageAwarePage.Styles>
+
+  <Border BorderThickness="0,1,0,0" BorderBrush="Silver">
+    <Grid Margin="10">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="auto"/>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="100"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <TextBlock Text="Feat Preferences Table" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+      <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}" MaxLength="16">
+        <TextBox.IsEnabled>
+          <MultiBinding Converter="{x:Static BoolConverters.And}">
+            <Binding Path="!Data.IsReadonly"/>
+            <Binding Path="!Data.IsOverride"/>
+          </MultiBinding>
+        </TextBox.IsEnabled>
+      </TextBox>
+
+      <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+      <TextBox IsEnabled="{Binding !Data.IsReadonly}" Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
+
+      <DataGrid Grid.Row="3" Grid.Column="1" Items="{Binding Data.Items}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" Margin="2,0,0,0">
+        <DataGrid.Columns>
+          <DataGridTemplateColumn Header="Spell" Width="300">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <uc:FeatComboBox IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" SelectedValue="{Binding Path=Feat}" IsNullable="False" Margin="0,1,0,1"/>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+
+          <DataGridTemplateColumn Header="" Width="40">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <Grid Margin="2,0,0,3">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+
+                  <Button Grid.Column="0" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" Content="🡅" FontSize="14" Foreground="#505050" Height="24" Margin="0,1,0,-1" Command="{Binding ElementName=page, Path=DataContext.MoveFeatPrefUpCommand}" CommandParameter="{Binding}"/>
+                  <Button Grid.Column="1" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" Content="🡇" FontSize="14" Foreground="#505050" Height="24" Margin="1,1,0,-1" Command="{Binding ElementName=page, Path=DataContext.MoveFeatPrefDownCommand}" CommandParameter="{Binding}"/>
+                </Grid>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          
+          <DataGridTemplateColumn Header="" Width="27">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <uc:DeleteButton IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" Command="{Binding ElementName=page, Path=DataContext.DeleteFeatPreferenceItemCommand}" CommandParameter="{Binding}" Margin="2,1,0,1"/>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+        </DataGrid.Columns>
+      </DataGrid>
+
+      <Button Grid.Row="4" Grid.Column="1" IsEnabled="{Binding !Data.IsReadonly}" Content="Add Feat" Width="150" Margin="2,5,0,0" HorizontalAlignment="Left" Command="{Binding AddFeatPreferenceItemCommand}"/>
+    </Grid>
+  </Border>
+</local:LanguageAwarePage>

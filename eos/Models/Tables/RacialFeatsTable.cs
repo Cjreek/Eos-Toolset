@@ -8,6 +8,11 @@ namespace Eos.Models.Tables
 {
     public class RacialFeatsTable : BaseTable<RacialFeatsTableItem>
     {
+        protected override string GetTypeName()
+        {
+            return "Racial Feats Table";
+        } 
+
         protected override void SetDefaultValues()
         {
             Name = "RACE_FEAT_NEW";

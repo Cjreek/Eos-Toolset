@@ -1,0 +1,211 @@
+<local:LanguageAwarePage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views"
+             xmlns:uc="using:Eos.Usercontrols"
+             xmlns:ext="using:Eos.Extensions"
+             xmlns:types="using:Eos.Types"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
+             x:Class="Eos.Views.WeaponSoundView"
+             x:Name="page">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+        <ResourceInclude Source="/Assets/CustomDataTemplateResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <local:LanguageAwarePage.Styles>
+    <StyleInclude Source="/Assets/StyleResources.axaml"/>
+  </local:LanguageAwarePage.Styles>
+
+  <TabControl TabStripPlacement="Left" BorderThickness="0,1,0,0" SelectedIndex="{Binding SelectedTabIndex}" Padding="0">
+    <TabItem Header="Info" Width="120" Height="30" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*" MinWidth="150"/>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*" MinWidth="150"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="0,0,0,10">
+              <TextBlock FontSize="22" FontWeight="Bold">
+                <TextBlock.Text>
+                  <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                    <Binding Path="Data.Name"/>
+                  </MultiBinding>
+                </TextBlock.Text>
+              </TextBlock>
+
+              <TextBlock Text=" (Weapon Sound ID:" FontSize="16" VerticalAlignment="Center"/>
+              <!--<uc:ResetIsEnabled>-->
+              <TextBox Text="{Binding Data.CalculatedIndex, Mode=OneWay}" BorderThickness="0" FontSize="16" VerticalAlignment="Center" Margin="0" IsReadOnly="True"/>
+              <!--</uc:ResetIsEnabled>-->
+              <TextBlock Text=")" FontSize="16" VerticalAlignment="Center" Margin="0,0,0,0"/>
+            </StackPanel>
+
+            <!--Name-->
+            <TextBlock Text="Name" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <TextBox Text="{Binding Data.Name}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+
+            <TextBlock Text="Hint" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+            <TextBox Text="{Binding Data.Hint}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
+
+            <TextBlock Text="Leather 1" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Leather0}" Grid.Row="3" Grid.Column="1"/>
+
+            <TextBlock Text="Leather 2" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Leather1}" Grid.Row="3" Grid.Column="3"/>
+
+            <TextBlock Text="Chain 1" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Chain0}" Grid.Row="4" Grid.Column="1"/>
+
+            <TextBlock Text="Chain 2" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Chain1}" Grid.Row="4" Grid.Column="3"/>
+
+            <TextBlock Text="Plate 1" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Plate0}" Grid.Row="5" Grid.Column="1"/>
+
+            <TextBlock Text="Plate 2" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Plate1}" Grid.Row="5" Grid.Column="3"/>
+
+            <TextBlock Text="Stone 1" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Stone0}" Grid.Row="6" Grid.Column="1"/>
+
+            <TextBlock Text="Stone 2" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="2"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Stone1}" Grid.Row="6" Grid.Column="3"/>
+
+            <TextBlock Text="Wood 1" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Wood0}" Grid.Row="7" Grid.Column="1"/>
+
+            <TextBlock Text="Wood 2" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="2"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Wood1}" Grid.Row="7" Grid.Column="3"/>
+
+            <TextBlock Text="Chitin 1" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Chitin0}" Grid.Row="8" Grid.Column="1"/>
+
+            <TextBlock Text="Chitin 2" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Chitin1}" Grid.Row="8" Grid.Column="3"/>
+
+            <TextBlock Text="Scale 1" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Scale0}" Grid.Row="9" Grid.Column="1"/>
+
+            <TextBlock Text="Scale 2" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Scale1}" Grid.Row="9" Grid.Column="3"/>
+
+            <TextBlock Text="Ethereal 1" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Ethereal0}" Grid.Row="10" Grid.Column="1"/>
+
+            <TextBlock Text="Ethereal 2" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Ethereal1}" Grid.Row="10" Grid.Column="3"/>
+
+            <TextBlock Text="Crystal 1" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="0"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Crystal0}" Grid.Row="11" Grid.Column="1"/>
+
+            <TextBlock Text="Crystal 2" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="2"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Crystal1}" Grid.Row="11" Grid.Column="3"/>
+
+            <TextBlock Text="Miss 1" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Miss0}" Grid.Row="12" Grid.Column="1"/>
+
+            <TextBlock Text="Miss 2" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="2"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Miss1}" Grid.Row="12" Grid.Column="3"/>
+
+            <TextBlock Text="Parry" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="0"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Parry}" Grid.Row="13" Grid.Column="1"/>
+
+            <TextBlock Text="Critical" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="0"/>
+            <uc:SoundResourceTextbox ResRef="{Binding Data.Critical}" Grid.Row="14" Grid.Column="1"/>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Extensions" Width="120" Height="30" BorderThickness="0,0,0,1" IsVisible="{Binding !Data.IsReadonly}">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Extension Fields" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <ItemsRepeater Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding Data.ExtensionValues}" ElementPrepared="ItemsRepeater_ElementPrepared">
+              <ItemsRepeater.Layout>
+                <UniformGridLayout ItemsStretch="Fill" Orientation="Horizontal" MaximumRowsOrColumns="2" MinItemHeight="25"/>
+              </ItemsRepeater.Layout>
+
+              <ItemsRepeater.ItemTemplate>
+                <DataTemplate>
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="150"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Margin="0,3,5,0" Text="{Binding Property.Label}"/>
+                    <ContentPresenter Grid.Column="1" Content="{Binding}" ContentTemplate="{StaticResource templateSelector}"/>
+                  </Grid>
+                </DataTemplate>
+              </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Metadata" Width="120" Height="30" BorderThickness="0,0,0,1" IsVisible="{Binding !Data.IsReadonly}">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Weapon Sound Metadata" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <TextBlock Text="Script Constant" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <DockPanel Grid.Row="1" Grid.Column="1">
+              <TextBox Text="WEAPONSOUND_TYPE_" BorderThickness="1,1,0,1" IsReadOnly="True" VerticalContentAlignment="Center" Margin="2,0,0,3"/>
+              <TextBox Text="{Binding Data.ScriptConstant}" Margin="-2,0,0,3" BorderThickness="0,1,1,1" VerticalContentAlignment="Center" Watermark="*AUTOGENERATED*" TextChanging="ConstantTextbox_TextChanging"/>
+            </DockPanel>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+  </TabControl>
+</local:LanguageAwarePage>

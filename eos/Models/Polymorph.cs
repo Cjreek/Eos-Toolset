@@ -14,6 +14,12 @@ namespace Eos.Models
     public class Polymorph : BaseModel
     {
         private String _name = "";
+        private Appearance? _appearance;
+        private Race? _racialType;
+        private Portrait? _portrait;
+        private Spell? _spell1;
+        private Spell? _spell2;
+        private Spell? _spell3;
 
         public String Name
         {
@@ -28,9 +34,21 @@ namespace Eos.Models
             }
         }
 
-        public Appearance? Appearance { get; set; }
-        public Race? RacialType { get; set; }
-        public Portrait? Portrait { get; set; }
+        public Appearance? Appearance
+        {
+            get { return _appearance; }
+            set { Set(ref _appearance, value); }
+        }
+        public Race? RacialType
+        {
+            get { return _racialType; }
+            set { Set(ref _racialType, value); }
+        }
+        public Portrait? Portrait
+        {
+            get { return _portrait; }
+            set { Set(ref _portrait, value); }
+        }
         public String? PortraitResRef { get; set; }
         public String? CreatureWeapon1 { get; set; }
         public String? CreatureWeapon2 { get; set; }
@@ -43,9 +61,21 @@ namespace Eos.Models
         public int? NaturalACBonus { get; set; }
         public int? HPBonus { get; set; }
         //public Soundset? Soundset { get; set; } // Unused
-        public Spell? Spell1 { get; set; }
-        public Spell? Spell2 { get; set; }
-        public Spell? Spell3 { get; set; }
+        public Spell? Spell1
+        {
+            get { return _spell1; }
+            set { Set(ref _spell1, value); }
+        }
+        public Spell? Spell2
+        {
+            get { return _spell2; }
+            set { Set(ref _spell2, value); }
+        }
+        public Spell? Spell3
+        {
+            get { return _spell3; }
+            set { Set(ref _spell3, value); }
+        }
         public bool MergeWeapon { get; set; }
         public bool MergeAccessories { get; set; }
         public bool MergeArmor { get; set; }

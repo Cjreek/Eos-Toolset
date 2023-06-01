@@ -7,6 +7,7 @@
              xmlns:uc="using:Eos.Usercontrols"
              xmlns:types="using:Eos.Types"
              xmlns:ext="using:Eos.Extensions"
+             xmlns:config="using:Eos.Config"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Eos.Views.ClassPackageView"
              x:Name="page">
@@ -29,105 +30,126 @@
   </local:LanguageAwarePage.Styles>
 
   <TabControl TabStripPlacement="Left" BorderThickness="0,1,0,0" SelectedIndex="{Binding SelectedTabIndex}" Padding="0">
-    <TabItem Header="Info" Width="100" Height="30">
+    <TabItem Header="Info" Width="120" Height="30" BorderThickness="0,0,0,1">
       <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-        <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
-          <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition MinHeight="22" Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-          </Grid.RowDefinitions>
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="120"/>
-            <ColumnDefinition Width="*"/>
-          </Grid.ColumnDefinitions>
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition MinHeight="22" Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="25"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="120"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="120"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-          <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="0,0,0,10">
-            <TextBlock FontSize="22" FontWeight="Bold">
-              <TextBlock.Text>
-                <MultiBinding Converter="{StaticResource tlkConverterDefault}">
-                  <Binding Path="Data.Name"/>
-                </MultiBinding>
-              </TextBlock.Text>
-            </TextBlock>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="0,0,0,10">
+              <TextBlock FontSize="22" FontWeight="Bold">
+                <TextBlock.Text>
+                  <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                    <Binding Path="Data.Name"/>
+                  </MultiBinding>
+                </TextBlock.Text>
+              </TextBlock>
 
-            <TextBlock Text=" (Package ID:" FontSize="16" VerticalAlignment="Center"/>
-            <!--<uc:ResetIsEnabled>-->
-            <TextBox Text="{Binding Data.CalculatedIndex, Mode=OneWay}" BorderThickness="0" FontSize="16" VerticalAlignment="Center" Margin="0" IsReadOnly="True"/>
+              <TextBlock Text=" (Package ID:" FontSize="16" VerticalAlignment="Center"/>
+              <!--<uc:ResetIsEnabled>-->
+              <TextBox Text="{Binding Data.CalculatedIndex, Mode=OneWay}" BorderThickness="0" FontSize="16" VerticalAlignment="Center" Margin="0" IsReadOnly="True"/>
+              <!--</uc:ResetIsEnabled>-->
+              <TextBlock Text=")" FontSize="16" VerticalAlignment="Center" Margin="0,0,0,0"/>
+            </StackPanel>
+
+            <!--Name-->
+            <TextBlock Text="Name" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+
+            <TextBlock Text="Hint" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+            <TextBox Text="{Binding Data.Hint}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
+
+            <!--Description-->
+            <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,3,5,0" Grid.Row="3" Grid.Column="0"/>
+            <!--<uc:ResetIsEnabled >-->
+            <uc:TLKTextbox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
             <!--</uc:ResetIsEnabled>-->
-            <TextBlock Text=")" FontSize="16" VerticalAlignment="Center" Margin="0,0,0,0"/>
-          </StackPanel>
 
-          <!--Name-->
-          <TextBlock Text="Name" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-          <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+            <TextBlock Text="Playable" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+            <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding Data.Playable}"/>
 
-          <TextBlock Text="Hint" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
-          <TextBox Text="{Binding Data.Hint}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
+            <TextBlock Text="Class" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+            <uc:ClassComboBox Grid.Row="5" Grid.Column="1" SelectedValue="{Binding Data.ForClass}" IsNullable="False"/>
 
-          <!--Description-->
-          <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,3,5,0" Grid.Row="3" Grid.Column="0"/>
-          <!--<uc:ResetIsEnabled >-->
-          <uc:TLKTextbox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding ElementName=page, Path=TLKLanguage}" Gender="{Binding ElementName=page, Path=Gender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
-          <!--</uc:ResetIsEnabled>-->
+            <TextBlock Text="Preferred Ability" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
+            <uc:EnumComboBox Grid.Row="5" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.PreferredAbility}"/>
 
-          <TextBlock Text="Playable" Margin="0,0,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
-          <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding Data.Playable}"/>
+            <TextBlock Text="Starting Gold" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
+            <NumericUpDown Grid.Row="6" Grid.Column="1" Value="{Binding Data.Gold}" Increment="1"/>
 
-          <TextBlock Text="Class" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
-          <uc:ClassComboBox Grid.Row="5" Grid.Column="1" SelectedValue="{Binding Data.ForClass}" IsNullable="False"/>
+            <TextBlock Text="Domain 1" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
+            <uc:DomainComboBox Grid.Row="7" Grid.Column="1" SelectedValue="{Binding Data.Domain1}"/>
 
-          <TextBlock Text="Preferred Ability" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
-          <uc:EnumComboBox Grid.Row="5" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type types:AbilityType}}" SelectedValue="{Binding Data.PreferredAbility}"/>
+            <TextBlock Text="Domain 2" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="2"/>
+            <uc:DomainComboBox Grid.Row="7" Grid.Column="3" SelectedValue="{Binding Data.Domain2}"/>
 
-          <TextBlock Text="Starting Gold" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
-          <NumericUpDown Grid.Row="6" Grid.Column="1" Value="{Binding Data.Gold}" Increment="1"/>
+            <TextBlock Text="Spell School" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
+            <uc:EnumComboBox Grid.Row="8" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:SpellSchool}}" SelectedValue="{Binding Data.SpellSchool}" IsNullable="True"/>
 
-          <TextBlock Text="Domain 1" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
-          <uc:DomainComboBox Grid.Row="7" Grid.Column="1" SelectedValue="{Binding Data.Domain1}"/>
+            <TextBlock Text="Companion" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2" IsVisible="{Binding !Data.ForClass.IsArcaneCaster}"/>
+            <uc:CompanionComboBox Grid.Row="8" Grid.Column="3" SelectedValue="{Binding Data.AssociateCompanion}" IsEnabled="{Binding Data.ForClass.IsSpellCaster}" IsVisible="{Binding !Data.ForClass.IsArcaneCaster}"/>
 
-          <TextBlock Text="Domain 2" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="2"/>
-          <uc:DomainComboBox Grid.Row="7" Grid.Column="3" SelectedValue="{Binding Data.Domain2}"/>
+            <TextBlock Text="Familiar" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2" IsVisible="{Binding Data.ForClass.IsArcaneCaster}"/>
+            <uc:FamiliarComboBox Grid.Row="8" Grid.Column="3" SelectedValue="{Binding Data.AssociateFamiliar}" IsEnabled="{Binding Data.ForClass.IsSpellCaster}" IsVisible="{Binding Data.ForClass.IsArcaneCaster}"/>
 
-          <TextBlock Text="Spell School" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
-          <uc:EnumComboBox Grid.Row="8" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:SpellSchool}}" SelectedValue="{Binding Data.SpellSchool}" IsNullable="True"/>
+            <TextBlock Text="Spell Preferences" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
+            <uc:SpellPreferencesTableComboBox Grid.Row="9" Grid.Column="1" SelectedValue="{Binding Data.SpellPreferences}" IsNullable="True"/>
 
-          <TextBlock Text="Associate" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2"/>
-          <ComboBox Grid.Row="8" Grid.Column="3" Margin="2,0,0,3"/>
-        </Grid>
+            <TextBlock Text="Feat Preferences" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
+            <uc:FeatPreferencesTableComboBox Grid.Row="9" Grid.Column="3" SelectedValue="{Binding Data.FeatPreferences}" IsNullable="True"/>
+
+            <TextBlock Text="Skill Preferences" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
+            <uc:SkillPreferencesTableComboBox Grid.Row="10" Grid.Column="1" SelectedValue="{Binding Data.SkillPreferences}" IsNullable="True"/>
+
+            <TextBlock Text="Starting Equipment" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
+            <uc:PackageEquipmentTableComboBox Grid.Row="10" Grid.Column="3" SelectedValue="{Binding Data.StartingEquipment}" IsNullable="True"/>
+          </Grid>
+        </Border>
       </ScrollViewer>
     </TabItem>
-    <TabItem Header="Metadata" Width="100" Height="30" IsVisible="{Binding !Data.IsReadonly}">
+    <TabItem Header="Metadata" Width="120" Height="30" BorderThickness="0,0,0,1" IsVisible="{Binding !Data.IsReadonly}">
       <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-        <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="*"/>
-          </Grid.ColumnDefinitions>
-          <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="25"/>
-          </Grid.RowDefinitions>
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
 
-          <TextBlock Text="Class Package Metadata" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+            <TextBlock Text="Class Package Metadata" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-          <TextBlock Text="Script Constant" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-          <DockPanel Grid.Row="1" Grid.Column="1">
-            <TextBox Text="PACKAGE_" BorderThickness="1,1,0,1" IsReadOnly="True" VerticalContentAlignment="Center" Margin="2,0,0,3"/>
-            <TextBox Text="{Binding Data.ScriptConstant}" Margin="-2,0,0,3" BorderThickness="0,1,1,1" VerticalContentAlignment="Center" Watermark="*AUTOGENERATED*" TextChanging="ConstantTextbox_TextChanging"/>
-          </DockPanel>
-        </Grid>
+            <TextBlock Text="Script Constant" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <DockPanel Grid.Row="1" Grid.Column="1">
+              <TextBox Text="PACKAGE_" BorderThickness="1,1,0,1" IsReadOnly="True" VerticalContentAlignment="Center" Margin="2,0,0,3"/>
+              <TextBox Text="{Binding Data.ScriptConstant}" Margin="-2,0,0,3" BorderThickness="0,1,1,1" VerticalContentAlignment="Center" Watermark="*AUTOGENERATED*" TextChanging="ConstantTextbox_TextChanging"/>
+            </DockPanel>
+          </Grid>
+        </Border>
       </ScrollViewer>
     </TabItem>
   </TabControl>

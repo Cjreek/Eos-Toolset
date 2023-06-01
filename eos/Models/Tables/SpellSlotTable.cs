@@ -8,6 +8,11 @@ namespace Eos.Models.Tables
 {
     public class SpellSlotTable : BaseTable<SpellSlotTableItem>
     {
+        protected override string GetTypeName()
+        {
+            return "Spellslot Table";
+        }
+
         protected override void SetDefaultValues()
         {
             Name = "CLS_SPGN_NEW";

@@ -36,7 +36,7 @@ namespace Eos.Views.Dialogs
                 if ((Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime app) && (app.MainWindow != null))
                 {
                     var dlg = new OpenFileDialog();
-                    dlg.AllowMultiple = false;
+                    dlg.AllowMultiple = true;
                     dlg.Filters?.Add(new FileDialogFilter() { Name = "Importable Files (*.hak, *.erf, *.2da)", Extensions = { "hak", "erf", "2da" } });
                     dlg.Filters?.Add(new FileDialogFilter() { Name = "Hak File (*.hak)", Extensions = { "hak" } });
                     dlg.Filters?.Add(new FileDialogFilter() { Name = "Encapsulated Resource File (*.erf)", Extensions = { "erf" } });
@@ -45,7 +45,10 @@ namespace Eos.Views.Dialogs
                     {
                         if ((t.Result != null) && (t.Result.Any()))
                         {
-                            vm.InputFilePath = t.Result.First();
+                            foreach (var file in t.Result)
+                            {
+                                vm.Files.Add(file);
+                            }
                         }
                     }, TaskScheduler.FromCurrentSynchronizationContext());
                 }

@@ -1,0 +1,263 @@
+<local:LanguageAwarePage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views"
+             xmlns:vm="using:Eos.ViewModels"
+             xmlns:uc="using:Eos.Usercontrols"
+             xmlns:tables="using:Eos.Models.Tables"
+             xmlns:config="using:Eos.Config"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Views.ItemPropertyTableView"
+             x:Name="page">
+
+  <local:LanguageAwarePage.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+        <ResourceInclude Source="/Assets/CustomDataTemplateResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </local:LanguageAwarePage.Resources>
+
+  <local:LanguageAwarePage.Styles>
+    <StyleInclude Source="/Assets/StyleResources.axaml"/>
+  </local:LanguageAwarePage.Styles>
+
+  <TabControl TabStripPlacement="Left" BorderThickness="0,1,0,0" SelectedIndex="{Binding SelectedTabIndex}" Padding="0">
+    <TabItem Header="Info" Width="100" Height="30" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="22"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="10"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="*"/>
+              <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="110"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Item Property Table" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}" MaxLength="16" Grid.ColumnSpan="5">
+              <TextBox.IsEnabled>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                  <Binding Path="!Data.IsReadonly"/>
+                  <Binding Path="!Data.IsOverride"/>
+                </MultiBinding>
+              </TextBox.IsEnabled>
+            </TextBox>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+            <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}" Grid.ColumnSpan="5"/>
+
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="Label" Margin="0,0,5,0" HorizontalAlignment="Center" FontWeight="Bold"/>
+            <TextBlock Grid.Row="4" Grid.Column="2" Text="Column Name" Margin="0,0,5,0" HorizontalAlignment="Center" FontWeight="Bold"/>
+            <TextBlock Grid.Row="4" Grid.Column="3" Text="Data Type" Margin="0,0,5,0" HorizontalAlignment="Center" FontWeight="Bold"/>
+
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="Custom Column 1" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Data.CustomColumn01.Label}"/>
+            <TextBox Grid.Row="6" Grid.Column="2" Text="{Binding Data.CustomColumn01.Column}"/>
+            <uc:DataTypeComboBox Grid.Row="6" Grid.Column="3" SelectedValue="{Binding Path=Data.CustomColumn01.DataType}"/>
+
+            <TextBlock Grid.Row="7" Grid.Column="0" Text="Custom Column 2" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Data.CustomColumn02.Label}"/>
+            <TextBox Grid.Row="7" Grid.Column="2" Text="{Binding Data.CustomColumn02.Column}"/>
+            <uc:DataTypeComboBox Grid.Row="7" Grid.Column="3" SelectedValue="{Binding Path=Data.CustomColumn02.DataType}"/>
+
+            <TextBlock Grid.Row="8" Grid.Column="0" Text="Custom Column 3" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+            <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Data.CustomColumn03.Label}"/>
+            <TextBox Grid.Row="8" Grid.Column="2" Text="{Binding Data.CustomColumn03.Column}"/>
+            <uc:DataTypeComboBox Grid.Row="8" Grid.Column="3" SelectedValue="{Binding Path=Data.CustomColumn03.DataType}"/>
+
+            <TextBlock Grid.Row="9" Grid.Column="0" Text="Custom Column 4" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+            <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding Data.CustomColumn04.Label}"/>
+            <TextBox Grid.Row="9" Grid.Column="2" Text="{Binding Data.CustomColumn04.Column}"/>
+            <uc:DataTypeComboBox Grid.Row="9" Grid.Column="3" SelectedValue="{Binding Path=Data.CustomColumn04.DataType}"/>
+
+            <TextBlock Grid.Row="10" Grid.Column="0" Text="Custom Column 5" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+            <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding Data.CustomColumn05.Label}"/>
+            <TextBox Grid.Row="10" Grid.Column="2" Text="{Binding Data.CustomColumn05.Column}"/>
+            <uc:DataTypeComboBox Grid.Row="10" Grid.Column="3" SelectedValue="{Binding Path=Data.CustomColumn05.DataType}"/>
+
+            <TextBlock Grid.Row="11" Grid.Column="0" Text="Custom Column 6" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+            <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding Data.CustomColumn06.Label}"/>
+            <TextBox Grid.Row="11" Grid.Column="2" Text="{Binding Data.CustomColumn06.Column}"/>
+            <uc:DataTypeComboBox Grid.Row="11" Grid.Column="3" SelectedValue="{Binding Path=Data.CustomColumn06.DataType}"/>
+
+            <TextBlock Grid.Row="12" Grid.Column="0" Text="Custom Column 7" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+            <TextBox Grid.Row="12" Grid.Column="1" Text="{Binding Data.CustomColumn07.Label}"/>
+            <TextBox Grid.Row="12" Grid.Column="2" Text="{Binding Data.CustomColumn07.Column}"/>
+            <uc:DataTypeComboBox Grid.Row="12" Grid.Column="3" SelectedValue="{Binding Path=Data.CustomColumn07.DataType}"/>
+
+            <TextBlock Grid.Row="13" Grid.Column="0" Text="Custom Column 8" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+            <TextBox Grid.Row="13" Grid.Column="1" Text="{Binding Data.CustomColumn08.Label}"/>
+            <TextBox Grid.Row="13" Grid.Column="2" Text="{Binding Data.CustomColumn08.Column}"/>
+            <uc:DataTypeComboBox Grid.Row="13" Grid.Column="3" SelectedValue="{Binding Path=Data.CustomColumn08.DataType}"/>
+
+            <TextBlock Grid.Row="14" Grid.Column="0" Text="Custom Column 9" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+            <TextBox Grid.Row="14" Grid.Column="1" Text="{Binding Data.CustomColumn09.Label}"/>
+            <TextBox Grid.Row="14" Grid.Column="2" Text="{Binding Data.CustomColumn09.Column}"/>
+            <uc:DataTypeComboBox Grid.Row="14" Grid.Column="3" SelectedValue="{Binding Path=Data.CustomColumn09.DataType}"/>
+
+            <TextBlock Grid.Row="15" Grid.Column="0" Text="Custom Column 10" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+            <TextBox Grid.Row="15" Grid.Column="1" Text="{Binding Data.CustomColumn10.Label}"/>
+            <TextBox Grid.Row="15" Grid.Column="2" Text="{Binding Data.CustomColumn10.Column}"/>
+            <uc:DataTypeComboBox Grid.Row="15" Grid.Column="3" SelectedValue="{Binding Path=Data.CustomColumn10.DataType}"/>         
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Table" Width="100" Height="30" BorderThickness="0,0,0,1">
+      <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+        <Grid Margin="10">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+          </Grid.RowDefinitions>
+
+          <TextBlock Text="{Binding Data.Name}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+          <DataGrid x:Name="grItems" Grid.Row="1" Grid.Column="1" Items="{Binding Data.Items}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" Margin="2,0,0,0">
+              <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Name" Width="200">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <uc:TLKTextbox IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" TLKStrings="{Binding Name}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}"/>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn01.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn01.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <ContentPresenter x:DataType="tables:ItemPropertyTableItem" Content="{CompiledBinding CustomColumnValue01}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn02.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn02.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <ContentPresenter x:DataType="tables:ItemPropertyTableItem" Content="{CompiledBinding CustomColumnValue02}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn03.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn03.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <ContentPresenter x:DataType="tables:ItemPropertyTableItem" Content="{CompiledBinding CustomColumnValue03}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn04.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn04.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <ContentPresenter x:DataType="tables:ItemPropertyTableItem" Content="{CompiledBinding CustomColumnValue04}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn05.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn05.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <ContentPresenter x:DataType="tables:ItemPropertyTableItem" Content="{CompiledBinding CustomColumnValue05}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn06.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn06.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <ContentPresenter x:DataType="tables:ItemPropertyTableItem" Content="{CompiledBinding CustomColumnValue06}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn07.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn07.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <ContentPresenter x:DataType="tables:ItemPropertyTableItem" Content="{CompiledBinding CustomColumnValue07}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn08.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn08.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <ContentPresenter x:DataType="tables:ItemPropertyTableItem" Content="{CompiledBinding CustomColumnValue08}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn09.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn09.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <ContentPresenter x:DataType="tables:ItemPropertyTableItem" Content="{CompiledBinding CustomColumnValue09}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn10.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn10.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <ContentPresenter x:DataType="tables:ItemPropertyTableItem" Content="{CompiledBinding CustomColumnValue10}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="" Width="40">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <Grid Margin="2,0,0,3">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="*"/>
+                          <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" Content="🡅" FontSize="14" Foreground="#505050" Height="24" Margin="0,1,0,-1" Command="{Binding ElementName=page, Path=DataContext.MoveUpCommand}" CommandParameter="{Binding}"/>
+                        <Button Grid.Column="1" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" Content="🡇" FontSize="14" Foreground="#505050" Height="24" Margin="1,1,0,-1" Command="{Binding ElementName=page, Path=DataContext.MoveDownCommand}" CommandParameter="{Binding}"/>
+                      </Grid>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+          
+                <DataGridTemplateColumn Header="" Width="27">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <uc:DeleteButton IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" Command="{Binding ElementName=page, Path=DataContext.DeleteItemPropertyTableItemCommand}" CommandParameter="{Binding}" Margin="2,1,0,1"/>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+              </DataGrid.Columns>
+            </DataGrid>
+
+          <Button Grid.Row="4" Grid.Column="1" IsEnabled="{Binding !Data.IsReadonly}" Content="Add Row" Width="150" Margin="2,5,0,0" HorizontalAlignment="Left" Command="{Binding AddItemPropertyTableItemCommand}"/>
+        </Grid>
+      </Border>
+    </TabItem>
+  </TabControl>
+</local:LanguageAwarePage>

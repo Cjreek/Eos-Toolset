@@ -36,6 +36,9 @@ namespace Eos.Views.Dialogs
                         case "2DA":
                             dlg.Directory = Path.GetFullPath(vm.SettingsCopy.Export.TwoDAFolder, MasterRepository.Project.ProjectFolder);
                             break;
+                        case "SSF":
+                            dlg.Directory = Path.GetFullPath(vm.SettingsCopy.Export.SsfFolder, MasterRepository.Project.ProjectFolder);
+                            break;
                         case "HAK":
                             dlg.Directory = Path.GetFullPath(vm.SettingsCopy.Export.HakFolder, MasterRepository.Project.ProjectFolder);
                             break;
@@ -67,6 +70,9 @@ namespace Eos.Views.Dialogs
                                     break;
                                 case "2DA":
                                     vm.SettingsCopy.Export.TwoDAFolder = resultPath;
+                                    break;
+                                case "SSF":
+                                    vm.SettingsCopy.Export.SsfFolder = resultPath;
                                     break;
                                 case "HAK":
                                     vm.SettingsCopy.Export.HakFolder = resultPath;

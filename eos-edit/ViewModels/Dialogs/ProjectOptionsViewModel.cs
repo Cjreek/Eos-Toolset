@@ -52,7 +52,7 @@ namespace Eos.ViewModels.Dialogs
 
         protected override int GetDefaultHeight()
         {
-            return 610;
+            return 650;
         }
 
         protected override bool GetCanResize()
@@ -86,6 +86,11 @@ namespace Eos.ViewModels.Dialogs
         {
             MasterRepository.Project.OverrideSettings(vm.SettingsCopy);
             WindowService.Close(vm);
+        });
+
+        public ReactiveCommand<ProjectSettingsCustomData, Unit> RestoreDefaultExportOffsetCommand { get; private set; } = ReactiveCommand.Create<ProjectSettingsCustomData>(settings =>
+        {
+            settings.ExportOffset = settings.DefaultExportOffset;
         });
     }
 }

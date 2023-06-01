@@ -4,9 +4,11 @@ using Eos.Types;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -23,6 +25,48 @@ namespace Eos.Config
         Simple, Multiline
     }
 
+    public class RuntimeConfig : INotifyPropertyChanged
+    {
+        private TLKLanguage currentLanguage;
+        private bool currentGender;
+
+        public TLKLanguage CurrentLanguage
+        {
+            get { return currentLanguage; }
+            set
+            {
+                if (currentLanguage != value)
+                {
+                    currentLanguage = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public bool CurrentGender
+        {
+            get { return currentGender; }
+            set
+            {
+                if (currentGender != value)
+                {
+                    currentGender = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
     public static class EosConfig
     {
         public static String NwnBasePath { get; private set; } = "";
@@ -31,6 +75,13 @@ namespace Eos.Config
         public static String LastProject { get; set; } = "";
         public static TabLayout TabLayout { get; set; } = TabLayout.Multiline;
 
+        public static RuntimeConfig RuntimeConfig { get; } = new RuntimeConfig();
+
+        public static void OverrideNwnBasePath(string overridePath)
+        {
+            NwnBasePath = overridePath;
+        }
+
         private static String FindSteamPathByRegistry()
         {
             // TODO: Linux/GoG/Beamdog/etc
@@ -38,17 +89,16 @@ namespace Eos.Config
             if (nwnEEKey != null)
                 return (String?)nwnEEKey.GetValue("InstallLocation") ?? "";
 
-            return NwnBasePath;
+            return "";
         }
 
         private static String FindGOGPathByRegistry()
         {
-            // TODO: Linux/GoG/Beamdog/etc
-            var nwnEEKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 704450", false);
-            if (nwnEEKey != null)
-                return (String?)nwnEEKey.GetValue("InstallLocation") ?? "";
+            var gogKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\GOG.com\Games\1097893768", false);
+            if (gogKey != null)
+                return (String?)gogKey.GetValue("path") ?? "";
 
-            return NwnBasePath;
+            return "";
         }
 
         private static String FindNwnBasePath()
@@ -247,6 +297,7 @@ namespace Eos.Config
                     throw;
                 }
             }
+
             if (NwnBasePath == String.Empty)
             {
                 Log.Info("NwnBasePath is empty -> Searching for NWN installation...");

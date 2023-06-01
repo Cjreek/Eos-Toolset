@@ -29,13 +29,5 @@ namespace Eos.Nwn.Tlk
         Spanish = 4,
         [ISO("PL")]
         Polish = 5,
-        [ISO("KO")]
-        Korean = 128,
-        [ISO("ZHT")]
-        ChineseTraditional = 129,
-        [ISO("ZHS")]
-        ChineseSimplified = 130,
-        [ISO("JA")]
-        Japanese = 131,
     }
 }

@@ -21,8 +21,17 @@ namespace Eos.Models.Tables
         public int? SpellLevel8 { get; set; }
         public int? SpellLevel9 { get; set; }
 
+        public KnownSpellsTableItem() : base()
+        {
+        }
+
+        public KnownSpellsTableItem(KnownSpellsTable parentTable) : base(parentTable)
+        {
+        }
+
         public override void FromJson(JsonObject json)
         {
+            base.FromJson(json);
             this.Level = json["Level"]?.GetValue<int>() ?? 0;
             this.SpellLevel0 = json["SpellLevel0"]?.GetValue<int>();
             this.SpellLevel1 = json["SpellLevel1"]?.GetValue<int>();
@@ -38,7 +47,7 @@ namespace Eos.Models.Tables
 
         public override JsonObject ToJson()
         {
-            var json = new JsonObject();
+            var json = base.ToJson();
             json.Add("Level", this.Level);
             json.Add("SpellLevel0", this.SpellLevel0);
             json.Add("SpellLevel1", this.SpellLevel1);

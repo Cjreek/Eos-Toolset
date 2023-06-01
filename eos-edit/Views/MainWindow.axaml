@@ -14,11 +14,13 @@
         xmlns:nwn="using:Eos.Nwn"
         xmlns:tlk="using:Eos.Nwn.Tlk"
         xmlns:uc="using:Eos.Usercontrols"
+        xmlns:config="using:Eos.Config"
+        xmlns:cp="clr-namespace:ThemeEditor.Controls.ColorPicker;assembly=ThemeEditor.Controls.ColorPicker"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Eos.Views.MainWindow" MinHeight="300" MinWidth="500"
         Height="700" Width="1100" Loaded="mainWindow_Loaded"
-        x:Name="mainWindow" Tag="Eos Toolset v0.63d" FontFamily="Segoe UI"
+        x:Name="mainWindow" Tag="Eos Toolset v0.70" FontFamily="Segoe UI"
         Closing="mainWindow_Closing"
         Icon="/Assets/Icons/Eos.ico">
   <Window.Title>
@@ -201,100 +203,182 @@
   <Window.DataTemplates>
     <!--Race-->
     <DataTemplate DataType="{x:Type vm:RaceViewModel}">
-      <view:RaceView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:RaceView DataContext="{Binding}"/>
     </DataTemplate>
     
     <!--Class-->
     <DataTemplate DataType="{x:Type vm:ClassViewModel}">
-      <view:ClassView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:ClassView DataContext="{Binding}"/>
     </DataTemplate>
 
     <!--Class Packages-->
     <DataTemplate DataType="{x:Type vm:ClassPackageViewModel}">
-      <view:ClassPackageView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:ClassPackageView DataContext="{Binding}"/>
     </DataTemplate>
     
     <!--Domain-->
     <DataTemplate DataType="{x:Type vm:DomainViewModel}">
-      <view:DomainView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:DomainView DataContext="{Binding}"/>
     </DataTemplate>
     
     <!--Spellbook-->
     <DataTemplate DataType="{x:Type vm:SpellbookViewModel}">
-      <view:SpellbookView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:SpellbookView DataContext="{Binding}"/>
     </DataTemplate>
     
     <!--Spell-->
     <DataTemplate DataType="{x:Type vm:SpellViewModel}">
-      <view:SpellView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:SpellView DataContext="{Binding}"/>
     </DataTemplate>
     
     <!--MasterFeat-->
     <DataTemplate DataType="{x:Type vm:MasterFeatViewModel}">
-      <view:MasterFeatView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:MasterFeatView DataContext="{Binding}"/>
     </DataTemplate>
     
     <!--Feat-->
     <DataTemplate DataType="{x:Type vm:FeatViewModel}">
-      <view:FeatView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:FeatView DataContext="{Binding}"/>
     </DataTemplate>
     
     <!--Skill-->
     <DataTemplate DataType="{x:Type vm:SkillViewModel}">
-      <view:SkillView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:SkillView DataContext="{Binding}"/>
     </DataTemplate>
     
     <!--Disease-->
     <DataTemplate DataType="{x:Type vm:DiseaseViewModel}">
-      <view:DiseaseView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:DiseaseView DataContext="{Binding}"/>
     </DataTemplate>
     
     <!--Poison-->
     <DataTemplate DataType="{x:Type vm:PoisonViewModel}">
-      <view:PoisonView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:PoisonView DataContext="{Binding}"/>
     </DataTemplate>
     
     <!--AreaEffect-->
     <DataTemplate DataType="{x:Type vm:AreaEffectViewModel}">
-      <view:AreaEffectView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:AreaEffectView DataContext="{Binding}"/>
     </DataTemplate>
 
     <!--Soundset-->
     <DataTemplate DataType="{x:Type vm:SoundsetViewModel}">
-      <view:SoundsetView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:SoundsetView DataContext="{Binding}"/>
     </DataTemplate>
     
     <!--Polymorph-->
     <DataTemplate DataType="{x:Type vm:PolymorphViewModel}">
-      <view:PolymorphView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:PolymorphView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Appearance-->
+    <DataTemplate DataType="{x:Type vm:AppearanceViewModel}">
+      <view:AppearanceView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Appearance Soundset-->
+    <DataTemplate DataType="{x:Type vm:AppearanceSoundsetViewModel}">
+      <view:AppearanceSoundsetView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Weapon Sound-->
+    <DataTemplate DataType="{x:Type vm:WeaponSoundViewModel}">
+      <view:WeaponSoundView DataContext="{Binding}"/>
+    </DataTemplate>
+    
+    <!--Inventory Sound-->
+    <DataTemplate DataType="{x:Type vm:InventorySoundViewModel}">
+      <view:InventorySoundView DataContext="{Binding}"/>
+    </DataTemplate>
+    
+    <!--Base Item-->
+    <DataTemplate DataType="{x:Type vm:BaseItemViewModel}">
+      <view:BaseItemView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Companion-->
+    <DataTemplate DataType="{x:Type vm:CompanionViewModel}">
+      <view:CompanionView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Familiar-->
+    <DataTemplate DataType="{x:Type vm:FamiliarViewModel}">
+      <view:FamiliarView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Trap-->
+    <DataTemplate DataType="{x:Type vm:TrapViewModel}">
+      <view:TrapView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--SpellPreferencesTable-->
+    <DataTemplate DataType="{x:Type vm:PackageSpellPreferencesTableViewModel}">
+      <view:PackageSpellPreferencesTableView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--FeatPreferencesTable-->
+    <DataTemplate DataType="{x:Type vm:PackageFeatPreferencesTableViewModel}">
+      <view:PackageFeatPreferencesTableView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--SkillPreferencesTable-->
+    <DataTemplate DataType="{x:Type vm:PackageSkillPreferencesTableViewModel}">
+      <view:PackageSkillPreferencesTableView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Package Equipment Table-->
+    <DataTemplate DataType="{x:Type vm:PackageEquipmentTableViewModel}">
+      <view:PackageEquipmentTableView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Portrait-->
+    <DataTemplate DataType="{x:Type vm:PortraitViewModel}">
+      <view:PortraitView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Item Property-->
+    <DataTemplate DataType="{x:Type vm:ItemPropertyViewModel}">
+      <view:ItemPropertyView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Item Property Table-->
+    <DataTemplate DataType="{x:Type vm:ItemPropertyTableViewModel}">
+      <view:ItemPropertyTableView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Item Property Cost Table-->
+    <DataTemplate DataType="{x:Type vm:ItemPropertyCostTableViewModel}">
+      <view:ItemPropertyCostTableView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Item Property Param-->
+    <DataTemplate DataType="{x:Type vm:ItemPropertyParamViewModel}">
+      <view:ItemPropertyParamView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Item Property Set-->
+    <DataTemplate DataType="{x:Type vm:ItemPropertySetViewModel}">
+      <view:ItemPropertySetView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Visual Effect-->
+    <DataTemplate DataType="{x:Type vm:VisualEffectViewModel}">
+      <view:VisualEffectView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Programmed Effect-->
+    <DataTemplate DataType="{x:Type vm:ProgrammedEffectViewModel}">
+      <view:ProgrammedEffectView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Damage Type-->
+    <DataTemplate DataType="{x:Type vm:DamageTypeViewModel}">
+      <view:DamageTypeView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Damage Type Group-->
+    <DataTemplate DataType="{x:Type vm:DamageTypeGroupViewModel}">
+      <view:DamageTypeGroupView DataContext="{Binding}"/>
     </DataTemplate>
 
     <!--
@@ -305,16 +389,12 @@
     
     <!--Custom Enums-->
     <DataTemplate DataType="{x:Type vm:CustomEnumViewModel}">
-      <view:CustomEnumView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:CustomEnumView DataContext="{Binding}"/>
     </DataTemplate>
 
     <!--Custom Objects-->
     <DataTemplate DataType="{x:Type vm:CustomObjectViewModel}">
-      <view:CustomObjectView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:CustomObjectView DataContext="{Binding}"/>
     </DataTemplate>
     
     <!--
@@ -325,72 +405,52 @@
     
     <!--Racial Feats-->
     <DataTemplate DataType="{x:Type vm:RacialFeatsTableViewModel}">
-      <view:RacialFeatsTableView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:RacialFeatsTableView DataContext="{Binding}"/>
     </DataTemplate>
 
     <!--Feats-->
     <DataTemplate DataType="{x:Type vm:FeatsTableViewModel}">
-      <view:FeatsTableView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:FeatsTableView DataContext="{Binding}"/>
     </DataTemplate>
 
     <!--BonusFeatTable-->
     <DataTemplate DataType="{x:Type vm:BonusFeatTableViewModel}">
-      <view:BonusFeatTableView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:BonusFeatTableView DataContext="{Binding}"/>
     </DataTemplate>
 
     <!--SkillTable-->
     <DataTemplate DataType="{x:Type vm:SkillTableViewModel}">
-      <view:SkillTableView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:SkillTableView DataContext="{Binding}"/>
     </DataTemplate>
 
     <!--AttackBonusTable-->
     <DataTemplate DataType="{x:Type vm:AttackBonusTableViewModel}">
-      <view:AttackBonusTableView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:AttackBonusTableView DataContext="{Binding}"/>
     </DataTemplate>
 
     <!--SavingThrowTable-->
     <DataTemplate DataType="{x:Type vm:SavingThrowTableViewModel}">
-      <view:SavingThrowTableView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:SavingThrowTableView DataContext="{Binding}"/>
     </DataTemplate>
 
     <!--PrerequisiteTable-->
     <DataTemplate DataType="{x:Type vm:PrerequisiteTableViewModel}">
-      <view:PrerequisiteTableView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:PrerequisiteTableView DataContext="{Binding}"/>
     </DataTemplate>
 
     <!--StatGainTable-->
     <DataTemplate DataType="{x:Type vm:StatGainTableViewModel}">
-      <view:StatGainTableView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:StatGainTableView DataContext="{Binding}"/>
     </DataTemplate>
 
     <!--SpellSlotTable-->
     <DataTemplate DataType="{x:Type vm:SpellSlotTableViewModel}">
-      <view:SpellSlotTableView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:SpellSlotTableView DataContext="{Binding}"/>
     </DataTemplate>
 
     <!--KnownSpellsTable-->
     <DataTemplate DataType="{x:Type vm:KnownSpellsTableViewModel}">
-      <view:KnownSpellsTableView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:KnownSpellsTableView DataContext="{Binding}"/>
     </DataTemplate>
 
     <!--
@@ -401,16 +461,12 @@
 
     <!--ModelExtensions-->
     <DataTemplate DataType="{x:Type vm:ModelExtensionViewModel}">
-      <view:ModelExtensionView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:ModelExtensionView DataContext="{Binding}"/>
     </DataTemplate>
 
     <!--Custom Object Instances-->
     <DataTemplate DataType="{x:Type vm:CustomObjectInstanceViewModel}">
-      <view:CustomObjectInstanceView DataContext="{Binding}"
-              TLKLanguage="{Binding ElementName=mainWindow, Path=DataContext.CurrentLanguage, Mode=OneWay}"
-              Gender="{Binding ElementName=mainWindow, Path=DataContext.CurrentGender, Mode=OneWay}"/>
+      <view:CustomObjectInstanceView DataContext="{Binding}"/>
     </DataTemplate>
   </Window.DataTemplates>
   
@@ -432,28 +488,28 @@
             <Image Source="/Assets/Icons/save32.png"/>
           </MenuItem.Icon>
         </MenuItem>
-        <MenuItem x:Name="miCloseProject" Header="Close Project" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Command="{Binding ElementName=mainWindow, Path=DataContext.CloseProjectCommand}">
-          <!--<MenuItem.Icon>
-            <Image Source="/Assets/Icons/save32.png"/>
-          </MenuItem.Icon>-->
-        </MenuItem>
+        
+        <MenuItem x:Name="miCloseProject" Header="Close" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Command="{Binding ElementName=mainWindow, Path=DataContext.CloseProjectCommand}"/>
+        
         <Separator/>
-        <MenuItem Header="Settings" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Command="{Binding ElementName=mainWindow, Path=DataContext.OpenProjectSettingsCommand}">
+
+        <MenuItem x:Name="miBackupProject" Header="Create Backup" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miBackupProject_Click">
           <MenuItem.Icon>
-            <Image Source="/Assets/Icons/settings32.png"/>
+            <Image Source="/Assets/Icons/backup32.png"/>
           </MenuItem.Icon>
         </MenuItem>
-        <Separator/>
         
-        <MenuItem x:Name="miExportProject" Header="Export Project" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miExportProject_Click">
+        <MenuItem x:Name="miExportProject" Header="Export" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miExportProject_Click">
           <MenuItem.Icon>
             <Image Source="/Assets/Icons/export32.png"/>
           </MenuItem.Icon>
         </MenuItem>
 
-        <MenuItem x:Name="miBackupProject" Header="Create Backup" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miBackupProject_Click">
+        <Separator/>
+
+        <MenuItem Header="Settings" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Command="{Binding ElementName=mainWindow, Path=DataContext.OpenProjectSettingsCommand}">
           <MenuItem.Icon>
-            <Image Source="/Assets/Icons/backup32.png"/>
+            <Image Source="/Assets/Icons/settings32.png"/>
           </MenuItem.Icon>
         </MenuItem>
         
@@ -471,15 +527,11 @@
         
         <MenuItem x:Name="miImportBaseData" Header="Import Game Files" Click="miImportBaseData_Click">
           <MenuItem.Icon>
-            <Image Source="/Assets/Icons/import32.png"/>
+            <Image Source="/Assets/Icons/nwn32.png"/>
           </MenuItem.Icon>
         </MenuItem>
 
-        <MenuItem x:Name="miImport" Header="Import HAKs/2DAs" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Command="{Binding ElementName=mainWindow, Path=DataContext.OpenDataImportCommand}">
-          <!--<MenuItem.Icon>
-            <Image Source="/Assets/Icons/search32.png"/>
-          </MenuItem.Icon>-->
-        </MenuItem>
+        <MenuItem x:Name="miImport" Header="Import HAKs/2DAs" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Command="{Binding ElementName=mainWindow, Path=DataContext.OpenDataImportCommand}"/>
       </MenuItem>
     </Menu>
 
@@ -491,34 +543,38 @@
         </Grid.ColumnDefinitions>
 
         <DockPanel Grid.Column="0" HorizontalAlignment="Left">
-          <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" ToolTip.Tip="New Project" Command="{Binding Path=NewProjectCommand}">
+          <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" ToolTip.Tip="New Project (Ctrl+N)" Command="{Binding Path=NewProjectCommand}">
             <Image Source="/Assets/Icons/new32.png"/>
           </Button>
-          <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" ToolTip.Tip="Open Project" Click="miOpenProject_Click">
+          <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" ToolTip.Tip="Open Project (Ctrl+O)" Click="miOpenProject_Click">
             <Image Source="/Assets/Icons/open32.png"/>
           </Button>
-          <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" ToolTip.Tip="Save Project" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Command="{Binding ElementName=mainWindow, Path=DataContext.SaveProjectCommand}">
+          <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" ToolTip.Tip="Save Project (Ctrl+S)" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Command="{Binding ElementName=mainWindow, Path=DataContext.SaveProjectCommand}">
             <Image Source="/Assets/Icons/save32.png"/>
           </Button>
-          <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" ToolTip.Tip="Search" Command="{Binding ElementName=mainWindow, Path=DataContext.GlobalSearchCommand}">
+          <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" ToolTip.Tip="Search (Ctrl+F)" Command="{Binding ElementName=mainWindow, Path=DataContext.GlobalSearchCommand}">
             <Image Source="/Assets/Icons/search32.png"/>
           </Button>
-          <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" ToolTip.Tip="Import Data" Click="miImportBaseData_Click">
-            <Image Source="/Assets/Icons/import32.png"/>
+          <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" ToolTip.Tip="Backup Project" Click="miBackupProject_Click" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}">
+            <Image Source="/Assets/Icons/backup32.png"/>
           </Button>
           <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" ToolTip.Tip="Export Project" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miExportProject_Click">
             <Image Source="/Assets/Icons/export32.png"/>
           </Button>
-          <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" ToolTip.Tip="Project Settings" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Command="{Binding ElementName=mainWindow, Path=DataContext.OpenProjectSettingsCommand}">
+          <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" ToolTip.Tip="Project Settings" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Command="{Binding ElementName=mainWindow, Path=DataContext.OpenProjectSettingsCommand}">
             <Image Source="/Assets/Icons/settings32.png"/>
+          </Button>
+          
+          <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" ToolTip.Tip="Import Game Files" Click="miImportBaseData_Click">
+            <Image Source="/Assets/Icons/nwn32.png"/>
           </Button>
         </DockPanel>
 
         <StackPanel Grid.Column="1" Orientation="Horizontal">        
-          <TextBlock Text="Language" VerticalAlignment="Center" FontSize="16"/>
+          <TextBlock Text="Language" VerticalAlignment="Center" FontSize="16" Margin="0,0,3,0"/>
        
-          <uc:EnumComboBox x:Name="cbCurrentLang" FontSize="16" Margin="3,4,0,4" Width="150" ItemsSource="{ext:EnumSource {x:Type tlk:TLKLanguage}}" SelectedValue="{Binding CurrentLanguage, Mode=TwoWay}"/>
-          <ToggleButton Margin="3,0,0,0" BorderBrush="Gray" BorderThickness="0.5" IsChecked="{Binding CurrentGender, Mode=TwoWay}" VerticalAlignment="Center" Width="{Binding ElementName=cbCurrentLang, Path=Bounds.Height}" Height="{Binding ElementName=cbCurrentLang, Path=Bounds.Height}">
+          <uc:EnumComboBox x:Name="cbCurrentLang" FontSize="16" Margin="3,4,0,4" Width="150" ItemsSource="{ext:EnumSource {x:Type tlk:TLKLanguage}}" SelectedValue="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage, Mode=TwoWay}"/>
+          <ToggleButton Margin="3,0,0,0" BorderBrush="Gray" BorderThickness="0.5" IsChecked="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender, Mode=TwoWay}" VerticalAlignment="Center" Width="{Binding ElementName=cbCurrentLang, Path=Bounds.Height}" Height="{Binding ElementName=cbCurrentLang, Path=Bounds.Height}">
             <Panel>
               <Image Source="/Assets/Icons/male16.png" Classes="tbunchecked"/>
               <Image Source="/Assets/Icons/female16.png" Classes="tbchecked"/>
@@ -571,7 +627,7 @@
                   <Run>
                     <Run.Text>
                       <MultiBinding Converter="{StaticResource tlkConverter}">
-                        <Binding Path="Name"/>
+                        <Binding Path="Label"/>
                         <Binding ElementName="mainWindow" Path="DataContext.CurrentLanguage"/>
                         <Binding ElementName="mainWindow" Path="DataContext.CurrentGender"/>
                       </MultiBinding>
@@ -594,14 +650,34 @@
                 </Style>
               </Styles>
             </TreeView.Styles>
-            
-            <TreeViewItem Header="Races" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Races}" Classes="category"/>
-            <TreeViewItem Header="Classes" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Classes}" Classes="category"/>
-            <TreeViewItem Header="Class Packages" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ClassPackages}" Classes="category" IsVisible="False"/>
+
+            <TreeViewItem Header="Race Data" Classes="category">
+              <TreeViewItem Header="Races" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Races}" Classes="category"/>
+              <TreeViewItem Header="Feats" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=RacialFeatsTables}" Classes="category"/>
+            </TreeViewItem>
+            <TreeViewItem Header="Class Data" Classes="category">
+              <TreeViewItem Header="Classes" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Classes}" Classes="category"/>
+              <TreeViewItem Header="Feats" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=FeatTables}" Classes="category"/>
+              <TreeViewItem Header="Bonus Feats" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=BonusFeatTables}" Classes="category"/>
+              <TreeViewItem Header="Skills" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SkillTables}" Classes="category"/>
+              <TreeViewItem Header="Base Attack Bonus" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=AttackBonusTables}" Classes="category"/>
+              <TreeViewItem Header="Saving Throws" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SavingThrowTables}" Classes="category"/>
+              <TreeViewItem Header="Prerequisites" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=PrerequisiteTables}" Classes="category"/>
+              <TreeViewItem Header="Stat Changes" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=StatGainTables}" Classes="category"/>
+              <TreeViewItem Header="Spell Slots" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SpellSlotTables}" Classes="category"/>
+              <TreeViewItem Header="Known Spells" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=KnownSpellsTables}" Classes="category"/>
+            </TreeViewItem>
+            <TreeViewItem Header="Package Data" Classes="category">
+              <TreeViewItem Header="Packages" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ClassPackages}" Classes="category"/>
+              <TreeViewItem Header="Equipment" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=PackageEquipmentTables}" Classes="category"/>
+              <TreeViewItem Header="Spell Preferences" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SpellPreferencesTables}" Classes="category"/>
+              <TreeViewItem Header="Feat Preferences" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=FeatPreferencesTables}" Classes="category"/>
+              <TreeViewItem Header="Skill Preferences" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SkillPreferencesTables}" Classes="category"/>
+            </TreeViewItem>
             <TreeViewItem Header="Domains" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Domains}" Classes="category"/>
-            <TreeViewItem Header="Spellbooks" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Spellbooks}" Classes="category"/>
-            <TreeViewItem Header="Spells" Classes="category">
-              <TreeViewItem Header="Spell" Classes="category">
+            <TreeViewItem Header="Spell Data" Classes="category">
+              <TreeViewItem Header="Spells" Classes="category">
+                <TreeViewItem Header="General" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.GeneralSpells}" Classes="category"/>
                 <TreeViewItem Header="Abjuration" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.AbjurationSpells}" Classes="category"/>
                 <TreeViewItem Header="Conjuration" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.ConjurationSpells}" Classes="category"/>
                 <TreeViewItem Header="Divination" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.DivinationSpells}" Classes="category"/>
@@ -610,38 +686,54 @@
                 <TreeViewItem Header="Illusion" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.IllusionSpells}" Classes="category"/>
                 <TreeViewItem Header="Necromancy" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.NecromancySpells}" Classes="category"/>
                 <TreeViewItem Header="Transmutation" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.TransmutationSpells}" Classes="category"/>
-                <TreeViewItem Header="General" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.GeneralSpells}" Classes="category"/>
+                <TreeViewItem Header="Creature Power" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.CreaturePowers}" Classes="category"/>
+                <TreeViewItem Header="Feat" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.FeatSpells}" Classes="category"/>
+                <TreeViewItem Header="Other" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.OtherSpells}" Classes="category"/>
               </TreeViewItem>
-              <TreeViewItem Header="Creature Power" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.CreaturePowers}" Classes="category"/>
-              <TreeViewItem Header="Feat" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.FeatSpells}" Classes="category"/>
-              <TreeViewItem Header="Other" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.OtherSpells}" Classes="category"/>
+              <TreeViewItem Header="Spellbooks" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Spellbooks}" Classes="category"/>
             </TreeViewItem>
-            <TreeViewItem Header="Master Feats" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=MasterFeats}" Classes="category"/>
-            <TreeViewItem Header="Feats" Classes="category">
-              <TreeViewItem Header="Class/Racial" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.ClassOrRacial}" Classes="category"/>
-              <TreeViewItem Header="Active Combat Feats" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.CombatActive}" Classes="category"/>
-              <TreeViewItem Header="Combat Feats" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Combat}" Classes="category"/>
-              <TreeViewItem Header="Defensive" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Defensive}" Classes="category"/>
-              <TreeViewItem Header="Magical" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Magical}" Classes="category"/>
-              <TreeViewItem Header="Other" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Other}" Classes="category"/>
+            <TreeViewItem Header="Feat Data" Classes="category">
+              <TreeViewItem Header="Feats" Classes="category">
+                <TreeViewItem Header="Class/Racial" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.ClassOrRacial}" Classes="category"/>
+                <TreeViewItem Header="Active Combat Feats" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.CombatActive}" Classes="category"/>
+                <TreeViewItem Header="Combat Feats" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Combat}" Classes="category"/>
+                <TreeViewItem Header="Defensive" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Defensive}" Classes="category"/>
+                <TreeViewItem Header="Magical" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Magical}" Classes="category"/>
+                <TreeViewItem Header="Other" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Other}" Classes="category"/>
+              </TreeViewItem>
+              <TreeViewItem Header="Master Feats" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=MasterFeats}" Classes="category"/>
             </TreeViewItem>
             <TreeViewItem Header="Skills" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Skills}" Classes="category"/>
             <TreeViewItem Header="Diseases" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Diseases}" Classes="category"/>
             <TreeViewItem Header="Poisons" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Poisons}" Classes="category"/>
-            <TreeViewItem Header="Area Effects" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=AreaEffects}" Classes="category"/>
-            <TreeViewItem Header="Soundsets" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Soundsets}" Classes="category" IsVisible="False"/>
+            <TreeViewItem Header="Base Items" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=BaseItems}" Classes="category"/>
+            <TreeViewItem Header="Item Property Data" Classes="category">
+              <TreeViewItem Header="Item Properties" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ItemProperties}" Classes="category"/>
+              <TreeViewItem Header="Tables" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ItemPropertyTables}" Classes="category"/>
+              <TreeViewItem Header="Cost Tables" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ItemPropertyCostTables}" Classes="category"/>
+              <TreeViewItem Header="Param Tables" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ItemPropertyParams}" Classes="category"/>
+              <TreeViewItem Header="Categories" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ItemPropertySets}" Classes="category"/>
+            </TreeViewItem>
+            <TreeViewItem Header="Damage Type Data" Classes="category">
+              <TreeViewItem Header="Damage Types" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=DamageTypes}" Classes="category"/>
+              <TreeViewItem Header="Damage Type Groups" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=DamageTypeGroups}" Classes="category"/>
+            </TreeViewItem>
+            <TreeViewItem Header="Traps" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Traps}" Classes="category"/>
+            <TreeViewItem Header="Companions" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Companions}" Classes="category"/>
+            <TreeViewItem Header="Familiars" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Familiars}" Classes="category"/>
+            <TreeViewItem Header="Appearance Data" Classes="category">
+              <TreeViewItem Header="Appearances" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Appearances}" Classes="category"/>
+              <TreeViewItem Header="Soundsets" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=AppearanceSoundsets}" Classes="category"/>
+            </TreeViewItem>
             <TreeViewItem Header="Polymorphs" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Polymorphs}" Classes="category"/>
-            <TreeViewItem Header="Tables" Classes="category" IsExpanded="True">
-              <TreeViewItem Header="Racial Feats" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=RacialFeatsTables}" Classes="category"/>
-              <TreeViewItem Header="Feats" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=FeatTables}" Classes="category"/>
-              <TreeViewItem Header="Bonus Feats" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=BonusFeatTables}" Classes="category"/>
-              <TreeViewItem Header="Skills" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SkillTables}" Classes="category"/>
-              <TreeViewItem Header="BAB" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=AttackBonusTables}" Classes="category"/>
-              <TreeViewItem Header="Saving Throws" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SavingThrowTables}" Classes="category"/>
-              <TreeViewItem Header="Prerequisites" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=PrerequisiteTables}" Classes="category"/>
-              <TreeViewItem Header="StatGain" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=StatGainTables}" Classes="category"/>
-              <TreeViewItem Header="Spell Slots" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SpellSlotTables}" Classes="category"/>
-              <TreeViewItem Header="Known Spells" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=KnownSpellsTables}" Classes="category"/>
+            <TreeViewItem Header="Area Effects" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=AreaEffects}" Classes="category"/>
+            <TreeViewItem Header="Other" Classes="category">
+              <TreeViewItem Header="Soundsets" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Soundsets}" Classes="category"/>
+              <TreeViewItem Header="Weapon Sounds" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=WeaponSounds}" Classes="category"/>
+              <TreeViewItem Header="Inventory Sounds" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=InventorySounds}" Classes="category"/>
+              <TreeViewItem Header="Portraits" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Portraits}" Classes="category"/>
+              <TreeViewItem Header="Visual Effects" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=VisualEffects}" Classes="category"/>
+              <TreeViewItem Header="Programmed Effects" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ProgrammedEffects}" Classes="category"/>
             </TreeViewItem>
           </TreeView>
         </TabItem>
@@ -662,29 +754,148 @@
                 </Style>
               </Styles>
             </TreeView.Styles>
-            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Races}" Classes="category x" Tag="{x:Type models:Race}">
-              <TreeViewItem.Header>
-                <TextBlock>
-                  <Run Text="Races"/>
-                  <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Races, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                </TextBlock>
-              </TreeViewItem.Header>
+
+            <TreeViewItem Header="Race Data" Classes="category nocontext">
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Races}" Classes="category" Tag="{x:Type models:Race}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Races"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Races, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=RacialFeatsTables}" Classes="category" Tag="{x:Type tables:RacialFeatsTable}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Feats"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=RacialFeatsTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
             </TreeViewItem>
-            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Classes}" Classes="category" Tag="{x:Type models:CharacterClass}">
-              <TreeViewItem.Header>
-                <TextBlock>
-                  <Run Text="Classes"/>
-                  <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Classes, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                </TextBlock>
-              </TreeViewItem.Header>
+            <TreeViewItem Header="Class Data" Classes="category nocontext">
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Classes}" Classes="category" Tag="{x:Type models:CharacterClass}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Classes"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Classes, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Header="Feats" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=FeatTables}" Classes="category" Tag="{x:Type tables:FeatsTable}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Feats"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=FeatTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=BonusFeatTables}" Classes="category" Tag="{x:Type tables:BonusFeatsTable}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Bonus Feats"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=BonusFeatTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SkillTables}" Classes="category" Tag="{x:Type tables:SkillsTable}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Skills"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SkillTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=AttackBonusTables}" Classes="category" Tag="{x:Type tables:AttackBonusTable}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Base Attack Bonus"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=AttackBonusTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SavingThrowTables}" Classes="category" Tag="{x:Type tables:SavingThrowTable}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Saving Throws"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SavingThrowTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=PrerequisiteTables}" Classes="category" Tag="{x:Type tables:PrerequisiteTable}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Prerequisites"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=PrerequisiteTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=StatGainTables}" Classes="category" Tag="{x:Type tables:StatGainTable}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Stat Changes"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=StatGainTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SpellSlotTables}" Classes="category" Tag="{x:Type tables:SpellSlotTable}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Spell Slots"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SpellSlotTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=KnownSpellsTables}" Classes="category" Tag="{x:Type tables:KnownSpellsTable}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Known Spells"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=KnownSpellsTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
             </TreeViewItem>
-            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ClassPackages}" Classes="category" Tag="{x:Type models:CharacterClass}" IsVisible="False">
-              <TreeViewItem.Header>
-                <TextBlock>
-                  <Run Text="Class Packages"/>
-                  <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ClassPackages, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                </TextBlock>
-              </TreeViewItem.Header>
+            <TreeViewItem Header="Package Data" Classes="category nocontext">
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ClassPackages}" Classes="category" Tag="{x:Type models:ClassPackage}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Packages"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ClassPackages, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=PackageEquipmentTables}" Classes="category" Tag="{x:Type tables:PackageEquipmentTable}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Equipment"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=PackageEquipmentTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SpellPreferencesTables}" Classes="category" Tag="{x:Type tables:PackageSpellPreferencesTable}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Spell Preferences"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SpellPreferencesTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=FeatPreferencesTables}" Classes="category" Tag="{x:Type tables:PackageFeatPreferencesTable}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Feat Preferences"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=FeatPreferencesTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SkillPreferencesTables}" Classes="category" Tag="{x:Type tables:PackageSkillPreferencesTable}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Skill Preferences"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SkillPreferencesTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
             </TreeViewItem>
             <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Domains}" Classes="category" Tag="{x:Type models:Domain}">
               <TreeViewItem.Header>
@@ -694,23 +905,23 @@
                 </TextBlock>
               </TreeViewItem.Header>
             </TreeViewItem>
-            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Spellbooks}" Classes="category" Tag="{x:Type models:Spellbook}">
-              <TreeViewItem.Header>
-                <TextBlock>
-                  <Run Text="Spellbooks"/>
-                  <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Spellbooks, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                </TextBlock>
-              </TreeViewItem.Header>
-            </TreeViewItem>
-            <TreeViewItem Classes="category" Tag="{x:Type models:Spell}">
-              <TreeViewItem.Header>
-                <TextBlock>
-                  <Run Text="Spells"/>
-                  <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Spells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                </TextBlock>
-              </TreeViewItem.Header>
+            <TreeViewItem Header="Spell Data" Classes="category nocontext">
+              <TreeViewItem Classes="category" Tag="{x:Type models:Spell}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Spells"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Spells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
 
-              <TreeViewItem Header="Spell" Classes="category" Tag="{x:Type models:Spell}">
+                <TreeViewItem Header="General" Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.GeneralSpells}" Classes="category" Tag="{x:Type models:Spell}">
+                  <TreeViewItem.Header>
+                    <TextBlock>
+                      <Run Text="General"/>
+                      <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.GeneralSpells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                    </TextBlock>
+                  </TreeViewItem.Header>
+                </TreeViewItem>
                 <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.AbjurationSpells}" Classes="category" Tag="{x:Type models:Spell}">
                   <TreeViewItem.Header>
                     <TextBlock>
@@ -775,101 +986,103 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Header="General" Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.GeneralSpells}" Classes="category" Tag="{x:Type models:Spell}">
+                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.CreaturePowers}" Classes="category" Tag="{x:Type models:Spell}">
                   <TreeViewItem.Header>
                     <TextBlock>
-                      <Run Text="General"/>
-                      <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.GeneralSpells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                      <Run Text="Creature Power"/>
+                      <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.CreaturePowers, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                    </TextBlock>
+                  </TreeViewItem.Header>
+                </TreeViewItem>
+                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.FeatSpells}" Classes="category" Tag="{x:Type models:Spell}">
+                  <TreeViewItem.Header>
+                    <TextBlock>
+                      <Run Text="Feat"/>
+                      <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.FeatSpells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                    </TextBlock>
+                  </TreeViewItem.Header>
+                </TreeViewItem>
+                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.OtherSpells}" Classes="category" Tag="{x:Type models:Spell}">
+                  <TreeViewItem.Header>
+                    <TextBlock>
+                      <Run Text="Other"/>
+                      <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.OtherSpells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
               </TreeViewItem>
-              <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.CreaturePowers}" Classes="category" Tag="{x:Type models:Spell}">
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Spellbooks}" Classes="category" Tag="{x:Type models:Spellbook}">
                 <TreeViewItem.Header>
                   <TextBlock>
-                    <Run Text="Creature Power"/>
-                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.CreaturePowers, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                  </TextBlock>
-                </TreeViewItem.Header>
-              </TreeViewItem>
-              <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.FeatSpells}" Classes="category" Tag="{x:Type models:Spell}">
-                <TreeViewItem.Header>
-                  <TextBlock>
-                    <Run Text="Feat"/>
-                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.FeatSpells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                  </TextBlock>
-                </TreeViewItem.Header>
-              </TreeViewItem>
-              <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.OtherSpells}" Classes="category" Tag="{x:Type models:Spell}">
-                <TreeViewItem.Header>
-                  <TextBlock>
-                    <Run Text="Other"/>
-                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.OtherSpells, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                    <Run Text="Spellbooks"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Spellbooks, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
             </TreeViewItem>
-            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=MasterFeats}" Classes="category" Tag="{x:Type models:MasterFeat}">
-              <TreeViewItem.Header>
-                <TextBlock>
-                  <Run Text="Master Feats"/>
-                  <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=MasterFeats, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                </TextBlock>
-              </TreeViewItem.Header>
-            </TreeViewItem>
-            <TreeViewItem Classes="category">
-              <TreeViewItem.Header>
-                <TextBlock>
-                  <Run Text="Feats"/>
-                  <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Feats, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                </TextBlock>
-              </TreeViewItem.Header>
+            <TreeViewItem Header="Feat Data" Classes="category nocontext">
+              <TreeViewItem Classes="category">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Feats"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Feats, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
               
-              <TreeViewItem Header="Class/Racial" Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.ClassOrRacial}" Classes="category" Tag="{x:Type models:Feat}">
-                <TreeViewItem.Header>
-                  <TextBlock>
-                    <Run Text="Class/Racial"/>
-                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.ClassOrRacial, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                  </TextBlock>
-                </TreeViewItem.Header>
+                <TreeViewItem Header="Class/Racial" Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.ClassOrRacial}" Classes="category" Tag="{x:Type models:Feat}">
+                  <TreeViewItem.Header>
+                    <TextBlock>
+                      <Run Text="Class/Racial"/>
+                      <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.ClassOrRacial, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                    </TextBlock>
+                  </TreeViewItem.Header>
+                </TreeViewItem>
+                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.CombatActive}" Classes="category" Tag="{x:Type models:Feat}">
+                  <TreeViewItem.Header>
+                    <TextBlock>
+                      <Run Text="Active Combat Feats"/>
+                      <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.CombatActive, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                    </TextBlock>
+                  </TreeViewItem.Header>
+                </TreeViewItem>
+                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Combat}" Classes="category" Tag="{x:Type models:Feat}">
+                  <TreeViewItem.Header>
+                    <TextBlock>
+                      <Run Text="Combat Feats"/>
+                      <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Combat, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                    </TextBlock>
+                  </TreeViewItem.Header>
+                </TreeViewItem>
+                <TreeViewItem Header="Defensive" Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Defensive}" Classes="category" Tag="{x:Type models:Feat}">
+                  <TreeViewItem.Header>
+                    <TextBlock>
+                      <Run Text="Defensive"/>
+                      <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Defensive, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                    </TextBlock>
+                  </TreeViewItem.Header>
+                </TreeViewItem>
+                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Magical}" Classes="category" Tag="{x:Type models:Feat}">
+                  <TreeViewItem.Header>
+                    <TextBlock>
+                      <Run Text="Magical"/>
+                      <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Magical, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                    </TextBlock>
+                  </TreeViewItem.Header>
+                </TreeViewItem>
+                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Other}" Classes="category" Tag="{x:Type models:Feat}">
+                  <TreeViewItem.Header>
+                    <TextBlock>
+                      <Run Text="Other"/>
+                      <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Other, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                    </TextBlock>
+                  </TreeViewItem.Header>
+                </TreeViewItem>
               </TreeViewItem>
-              <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.CombatActive}" Classes="category" Tag="{x:Type models:Feat}">
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=MasterFeats}" Classes="category" Tag="{x:Type models:MasterFeat}">
                 <TreeViewItem.Header>
                   <TextBlock>
-                    <Run Text="Active Combat Feats"/>
-                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.CombatActive, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                  </TextBlock>
-                </TreeViewItem.Header>
-              </TreeViewItem>
-              <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Combat}" Classes="category" Tag="{x:Type models:Feat}">
-                <TreeViewItem.Header>
-                  <TextBlock>
-                    <Run Text="Combat Feats"/>
-                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Combat, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                  </TextBlock>
-                </TreeViewItem.Header>
-              </TreeViewItem>
-              <TreeViewItem Header="Defensive" Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Defensive}" Classes="category" Tag="{x:Type models:Feat}">
-                <TreeViewItem.Header>
-                  <TextBlock>
-                    <Run Text="Defensive"/>
-                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Defensive, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                  </TextBlock>
-                </TreeViewItem.Header>
-              </TreeViewItem>
-              <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Magical}" Classes="category" Tag="{x:Type models:Feat}">
-                <TreeViewItem.Header>
-                  <TextBlock>
-                    <Run Text="Magical"/>
-                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Magical, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                  </TextBlock>
-                </TreeViewItem.Header>
-              </TreeViewItem>
-              <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Other}" Classes="category" Tag="{x:Type models:Feat}">
-                <TreeViewItem.Header>
-                  <TextBlock>
-                    <Run Text="Other"/>
-                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Other, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                    <Run Text="Master Feats"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=MasterFeats, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
@@ -898,21 +1111,115 @@
                 </TextBlock>
               </TreeViewItem.Header>
             </TreeViewItem>
-            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=AreaEffects}" Classes="category" Tag="{x:Type models:AreaEffect}">
+            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=BaseItems}" Classes="category" Tag="{x:Type models:BaseItem}">
               <TreeViewItem.Header>
                 <TextBlock>
-                  <Run Text="Area Effects"/>
-                  <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=AreaEffects, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  <Run Text="Base Items"/>
+                  <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=BaseItems, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
                 </TextBlock>
               </TreeViewItem.Header>
             </TreeViewItem>
-            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Soundsets}" Classes="category" Tag="{x:Type models:AreaEffect}" IsVisible="False">
+            <TreeViewItem Header="Item Property Data" Classes="category nocontext">
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemProperties}" Classes="category" Tag="{x:Type models:ItemProperty}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Item Properties"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemProperties, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemPropertyTables}" Classes="category" Tag="{x:Type tables:ItemPropertyTable}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Tables"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemPropertyTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemPropertyCostTables}" Classes="category" Tag="{x:Type tables:ItemPropertyCostTable}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Cost Tables"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemPropertyCostTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemPropertyParams}" Classes="category" Tag="{x:Type models:ItemPropertyParam}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Param Tables"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemPropertyParams, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemPropertySets}" Classes="category" Tag="{x:Type models:ItemPropertySet}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Categories"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemPropertySets, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+            </TreeViewItem>
+            <TreeViewItem Header="Damage Type Data" Classes="category nocontext">
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=DamageTypes}" Classes="category" Tag="{x:Type models:DamageType}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Damage Types"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=DamageTypes, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=DamageTypeGroups}" Classes="category" Tag="{x:Type models:DamageTypeGroup}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Damage Type Groups"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=DamageTypeGroups, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+            </TreeViewItem>
+            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Traps}" Classes="category" Tag="{x:Type models:Trap}">
               <TreeViewItem.Header>
                 <TextBlock>
-                  <Run Text="Soundsets"/>
-                  <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Soundsets, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  <Run Text="Traps"/>
+                  <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Traps, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
                 </TextBlock>
               </TreeViewItem.Header>
+            </TreeViewItem>
+            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Companions}" Classes="category" Tag="{x:Type models:Companion}">
+              <TreeViewItem.Header>
+                <TextBlock>
+                  <Run Text="Companions"/>
+                  <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Companions, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                </TextBlock>
+              </TreeViewItem.Header>
+            </TreeViewItem>
+            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Familiars}" Classes="category" Tag="{x:Type models:Familiar}">
+              <TreeViewItem.Header>
+                <TextBlock>
+                  <Run Text="Familiars"/>
+                  <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Familiars, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                </TextBlock>
+              </TreeViewItem.Header>
+            </TreeViewItem>
+            <TreeViewItem Header="Appearance Data" Classes="category nocontext">
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Appearances}" Classes="category" Tag="{x:Type models:Appearance}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Appearances"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Appearances, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=AppearanceSoundsets}" Classes="category" Tag="{x:Type models:AppearanceSoundset}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Soundsets"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=AppearanceSoundsets, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
             </TreeViewItem>
             <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Polymorphs}" Classes="category" Tag="{x:Type models:Polymorph}">
               <TreeViewItem.Header>
@@ -922,84 +1229,60 @@
                 </TextBlock>
               </TreeViewItem.Header>
             </TreeViewItem>
-            <TreeViewItem Header="Tables" Classes="category" IsExpanded="True">
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=RacialFeatsTables}" Classes="category" Tag="{x:Type tables:RacialFeatsTable}">
+            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=AreaEffects}" Classes="category" Tag="{x:Type models:AreaEffect}">
+              <TreeViewItem.Header>
+                <TextBlock>
+                  <Run Text="Area Effects"/>
+                  <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=AreaEffects, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                </TextBlock>
+              </TreeViewItem.Header>
+            </TreeViewItem>
+            <TreeViewItem Header="Other" Classes="category nocontext">
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Soundsets}" Classes="category" Tag="{x:Type models:AreaEffect}">
                 <TreeViewItem.Header>
                   <TextBlock>
-                    <Run Text="Racial Feats"/>
-                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=RacialFeatsTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                    <Run Text="Soundsets"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Soundsets, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Header="Feats" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=FeatTables}" Classes="category" Tag="{x:Type tables:FeatsTable}">
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=WeaponSounds}" Classes="category" Tag="{x:Type models:WeaponSound}">
                 <TreeViewItem.Header>
                   <TextBlock>
-                    <Run Text="Feats"/>
-                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=FeatTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                    <Run Text="Weapon Sounds"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=WeaponSounds, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=BonusFeatTables}" Classes="category" Tag="{x:Type tables:BonusFeatsTable}">
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=InventorySounds}" Classes="category" Tag="{x:Type models:InventorySound}">
                 <TreeViewItem.Header>
                   <TextBlock>
-                    <Run Text="Bonus Feats"/>
-                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=BonusFeatTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                    <Run Text="Inventory Sounds"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=InventorySounds, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SkillTables}" Classes="category" Tag="{x:Type tables:SkillsTable}">
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Portraits}" Classes="category" Tag="{x:Type models:Portrait}">
                 <TreeViewItem.Header>
                   <TextBlock>
-                    <Run Text="Skills"/>
-                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SkillTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                    <Run Text="Portraits"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Portraits, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=AttackBonusTables}" Classes="category" Tag="{x:Type tables:AttackBonusTable}">
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=VisualEffects}" Classes="category" Tag="{x:Type models:VisualEffect}">
                 <TreeViewItem.Header>
                   <TextBlock>
-                    <Run Text="BAB"/>
-                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=AttackBonusTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                    <Run Text="Visual Effects"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=VisualEffects, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SavingThrowTables}" Classes="category" Tag="{x:Type tables:SavingThrowTable}">
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ProgrammedEffects}" Classes="category" Tag="{x:Type models:ProgrammedEffect}">
                 <TreeViewItem.Header>
                   <TextBlock>
-                    <Run Text="Saving Throws"/>
-                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SavingThrowTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                  </TextBlock>
-                </TreeViewItem.Header>
-              </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=PrerequisiteTables}" Classes="category" Tag="{x:Type tables:PrerequisiteTable}">
-                <TreeViewItem.Header>
-                  <TextBlock>
-                    <Run Text="Prerequisites"/>
-                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=PrerequisiteTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                  </TextBlock>
-                </TreeViewItem.Header>
-              </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=StatGainTables}" Classes="category" Tag="{x:Type tables:StatGainTable}">
-                <TreeViewItem.Header>
-                  <TextBlock>
-                    <Run Text="StatGain"/>
-                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=StatGainTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                  </TextBlock>
-                </TreeViewItem.Header>
-              </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SpellSlotTables}" Classes="category" Tag="{x:Type tables:SpellSlotTable}">
-                <TreeViewItem.Header>
-                  <TextBlock>
-                    <Run Text="Spell Slots"/>
-                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SpellSlotTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
-                  </TextBlock>
-                </TreeViewItem.Header>
-              </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=KnownSpellsTables}" Classes="category" Tag="{x:Type tables:KnownSpellsTable}">
-                <TreeViewItem.Header>
-                  <TextBlock>
-                    <Run Text="Known Spells"/>
-                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=KnownSpellsTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                    <Run Text="Programmed Effects"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ProgrammedEffects, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
@@ -1015,6 +1298,13 @@
                   </i:Interaction.Behaviors>
                 </TreeViewItem>
                 <TreeViewItem Header="Class" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Classes.Extensions}" Classes="nocontext">
+                  <i:Interaction.Behaviors>
+                    <ia:EventTriggerBehavior EventName="DoubleTapped">
+                      <ia:InvokeCommandAction Command="{Binding ElementName=mainWindow, Path=DataContext.OpenDetailCommand}" CommandParameter="{Binding}"/>
+                    </ia:EventTriggerBehavior>
+                  </i:Interaction.Behaviors>
+                </TreeViewItem>
+                <TreeViewItem Header="Package" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=ClassPackages.Extensions}" Classes="nocontext">
                   <i:Interaction.Behaviors>
                     <ia:EventTriggerBehavior EventName="DoubleTapped">
                       <ia:InvokeCommandAction Command="{Binding ElementName=mainWindow, Path=DataContext.OpenDetailCommand}" CommandParameter="{Binding}"/>
@@ -1071,6 +1361,34 @@
                   </i:Interaction.Behaviors>
                 </TreeViewItem>
                 <TreeViewItem Header="Polymorph" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Polymorphs.Extensions}" Classes="nocontext">
+                  <i:Interaction.Behaviors>
+                    <ia:EventTriggerBehavior EventName="DoubleTapped">
+                      <ia:InvokeCommandAction Command="{Binding ElementName=mainWindow, Path=DataContext.OpenDetailCommand}" CommandParameter="{Binding}"/>
+                    </ia:EventTriggerBehavior>
+                  </i:Interaction.Behaviors>
+                </TreeViewItem>
+                <TreeViewItem Header="Base Item" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=BaseItems.Extensions}" Classes="nocontext">
+                  <i:Interaction.Behaviors>
+                    <ia:EventTriggerBehavior EventName="DoubleTapped">
+                      <ia:InvokeCommandAction Command="{Binding ElementName=mainWindow, Path=DataContext.OpenDetailCommand}" CommandParameter="{Binding}"/>
+                    </ia:EventTriggerBehavior>
+                  </i:Interaction.Behaviors>
+                </TreeViewItem>
+                <TreeViewItem Header="Item Property" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=ItemProperties.Extensions}" Classes="nocontext">
+                  <i:Interaction.Behaviors>
+                    <ia:EventTriggerBehavior EventName="DoubleTapped">
+                      <ia:InvokeCommandAction Command="{Binding ElementName=mainWindow, Path=DataContext.OpenDetailCommand}" CommandParameter="{Binding}"/>
+                    </ia:EventTriggerBehavior>
+                  </i:Interaction.Behaviors>
+                </TreeViewItem>
+                <TreeViewItem Header="Companion" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Companions.Extensions}" Classes="nocontext">
+                  <i:Interaction.Behaviors>
+                    <ia:EventTriggerBehavior EventName="DoubleTapped">
+                      <ia:InvokeCommandAction Command="{Binding ElementName=mainWindow, Path=DataContext.OpenDetailCommand}" CommandParameter="{Binding}"/>
+                    </ia:EventTriggerBehavior>
+                  </i:Interaction.Behaviors>
+                </TreeViewItem>
+                <TreeViewItem Header="Familiar" DataContext="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Familiars.Extensions}" Classes="nocontext">
                   <i:Interaction.Behaviors>
                     <ia:EventTriggerBehavior EventName="DoubleTapped">
                       <ia:InvokeCommandAction Command="{Binding ElementName=mainWindow, Path=DataContext.OpenDetailCommand}" CommandParameter="{Binding}"/>

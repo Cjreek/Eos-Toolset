@@ -1,0 +1,250 @@
+<local:LanguageAwarePage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views"
+             xmlns:uc="using:Eos.Usercontrols"
+             xmlns:ext="using:Eos.Extensions"
+             xmlns:types="using:Eos.Types"
+             xmlns:config="using:Eos.Config"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
+             x:Class="Eos.Views.AppearanceView"
+             x:Name="page">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+        <ResourceInclude Source="/Assets/CustomDataTemplateResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <local:LanguageAwarePage.Styles>
+    <StyleInclude Source="/Assets/StyleResources.axaml"/>
+  </local:LanguageAwarePage.Styles>
+
+  <TabControl TabStripPlacement="Left" BorderThickness="0,1,0,0" SelectedIndex="{Binding SelectedTabIndex}" Padding="0">
+    <TabItem Header="Info" Width="120" Height="30" BorderThickness="0,0,0,1">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="*" MinWidth="150"/>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="*" MinWidth="150"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Margin="0,0,0,10">
+              <TextBlock FontSize="22" FontWeight="Bold">
+                <TextBlock.Text>
+                  <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                    <Binding Path="Data.Name"/>
+                  </MultiBinding>
+                </TextBlock.Text>
+              </TextBlock>
+
+              <TextBlock Text=" (Appearance ID:" FontSize="16" VerticalAlignment="Center"/>
+              <!--<uc:ResetIsEnabled>-->
+              <TextBox Text="{Binding Data.CalculatedIndex, Mode=OneWay}" BorderThickness="0" FontSize="16" VerticalAlignment="Center" Margin="0" IsReadOnly="True"/>
+              <!--</uc:ResetIsEnabled>-->
+              <TextBlock Text=")" FontSize="16" VerticalAlignment="Center" Margin="0,0,0,0"/>
+            </StackPanel>
+
+            <!--Name-->
+            <TextBlock Text="Name" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <uc:TLKTextbox TLKStrings="{Binding Data.Name}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+
+            <TextBlock Text="Hint" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+            <TextBox Text="{Binding Data.Hint}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
+
+            <TextBlock Text="Race Model" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+            <uc:ModelResourceTextbox ResRef="{Binding Data.RaceModel}" Grid.Row="3" Grid.Column="1"/>
+
+            <TextBlock Text="Environment Map" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+            <uc:ModelResourceTextbox ResRef="{Binding Data.EnvironmentMap}" Grid.Row="3" Grid.Column="3"/>
+
+            <TextBlock Text="Model Type" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+            <uc:EnumComboBox Grid.Row="4" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:ModelType}}" SelectedValue="{Binding Data.ModelType}"/>
+
+            <TextBlock Text="Model Head-Node Name" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
+            <TextBox Text="{Binding Data.ModelHeadNodeName}" Grid.Row="4" Grid.Column="3"/>
+            
+            <TextBlock Text="Can have Wings" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+            <CheckBox Grid.Row="5" Grid.Column="1" IsChecked="{Binding Data.CanHaveWings}"/>
+
+            <TextBlock Text="Can have Tails" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
+            <CheckBox Grid.Row="5" Grid.Column="3" IsChecked="{Binding Data.CanHaveTails}"/>
+
+            <TextBlock Text="Weapon Scale" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
+            <NumericUpDown Grid.Row="6" Grid.Column="1" Value="{Binding Data.WeaponScale}" Increment="0.1"/>
+
+            <TextBlock Text="Wing/Tail Scale" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="2"/>
+            <NumericUpDown Grid.Row="6" Grid.Column="3" Value="{Binding Data.WingTailScale}" Increment="0.1"/>
+
+            <TextBlock Text="Helmet Scale ♂" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
+            <NumericUpDown Grid.Row="7" Grid.Column="1" Value="{Binding Data.HelmetScaleMale}" Increment="0.1"/>
+
+            <TextBlock Text="Helmet Scale ♀" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="2"/>
+            <NumericUpDown Grid.Row="7" Grid.Column="3" Value="{Binding Data.HelmetScaleFemale}" Increment="0.1"/>
+
+            <TextBlock Text="Movement Rate" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
+            <uc:EnumComboBox Grid.Row="8" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:MovementRate}}" SelectedValue="{Binding Data.MovementRate}"/>
+
+            <TextBlock Text="Size" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="2"/>
+            <uc:EnumComboBox Grid.Row="8" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type types:SizeCategory}}" SelectedValue="{Binding Data.SizeCategory}"/>
+
+            <TextBlock Text="Walk Animation Distance" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
+            <NumericUpDown Grid.Row="9" Grid.Column="1" Value="{Binding Data.WalkAnimationDistance}" Increment="0.1"/>
+
+            <TextBlock Text="Run Animation Distance" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
+            <NumericUpDown Grid.Row="9" Grid.Column="3" Value="{Binding Data.RunAnimationDistance}" Increment="0.1"/>
+
+            <TextBlock Text="Personal Space" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0"/>
+            <NumericUpDown Grid.Row="10" Grid.Column="1" Value="{Binding Data.PersonalSpaceRadius}" Increment="0.1"/>
+
+            <TextBlock Text="Creature Personal Space" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="2"/>
+            <NumericUpDown Grid.Row="10" Grid.Column="3" Value="{Binding Data.CreaturePersonalSpaceRadius}" Increment="0.1"/>
+
+            <TextBlock Text="Hit Distance" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="0"/>
+            <NumericUpDown Grid.Row="11" Grid.Column="1" Value="{Binding Data.HitDistance}" Increment="0.1"/>
+
+            <TextBlock Text="Preferred Attack Distance" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="11" Grid.Column="2"/>
+            <NumericUpDown Grid.Row="11" Grid.Column="3" Value="{Binding Data.PreferredAttackDistance}" Increment="0.1"/>
+
+            <TextBlock Text="Target Height" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="0"/>
+            <uc:EnumComboBox Grid.Row="12" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:TargetHeight}}" SelectedValue="{Binding Data.TargetHeight}"/>
+
+            <TextBlock Text="Camera Height" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="12" Grid.Column="2"/>
+            <NumericUpDown Grid.Row="12" Grid.Column="3" Value="{Binding Data.CameraHeight}" Increment="0.1"/>
+
+            <TextBlock Text="Perception Range" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="0"/>
+            <uc:EnumComboBox Grid.Row="13" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:PerceptionDistance}}" SelectedValue="{Binding Data.PerceptionRange}"/>
+
+            <TextBlock Text="Portrait" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="13" Grid.Column="2"/>
+            <TextBox Text="{Binding Data.Portrait}" Grid.Row="13" Grid.Column="3"/>
+
+            <TextBlock Text="Body Bag" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="0"/>
+            <uc:EnumComboBox Grid.Row="14" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:BodyBag}}" SelectedValue="{Binding Data.BodyBag}"/>
+
+            <TextBlock Text="Blood Color" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="14" Grid.Column="2"/>
+            <uc:EnumComboBox Grid.Row="14" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type types:BloodColor}}" SelectedValue="{Binding Data.BloodColor}"/>
+
+            <TextBlock Text="Soundset" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="0"/>
+            <uc:AppearanceSoundsetComboBox SelectedValue="{Binding Data.AppearanceSoundset}" Grid.Row="15" Grid.Column="1"/>
+            
+            <TextBlock Text="Footstep Sound" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="15" Grid.Column="2"/>
+            <uc:EnumComboBox Grid.Row="15" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type types:FootstepSound}}" SelectedValue="{Binding Data.FootstepSound}"/>
+
+            <TextBlock Text="Headtracking" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="16" Grid.Column="0"/>
+            <CheckBox Grid.Row="16" Grid.Column="1" IsChecked="{Binding Data.HeadTracking}"/>
+
+            <TextBlock Text="Parry aborts Attack Anim." Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="16" Grid.Column="2"/>
+            <CheckBox Grid.Row="16" Grid.Column="3" IsChecked="{Binding Data.AbortAttackAnimationOnParry}"/>
+
+            <TextBlock Text="Horiz. Headtracking Range" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="17" Grid.Column="0"/>
+            <NumericUpDown Grid.Row="17" Grid.Column="1" Value="{Binding Data.HorizontalHeadTrackingRange}" Increment="1"/>
+
+            <TextBlock Text="Vert. Headtracking Range" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="17" Grid.Column="2"/>
+            <NumericUpDown Grid.Row="17" Grid.Column="3" Value="{Binding Data.VerticalHeadTrackingRange}" Increment="1"/>
+
+            <TextBlock Text="Has Arms" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="18" Grid.Column="0"/>
+            <CheckBox Grid.Row="18" Grid.Column="1" IsChecked="{Binding Data.HasArms}"/>
+
+            <TextBlock Text="Has Legs" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="18" Grid.Column="2"/>
+            <CheckBox Grid.Row="18" Grid.Column="3" IsChecked="{Binding Data.HasLegs}"/>
+
+            <TextBlock Text="Targetable" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="19" Grid.Column="0"/>
+            <CheckBox Grid.Row="19" Grid.Column="1" IsChecked="{Binding Data.Targetable}"/>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Extensions" Width="120" Height="30" BorderThickness="0,0,0,1" IsVisible="{Binding !Data.IsReadonly}">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="150"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Extension Fields" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <ItemsRepeater Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding Data.ExtensionValues}" ElementPrepared="ItemsRepeater_ElementPrepared">
+              <ItemsRepeater.Layout>
+                <UniformGridLayout ItemsStretch="Fill" Orientation="Horizontal" MaximumRowsOrColumns="2" MinItemHeight="25"/>
+              </ItemsRepeater.Layout>
+
+              <ItemsRepeater.ItemTemplate>
+                <DataTemplate>
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="150"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Margin="0,3,5,0" Text="{Binding Property.Label}"/>
+                    <ContentPresenter Grid.Column="1" Content="{Binding}" ContentTemplate="{StaticResource templateSelector}"/>
+                  </Grid>
+                </DataTemplate>
+              </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+    <TabItem Header="Metadata" Width="120" Height="30" BorderThickness="0,0,0,1" IsVisible="{Binding !Data.IsReadonly}">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
+          <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="100"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="auto"/>
+              <RowDefinition Height="25"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Appearance Metadata" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+            <TextBlock Text="Script Constant" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+            <DockPanel Grid.Row="1" Grid.Column="1">
+              <TextBox Text="APPEARANCE_TYPE_" BorderThickness="1,1,0,1" IsReadOnly="True" VerticalContentAlignment="Center" Margin="2,0,0,3"/>
+              <TextBox Text="{Binding Data.ScriptConstant}" Margin="-2,0,0,3" BorderThickness="0,1,1,1" VerticalContentAlignment="Center" Watermark="*AUTOGENERATED*" TextChanging="ConstantTextbox_TextChanging"/>
+            </DockPanel>
+          </Grid>
+        </Border>
+      </ScrollViewer>
+    </TabItem>
+  </TabControl>
+</local:LanguageAwarePage>

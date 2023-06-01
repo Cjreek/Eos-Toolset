@@ -32,6 +32,11 @@ namespace Eos.Models
             return Name;
         }
 
+        protected override string GetTypeName()
+        {
+            return "Master Feat";
+        }
+
         protected override void SetDefaultValues()
         {
             Name[MasterRepository.Project.DefaultLanguage].Text = "New Masterfeat";

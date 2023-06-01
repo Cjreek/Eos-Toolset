@@ -22,7 +22,7 @@ namespace Eos.ViewModels.Dialogs
 
         protected override string GetWindowTitle()
         {
-            return "Search spell";
+            return "Search Spell";
         }
     }
 }

@@ -11,6 +11,7 @@ using Avalonia.Markup.Xaml.Templates;
 using Avalonia;
 using Avalonia.Controls.Templates;
 using Avalonia.Controls;
+using Eos.Nwn.Tlk;
 
 namespace Eos.Extensions
 {
@@ -22,6 +23,7 @@ namespace Eos.Extensions
         public DataTemplate? DoubleTemplate { get; set; }
         public DataTemplate? BoolTemplate { get; set; }
         public DataTemplate? StringTemplate { get; set; }
+        public DataTemplate? TlkTemplate { get; set; }
         public DataTemplate? VariantTemplate { get; set; }
         public DataTemplate? RaceTemplate { get; set; }
         public DataTemplate? ClassTemplate { get; set; }
@@ -39,8 +41,19 @@ namespace Eos.Extensions
         public DataTemplate? PackageTemplate { get; set; }
         public DataTemplate? DiseaseTemplate { get; set; }
         public DataTemplate? PoisonTemplate { get; set; }
+        public DataTemplate? TrapTemplate { get; set; }
+        public DataTemplate? BaseItemTemplate { get; set; }
+        public DataTemplate? ItemPropertyTemplate { get; set; }
+        public DataTemplate? AppearanceSoundsetTemplate { get; set; }
+        public DataTemplate? WeaponSoundTemplate { get; set; }
+        public DataTemplate? InventorySoundTemplate { get; set; }
+        public DataTemplate? CompanionTemplate { get; set; }
+        public DataTemplate? FamiliarTemplate { get; set; }
+        public DataTemplate? ProgrammedEffectTemplate { get; set; }
         public DataTemplate? CustomObjectTemplate { get; set; }
         public DataTemplate? CustomEnumTemplate { get; set; }
+        public DataTemplate? DamageTypeTemplate { get; set; }
+        public DataTemplate? DamageTypeGroupTemplate { get; set; }
 
         public Control? Build(object? param)
         {
@@ -73,6 +86,8 @@ namespace Eos.Extensions
                     return BoolTemplate ?? ErrorTemplate;
                 if (dataTypeDef.Type == typeof(string))
                     return StringTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(TLKStringSet))
+                    return TlkTemplate ?? ErrorTemplate;
                 if (dataTypeDef.Type == typeof(VariantValue))
                     return VariantTemplate ?? ErrorTemplate;
                 if (dataTypeDef.Type == typeof(Race))
@@ -107,6 +122,28 @@ namespace Eos.Extensions
                     return DiseaseTemplate ?? ErrorTemplate;
                 if (dataTypeDef.Type == typeof(Poison))
                     return PoisonTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(Trap))
+                    return TrapTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(BaseItem))
+                    return BaseItemTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(ItemProperty))
+                    return ItemPropertyTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(AppearanceSoundset))
+                    return AppearanceSoundsetTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(WeaponSound))
+                    return WeaponSoundTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(InventorySound))
+                    return InventorySoundTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(Companion))
+                    return CompanionTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(Familiar))
+                    return FamiliarTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(ProgrammedEffect))
+                    return ProgrammedEffectTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(DamageType))
+                    return DamageTypeTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(DamageTypeGroup))
+                    return DamageTypeGroupTemplate ?? ErrorTemplate;
 
                 if (dataTypeDef.CustomType is CustomObject customObject)
                     return CustomObjectTemplate ?? ErrorTemplate;

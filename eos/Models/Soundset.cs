@@ -67,6 +67,12 @@ namespace Eos.Models
             Name[MasterRepository.Project.DefaultLanguage].TextF = "New Soundset";
         }
 
+        protected override TLKStringSet? GetTlkDisplayName()
+        {
+            var modelOverride = (Race?)MasterRepository.Project.GetOverride(this);
+            return modelOverride?.Name ?? this.Name;
+        }
+
         public override void FromJson(JsonObject json)
         {
             base.FromJson(json);

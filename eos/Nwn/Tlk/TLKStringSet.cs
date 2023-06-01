@@ -12,23 +12,18 @@ namespace Eos.Nwn.Tlk
     public class TLKStringSet
     {
         private Dictionary<TLKLanguage, TLKString> strings;
-        private NotifyPropertyChangedDelegate? changedCallback;
 
         public TLKStringSet(NotifyPropertyChangedDelegate? changedCallback = null)
         {
-            strings = new Dictionary<TLKLanguage, TLKString>();
-            strings.Add(TLKLanguage.English, new TLKString(changedCallback));
-            strings.Add(TLKLanguage.French, new TLKString(changedCallback));
-            strings.Add(TLKLanguage.German, new TLKString(changedCallback));
-            strings.Add(TLKLanguage.Italian, new TLKString(changedCallback));
-            strings.Add(TLKLanguage.Spanish, new TLKString(changedCallback));
-            strings.Add(TLKLanguage.Polish, new TLKString(changedCallback));
-            strings.Add(TLKLanguage.Korean, new TLKString(changedCallback));
-            strings.Add(TLKLanguage.ChineseTraditional, new TLKString(changedCallback));
-            strings.Add(TLKLanguage.ChineseSimplified, new TLKString(changedCallback));
-            strings.Add(TLKLanguage.Japanese, new TLKString(changedCallback));
-
-            this.changedCallback = changedCallback;
+            strings = new Dictionary<TLKLanguage, TLKString>
+            {
+                { TLKLanguage.English, new TLKString(changedCallback) },
+                { TLKLanguage.French, new TLKString(changedCallback) },
+                { TLKLanguage.German, new TLKString(changedCallback) },
+                { TLKLanguage.Italian, new TLKString(changedCallback) },
+                { TLKLanguage.Spanish, new TLKString(changedCallback) },
+                { TLKLanguage.Polish, new TLKString(changedCallback) }
+            };
         }
 
         public TLKString this[TLKLanguage index]

@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Usercontrols"
+             xmlns:nwn="using:Eos.Nwn"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Usercontrols.FamiliarComboBox"
+             x:Name="ucFamiliarComboBox">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:FamiliarComboBox}}}">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="auto"/>
+      <ColumnDefinition Width="auto"/>
+    </Grid.ColumnDefinitions>
+
+    <Button x:Name="cbFamiliars" Grid.Column="0" Click="btSearch_Click" HorizontalContentAlignment="Stretch" MinHeight="22">
+      <Button.Content>
+        <TextBlock Grid.Column="1" Margin="3,0,0,0">
+          <Run>
+            <Run.Text>
+              <MultiBinding Converter="{StaticResource tlkConverterDefault}">
+                <Binding ElementName="ucFamiliarComboBox" Path="SelectedValue.TlkDisplayName" Mode="OneWay"/>
+              </MultiBinding>
+            </Run.Text>
+          </Run>
+          <Run Text="{Binding ElementName=ucFamiliarComboBox, Path=SelectedValue.DisplayHint, Converter={StaticResource hintConverter}, Mode=OneWay}"/>
+        </TextBlock>
+      </Button.Content>
+    </Button>
+
+    <Button x:Name="btClear" Grid.Column="1" Content="🞪" Click="btClear_Click" Margin="2,0,0,0"
+            Height="{Binding ElementName=cbFamiliars, Path=Bounds.Height}" Width="{Binding ElementName=cbFamiliars, Path=Bounds.Height}"
+            IsVisible="{Binding ElementName=ucFamiliarComboBox, Path=IsNullable}"/>
+    <!--<local:ResetIsEnabled >-->
+    <Button x:Name="btGoto" Grid.Column="2" Margin="2,0,0,0" Content="👁" Click="btGoto_Click"
+            Height="{Binding ElementName=cbFamiliars, Path=Bounds.Height}" Width="{Binding ElementName=cbFamiliars, Path=Bounds.Height}"/>
+    <!--</local:ResetIsEnabled>-->
+  </Grid>
+</UserControl>

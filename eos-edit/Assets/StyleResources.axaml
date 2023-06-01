@@ -304,6 +304,86 @@
     <Setter Property="Margin" Value="2,0,0,3"/>
   </Style>
 
+  <Style Selector="uc|AppearanceSoundsetComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|WeaponSoundComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|InventorySoundComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|BaseItemComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|ItemPropertySetComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|CompanionComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|FamiliarComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|TrapComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|SpellPreferencesTableComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|FeatPreferencesTableComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+  
+  <Style Selector="uc|SkillPreferencesTableComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|PackageEquipmentTableComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+  
+  <Style Selector="uc|ItemPropertyTableComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|ItemPropertyCostTableComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|ItemPropertyParamComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|ItemPropertyComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|ProgrammedEffectComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|DamageTypeGroupComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+  
+  <Style Selector="uc|DamageTypeComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|DataTypeComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
   <Style Selector="uc|CustomEnumComboBox">
     <Setter Property="Margin" Value="2,0,0,3"/>
   </Style>

@@ -41,9 +41,9 @@ namespace Eos.Nwn.TwoDimensionalArray
             this.columns.ColumnAdded -= Columns_ColumnAdded;
         }
 
-        private void Columns_ColumnAdded(object? defaultValue = null)
+        private void Columns_ColumnAdded(int index, object? defaultValue = null)
         {
-            values.Add(defaultValue);
+            values.Insert(index, defaultValue);
         }
 
         public object? this[int index]
@@ -55,13 +55,18 @@ namespace Eos.Nwn.TwoDimensionalArray
         public void Set(String columnName, object? value)
         {
             var index = columns.IndexOf(columnName);
-            if ((index >= values.Count) || (index < 0))
+            Set(index, value);
+        }
+
+        public void Set(int columnIndex, object? value)
+        {
+            if ((columnIndex >= values.Count) || (columnIndex < 0))
                 throw new IndexOutOfRangeException();
 
             if (value is bool b)
-                values[index] = b ? 1 : 0;
+                values[columnIndex] = b ? 1 : 0;
             else
-                values[index] = value;
+                values[columnIndex] = value;
         }
 
         public void Clear()
@@ -251,7 +256,7 @@ namespace Eos.Nwn.TwoDimensionalArray
         }
     }
 
-    internal delegate void ColumnAddedEvent(object? defaultValue = null);
+    internal delegate void ColumnAddedEvent(int index, object? defaultValue = null);
 
     internal class ColumnInfos
     {
@@ -259,6 +264,7 @@ namespace Eos.Nwn.TwoDimensionalArray
         private Dictionary<String, int> columnLookup = new Dictionary<String, int>();
         private Dictionary<int, bool> writeHexDict = new Dictionary<int, bool>();
         private Dictionary<int, bool> writeLowerCaseDict = new Dictionary<int, bool>();
+        private Dictionary<int, int> columnMaxLengthDict = new Dictionary<int, int>();
 
         public ColumnInfos(String[] columnLine)
         {
@@ -268,6 +274,7 @@ namespace Eos.Nwn.TwoDimensionalArray
                 columnLookup[columnList[i].ToLower()] = i;
                 writeHexDict[i] = false;
                 writeLowerCaseDict[i] = false;
+                columnMaxLengthDict[i] = -1;
             }
         }
 
@@ -280,7 +287,22 @@ namespace Eos.Nwn.TwoDimensionalArray
                 columnList.Add(columnName);
                 columnLookup[columnName.ToLower()] = columnList.Count - 1;
                 if (ColumnAdded != null)
-                    ColumnAdded(defaultValue);
+                    ColumnAdded(columnList.Count - 1, defaultValue);
+            }
+        }
+
+        public void InsertColumn(int index, String columnName, object? defaultValue = null)
+        {
+            if (!columnLookup.ContainsKey(columnName.ToLower()))
+            {
+                columnList.Insert(index, columnName);
+
+                columnLookup.Clear();
+                for (int i = 0; i < columnList.Count; i++)
+                    columnLookup.Add(columnList[i], i);
+
+                if (ColumnAdded != null)
+                    ColumnAdded(index, defaultValue);
             }
         }
 
@@ -331,6 +353,25 @@ namespace Eos.Nwn.TwoDimensionalArray
             var index = IndexOf(columnName);
             if (index >= 0)
                 writeLowerCaseDict[index] = writeLowercase;
+        }
+
+        public int GetMaxLength(int columnIndex)
+        {
+            if (columnMaxLengthDict.ContainsKey(columnIndex))
+                return columnMaxLengthDict[columnIndex];
+            return -1;
+        }
+
+        public int GetMaxLength(String columnName)
+        {
+            return GetMaxLength(IndexOf(columnName));
+        }
+
+        public void SetMaxLength(String columnName, int maxLength)
+        {
+            var index = IndexOf(columnName);
+            if (index >= 0)
+                columnMaxLengthDict[index] = maxLength;
         }
 
         public String this[int index] => columnList[index];
@@ -436,9 +477,12 @@ namespace Eos.Nwn.TwoDimensionalArray
             if (header != "2DA V2.0")
                 throw new Exception("Invalid 2da version!");
 
-            reader.ReadLine();
-
             var columns = reader.ReadLine() ?? "";
+            while (columns.Trim() == "")
+            {
+                columns = reader.ReadLine() ?? "";
+            }
+
             columnInfos = new ColumnInfos(Split(columns));
 
             records.Clear();
@@ -465,64 +509,94 @@ namespace Eos.Nwn.TwoDimensionalArray
             return 0;
         }
 
-        private String ValueToStr(object? value, bool isHex, bool isLowercase)
+        private String ValueToStr(object? value, bool isHex, bool isLowercase, int maxLength)
         {
+            string result = "";
+
             if (value == null) return "****";
             if (value is String str)
             {
                 if (isLowercase) str = str.ToLower();
                 if (str.Trim() == "") return "****";
-                if (str.Contains(' ')) return "\"" + str + "\"";
+                if (str.Contains(' ')) result = "\"" + str + "\"";
             }
-            if (value is double dblValue) return dblValue.ToString("n2", floatFormat);
-            if ((value is int intValue) && (isHex)) return "0x" + intValue.ToString("x2");
+            if (value is double dblValue)
+                result = dblValue.ToString("0.##", floatFormat);
+            else if (value is decimal decValue)
+                result = decValue.ToString("0.##", floatFormat);
+            else if ((value is int intValue) && (isHex))
+                result = "0x" + intValue.ToString("x2");
+  
+            if (result == "")
+                result = isLowercase ? value.ToString()?.ToLower() ?? "****" : value.ToString() ?? "****";
 
-            return isLowercase ? value.ToString()?.ToLower() ?? "****" : value.ToString() ?? "****";
+            if ((maxLength > 0) && (result.Length > maxLength))
+                result = result.Substring(0, maxLength);
+
+            return result;
         }
 
-        public void Save(Stream stream)
+        public void Save(Stream stream, bool compress = false)
         {
-            const int COLUMN_EXTRA_SPACE = 4;
-
-            var columnWidths = new List<int>();
-            columnWidths.Add((Count - 1).ToString().Length + COLUMN_EXTRA_SPACE);
-            for (int i=0; i < Columns.Count; i++)
-            {
-                var maxLen = Columns[i].Length;
-                for (int j=0; j < records.Count; j++)
-                {
-                    var len = GetValueLength(records[j][i]);
-                    if (len > maxLen) maxLen = len;
-                }
-                columnWidths.Add(maxLen + COLUMN_EXTRA_SPACE);
-            }
-
             var writer = new StreamWriter(stream);
             writer.WriteLine("2DA V2.0");
             writer.WriteLine("");
 
-            var line = new String(' ', columnWidths[0]);
-            for (int i = 0; i < Columns.Count; i++)
-                line += String.Format("{0,-" + columnWidths[i+1].ToString() + "}", Columns[i]);
-            writer.WriteLine(line.TrimEnd());
-
-            for (int i=0; i < records.Count; i++)
+            if (compress)
             {
-                line = String.Format("{0,-" + columnWidths[0].ToString() + "}", i);
-                for (int j = 0; j < Columns.Count; j++)
-                    line += String.Format("{0,-" + columnWidths[j + 1].ToString() + "}", ValueToStr(records[i][j], Columns.IsHex(j), Columns.IsLowercase(j)));
-                writer.WriteLine(line.Trim());
+                var line = "  ";
+                for (int i = 0; i < Columns.Count; i++)
+                    line += Columns[i] + " ";
+                writer.WriteLine(line.TrimEnd());
+
+                for (int i = 0; i < records.Count; i++)
+                {
+                    line = i.ToString() + " ";
+                    for (int j = 0; j < Columns.Count; j++)
+                        line += ValueToStr(records[i][j], Columns.IsHex(j), Columns.IsLowercase(j), Columns.GetMaxLength(j)) + " ";
+                    writer.WriteLine(line.Trim());
+                }
+            }
+            else
+            {
+                const int COLUMN_EXTRA_SPACE = 4;
+
+                var columnWidths = new List<int>();
+                columnWidths.Add((Count - 1).ToString().Length + COLUMN_EXTRA_SPACE);
+                for (int i = 0; i < Columns.Count; i++)
+                {
+                    var maxLen = Columns[i].Length;
+                    for (int j = 0; j < records.Count; j++)
+                    {
+                        var len = GetValueLength(records[j][i]);
+                        if (len > maxLen) maxLen = len;
+                    }
+                    columnWidths.Add(maxLen + COLUMN_EXTRA_SPACE);
+                }
+
+                var line = new String(' ', columnWidths[0]);
+                for (int i = 0; i < Columns.Count; i++)
+                    line += String.Format("{0,-" + columnWidths[i + 1].ToString() + "}", Columns[i]);
+                writer.WriteLine(line.TrimEnd());
+
+                for (int i = 0; i < records.Count; i++)
+                {
+                    line = String.Format("{0,-" + columnWidths[0].ToString() + "}", i);
+                    for (int j = 0; j < Columns.Count; j++)
+                        line += String.Format("{0,-" + columnWidths[j + 1].ToString() + "}", ValueToStr(records[i][j], Columns.IsHex(j), Columns.IsLowercase(j), Columns.GetMaxLength(j)));
+                    writer.WriteLine(line.Trim());
+                }
             }
 
             writer.Flush();
         }
 
-        public void Save(String filename)
+        public void Save(String filename, bool compress = false)
         {
             var fs = new FileStream(filename, FileMode.Create, FileAccess.ReadWrite);
             try
             {
-                Save(fs);
+                Save(fs, compress);
             }
             finally
             {

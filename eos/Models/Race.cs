@@ -42,7 +42,6 @@ namespace Eos.Models
             get { return _favoredClass; }
             set { Set(ref _favoredClass, value); }
         }
-
         public TLKStringSet Biography { get; set; } = new TLKStringSet();
         public bool? Playable { get; set; } = false;
         public int? DefaultAge { get; set; }

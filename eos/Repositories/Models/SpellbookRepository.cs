@@ -28,8 +28,10 @@ namespace Eos.Repositories.Models
             return spellbook;
         }
 
-        public override void Add(Spellbook model)
+        public override void Add(Spellbook? model)
         {
+            if (model == null) return;
+
             if (!_spellbookNameLookup.ContainsKey(model.Name))
             {
                 base.Add(model);

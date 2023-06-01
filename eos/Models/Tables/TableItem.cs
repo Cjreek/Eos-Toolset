@@ -12,7 +12,18 @@ namespace Eos.Models.Tables
     public class TableItem : INotifyPropertyChanged
     {
         public BaseModel? ParentTable { get; set; }
+        public string SourceLabel { get; set; } = "";
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        public TableItem()
+        {
+
+        }
+
+        public TableItem(BaseModel? parentTable)
+        {
+            ParentTable = parentTable;
+        }
 
         public virtual void ResolveReferences()
         {
@@ -21,12 +32,15 @@ namespace Eos.Models.Tables
 
         public virtual void FromJson(JsonObject json)
         {
-
+            this.SourceLabel = json["SourceLabel"]?.GetValue<string>() ?? "";
         }
 
         public virtual JsonObject ToJson()
         {
-            return new JsonObject();
+            var item = new JsonObject();
+            item.Add("SourceLabel", this.SourceLabel);
+
+            return item;
         }
 
         protected void Set<T>(ref T? reference, T? value, [CallerMemberName] String refProperty = "") where T : BaseModel

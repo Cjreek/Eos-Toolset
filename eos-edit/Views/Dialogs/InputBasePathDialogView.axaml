@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views.Dialogs"
+             xmlns:ext="using:Eos.Extensions"
+             xmlns:uc="using:Eos.Usercontrols"
+             xmlns:tlk="using:Eos.Nwn.Tlk"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="150"
+             x:Class="Eos.Views.Dialogs.InputBasePathDialogView">
+  
+  <DockPanel Margin="10" LastChildFill="True">
+    <Grid DockPanel.Dock="Bottom" VerticalAlignment="Bottom">
+      <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Margin="0,5,0,0">
+        <Button Content="Cancel" VerticalAlignment="Center" Width="100" Command="{Binding CloseCommand}" CommandParameter="{Binding}"/>
+        <Button Content="OK" VerticalAlignment="Center" Width="100" Margin="3,0,0,0" Command="{Binding OKCommand}" CommandParameter="{Binding}"/>
+      </StackPanel>
+    </Grid>
+
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="10"/>
+        <RowDefinition Height="auto" MinHeight="25"/>
+      </Grid.RowDefinitions>
+      
+      <TextBlock Grid.Row="0" Text="Eos couldn't find any installation of Neverwinter Nights." Margin="3,0,0,3"/>
+      <TextBlock Grid.Row="1" Text="Please chose a valid Neverwinter Nights install directory manually:" Margin="3,0,0,3"/>
+
+      <DockPanel Grid.Row="3" LastChildFill="True">
+        <Button x:Name="btOpenDlg" DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbBasePath, Path=Bounds.Height}" Height="{Binding ElementName=tbBasePath, Path=Bounds.Height}" VerticalAlignment="Top" Click="btOpenDlg_Click"/>
+        <TextBox x:Name="tbBasePath" Margin="3,0,0,3" Text="{Binding BasePath, Mode=TwoWay}" HorizontalAlignment="Stretch"/>
+      </DockPanel>
+    </Grid>
+  </DockPanel>
+</UserControl>

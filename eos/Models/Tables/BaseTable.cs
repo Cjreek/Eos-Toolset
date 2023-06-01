@@ -135,7 +135,7 @@ namespace Eos.Models.Tables
                 {
                     if (jsonItemValue is JsonObject jsonItem)
                     {
-                        var item = new T();
+                        var item = (T?)Activator.CreateInstance(typeof(T), this) ?? new T();
                         item.ParentTable = this;
                         item.FromJson(jsonItem);
                         Add(item);

@@ -192,6 +192,14 @@ namespace Eos.Models.Tables
             }
         }
 
+        public PrerequisiteTableItem() : base()
+        {
+        }
+
+        public PrerequisiteTableItem(PrerequisiteTable parentTable) : base(parentTable)
+        {
+        }
+
         public void ClearParams()
         {
             Param1Class = null;
@@ -230,6 +238,7 @@ namespace Eos.Models.Tables
 
         public override void FromJson(JsonObject json)
         {
+            base.FromJson(json);
             this.RequirementType = JsonToEnum<RequirementType>(json["RequirementType"]) ?? RequirementType.VAR;
 
             this.Param1Class = CreateRefFromJson<CharacterClass>(json["Param1Class"]?.AsObject());
@@ -257,19 +266,16 @@ namespace Eos.Models.Tables
 
         public override JsonObject ToJson()
         {
-            var json = new JsonObject
-            {
-                { "RequirementType", EnumToJson(RequirementType) },
-                { "Param1Class", Param1Class?.ToJsonRef() },
-                { "Param1Feat", Param1Feat?.ToJsonRef() },
-                { "Param1Race", Param1Race?.ToJsonRef() },
-                { "Param1Skill", Param1Skill?.ToJsonRef() },
-                { "Param1String", Param1String },
-                { "Param1Int", Param1Int },
-                { "Param1Save", Param1Save },
-
-                { "RequirementParam2", RequirementParam2 }
-            };
+            var json = base.ToJson();
+            json.Add("RequirementType", EnumToJson(RequirementType));
+            json.Add("Param1Class", Param1Class?.ToJsonRef());
+            json.Add("Param1Feat", Param1Feat?.ToJsonRef());
+            json.Add("Param1Race", Param1Race?.ToJsonRef());
+            json.Add("Param1Skill", Param1Skill?.ToJsonRef());
+            json.Add("Param1String", Param1String);
+            json.Add("Param1Int", Param1Int);
+            json.Add("Param1Save", Param1Save);
+            json.Add("RequirementParam2", RequirementParam2);
 
             return json;
         }

@@ -43,17 +43,23 @@ namespace Eos
             Log.Info("Avalonia Framework initialization completed");
         }
 
-        private void Desktop_Startup(object? sender, ControlledApplicationLifetimeStartupEventArgs e)
+        public void InitializeRepositories()
         {
-            EosConfig.Load();
-
             MasterRepository.Initialize(EosConfig.NwnBasePath);
             MasterRepository.Resources.RegisterResourceLoader(NWNResourceType.TGA, TargaResourceLoader);
             MasterRepository.Resources.RegisterResourceLoader(NWNResourceType.NSS, ScriptSourceLoader);
 
             MasterRepository.Load();
+        }
 
-            Log.Info("Initialization complete!");
+        private void Desktop_Startup(object? sender, ControlledApplicationLifetimeStartupEventArgs e)
+        {
+            EosConfig.Load();
+            if (EosConfig.NwnBasePath != "")
+            {
+                InitializeRepositories();
+                Log.Info("Initialization complete!");
+            }
         }
 
         private object? TargaResourceLoader(Stream stream)

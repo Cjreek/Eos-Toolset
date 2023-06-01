@@ -102,10 +102,6 @@ namespace Eos.Nwn.Erf
             { TLKLanguage.Italian, Encoding.GetEncoding(1252) },
             { TLKLanguage.Spanish, Encoding.GetEncoding(1252) },
             { TLKLanguage.Polish, Encoding.GetEncoding(1250) },
-            { TLKLanguage.Korean, Encoding.GetEncoding(949) },
-            { TLKLanguage.ChineseTraditional, Encoding.GetEncoding(950) },
-            { TLKLanguage.ChineseSimplified, Encoding.GetEncoding(936) },
-            { TLKLanguage.Japanese, Encoding.GetEncoding(932) },
         };
 
         public int Count => resources.Count;

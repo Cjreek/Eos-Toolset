@@ -16,8 +16,17 @@ namespace Eos.Models.Tables
         public String Label { get; set; } = "";
         public String Value { get; set; } = "";
 
+        public CustomEnumItem() : base()
+        {
+        }
+
+        public CustomEnumItem(CustomEnum parentTable) : base(parentTable)
+        {
+        }
+
         public override void FromJson(JsonObject json)
         {
+            base.FromJson(json);
             this.ID = ParseGuid(json["ID"]?.GetValue<String>());
             this.Label = json["Label"]?.GetValue<String>() ?? "";
             this.Value = json["Value"]?.GetValue<String>() ?? "";
@@ -25,7 +34,7 @@ namespace Eos.Models.Tables
 
         public override JsonObject ToJson()
         {
-            var json = new JsonObject();
+            var json = base.ToJson();
             json.Add("ID", this.ID.ToString());
             json.Add("Label", this.Label);
             json.Add("Value", this.Value);

@@ -74,11 +74,18 @@ namespace Eos.Services
                 {
                     if (desktop.MainWindow != null)
                     {
-                        //await window.ShowDialog(desktop.MainWindow);
+                        var wasFakeVisible = false;
+                        if (!desktop.MainWindow.IsVisible)
+                        {
+                            desktop.MainWindow.IsVisible = true;
+                            wasFakeVisible = true;
+                        }
+
                         using (var source = new CancellationTokenSource())
                         {
                             window.ShowDialog(desktop.MainWindow).ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
                             Dispatcher.UIThread.MainLoop(source.Token);
+                            if (wasFakeVisible) desktop.MainWindow.IsVisible = false;
                         }
                     }
                 }

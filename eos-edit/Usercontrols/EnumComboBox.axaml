@@ -27,7 +27,7 @@
       <ColumnDefinition Width="auto"/>
     </Grid.ColumnDefinitions>
 
-    <ComboBox x:Name="cbEnum" HorizontalAlignment="Stretch" Grid.Column="0" Items="{Binding Path=ItemsSource}" DisplayMemberBinding="{Binding DisplayName}"
+    <ComboBox x:Name="cbEnum" HorizontalAlignment="Stretch" SelectedIndex="{Binding ElementName=ucEnumComboBox, Path=SelectedIndex}" Grid.Column="0" Items="{Binding Path=ItemsSource}" DisplayMemberBinding="{Binding DisplayName}"
               SelectedItem="{Binding Path=SelectedItem, Mode=TwoWay}" SelectedValueBinding="{Binding Value}" SelectedValue="{Binding SelectedValue, Mode=TwoWay}"
               VerticalContentAlignment="Stretch" Padding="3,2,2,2"/>
     <Button x:Name="btClear" Grid.Column="1" Content="🞪" Click="btClear_Click" Margin="2,0,0,0"

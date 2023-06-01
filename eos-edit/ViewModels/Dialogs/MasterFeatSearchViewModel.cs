@@ -22,7 +22,7 @@ namespace Eos.ViewModels.Dialogs
 
         protected override string GetWindowTitle()
         {
-            return "Search master feat";
+            return "Search Master Feat";
         }
     }
 }

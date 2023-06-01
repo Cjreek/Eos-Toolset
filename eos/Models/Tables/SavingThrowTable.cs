@@ -9,6 +9,11 @@ namespace Eos.Models.Tables
 {
     public class SavingThrowTable : BaseTable<SavingThrowTableItem>
     {
+        protected override string GetTypeName()
+        {
+            return "Saving Throw Table";
+        }
+
         protected override void SetDefaultValues()
         {
             Name = "CLS_SAVTHR_NEW";

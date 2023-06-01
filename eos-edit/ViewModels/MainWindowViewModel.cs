@@ -25,39 +25,11 @@ namespace Eos.ViewModels
         private Dictionary<object, DataDetailViewModelBase> detailViewDict = new Dictionary<object, DataDetailViewModelBase>();
 
         private DataDetailViewModelBase? currentView;
-        private TLKLanguage currentLanguage;
-        private bool currentGender;
         private bool inProjectUpdate;
 
         public ObservableCollection<DataDetailViewModelBase> DetailViewList { get { return detailViewList; } }
 
         public ModelRepository<Race> Races { get { return MasterRepository.Standard.Races; } }
-
-        public TLKLanguage CurrentLanguage
-        {
-            get { return currentLanguage; }
-            set
-            {
-                if (currentLanguage != value)
-                {
-                    currentLanguage = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
-
-        public bool CurrentGender
-        {
-            get { return currentGender; }
-            set
-            {
-                if (currentGender != value)
-                {
-                    currentGender = value;
-                    NotifyPropertyChanged();
-                }
-            }
-        }
 
         public DataDetailViewModelBase? CurrentView
         {
@@ -338,7 +310,7 @@ namespace Eos.ViewModels
                         break;
 
                     case MessageType.ChangeLanguage:
-                        CurrentLanguage = (TLKLanguage?)message ?? CurrentLanguage;
+                        EosConfig.RuntimeConfig.CurrentLanguage = (TLKLanguage?)message ?? EosConfig.RuntimeConfig.CurrentLanguage;
                         break;
 
                     case MessageType.DoGameDataImport:

@@ -13,10 +13,56 @@ namespace Eos.Models.Tables
 {
     public class CustomObjectProperty : TableItem
     {
+        private String _label = "";
+        private String _column = "";
+        private DataTypeDefinition? _dataType;
+        
         public Guid ID { get; set; } = Guid.NewGuid();
-        public String Label { get; set; } = "";
-        public String Column { get; set; } = "";
-        public DataTypeDefinition? DataType { get; set; }
+
+        public String Label
+        {
+            get { return _label; }
+            set 
+            { 
+                if (_label != value) 
+                {
+                    _label = value;
+                }
+            }
+        }
+
+        public String Column
+        {
+            get { return _column; }
+            set
+            {
+                if (_column != value)
+                {
+                    _column = value;
+                }
+            }
+        }
+
+        public DataTypeDefinition? DataType
+        {
+            get { return _dataType; }
+            set
+            {
+                if (_dataType != value)
+                {
+                    _dataType = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public CustomObjectProperty() : base()
+        {
+        }
+
+        public CustomObjectProperty(CustomObject parentTable) : base(parentTable)
+        {
+        }
 
         public override void ResolveReferences()
         {
@@ -25,6 +71,7 @@ namespace Eos.Models.Tables
 
         public override void FromJson(JsonObject json)
         {
+            base.FromJson(json);
             this.ID = ParseGuid(json["ID"]?.GetValue<String>());
             this.Label = json["Label"]?.GetValue<String>() ?? "";
             this.Column = json["Column"]?.GetValue<String>() ?? "";
@@ -33,7 +80,7 @@ namespace Eos.Models.Tables
 
         public override JsonObject ToJson()
         {
-            var json = new JsonObject();
+            var json = base.ToJson();
             json.Add("ID", this.ID.ToString());
             json.Add("Label", this.Label);
             json.Add("Column", this.Column);
