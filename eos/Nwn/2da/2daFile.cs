@@ -25,7 +25,7 @@ namespace Eos.Nwn.TwoDimensionalArray
             {
                 if (int.TryParse(line[i], NumberStyles.Integer, enUS, out int intValue))
                     values.Add(intValue);
-                else if (line[i].StartsWith("0x"))
+                else if ((line[i].StartsWith("0x")) || (line[i].StartsWith("0X")))
                     values.Add(Convert.ToInt32(line[i], 16));
                 else if (double.TryParse(line[i], NumberStyles.Float, enUS.NumberFormat, out double dblValue))
                     values.Add(dblValue);
