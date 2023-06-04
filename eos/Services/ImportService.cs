@@ -515,6 +515,8 @@ namespace Eos.Services
             preRequTable.Clear();
             for (int i = 0; i < preRequTable2da.Count; i++)
             {
+                if (preRequTable2da[i].IsNull("ReqType")) continue;
+
                 var tmpItem = new PrerequisiteTableItem();
                 tmpItem.ParentTable = preRequTable;
                 tmpItem.SourceLabel = preRequTable2da[i].AsString("LABEL") ?? ""; 
@@ -861,8 +863,8 @@ namespace Eos.Services
                     SetText(tmpSpell.AlternativeCastMessage, spells2da[i].AsInteger("AltMessage"));
 
                     tmpSpell.Icon = AddIconResource(spells2da[i].AsString("IconResRef"));
-                    tmpSpell.School = Enum.Parse<SpellSchool>(spells2da[i].AsString("School") ?? "", true);
-                    tmpSpell.Range = Enum.Parse<SpellRange>(spells2da[i].AsString("Range") ?? "", true);
+                    tmpSpell.School = !spells2da[i].IsNull("School") ? Enum.Parse<SpellSchool>(spells2da[i].AsString("School") ?? "", true) : SpellSchool.G;
+                    tmpSpell.Range = !spells2da[i].IsNull("Range") ? Enum.Parse<SpellRange>(spells2da[i].AsString("Range") ?? "", true) : SpellRange.S;
 
                     var componentStr = spells2da[i].AsString("VS") ?? "";
                     SpellComponent components = 0;
