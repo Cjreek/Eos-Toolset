@@ -61,7 +61,7 @@ namespace Eos.Services
         {
             foreach (var extension in extensions.Items)
             {
-                if (extension != null)
+                if ((extension != null) && (extension.Column != "") && (!(extension.DataType?.IsVisualOnly ?? false)))
                     twoDAFile.Columns.AddColumn(extension.Column);
             }
         }
