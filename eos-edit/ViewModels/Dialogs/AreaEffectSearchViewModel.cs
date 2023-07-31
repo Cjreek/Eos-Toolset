@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels.Dialogs
 {
-    internal class AreaEffectSearchViewModel : ModelSearchViewModel<AreaEffect>
+    public class AreaEffectSearchViewModel : ModelSearchViewModel<AreaEffect>
     {
         public AreaEffectSearchViewModel(VirtualModelRepository<AreaEffect> repository) : base(repository)
         {

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class ItemPropertyTableViewModel : DataDetailViewModel<ItemPropertyTable>
+    public class ItemPropertyTableViewModel : DataDetailViewModel<ItemPropertyTable>
     {
         public ItemPropertyTableViewModel() : base()
         {

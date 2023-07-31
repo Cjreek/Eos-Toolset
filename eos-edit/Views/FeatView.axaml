@@ -115,7 +115,7 @@
 
               <!--Uses per Day-->
               <TextBlock Text="Uses per day" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
-              <NumericUpDown Text="{Binding Data.UsesPerDay}" Grid.Row="6" Grid.Column="1" Increment="1"/>
+              <NumericUpDown Value="{Binding Data.UsesPerDay}" Grid.Row="6" Grid.Column="1" Increment="1"/>
 
               <!-- OnUse Effect -->
               <TextBlock Text="OnUse Spell Effect" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="2"/>

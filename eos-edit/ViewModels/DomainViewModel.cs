@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class DomainViewModel : DataDetailViewModel<Domain>
+    public class DomainViewModel : DataDetailViewModel<Domain>
     {
         public DomainViewModel() : base()
         {

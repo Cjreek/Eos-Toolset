@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class AreaEffectViewModel : DataDetailViewModel<AreaEffect>
+    public class AreaEffectViewModel : DataDetailViewModel<AreaEffect>
     {
         public AreaEffectViewModel() : base()
         {

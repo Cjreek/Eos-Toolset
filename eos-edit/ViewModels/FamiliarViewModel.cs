@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class FamiliarViewModel : DataDetailViewModel<Familiar>
+    public class FamiliarViewModel : DataDetailViewModel<Familiar>
     {
         public FamiliarViewModel() : base()
         {

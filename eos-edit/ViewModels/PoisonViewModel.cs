@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class PoisonViewModel : DataDetailViewModel<Poison>
+    public class PoisonViewModel : DataDetailViewModel<Poison>
     {
         public PoisonViewModel() : base()
         {

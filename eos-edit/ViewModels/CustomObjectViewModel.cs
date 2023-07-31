@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class CustomObjectViewModel : DataDetailViewModel<CustomObject>
+    public class CustomObjectViewModel : DataDetailViewModel<CustomObject>
     {
         public event EventHandler<DeleteCustomPropertyEventArgs>? OnDeleteCustomProperty;
         public void RemoveAllEventsCalling(EventHandler<DeleteCustomPropertyEventArgs> method)

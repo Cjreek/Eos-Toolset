@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels.Dialogs
 {
-    internal class CustomObjectInstanceSearchViewModel : ModelSearchViewModel<CustomObjectInstance>
+    public class CustomObjectInstanceSearchViewModel : ModelSearchViewModel<CustomObjectInstance>
     {
         private CustomObject template;
 
@@ -24,7 +24,7 @@ namespace Eos.ViewModels.Dialogs
         {
             var tlk = new TLKStringSet();
             foreach (var lang in Enum.GetValues<TLKLanguage>())
-                tlk[lang].Text = model?.Label ?? "";
+                tlk[lang].Text = model?.Name ?? "";
             return tlk;
         }
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class AppearanceViewModel : DataDetailViewModel<Appearance>
+    public class AppearanceViewModel : DataDetailViewModel<Appearance>
     {
         public AppearanceViewModel() : base()
         {

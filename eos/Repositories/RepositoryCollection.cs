@@ -36,6 +36,32 @@ namespace Eos.Repositories
         }
     }
 
+    public class CustomDynamicTableRepositoryCollection
+    {
+        private Dictionary<CustomDynamicTable, ModelRepository<CustomDynamicTableInstance>> repositoryDict = new Dictionary<CustomDynamicTable, ModelRepository<CustomDynamicTableInstance>>();
+
+        public ModelRepository<CustomDynamicTableInstance> this[CustomDynamicTable index] => AddRepository(index);
+
+        public ModelRepository<CustomDynamicTableInstance> AddRepository(CustomDynamicTable customDynamicTable)
+        {
+            if (!repositoryDict.TryGetValue(customDynamicTable, out var repo))
+            {
+                repo = RepositoryFactory.Create<CustomDynamicTableInstance>(false);
+                //repo.CollectionChanged += (_, _) => NotifyPropertyChanged(nameof(CustomObjectInstances)); // TODO: ?
+                repositoryDict.Add(customDynamicTable, repo);
+            }
+
+            return repo;
+        }
+
+        public void Clear()
+        {
+            foreach (var repo in repositoryDict.Values)
+                repo.Clear();
+            repositoryDict.Clear();
+        }
+    }
+
     public class RepositoryCollection : INotifyPropertyChanged
     {
         private readonly bool isReadonly;
@@ -95,8 +121,10 @@ namespace Eos.Repositories
         // Custom Datatypes
         private readonly ModelRepository<CustomEnum> customEnumRepository;
         private readonly ModelRepository<CustomObject> customObjectRepository;
+        private readonly ModelRepository<CustomDynamicTable> customDynamicTableRepository;
 
         private readonly CustomObjectRepositoryCollection customObjectRepositoryCollection = new CustomObjectRepositoryCollection();
+        private readonly CustomDynamicTableRepositoryCollection customDynamicTableRepositoryCollection = new CustomDynamicTableRepositoryCollection();
 
         private void InitRepository<T>(out ModelRepository<T> repository, string propertyName) where T : BaseModel, new()
         {
@@ -162,6 +190,7 @@ namespace Eos.Repositories
             // Custom Datatypes
             InitRepository(out customEnumRepository, nameof(CustomEnums));
             InitRepository(out customObjectRepository, nameof(CustomObjects));
+            InitRepository(out customDynamicTableRepository, nameof(CustomDynamicTables));
         }
 
         // Model Repositories
@@ -216,7 +245,10 @@ namespace Eos.Repositories
         // Custom Datatypes
         public ModelRepository<CustomEnum> CustomEnums { get { return customEnumRepository; } }
         public ModelRepository<CustomObject> CustomObjects { get { return customObjectRepository; } }
+        public ModelRepository<CustomDynamicTable> CustomDynamicTables { get { return customDynamicTableRepository; } }
+
         public CustomObjectRepositoryCollection CustomObjectRepositories { get { return customObjectRepositoryCollection; } }
+        public CustomDynamicTableRepositoryCollection CustomDynamicTableRepositories { get { return customDynamicTableRepositoryCollection; } }
 
         public IEnumerable<IRepository> AllRepositories => repositoryDict.Values;
 
@@ -236,7 +268,16 @@ namespace Eos.Repositories
 
         public void Add(BaseModel model)
         {
-            if (model is CustomObjectInstance coi)
+            if (model is CustomDynamicTableInstance cdti)
+            {
+                if (cdti.Template != null)
+                {
+                    if (cdti.Index == null)
+                        cdti.Index = CustomDynamicTableRepositories[cdti.Template].GetNextFreeIndex();
+                    CustomDynamicTableRepositories[cdti.Template].Add(cdti);
+                }
+            }
+            else if (model is CustomObjectInstance coi)
             {
                 if (coi.Template != null)
                 {
@@ -266,7 +307,12 @@ namespace Eos.Repositories
 
         public void Delete(BaseModel model)
         {
-            if (model is CustomObjectInstance coi)
+            if (model is CustomDynamicTableInstance cdti)
+            {
+                if (cdti.Template != null)
+                    CustomDynamicTableRepositories[cdti.Template].Remove(cdti);
+            }
+            else if (model is CustomObjectInstance coi)
             {
                 if (coi.Template != null)
                     CustomObjectRepositories[coi.Template].Remove(coi);
@@ -281,7 +327,9 @@ namespace Eos.Repositories
         public bool HasOverride(BaseModel model)
         {
             var modelType = model.GetType();
-            return repositoryDict[modelType].HasOverride(model);
+            if (repositoryDict.ContainsKey(modelType))
+                return repositoryDict[modelType].HasOverride(model);
+            return false;
         }
 
         public BaseModel? GetOverride(BaseModel? model)
@@ -294,7 +342,13 @@ namespace Eos.Repositories
 
         public int? GetBase2DAIndex(BaseModel model, bool returnCustomDataIndex = true)
         {
-            if (model is CustomObjectInstance coi)
+            if (model is CustomDynamicTableInstance cdti)
+            {
+                if (cdti.Template != null)
+                    return CustomDynamicTableRepositories[cdti.Template].GetBase2DAIndex(model, returnCustomDataIndex);
+                return -1;
+            }
+            else if (model is CustomObjectInstance coi)
             {
                 if (coi.Template != null)
                     return CustomObjectRepositories[coi.Template].GetBase2DAIndex(model, returnCustomDataIndex);
@@ -362,8 +416,10 @@ namespace Eos.Repositories
             // Custom Datatypes
             CustomEnums.Clear();
             CustomObjects.Clear();
+            CustomDynamicTables.Clear();
 
             CustomObjectRepositories.Clear();
+            CustomDynamicTableRepositories.Clear();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

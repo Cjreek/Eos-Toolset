@@ -9,7 +9,7 @@ using System.Windows.Markup;
 
 namespace Eos.ViewModels
 {
-    internal class SpellSlotTableViewModel : DataDetailViewModel<SpellSlotTable>
+    public class SpellSlotTableViewModel : DataDetailViewModel<SpellSlotTable>
     {
         public SpellSlotTableViewModel() : base()
         {

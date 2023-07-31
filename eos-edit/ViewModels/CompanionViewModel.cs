@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class CompanionViewModel : DataDetailViewModel<Companion>
+    public class CompanionViewModel : DataDetailViewModel<Companion>
     {
         public CompanionViewModel() : base()
         {

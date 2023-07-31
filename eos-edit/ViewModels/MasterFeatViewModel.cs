@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class MasterFeatViewModel : DataDetailViewModel<MasterFeat>
+    public class MasterFeatViewModel : DataDetailViewModel<MasterFeat>
     {
         public MasterFeatViewModel() : base()
         {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class SpellViewModel : DataDetailViewModel<Spell>
+    public class SpellViewModel : DataDetailViewModel<Spell>
     {
         public SpellViewModel() : base()
         {

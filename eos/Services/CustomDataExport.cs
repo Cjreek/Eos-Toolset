@@ -66,12 +66,12 @@ namespace Eos.Services
             }
         }
 
-        private void WriteExtensionValues(LineRecord record, ObservableCollection<CustomValueInstance> values)
+        private void WriteExtensionValues(LineRecord record, ObservableCollection<CustomValueInstance> values, bool writeLowerCase)
         {
             foreach (var value in values)
             {
                 if ((!value.Property.DataType?.IsVisualOnly ?? false) && (value.Property.DataType?.To2DA != null))
-                    record.Set(value.Property.Column, value.Property.DataType?.To2DA(value.Value));
+                    record.Set(value.Property.Column, value.Property.DataType?.To2DA(value.Value, writeLowerCase, GetTLKIndex));
             }
         }
 
@@ -411,6 +411,53 @@ namespace Eos.Services
             {
                 if (ipParam != null)
                     AddTLKString(ipParam.Name);
+            }
+
+            // Custom Objects
+            foreach (var co in project.CustomObjects)
+            {
+                if (co != null)
+                {
+                    var repo = project.CustomObjectRepositories[co];
+                    foreach (var instance in repo)
+                    {
+                        if (instance == null) continue;
+                        foreach (var val in instance.Values)
+                        {
+                            if (val.Value is TLKStringSet tlk)
+                                AddTLKString(tlk);
+                        }
+                    }
+                }
+            }
+
+            // Custom Dynamic Tables
+            foreach (var cdt in project.CustomDynamicTables)
+            {
+                if (cdt != null)
+                {
+                    var repo = project.CustomDynamicTableRepositories[cdt];
+                    foreach (var table in repo)
+                    {
+                        if (table == null) continue;
+
+                        foreach (var item in table.Items)
+                        {
+                            if (item == null) continue;
+
+                            if (item.CustomColumnValue01.Value is TLKStringSet tlk01) AddTLKString(tlk01);
+                            if (item.CustomColumnValue02.Value is TLKStringSet tlk02) AddTLKString(tlk02);
+                            if (item.CustomColumnValue03.Value is TLKStringSet tlk03) AddTLKString(tlk03);
+                            if (item.CustomColumnValue04.Value is TLKStringSet tlk04) AddTLKString(tlk04);
+                            if (item.CustomColumnValue05.Value is TLKStringSet tlk05) AddTLKString(tlk05);
+                            if (item.CustomColumnValue06.Value is TLKStringSet tlk06) AddTLKString(tlk06);
+                            if (item.CustomColumnValue07.Value is TLKStringSet tlk07) AddTLKString(tlk07);
+                            if (item.CustomColumnValue08.Value is TLKStringSet tlk08) AddTLKString(tlk08);
+                            if (item.CustomColumnValue09.Value is TLKStringSet tlk09) AddTLKString(tlk09);
+                            if (item.CustomColumnValue10.Value is TLKStringSet tlk10) AddTLKString(tlk10);
+                        }
+                    }
+                }
             }
         }
 
@@ -1108,7 +1155,7 @@ namespace Eos.Services
                         record.Set("CanCastSpontaneously", cls.IsSpellCaster ? cls.CanCastSpontaneously : null);
                         record.Set("SkipSpellSelection", cls.IsSpellCaster ? cls.SkipSpellSelection : null);
 
-                        WriteExtensionValues(record, cls.ExtensionValues);
+                        WriteExtensionValues(record, cls.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -1246,7 +1293,7 @@ namespace Eos.Services
                         record.Set("End_Incu_Script", disease.IncubationEndScript);
                         record.Set("24_Hour_Script", disease.DailyEffectScript);
 
-                        WriteExtensionValues(record, disease.ExtensionValues);
+                        WriteExtensionValues(record, disease.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -1311,7 +1358,7 @@ namespace Eos.Services
                         record.Set("GrantedFeat", project.Feats.Get2DAIndex(domain.GrantedFeat));
                         record.Set("CastableFeat", domain.FeatIsActive);
 
-                        WriteExtensionValues(record, domain.ExtensionValues);
+                        WriteExtensionValues(record, domain.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -1354,7 +1401,7 @@ namespace Eos.Services
                         record.Set("DESCRIPTION", GetTLKIndex(masterFeat.Description));
                         record.Set("ICON", masterFeat.Icon);
 
-                        WriteExtensionValues(record, masterFeat.ExtensionValues);
+                        WriteExtensionValues(record, masterFeat.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -1450,7 +1497,7 @@ namespace Eos.Services
                         record.Set("PreReqEpic", feat.RequiresEpic);
                         record.Set("ReqAction", feat.UseActionQueue);
 
-                        WriteExtensionValues(record, feat.ExtensionValues);
+                        WriteExtensionValues(record, feat.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -1514,7 +1561,7 @@ namespace Eos.Services
                         record.Set("OnHitApplied", poison.OnHitApplied);
                         record.Set("VFX_Impact", poison.ImpactVFX);
 
-                        WriteExtensionValues(record, poison.ExtensionValues);
+                        WriteExtensionValues(record, poison.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -1599,7 +1646,7 @@ namespace Eos.Services
                         record.Set("SkillPointModifierAbility", race.SkillPointModifierAbility?.ToString());
                         record.Set("FavoredEnemyFeat", project.Feats.Get2DAIndex(race.FavoredEnemyFeat));
 
-                        WriteExtensionValues(record, race.ExtensionValues);
+                        WriteExtensionValues(record, race.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -1661,7 +1708,7 @@ namespace Eos.Services
                         record.Set("HostileSkill", skill.IsHostile);
                         record.Set("HideFromLevelUp", skill.HideFromLevelUp);
 
-                        WriteExtensionValues(record, skill.ExtensionValues);
+                        WriteExtensionValues(record, skill.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -1748,7 +1795,7 @@ namespace Eos.Services
                         record.Set("MODELMIN02", aoe.LowQualityModel2);
                         record.Set("MODELMIN03", aoe.LowQualityModel3);
 
-                        WriteExtensionValues(record, aoe.ExtensionValues);
+                        WriteExtensionValues(record, aoe.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -1809,7 +1856,7 @@ namespace Eos.Services
                         record.Set("FallFwd", appearanceSoundset.FallForward);
                         record.Set("FallBck", appearanceSoundset.FallBackward);
 
-                        WriteExtensionValues(record, appearanceSoundset.ExtensionValues);
+                        WriteExtensionValues(record, appearanceSoundset.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -1897,7 +1944,7 @@ namespace Eos.Services
                         record.Set("BODY_BAG", (int)appearance.BodyBag);
                         record.Set("TARGETABLE", appearance.Targetable);
 
-                        WriteExtensionValues(record, appearance.ExtensionValues);
+                        WriteExtensionValues(record, appearance.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -1987,7 +2034,7 @@ namespace Eos.Services
                         record.Set("Parry0", weaponSound.Parry);
                         record.Set("Critical0", weaponSound.Critical);
 
-                        WriteExtensionValues(record, weaponSound.ExtensionValues);
+                        WriteExtensionValues(record, weaponSound.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -2034,7 +2081,7 @@ namespace Eos.Services
                         record.Set("Label", inventorySound.Name);
                         record.Set("InventorySound", inventorySound.Sound);
 
-                        WriteExtensionValues(record, inventorySound.ExtensionValues);
+                        WriteExtensionValues(record, inventorySound.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -2106,7 +2153,7 @@ namespace Eos.Services
                         record.Set("MergeI", polymorph.MergeAccessories ? polymorph.MergeAccessories : null);
                         record.Set("MergeA", polymorph.MergeArmor ? polymorph.MergeArmor : null);
 
-                        WriteExtensionValues(record, polymorph.ExtensionValues);
+                        WriteExtensionValues(record, polymorph.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -2277,7 +2324,7 @@ namespace Eos.Services
                         record.Set("IsMonkWeapon", baseItem.IsMonkWeapon ? true : null);
                         record.Set("WeaponFinesseMinimumCreatureSize", (int?)baseItem.WeaponFinesseMinimumCreatureSize);
 
-                        WriteExtensionValues(record, baseItem.ExtensionValues);
+                        WriteExtensionValues(record, baseItem.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -2328,7 +2375,7 @@ namespace Eos.Services
                         record.Set("STRREF", GetTLKIndex(companion.Name));
                         record.Set("DESCRIPTION", GetTLKIndex(companion.Description));
 
-                        WriteExtensionValues(record, companion.ExtensionValues);
+                        WriteExtensionValues(record, companion.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -2379,7 +2426,7 @@ namespace Eos.Services
                         record.Set("STRREF", GetTLKIndex(familiar.Name));
                         record.Set("DESCRIPTION", GetTLKIndex(familiar.Description));
 
-                        WriteExtensionValues(record, familiar.ExtensionValues);
+                        WriteExtensionValues(record, familiar.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -2436,7 +2483,7 @@ namespace Eos.Services
                         record.Set("ResRef", trap.BlueprintResRef);
                         record.Set("IconResRef", trap.Icon);
 
-                        WriteExtensionValues(record, trap.ExtensionValues);
+                        WriteExtensionValues(record, trap.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -2526,7 +2573,7 @@ namespace Eos.Services
                         record.Set("LowQuality", vfx.LowQualityModel);
                         record.Set("OrientWithObject", vfx.OrientWithObject);
 
-                        WriteExtensionValues(record, vfx.ExtensionValues);
+                        WriteExtensionValues(record, vfx.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -2670,7 +2717,7 @@ namespace Eos.Services
                                 break;
                         }
 
-                        WriteExtensionValues(record, progFX.ExtensionValues);
+                        WriteExtensionValues(record, progFX.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -2726,7 +2773,7 @@ namespace Eos.Services
                         record.Set("GameStrRef", GetTLKIndex(itemProp.PropertyText));
                         record.Set("Description", GetTLKIndex(itemProp.Description));
 
-                        WriteExtensionValues(record, itemProp.ExtensionValues);
+                        WriteExtensionValues(record, itemProp.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -2893,7 +2940,7 @@ namespace Eos.Services
                                 if (custValues[i].Value is TLKStringSet tlkValue)
                                     rec.Set(custColumns[i].Column.Trim(), GetTLKIndex(tlkValue));
                                 else
-                                    rec.Set(custColumns[i].Column.Trim(), custColumns[i].DataType?.To2DA(custValues[i].Value));
+                                    rec.Set(custColumns[i].Column.Trim(), custColumns[i].DataType?.To2DA(custValues[i].Value, project.Settings.Export.LowercaseFilenames, GetTLKIndex));
                             }
                         }
                     }
@@ -2943,7 +2990,7 @@ namespace Eos.Services
                         record.Set("Label", costTable.Name); // !
                         record.Set("ClientLoad", costTable.ClientLoad);
 
-                        WriteExtensionValues(record, costTable.ExtensionValues);
+                        WriteExtensionValues(record, costTable.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -3032,7 +3079,7 @@ namespace Eos.Services
                                 if (custValues[i].Value is TLKStringSet tlkValue)
                                     rec.Set(custColumns[i].Column.Trim(), GetTLKIndex(tlkValue));
                                 else
-                                    rec.Set(custColumns[i].Column.Trim(), custColumns[i].DataType?.To2DA(custValues[i].Value));
+                                    rec.Set(custColumns[i].Column.Trim(), custColumns[i].DataType?.To2DA(custValues[i].Value, project.Settings.Export.LowercaseFilenames, GetTLKIndex));
                             }
                         }
                     }
@@ -3088,7 +3135,7 @@ namespace Eos.Services
                         else
                             record.Set("TableResRef", paramTable.TableResRef.Trim());
 
-                        WriteExtensionValues(record, paramTable.ExtensionValues);
+                        WriteExtensionValues(record, paramTable.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -3133,7 +3180,7 @@ namespace Eos.Services
                         record.Set("CharsheetStrref", GetTLKIndex(damageType.Name));
                         record.Set("DamageTypeGroup", project.DamageTypeGroups.Get2DAIndex(damageType.Group));
 
-                        WriteExtensionValues(record, damageType.ExtensionValues);
+                        WriteExtensionValues(record, damageType.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -3186,7 +3233,7 @@ namespace Eos.Services
                             record.Set("ColorB", colorB);
                         }
 
-                        WriteExtensionValues(record, damageTypeGroup.ExtensionValues);
+                        WriteExtensionValues(record, damageTypeGroup.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -3405,7 +3452,7 @@ namespace Eos.Services
                         record.Set("TargetSizeX", spell.TargetSizeX);
                         record.Set("TargetSizeY", spell.TargetSizeY);
 
-                        WriteExtensionValues(record, spell.ExtensionValues);
+                        WriteExtensionValues(record, spell.ExtensionValues, project.Settings.Export.LowercaseFilenames);
                     }
                 }
 
@@ -3478,11 +3525,11 @@ namespace Eos.Services
 
                     if (!instance.Disabled)
                     {
-                        rec.Set("Label", MakeLabel(instance.Label, "_"));
+                        rec.Set("Label", MakeLabel(instance.Name, "_"));
                         foreach (var value in instance.Values)
                         {
                             if ((!value.Property.DataType?.IsVisualOnly ?? false) && (value.Property.DataType?.To2DA != null))
-                                rec.Set(value.Property.Column, value.Property.DataType?.To2DA(value.Value));
+                                rec.Set(value.Property.Column, value.Property.DataType?.To2DA(value.Value, project.Settings.Export.LowercaseFilenames, GetTLKIndex));
                         }
                     }
                 }
@@ -3491,6 +3538,95 @@ namespace Eos.Services
                 custom2da.Save(filename, project.Settings.Export.Compress2DA);
 
                 AddHAKResource(template.ResourceName.ToLower(), NWNResourceType.TWODA, filename);
+            }
+        }
+
+        private void ExportCustomDynamicTables(EosProject project)
+        {
+            foreach (var template in project.CustomDynamicTables)
+            {
+                if (template == null) continue;
+
+                var repo = project.CustomDynamicTableRepositories[template];
+                if (repo.Count == 0) return;
+
+                foreach (var instance in repo)
+                {
+                    if (instance == null) continue;
+
+                    var columns = new List<String>();
+                    var custColumns = new List<CustomObjectProperty>
+                    {
+                        instance.CustomColumn01,
+                        instance.CustomColumn02,
+                        instance.CustomColumn03,
+                        instance.CustomColumn04,
+                        instance.CustomColumn05,
+                        instance.CustomColumn06,
+                        instance.CustomColumn07,
+                        instance.CustomColumn08,
+                        instance.CustomColumn09,
+                        instance.CustomColumn10,
+                    };
+
+                    for (int i = 0; i < custColumns.Count; i++)
+                    {
+                        if (custColumns[i].Column.Trim() == "") break;
+                        columns.Add(custColumns[i].Column.Trim());
+                    }
+
+                    var custom2da = new TwoDimensionalArrayFile();
+                    custom2da.New(columns.ToArray());
+
+                    if (project.Settings.Export.LowercaseFilenames)
+                    {
+                        for (int i = 0; i < custColumns.Count; i++)
+                        {
+                            if (custColumns[i].Column.Trim() == "") break;
+
+                            if (custColumns[i].DataType?.ID.Equals(new Guid("e4897c44-4117-45d4-b3fc-37b82fd88247")) ?? false) // Resource Reference
+                                custom2da.Columns.SetLowercase(custColumns[i].Column.Trim());
+                        }
+                    }
+
+                    foreach (var item in instance.Items)
+                    {
+                        if (item != null)
+                        {
+                            var rec = custom2da.AddRecord();
+
+                            var custValues = new List<CustomValueInstance>
+                            {
+                                item.CustomColumnValue01,
+                                item.CustomColumnValue02,
+                                item.CustomColumnValue03,
+                                item.CustomColumnValue04,
+                                item.CustomColumnValue05,
+                                item.CustomColumnValue06,
+                                item.CustomColumnValue07,
+                                item.CustomColumnValue08,
+                                item.CustomColumnValue09,
+                                item.CustomColumnValue10,
+                            };
+
+                            for (int i = 0; i < custColumns.Count; i++)
+                            {
+                                if (custColumns[i].Column.Trim() == "") break;
+                                if (custColumns[i].DataType?.To2DA == null) continue;
+
+                                if (custValues[i].Value is TLKStringSet tlkValue)
+                                    rec.Set(custColumns[i].Column.Trim(), GetTLKIndex(tlkValue));
+                                else
+                                    rec.Set(custColumns[i].Column.Trim(), custColumns[i].DataType?.To2DA(custValues[i].Value, project.Settings.Export.LowercaseFilenames, GetTLKIndex));
+                            }
+                        }
+                    }
+
+                    var filename = project.Settings.Export.TwoDAFolder + instance.Name.ToLower() + ".2da";
+                    custom2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                    AddHAKResource(instance.Name.ToLower(), NWNResourceType.TWODA, filename);
+                }
             }
         }
 
@@ -3960,6 +4096,7 @@ namespace Eos.Services
                 ExportDamageTypeGroups(project);
 
                 ExportCustomObjects(project);
+                ExportCustomDynamicTables(project);
 
                 ExportIncludeFile(project);
 

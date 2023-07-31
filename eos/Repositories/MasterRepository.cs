@@ -86,6 +86,7 @@ namespace Eos.Repositories
         // Custom Datatypes
         private static readonly VirtualModelRepository<CustomEnum> customEnumVirtualRepository;
         private static readonly VirtualModelRepository<CustomObject> customObjectVirtualRepository;
+        private static readonly VirtualModelRepository<CustomDynamicTable> customDynamicTableVirtualRepository;
 
         static MasterRepository()
         {
@@ -181,11 +182,12 @@ namespace Eos.Repositories
             // Custom Datatypes
             customEnumVirtualRepository = new VirtualModelRepository<CustomEnum>(standardCategory.CustomEnums, project.CustomEnums);
             customObjectVirtualRepository = new VirtualModelRepository<CustomObject>(standardCategory.CustomObjects, project.CustomObjects);
+            customDynamicTableVirtualRepository = new VirtualModelRepository<CustomDynamicTable>(standardCategory.CustomDynamicTables, project.CustomDynamicTables);
 
             InitDefaultDataTypes();
         }
 
-        private static void AddDataType(Guid id, String label, object? type, DataTypeToJsonDelegate toJsonFunc, DataTypeFromJsonDelegate fromJsonFunc, DataTypeTo2DADelegate to2DAFunc, bool isCustom = false, bool isVisualOnly = false)
+        private static DataTypeDefinition AddDataType(Guid id, String label, object? type, DataTypeToJsonDelegate toJsonFunc, DataTypeFromJsonDelegate fromJsonFunc, DataTypeTo2DADelegate to2DAFunc, bool isCustom = false, bool isVisualOnly = false)
         {
             var dataType = new DataTypeDefinition(id, label, type, isCustom);
             dataType.ToJson = toJsonFunc;
@@ -196,11 +198,13 @@ namespace Eos.Repositories
             dataTypeByIdDict.Add(id, dataType);
             if ((type is Type dataTypeType) && (!dataTypeByTypeDict.ContainsKey(dataTypeType)))
                 dataTypeByTypeDict.Add(dataTypeType, dataType);
+
+            return dataType;
         }
 
         private static void InitDefaultDataTypes()
         {
-            DataTypeTo2DADelegate to2daIdentity = o => o;
+            DataTypeTo2DADelegate to2daIdentity = (o, _, _) => o;
 
             AddDataType(Guid.Parse("a136669b-e618-4be1-9a29-8b76f85c60be"), "None", null, o => null, json => null, to2daIdentity, false, true);
 
@@ -208,15 +212,20 @@ namespace Eos.Repositories
             AddDataType(Guid.Parse("0212ec84-bd23-441a-8269-713a3d765cbe"), "Integer", typeof(int), o => { if (o is Decimal d) return Decimal.ToInt32(d); return (int?)o; }, json => json?.GetValue<int>(), to2daIdentity);
             AddDataType(Guid.Parse("7dd178ac-c87f-4849-a539-ad9bf2c95220"), "Float", typeof(double), o => { if (o is Decimal d) return Decimal.ToDouble(d); return (double?)o; }, json => json?.GetValue<double>(), to2daIdentity);
             AddDataType(Guid.Parse("bd7ee740-d4a5-41b7-bcf6-cf14923e78dc"), "Boolean", typeof(bool), o => (bool?)o ?? false, json => json?.GetValue<bool>() ?? false, to2daIdentity);
-            
+
             AddDataType(Guid.Parse("e4897c44-4117-45d4-b3fc-37b82fd88247"), "Resource Reference", typeof(ResourceReference), o => (string?)o, json => json?.GetValue<string>(), to2daIdentity);
-            AddDataType(Guid.Parse("aaae9a67-5b8b-4085-81f6-125fc8cf89a7"), "TLK String", typeof(TLKStringSet), o => ((TLKStringSet?)o)?.ToJson(), 
+            var tlkDataType = AddDataType(Guid.Parse("aaae9a67-5b8b-4085-81f6-125fc8cf89a7"), "TLK String", typeof(TLKStringSet), o => ((TLKStringSet?)o)?.ToJson(),
             json =>
             {
                 var tlkString = new TLKStringSet();
                 tlkString.FromJson(json?.AsObject());
                 return tlkString;
-            }, to2daIdentity); // ! to2daIdentity (?)
+            },
+            (o, _, tlk2Index) =>
+            { 
+                return (o is TLKStringSet tlk) ? tlk2Index(tlk) : null;
+            });
+            tlkDataType.GetDefaultValue = () => new TLKStringSet();
 
             AddDataType(Guid.Parse("e4a815d7-78e1-4e12-84e8-129a69cbb951"), "Variant", typeof(VariantValue),
                 o =>
@@ -243,42 +252,42 @@ namespace Eos.Repositories
 
                     return varValue;
                 },
-                o =>
+                (o, lower, tlk2Index) =>
                 {
                     if ((o is VariantValue varValue) && (varValue.DataType?.To2DA != null))
-                        return varValue.DataType?.To2DA(varValue.Value);
+                        return varValue.DataType?.To2DA(varValue.Value, lower, tlk2Index);
                     return null;
                 });
-             
-            DataTypeToJsonDelegate modelToJson = o => ((BaseModel?)o)?.ToJsonRef();
-            AddDataType(Guid.Parse("75a47130-999f-46b3-ac79-0e8e9ca48344"), "Race", typeof(Race), modelToJson, json => JsonUtils.CreateRefFromJson<Race>((JsonObject?)json), o => Project.Races.Get2DAIndex((Race?)o));
-            AddDataType(Guid.Parse("8541fb58-1534-464d-baab-0384381cc506"), "Class", typeof(CharacterClass), modelToJson, json => JsonUtils.CreateRefFromJson<CharacterClass>((JsonObject?)json), o => Project.Classes.Get2DAIndex((CharacterClass?)o));
-            AddDataType(Guid.Parse("3f2d92d3-2860-4b90-8f78-f8b2bb9c4820"), "Feat", typeof(Feat), modelToJson, json => JsonUtils.CreateRefFromJson<Feat>((JsonObject?)json), o => Project.Feats.Get2DAIndex((Feat?)o));
-            AddDataType(Guid.Parse("ff714377-786a-4a29-9fd6-72bd04a0c968"), "Skill", typeof(Skill), modelToJson, json => JsonUtils.CreateRefFromJson<Skill>((JsonObject?)json), o => Project.Skills.Get2DAIndex((Skill?)o));
-            AddDataType(Guid.Parse("6380f69e-92fb-4717-ab00-01a1060727fc"), "Domain", typeof(Domain), modelToJson, json => JsonUtils.CreateRefFromJson<Domain>((JsonObject?)json), o => Project.Domains.Get2DAIndex((Domain?)o));
-            AddDataType(Guid.Parse("7649f1d6-cd21-4af0-abae-834c5898b75b"), "Spell", typeof(Spell), modelToJson, json => JsonUtils.CreateRefFromJson<Spell>((JsonObject?)json), o => Project.Spells.Get2DAIndex((Spell?)o));
-            AddDataType(Guid.Parse("159e9a47-de78-435d-9047-d96847544883"), "Poison", typeof(Poison), modelToJson, json => JsonUtils.CreateRefFromJson<Poison>((JsonObject?)json), o => Project.Poisons.Get2DAIndex((Poison?)o));
-            AddDataType(Guid.Parse("c241bc8c-0a05-477d-9cbd-3bb4e50d0bfb"), "Disease", typeof(Disease), modelToJson, json => JsonUtils.CreateRefFromJson<Disease>((JsonObject?)json), o => Project.Diseases.Get2DAIndex((Disease?)o));
-            AddDataType(Guid.Parse("f4d8a469-32a6-4f68-bccd-7710ebb026d9"), "Area Effect", typeof(AreaEffect), modelToJson, json => JsonUtils.CreateRefFromJson<AreaEffect>((JsonObject?)json), o => Project.AreaEffects.Get2DAIndex((AreaEffect?)o));
-            AddDataType(Guid.Parse("d84ec31c-5e6b-4373-a1c4-9d8fb4a501a7"), "Master Feat", typeof(MasterFeat), modelToJson, json => JsonUtils.CreateRefFromJson<MasterFeat>((JsonObject?)json), o => Project.MasterFeats.Get2DAIndex((MasterFeat?)o));
-            AddDataType(Guid.Parse("e552fd8f-599d-4a5a-a536-a58d02e52276"), "Base Item", typeof(BaseItem), modelToJson, json => JsonUtils.CreateRefFromJson<BaseItem>((JsonObject?)json), o => Project.BaseItems.Get2DAIndex((BaseItem?)o));
-            AddDataType(Guid.Parse("3bffa036-db5f-4946-ae66-ed4c31a29830"), "Class Package", typeof(ClassPackage), modelToJson, json => JsonUtils.CreateRefFromJson<ClassPackage>((JsonObject?)json), o => Project.ClassPackages.Get2DAIndex((ClassPackage?)o));
-            AddDataType(Guid.Parse("f5f2f8d9-8b11-4e2a-9d7c-8bae3bb48856"), "Item Property", typeof(ItemProperty), modelToJson, json => JsonUtils.CreateRefFromJson<ItemProperty>((JsonObject?)json), o => Project.ItemProperties.Get2DAIndex((ItemProperty?)o));
 
-            AddDataType(Guid.Parse("80b538dc-7e6a-40c7-830a-05bdac2fe3a4"), "Appearance", typeof(Appearance), modelToJson, json => JsonUtils.CreateRefFromJson<Appearance>((JsonObject?)json), o => Project.Appearances.Get2DAIndex((Appearance?)o));
-            AddDataType(Guid.Parse("824174da-64bf-42fe-b026-c7816eb1625b"), "Appearance Soundset", typeof(AppearanceSoundset), modelToJson, json => JsonUtils.CreateRefFromJson<AppearanceSoundset>((JsonObject?)json), o => Project.AppearanceSoundsets.Get2DAIndex((AppearanceSoundset?)o));
-            AddDataType(Guid.Parse("714cc45e-e3a0-44e5-9634-c460161fbc18"), "Weapon Sound", typeof(WeaponSound), modelToJson, json => JsonUtils.CreateRefFromJson<WeaponSound>((JsonObject?)json), o => Project.WeaponSounds.Get2DAIndex((WeaponSound?)o));
-            AddDataType(Guid.Parse("f81539e2-3d66-476a-a2dc-919ad5fd8d67"), "Inventory Sound", typeof(InventorySound), modelToJson, json => JsonUtils.CreateRefFromJson<InventorySound>((JsonObject?)json), o => Project.InventorySounds.Get2DAIndex((InventorySound?)o));
-            AddDataType(Guid.Parse("3744b4c4-12e6-40e0-a776-cf9866f268a0"), "Visual Effect", typeof(VisualEffect), modelToJson, json => JsonUtils.CreateRefFromJson<VisualEffect>((JsonObject?)json), o => Project.VisualEffects.Get2DAIndex((VisualEffect?)o));
-            AddDataType(Guid.Parse("8fb225be-dca3-4dce-bd38-fbde34e6fce1"), "Soundset", typeof(Soundset), modelToJson, json => JsonUtils.CreateRefFromJson<Soundset>((JsonObject?)json), o => Project.Soundsets.Get2DAIndex((Soundset?)o));
-            AddDataType(Guid.Parse("0de3877c-ec2d-4f05-86ee-7c7ef26d7df7"), "Polymorph", typeof(Polymorph), modelToJson, json => JsonUtils.CreateRefFromJson<Polymorph>((JsonObject?)json), o => Project.Polymorphs.Get2DAIndex((Polymorph?)o));
-            AddDataType(Guid.Parse("3a5fa240-0931-43b1-afb7-b244b2ef9e61"), "Portrait", typeof(Portrait), modelToJson, json => JsonUtils.CreateRefFromJson<Portrait>((JsonObject?)json), o => Project.Portraits.Get2DAIndex((Portrait?)o));
-            AddDataType(Guid.Parse("2d39f858-6f18-478c-858a-ac5fbdc6bdd0"), "Companion", typeof(Companion), modelToJson, json => JsonUtils.CreateRefFromJson<Companion>((JsonObject?)json), o => Project.Companions.Get2DAIndex((Companion?)o));
-            AddDataType(Guid.Parse("0be9d01b-46cf-4bed-ac35-fbd6f227ef7c"), "Familiar", typeof(Familiar), modelToJson, json => JsonUtils.CreateRefFromJson<Familiar>((JsonObject?)json), o => Project.Familiars.Get2DAIndex((Familiar?)o));
-            AddDataType(Guid.Parse("d2060f90-f9dc-4deb-8a28-af6c3fbb5990"), "Trap", typeof(Trap), modelToJson, json => JsonUtils.CreateRefFromJson<Trap>((JsonObject?)json), o => Project.Traps.Get2DAIndex((Trap?)o));
-            AddDataType(Guid.Parse("c50c6360-4480-430e-9411-21eb03778d9e"), "Programmed Effect", typeof(ProgrammedEffect), modelToJson, json => JsonUtils.CreateRefFromJson<ProgrammedEffect>((JsonObject?)json), o => Project.ProgrammedEffects.Get2DAIndex((ProgrammedEffect?)o));
-            AddDataType(Guid.Parse("1d68cd7c-500d-44c2-a948-b8e61d88958d"), "Damage Type", typeof(DamageType), modelToJson, json => JsonUtils.CreateRefFromJson<DamageType>((JsonObject?)json), o => Project.DamageTypes.Get2DAIndex((DamageType?)o));
-            AddDataType(Guid.Parse("2f17a139-20e0-4c9e-b386-a62ede19d76b"), "Damage Type Group", typeof(DamageTypeGroup), modelToJson, json => JsonUtils.CreateRefFromJson<DamageTypeGroup>((JsonObject?)json), o => Project.DamageTypeGroups.Get2DAIndex((DamageTypeGroup?)o));
+            DataTypeToJsonDelegate modelToJson = o => ((BaseModel?)o)?.ToJsonRef();
+            AddDataType(Guid.Parse("75a47130-999f-46b3-ac79-0e8e9ca48344"), "Race", typeof(Race), modelToJson, json => JsonUtils.CreateRefFromJson<Race>((JsonObject?)json), (o, _, _) => Project.Races.Get2DAIndex((Race?)o));
+            AddDataType(Guid.Parse("8541fb58-1534-464d-baab-0384381cc506"), "Class", typeof(CharacterClass), modelToJson, json => JsonUtils.CreateRefFromJson<CharacterClass>((JsonObject?)json), (o, _, _) => Project.Classes.Get2DAIndex((CharacterClass?)o));
+            AddDataType(Guid.Parse("3f2d92d3-2860-4b90-8f78-f8b2bb9c4820"), "Feat", typeof(Feat), modelToJson, json => JsonUtils.CreateRefFromJson<Feat>((JsonObject?)json), (o, _, _) => Project.Feats.Get2DAIndex((Feat?)o));
+            AddDataType(Guid.Parse("ff714377-786a-4a29-9fd6-72bd04a0c968"), "Skill", typeof(Skill), modelToJson, json => JsonUtils.CreateRefFromJson<Skill>((JsonObject?)json), (o, _, _) => Project.Skills.Get2DAIndex((Skill?)o));
+            AddDataType(Guid.Parse("6380f69e-92fb-4717-ab00-01a1060727fc"), "Domain", typeof(Domain), modelToJson, json => JsonUtils.CreateRefFromJson<Domain>((JsonObject?)json), (o, _, _) => Project.Domains.Get2DAIndex((Domain?)o));
+            AddDataType(Guid.Parse("7649f1d6-cd21-4af0-abae-834c5898b75b"), "Spell", typeof(Spell), modelToJson, json => JsonUtils.CreateRefFromJson<Spell>((JsonObject?)json), (o, _, _) => Project.Spells.Get2DAIndex((Spell?)o));
+            AddDataType(Guid.Parse("159e9a47-de78-435d-9047-d96847544883"), "Poison", typeof(Poison), modelToJson, json => JsonUtils.CreateRefFromJson<Poison>((JsonObject?)json), (o, _, _) => Project.Poisons.Get2DAIndex((Poison?)o));
+            AddDataType(Guid.Parse("c241bc8c-0a05-477d-9cbd-3bb4e50d0bfb"), "Disease", typeof(Disease), modelToJson, json => JsonUtils.CreateRefFromJson<Disease>((JsonObject?)json), (o, _, _) => Project.Diseases.Get2DAIndex((Disease?)o));
+            AddDataType(Guid.Parse("f4d8a469-32a6-4f68-bccd-7710ebb026d9"), "Area Effect", typeof(AreaEffect), modelToJson, json => JsonUtils.CreateRefFromJson<AreaEffect>((JsonObject?)json), (o, _, _) => Project.AreaEffects.Get2DAIndex((AreaEffect?)o));
+            AddDataType(Guid.Parse("d84ec31c-5e6b-4373-a1c4-9d8fb4a501a7"), "Master Feat", typeof(MasterFeat), modelToJson, json => JsonUtils.CreateRefFromJson<MasterFeat>((JsonObject?)json), (o, _, _) => Project.MasterFeats.Get2DAIndex((MasterFeat?)o));
+            AddDataType(Guid.Parse("e552fd8f-599d-4a5a-a536-a58d02e52276"), "Base Item", typeof(BaseItem), modelToJson, json => JsonUtils.CreateRefFromJson<BaseItem>((JsonObject?)json), (o, _, _) => Project.BaseItems.Get2DAIndex((BaseItem?)o));
+            AddDataType(Guid.Parse("3bffa036-db5f-4946-ae66-ed4c31a29830"), "Class Package", typeof(ClassPackage), modelToJson, json => JsonUtils.CreateRefFromJson<ClassPackage>((JsonObject?)json), (o, _, _) => Project.ClassPackages.Get2DAIndex((ClassPackage?)o));
+            AddDataType(Guid.Parse("f5f2f8d9-8b11-4e2a-9d7c-8bae3bb48856"), "Item Property", typeof(ItemProperty), modelToJson, json => JsonUtils.CreateRefFromJson<ItemProperty>((JsonObject?)json), (o, _, _) => Project.ItemProperties.Get2DAIndex((ItemProperty?)o));
+
+            AddDataType(Guid.Parse("80b538dc-7e6a-40c7-830a-05bdac2fe3a4"), "Appearance", typeof(Appearance), modelToJson, json => JsonUtils.CreateRefFromJson<Appearance>((JsonObject?)json), (o, _, _) => Project.Appearances.Get2DAIndex((Appearance?)o));
+            AddDataType(Guid.Parse("824174da-64bf-42fe-b026-c7816eb1625b"), "Appearance Soundset", typeof(AppearanceSoundset), modelToJson, json => JsonUtils.CreateRefFromJson<AppearanceSoundset>((JsonObject?)json), (o, _, _) => Project.AppearanceSoundsets.Get2DAIndex((AppearanceSoundset?)o));
+            AddDataType(Guid.Parse("714cc45e-e3a0-44e5-9634-c460161fbc18"), "Weapon Sound", typeof(WeaponSound), modelToJson, json => JsonUtils.CreateRefFromJson<WeaponSound>((JsonObject?)json), (o, _, _) => Project.WeaponSounds.Get2DAIndex((WeaponSound?)o));
+            AddDataType(Guid.Parse("f81539e2-3d66-476a-a2dc-919ad5fd8d67"), "Inventory Sound", typeof(InventorySound), modelToJson, json => JsonUtils.CreateRefFromJson<InventorySound>((JsonObject?)json), (o, _, _) => Project.InventorySounds.Get2DAIndex((InventorySound?)o));
+            AddDataType(Guid.Parse("3744b4c4-12e6-40e0-a776-cf9866f268a0"), "Visual Effect", typeof(VisualEffect), modelToJson, json => JsonUtils.CreateRefFromJson<VisualEffect>((JsonObject?)json), (o, _, _) => Project.VisualEffects.Get2DAIndex((VisualEffect?)o));
+            AddDataType(Guid.Parse("8fb225be-dca3-4dce-bd38-fbde34e6fce1"), "Soundset", typeof(Soundset), modelToJson, json => JsonUtils.CreateRefFromJson<Soundset>((JsonObject?)json), (o, _, _) => Project.Soundsets.Get2DAIndex((Soundset?)o));
+            AddDataType(Guid.Parse("0de3877c-ec2d-4f05-86ee-7c7ef26d7df7"), "Polymorph", typeof(Polymorph), modelToJson, json => JsonUtils.CreateRefFromJson<Polymorph>((JsonObject?)json), (o, _, _) => Project.Polymorphs.Get2DAIndex((Polymorph?)o));
+            AddDataType(Guid.Parse("3a5fa240-0931-43b1-afb7-b244b2ef9e61"), "Portrait", typeof(Portrait), modelToJson, json => JsonUtils.CreateRefFromJson<Portrait>((JsonObject?)json), (o, _, _) => Project.Portraits.Get2DAIndex((Portrait?)o));
+            AddDataType(Guid.Parse("2d39f858-6f18-478c-858a-ac5fbdc6bdd0"), "Companion", typeof(Companion), modelToJson, json => JsonUtils.CreateRefFromJson<Companion>((JsonObject?)json), (o, _, _) => Project.Companions.Get2DAIndex((Companion?)o));
+            AddDataType(Guid.Parse("0be9d01b-46cf-4bed-ac35-fbd6f227ef7c"), "Familiar", typeof(Familiar), modelToJson, json => JsonUtils.CreateRefFromJson<Familiar>((JsonObject?)json), (o, _, _) => Project.Familiars.Get2DAIndex((Familiar?)o));
+            AddDataType(Guid.Parse("d2060f90-f9dc-4deb-8a28-af6c3fbb5990"), "Trap", typeof(Trap), modelToJson, json => JsonUtils.CreateRefFromJson<Trap>((JsonObject?)json), (o, _, _) => Project.Traps.Get2DAIndex((Trap?)o));
+            AddDataType(Guid.Parse("c50c6360-4480-430e-9411-21eb03778d9e"), "Programmed Effect", typeof(ProgrammedEffect), modelToJson, json => JsonUtils.CreateRefFromJson<ProgrammedEffect>((JsonObject?)json), (o, _, _) => Project.ProgrammedEffects.Get2DAIndex((ProgrammedEffect?)o));
+            AddDataType(Guid.Parse("1d68cd7c-500d-44c2-a948-b8e61d88958d"), "Damage Type", typeof(DamageType), modelToJson, json => JsonUtils.CreateRefFromJson<DamageType>((JsonObject?)json), (o, _, _) => Project.DamageTypes.Get2DAIndex((DamageType?)o));
+            AddDataType(Guid.Parse("2f17a139-20e0-4c9e-b386-a62ede19d76b"), "Damage Type Group", typeof(DamageTypeGroup), modelToJson, json => JsonUtils.CreateRefFromJson<DamageTypeGroup>((JsonObject?)json), (o, _, _) => Project.DamageTypeGroups.Get2DAIndex((DamageTypeGroup?)o));
 
             //AddDataType(Guid.Parse("6049191e-3cf5-44e8-9c5d-dc3c45136a3e"), "Item Property Param", typeof(ItemPropertyParam), modelToJson, json => JsonUtils.CreateRefFromJson<ItemPropertyParam>((JsonObject?)json), o => Project.ItemPropertyParams.Get2DAIndex((ItemPropertyParam?)o));
 
@@ -311,6 +320,10 @@ namespace Eos.Repositories
                 var customObject = Project.CustomObjects.GetByID(id);
                 if (customObject != null)
                     return customObject.DataTypeDefinition;
+
+                var customDynTable = Project.CustomDynamicTables.GetByID(id);
+                if (customDynTable != null)
+                    return customDynTable.DataTypeDefinition;
             }
 
             return result;
@@ -407,6 +420,7 @@ namespace Eos.Repositories
         // Custom Datatypes
         public static VirtualModelRepository<CustomEnum> CustomEnums { get { return customEnumVirtualRepository; } }
         public static VirtualModelRepository<CustomObject> CustomObjects { get { return customObjectVirtualRepository; } }
+        public static VirtualModelRepository<CustomDynamicTable> CustomDynamicTables { get { return customDynamicTableVirtualRepository; } }
 
         public static IEnumerable<DataTypeDefinition?> DataTypes
         {
@@ -414,7 +428,8 @@ namespace Eos.Repositories
             {
                 var enumTypes = CustomEnums.Select(ce => ce?.DataTypeDefinition);
                 var objectTypes = CustomObjects.Select(co => co?.DataTypeDefinition);
-                return defaultDataTypeList.Concat(enumTypes).Concat(objectTypes);
+                var dynTableTypes = CustomDynamicTables.Select(cdt => cdt?.DataTypeDefinition);
+                return defaultDataTypeList.Concat(enumTypes).Concat(objectTypes).Concat(dynTableTypes);
             }
         }
 

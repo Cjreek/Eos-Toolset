@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class SpellbookViewModel : DataDetailViewModel<Spellbook>
+    public class SpellbookViewModel : DataDetailViewModel<Spellbook>
     {
         public SpellbookViewModel() : base()
         {

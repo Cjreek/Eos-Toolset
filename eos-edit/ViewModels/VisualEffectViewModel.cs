@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class VisualEffectViewModel : DataDetailViewModel<VisualEffect>
+    public class VisualEffectViewModel : DataDetailViewModel<VisualEffect>
     {
         public VisualEffectViewModel() : base()
         {

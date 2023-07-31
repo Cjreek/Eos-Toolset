@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class RacialFeatsTableViewModel : DataDetailViewModel<RacialFeatsTable>
+    public class RacialFeatsTableViewModel : DataDetailViewModel<RacialFeatsTable>
     {
         public RacialFeatsTableViewModel() : base()
         {

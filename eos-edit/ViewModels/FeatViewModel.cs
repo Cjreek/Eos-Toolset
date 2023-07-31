@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class FeatViewModel : DataDetailViewModel<Feat>
+    public class FeatViewModel : DataDetailViewModel<Feat>
     {
         public FeatViewModel() : base()
         {

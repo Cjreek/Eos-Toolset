@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class InventorySoundViewModel : DataDetailViewModel<InventorySound>
+    public class InventorySoundViewModel : DataDetailViewModel<InventorySound>
     {
         public InventorySoundViewModel() : base()
         {

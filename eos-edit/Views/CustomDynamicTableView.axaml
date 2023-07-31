@@ -1,0 +1,58 @@
+<local:LanguageAwarePage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views"
+             xmlns:vm="using:Eos.ViewModels"
+             xmlns:uc="using:Eos.Usercontrols"
+             xmlns:repo="using:Eos.Repositories"
+             xmlns:types="using:Eos.Types"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Views.CustomDynamicTableView"
+             x:Name="page">
+  <Design.DataContext>
+    <vm:CustomDynamicTableViewModel/>
+  </Design.DataContext>
+
+  <local:LanguageAwarePage.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </local:LanguageAwarePage.Resources>
+
+  <local:LanguageAwarePage.Styles>
+    <Styles>
+      <StyleInclude Source="/Assets/StyleResources.axaml"/>
+    </Styles>
+  </local:LanguageAwarePage.Styles>
+
+  <Border BorderBrush="Silver" BorderThickness="0,1,0,0">
+    <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="auto"/>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="100"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <TextBlock Text="Custom Dynamic Table" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+      <TextBlock Grid.Row="1" Grid.Column="0" Text="Display Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}"/>
+
+      <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+      <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
+
+      <TextBlock Grid.Row="3" Grid.Column="0" Text="2DA Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+      <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Data.ResourceName}" MaxLength="16"/>
+    </Grid>
+  </Border>
+</local:LanguageAwarePage>

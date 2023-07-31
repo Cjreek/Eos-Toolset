@@ -27,6 +27,7 @@ namespace Eos.Models.Tables
                 if (_label != value) 
                 {
                     _label = value;
+                    NotifyPropertyChanged();
                 }
             }
         }
@@ -39,6 +40,7 @@ namespace Eos.Models.Tables
                 if (_column != value)
                 {
                     _column = value;
+                    NotifyPropertyChanged();
                 }
             }
         }

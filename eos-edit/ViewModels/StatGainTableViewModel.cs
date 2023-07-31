@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class StatGainTableViewModel : DataDetailViewModel<StatGainTable>
+    public class StatGainTableViewModel : DataDetailViewModel<StatGainTable>
     {
         public StatGainTableViewModel() : base()
         {

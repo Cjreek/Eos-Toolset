@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels.Dialogs
 {
-    internal class ImportDialogViewModel : DialogViewModel
+    public class ImportDialogViewModel : DialogViewModel
     {
         private string _inputFilePath = "";
         private string _tlkFile = "";

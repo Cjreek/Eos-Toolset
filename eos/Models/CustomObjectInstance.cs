@@ -47,7 +47,7 @@ namespace Eos.Models
         public CustomValueInstance(CustomObjectProperty property, object? value = null)
         {
             Property = property;
-            Value = value;
+            Value = value ?? property.DataType?.GetDefaultValue();
 
             Property.PropertyChanged += Property_PropertyChanged;
         }
@@ -56,7 +56,7 @@ namespace Eos.Models
         {
             if (e.PropertyName == nameof(Property.DataType))
             {
-                Value = null;
+                Value = null ?? Property.DataType?.GetDefaultValue();
             }
         }
 
@@ -74,7 +74,7 @@ namespace Eos.Models
     public class CustomObjectInstance : BaseModel
     {
         private CustomObject? _template;
-        private String _label = "";
+        private String _name = "";
         private Dictionary<CustomObjectProperty, CustomValueInstance> valueDict = new Dictionary<CustomObjectProperty, CustomValueInstance>();
 
         public CustomObject? Template
@@ -97,14 +97,14 @@ namespace Eos.Models
             InitValueDictionary();
         }
 
-        public String Label
+        public String Name
         {
-            get { return _label; }
+            get { return _name; }
             set
             {
-                if (_label != value)
+                if (_name != value)
                 {
-                    _label = value;
+                    _name = value;
                     NotifyPropertyChanged();
                 }
             }
@@ -161,14 +161,14 @@ namespace Eos.Models
         protected override void SetDefaultValues()
         {
             if (Template != null)
-                Label = "New " + Template.Name;
+                Name = "New " + Template.Name;
             else
-                Label = "New Object";
+                Name = "New Object";
         }
 
         public override String GetLabel()
         {
-            return Label;
+            return Name;
         }
 
         public override void ResolveReferences()
@@ -195,7 +195,7 @@ namespace Eos.Models
         public override void FromJson(JsonObject json)
         {
             base.FromJson(json);
-            this.Label = json["Label"]?.GetValue<String>() ?? "";
+            this.Name = json["Label"]?.GetValue<String>() ?? "";
             this.Template = MasterRepository.CustomObjects.GetByID(ParseGuid(json["Template"]?["ID"]?.GetValue<String>()));
             foreach (var prop in valueDict.Keys)
             {
@@ -207,7 +207,7 @@ namespace Eos.Models
         public override JsonObject ToJson()
         {
             var customObjectJson = base.ToJson();
-            customObjectJson.Add("Label", this.Label);
+            customObjectJson.Add("Label", this.Name);
             customObjectJson.Add("Template", CreateJsonRef(this.Template));
             foreach (var prop in valueDict.Keys)
             {

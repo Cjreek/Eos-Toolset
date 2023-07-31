@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels.Dialogs
 {
-    internal class AppearanceSoundsetSearchViewModel : ModelSearchViewModel<AppearanceSoundset>
+    public class AppearanceSoundsetSearchViewModel : ModelSearchViewModel<AppearanceSoundset>
     {
         public AppearanceSoundsetSearchViewModel(VirtualModelRepository<AppearanceSoundset> repository) : base(repository)
         {

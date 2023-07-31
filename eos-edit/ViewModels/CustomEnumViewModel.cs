@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class CustomEnumViewModel : DataDetailViewModel<CustomEnum>
+    public class CustomEnumViewModel : DataDetailViewModel<CustomEnum>
     {
         public CustomEnumViewModel() : base()
         {

@@ -1,4 +1,5 @@
 ﻿using Eos.Models.Tables;
+using Eos.Nwn.Tlk;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,9 @@ namespace Eos.Types
 {
     public delegate JsonNode? DataTypeToJsonDelegate(object? value);
     public delegate object? DataTypeFromJsonDelegate(JsonNode? json);
-    public delegate object? DataTypeTo2DADelegate(object? value);
+    public delegate int? DataTypeTLKToIndexDelegate(TLKStringSet tlk);
+    public delegate object? DataTypeTo2DADelegate(object? value, bool toLower, DataTypeTLKToIndexDelegate tlkToIndex);
+    public delegate object? DataTypeGetDefaultValueDelegate();
 
     public class DataTypeDefinition
     {
@@ -24,6 +27,7 @@ namespace Eos.Types
         public DataTypeToJsonDelegate? ToJson { get; set; } = null;
         public DataTypeFromJsonDelegate? FromJson { get; set; } = null;
         public DataTypeTo2DADelegate? To2DA { get; set; } = null;
+        public DataTypeGetDefaultValueDelegate GetDefaultValue { get; set; } = () => null;
 
         public DataTypeDefinition(Guid id, string label, object? type, bool isCustom = false)
         {

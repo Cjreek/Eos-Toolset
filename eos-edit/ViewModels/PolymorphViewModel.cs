@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class PolymorphViewModel : DataDetailViewModel<Polymorph>
+    public class PolymorphViewModel : DataDetailViewModel<Polymorph>
     {
         public PolymorphViewModel() : base()
         {

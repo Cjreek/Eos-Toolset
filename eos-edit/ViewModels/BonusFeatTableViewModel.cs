@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class BonusFeatTableViewModel : DataDetailViewModel<BonusFeatsTable>
+    public class BonusFeatTableViewModel : DataDetailViewModel<BonusFeatsTable>
     {
         public BonusFeatTableViewModel() : base()
         {

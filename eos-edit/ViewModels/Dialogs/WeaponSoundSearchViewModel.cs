@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels.Dialogs
 {
-    internal class WeaponSoundSearchViewModel : ModelSearchViewModel<WeaponSound>
+    public class WeaponSoundSearchViewModel : ModelSearchViewModel<WeaponSound>
     {
         public WeaponSoundSearchViewModel(VirtualModelRepository<WeaponSound> repository) : base(repository)
         {

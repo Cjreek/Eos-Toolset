@@ -21,7 +21,7 @@ namespace Eos.Models.Tables
                 {
                     dataTypeDefinition = new DataTypeDefinition(ID, Name, this, true);
                     dataTypeDefinition.ToJson = o => ((CustomEnumItem?)o)?.Value;
-                    dataTypeDefinition.To2DA = o => ((CustomEnumItem?)o)?.Value;
+                    dataTypeDefinition.To2DA = (o, _, _) => ((CustomEnumItem?)o)?.Value;
                     dataTypeDefinition.FromJson = json => GetByValue(json?.GetValue<String>());
                 }
 

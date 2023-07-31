@@ -24,7 +24,7 @@ namespace Eos.Models.Tables
                 {
                     dataTypeDefinition = new DataTypeDefinition(ID, Name, this, true);
                     dataTypeDefinition.ToJson = o => ((CustomObjectInstance?)o)?.ToJsonRef();
-                    dataTypeDefinition.To2DA = o => MasterRepository.Project.CustomObjectRepositories[this].Get2DAIndex((CustomObjectInstance?)o);
+                    dataTypeDefinition.To2DA = (o, _, _) => MasterRepository.Project.CustomObjectRepositories[this].Get2DAIndex((CustomObjectInstance?)o);
                     dataTypeDefinition.FromJson = json => JsonUtils.CreateRefFromJson<CustomObjectInstance>((JsonObject?)json);
                 }
                 return dataTypeDefinition;

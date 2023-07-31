@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class RaceViewModel : DataDetailViewModel<Race>
+    public class RaceViewModel : DataDetailViewModel<Race>
     {
         public RaceViewModel() : base()
         {

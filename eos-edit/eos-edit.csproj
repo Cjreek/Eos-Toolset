@@ -161,6 +161,9 @@
     <Compile Update="Usercontrols\BaseItemComboBox.axaml.cs">
       <DependentUpon>BaseItemComboBox.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Usercontrols\CustomDynamicTableComboBox.axaml.cs">
+      <DependentUpon>CustomDynamicTableComboBox.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Usercontrols\DamageTypeComboBox.axaml.cs">
       <DependentUpon>DamageTypeComboBox.axaml</DependentUpon>
     </Compile>
@@ -252,11 +255,17 @@
     <Compile Update="Views\BaseItemView.axaml.cs">
       <DependentUpon>BaseItemView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\CustomDynamicTableView.axaml.cs">
+      <DependentUpon>CustomDynamicTableView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\DamageTypeGroupView.axaml.cs">
       <DependentUpon>DamageTypeGroupView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\DamageTypeView.axaml.cs">
       <DependentUpon>DamageTypeView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\CustomDynamicTableInstanceView.axaml.cs">
+      <DependentUpon>CustomDynamicTableInstanceView.axaml</DependentUpon>
     </Compile>
     <Compile Update="Views\ProgrammedEffectView.axaml.cs">
       <DependentUpon>ProgrammedEffectView.axaml</DependentUpon>

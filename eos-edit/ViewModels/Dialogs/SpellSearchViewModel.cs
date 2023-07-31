@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels.Dialogs
 {
-    internal class SpellSearchViewModel : ModelSearchViewModel<Spell>
+    public class SpellSearchViewModel : ModelSearchViewModel<Spell>
     {
         public SpellSearchViewModel(VirtualModelRepository<Spell> repository) : base(repository)
         {

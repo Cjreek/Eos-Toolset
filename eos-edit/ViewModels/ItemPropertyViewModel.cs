@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class ItemPropertyViewModel : DataDetailViewModel<ItemProperty>
+    public class ItemPropertyViewModel : DataDetailViewModel<ItemProperty>
     {
         public ItemPropertyViewModel() : base()
         {

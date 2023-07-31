@@ -14,7 +14,7 @@ using System.Reactive;
 
 namespace Eos.ViewModels.Dialogs
 {
-    internal class ProjectOptionsViewModel : DialogViewModel
+    public class ProjectOptionsViewModel : DialogViewModel
     {
         private String _externalPathToAdd = "";
 

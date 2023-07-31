@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class SkillTableViewModel : DataDetailViewModel<SkillsTable>
+    public class SkillTableViewModel : DataDetailViewModel<SkillsTable>
     {
         public SkillTableViewModel() : base()
         {

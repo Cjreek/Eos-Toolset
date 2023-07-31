@@ -25,7 +25,7 @@ using System.Threading;
 
 namespace Eos.Views
 {
-    class CustomObjectRepositoryConverter : IValueConverter
+    public class CustomObjectRepositoryConverter : IValueConverter
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
@@ -41,7 +41,7 @@ namespace Eos.Views
         }
     }
 
-    class ItemCountConverter : IValueConverter
+    public class ItemCountConverter : IValueConverter
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
@@ -150,7 +150,7 @@ namespace Eos.Views
             var viewModel = (MainWindowViewModel?)DataContext;
             if ((viewModel != null) && (e.PropertyName == nameof(viewModel.CurrentView)) && (viewModel.CurrentView?.GetDataObject() is BaseModel model))
             {
-                if (model is CustomObjectInstance customObjectInstance)
+                if ((model is CustomObjectInstance) || (model is CustomDynamicTableInstance))
                 {
                     if (tvAdditional.Items != null)
                     {

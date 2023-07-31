@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class SoundsetViewModel : DataDetailViewModel<Soundset>
+    public class SoundsetViewModel : DataDetailViewModel<Soundset>
     {
         public SoundsetViewModel() : base()
         {

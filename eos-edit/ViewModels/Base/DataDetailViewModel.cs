@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels.Base
 {
-    internal abstract class DataDetailViewModel<T> : DataDetailViewModelBase where T : BaseModel, new()
+    public abstract class DataDetailViewModel<T> : DataDetailViewModelBase where T : BaseModel, new()
     {
         private T data;
         private HashSet<String> headerSourceFields;

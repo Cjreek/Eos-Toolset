@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels.Dialogs
 {
-    internal class PoisonSearchViewModel : ModelSearchViewModel<Poison>
+    public class PoisonSearchViewModel : ModelSearchViewModel<Poison>
     {
         public PoisonSearchViewModel(VirtualModelRepository<Poison> repository) : base(repository)
         {

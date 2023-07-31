@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class PackageEquipmentTableViewModel : DataDetailViewModel<PackageEquipmentTable>
+    public class PackageEquipmentTableViewModel : DataDetailViewModel<PackageEquipmentTable>
     {
         public PackageEquipmentTableViewModel() : base()
         {

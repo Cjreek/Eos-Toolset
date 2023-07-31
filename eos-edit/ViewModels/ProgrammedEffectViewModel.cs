@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class ProgrammedEffectViewModel : DataDetailViewModel<ProgrammedEffect>
+    public class ProgrammedEffectViewModel : DataDetailViewModel<ProgrammedEffect>
     {
         public ProgrammedEffectViewModel() : base()
         {

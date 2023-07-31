@@ -351,6 +351,8 @@ namespace Eos.Models
                 {
                     if ((varModel is CustomObjectInstance coInstance) && (varValue.DataType?.CustomType is CustomObject template))
                         varValue.Value = MasterRepository.Project.CustomObjectRepositories[template].GetByID(coInstance.ID);
+                    else if ((varModel is CustomDynamicTableInstance cdtInstance) && (varValue.DataType?.CustomType is CustomDynamicTable dynTableTemplate))
+                        varValue.Value = MasterRepository.Project.CustomDynamicTableRepositories[dynTableTemplate].GetByID(cdtInstance.ID);
                     else
                         varValue.Value = ResolveByType(varModel.GetType(), varModel.ID);
                 }
@@ -358,6 +360,8 @@ namespace Eos.Models
                 {
                     if ((model is CustomObjectInstance coInstance) && (prop.DataType?.CustomType is CustomObject template))
                         extensionValueDict[prop].Value = MasterRepository.Project.CustomObjectRepositories[template].GetByID(coInstance.ID);
+                    else if ((model is CustomDynamicTableInstance cdtInstance) && (prop.DataType?.CustomType is CustomDynamicTable dynTableTemplate))
+                        extensionValueDict[prop].Value = MasterRepository.Project.CustomDynamicTableRepositories[dynTableTemplate].GetByID(cdtInstance.ID);
                     else
                         extensionValueDict[prop].Value = ResolveByType(model.GetType(), model.ID);
                 }

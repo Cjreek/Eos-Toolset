@@ -758,11 +758,20 @@ namespace Eos.Repositories
 
                     AddZipEntry(zip, ProjectFolder + Constants.CustomEnumsFilename, Constants.CustomEnumsFilename);
                     AddZipEntry(zip, ProjectFolder + Constants.CustomObjectsFilename, Constants.CustomObjectsFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.CustomDynamicTablesFilename, Constants.CustomDynamicTablesFilename);
 
                     foreach (var template in CustomObjects)
                     {
                         if (template != null)
                             AddZipEntry(zip, ProjectFolder + template.ResourceName + ".json", template.ResourceName + ".json");
+                    }
+
+                    foreach (var template in CustomDynamicTables)
+                    {
+                        if (template != null)
+                        {
+                            AddZipEntry(zip, ProjectFolder + template.ResourceName + ".json", template.ResourceName + ".json");
+                        }
                     }
                 }
             }
@@ -782,14 +791,22 @@ namespace Eos.Repositories
             {
                 CustomEnums.LoadFromFile(ProjectFolder + Constants.CustomEnumsFilename);
                 CustomObjects.LoadFromFile(ProjectFolder + Constants.CustomObjectsFilename);
+                CustomDynamicTables.LoadFromFile(ProjectFolder + Constants.CustomDynamicTablesFilename);
 
                 CustomEnums.ResolveReferences();
                 CustomObjects.ResolveReferences();
+                CustomDynamicTables.ResolveReferences();
 
                 foreach (var customObj in CustomObjects)
                 {
                     if (customObj != null)
                         CustomObjectRepositories.AddRepository(customObj);
+                }
+
+                foreach (var customDynTable in CustomDynamicTables)
+                {
+                    if (customDynTable != null)
+                        CustomDynamicTableRepositories.AddRepository(customDynTable);
                 }
 
                 Races.LoadFromFile(ProjectFolder + Constants.RacesFilename);
@@ -847,6 +864,12 @@ namespace Eos.Repositories
                         CustomObjectRepositories[template].LoadFromFile(ProjectFolder + template.ResourceName + ".json");
                 }
 
+                foreach (var template in CustomDynamicTables)
+                {
+                    if (template != null)
+                        CustomDynamicTableRepositories[template].LoadFromFile(ProjectFolder + template.ResourceName + ".json");
+                }
+
                 Races.ResolveReferences();
                 Classes.ResolveReferences();
                 ClassPackages.ResolveReferences();
@@ -900,6 +923,12 @@ namespace Eos.Repositories
                 {
                     if (template != null)
                         CustomObjectRepositories[template].ResolveReferences();
+                }
+
+                foreach (var template in CustomDynamicTables)
+                {
+                    if (template != null)
+                        CustomDynamicTableRepositories[template].ResolveReferences();
                 }
             }
             catch (Exception e)
@@ -1023,11 +1052,18 @@ namespace Eos.Repositories
 
                 CustomEnums.SaveToFile(ProjectFolder + Constants.CustomEnumsFilename, Settings.CustomData.FormatJson);
                 CustomObjects.SaveToFile(ProjectFolder + Constants.CustomObjectsFilename, Settings.CustomData.FormatJson);
+                CustomDynamicTables.SaveToFile(ProjectFolder + Constants.CustomDynamicTablesFilename, Settings.CustomData.FormatJson);
 
                 foreach (var template in CustomObjects)
                 {
                     if (template != null)
                         CustomObjectRepositories[template].SaveToFile(ProjectFolder + template.ResourceName + ".json", Settings.CustomData.FormatJson);
+                }
+
+                foreach (var template in CustomDynamicTables)
+                {
+                    if (template != null)
+                        CustomDynamicTableRepositories[template].SaveToFile(ProjectFolder + template.ResourceName + ".json", Settings.CustomData.FormatJson);
                 }
             }
             catch (Exception e)

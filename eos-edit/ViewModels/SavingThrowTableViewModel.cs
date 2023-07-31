@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class SavingThrowTableViewModel : DataDetailViewModel<SavingThrowTable>
+    public class SavingThrowTableViewModel : DataDetailViewModel<SavingThrowTable>
     {
         public SavingThrowTableViewModel() : base()
         {

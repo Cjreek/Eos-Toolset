@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class PrerequisiteTableViewModel : DataDetailViewModel<PrerequisiteTable>
+    public class PrerequisiteTableViewModel : DataDetailViewModel<PrerequisiteTable>
     {
         public PrerequisiteTableViewModel() : base()
         {

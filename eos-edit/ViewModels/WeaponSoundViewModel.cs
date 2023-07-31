@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class WeaponSoundViewModel : DataDetailViewModel<WeaponSound>
+    public class WeaponSoundViewModel : DataDetailViewModel<WeaponSound>
     {
         public WeaponSoundViewModel() : base()
         {

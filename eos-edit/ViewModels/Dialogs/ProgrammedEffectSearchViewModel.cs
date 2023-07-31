@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels.Dialogs
 {
-    internal class ProgrammedEffectSearchViewModel : ModelSearchViewModel<ProgrammedEffect>
+    public class ProgrammedEffectSearchViewModel : ModelSearchViewModel<ProgrammedEffect>
     {
         public ProgrammedEffectSearchViewModel(VirtualModelRepository<ProgrammedEffect> repository) : base(repository)
         {

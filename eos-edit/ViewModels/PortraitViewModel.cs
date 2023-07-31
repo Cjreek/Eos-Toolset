@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class PortraitViewModel : DataDetailViewModel<Portrait>
+    public class PortraitViewModel : DataDetailViewModel<Portrait>
     {
         public PortraitViewModel() : base()
         {

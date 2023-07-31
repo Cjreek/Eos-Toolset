@@ -122,6 +122,10 @@
     <uc:CustomEnumComboBox CustomEnum="{Binding Property.DataType.CustomType}" SelectedValue="{Binding Value}" IsNullable="True"/>
   </DataTemplate>
 
+  <DataTemplate x:Key="customDynamicTableTemplate">
+    <uc:CustomDynamicTableComboBox CustomDynamicTableTemplate="{Binding Property.DataType.CustomType}" SelectedValue="{Binding Value}" IsNullable="True"/>
+  </DataTemplate>
+
   <DataTemplate x:Key="customObjectVariantTemplate">
     <uc:CustomObjectComboBox CustomObjectTemplate="{Binding DataType.CustomType}" SelectedValue="{Binding Value}" IsNullable="True"/>
   </DataTemplate>
@@ -166,7 +170,8 @@
                                               CompanionTemplate="{StaticResource companionTemplate}"
                                               FamiliarTemplate="{StaticResource familiarTemplate}"
                                               CustomObjectTemplate="{StaticResource customObjectVariantTemplate}"
-                                              CustomEnumTemplate="{StaticResource customEnumVariantTemplate}"/>
+                                              CustomEnumTemplate="{StaticResource customEnumVariantTemplate}"
+                                              CustomDynamicTableTemplate="{StaticResource customDynamicTableTemplate}"/>
 
   <DataTemplate x:Key="variantTemplate">
     <Grid DataContextChanged="">
@@ -237,5 +242,6 @@
                                               CompanionTemplate="{StaticResource companionTemplate}"
                                               FamiliarTemplate="{StaticResource familiarTemplate}"
                                               CustomObjectTemplate="{StaticResource customObjectTemplate}"
-                                              CustomEnumTemplate="{StaticResource customEnumTemplate}"/>
+                                              CustomEnumTemplate="{StaticResource customEnumTemplate}"
+                                              CustomDynamicTableTemplate="{StaticResource customDynamicTableTemplate}"/>
 </ResourceDictionary>

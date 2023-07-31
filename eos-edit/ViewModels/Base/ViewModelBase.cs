@@ -110,6 +110,11 @@ namespace Eos.ViewModels.Base
             MessageDispatcher.Send(MessageType.NewCustomDetail, template);
         });
 
+        public ReactiveCommand<CustomDynamicTable, Unit> NewCustomDynamicTableCommand { get; private set; } = ReactiveCommand.Create<CustomDynamicTable>(template =>
+        {
+            MessageDispatcher.Send(MessageType.NewCustomDetail, template);
+        });
+
         public ReactiveCommand<BaseModel, Unit> OverrideDetailCommand { get; private set; } = ReactiveCommand.Create<BaseModel>(originalModel =>
         {
             MessageDispatcher.Send(MessageType.OverrideDetail, originalModel);

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class ClassPackageViewModel : DataDetailViewModel<ClassPackage>
+    public class ClassPackageViewModel : DataDetailViewModel<ClassPackage>
     {
         public ClassPackageViewModel() : base()
         {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class AttackBonusTableViewModel : DataDetailViewModel<AttackBonusTable>
+    public class AttackBonusTableViewModel : DataDetailViewModel<AttackBonusTable>
     {
         public AttackBonusTableViewModel() : base()
         {

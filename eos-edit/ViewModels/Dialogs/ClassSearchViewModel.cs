@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels.Dialogs
 {
-    internal class ClassSearchViewModel : ModelSearchViewModel<CharacterClass>
+    public class ClassSearchViewModel : ModelSearchViewModel<CharacterClass>
     {
         public ClassSearchViewModel(VirtualModelRepository<CharacterClass> repository) : base(repository)
         {

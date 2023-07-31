@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class TrapViewModel : DataDetailViewModel<Trap>
+    public class TrapViewModel : DataDetailViewModel<Trap>
     {
         public TrapViewModel() : base()
         {

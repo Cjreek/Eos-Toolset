@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels.Dialogs
 {
-    internal class GlobalSearchViewModel : DialogViewModel
+    public class GlobalSearchViewModel : DialogViewModel
     {
         private String _searchText;
         private IEnumerable<BaseModel?> _searchResult;

@@ -24,7 +24,7 @@ namespace Eos.ViewModels.Dialogs
         Cancel, Ok, Yes, No
     }
 
-    internal class MessageBoxViewModel : DialogViewModel
+    public class MessageBoxViewModel : DialogViewModel
     {
         public string MessageTitle { get; }
         public string Message { get; }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class CustomObjectInstanceViewModel : DataDetailViewModel<CustomObjectInstance>
+    public class CustomObjectInstanceViewModel : DataDetailViewModel<CustomObjectInstance>
     {
         public CustomObjectInstanceViewModel() : base()
         {
@@ -24,13 +24,13 @@ namespace Eos.ViewModels
         {
             return new HashSet<String>()
             {
-                "Label"
+                "Name"
             };
         }
 
         protected override string GetHeader()
         {
-            return Data.Label;
+            return Data.Name;
         }
     }
 }

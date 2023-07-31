@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    internal class PackageSpellPreferencesTableViewModel : DataDetailViewModel<PackageSpellPreferencesTable>
+    public class PackageSpellPreferencesTableViewModel : DataDetailViewModel<PackageSpellPreferencesTable>
     {
         public PackageSpellPreferencesTableViewModel() : base()
         {
