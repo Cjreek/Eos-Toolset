@@ -86,6 +86,7 @@ namespace Eos.Repositories
         // Custom Datatypes
         private static readonly VirtualModelRepository<CustomEnum> customEnumVirtualRepository;
         private static readonly VirtualModelRepository<CustomObject> customObjectVirtualRepository;
+        private static readonly VirtualModelRepository<CustomTable> customTableVirtualRepository;
         private static readonly VirtualModelRepository<CustomDynamicTable> customDynamicTableVirtualRepository;
 
         static MasterRepository()
@@ -182,6 +183,7 @@ namespace Eos.Repositories
             // Custom Datatypes
             customEnumVirtualRepository = new VirtualModelRepository<CustomEnum>(standardCategory.CustomEnums, project.CustomEnums);
             customObjectVirtualRepository = new VirtualModelRepository<CustomObject>(standardCategory.CustomObjects, project.CustomObjects);
+            customTableVirtualRepository = new VirtualModelRepository<CustomTable>(standardCategory.CustomTables, project.CustomTables);
             customDynamicTableVirtualRepository = new VirtualModelRepository<CustomDynamicTable>(standardCategory.CustomDynamicTables, project.CustomDynamicTables);
 
             InitDefaultDataTypes();
@@ -321,6 +323,10 @@ namespace Eos.Repositories
                 if (customObject != null)
                     return customObject.DataTypeDefinition;
 
+                var customTable = Project.CustomTables.GetByID(id);
+                if (customTable != null)
+                    return customTable.DataTypeDefinition;
+
                 var customDynTable = Project.CustomDynamicTables.GetByID(id);
                 if (customDynTable != null)
                     return customDynTable.DataTypeDefinition;
@@ -420,6 +426,7 @@ namespace Eos.Repositories
         // Custom Datatypes
         public static VirtualModelRepository<CustomEnum> CustomEnums { get { return customEnumVirtualRepository; } }
         public static VirtualModelRepository<CustomObject> CustomObjects { get { return customObjectVirtualRepository; } }
+        public static VirtualModelRepository<CustomTable> CustomTables { get { return customTableVirtualRepository; } }
         public static VirtualModelRepository<CustomDynamicTable> CustomDynamicTables { get { return customDynamicTableVirtualRepository; } }
 
         public static IEnumerable<DataTypeDefinition?> DataTypes
@@ -428,8 +435,9 @@ namespace Eos.Repositories
             {
                 var enumTypes = CustomEnums.Select(ce => ce?.DataTypeDefinition);
                 var objectTypes = CustomObjects.Select(co => co?.DataTypeDefinition);
+                var tableTypes = CustomTables.Select(ct => ct?.DataTypeDefinition);
                 var dynTableTypes = CustomDynamicTables.Select(cdt => cdt?.DataTypeDefinition);
-                return defaultDataTypeList.Concat(enumTypes).Concat(objectTypes).Concat(dynTableTypes);
+                return defaultDataTypeList.Concat(enumTypes).Concat(objectTypes).Concat(tableTypes).Concat(dynTableTypes);
             }
         }
 

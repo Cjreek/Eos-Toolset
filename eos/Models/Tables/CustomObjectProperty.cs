@@ -66,6 +66,10 @@ namespace Eos.Models.Tables
         {
         }
 
+        public CustomObjectProperty(CustomTable parentTable) : base(parentTable)
+        {
+        }
+
         public override void ResolveReferences()
         {
             DataType = MasterRepository.GetDataTypeById(DataType?.ID ?? Guid.Empty);

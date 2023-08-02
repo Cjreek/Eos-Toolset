@@ -16,7 +16,6 @@ using Eos.Models.Tables;
 using Eos.Config;
 using Eos.ViewModels.Dialogs;
 using Avalonia.Input;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Eos.ViewModels
 {
@@ -47,7 +46,7 @@ namespace Eos.ViewModels
 
         private void OpenDetail(BaseModel model, bool jumpToOverride, bool changeView)
         {
-            if ((jumpToOverride) && !(model is CustomObjectInstance) && !(model is CustomDynamicTableInstance))
+            if ((jumpToOverride) && !(model is CustomObjectInstance) && !(model is CustomTableInstance) && !(model is CustomDynamicTableInstance))
                 model = MasterRepository.Project.GetOverride(model) ?? model;
 
             if (!detailViewDict.ContainsKey(model))
@@ -100,6 +99,13 @@ namespace Eos.ViewModels
                     message += "Do you still want to delete this Custom Object definition?";
                     queryResult = DoQuery("Delete Confirmation", message, ViewModelQueryType.Warning);
                 }
+                else if (model is CustomTable)
+                {
+                    var message = "Do you really want to delete the definition of: \"" + model.GetLabel() + "\"?\n";
+                    message += "WARNING: This will delete every instance of this table type!\n\n";
+                    message += "Do you still want to delete this Custom Table definition?";
+                    queryResult = DoQuery("Delete Confirmation", message, ViewModelQueryType.Warning);
+                }
                 else if (model is CustomDynamicTable)
                 {
                     var message = "Do you really want to delete the definition of: \"" + model.GetLabel() + "\"?\n";
@@ -124,6 +130,14 @@ namespace Eos.ViewModels
                 {
                     if (custObjInstance != null)
                         CloseDetail(custObjInstance);
+                }
+            }
+            else if (model is CustomTable customTable)
+            {
+                foreach (var custTableInstance in MasterRepository.Project.CustomTableRepositories[customTable])
+                {
+                    if (custTableInstance != null)
+                        CloseDetail(custTableInstance);
                 }
             }
             else if (model is CustomDynamicTable customDynTable)
@@ -173,6 +187,13 @@ namespace Eos.ViewModels
                         {
                             var instance = new CustomObjectInstance();
                             instance.Template = template;
+                            MasterRepository.Add(instance);
+                            MessageDispatcher.Send(MessageType.OpenDetail, instance);
+                        }
+                        else if (model is CustomTable tableTemplate)
+                        {
+                            var instance = new CustomTableInstance();
+                            instance.Template = tableTemplate;
                             MasterRepository.Add(instance);
                             MessageDispatcher.Send(MessageType.OpenDetail, instance);
                         }

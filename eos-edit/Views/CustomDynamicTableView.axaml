@@ -48,11 +48,11 @@
       <TextBlock Grid.Row="1" Grid.Column="0" Text="Display Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
       <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Data.Name}"/>
 
-      <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-      <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
-
-      <TextBlock Grid.Row="3" Grid.Column="0" Text="2DA Name" Margin="0,0,5,0" HorizontalAlignment="Right"/>
-      <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Data.ResourceName}" MaxLength="16"/>
+      <TextBlock Grid.Row="2" Grid.Column="0" Text="Filename (.json)" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+      <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Data.FileName}"/>
+      
+      <TextBlock Grid.Row="3" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
+      <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Data.Hint}"/>
     </Grid>
   </Border>
 </local:LanguageAwarePage>

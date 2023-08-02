@@ -12,7 +12,7 @@ using System.Xml.Linq;
 
 namespace Eos.Models.Tables
 {
-    public class CustomObject : BaseTable<CustomObjectProperty>
+    public class CustomTable : BaseTable<CustomObjectProperty>
     {
         private DataTypeDefinition dataTypeDefinition = new DataTypeDefinition(Guid.Empty, String.Empty, null);
 
@@ -23,27 +23,27 @@ namespace Eos.Models.Tables
                 if (dataTypeDefinition.ID != ID)
                 {
                     dataTypeDefinition = new DataTypeDefinition(ID, Name, this, true);
-                    dataTypeDefinition.ToJson = o => ((CustomObjectInstance?)o)?.ToJsonRef();
-                    dataTypeDefinition.To2DA = (o, _, _) => MasterRepository.Project.CustomObjectRepositories[this].Get2DAIndex((CustomObjectInstance?)o);
-                    dataTypeDefinition.FromJson = json => JsonUtils.CreateRefFromJson<CustomObjectInstance>((JsonObject?)json);
+                    dataTypeDefinition.ToJson = o => ((CustomTableInstance?)o)?.ToJsonRef();
+                    dataTypeDefinition.To2DA = (o, lower, _) => lower ? ((CustomTableInstance?)o)?.Name?.ToLower() : ((CustomTableInstance?)o)?.Name;
+                    dataTypeDefinition.FromJson = json => JsonUtils.CreateRefFromJson<CustomTableInstance>((JsonObject?)json);
                 }
                 return dataTypeDefinition;
             }
         }
 
-        public ModelRepository<CustomObjectInstance> InstanceRepository { get; set; }
+        public ModelRepository<CustomTableInstance> InstanceRepository { get; set; }
 
         public event EventHandler? OnChanged;
 
-        public String ResourceName { get; set; } = "";
+        public String FileName { get; set; } = "";
 
-        public CustomObject() : base()
+        public CustomTable() : base()
         {
-            InstanceRepository = MasterRepository.Project.CustomObjectRepositories[this];
+            InstanceRepository = MasterRepository.Project.CustomTableRepositories[this];
             InstanceRepository.CollectionChanged += InstanceRepository_CollectionChanged;
         }
 
-        ~CustomObject()
+        ~CustomTable()
         {
             InstanceRepository.CollectionChanged -= InstanceRepository_CollectionChanged;
         }
@@ -60,20 +60,20 @@ namespace Eos.Models.Tables
 
         protected override void SetDefaultValues()
         {
-            Name = "NewObject";
+            Name = "New Table";
         }
 
         public override JsonObject ToJson()
         {
             var json = base.ToJson();
-            json.Add("ResourceName", this.ResourceName);
+            json.Add("FileName", FileName);
             return json;
         }
 
         public override void FromJson(JsonObject json)
         {
             base.FromJson(json);
-            this.ResourceName = json["ResourceName"]?.GetValue<String>() ?? "";
+            FileName = json["FileName"]?.GetValue<String>() ?? "";
         }
 
         protected override void Changed()

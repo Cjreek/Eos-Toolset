@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Eos.Repositories;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -38,7 +39,8 @@ namespace Eos.Models.Tables
         public virtual JsonObject ToJson()
         {
             var item = new JsonObject();
-            item.Add("SourceLabel", this.SourceLabel);
+            if (this.SourceLabel != "")
+                item.Add("SourceLabel", this.SourceLabel);
 
             return item;
         }
@@ -57,6 +59,11 @@ namespace Eos.Models.Tables
         public virtual bool IsValid()
         {
             return true;
+        }
+
+        protected BaseModel? ResolveByType(Type modelType, Guid id)
+        {
+            return MasterRepository.Standard.GetByID(modelType, id) ?? MasterRepository.Project.GetByID(modelType, id);
         }
 
         public void NotifyPropertyChanged([CallerMemberName] string propertyName = "") // TODOX: protected // !

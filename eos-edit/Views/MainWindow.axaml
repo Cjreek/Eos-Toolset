@@ -20,7 +20,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Eos.Views.MainWindow" MinHeight="300" MinWidth="500"
         Height="700" Width="1100" Loaded="mainWindow_Loaded"
-        x:Name="mainWindow" Tag="Eos Toolset v0.71" FontFamily="Segoe UI"
+        x:Name="mainWindow" Tag="Eos Toolset v0.72" FontFamily="Segoe UI"
         Closing="mainWindow_Closing"
         Icon="/Assets/Icons/Eos.ico">
   <Window.Title>
@@ -134,6 +134,10 @@
 
           <ContextMenu x:Key="customObjectContextMenu">
             <MenuItem x:Name="miAdditionalNew" Header="New" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Command="{Binding ElementName=mainWindow, Path=DataContext.NewCustomDetailCommand}" CommandParameter="{Binding}" Click="MenuItem_Click"/>
+          </ContextMenu>
+
+          <ContextMenu x:Key="customTableContextMenu">
+            <MenuItem x:Name="miAdditionalTableNew" Header="New" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Command="{Binding ElementName=mainWindow, Path=DataContext.NewCustomTableCommand}" CommandParameter="{Binding}" Click="MenuItem_Click"/>
           </ContextMenu>
 
           <ContextMenu x:Key="customDynamicTableContextMenu">
@@ -401,6 +405,11 @@
       <view:CustomObjectView DataContext="{Binding}"/>
     </DataTemplate>
 
+    <!--Custom Tables-->
+    <DataTemplate DataType="{x:Type vm:CustomTableViewModel}">
+      <view:CustomTableView DataContext="{Binding}"/>
+    </DataTemplate>
+
     <!--Custom Dynamic Tables-->
     <DataTemplate DataType="{x:Type vm:CustomDynamicTableViewModel}">
       <view:CustomDynamicTableView DataContext="{Binding}"/>
@@ -478,6 +487,12 @@
       <view:CustomObjectInstanceView DataContext="{Binding}"/>
     </DataTemplate>
 
+    
+    <!--Custom Table Instances-->
+    <DataTemplate DataType="{x:Type vm:CustomTableInstanceViewModel}">
+      <view:CustomTableInstanceView DataContext="{Binding}"/>
+    </DataTemplate>
+    
     <!--Custom Dynamic Table Instances-->
     <DataTemplate DataType="{x:Type vm:CustomDynamicTableInstanceViewModel}">
       <view:CustomDynamicTableInstanceView DataContext="{Binding}"/>
@@ -1426,6 +1441,14 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
+              <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomTables}" Tag="{x:Type tables:CustomTable}" Classes="category">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Tables"/>
+                    <Run Text="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomTables, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
               <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomDynamicTables}" Tag="{x:Type models:CustomDynamicTable}" Classes="category">
                 <TreeViewItem.Header>
                   <TextBlock>
@@ -1443,6 +1466,15 @@
               <TreeDataTemplate DataType="{x:Type tables:CustomObject}" ItemsSource="{Binding InstanceRepository}">
                 <Grid>
                   <TextBlock ContextMenu="{StaticResource customObjectContextMenu}" FontWeight="Bold">
+                    <Run Text="{CompiledBinding Path=Name}"/>
+                    <Run Text="{CompiledBinding InstanceRepository, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </Grid>
+              </TreeDataTemplate>
+
+              <TreeDataTemplate DataType="{x:Type tables:CustomTable}" ItemsSource="{Binding InstanceRepository}">
+                <Grid>
+                  <TextBlock ContextMenu="{StaticResource customTableContextMenu}" FontWeight="Bold">
                     <Run Text="{CompiledBinding Path=Name}"/>
                     <Run Text="{CompiledBinding InstanceRepository, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
                   </TextBlock>
@@ -1472,9 +1504,40 @@
                   </TextBlock>
                 </ContentControl>
               </TreeDataTemplate>
+
+              <TreeDataTemplate DataType="{x:Type tables:CustomDynamicTableInstance}">
+                <ContentControl HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                  <i:Interaction.Behaviors>
+                    <ia:EventTriggerBehavior EventName="DoubleTapped">
+                      <ia:InvokeCommandAction Command="{Binding ElementName=mainWindow, Path=DataContext.OpenDetailCommand}" CommandParameter="{Binding}"/>
+                    </ia:EventTriggerBehavior>
+                  </i:Interaction.Behaviors>
+
+                  <TextBlock FontWeight="Normal" ContextMenu="{StaticResource customObjectInstanceContextMenu}" HorizontalAlignment="Stretch" Background="Transparent">
+                    <Run Text="{CompiledBinding Label}"/>
+                    <Run Text="{CompiledBinding Hint, Converter={StaticResource hintConverter}, Mode=OneWay}"/>
+                  </TextBlock>
+                </ContentControl>
+              </TreeDataTemplate>
+
+              <TreeDataTemplate DataType="{x:Type tables:CustomTableInstance}">
+                <ContentControl HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                  <i:Interaction.Behaviors>
+                    <ia:EventTriggerBehavior EventName="DoubleTapped">
+                      <ia:InvokeCommandAction Command="{Binding ElementName=mainWindow, Path=DataContext.OpenDetailCommand}" CommandParameter="{Binding}"/>
+                    </ia:EventTriggerBehavior>
+                  </i:Interaction.Behaviors>
+
+                  <TextBlock FontWeight="Normal" ContextMenu="{StaticResource customObjectInstanceContextMenu}" HorizontalAlignment="Stretch" Background="Transparent">
+                    <Run Text="{CompiledBinding Label}"/>
+                    <Run Text="{CompiledBinding Hint, Converter={StaticResource hintConverter}, Mode=OneWay}"/>
+                  </TextBlock>
+                </ContentControl>
+              </TreeDataTemplate>
             </TreeView.DataTemplates>
 
             <TreeViewItem Header="Custom Objects" IsExpanded="True" Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomObjects}" Classes="category"/>
+            <TreeViewItem Header="Custom Tables" IsExpanded="True" Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomTables}" Classes="category"/>
             <TreeViewItem Header="Dynamic Tables" IsExpanded="True" Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomDynamicTables}" Classes="category"/>
           </TreeView>
         </TabItem>

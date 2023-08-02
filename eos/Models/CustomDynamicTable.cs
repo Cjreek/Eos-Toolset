@@ -47,6 +47,9 @@ namespace Eos.Models
 
         private void InstanceRepository_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
+            // Delay, because otherwise bindings won't update immediately
+            Task.Delay(5).ContinueWith(t => NotifyPropertyChanged(nameof(InstanceRepository)));
+
             // Suddenly works ??
             //if ((e.Action == NotifyCollectionChangedAction.Reset) || (e.Action == NotifyCollectionChangedAction.Move))
             //    NotifyPropertyChanged(nameof(InstanceRepository));
@@ -65,12 +68,12 @@ namespace Eos.Models
             }
         }
 
-        public String ResourceName { get; set; } = "";
+        public String FileName { get; set; } = "";
 
         protected override void SetDefaultValues()
         {
             Name = "New Dynamic Table";
-            ResourceName = "newdyntable";
+            FileName = "newdyntable";
         }
 
         public override String GetLabel()
@@ -82,14 +85,14 @@ namespace Eos.Models
         {
             base.FromJson(json);
             this.Name = json["Name"]?.GetValue<string>() ?? "";
-            this.ResourceName = json["ResourceName"]?.GetValue<string>() ?? "";
+            this.FileName = json["FileName"]?.GetValue<string>() ?? json["ResourceName"]?.GetValue<string>() ?? "";
         }
 
         public override JsonObject ToJson()
         {
             var customDynTableJson = base.ToJson();
             customDynTableJson.Add("Name", this.Name);
-            customDynTableJson.Add("ResourceName", this.ResourceName);
+            customDynTableJson.Add("FileName", this.FileName);
 
             return customDynTableJson;
         }

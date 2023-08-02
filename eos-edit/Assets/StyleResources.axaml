@@ -392,6 +392,10 @@
     <Setter Property="Margin" Value="2,0,0,3"/>
   </Style>
 
+  <Style Selector="uc|CustomTableComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
   <Style Selector="uc|CustomDynamicTableComboBox">
     <Setter Property="Margin" Value="2,0,0,3"/>
   </Style>

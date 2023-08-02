@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Usercontrols"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Usercontrols.CustomTableComboBox"
+             x:Name="ucCustomTableComboBox">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <Grid DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CustomTableComboBox}}}">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
+
+    <Button x:Name="cbCustomTables" Grid.Column="0" Click="btSearch_Click" HorizontalContentAlignment="Stretch" MinHeight="22">
+      <Button.Content>
+        <TextBlock Text="{Binding ElementName=ucCustomTableComboBox, Path=SelectedValue.Label}" Margin="3,0,0,0"/>
+      </Button.Content>
+    </Button>
+
+    <Button x:Name="btClear" Grid.Column="1" Content="🞪" Click="btClear_Click" Margin="2,0,0,0"
+            Height="{Binding ElementName=cbCustomTables, Path=Bounds.Height}" Width="{Binding ElementName=cbCustomTables, Path=Bounds.Height}"
+            IsVisible="{Binding ElementName=ucCustomTableComboBox, Path=IsNullable}"/>
+    <Button x:Name="btGoto" Grid.Column="2" Margin="2,0,0,0" Content="👁" Click="btGoto_Click"
+            Height="{Binding ElementName=cbCustomTables, Path=Bounds.Height}" Width="{Binding ElementName=cbCustomTables, Path=Bounds.Height}"/>
+  </Grid>
+</UserControl>

@@ -79,6 +79,7 @@ namespace Eos.Types
 
         public static readonly String CustomEnumsFilename;
         public static readonly String CustomObjectsFilename;
+        public static readonly String CustomTablesFilename;
         public static readonly String CustomDynamicTablesFilename;
 
         public static readonly String IconResourcesFolder;
@@ -212,6 +213,7 @@ namespace Eos.Types
 
             CustomEnumsFilename = "customenums.json";
             CustomObjectsFilename = "customobjects.json";
+            CustomTablesFilename = "customtables.json";
             CustomDynamicTablesFilename = "customdyntables.json";
 
             IconResourcesFolder = @"icons" + Path.DirectorySeparatorChar;

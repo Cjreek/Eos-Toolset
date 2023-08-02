@@ -113,10 +113,14 @@ namespace Eos.ViewModels.Base
                 return new CustomEnumViewModel(customEnum);
             if (model is CustomObject customObject)
                 return new CustomObjectViewModel(customObject);
+            if (model is CustomTable customTable)
+                return new CustomTableViewModel(customTable);
             if (model is CustomDynamicTable customDynamicTable)
                 return new CustomDynamicTableViewModel(customDynamicTable);
             if (model is CustomObjectInstance customObjectInstance)
                 return new CustomObjectInstanceViewModel(customObjectInstance);
+            if (model is CustomTableInstance customTableInstance)
+                return new CustomTableInstanceViewModel(customTableInstance);
             if (model is CustomDynamicTableInstance customDynamicTableInstance)
                 return new CustomDynamicTableInstanceViewModel(customDynamicTableInstance);
 

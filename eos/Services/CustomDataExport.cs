@@ -3541,6 +3541,63 @@ namespace Eos.Services
             }
         }
 
+        private void ExportCustomTables(EosProject project)
+        {
+            foreach (var template in project.CustomTables)
+            {
+                if (template == null) continue;
+
+                var repo = project.CustomTableRepositories[template];
+                if (repo.Count == 0) return;
+
+                var columns = new List<string>();
+                var columnLower = new List<bool>();
+                foreach (var prop in template.Items)
+                {
+                    if ((prop == null) || (prop.DataType?.IsVisualOnly ?? false)) continue;
+                    columns.Add(prop.Column);
+                    columnLower.Add(prop.DataType?.ID.Equals(new Guid("e4897c44-4117-45d4-b3fc-37b82fd88247")) ?? false);
+                }
+
+                foreach (var instance in repo)
+                {
+                    if (instance == null) continue;
+
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + instance.Name.ToLower() + ".2da"));
+
+                    var custom2da = new TwoDimensionalArrayFile();
+                    custom2da.New(columns.ToArray());
+
+                    if (project.Settings.Export.LowercaseFilenames)
+                    {
+                        for (int i = 0; i < columns.Count; i++)
+                        {
+                            if (columnLower[i])
+                                custom2da.Columns.SetLowercase(columns[i].Trim());
+                        }
+                    }
+
+                    foreach (var item in instance.Items)
+                    {
+                        if (item != null)
+                        {
+                            var rec = custom2da.AddRecord();
+                            foreach (var value in item.Values)
+                            {
+                                if ((!value.Property.DataType?.IsVisualOnly ?? false) && (value.Property.DataType?.To2DA != null))
+                                    rec.Set(value.Property.Column, value.Property.DataType?.To2DA(value.Value, project.Settings.Export.LowercaseFilenames, GetTLKIndex));
+                            }
+                        }
+                    }
+
+                    var filename = project.Settings.Export.TwoDAFolder + instance.Name.ToLower() + ".2da";
+                    custom2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                    AddHAKResource(instance.Name.ToLower(), NWNResourceType.TWODA, filename);
+                }
+            }
+        }
+
         private void ExportCustomDynamicTables(EosProject project)
         {
             foreach (var template in project.CustomDynamicTables)
@@ -3553,6 +3610,8 @@ namespace Eos.Services
                 foreach (var instance in repo)
                 {
                     if (instance == null) continue;
+
+                    Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + instance.Name.ToLower() + ".2da"));
 
                     var columns = new List<String>();
                     var custColumns = new List<CustomObjectProperty>
@@ -4096,6 +4155,7 @@ namespace Eos.Services
                 ExportDamageTypeGroups(project);
 
                 ExportCustomObjects(project);
+                ExportCustomTables(project);
                 ExportCustomDynamicTables(project);
 
                 ExportIncludeFile(project);

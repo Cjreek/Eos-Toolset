@@ -53,8 +53,9 @@ namespace Eos.Extensions
         public DataTemplate? DamageTypeTemplate { get; set; }
         public DataTemplate? DamageTypeGroupTemplate { get; set; }
         public DataTemplate? CustomObjectTemplate { get; set; }
-        public DataTemplate? CustomEnumTemplate { get; set; }
+        public DataTemplate? CustomTableTemplate { get; set; }
         public DataTemplate? CustomDynamicTableTemplate { get; set; }
+        public DataTemplate? CustomEnumTemplate { get; set; }
 
 
         public Control? Build(object? param)
@@ -149,10 +150,12 @@ namespace Eos.Extensions
 
                 if (dataTypeDef.CustomType is CustomObject customObject)
                     return CustomObjectTemplate ?? ErrorTemplate;
-                if (dataTypeDef.CustomType is CustomEnum customEnum)
-                    return CustomEnumTemplate ?? ErrorTemplate;
+                if (dataTypeDef.CustomType is CustomTable customTable)
+                    return CustomTableTemplate ?? ErrorTemplate;
                 if (dataTypeDef.CustomType is CustomDynamicTable customDynTable)
                     return CustomDynamicTableTemplate ?? ErrorTemplate;
+                if (dataTypeDef.CustomType is CustomEnum customEnum)
+                    return CustomEnumTemplate ?? ErrorTemplate;
 
                 return ErrorTemplate;
             }

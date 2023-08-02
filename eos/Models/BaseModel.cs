@@ -351,6 +351,8 @@ namespace Eos.Models
                 {
                     if ((varModel is CustomObjectInstance coInstance) && (varValue.DataType?.CustomType is CustomObject template))
                         varValue.Value = MasterRepository.Project.CustomObjectRepositories[template].GetByID(coInstance.ID);
+                    else if ((varModel is CustomTableInstance ctInstance) && (varValue.DataType?.CustomType is CustomTable tableTemplate))
+                        varValue.Value = MasterRepository.Project.CustomTableRepositories[tableTemplate].GetByID(ctInstance.ID);
                     else if ((varModel is CustomDynamicTableInstance cdtInstance) && (varValue.DataType?.CustomType is CustomDynamicTable dynTableTemplate))
                         varValue.Value = MasterRepository.Project.CustomDynamicTableRepositories[dynTableTemplate].GetByID(cdtInstance.ID);
                     else
@@ -360,6 +362,8 @@ namespace Eos.Models
                 {
                     if ((model is CustomObjectInstance coInstance) && (prop.DataType?.CustomType is CustomObject template))
                         extensionValueDict[prop].Value = MasterRepository.Project.CustomObjectRepositories[template].GetByID(coInstance.ID);
+                    else if ((model is CustomTableInstance ctInstance) && (prop.DataType?.CustomType is CustomTable tableTemplate))
+                        extensionValueDict[prop].Value = MasterRepository.Project.CustomTableRepositories[tableTemplate].GetByID(ctInstance.ID);
                     else if ((model is CustomDynamicTableInstance cdtInstance) && (prop.DataType?.CustomType is CustomDynamicTable dynTableTemplate))
                         extensionValueDict[prop].Value = MasterRepository.Project.CustomDynamicTableRepositories[dynTableTemplate].GetByID(cdtInstance.ID);
                     else
@@ -419,6 +423,8 @@ namespace Eos.Models
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                if (propertyName == "Name") // Hacky McHack
+                    PropertyChanged(this, new PropertyChangedEventArgs("Label"));
             }
         }
     }

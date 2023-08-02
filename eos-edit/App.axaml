@@ -97,6 +97,9 @@
       <DataTemplate DataType="{x:Type dialogVM:CustomObjectInstanceSearchViewModel}">
         <dialogViews:ModelSearchView/>
       </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:CustomTableInstanceSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
       <DataTemplate DataType="{x:Type dialogVM:CustomDynamicTableInstanceSearchViewModel}">
         <dialogViews:ModelSearchView/>
       </DataTemplate>

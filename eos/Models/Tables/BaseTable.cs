@@ -85,8 +85,14 @@ namespace Eos.Models.Tables
             if (Count < GetMaximumItems())
             {
                 item.ParentTable = this;
+                OnItemAdd(item);
                 _items.Add(item);
             }
+        }
+
+        protected virtual void OnItemAdd(T item)
+        {
+
         }
 
         public void Remove(T item)

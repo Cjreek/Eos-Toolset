@@ -17,7 +17,7 @@ namespace Eos.ViewModels
         public CustomDynamicTableInstanceViewModel() : base()
         {
             DeleteCustomDynTableItemCommand = ReactiveCommand.Create<CustomDynamicTableInstanceItem>(DeleteCustomDynTableItem);
-            AddCustomDynTableItemCommand = ReactiveCommand.Create(AddItemPropertyTableItem);
+            AddCustomDynTableItemCommand = ReactiveCommand.Create(AddCustomDynTableItem);
 
             MoveUpCommand = ReactiveCommand.Create<CustomDynamicTableInstanceItem>(MoveUp);
             MoveDownCommand = ReactiveCommand.Create<CustomDynamicTableInstanceItem>(MoveDown);
@@ -26,7 +26,7 @@ namespace Eos.ViewModels
         public CustomDynamicTableInstanceViewModel(CustomDynamicTableInstance instance) : base(instance)
         {
             DeleteCustomDynTableItemCommand = ReactiveCommand.Create<CustomDynamicTableInstanceItem>(DeleteCustomDynTableItem);
-            AddCustomDynTableItemCommand = ReactiveCommand.Create(AddItemPropertyTableItem);
+            AddCustomDynTableItemCommand = ReactiveCommand.Create(AddCustomDynTableItem);
 
             MoveUpCommand = ReactiveCommand.Create<CustomDynamicTableInstanceItem>(MoveUp);
             MoveDownCommand = ReactiveCommand.Create<CustomDynamicTableInstanceItem>(MoveDown);
@@ -45,7 +45,7 @@ namespace Eos.ViewModels
             return Data.Label;
         }
 
-        private void AddItemPropertyTableItem()
+        private void AddCustomDynTableItem()
         {
             var newItem = new CustomDynamicTableInstanceItem(Data);
             Data.Add(newItem);

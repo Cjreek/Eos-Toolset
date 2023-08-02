@@ -150,7 +150,7 @@ namespace Eos.Views
             var viewModel = (MainWindowViewModel?)DataContext;
             if ((viewModel != null) && (e.PropertyName == nameof(viewModel.CurrentView)) && (viewModel.CurrentView?.GetDataObject() is BaseModel model))
             {
-                if ((model is CustomObjectInstance) || (model is CustomDynamicTableInstance))
+                if ((model is CustomObjectInstance) || (model is CustomDynamicTableInstance) || (model is CustomTableInstance))
                 {
                     if (tvAdditional.Items != null)
                     {

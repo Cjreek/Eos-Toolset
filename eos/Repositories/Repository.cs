@@ -83,7 +83,8 @@ namespace Eos.Repositories
 
         private void Item_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            // Works better without.. But why did I have it in in the first place? It used to fix *something*...
+            //RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
         protected virtual void Changed()

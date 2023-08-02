@@ -118,16 +118,28 @@
     <uc:CustomObjectComboBox CustomObjectTemplate="{Binding Property.DataType.CustomType}" SelectedValue="{Binding Value}" IsNullable="True"/>
   </DataTemplate>
 
-  <DataTemplate x:Key="customEnumTemplate">
-    <uc:CustomEnumComboBox CustomEnum="{Binding Property.DataType.CustomType}" SelectedValue="{Binding Value}" IsNullable="True"/>
+  <DataTemplate x:Key="customTableTemplate">
+    <uc:CustomTableComboBox CustomTableTemplate="{Binding Property.DataType.CustomType}" SelectedValue="{Binding Value}" IsNullable="True"/>
   </DataTemplate>
 
   <DataTemplate x:Key="customDynamicTableTemplate">
     <uc:CustomDynamicTableComboBox CustomDynamicTableTemplate="{Binding Property.DataType.CustomType}" SelectedValue="{Binding Value}" IsNullable="True"/>
   </DataTemplate>
 
+  <DataTemplate x:Key="customEnumTemplate">
+    <uc:CustomEnumComboBox CustomEnum="{Binding Property.DataType.CustomType}" SelectedValue="{Binding Value}" IsNullable="True"/>
+  </DataTemplate>
+
   <DataTemplate x:Key="customObjectVariantTemplate">
     <uc:CustomObjectComboBox CustomObjectTemplate="{Binding DataType.CustomType}" SelectedValue="{Binding Value}" IsNullable="True"/>
+  </DataTemplate>
+
+  <DataTemplate x:Key="customTableVariantTemplate">
+    <uc:CustomTableComboBox CustomTableTemplate="{Binding DataType.CustomType}" SelectedValue="{Binding Value}" IsNullable="True"/>
+  </DataTemplate>
+
+  <DataTemplate x:Key="customDynamicTableVariantTemplate">
+    <uc:CustomDynamicTableComboBox CustomDynamicTableTemplate="{Binding DataType.CustomType}" SelectedValue="{Binding Value}" IsNullable="True"/>
   </DataTemplate>
 
   <DataTemplate x:Key="customEnumVariantTemplate">
@@ -170,8 +182,9 @@
                                               CompanionTemplate="{StaticResource companionTemplate}"
                                               FamiliarTemplate="{StaticResource familiarTemplate}"
                                               CustomObjectTemplate="{StaticResource customObjectVariantTemplate}"
-                                              CustomEnumTemplate="{StaticResource customEnumVariantTemplate}"
-                                              CustomDynamicTableTemplate="{StaticResource customDynamicTableTemplate}"/>
+                                              CustomTableTemplate="{StaticResource customTableVariantTemplate}"
+                                              CustomDynamicTableTemplate="{StaticResource customDynamicTableVariantTemplate}"
+                                              CustomEnumTemplate="{StaticResource customEnumVariantTemplate}"/>
 
   <DataTemplate x:Key="variantTemplate">
     <Grid DataContextChanged="">
@@ -242,6 +255,7 @@
                                               CompanionTemplate="{StaticResource companionTemplate}"
                                               FamiliarTemplate="{StaticResource familiarTemplate}"
                                               CustomObjectTemplate="{StaticResource customObjectTemplate}"
-                                              CustomEnumTemplate="{StaticResource customEnumTemplate}"
-                                              CustomDynamicTableTemplate="{StaticResource customDynamicTableTemplate}"/>
+                                              CustomTableTemplate="{StaticResource customTableTemplate}"
+                                              CustomDynamicTableTemplate="{StaticResource customDynamicTableTemplate}"
+                                              CustomEnumTemplate="{StaticResource customEnumTemplate}"/>
 </ResourceDictionary>
