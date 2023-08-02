@@ -72,8 +72,8 @@
                     <ColumnDefinition Width="*"/>
                   </Grid.ColumnDefinitions>
 
-                  <Button Grid.Column="0" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" Content="🡅" FontSize="14" Foreground="#505050" Height="24" Margin="0,1,0,-1" Command="{Binding ElementName=page, Path=DataContext.MoveSkillPrefUpCommand}" CommandParameter="{Binding}"/>
-                  <Button Grid.Column="1" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" Content="🡇" FontSize="14" Foreground="#505050" Height="24" Margin="1,1,0,-1" Command="{Binding ElementName=page, Path=DataContext.MoveSkillPrefDownCommand}" CommandParameter="{Binding}"/>
+                  <Button Grid.Column="0" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" Content="🡅" FontSize="14" Height="24" Margin="0,1,0,-1" Command="{Binding ElementName=page, Path=DataContext.MoveSkillPrefUpCommand}" CommandParameter="{Binding}"/>
+                  <Button Grid.Column="1" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" Content="🡇" FontSize="14" Height="24" Margin="1,1,0,-1" Command="{Binding ElementName=page, Path=DataContext.MoveSkillPrefDownCommand}" CommandParameter="{Binding}"/>
                 </Grid>
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
