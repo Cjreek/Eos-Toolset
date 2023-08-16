@@ -19,7 +19,8 @@ namespace Eos.ViewModels.Dialogs
 
         public IconSearchViewModel()
         {
-            _allIcons = MasterRepository.Resources.GetResourceKeys(NWNResourceType.TGA).Where(icon => (icon?.StartsWith("i", StringComparison.OrdinalIgnoreCase) ?? false) && !(icon?.StartsWith("iw", StringComparison.OrdinalIgnoreCase) ?? false) && !(icon?.StartsWith("ia", StringComparison.OrdinalIgnoreCase) ?? false));
+            _allIcons = MasterRepository.Resources.GetResourceKeys(NWNResourceType.TGA)
+                .Where(icon => (icon != null) && (MasterRepository.Resources.IsExternal(icon, NWNResourceType.TGA) || ((icon?.StartsWith("i", StringComparison.OrdinalIgnoreCase) ?? false) && !(icon?.StartsWith("iw", StringComparison.OrdinalIgnoreCase) ?? false) && !(icon?.StartsWith("ia", StringComparison.OrdinalIgnoreCase) ?? false))));
 
             _searchText = "";
             _searchResult = _allIcons;

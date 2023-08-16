@@ -365,6 +365,14 @@ namespace Eos.Repositories
             return (T?)Get(resRef, type);
         }
 
+        public bool IsExternal(String? resRef, NWNResourceType type)
+        {
+            if (_resources.TryGetValue((resRef, type), out var res))
+                return (res.Source == NWNResourceSource.External);
+
+            return false;
+        }
+
         private ResourceLoaderFunc GetResourceLoader(NWNResourceType resType)
         {
             if (!resourceLoaders.TryGetValue(resType, out ResourceLoaderFunc? loader))
