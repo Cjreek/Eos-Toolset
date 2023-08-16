@@ -20,7 +20,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Eos.Views.MainWindow" MinHeight="300" MinWidth="500"
         Height="700" Width="1100" Loaded="mainWindow_Loaded"
-        x:Name="mainWindow" Tag="Eos Toolset v0.72a" FontFamily="Segoe UI"
+        x:Name="mainWindow" Tag="Eos Toolset v0.73" FontFamily="Segoe UI"
         Closing="mainWindow_Closing"
         Icon="/Assets/Icons/Eos.ico">
   <Window.Title>
@@ -536,6 +536,12 @@
 
         <Separator/>
 
+        <MenuItem Header="Reload External Files" HotKey="F5" InputGesture="F5" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miReloadExternalData_Click">
+          <MenuItem.Icon>
+            <Image Source="/Assets/Icons/refresh.png"/>
+          </MenuItem.Icon>
+        </MenuItem>
+
         <MenuItem Header="Settings" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Command="{Binding ElementName=mainWindow, Path=DataContext.OpenProjectSettingsCommand}">
           <MenuItem.Icon>
             <Image Source="/Assets/Icons/settings32.png"/>
@@ -589,6 +595,9 @@
           </Button>
           <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" ToolTip.Tip="Export Project" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miExportProject_Click">
             <Image Source="/Assets/Icons/export32.png"/>
+          </Button>
+          <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" ToolTip.Tip="Reload External Files (F5)" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Click="miReloadExternalData_Click">
+            <Image Source="/Assets/Icons/refresh.png"/>
           </Button>
           <Button DockPanel.Dock="Left" Margin="3,3,0,3" Width="32" ToolTip.Tip="Project Settings" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Command="{Binding ElementName=mainWindow, Path=DataContext.OpenProjectSettingsCommand}">
             <Image Source="/Assets/Icons/settings32.png"/>

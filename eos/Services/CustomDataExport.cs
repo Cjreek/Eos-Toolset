@@ -116,7 +116,7 @@ namespace Eos.Services
             }
 
             var isDifferent = true;
-            if ((tlk.OriginalIndex ?? -1) >= 0)
+            if (((tlk.OriginalIndex ?? -1) >= 0) && ((tlk.OriginalIndex ?? -1) < 0x01000000))
             {
                 isDifferent = false;
                 foreach (var lang in Enum.GetValues<TLKLanguage>())

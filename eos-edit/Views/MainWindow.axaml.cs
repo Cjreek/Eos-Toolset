@@ -296,6 +296,8 @@ namespace Eos.Views
 
         private void miExportProject_Click(object sender, RoutedEventArgs e)
         {
+            MasterRepository.Resources.LoadExternalResources(MasterRepository.Project.Settings.ExternalFolders);
+
             MessageDispatcher.Send(MessageType.SaveProject, null);
 
             var export = new CustomDataExport();
@@ -310,6 +312,13 @@ namespace Eos.Views
             MasterRepository.Project.CreateBackup();
 
             WindowService.ShowMessage("Backup successful!", "Backup successful", MessageBoxButtons.Ok, MessageBoxIcon.Information);
+        }
+
+        private void miReloadExternalData_Click(object sender, RoutedEventArgs e)
+        {
+            MasterRepository.Resources.LoadExternalResources(MasterRepository.Project.Settings.ExternalFolders);
+
+            WindowService.ShowMessage("External files reloaded successfully!", "Reload successful", MessageBoxButtons.Ok, MessageBoxIcon.Information);
         }
 
         private void miExit_Click(object sender, RoutedEventArgs e)
