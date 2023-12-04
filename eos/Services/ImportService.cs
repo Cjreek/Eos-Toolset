@@ -1212,16 +1212,16 @@ namespace Eos.Services
                     tmpBaseItem.StraightSlashAnimationPercent = baseitems2da[i].AsInteger("%AnimSlashS");
                     tmpBaseItem.StorePanelOrder = baseitems2da[i].AsInteger("StorePanelSort");
                     tmpBaseItem.ItemLevelRestrictionStackSize = baseitems2da[i].AsInteger("ILRStackSize") ?? 1;
-                    tmpBaseItem.WeaponFocusFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("WeaponFocusFeat"));
-                    tmpBaseItem.EpicWeaponFocusFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("EpicWeaponFocusFeat"));
-                    tmpBaseItem.WeaponSpecializationFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("WeaponSpecializationFeat"));
-                    tmpBaseItem.EpicWeaponSpecializationFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("EpicWeaponSpecializationFeat"));
-                    tmpBaseItem.ImprovedCriticalFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("WeaponImprovedCriticalFeat"));
-                    tmpBaseItem.OverwhelmingCriticalFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("EpicWeaponOverwhelmingCriticalFeat"));
-                    tmpBaseItem.DevastatingCriticalFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("EpicWeaponDevastatingCriticalFeat"));
-                    tmpBaseItem.WeaponOfChoiceFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("WeaponOfChoiceFeat"));
+                    tmpBaseItem.WeaponFocusFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("WeaponFocusFeat", null));
+                    tmpBaseItem.EpicWeaponFocusFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("EpicWeaponFocusFeat", null));
+                    tmpBaseItem.WeaponSpecializationFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("WeaponSpecializationFeat", null));
+                    tmpBaseItem.EpicWeaponSpecializationFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("EpicWeaponSpecializationFeat", null));
+                    tmpBaseItem.ImprovedCriticalFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("WeaponImprovedCriticalFeat", null));
+                    tmpBaseItem.OverwhelmingCriticalFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("EpicWeaponOverwhelmingCriticalFeat", null));
+                    tmpBaseItem.DevastatingCriticalFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("EpicWeaponDevastatingCriticalFeat", null));
+                    tmpBaseItem.WeaponOfChoiceFeat = CreateRef<Feat>(baseitems2da[i].AsInteger("WeaponOfChoiceFeat", null));
                     tmpBaseItem.IsMonkWeapon = baseitems2da[i].AsBoolean("IsMonkWeapon");
-                    tmpBaseItem.WeaponFinesseMinimumCreatureSize = baseitems2da[i].IsNull("WeaponFinesseMinimumCreatureSize") ? null : (SizeCategory)Enum.ToObject(typeof(SizeCategory), baseitems2da[i].AsInteger("WeaponFinesseMinimumCreatureSize") ?? 0);
+                    tmpBaseItem.WeaponFinesseMinimumCreatureSize = baseitems2da[i].IsNull("WeaponFinesseMinimumCreatureSize", false) ? null : (SizeCategory)Enum.ToObject(typeof(SizeCategory), baseitems2da[i].AsInteger("WeaponFinesseMinimumCreatureSize") ?? 0);
 
                     _importCollection.BaseItems.Add(tmpBaseItem);
                 }
