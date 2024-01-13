@@ -20,7 +20,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Eos.Views.MainWindow" MinHeight="300" MinWidth="500"
         Height="700" Width="1100" Loaded="mainWindow_Loaded"
-        x:Name="mainWindow" Tag="Eos Toolset v0.73a" FontFamily="Segoe UI"
+        x:Name="mainWindow" Tag="Eos Toolset v0.73b" FontFamily="Segoe UI"
         Closing="mainWindow_Closing"
         Icon="/Assets/Icons/Eos.ico">
   <Window.Title>
@@ -29,7 +29,7 @@
         <Binding Source="{x:Static repo:MasterRepository.Project}" Path="Name"/>
     </MultiBinding>
   </Window.Title>
-
+  
   <Window.KeyBindings>
     <KeyBinding Command="{Binding Path=DataContext.CloseDetailCommand, ElementName=mainWindow}" CommandParameter="{Binding ElementName=mainWindow, Path=DataContext.CurrentView.Data}" Gesture="Ctrl+W"/>
     <KeyBinding Command="{Binding Path=DataContext.GotoDetailCommand, ElementName=mainWindow}" Gesture="Ctrl+D1">
@@ -1276,7 +1276,7 @@
               </TreeViewItem.Header>
             </TreeViewItem>
             <TreeViewItem Header="Other" Classes="category nocontext">
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Soundsets}" Classes="category" Tag="{x:Type models:AreaEffect}">
+              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Soundsets}" Classes="category" Tag="{x:Type models:Soundset}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Soundsets"/>
