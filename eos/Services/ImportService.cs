@@ -276,7 +276,7 @@ namespace Eos.Services
 
                     var tmpRace = new Race();
                     tmpRace.ID = recordId;
-                    tmpRace.Index = i;
+                    tmpRace.Index = i - originalRaces2da.Count; 
                     tmpRace.SourceLabel = races2da[i].AsString("Label");
 
                     if (!SetText(tmpRace.Name, races2da[i].AsInteger("Name"))) continue;
@@ -610,7 +610,7 @@ namespace Eos.Services
 
                     var tmpClass = new CharacterClass();
                     tmpClass.ID = recordId;
-                    tmpClass.Index = i;
+                    tmpClass.Index = i - originalClasses2da.Count;
                     tmpClass.SourceLabel = classes2da[i].AsString("Label");
 
                     if (!SetText(tmpClass.Name, classes2da[i].AsInteger("Name"))) continue;
@@ -715,7 +715,7 @@ namespace Eos.Services
 
                     var tmpDomain = new Domain();
                     tmpDomain.ID = recordId;
-                    tmpDomain.Index = i;
+                    tmpDomain.Index = i - originalDomains2da.Count;
                     tmpDomain.SourceLabel = domains2da[i].AsString("Label");
 
                     if (!SetText(tmpDomain.Name, domains2da[i].AsInteger("Name"))) continue;
@@ -756,7 +756,7 @@ namespace Eos.Services
 
                     var tmpSkill = new Skill();
                     tmpSkill.ID = recordId;
-                    tmpSkill.Index = i;
+                    tmpSkill.Index = i - originalSkills2da.Count;
                     tmpSkill.SourceLabel = skills2da[i].AsString("Label");
 
                     if (!SetText(tmpSkill.Name, skills2da[i].AsInteger("Name"))) continue;
@@ -790,7 +790,7 @@ namespace Eos.Services
 
                     var tmpFeat = new Feat();
                     tmpFeat.ID = recordId;
-                    tmpFeat.Index = i;
+                    tmpFeat.Index = i - originalFeat2da.Count;
                     tmpFeat.SourceLabel = feat2da[i].AsString("LABEL");
 
                     if (!SetText(tmpFeat.Name, feat2da[i].AsInteger("FEAT"))) continue;
@@ -855,7 +855,7 @@ namespace Eos.Services
 
                     var tmpSpell = new Spell();
                     tmpSpell.ID = recordId;
-                    tmpSpell.Index = i;
+                    tmpSpell.Index = i - originalSpells2da.Count;
                     tmpSpell.SourceLabel = spells2da[i].AsString("Label");
 
                     if (!SetText(tmpSpell.Name, spells2da[i].AsInteger("Name"))) continue;
@@ -992,7 +992,7 @@ namespace Eos.Services
 
                     var tmpDisease = new Disease();
                     tmpDisease.ID = recordId;
-                    tmpDisease.Index = i;
+                    tmpDisease.Index = i - originalDisease2da.Count;
                     tmpDisease.SourceLabel = disease2da[i].AsString("Label");
 
                     if (!SetText(tmpDisease.Name, disease2da[i].AsInteger("Name"))) continue;
@@ -1032,7 +1032,7 @@ namespace Eos.Services
 
                     var tmpPoison = new Poison();
                     tmpPoison.ID = recordId;
-                    tmpPoison.Index = i;
+                    tmpPoison.Index = i - originalPoison2da.Count;
                     tmpPoison.SourceLabel = poison2da[i].AsString("Label");
 
                     if (!SetText(tmpPoison.Name, poison2da[i].AsInteger("Name"))) continue;
@@ -1071,7 +1071,7 @@ namespace Eos.Services
 
                     var tmpAreaEffect = new AreaEffect();
                     tmpAreaEffect.ID = recordId;
-                    tmpAreaEffect.Index = i;
+                    tmpAreaEffect.Index = i - originalAoe2da.Count;
                     tmpAreaEffect.SourceLabel = aoe2da[i].AsString("LABEL");
 
                     tmpAreaEffect.Name = aoe2da[i].AsString("LABEL") ?? "";
@@ -1126,7 +1126,7 @@ namespace Eos.Services
 
                     var tmpMasterFeat = new MasterFeat();
                     tmpMasterFeat.ID = recordId;
-                    tmpMasterFeat.Index = i;
+                    tmpMasterFeat.Index = i - originalMasterFeats2da.Count;
                     tmpMasterFeat.SourceLabel = masterFeats2da[i].AsString("LABEL");
 
                     if (!SetText(tmpMasterFeat.Name, masterFeats2da[i].AsInteger("STRREF"))) continue;
@@ -1153,7 +1153,7 @@ namespace Eos.Services
 
                     var tmpBaseItem = new BaseItem();
                     tmpBaseItem.ID = recordId;
-                    tmpBaseItem.Index = i;
+                    tmpBaseItem.Index = i - originalBaseitems2da.Count;
                     tmpBaseItem.SourceLabel = baseitems2da[i].AsString("label");
 
                     if (!SetText(tmpBaseItem.Name, baseitems2da[i].AsInteger("Name"))) continue;
@@ -1243,7 +1243,7 @@ namespace Eos.Services
 
                     var tmpAppearance = new Appearance();
                     tmpAppearance.ID = recordId;
-                    tmpAppearance.Index = i;
+                    tmpAppearance.Index = i - originalAppearance2da.Count;
                     tmpAppearance.SourceLabel = appearance2da[i].AsString("LABEL");
 
                     if (!SetText(tmpAppearance.Name, appearance2da[i].AsInteger("STRING_REF"))) continue;
@@ -1308,7 +1308,7 @@ namespace Eos.Services
 
                     var tmpAppearanceSoundset = new AppearanceSoundset();
                     tmpAppearanceSoundset.ID = recordId;
-                    tmpAppearanceSoundset.Index = i;
+                    tmpAppearanceSoundset.Index = i - originalAppearanceSoundset2da.Count;
                     tmpAppearanceSoundset.SourceLabel = appearancesndset2da[i].AsString("Label");
 
                     if (appearancesndset2da[i].IsNull("Label")) continue;
@@ -1345,7 +1345,7 @@ namespace Eos.Services
 
                     var tmpWeaponSound = new WeaponSound();
                     tmpWeaponSound.ID = recordId;
-                    tmpWeaponSound.Index = i;
+                    tmpWeaponSound.Index = i - originalWeaponSounds2da.Count;
                     tmpWeaponSound.SourceLabel = weaponsounds2da[i].AsString("Label");
 
                     if (weaponsounds2da[i].IsNull("Label")) continue;
@@ -1393,7 +1393,7 @@ namespace Eos.Services
 
                     var tmpInventorySound = new InventorySound();
                     tmpInventorySound.ID = recordId;
-                    tmpInventorySound.Index = i;
+                    tmpInventorySound.Index = i - originalInventorySounds2da.Count;
                     tmpInventorySound.SourceLabel = inventorysnds2da[i].AsString("Label");
 
                     if (inventorysnds2da[i].IsNull("Label")) continue;
@@ -1420,7 +1420,7 @@ namespace Eos.Services
 
                     var tmpVfx = new VisualEffect();
                     tmpVfx.ID = recordId;
-                    tmpVfx.Index = i;
+                    tmpVfx.Index = i - originalVfx2da.Count;
                     tmpVfx.SourceLabel = vfx2da[i].AsString("Label");
 
                     if (vfx2da[i].IsNull("Type_FD")) continue;
@@ -1472,7 +1472,7 @@ namespace Eos.Services
 
                     var tmpProgFX = new ProgrammedEffect();
                     tmpProgFX.ID = recordId;
-                    tmpProgFX.Index = i;
+                    tmpProgFX.Index = i - originalProgFX2da.Count;
                     tmpProgFX.SourceLabel = progFX2da[i].AsString("Label");
 
                     if (progFX2da[i].IsNull("Label")) continue;
@@ -1683,7 +1683,7 @@ namespace Eos.Services
 
                     var tmpPackage = new ClassPackage();
                     tmpPackage.ID = recordId;
-                    tmpPackage.Index = i;
+                    tmpPackage.Index = i - originalPackages2da.Count;
                     tmpPackage.SourceLabel = packages2da[i].AsString("Label");
 
                     if (!SetText(tmpPackage.Name, packages2da[i].AsInteger("Name"))) continue;
@@ -1723,7 +1723,7 @@ namespace Eos.Services
 
                     var tmpSoundset = new Soundset();
                     tmpSoundset.ID = recordId;
-                    tmpSoundset.Index = i;
+                    tmpSoundset.Index = i - originalSoundset2da.Count;
                     tmpSoundset.SourceLabel = soundset2da[i].AsString("LABEL");
 
                     if (!SetText(tmpSoundset.Name, soundset2da[i].AsInteger("STRREF"))) continue;
@@ -1767,7 +1767,7 @@ namespace Eos.Services
 
                     var tmpPolymorph = new Polymorph();
                     tmpPolymorph.ID = recordId;
-                    tmpPolymorph.Index = i;
+                    tmpPolymorph.Index = i - originalPolymorph2da.Count;
                     tmpPolymorph.SourceLabel = polymorph2da[i].AsString("Name");
 
                     if (polymorph2da[i].IsNull("Name")) continue;
@@ -1814,7 +1814,7 @@ namespace Eos.Services
 
                     var tmpCompanion = new Companion();
                     tmpCompanion.ID = recordId;
-                    tmpCompanion.Index = i;
+                    tmpCompanion.Index = i - originalCompanions2da.Count;
                     tmpCompanion.SourceLabel = companions2da[i].AsString("NAME");
 
                     if (!SetText(tmpCompanion.Name, companions2da[i].AsInteger("STRREF"))) continue;
@@ -1841,7 +1841,7 @@ namespace Eos.Services
 
                     var tmpFamiliar = new Familiar();
                     tmpFamiliar.ID = recordId;
-                    tmpFamiliar.Index = i;
+                    tmpFamiliar.Index = i - originalFamiliars2da.Count;
                     tmpFamiliar.SourceLabel = familiars2da[i].AsString("NAME");
 
                     if (!SetText(tmpFamiliar.Name, familiars2da[i].AsInteger("STRREF"))) continue;
@@ -1868,7 +1868,7 @@ namespace Eos.Services
 
                     var tmpTrap = new Trap();
                     tmpTrap.ID = recordId;
-                    tmpTrap.Index = i;
+                    tmpTrap.Index = i - originalTraps2da.Count;
                     tmpTrap.SourceLabel = traps2da[i].AsString("Label");
 
                     if (!SetText(tmpTrap.Name, traps2da[i].AsInteger("TrapName"))) continue;
@@ -1899,7 +1899,7 @@ namespace Eos.Services
 
                     var tmpDamageType = new DamageType();
                     tmpDamageType.ID = recordId;
-                    tmpDamageType.Index = i;
+                    tmpDamageType.Index = i - originalDamageTypes2da.Count;
                     tmpDamageType.SourceLabel = damagetypes2da[i].AsString("Label");
 
                     if (!SetText(tmpDamageType.Name, damagetypes2da[i].AsInteger("CharsheetStrref"))) continue;
@@ -1925,7 +1925,7 @@ namespace Eos.Services
 
                     var tmpDamageTypeGroup = new DamageTypeGroup();
                     tmpDamageTypeGroup.ID = recordId;
-                    tmpDamageTypeGroup.Index = i;
+                    tmpDamageTypeGroup.Index = i - originalDamageTypeGroups2da.Count;
                     tmpDamageTypeGroup.SourceLabel = damagetypeGroups2da[i].AsString("Label");
 
                     if (!SetText(tmpDamageTypeGroup.FeedbackText, damagetypeGroups2da[i].AsInteger("FeedbackStrref"))) continue;
@@ -1958,7 +1958,7 @@ namespace Eos.Services
 
                     var tmpPortrait = new Portrait();
                     tmpPortrait.ID = recordId;
-                    tmpPortrait.Index = i;
+                    tmpPortrait.Index = i - originalPortraits2da.Count;
                     tmpPortrait.SourceLabel = portraits2da[i].AsString("BaseResRef");
 
                     if (portraits2da[i].IsNull("BaseResRef")) continue;
@@ -2302,6 +2302,7 @@ namespace Eos.Services
                 {
                     race.ID = Guid.Empty;
                     race.Overrides = standardRace.ID;
+                    race.Index = -1;
 
                     var projectOverrideRace = MasterRepository.Project.GetOverride(standardRace);
                     if (projectOverrideRace != null)
@@ -2321,6 +2322,7 @@ namespace Eos.Services
                 {
                     cls.ID = Guid.Empty;
                     cls.Overrides = standardClass.ID;
+                    cls.Index = -1;
 
                     var projectOverrideClass = MasterRepository.Project.GetOverride(standardClass);
                     if (projectOverrideClass != null)
@@ -2340,6 +2342,7 @@ namespace Eos.Services
                 {
                     package.ID = Guid.Empty;
                     package.Overrides = standardPackage.ID;
+                    package.Index = -1;
 
                     var projectOverridePackage = MasterRepository.Project.GetOverride(standardPackage);
                     if (projectOverridePackage != null)
@@ -2359,6 +2362,7 @@ namespace Eos.Services
                 {
                     domain.ID = Guid.Empty;
                     domain.Overrides = standardDomain.ID;
+                    domain.Index = -1;
 
                     var projectOverrideDomain = MasterRepository.Project.GetOverride(standardDomain);
                     if (projectOverrideDomain != null)
@@ -2394,6 +2398,7 @@ namespace Eos.Services
                 {
                     spell.ID = Guid.Empty;
                     spell.Overrides = standardSpell.ID;
+                    spell.Index = -1;
 
                     var projectOverrideSpell = MasterRepository.Project.GetOverride(standardSpell);
                     if (projectOverrideSpell != null)
@@ -2413,6 +2418,7 @@ namespace Eos.Services
                 {
                     masterFeat.ID = Guid.Empty;
                     masterFeat.Overrides = standardMasterFeat.ID;
+                    masterFeat.Index = -1;
 
                     var projectOverrideMasterFeat = MasterRepository.Project.GetOverride(standardMasterFeat);
                     if (projectOverrideMasterFeat != null)
@@ -2432,6 +2438,7 @@ namespace Eos.Services
                 {
                     feat.ID = Guid.Empty;
                     feat.Overrides = standardFeat.ID;
+                    feat.Index = -1;
 
                     var projectOverrideFeat = MasterRepository.Project.GetOverride(standardFeat);
                     if (projectOverrideFeat != null)
@@ -2451,6 +2458,7 @@ namespace Eos.Services
                 {
                     skill.ID = Guid.Empty;
                     skill.Overrides = standardSkill.ID;
+                    skill.Index = -1;
 
                     var projectOverrideSkill = MasterRepository.Project.GetOverride(standardSkill);
                     if (projectOverrideSkill != null)
@@ -2470,6 +2478,7 @@ namespace Eos.Services
                 {
                     disease.ID = Guid.Empty;
                     disease.Overrides = standardDisease.ID;
+                    disease.Index = -1;
 
                     var projectOverrideDisease = MasterRepository.Project.GetOverride(standardDisease);
                     if (projectOverrideDisease != null)
@@ -2489,6 +2498,7 @@ namespace Eos.Services
                 {
                     poison.ID = Guid.Empty;
                     poison.Overrides = standardPoison.ID;
+                    poison.Index = -1;
 
                     var projectOverridePoison = MasterRepository.Project.GetOverride(standardPoison);
                     if (projectOverridePoison != null)
@@ -2508,6 +2518,7 @@ namespace Eos.Services
                 {
                     baseItem.ID = Guid.Empty;
                     baseItem.Overrides = standardBaseItem.ID;
+                    baseItem.Index = -1;
 
                     var projectOverrideBaseItem = MasterRepository.Project.GetOverride(standardBaseItem);
                     if (projectOverrideBaseItem != null)
@@ -2527,6 +2538,7 @@ namespace Eos.Services
                 {
                     aoe.ID = Guid.Empty;
                     aoe.Overrides = standardAoe.ID;
+                    aoe.Index = -1;
 
                     var projectOverrideAoe = MasterRepository.Project.GetOverride(standardAoe);
                     if (projectOverrideAoe != null)
@@ -2546,6 +2558,7 @@ namespace Eos.Services
                 {
                     polymorph.ID = Guid.Empty;
                     polymorph.Overrides = standardPolymorph.ID;
+                    polymorph.Index = -1;
 
                     var projectOverridePolymorph = MasterRepository.Project.GetOverride(standardPolymorph);
                     if (projectOverridePolymorph != null)
@@ -2565,6 +2578,7 @@ namespace Eos.Services
                 {
                     companion.ID = Guid.Empty;
                     companion.Overrides = standardCompanion.ID;
+                    companion.Index = -1;
 
                     var projectOverrideCompanion = MasterRepository.Project.GetOverride(standardCompanion);
                     if (projectOverrideCompanion != null)
@@ -2584,6 +2598,7 @@ namespace Eos.Services
                 {
                     familiar.ID = Guid.Empty;
                     familiar.Overrides = standardFamiliar.ID;
+                    familiar.Index = -1;
 
                     var projectOverrideFamiliar = MasterRepository.Project.GetOverride(standardFamiliar);
                     if (projectOverrideFamiliar != null)
@@ -2603,6 +2618,7 @@ namespace Eos.Services
                 {
                     trap.ID = Guid.Empty;
                     trap.Overrides = standardTrap.ID;
+                    trap.Index = -1;
 
                     var projectOverrideTrap = MasterRepository.Project.GetOverride(standardTrap);
                     if (projectOverrideTrap != null)
@@ -2622,6 +2638,7 @@ namespace Eos.Services
                 {
                     soundset.ID = Guid.Empty;
                     soundset.Overrides = standardSoundset.ID;
+                    soundset.Index = -1;
 
                     var projectOverrideSoundset = MasterRepository.Project.GetOverride(standardSoundset);
                     if (projectOverrideSoundset != null)
@@ -2641,6 +2658,7 @@ namespace Eos.Services
                 {
                     vfx.ID = Guid.Empty;
                     vfx.Overrides = standardVfx.ID;
+                    vfx.Index = -1;
 
                     var projectOverrideVfx = MasterRepository.Project.GetOverride(standardVfx);
                     if (projectOverrideVfx != null)
@@ -2660,6 +2678,7 @@ namespace Eos.Services
                 {
                     appearance.ID = Guid.Empty;
                     appearance.Overrides = standardAppearance.ID;
+                    appearance.Index = -1;
 
                     var projectOverrideAppearance = MasterRepository.Project.GetOverride(standardAppearance);
                     if (projectOverrideAppearance != null)
@@ -2679,6 +2698,7 @@ namespace Eos.Services
                 {
                     appearanceSoundset.ID = Guid.Empty;
                     appearanceSoundset.Overrides = standardAppearanceSoundset.ID;
+                    appearanceSoundset.Index = -1;
 
                     var projectOverrideAppearanceSoundset = MasterRepository.Project.GetOverride(standardAppearanceSoundset);
                     if (projectOverrideAppearanceSoundset != null)
@@ -2698,6 +2718,7 @@ namespace Eos.Services
                 {
                     weaponSound.ID = Guid.Empty;
                     weaponSound.Overrides = standardWeaponSound.ID;
+                    weaponSound.Index = -1;
 
                     var projectOverrideWeaponSound = MasterRepository.Project.GetOverride(standardWeaponSound);
                     if (projectOverrideWeaponSound != null)
@@ -2717,6 +2738,7 @@ namespace Eos.Services
                 {
                     inventorySound.ID = Guid.Empty;
                     inventorySound.Overrides = standardInventorySound.ID;
+                    inventorySound.Index = -1;
 
                     var projectOverrideInventorySound = MasterRepository.Project.GetOverride(standardInventorySound);
                     if (projectOverrideInventorySound != null)
@@ -2736,6 +2758,7 @@ namespace Eos.Services
                 {
                     portrait.ID = Guid.Empty;
                     portrait.Overrides = standardPortrait.ID;
+                    portrait.Index = -1;
 
                     var projectOverridePortrait = MasterRepository.Project.GetOverride(standardPortrait);
                     if (projectOverridePortrait != null)
@@ -2755,6 +2778,7 @@ namespace Eos.Services
                 {
                     progFX.ID = Guid.Empty;
                     progFX.Overrides = standardProgFX.ID;
+                    progFX.Index = -1;
 
                     var projectOverrideProgFX = MasterRepository.Project.GetOverride(standardProgFX);
                     if (projectOverrideProgFX != null)
@@ -2774,6 +2798,7 @@ namespace Eos.Services
                 {
                     damageType.ID = Guid.Empty;
                     damageType.Overrides = standardDamageType.ID;
+                    damageType.Index = -1;
 
                     var projectOverrideDamageType = MasterRepository.Project.GetOverride(standardDamageType);
                     if (projectOverrideDamageType != null)
@@ -2793,6 +2818,7 @@ namespace Eos.Services
                 {
                     damageTypeGroup.ID = Guid.Empty;
                     damageTypeGroup.Overrides = standardDamageTypeGroup.ID;
+                    damageTypeGroup.Index = -1;
 
                     var projectOverrideDamageTypeGroup = MasterRepository.Project.GetOverride(standardDamageTypeGroup);
                     if (projectOverrideDamageTypeGroup != null)
@@ -2812,6 +2838,7 @@ namespace Eos.Services
                 {
                     racialFeatsTable.ID = Guid.Empty;
                     racialFeatsTable.Overrides = standardRacialFeatsTable.ID;
+                    racialFeatsTable.Index = -1;
 
                     var projectOverrideRacialFeatsTable = MasterRepository.Project.GetOverride(standardRacialFeatsTable);
                     if (projectOverrideRacialFeatsTable != null)
@@ -2831,6 +2858,7 @@ namespace Eos.Services
                 {
                     featsTable.ID = Guid.Empty;
                     featsTable.Overrides = standardFeatsTable.ID;
+                    featsTable.Index = -1;
 
                     var projectOverrideFeatsTable = MasterRepository.Project.GetOverride(standardFeatsTable);
                     if (projectOverrideFeatsTable != null)
@@ -2850,6 +2878,7 @@ namespace Eos.Services
                 {
                     bfeatsTable.ID = Guid.Empty;
                     bfeatsTable.Overrides = standardBFeatsTable.ID;
+                    bfeatsTable.Index = -1;
 
                     var projectOverrideBFeatsTable = MasterRepository.Project.GetOverride(standardBFeatsTable);
                     if (projectOverrideBFeatsTable != null)
@@ -2869,6 +2898,7 @@ namespace Eos.Services
                 {
                     skillTable.ID = Guid.Empty;
                     skillTable.Overrides = standardSkillTable.ID;
+                    skillTable.Index = -1;
 
                     var projectOverrideSkillTable = MasterRepository.Project.GetOverride(standardSkillTable);
                     if (projectOverrideSkillTable != null)
@@ -2888,6 +2918,7 @@ namespace Eos.Services
                 {
                     attackTable.ID = Guid.Empty;
                     attackTable.Overrides = standardAttackTable.ID;
+                    attackTable.Index = -1;
 
                     var projectOverrideAttackTable = MasterRepository.Project.GetOverride(standardAttackTable);
                     if (projectOverrideAttackTable != null)
@@ -2907,6 +2938,7 @@ namespace Eos.Services
                 {
                     savesTable.ID = Guid.Empty;
                     savesTable.Overrides = standardSavesTable.ID;
+                    savesTable.Index = -1;
 
                     var projectOverrideSavesTable = MasterRepository.Project.GetOverride(standardSavesTable);
                     if (projectOverrideSavesTable != null)
@@ -2926,6 +2958,7 @@ namespace Eos.Services
                 {
                     requTable.ID = Guid.Empty;
                     requTable.Overrides = standardRequTable.ID;
+                    requTable.Index = -1;
 
                     var projectOverrideRequTable = MasterRepository.Project.GetOverride(standardRequTable);
                     if (projectOverrideRequTable != null)
@@ -2945,6 +2978,7 @@ namespace Eos.Services
                 {
                     statGainTable.ID = Guid.Empty;
                     statGainTable.Overrides = standardStatGainTable.ID;
+                    statGainTable.Index = -1;
 
                     var projectOverrideStatGainTable = MasterRepository.Project.GetOverride(standardStatGainTable);
                     if (projectOverrideStatGainTable != null)
@@ -2964,6 +2998,7 @@ namespace Eos.Services
                 {
                     spellSlotTable.ID = Guid.Empty;
                     spellSlotTable.Overrides = standardSpellSlotTable.ID;
+                    spellSlotTable.Index = -1;
 
                     var projectOverrideSpellSlotTable = MasterRepository.Project.GetOverride(standardSpellSlotTable);
                     if (projectOverrideSpellSlotTable != null)
@@ -2983,6 +3018,7 @@ namespace Eos.Services
                 {
                     knownSpellsTable.ID = Guid.Empty;
                     knownSpellsTable.Overrides = standardKnownSpellsTable.ID;
+                    knownSpellsTable.Index = -1;
 
                     var projectOverrideKnownSpellsTable = MasterRepository.Project.GetOverride(standardKnownSpellsTable);
                     if (projectOverrideKnownSpellsTable != null)
@@ -3002,6 +3038,7 @@ namespace Eos.Services
                 {
                     spellPrefTable.ID = Guid.Empty;
                     spellPrefTable.Overrides = standardSpellPrefsTable.ID;
+                    spellPrefTable.Index = -1;
 
                     var projectOverrideSpellPrefTable = MasterRepository.Project.GetOverride(standardSpellPrefsTable);
                     if (projectOverrideSpellPrefTable != null)
@@ -3021,6 +3058,7 @@ namespace Eos.Services
                 {
                     featPrefTable.ID = Guid.Empty;
                     featPrefTable.Overrides = standardFeatPrefsTable.ID;
+                    featPrefTable.Index = -1;
 
                     var projectOverrideFeatPrefTable = MasterRepository.Project.GetOverride(standardFeatPrefsTable);
                     if (projectOverrideFeatPrefTable != null)
@@ -3040,6 +3078,7 @@ namespace Eos.Services
                 {
                     skillPrefTable.ID = Guid.Empty;
                     skillPrefTable.Overrides = standardSkillPrefsTable.ID;
+                    skillPrefTable.Index = -1;
 
                     var projectOverrideSkillPrefTable = MasterRepository.Project.GetOverride(standardSkillPrefsTable);
                     if (projectOverrideSkillPrefTable != null)
@@ -3059,6 +3098,7 @@ namespace Eos.Services
                 {
                     equipmentTable.ID = Guid.Empty;
                     equipmentTable.Overrides = standardEquipmentTable.ID;
+                    equipmentTable.Index = -1;
 
                     var projectOverrideEquipmentTable = MasterRepository.Project.GetOverride(standardEquipmentTable);
                     if (projectOverrideEquipmentTable != null)

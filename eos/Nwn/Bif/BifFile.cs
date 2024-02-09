@@ -42,7 +42,7 @@ namespace Eos.Nwn.Bif
 
         public void Load(String bifFile)
         {
-            fileStream = new FileStream(bifFile, FileMode.Open, FileAccess.Read);
+            fileStream = new FileStream(bifFile, FileMode.Open, FileAccess.Read, FileShare.Read);
             reader = new BinaryReader(fileStream);
             header = BinaryHelper.Read<BifHeader>(reader);
         }

@@ -77,7 +77,7 @@ namespace Eos.Nwn.Tlk
                 header = BinaryHelper.Read<TlkHeader>(reader);
             };
 
-            fileStream = new FileStream(tlkFile, FileMode.Open, FileAccess.Read);
+            fileStream = new FileStream(tlkFile, FileMode.Open, FileAccess.Read, FileShare.Read);
             reader = new BinaryReader(fileStream, languageEncodings[header.LanguageId]);
             if (writeable)
             {

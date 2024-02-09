@@ -46,6 +46,11 @@ namespace Eos.Nwn
             }
         }
 
+        public static void Skip(BinaryReader stream, int count)
+        {
+            stream.ReadBytes(count);
+        }
+
         public static String ReadString(BinaryReader stream, int length)
         {
             return new String(stream.ReadChars(length)).Trim('\0');

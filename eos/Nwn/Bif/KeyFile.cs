@@ -58,7 +58,7 @@ namespace Eos.Nwn.Bif
 
         public void Load(String filename)
         {
-            FileStream fs = new FileStream(filename, FileMode.Open);
+            FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
             try
             {
                 Load(fs);

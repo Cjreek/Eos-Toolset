@@ -172,7 +172,7 @@ namespace Eos.Config
             {
                 Log.Info("Found Beamdog settings.json at: {0}", path);
 
-                var fs = new FileStream(settingsFile, FileMode.Open, FileAccess.Read);
+                var fs = new FileStream(settingsFile, FileMode.Open, FileAccess.Read, FileShare.Read);
                 try
                 {
                     if (JsonNode.Parse(fs) is JsonObject settingsRoot)
@@ -275,7 +275,7 @@ namespace Eos.Config
             {
                 try
                 {
-                    var fs = new FileStream(Constants.ConfigPath, FileMode.Open, FileAccess.Read);
+                    var fs = new FileStream(Constants.ConfigPath, FileMode.Open, FileAccess.Read, FileShare.Read);
                     try
                     {
                         if (JsonNode.Parse(fs) is JsonObject configJson)

@@ -151,7 +151,7 @@ namespace Eos.Repositories
                 {
                     Log.Info("Loading \"{0}\"", filename);
 
-                    var fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+                    var fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
                     try
                     {
                         if (JsonNode.Parse(fs) is JsonObject jsonRepository)

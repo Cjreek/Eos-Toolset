@@ -456,7 +456,7 @@ namespace Eos.Nwn.TwoDimensionalArray
         {
             if (File.Exists(filename))
             {
-                var fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+                var fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
                 try
                 {
                     Load(fs);
