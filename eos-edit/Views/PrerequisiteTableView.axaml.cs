@@ -28,6 +28,13 @@ namespace Eos.Views
                         case RequirementType.ARCSPELL:
                         case RequirementType.SPELL:
                         case RequirementType.BAB:
+#if SPACEPOPE
+                        case RequirementType.ARCCAST:
+                        case RequirementType.DIVCAST:
+                        case RequirementType.DIVSPELL:
+                        case RequirementType.PANTHEONOR:
+                        case RequirementType.DEITYOR:
+#endif
                             return controlType == "INT";
                         case RequirementType.FEATOR:
                         case RequirementType.FEAT:
@@ -42,7 +49,11 @@ namespace Eos.Views
                         case RequirementType.SAVE:
                             return controlType == "SAVE";
                         case RequirementType.SKILL:
+#if SPACEPOPE
+                        case RequirementType.SKILLOR:
+#endif
                             return controlType == "SKILL";
+                        
                     }
                 }
                 else if (ParamNumber == 2)

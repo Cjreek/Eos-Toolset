@@ -56,6 +56,12 @@ namespace Eos.Models
         public BodyBag BodyBag { get; set; } = BodyBag.Default;
         public bool Targetable { get; set; } = true;
 
+        protected override void Initialize()
+        {
+            base.Initialize();
+            Name = new TLKStringSet(() => NotifyPropertyChanged(nameof(Name)));
+        }
+
         protected override TLKStringSet? GetTlkDisplayName()
         {
             var modelOverride = (Appearance?)MasterRepository.Project.GetOverride(this);

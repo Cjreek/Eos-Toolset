@@ -48,6 +48,13 @@ namespace Eos.Models.Tables
                     case RequirementType.ARCSPELL:
                     case RequirementType.BAB:
                     case RequirementType.SPELL:
+#if SPACEPOPE
+                    case RequirementType.ARCCAST:
+                    case RequirementType.DIVCAST:
+                    case RequirementType.DIVSPELL:
+                    case RequirementType.PANTHEONOR:
+                    case RequirementType.DEITYOR:
+#endif
                         return Param1Int;
 
                     case RequirementType.CLASSNOT:
@@ -62,6 +69,9 @@ namespace Eos.Models.Tables
                         return Param1Race;
 
                     case RequirementType.SKILL:
+#if SPACEPOPE
+                    case RequirementType.SKILLOR:
+#endif
                         return Param1Skill;
 
                     case RequirementType.VAR:

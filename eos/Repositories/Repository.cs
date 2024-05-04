@@ -39,7 +39,10 @@ namespace Eos.Repositories
                 if (items != null)
                 {
                     foreach (var item in items.Cast<INotifyPropertyChanged>())
-                        item.PropertyChanged -= Item_PropertyChanged;
+                    {
+                        if (item != null)
+                            item.PropertyChanged -= Item_PropertyChanged;
+                    }
                 }
             }
             else
@@ -49,7 +52,10 @@ namespace Eos.Repositories
                 if (items != null)
                 {
                     foreach (var item in items.Cast<INotifyPropertyChanged>())
-                        item.PropertyChanged += Item_PropertyChanged;
+                    { 
+                        if (item != null)
+                            item.PropertyChanged += Item_PropertyChanged;
+                    }
                 }
             }
             else
@@ -83,8 +89,8 @@ namespace Eos.Repositories
 
         private void Item_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            // Works better without.. But why did I have it in in the first place? It used to fix *something*...
-            //RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            if ((sender is BaseModel model) && (model.NotifyRepository))
+                Task.Delay(5).ContinueWith(t => RaiseCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset)));
         }
 
         protected virtual void Changed()

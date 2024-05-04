@@ -114,7 +114,7 @@ namespace Eos.Models
                 if (_toolsetCategory != value)
                 {
                     _toolsetCategory = value;
-                    NotifyPropertyChanged();
+                    NotifyPropertyChangedWithRepository();
                 }
             }
         }

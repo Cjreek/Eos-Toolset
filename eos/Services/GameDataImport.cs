@@ -393,6 +393,9 @@ namespace Eos.Services
                         break;
 
                     case RequirementType.SKILL:
+#if SPACEPOPE
+                    case RequirementType.SKILLOR:
+#endif
                         tmpItem.Param1Skill = CreateRef<Skill>(preRequTable2da[i].AsInteger("ReqParam1"));
                         break;
 
@@ -403,6 +406,13 @@ namespace Eos.Services
                     case RequirementType.ARCSPELL:
                     case RequirementType.SPELL:
                     case RequirementType.BAB:
+#if SPACEPOPE
+                    case RequirementType.ARCCAST:
+                    case RequirementType.DIVCAST:
+                    case RequirementType.DIVSPELL:
+                    case RequirementType.PANTHEONOR:
+                    case RequirementType.DEITYOR:
+#endif
                         tmpItem.Param1Int = preRequTable2da[i].AsInteger("ReqParam1");
                         break;
 
@@ -984,6 +994,24 @@ namespace Eos.Services
                     tmpFeat.ToolsetCategory = FeatCategory.Other;
                     tmpFeat.IsHostile = false;
                     tmpFeat.UseActionQueue = false;
+
+                    Standard.Feats.Add(tmpFeat);
+                    break;
+
+                case 981: // Epic Harper Scout
+                    tmpFeat.Name.OriginalIndex = -1;
+                    tmpFeat.Name[TLKLanguage.English].Text = "Epic Harper Scout";
+                    tmpFeat.Name[TLKLanguage.English].TextF = tmpFeat.Name[TLKLanguage.English].Text;
+                    tmpFeat.Hint = "Cut";
+                    tmpFeat.Icon = "IR_X1_HARPER";
+                    tmpFeat.Category = null;
+                    tmpFeat.UseableByAllClasses = false;
+                    tmpFeat.ToolsetCategory = FeatCategory.Other;
+                    tmpFeat.IsHostile = false;
+                    tmpFeat.UseActionQueue = false;
+                    tmpFeat.CRModifier = 0;
+                    tmpFeat.UsesPerDay = null;
+                    tmpFeat.RequiresEpic = true;
 
                     Standard.Feats.Add(tmpFeat);
                     break;
@@ -2957,6 +2985,9 @@ namespace Eos.Services
                             break;
 
                         case RequirementType.SKILL:
+#if SPACEPOPE
+                        case RequirementType.SKILLOR:
+#endif
                             item.Param1Skill = SolveInstance(item.Param1Skill, Standard.Skills);
                             break;
                     }

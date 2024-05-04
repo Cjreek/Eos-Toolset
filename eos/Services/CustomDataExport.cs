@@ -703,12 +703,34 @@ namespace Eos.Services
                                     break;
 
                                 case RequirementType.SKILL:
+#if SPACEPOPE
+                                case RequirementType.SKILLOR:
+#endif
                                     rec.Set("LABEL", ((Skill?)item.RequirementParam1)?.Name[project.DefaultLanguage].Text.Replace(" ", ""));
                                     break;
 
                                 case RequirementType.VAR:
                                     rec.Set("LABEL", "ScriptVar");
                                     break;
+
+#if SPACEPOPE
+                                case RequirementType.ARCCAST:
+                                    rec.Set("LABEL", "Arcane");
+                                    break;
+
+                                case RequirementType.DIVCAST:
+                                case RequirementType.DIVSPELL:
+                                    rec.Set("LABEL", "Divine");
+                                    break;
+
+                                case RequirementType.PANTHEONOR:
+                                    rec.Set("LABEL", "Pantheon");
+                                    break;
+
+                                case RequirementType.DEITYOR:
+                                    rec.Set("LABEL", "Deity");
+                                    break;
+#endif
 
                                 default: 
                                     rec.Set("LABEL", "Label");
@@ -1453,7 +1475,7 @@ namespace Eos.Services
                             continue;
                         }
 
-                        record.Set("LABEL", MakeLabel(feat.Name[project.DefaultLanguage].Text, "_"));
+                        record.Set("LABEL", GetScriptConstant("FEAT_", feat));
                         record.Set("FEAT", GetTLKIndex(feat.Name));
                         record.Set("DESCRIPTION", GetTLKIndex(feat.Description));
                         record.Set("Icon", feat.Icon);
@@ -2545,7 +2567,7 @@ namespace Eos.Services
                         }
 
                         var record = vfx2da[index];
-                        record.Set("Label", MakeLabel(vfx.Name, ""));
+                        record.Set("Label", MakeLabel(vfx.Name, "_"));
                         record.Set("Type_FD", vfx.Type.ToString());
                         record.Set("OrientWithGround", vfx.OrientWithGround);
                         record.Set("Imp_HeadCon_Node", vfx.ImpactHeadEffect);
@@ -3789,14 +3811,19 @@ namespace Eos.Services
             }
 
             // Classes
-            var customClasses = project.Classes.Where(cls => cls != null && cls.Overrides == null);
+            var customClasses = project.Classes.Where(cls => (cls != null) && ((cls.Overrides == null) || (MasterRepository.Standard.Classes.GetByID(cls.Overrides ?? Guid.Empty)?.Hint == "Cut")));
             if (customClasses.Any())
             {
                 incFile.Add("// Classes");
                 foreach (var cls in customClasses)
                 {
                     if (cls == null) continue;
-                    var index = project.Classes.GetCustomDataStartIndex() + cls.Index;
+
+                    int? index = -1;
+                    if (cls.Overrides != null)
+                        index = MasterRepository.Standard.Classes.GetByID(cls.Overrides ?? Guid.Empty)?.Index ?? -1;
+                    else
+                        index = project.Classes.GetCustomDataStartIndex() + cls.Index;
                     incFile.Add("const int " + GetScriptConstant("CLASS_TYPE_", cls) + " = " + index.ToString() + ";");
                 }
                 incFile.Add("");
@@ -3859,14 +3886,20 @@ namespace Eos.Services
             }
 
             // Feats
-            var customFeats = project.Feats.Where(feat => feat != null && feat.Overrides == null);
+            var customFeats = project.Feats.Where(feat => (feat != null) && ((feat.Overrides == null) || (MasterRepository.Standard.Feats.GetByID(feat.Overrides ?? Guid.Empty)?.Hint == "Cut")));
             if (customFeats.Any())
             {
                 incFile.Add("// Feats");
                 foreach (var feat in customFeats)
                 {
                     if (feat == null) continue;
-                    var index = project.Feats.GetCustomDataStartIndex() + feat.Index;
+
+                    int? index = -1;
+                    if (feat.Overrides != null)
+                        index = MasterRepository.Standard.Feats.GetByID(feat.Overrides ?? Guid.Empty)?.Index ?? -1;
+                    else
+                        index = project.Feats.GetCustomDataStartIndex() + feat.Index;
+
                     incFile.Add("const int " + GetScriptConstant("FEAT_", feat) + " = " + index.ToString() + ";");
                 }
                 incFile.Add("");
@@ -4036,6 +4069,24 @@ namespace Eos.Services
                     if (itemProp == null) continue;
                     var index = project.ItemProperties.GetCustomDataStartIndex() + itemProp.Index;
                     incFile.Add("const int " + GetScriptConstant("ITEM_PROPERTY_", itemProp) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
+            // VFX
+            var customVFX = project.VisualEffects.Where(vfx => vfx != null && vfx.Overrides == null);
+            if (customVFX.Any())
+            {
+                incFile.Add("// Visual Effects");
+                foreach (var vfx in customVFX)
+                {
+                    if (vfx == null) continue;
+                    var index = project.VisualEffects.GetCustomDataStartIndex() + vfx.Index;
+
+                    if (vfx.ScriptConstant != "")
+                        incFile.Add("const int " + GetScriptConstant("VFX_", vfx) + " = " + index.ToString() + ";");
+                    else
+                        incFile.Add("const int " + vfx.Name.ToUpper() + " = " + index.ToString() + ";");
                 }
                 incFile.Add("");
             }

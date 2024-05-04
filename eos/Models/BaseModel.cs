@@ -107,6 +107,8 @@ namespace Eos.Models
         }
         public bool HasIcon => (Icon?.Trim() ?? "") != "";
 
+        public bool NotifyRepository { get; private set; }
+
         public String Hint
         {
             get { return _hint; }
@@ -395,6 +397,7 @@ namespace Eos.Models
                 result.ResolveReferences();
                 result.ID = Guid.Empty;
                 result.Index = null;
+                result.Overrides = null;
                 if (addCopyHint)
                 {
                     result.Hint = (result.Hint + " Copy").Trim();
@@ -425,6 +428,24 @@ namespace Eos.Models
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
                 if (propertyName == "Name") // Hacky McHack
                     PropertyChanged(this, new PropertyChangedEventArgs("Label"));
+            }
+        }
+
+        public void NotifyPropertyChangedWithRepository([CallerMemberName] string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                NotifyRepository = true;
+                try
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                    if (propertyName == "Name") // Hacky McHack
+                        PropertyChanged(this, new PropertyChangedEventArgs("Label"));
+                }
+                finally
+                {
+                    NotifyRepository = false;
+                }
             }
         }
     }

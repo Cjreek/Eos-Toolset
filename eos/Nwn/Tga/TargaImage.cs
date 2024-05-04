@@ -50,7 +50,7 @@ namespace Nwn.Tga
 
         public void Load(String filename, bool force32Bit = false)
         {
-            var fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+            var fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
             try
             {
                 Load(fs, force32Bit);

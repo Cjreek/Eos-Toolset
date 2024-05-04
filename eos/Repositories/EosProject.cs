@@ -964,7 +964,7 @@ namespace Eos.Repositories
                 throw;
             }
 
-            if (Settings.Appearances.Sorted) Appearances.Sort(d => d?.Name);
+            if (Settings.Appearances.Sorted) Appearances.Sort(d => d?.Name[DefaultLanguage].Text);
             if (Settings.AppearanceSoundsets.Sorted) AppearanceSoundsets.Sort(d => d?.Name);
             if (Settings.AreaEffects.Sorted) AreaEffects.Sort(d => d?.Name);
             if (Settings.AttackBonusTables.Sorted) AttackBonusTables.Sort(d => d?.Name);

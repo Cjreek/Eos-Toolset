@@ -57,7 +57,7 @@ namespace Eos.Nwn.Ssf
 
         public void Load(String filename)
         {
-            var fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+            var fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
             try
             {
                 Load(fs);
@@ -70,6 +70,8 @@ namespace Eos.Nwn.Ssf
 
         public void Load(Stream stream)
         {
+            if (stream.Length == 0) return;
+
             var reader = new BinaryReader(stream, Encoding.GetEncoding(1252));
             var header = BinaryHelper.Read<SsfHeader>(reader);
 

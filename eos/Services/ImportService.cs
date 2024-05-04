@@ -276,7 +276,7 @@ namespace Eos.Services
 
                     var tmpRace = new Race();
                     tmpRace.ID = recordId;
-                    tmpRace.Index = i - originalRaces2da.Count; 
+                    tmpRace.Index = i;
                     tmpRace.SourceLabel = races2da[i].AsString("Label");
 
                     if (!SetText(tmpRace.Name, races2da[i].AsInteger("Name"))) continue;
@@ -539,6 +539,9 @@ namespace Eos.Services
                         break;
 
                     case RequirementType.SKILL:
+#if SPACEPOPE
+                    case RequirementType.SKILLOR:
+#endif
                         tmpItem.Param1Skill = CreateRef<Skill>(preRequTable2da[i].AsInteger("ReqParam1"));
                         break;
 
@@ -549,6 +552,13 @@ namespace Eos.Services
                     case RequirementType.ARCSPELL:
                     case RequirementType.SPELL:
                     case RequirementType.BAB:
+#if SPACEPOPE
+                    case RequirementType.ARCCAST:
+                    case RequirementType.DIVCAST:
+                    case RequirementType.DIVSPELL:
+                    case RequirementType.PANTHEONOR:
+                    case RequirementType.DEITYOR:
+#endif
                         tmpItem.Param1Int = preRequTable2da[i].AsInteger("ReqParam1");
                         break;
 
@@ -610,7 +620,7 @@ namespace Eos.Services
 
                     var tmpClass = new CharacterClass();
                     tmpClass.ID = recordId;
-                    tmpClass.Index = i - originalClasses2da.Count;
+                    tmpClass.Index = i;
                     tmpClass.SourceLabel = classes2da[i].AsString("Label");
 
                     if (!SetText(tmpClass.Name, classes2da[i].AsInteger("Name"))) continue;
@@ -715,7 +725,7 @@ namespace Eos.Services
 
                     var tmpDomain = new Domain();
                     tmpDomain.ID = recordId;
-                    tmpDomain.Index = i - originalDomains2da.Count;
+                    tmpDomain.Index = i;
                     tmpDomain.SourceLabel = domains2da[i].AsString("Label");
 
                     if (!SetText(tmpDomain.Name, domains2da[i].AsInteger("Name"))) continue;
@@ -756,7 +766,7 @@ namespace Eos.Services
 
                     var tmpSkill = new Skill();
                     tmpSkill.ID = recordId;
-                    tmpSkill.Index = i - originalSkills2da.Count;
+                    tmpSkill.Index = i;
                     tmpSkill.SourceLabel = skills2da[i].AsString("Label");
 
                     if (!SetText(tmpSkill.Name, skills2da[i].AsInteger("Name"))) continue;
@@ -790,7 +800,7 @@ namespace Eos.Services
 
                     var tmpFeat = new Feat();
                     tmpFeat.ID = recordId;
-                    tmpFeat.Index = i - originalFeat2da.Count;
+                    tmpFeat.Index = i;
                     tmpFeat.SourceLabel = feat2da[i].AsString("LABEL");
 
                     if (!SetText(tmpFeat.Name, feat2da[i].AsInteger("FEAT"))) continue;
@@ -855,7 +865,7 @@ namespace Eos.Services
 
                     var tmpSpell = new Spell();
                     tmpSpell.ID = recordId;
-                    tmpSpell.Index = i - originalSpells2da.Count;
+                    tmpSpell.Index = i;
                     tmpSpell.SourceLabel = spells2da[i].AsString("Label");
 
                     if (!SetText(tmpSpell.Name, spells2da[i].AsInteger("Name"))) continue;
@@ -992,7 +1002,7 @@ namespace Eos.Services
 
                     var tmpDisease = new Disease();
                     tmpDisease.ID = recordId;
-                    tmpDisease.Index = i - originalDisease2da.Count;
+                    tmpDisease.Index = i;
                     tmpDisease.SourceLabel = disease2da[i].AsString("Label");
 
                     if (!SetText(tmpDisease.Name, disease2da[i].AsInteger("Name"))) continue;
@@ -1032,7 +1042,7 @@ namespace Eos.Services
 
                     var tmpPoison = new Poison();
                     tmpPoison.ID = recordId;
-                    tmpPoison.Index = i - originalPoison2da.Count;
+                    tmpPoison.Index = i;
                     tmpPoison.SourceLabel = poison2da[i].AsString("Label");
 
                     if (!SetText(tmpPoison.Name, poison2da[i].AsInteger("Name"))) continue;
@@ -1071,7 +1081,7 @@ namespace Eos.Services
 
                     var tmpAreaEffect = new AreaEffect();
                     tmpAreaEffect.ID = recordId;
-                    tmpAreaEffect.Index = i - originalAoe2da.Count;
+                    tmpAreaEffect.Index = i;
                     tmpAreaEffect.SourceLabel = aoe2da[i].AsString("LABEL");
 
                     tmpAreaEffect.Name = aoe2da[i].AsString("LABEL") ?? "";
@@ -1126,7 +1136,7 @@ namespace Eos.Services
 
                     var tmpMasterFeat = new MasterFeat();
                     tmpMasterFeat.ID = recordId;
-                    tmpMasterFeat.Index = i - originalMasterFeats2da.Count;
+                    tmpMasterFeat.Index = i;
                     tmpMasterFeat.SourceLabel = masterFeats2da[i].AsString("LABEL");
 
                     if (!SetText(tmpMasterFeat.Name, masterFeats2da[i].AsInteger("STRREF"))) continue;
@@ -1153,7 +1163,7 @@ namespace Eos.Services
 
                     var tmpBaseItem = new BaseItem();
                     tmpBaseItem.ID = recordId;
-                    tmpBaseItem.Index = i - originalBaseitems2da.Count;
+                    tmpBaseItem.Index = i;
                     tmpBaseItem.SourceLabel = baseitems2da[i].AsString("label");
 
                     if (!SetText(tmpBaseItem.Name, baseitems2da[i].AsInteger("Name"))) continue;
@@ -1243,7 +1253,7 @@ namespace Eos.Services
 
                     var tmpAppearance = new Appearance();
                     tmpAppearance.ID = recordId;
-                    tmpAppearance.Index = i - originalAppearance2da.Count;
+                    tmpAppearance.Index = i;
                     tmpAppearance.SourceLabel = appearance2da[i].AsString("LABEL");
 
                     if (!SetText(tmpAppearance.Name, appearance2da[i].AsInteger("STRING_REF"))) continue;
@@ -1308,7 +1318,7 @@ namespace Eos.Services
 
                     var tmpAppearanceSoundset = new AppearanceSoundset();
                     tmpAppearanceSoundset.ID = recordId;
-                    tmpAppearanceSoundset.Index = i - originalAppearanceSoundset2da.Count;
+                    tmpAppearanceSoundset.Index = i;
                     tmpAppearanceSoundset.SourceLabel = appearancesndset2da[i].AsString("Label");
 
                     if (appearancesndset2da[i].IsNull("Label")) continue;
@@ -1345,7 +1355,7 @@ namespace Eos.Services
 
                     var tmpWeaponSound = new WeaponSound();
                     tmpWeaponSound.ID = recordId;
-                    tmpWeaponSound.Index = i - originalWeaponSounds2da.Count;
+                    tmpWeaponSound.Index = i;
                     tmpWeaponSound.SourceLabel = weaponsounds2da[i].AsString("Label");
 
                     if (weaponsounds2da[i].IsNull("Label")) continue;
@@ -1393,7 +1403,7 @@ namespace Eos.Services
 
                     var tmpInventorySound = new InventorySound();
                     tmpInventorySound.ID = recordId;
-                    tmpInventorySound.Index = i - originalInventorySounds2da.Count;
+                    tmpInventorySound.Index = i;
                     tmpInventorySound.SourceLabel = inventorysnds2da[i].AsString("Label");
 
                     if (inventorysnds2da[i].IsNull("Label")) continue;
@@ -1420,7 +1430,7 @@ namespace Eos.Services
 
                     var tmpVfx = new VisualEffect();
                     tmpVfx.ID = recordId;
-                    tmpVfx.Index = i - originalVfx2da.Count;
+                    tmpVfx.Index = i;
                     tmpVfx.SourceLabel = vfx2da[i].AsString("Label");
 
                     if (vfx2da[i].IsNull("Type_FD")) continue;
@@ -1472,7 +1482,7 @@ namespace Eos.Services
 
                     var tmpProgFX = new ProgrammedEffect();
                     tmpProgFX.ID = recordId;
-                    tmpProgFX.Index = i - originalProgFX2da.Count;
+                    tmpProgFX.Index = i;
                     tmpProgFX.SourceLabel = progFX2da[i].AsString("Label");
 
                     if (progFX2da[i].IsNull("Label")) continue;
@@ -1683,7 +1693,7 @@ namespace Eos.Services
 
                     var tmpPackage = new ClassPackage();
                     tmpPackage.ID = recordId;
-                    tmpPackage.Index = i - originalPackages2da.Count;
+                    tmpPackage.Index = i;
                     tmpPackage.SourceLabel = packages2da[i].AsString("Label");
 
                     if (!SetText(tmpPackage.Name, packages2da[i].AsInteger("Name"))) continue;
@@ -1723,7 +1733,7 @@ namespace Eos.Services
 
                     var tmpSoundset = new Soundset();
                     tmpSoundset.ID = recordId;
-                    tmpSoundset.Index = i - originalSoundset2da.Count;
+                    tmpSoundset.Index = i;
                     tmpSoundset.SourceLabel = soundset2da[i].AsString("LABEL");
 
                     if (!SetText(tmpSoundset.Name, soundset2da[i].AsInteger("STRREF"))) continue;
@@ -1767,7 +1777,7 @@ namespace Eos.Services
 
                     var tmpPolymorph = new Polymorph();
                     tmpPolymorph.ID = recordId;
-                    tmpPolymorph.Index = i - originalPolymorph2da.Count;
+                    tmpPolymorph.Index = i;
                     tmpPolymorph.SourceLabel = polymorph2da[i].AsString("Name");
 
                     if (polymorph2da[i].IsNull("Name")) continue;
@@ -1814,7 +1824,7 @@ namespace Eos.Services
 
                     var tmpCompanion = new Companion();
                     tmpCompanion.ID = recordId;
-                    tmpCompanion.Index = i - originalCompanions2da.Count;
+                    tmpCompanion.Index = i;
                     tmpCompanion.SourceLabel = companions2da[i].AsString("NAME");
 
                     if (!SetText(tmpCompanion.Name, companions2da[i].AsInteger("STRREF"))) continue;
@@ -1841,7 +1851,7 @@ namespace Eos.Services
 
                     var tmpFamiliar = new Familiar();
                     tmpFamiliar.ID = recordId;
-                    tmpFamiliar.Index = i - originalFamiliars2da.Count;
+                    tmpFamiliar.Index = i;
                     tmpFamiliar.SourceLabel = familiars2da[i].AsString("NAME");
 
                     if (!SetText(tmpFamiliar.Name, familiars2da[i].AsInteger("STRREF"))) continue;
@@ -1868,7 +1878,7 @@ namespace Eos.Services
 
                     var tmpTrap = new Trap();
                     tmpTrap.ID = recordId;
-                    tmpTrap.Index = i - originalTraps2da.Count;
+                    tmpTrap.Index = i;
                     tmpTrap.SourceLabel = traps2da[i].AsString("Label");
 
                     if (!SetText(tmpTrap.Name, traps2da[i].AsInteger("TrapName"))) continue;
@@ -1899,7 +1909,7 @@ namespace Eos.Services
 
                     var tmpDamageType = new DamageType();
                     tmpDamageType.ID = recordId;
-                    tmpDamageType.Index = i - originalDamageTypes2da.Count;
+                    tmpDamageType.Index = i;
                     tmpDamageType.SourceLabel = damagetypes2da[i].AsString("Label");
 
                     if (!SetText(tmpDamageType.Name, damagetypes2da[i].AsInteger("CharsheetStrref"))) continue;
@@ -1925,7 +1935,7 @@ namespace Eos.Services
 
                     var tmpDamageTypeGroup = new DamageTypeGroup();
                     tmpDamageTypeGroup.ID = recordId;
-                    tmpDamageTypeGroup.Index = i - originalDamageTypeGroups2da.Count;
+                    tmpDamageTypeGroup.Index = i;
                     tmpDamageTypeGroup.SourceLabel = damagetypeGroups2da[i].AsString("Label");
 
                     if (!SetText(tmpDamageTypeGroup.FeedbackText, damagetypeGroups2da[i].AsInteger("FeedbackStrref"))) continue;
@@ -1958,7 +1968,7 @@ namespace Eos.Services
 
                     var tmpPortrait = new Portrait();
                     tmpPortrait.ID = recordId;
-                    tmpPortrait.Index = i - originalPortraits2da.Count;
+                    tmpPortrait.Index = i;
                     tmpPortrait.SourceLabel = portraits2da[i].AsString("BaseResRef");
 
                     if (portraits2da[i].IsNull("BaseResRef")) continue;
@@ -2130,6 +2140,9 @@ namespace Eos.Services
                             break;
 
                         case RequirementType.SKILL:
+#if SPACEPOPE
+                        case RequirementType.SKILLOR:
+#endif
                             item.Param1Skill = SolveInstance(item.Param1Skill);
                             break;
                     }
@@ -2308,8 +2321,12 @@ namespace Eos.Services
                     if (projectOverrideRace != null)
                         MasterRepository.Project.Races.Remove(projectOverrideRace);
                 }
+                else
+                {
+                    race.Index = null;
+                }
 
-                MasterRepository.Project.Races.Add(race);
+                MasterRepository.Project.Add(race);
             }
 
             // Classes
@@ -2328,8 +2345,12 @@ namespace Eos.Services
                     if (projectOverrideClass != null)
                         MasterRepository.Project.Classes.Remove(projectOverrideClass);
                 }
+                else
+                {
+                    cls.Index = null;
+                }
 
-                MasterRepository.Project.Classes.Add(cls);
+                MasterRepository.Project.Add(cls);
             }
 
             // Class Packages
@@ -2348,8 +2369,12 @@ namespace Eos.Services
                     if (projectOverridePackage != null)
                         MasterRepository.Project.ClassPackages.Remove(projectOverridePackage);
                 }
+                else
+                {
+                    package.Index = null;
+                }
 
-                MasterRepository.Project.ClassPackages.Add(package);
+                MasterRepository.Project.Add(package);
             }
 
             // Domains
@@ -2368,8 +2393,12 @@ namespace Eos.Services
                     if (projectOverrideDomain != null)
                         MasterRepository.Project.Domains.Remove(projectOverrideDomain);
                 }
+                else
+                {
+                    domain.Index = null;
+                }
 
-                MasterRepository.Project.Domains.Add(domain);
+                MasterRepository.Project.Add(domain);
             }
 
             // Spellbooks
@@ -2404,8 +2433,12 @@ namespace Eos.Services
                     if (projectOverrideSpell != null)
                         MasterRepository.Project.Spells.Remove(projectOverrideSpell);
                 }
+                else
+                {
+                    spell.Index = null;
+                }
 
-                MasterRepository.Project.Spells.Add(spell);
+                MasterRepository.Project.Add(spell);
             }
 
             // Master Feats
@@ -2424,8 +2457,12 @@ namespace Eos.Services
                     if (projectOverrideMasterFeat != null)
                         MasterRepository.Project.MasterFeats.Remove(projectOverrideMasterFeat);
                 }
+                else
+                {
+                    masterFeat.Index = null;
+                }
 
-                MasterRepository.Project.MasterFeats.Add(masterFeat);
+                MasterRepository.Project.Add(masterFeat);
             }
 
             // Feats
@@ -2444,8 +2481,12 @@ namespace Eos.Services
                     if (projectOverrideFeat != null)
                         MasterRepository.Project.Feats.Remove(projectOverrideFeat);
                 }
+                else
+                {
+                    feat.Index = null;
+                }
 
-                MasterRepository.Project.Feats.Add(feat);
+                MasterRepository.Project.Add(feat);
             }
 
             // Skills
@@ -2464,8 +2505,12 @@ namespace Eos.Services
                     if (projectOverrideSkill != null)
                         MasterRepository.Project.Skills.Remove(projectOverrideSkill);
                 }
+                else
+                {
+                    skill.Index = null;
+                }
 
-                MasterRepository.Project.Skills.Add(skill);
+                MasterRepository.Project.Add(skill);
             }
 
             // Diseases
@@ -2484,8 +2529,12 @@ namespace Eos.Services
                     if (projectOverrideDisease != null)
                         MasterRepository.Project.Diseases.Remove(projectOverrideDisease);
                 }
+                else
+                {
+                    disease.Index = null;
+                }
 
-                MasterRepository.Project.Diseases.Add(disease);
+                MasterRepository.Project.Add(disease);
             }
 
             // Poisons
@@ -2504,8 +2553,12 @@ namespace Eos.Services
                     if (projectOverridePoison != null)
                         MasterRepository.Project.Poisons.Remove(projectOverridePoison);
                 }
+                else
+                {
+                    poison.Index = null;
+                }
 
-                MasterRepository.Project.Poisons.Add(poison);
+                MasterRepository.Project.Add(poison);
             }
 
             // Base Items
@@ -2524,8 +2577,12 @@ namespace Eos.Services
                     if (projectOverrideBaseItem != null)
                         MasterRepository.Project.BaseItems.Remove(projectOverrideBaseItem);
                 }
+                else
+                {
+                    baseItem.Index = null;
+                }
 
-                MasterRepository.Project.BaseItems.Add(baseItem);
+                MasterRepository.Project.Add(baseItem);
             }
 
             // Area Effects
@@ -2544,8 +2601,12 @@ namespace Eos.Services
                     if (projectOverrideAoe != null)
                         MasterRepository.Project.AreaEffects.Remove(projectOverrideAoe);
                 }
+                else
+                {
+                    aoe.Index = null;
+                }
 
-                MasterRepository.Project.AreaEffects.Add(aoe);
+                MasterRepository.Project.Add(aoe);
             }
 
             // Polymorphs
@@ -2564,8 +2625,12 @@ namespace Eos.Services
                     if (projectOverridePolymorph != null)
                         MasterRepository.Project.Polymorphs.Remove(projectOverridePolymorph);
                 }
+                else
+                {
+                    polymorph.Index = null;
+                }
 
-                MasterRepository.Project.Polymorphs.Add(polymorph);
+                MasterRepository.Project.Add(polymorph);
             }
 
             // Companions
@@ -2584,8 +2649,12 @@ namespace Eos.Services
                     if (projectOverrideCompanion != null)
                         MasterRepository.Project.Companions.Remove(projectOverrideCompanion);
                 }
+                else
+                {
+                    companion.Index = null;
+                }
 
-                MasterRepository.Project.Companions.Add(companion);
+                MasterRepository.Project.Add(companion);
             }
 
             // Familiars
@@ -2604,8 +2673,12 @@ namespace Eos.Services
                     if (projectOverrideFamiliar != null)
                         MasterRepository.Project.Familiars.Remove(projectOverrideFamiliar);
                 }
+                else
+                {
+                    familiar.Index = null;
+                }
 
-                MasterRepository.Project.Familiars.Add(familiar);
+                MasterRepository.Project.Add(familiar);
             }
 
             // Traps
@@ -2624,8 +2697,12 @@ namespace Eos.Services
                     if (projectOverrideTrap != null)
                         MasterRepository.Project.Traps.Remove(projectOverrideTrap);
                 }
+                else
+                {
+                    trap.Index = null;
+                }
 
-                MasterRepository.Project.Traps.Add(trap);
+                MasterRepository.Project.Add(trap);
             }
 
             // Soundsets
@@ -2644,8 +2721,12 @@ namespace Eos.Services
                     if (projectOverrideSoundset != null)
                         MasterRepository.Project.Soundsets.Remove(projectOverrideSoundset);
                 }
+                else
+                {
+                    soundset.Index = null;
+                }
 
-                MasterRepository.Project.Soundsets.Add(soundset);
+                MasterRepository.Project.Add(soundset);
             }
 
             // Visual Effects
@@ -2664,8 +2745,12 @@ namespace Eos.Services
                     if (projectOverrideVfx != null)
                         MasterRepository.Project.VisualEffects.Remove(projectOverrideVfx);
                 }
+                else
+                {
+                    vfx.Index = null;
+                }
 
-                MasterRepository.Project.VisualEffects.Add(vfx);
+                MasterRepository.Project.Add(vfx);
             }
 
             // Appearances
@@ -2684,8 +2769,12 @@ namespace Eos.Services
                     if (projectOverrideAppearance != null)
                         MasterRepository.Project.Appearances.Remove(projectOverrideAppearance);
                 }
+                else
+                {
+                    appearance.Index = null;
+                }
 
-                MasterRepository.Project.Appearances.Add(appearance);
+                MasterRepository.Project.Add(appearance);
             }
 
             // Appearance Soundsets
@@ -2704,8 +2793,12 @@ namespace Eos.Services
                     if (projectOverrideAppearanceSoundset != null)
                         MasterRepository.Project.AppearanceSoundsets.Remove(projectOverrideAppearanceSoundset);
                 }
+                else
+                {
+                    appearanceSoundset.Index = null;
+                }
 
-                MasterRepository.Project.AppearanceSoundsets.Add(appearanceSoundset);
+                MasterRepository.Project.Add(appearanceSoundset);
             }
 
             // Weapon Sounds
@@ -2724,8 +2817,12 @@ namespace Eos.Services
                     if (projectOverrideWeaponSound != null)
                         MasterRepository.Project.WeaponSounds.Remove(projectOverrideWeaponSound);
                 }
+                else
+                {
+                    weaponSound.Index = null;
+                }
 
-                MasterRepository.Project.WeaponSounds.Add(weaponSound);
+                MasterRepository.Project.Add(weaponSound);
             }
 
             // Inventory Sounds
@@ -2744,8 +2841,12 @@ namespace Eos.Services
                     if (projectOverrideInventorySound != null)
                         MasterRepository.Project.InventorySounds.Remove(projectOverrideInventorySound);
                 }
+                else
+                {
+                    inventorySound.Index = null;
+                }
 
-                MasterRepository.Project.InventorySounds.Add(inventorySound);
+                MasterRepository.Project.Add(inventorySound);
             }
 
             // Portraits
@@ -2764,8 +2865,12 @@ namespace Eos.Services
                     if (projectOverridePortrait != null)
                         MasterRepository.Project.Portraits.Remove(projectOverridePortrait);
                 }
+                else
+                {
+                    portrait.Index = null;
+                }
 
-                MasterRepository.Project.Portraits.Add(portrait);
+                MasterRepository.Project.Add(portrait);
             }
 
             // Programmed Effects
@@ -2784,8 +2889,12 @@ namespace Eos.Services
                     if (projectOverrideProgFX != null)
                         MasterRepository.Project.ProgrammedEffects.Remove(projectOverrideProgFX);
                 }
+                else
+                {
+                    progFX.Index = null;
+                }
 
-                MasterRepository.Project.ProgrammedEffects.Add(progFX);
+                MasterRepository.Project.Add(progFX);
             }
 
             // Damage Types
@@ -2804,8 +2913,12 @@ namespace Eos.Services
                     if (projectOverrideDamageType != null)
                         MasterRepository.Project.DamageTypes.Remove(projectOverrideDamageType);
                 }
+                else
+                {
+                    damageType.Index = null;
+                }
 
-                MasterRepository.Project.DamageTypes.Add(damageType);
+                MasterRepository.Project.Add(damageType);
             }
 
             // Damage Type Groups
@@ -2824,8 +2937,12 @@ namespace Eos.Services
                     if (projectOverrideDamageTypeGroup != null)
                         MasterRepository.Project.DamageTypeGroups.Remove(projectOverrideDamageTypeGroup);
                 }
+                else
+                {
+                    damageTypeGroup.Index = null;
+                }
 
-                MasterRepository.Project.DamageTypeGroups.Add(damageTypeGroup);
+                MasterRepository.Project.Add(damageTypeGroup);
             }
 
             // Racial Feats
@@ -2844,8 +2961,12 @@ namespace Eos.Services
                     if (projectOverrideRacialFeatsTable != null)
                         MasterRepository.Project.RacialFeatsTables.Remove(projectOverrideRacialFeatsTable);
                 }
+                else
+                {
+                    racialFeatsTable.Index = null;
+                }
 
-                MasterRepository.Project.RacialFeatsTables.Add(racialFeatsTable);
+                MasterRepository.Project.Add(racialFeatsTable);
             }
 
             // Class Feats
@@ -2864,8 +2985,12 @@ namespace Eos.Services
                     if (projectOverrideFeatsTable != null)
                         MasterRepository.Project.FeatTables.Remove(projectOverrideFeatsTable);
                 }
+                else
+                {
+                    featsTable.Index = null;
+                }
 
-                MasterRepository.Project.FeatTables.Add(featsTable);
+                MasterRepository.Project.Add(featsTable);
             }
 
             // Class Bonus Feats
@@ -2884,8 +3009,12 @@ namespace Eos.Services
                     if (projectOverrideBFeatsTable != null)
                         MasterRepository.Project.BonusFeatTables.Remove(projectOverrideBFeatsTable);
                 }
+                else
+                {
+                    bfeatsTable.Index = null;
+                }
 
-                MasterRepository.Project.BonusFeatTables.Add(bfeatsTable);
+                MasterRepository.Project.Add(bfeatsTable);
             }
 
             // Class Skills
@@ -2904,8 +3033,12 @@ namespace Eos.Services
                     if (projectOverrideSkillTable != null)
                         MasterRepository.Project.SkillTables.Remove(projectOverrideSkillTable);
                 }
+                else
+                {
+                    skillTable.Index = null;
+                }
 
-                MasterRepository.Project.SkillTables.Add(skillTable);
+                MasterRepository.Project.Add(skillTable);
             }
 
             // Class BAB Tables
@@ -2924,8 +3057,12 @@ namespace Eos.Services
                     if (projectOverrideAttackTable != null)
                         MasterRepository.Project.AttackBonusTables.Remove(projectOverrideAttackTable);
                 }
+                else
+                {
+                    attackTable.Index = null;
+                }
 
-                MasterRepository.Project.AttackBonusTables.Add(attackTable);
+                MasterRepository.Project.Add(attackTable);
             }
 
             // Class Savingthrows
@@ -2944,8 +3081,12 @@ namespace Eos.Services
                     if (projectOverrideSavesTable != null)
                         MasterRepository.Project.SavingThrowTables.Remove(projectOverrideSavesTable);
                 }
+                else
+                {
+                    savesTable.Index = null;
+                }
 
-                MasterRepository.Project.SavingThrowTables.Add(savesTable);
+                MasterRepository.Project.Add(savesTable);
             }
 
             // Class Prerequisites
@@ -2964,8 +3105,12 @@ namespace Eos.Services
                     if (projectOverrideRequTable != null)
                         MasterRepository.Project.PrerequisiteTables.Remove(projectOverrideRequTable);
                 }
+                else
+                {
+                    requTable.Index = null;
+                }
 
-                MasterRepository.Project.PrerequisiteTables.Add(requTable);
+                MasterRepository.Project.Add(requTable);
             }
 
             // Class Statgain Tables
@@ -2984,8 +3129,12 @@ namespace Eos.Services
                     if (projectOverrideStatGainTable != null)
                         MasterRepository.Project.StatGainTables.Remove(projectOverrideStatGainTable);
                 }
+                else
+                {
+                    statGainTable.Index = null;
+                }
 
-                MasterRepository.Project.StatGainTables.Add(statGainTable);
+                MasterRepository.Project.Add(statGainTable);
             }
 
             // Class Spell Slots
@@ -3004,8 +3153,12 @@ namespace Eos.Services
                     if (projectOverrideSpellSlotTable != null)
                         MasterRepository.Project.SpellSlotTables.Remove(projectOverrideSpellSlotTable);
                 }
+                else
+                {
+                    spellSlotTable.Index = null;
+                }
 
-                MasterRepository.Project.SpellSlotTables.Add(spellSlotTable);
+                MasterRepository.Project.Add(spellSlotTable);
             }
 
             // Class Known Spells
@@ -3024,8 +3177,12 @@ namespace Eos.Services
                     if (projectOverrideKnownSpellsTable != null)
                         MasterRepository.Project.KnownSpellsTables.Remove(projectOverrideKnownSpellsTable);
                 }
+                else
+                {
+                    knownSpellsTable.Index = null;
+                }
 
-                MasterRepository.Project.KnownSpellsTables.Add(knownSpellsTable);
+                MasterRepository.Project.Add(knownSpellsTable);
             }
 
             // Package Spell Preferences
@@ -3044,8 +3201,12 @@ namespace Eos.Services
                     if (projectOverrideSpellPrefTable != null)
                         MasterRepository.Project.SpellPreferencesTables.Remove(projectOverrideSpellPrefTable);
                 }
+                else
+                {
+                    spellPrefTable.Index = null;
+                }
 
-                MasterRepository.Project.SpellPreferencesTables.Add(spellPrefTable);
+                MasterRepository.Project.Add(spellPrefTable);
             }
 
             // Package Feat Preferences
@@ -3064,8 +3225,12 @@ namespace Eos.Services
                     if (projectOverrideFeatPrefTable != null)
                         MasterRepository.Project.FeatPreferencesTables.Remove(projectOverrideFeatPrefTable);
                 }
+                else
+                {
+                    featPrefTable.Index = null;
+                }
 
-                MasterRepository.Project.FeatPreferencesTables.Add(featPrefTable);
+                MasterRepository.Project.Add(featPrefTable);
             }
 
             // Package Skill Preferences
@@ -3084,8 +3249,12 @@ namespace Eos.Services
                     if (projectOverrideSkillPrefTable != null)
                         MasterRepository.Project.SkillPreferencesTables.Remove(projectOverrideSkillPrefTable);
                 }
+                else
+                {
+                    skillPrefTable.Index = null;
+                }
 
-                MasterRepository.Project.SkillPreferencesTables.Add(skillPrefTable);
+                MasterRepository.Project.Add(skillPrefTable);
             }
 
             // Package Equipment
@@ -3104,8 +3273,12 @@ namespace Eos.Services
                     if (projectOverrideEquipmentTable != null)
                         MasterRepository.Project.PackageEquipmentTables.Remove(projectOverrideEquipmentTable);
                 }
+                else
+                {
+                    equipmentTable.Index = null;
+                }
 
-                MasterRepository.Project.PackageEquipmentTables.Add(equipmentTable);
+                MasterRepository.Project.Add(equipmentTable);
             }
         }
 
@@ -3193,9 +3366,12 @@ namespace Eos.Services
                 {
                     ResolveDependencies();
                     TransferImportedData();
-                    ImportExternalData();
 
-                    MasterRepository.Resources.LoadExternalResources(MasterRepository.Project.Settings.ExternalFolders);
+                    if (_externalDataPath != "")
+                    {
+                        ImportExternalData();
+                        MasterRepository.Resources.LoadExternalResources(MasterRepository.Project.Settings.ExternalFolders);
+                    }
                 }
             }
             catch(Exception e)

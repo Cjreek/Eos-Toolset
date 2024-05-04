@@ -39,7 +39,7 @@ namespace Eos.Models
                 if (_spellSchool != value)
                 {
                     _spellSchool = value;
-                    NotifyPropertyChanged();
+                    NotifyPropertyChangedWithRepository();
                 }
             }
         }

@@ -521,9 +521,9 @@ namespace Eos.Nwn.TwoDimensionalArray
                 if (str.Contains(' ')) result = "\"" + str + "\"";
             }
             if (value is double dblValue)
-                result = dblValue.ToString("0.##", floatFormat);
+                result = dblValue.ToString("0.####", floatFormat);
             else if (value is decimal decValue)
-                result = decValue.ToString("0.##", floatFormat);
+                result = decValue.ToString("0.####", floatFormat);
             else if ((value is int intValue) && (isHex))
                 result = "0x" + intValue.ToString("x2");
   
