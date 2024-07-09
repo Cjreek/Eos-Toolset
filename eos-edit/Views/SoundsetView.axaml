@@ -80,7 +80,7 @@
           <TextBlock Text="Soundset File" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0" />
           <TextBox IsEnabled="{Binding !Data.IsReadonly}" Text="{Binding Data.SoundsetResource}" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3"/>
 
-          <DataGrid Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4" Items="{Binding Data.Entries}" FontSize="14" CanUserSortColumns="False" CanUserResizeColumns="True" IsReadOnly="True" VerticalAlignment="Stretch" Margin="2,0,0,0">
+          <DataGrid Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4" ItemsSource="{Binding Data.Entries}" FontSize="14" CanUserSortColumns="False" CanUserResizeColumns="True" IsReadOnly="True" VerticalAlignment="Stretch" Margin="2,0,0,0">
             <DataGrid.Columns>
               <DataGridTemplateColumn Header="Type" Width="130">
                 <DataTemplate>

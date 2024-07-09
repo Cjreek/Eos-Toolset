@@ -6,7 +6,6 @@ using Eos.Extensions;
 using Eos.Models.Tables;
 using Eos.Usercontrols;
 using Eos.ViewModels;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Drawing.Printing;
 
 namespace Eos.Views

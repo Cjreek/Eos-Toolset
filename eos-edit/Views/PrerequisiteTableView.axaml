@@ -61,7 +61,7 @@
       <TextBlock Grid.Row="2" Grid.Column="0" Text="Hint" Margin="0,0,5,0" HorizontalAlignment="Right"/>
       <TextBox IsEnabled="{Binding !Data.IsReadonly}" Grid.Row="2" Grid.Column="1" Text="{Binding Data.Hint}"/>
 
-      <DataGrid x:Name="grid" Grid.Row="3" Grid.Column="1" Items="{Binding Data.Items}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" Margin="2,0,0,0">
+      <DataGrid x:Name="grid" Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Data.Items}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" Margin="2,0,0,0">
         <DataGrid.DataTemplates>
           <DataTemplate DataType="{x:Type local:SaveType}">
             <TextBlock Text="{Binding Name}"/>
@@ -77,7 +77,7 @@
               <uc:SkillComboBox IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" SelectedValue="{Binding Param1Skill}" IsNullable="False" IsVisible="{Binding RequirementType, Converter={StaticResource param1VisConverter}, ConverterParameter=SKILL}"/>
               <TextBox IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" Text="{Binding Param1String}" VerticalAlignment="Stretch" MinHeight="22" AcceptsReturn="True" VerticalContentAlignment="Center" IsVisible="{Binding RequirementType, Converter={StaticResource param1VisConverter}, ConverterParameter=VAR}"/>
               <NumericUpDown IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" Increment="1" Height="23" Value="{Binding Param1Int}" IsVisible="{Binding RequirementType, Converter={StaticResource param1VisConverter}, ConverterParameter=INT}"/>
-              <ComboBox IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" Items="{Binding ElementName=page, Path=SaveTypes}" Margin="2,0,0,3" Height="23"
+              <ComboBox IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}" ItemsSource="{Binding ElementName=page, Path=SaveTypes}" Margin="2,0,0,3" Height="23"
                         SelectedItem="{Binding SelectedSaveType}" SelectedValueBinding="{Binding Value}" SelectedValue="{Binding Param1Save, Mode=TwoWay}" DisplayMemberBinding="{Binding Name}"
                         IsVisible="{Binding RequirementType, Converter={StaticResource param1VisConverter}, ConverterParameter=SAVE}"/>
             </Grid>

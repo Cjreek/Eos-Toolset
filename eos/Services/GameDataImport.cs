@@ -30,6 +30,7 @@ namespace Eos.Services
         private string nwnBasePath = "";
         private TlkCollection tlk = new TlkCollection();
         private BifCollection bif = new BifCollection();
+        private BifCollection ovrBif = new BifCollection();
         private RepositoryCollection Standard = MasterRepository.Standard;
         private ResourceRepository Resources = MasterRepository.Resources;
 
@@ -41,7 +42,13 @@ namespace Eos.Services
             try
             {
                 var filename = Path.Combine(nwnBasePath, "ovr", name + ".2da");
-                if (File.Exists(filename))
+                if (ovrBif.ContainsResource(name, NWNResourceType.TWODA))
+                {
+                    Log.Info("Loading 2DA: {0}.2da", name);
+                    var resource = ovrBif.ReadResource(name, NWNResourceType.TWODA);
+                    return new TwoDimensionalArrayFile(resource.RawData);
+                }
+                else if (File.Exists(filename))
                 {
                     Log.Info("Loading 2DA: {0}", filename);
                     using (var fs = File.OpenRead(filename))
@@ -3331,6 +3338,8 @@ namespace Eos.Services
                 this.nwnBasePath = nwnBasePath;
                 tlk.Load(nwnBasePath);
                 bif.Load(nwnBasePath);
+                if (File.Exists(Path.Combine(nwnBasePath, "data", "nwn_retail.key")))
+                    ovrBif.Load(nwnBasePath, Path.Combine("data", "nwn_retail.key"));
 
                 ClearTables();
 

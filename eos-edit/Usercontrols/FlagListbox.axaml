@@ -17,7 +17,7 @@
     </ResourceDictionary>
   </UserControl.Resources>
 
-  <ListBox Items="{Binding ElementName=ucFlagListbox, Path=ItemsSource}" BorderBrush="Silver" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Padding="0">
+  <ListBox ItemsSource="{Binding ElementName=ucFlagListbox, Path=ItemsSource}" BorderBrush="Silver" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Padding="0">
     <ListBox.ItemsPanel>
       <ItemsPanelTemplate>
         <VirtualizingStackPanel Orientation="{Binding ElementName=ucFlagListbox, Path=Orientation}"/>

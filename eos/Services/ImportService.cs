@@ -38,6 +38,7 @@ namespace Eos.Services
 
         private TlkCollection gameDataTlk = new TlkCollection();
         private BifCollection gameDataBif = new BifCollection();
+        private BifCollection ovrBif = new BifCollection();
 
         private HashSet<String> iconResourceBuffer = new HashSet<String>();
         private List<(TLKStringSet strSet, int? strRef)> tlkBuffer = new List<(TLKStringSet strSet, int? strRef)>();
@@ -120,7 +121,12 @@ namespace Eos.Services
         private TwoDimensionalArrayFile LoadOriginal2da(string resRef)
         {
             var filename = Path.Combine(EosConfig.NwnBasePath, "ovr", resRef + ".2da");
-            if (File.Exists(filename))
+            if (ovrBif.ContainsResource(resRef, NWNResourceType.TWODA))
+            {
+                var resource = ovrBif.ReadResource(resRef, NWNResourceType.TWODA);
+                return new TwoDimensionalArrayFile(resource.RawData);
+            }
+            else if (File.Exists(filename))
             {
                 using (var fs = File.OpenRead(filename))
                 {
@@ -3319,6 +3325,8 @@ namespace Eos.Services
             {
                 gameDataTlk.Load(EosConfig.NwnBasePath);
                 gameDataBif.Load(EosConfig.NwnBasePath);
+                if (File.Exists(Path.Combine(EosConfig.NwnBasePath, "data", "nwn_retail.key")))
+                    ovrBif.Load(EosConfig.NwnBasePath, Path.Combine("data", "nwn_retail.key"));
 
                 foreach (var file in _importFiles)
                 {

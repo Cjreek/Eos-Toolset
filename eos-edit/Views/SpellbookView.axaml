@@ -75,7 +75,7 @@
 
           <TextBlock Text="Level 0 Spells" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-          <DataGrid Grid.Row="1" Items="{Binding Data.Level0}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
+          <DataGrid Grid.Row="1" ItemsSource="{Binding Data.Level0}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
             <DataGrid.Columns>
               <DataGridTemplateColumn Header="Spell" Width="300">
                 <DataGridTemplateColumn.CellTemplate>
@@ -110,7 +110,7 @@
 
           <TextBlock Text="Level 1 Spells" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-          <DataGrid Grid.Row="1" Items="{Binding Data.Level1}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
+          <DataGrid Grid.Row="1" ItemsSource="{Binding Data.Level1}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
             <DataGrid.Columns>
               <DataGridTemplateColumn Header="Spell" Width="300">
                 <DataGridTemplateColumn.CellTemplate>
@@ -145,7 +145,7 @@
 
           <TextBlock Text="Level 2 Spells" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-          <DataGrid Grid.Row="1" Items="{Binding Data.Level2}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
+          <DataGrid Grid.Row="1" ItemsSource="{Binding Data.Level2}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
             <DataGrid.Columns>
               <DataGridTemplateColumn Header="Spell" Width="300">
                 <DataGridTemplateColumn.CellTemplate>
@@ -180,7 +180,7 @@
 
           <TextBlock Text="Level 3 Spells" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-          <DataGrid Grid.Row="1" Items="{Binding Data.Level3}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
+          <DataGrid Grid.Row="1" ItemsSource="{Binding Data.Level3}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
             <DataGrid.Columns>
               <DataGridTemplateColumn Header="Spell" Width="300">
                 <DataGridTemplateColumn.CellTemplate>
@@ -215,7 +215,7 @@
 
           <TextBlock Text="Level 4 Spells" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-          <DataGrid Grid.Row="1" Items="{Binding Data.Level4}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
+          <DataGrid Grid.Row="1" ItemsSource="{Binding Data.Level4}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
             <DataGrid.Columns>
               <DataGridTemplateColumn Header="Spell" Width="300">
                 <DataGridTemplateColumn.CellTemplate>
@@ -250,7 +250,7 @@
 
           <TextBlock Text="Level 5 Spells" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-          <DataGrid Grid.Row="1" Items="{Binding Data.Level5}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
+          <DataGrid Grid.Row="1" ItemsSource="{Binding Data.Level5}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
             <DataGrid.Columns>
               <DataGridTemplateColumn Header="Spell" Width="300">
                 <DataGridTemplateColumn.CellTemplate>
@@ -285,7 +285,7 @@
 
           <TextBlock Text="Level 6 Spells" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-          <DataGrid Grid.Row="1" Items="{Binding Data.Level6}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
+          <DataGrid Grid.Row="1" ItemsSource="{Binding Data.Level6}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
             <DataGrid.Columns>
               <DataGridTemplateColumn Header="Spell" Width="300">
                 <DataGridTemplateColumn.CellTemplate>
@@ -320,7 +320,7 @@
 
           <TextBlock Text="Level 7 Spells" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-          <DataGrid Grid.Row="1" Items="{Binding Data.Level7}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
+          <DataGrid Grid.Row="1" ItemsSource="{Binding Data.Level7}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
             <DataGrid.Columns>
               <DataGridTemplateColumn Header="Spell" Width="300">
                 <DataGridTemplateColumn.CellTemplate>
@@ -355,7 +355,7 @@
 
           <TextBlock Text="Level 8 Spells" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-          <DataGrid Grid.Row="1" Items="{Binding Data.Level8}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
+          <DataGrid Grid.Row="1" ItemsSource="{Binding Data.Level8}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
             <DataGrid.Columns>
               <DataGridTemplateColumn Header="Spell" Width="300">
                 <DataGridTemplateColumn.CellTemplate>
@@ -390,7 +390,7 @@
 
           <TextBlock Text="Level 9 Spells" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-          <DataGrid Grid.Row="1" Items="{Binding Data.Level9}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
+          <DataGrid Grid.Row="1" ItemsSource="{Binding Data.Level9}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
             <DataGrid.Columns>
               <DataGridTemplateColumn Header="Spell" Width="300">
                 <DataGridTemplateColumn.CellTemplate>

@@ -28,7 +28,7 @@
       <ColumnDefinition Width="auto"/>
     </Grid.ColumnDefinitions>
 
-    <ComboBox x:Name="cbPackageEquipmentTables" Grid.Column="0" Items="{Binding Source={x:Static repo:MasterRepository.PackageEquipmentTables}}" SelectedItem="{Binding ElementName=ucPackageEquipmentTableComboBox, Path=SelectedValue}" DisplayMemberBinding="{Binding Name}" Padding="3,0,0,0">
+    <ComboBox x:Name="cbPackageEquipmentTables" Grid.Column="0" ItemsSource="{Binding Source={x:Static repo:MasterRepository.PackageEquipmentTables}}" SelectedItem="{Binding ElementName=ucPackageEquipmentTableComboBox, Path=SelectedValue}" DisplayMemberBinding="{Binding Name}" Padding="3,0,0,0">
       <ComboBox.ItemsPanel>
         <ItemsPanelTemplate>
           <VirtualizingStackPanel/>

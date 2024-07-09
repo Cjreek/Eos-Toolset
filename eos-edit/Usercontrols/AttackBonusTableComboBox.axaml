@@ -28,7 +28,7 @@
       <ColumnDefinition Width="auto"/>
     </Grid.ColumnDefinitions>
 
-    <ComboBox x:Name="cbAbTables" Grid.Column="0" Items="{Binding Source={x:Static repo:MasterRepository.AttackBonusTables}}" SelectedItem="{Binding ElementName=ucAttackBonusTableComboBox, Path=SelectedValue}" DisplayMemberBinding="{Binding Name}" Padding="3,0,0,0">
+    <ComboBox x:Name="cbAbTables" Grid.Column="0" ItemsSource="{Binding Source={x:Static repo:MasterRepository.AttackBonusTables}}" SelectedItem="{Binding ElementName=ucAttackBonusTableComboBox, Path=SelectedValue}" DisplayMemberBinding="{Binding Name}" Padding="3,0,0,0">
       <ComboBox.ItemsPanel>
         <ItemsPanelTemplate>
           <VirtualizingStackPanel/>

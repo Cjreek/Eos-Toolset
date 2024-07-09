@@ -20,7 +20,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Eos.Views.MainWindow" MinHeight="300" MinWidth="500"
         Height="700" Width="1100" Loaded="mainWindow_Loaded"
-        x:Name="mainWindow" Tag="Eos Toolset v0.74" FontFamily="Segoe UI"
+        x:Name="mainWindow" Tag="Eos Toolset v0.75" FontFamily="Segoe UI"
         Closing="mainWindow_Closing"
         Icon="/Assets/Icons/Eos.ico">
   <Window.Title>
@@ -690,88 +690,88 @@
             </TreeView.Styles>
 
             <TreeViewItem Header="Race Data" Classes="category">
-              <TreeViewItem Header="Races" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Races}" Classes="category"/>
-              <TreeViewItem Header="Feats" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=RacialFeatsTables}" Classes="category"/>
+              <TreeViewItem Header="Races" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Races}" Classes="category"/>
+              <TreeViewItem Header="Feats" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=RacialFeatsTables}" Classes="category"/>
             </TreeViewItem>
             <TreeViewItem Header="Class Data" Classes="category">
-              <TreeViewItem Header="Classes" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Classes}" Classes="category"/>
-              <TreeViewItem Header="Feats" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=FeatTables}" Classes="category"/>
-              <TreeViewItem Header="Bonus Feats" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=BonusFeatTables}" Classes="category"/>
-              <TreeViewItem Header="Skills" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SkillTables}" Classes="category"/>
-              <TreeViewItem Header="Base Attack Bonus" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=AttackBonusTables}" Classes="category"/>
-              <TreeViewItem Header="Saving Throws" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SavingThrowTables}" Classes="category"/>
-              <TreeViewItem Header="Prerequisites" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=PrerequisiteTables}" Classes="category"/>
-              <TreeViewItem Header="Stat Changes" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=StatGainTables}" Classes="category"/>
-              <TreeViewItem Header="Spell Slots" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SpellSlotTables}" Classes="category"/>
-              <TreeViewItem Header="Known Spells" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=KnownSpellsTables}" Classes="category"/>
+              <TreeViewItem Header="Classes" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Classes}" Classes="category"/>
+              <TreeViewItem Header="Feats" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=FeatTables}" Classes="category"/>
+              <TreeViewItem Header="Bonus Feats" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=BonusFeatTables}" Classes="category"/>
+              <TreeViewItem Header="Skills" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SkillTables}" Classes="category"/>
+              <TreeViewItem Header="Base Attack Bonus" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=AttackBonusTables}" Classes="category"/>
+              <TreeViewItem Header="Saving Throws" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SavingThrowTables}" Classes="category"/>
+              <TreeViewItem Header="Prerequisites" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=PrerequisiteTables}" Classes="category"/>
+              <TreeViewItem Header="Stat Changes" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=StatGainTables}" Classes="category"/>
+              <TreeViewItem Header="Spell Slots" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SpellSlotTables}" Classes="category"/>
+              <TreeViewItem Header="Known Spells" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=KnownSpellsTables}" Classes="category"/>
             </TreeViewItem>
             <TreeViewItem Header="Package Data" Classes="category">
-              <TreeViewItem Header="Packages" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ClassPackages}" Classes="category"/>
-              <TreeViewItem Header="Equipment" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=PackageEquipmentTables}" Classes="category"/>
-              <TreeViewItem Header="Spell Preferences" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SpellPreferencesTables}" Classes="category"/>
-              <TreeViewItem Header="Feat Preferences" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=FeatPreferencesTables}" Classes="category"/>
-              <TreeViewItem Header="Skill Preferences" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SkillPreferencesTables}" Classes="category"/>
+              <TreeViewItem Header="Packages" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ClassPackages}" Classes="category"/>
+              <TreeViewItem Header="Equipment" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=PackageEquipmentTables}" Classes="category"/>
+              <TreeViewItem Header="Spell Preferences" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SpellPreferencesTables}" Classes="category"/>
+              <TreeViewItem Header="Feat Preferences" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=FeatPreferencesTables}" Classes="category"/>
+              <TreeViewItem Header="Skill Preferences" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SkillPreferencesTables}" Classes="category"/>
             </TreeViewItem>
-            <TreeViewItem Header="Domains" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Domains}" Classes="category"/>
+            <TreeViewItem Header="Domains" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Domains}" Classes="category"/>
             <TreeViewItem Header="Spell Data" Classes="category">
               <TreeViewItem Header="Spells" Classes="category">
-                <TreeViewItem Header="General" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.GeneralSpells}" Classes="category"/>
-                <TreeViewItem Header="Abjuration" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.AbjurationSpells}" Classes="category"/>
-                <TreeViewItem Header="Conjuration" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.ConjurationSpells}" Classes="category"/>
-                <TreeViewItem Header="Divination" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.DivinationSpells}" Classes="category"/>
-                <TreeViewItem Header="Enchantment" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.EnchantmentSpells}" Classes="category"/>
-                <TreeViewItem Header="Evocation" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.EvocationSpells}" Classes="category"/>
-                <TreeViewItem Header="Illusion" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.IllusionSpells}" Classes="category"/>
-                <TreeViewItem Header="Necromancy" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.NecromancySpells}" Classes="category"/>
-                <TreeViewItem Header="Transmutation" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.TransmutationSpells}" Classes="category"/>
-                <TreeViewItem Header="Creature Power" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.CreaturePowers}" Classes="category"/>
-                <TreeViewItem Header="Feat" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.FeatSpells}" Classes="category"/>
-                <TreeViewItem Header="Other" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.OtherSpells}" Classes="category"/>
+                <TreeViewItem Header="General" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.GeneralSpells}" Classes="category"/>
+                <TreeViewItem Header="Abjuration" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.AbjurationSpells}" Classes="category"/>
+                <TreeViewItem Header="Conjuration" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.ConjurationSpells}" Classes="category"/>
+                <TreeViewItem Header="Divination" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.DivinationSpells}" Classes="category"/>
+                <TreeViewItem Header="Enchantment" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.EnchantmentSpells}" Classes="category"/>
+                <TreeViewItem Header="Evocation" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.EvocationSpells}" Classes="category"/>
+                <TreeViewItem Header="Illusion" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.IllusionSpells}" Classes="category"/>
+                <TreeViewItem Header="Necromancy" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.NecromancySpells}" Classes="category"/>
+                <TreeViewItem Header="Transmutation" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.TransmutationSpells}" Classes="category"/>
+                <TreeViewItem Header="Creature Power" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.CreaturePowers}" Classes="category"/>
+                <TreeViewItem Header="Feat" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.FeatSpells}" Classes="category"/>
+                <TreeViewItem Header="Other" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Spells.OtherSpells}" Classes="category"/>
               </TreeViewItem>
-              <TreeViewItem Header="Spellbooks" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Spellbooks}" Classes="category"/>
+              <TreeViewItem Header="Spellbooks" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Spellbooks}" Classes="category"/>
             </TreeViewItem>
             <TreeViewItem Header="Feat Data" Classes="category">
               <TreeViewItem Header="Feats" Classes="category">
-                <TreeViewItem Header="Class/Racial" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.ClassOrRacial}" Classes="category"/>
-                <TreeViewItem Header="Active Combat Feats" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.CombatActive}" Classes="category"/>
-                <TreeViewItem Header="Combat Feats" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Combat}" Classes="category"/>
-                <TreeViewItem Header="Defensive" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Defensive}" Classes="category"/>
-                <TreeViewItem Header="Magical" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Magical}" Classes="category"/>
-                <TreeViewItem Header="Other" Items="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Other}" Classes="category"/>
+                <TreeViewItem Header="Class/Racial" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.ClassOrRacial}" Classes="category"/>
+                <TreeViewItem Header="Active Combat Feats" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.CombatActive}" Classes="category"/>
+                <TreeViewItem Header="Combat Feats" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Combat}" Classes="category"/>
+                <TreeViewItem Header="Defensive" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Defensive}" Classes="category"/>
+                <TreeViewItem Header="Magical" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Magical}" Classes="category"/>
+                <TreeViewItem Header="Other" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Standard}, Path=Feats.Other}" Classes="category"/>
               </TreeViewItem>
-              <TreeViewItem Header="Master Feats" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=MasterFeats}" Classes="category"/>
+              <TreeViewItem Header="Master Feats" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=MasterFeats}" Classes="category"/>
             </TreeViewItem>
-            <TreeViewItem Header="Skills" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Skills}" Classes="category"/>
-            <TreeViewItem Header="Diseases" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Diseases}" Classes="category"/>
-            <TreeViewItem Header="Poisons" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Poisons}" Classes="category"/>
-            <TreeViewItem Header="Base Items" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=BaseItems}" Classes="category"/>
+            <TreeViewItem Header="Skills" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Skills}" Classes="category"/>
+            <TreeViewItem Header="Diseases" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Diseases}" Classes="category"/>
+            <TreeViewItem Header="Poisons" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Poisons}" Classes="category"/>
+            <TreeViewItem Header="Base Items" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=BaseItems}" Classes="category"/>
             <TreeViewItem Header="Item Property Data" Classes="category">
-              <TreeViewItem Header="Item Properties" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ItemProperties}" Classes="category"/>
-              <TreeViewItem Header="Tables" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ItemPropertyTables}" Classes="category"/>
-              <TreeViewItem Header="Cost Tables" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ItemPropertyCostTables}" Classes="category"/>
-              <TreeViewItem Header="Param Tables" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ItemPropertyParams}" Classes="category"/>
-              <TreeViewItem Header="Categories" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ItemPropertySets}" Classes="category"/>
+              <TreeViewItem Header="Item Properties" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ItemProperties}" Classes="category"/>
+              <TreeViewItem Header="Tables" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ItemPropertyTables}" Classes="category"/>
+              <TreeViewItem Header="Cost Tables" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ItemPropertyCostTables}" Classes="category"/>
+              <TreeViewItem Header="Param Tables" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ItemPropertyParams}" Classes="category"/>
+              <TreeViewItem Header="Categories" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ItemPropertySets}" Classes="category"/>
             </TreeViewItem>
             <TreeViewItem Header="Damage Type Data" Classes="category">
-              <TreeViewItem Header="Damage Types" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=DamageTypes}" Classes="category"/>
-              <TreeViewItem Header="Damage Type Groups" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=DamageTypeGroups}" Classes="category"/>
+              <TreeViewItem Header="Damage Types" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=DamageTypes}" Classes="category"/>
+              <TreeViewItem Header="Damage Type Groups" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=DamageTypeGroups}" Classes="category"/>
             </TreeViewItem>
-            <TreeViewItem Header="Traps" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Traps}" Classes="category"/>
-            <TreeViewItem Header="Companions" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Companions}" Classes="category"/>
-            <TreeViewItem Header="Familiars" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Familiars}" Classes="category"/>
+            <TreeViewItem Header="Traps" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Traps}" Classes="category"/>
+            <TreeViewItem Header="Companions" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Companions}" Classes="category"/>
+            <TreeViewItem Header="Familiars" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Familiars}" Classes="category"/>
             <TreeViewItem Header="Appearance Data" Classes="category">
-              <TreeViewItem Header="Appearances" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Appearances}" Classes="category"/>
-              <TreeViewItem Header="Soundsets" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=AppearanceSoundsets}" Classes="category"/>
+              <TreeViewItem Header="Appearances" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Appearances}" Classes="category"/>
+              <TreeViewItem Header="Soundsets" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=AppearanceSoundsets}" Classes="category"/>
             </TreeViewItem>
-            <TreeViewItem Header="Polymorphs" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Polymorphs}" Classes="category"/>
-            <TreeViewItem Header="Area Effects" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=AreaEffects}" Classes="category"/>
+            <TreeViewItem Header="Polymorphs" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Polymorphs}" Classes="category"/>
+            <TreeViewItem Header="Area Effects" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=AreaEffects}" Classes="category"/>
             <TreeViewItem Header="Other" Classes="category">
-              <TreeViewItem Header="Soundsets" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Soundsets}" Classes="category"/>
-              <TreeViewItem Header="Weapon Sounds" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=WeaponSounds}" Classes="category"/>
-              <TreeViewItem Header="Inventory Sounds" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=InventorySounds}" Classes="category"/>
-              <TreeViewItem Header="Portraits" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Portraits}" Classes="category"/>
-              <TreeViewItem Header="Visual Effects" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=VisualEffects}" Classes="category"/>
-              <TreeViewItem Header="Programmed Effects" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ProgrammedEffects}" Classes="category"/>
+              <TreeViewItem Header="Soundsets" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Soundsets}" Classes="category"/>
+              <TreeViewItem Header="Weapon Sounds" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=WeaponSounds}" Classes="category"/>
+              <TreeViewItem Header="Inventory Sounds" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=InventorySounds}" Classes="category"/>
+              <TreeViewItem Header="Portraits" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Portraits}" Classes="category"/>
+              <TreeViewItem Header="Visual Effects" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=VisualEffects}" Classes="category"/>
+              <TreeViewItem Header="Programmed Effects" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ProgrammedEffects}" Classes="category"/>
             </TreeViewItem>
           </TreeView>
         </TabItem>
@@ -794,7 +794,7 @@
             </TreeView.Styles>
 
             <TreeViewItem Header="Race Data" Classes="category nocontext">
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Races}" Classes="category" Tag="{x:Type models:Race}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Races}" Classes="category" Tag="{x:Type models:Race}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Races"/>
@@ -802,7 +802,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=RacialFeatsTables}" Classes="category" Tag="{x:Type tables:RacialFeatsTable}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=RacialFeatsTables}" Classes="category" Tag="{x:Type tables:RacialFeatsTable}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Feats"/>
@@ -812,7 +812,7 @@
               </TreeViewItem>
             </TreeViewItem>
             <TreeViewItem Header="Class Data" Classes="category nocontext">
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Classes}" Classes="category" Tag="{x:Type models:CharacterClass}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Classes}" Classes="category" Tag="{x:Type models:CharacterClass}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Classes"/>
@@ -820,7 +820,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Header="Feats" Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=FeatTables}" Classes="category" Tag="{x:Type tables:FeatsTable}">
+              <TreeViewItem Header="Feats" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=FeatTables}" Classes="category" Tag="{x:Type tables:FeatsTable}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Feats"/>
@@ -828,7 +828,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=BonusFeatTables}" Classes="category" Tag="{x:Type tables:BonusFeatsTable}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=BonusFeatTables}" Classes="category" Tag="{x:Type tables:BonusFeatsTable}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Bonus Feats"/>
@@ -836,7 +836,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SkillTables}" Classes="category" Tag="{x:Type tables:SkillsTable}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SkillTables}" Classes="category" Tag="{x:Type tables:SkillsTable}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Skills"/>
@@ -844,7 +844,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=AttackBonusTables}" Classes="category" Tag="{x:Type tables:AttackBonusTable}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=AttackBonusTables}" Classes="category" Tag="{x:Type tables:AttackBonusTable}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Base Attack Bonus"/>
@@ -852,7 +852,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SavingThrowTables}" Classes="category" Tag="{x:Type tables:SavingThrowTable}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SavingThrowTables}" Classes="category" Tag="{x:Type tables:SavingThrowTable}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Saving Throws"/>
@@ -860,7 +860,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=PrerequisiteTables}" Classes="category" Tag="{x:Type tables:PrerequisiteTable}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=PrerequisiteTables}" Classes="category" Tag="{x:Type tables:PrerequisiteTable}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Prerequisites"/>
@@ -868,7 +868,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=StatGainTables}" Classes="category" Tag="{x:Type tables:StatGainTable}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=StatGainTables}" Classes="category" Tag="{x:Type tables:StatGainTable}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Stat Changes"/>
@@ -876,7 +876,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SpellSlotTables}" Classes="category" Tag="{x:Type tables:SpellSlotTable}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SpellSlotTables}" Classes="category" Tag="{x:Type tables:SpellSlotTable}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Spell Slots"/>
@@ -884,7 +884,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=KnownSpellsTables}" Classes="category" Tag="{x:Type tables:KnownSpellsTable}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=KnownSpellsTables}" Classes="category" Tag="{x:Type tables:KnownSpellsTable}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Known Spells"/>
@@ -894,7 +894,7 @@
               </TreeViewItem>
             </TreeViewItem>
             <TreeViewItem Header="Package Data" Classes="category nocontext">
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ClassPackages}" Classes="category" Tag="{x:Type models:ClassPackage}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ClassPackages}" Classes="category" Tag="{x:Type models:ClassPackage}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Packages"/>
@@ -902,7 +902,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=PackageEquipmentTables}" Classes="category" Tag="{x:Type tables:PackageEquipmentTable}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=PackageEquipmentTables}" Classes="category" Tag="{x:Type tables:PackageEquipmentTable}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Equipment"/>
@@ -910,7 +910,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SpellPreferencesTables}" Classes="category" Tag="{x:Type tables:PackageSpellPreferencesTable}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SpellPreferencesTables}" Classes="category" Tag="{x:Type tables:PackageSpellPreferencesTable}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Spell Preferences"/>
@@ -918,7 +918,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=FeatPreferencesTables}" Classes="category" Tag="{x:Type tables:PackageFeatPreferencesTable}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=FeatPreferencesTables}" Classes="category" Tag="{x:Type tables:PackageFeatPreferencesTable}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Feat Preferences"/>
@@ -926,7 +926,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SkillPreferencesTables}" Classes="category" Tag="{x:Type tables:PackageSkillPreferencesTable}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SkillPreferencesTables}" Classes="category" Tag="{x:Type tables:PackageSkillPreferencesTable}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Skill Preferences"/>
@@ -935,7 +935,7 @@
                 </TreeViewItem.Header>
               </TreeViewItem>
             </TreeViewItem>
-            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Domains}" Classes="category" Tag="{x:Type models:Domain}">
+            <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Domains}" Classes="category" Tag="{x:Type models:Domain}">
               <TreeViewItem.Header>
                 <TextBlock>
                   <Run Text="Domains"/>
@@ -952,7 +952,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
 
-                <TreeViewItem Header="General" Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.GeneralSpells}" Classes="category" Tag="{x:Type models:Spell}">
+                <TreeViewItem Header="General" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.GeneralSpells}" Classes="category" Tag="{x:Type models:Spell}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="General"/>
@@ -960,7 +960,7 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.AbjurationSpells}" Classes="category" Tag="{x:Type models:Spell}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.AbjurationSpells}" Classes="category" Tag="{x:Type models:Spell}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Abjuration"/>
@@ -968,7 +968,7 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.ConjurationSpells}" Classes="category" Tag="{x:Type models:Spell}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.ConjurationSpells}" Classes="category" Tag="{x:Type models:Spell}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Conjuration"/>
@@ -976,7 +976,7 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.DivinationSpells}" Classes="category" Tag="{x:Type models:Spell}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.DivinationSpells}" Classes="category" Tag="{x:Type models:Spell}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Divination"/>
@@ -984,7 +984,7 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.EnchantmentSpells}" Classes="category" Tag="{x:Type models:Spell}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.EnchantmentSpells}" Classes="category" Tag="{x:Type models:Spell}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Enchantment"/>
@@ -992,7 +992,7 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.EvocationSpells}" Classes="category" Tag="{x:Type models:Spell}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.EvocationSpells}" Classes="category" Tag="{x:Type models:Spell}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Evocation"/>
@@ -1000,7 +1000,7 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.IllusionSpells}" Classes="category" Tag="{x:Type models:Spell}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.IllusionSpells}" Classes="category" Tag="{x:Type models:Spell}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Illusion"/>
@@ -1008,7 +1008,7 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.NecromancySpells}" Classes="category" Tag="{x:Type models:Spell}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.NecromancySpells}" Classes="category" Tag="{x:Type models:Spell}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Necromancy"/>
@@ -1016,7 +1016,7 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.TransmutationSpells}" Classes="category" Tag="{x:Type models:Spell}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.TransmutationSpells}" Classes="category" Tag="{x:Type models:Spell}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Transmutation"/>
@@ -1024,7 +1024,7 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.CreaturePowers}" Classes="category" Tag="{x:Type models:Spell}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.CreaturePowers}" Classes="category" Tag="{x:Type models:Spell}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Creature Power"/>
@@ -1032,7 +1032,7 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.FeatSpells}" Classes="category" Tag="{x:Type models:Spell}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.FeatSpells}" Classes="category" Tag="{x:Type models:Spell}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Feat"/>
@@ -1040,7 +1040,7 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.OtherSpells}" Classes="category" Tag="{x:Type models:Spell}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.OtherSpells}" Classes="category" Tag="{x:Type models:Spell}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Other"/>
@@ -1049,7 +1049,7 @@
                   </TreeViewItem.Header>
                 </TreeViewItem>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Spellbooks}" Classes="category" Tag="{x:Type models:Spellbook}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Spellbooks}" Classes="category" Tag="{x:Type models:Spellbook}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Spellbooks"/>
@@ -1067,7 +1067,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               
-                <TreeViewItem Header="Class/Racial" Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.ClassOrRacial}" Classes="category" Tag="{x:Type models:Feat}">
+                <TreeViewItem Header="Class/Racial" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.ClassOrRacial}" Classes="category" Tag="{x:Type models:Feat}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Class/Racial"/>
@@ -1075,7 +1075,7 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.CombatActive}" Classes="category" Tag="{x:Type models:Feat}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.CombatActive}" Classes="category" Tag="{x:Type models:Feat}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Active Combat Feats"/>
@@ -1083,7 +1083,7 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Combat}" Classes="category" Tag="{x:Type models:Feat}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Combat}" Classes="category" Tag="{x:Type models:Feat}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Combat Feats"/>
@@ -1091,7 +1091,7 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Header="Defensive" Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Defensive}" Classes="category" Tag="{x:Type models:Feat}">
+                <TreeViewItem Header="Defensive" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Defensive}" Classes="category" Tag="{x:Type models:Feat}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Defensive"/>
@@ -1099,7 +1099,7 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Magical}" Classes="category" Tag="{x:Type models:Feat}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Magical}" Classes="category" Tag="{x:Type models:Feat}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Magical"/>
@@ -1107,7 +1107,7 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Other}" Classes="category" Tag="{x:Type models:Feat}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Other}" Classes="category" Tag="{x:Type models:Feat}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Other"/>
@@ -1116,7 +1116,7 @@
                   </TreeViewItem.Header>
                 </TreeViewItem>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=MasterFeats}" Classes="category" Tag="{x:Type models:MasterFeat}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=MasterFeats}" Classes="category" Tag="{x:Type models:MasterFeat}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Master Feats"/>
@@ -1125,7 +1125,7 @@
                 </TreeViewItem.Header>
               </TreeViewItem>
             </TreeViewItem>
-            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Skills}" Classes="category" Tag="{x:Type models:Skill}">
+            <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Skills}" Classes="category" Tag="{x:Type models:Skill}">
               <TreeViewItem.Header>
                 <TextBlock>
                   <Run Text="Skills"/>
@@ -1133,7 +1133,7 @@
                 </TextBlock>
               </TreeViewItem.Header>
             </TreeViewItem>
-            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Diseases}" Classes="category" Tag="{x:Type models:Disease}">
+            <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Diseases}" Classes="category" Tag="{x:Type models:Disease}">
               <TreeViewItem.Header>
                 <TextBlock>
                   <Run Text="Diseases"/>
@@ -1141,7 +1141,7 @@
                 </TextBlock>
               </TreeViewItem.Header>
             </TreeViewItem>
-            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Poisons}" Classes="category" Tag="{x:Type models:Poison}">
+            <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Poisons}" Classes="category" Tag="{x:Type models:Poison}">
               <TreeViewItem.Header>
                 <TextBlock>
                   <Run Text="Poisons"/>
@@ -1149,7 +1149,7 @@
                 </TextBlock>
               </TreeViewItem.Header>
             </TreeViewItem>
-            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=BaseItems}" Classes="category" Tag="{x:Type models:BaseItem}">
+            <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=BaseItems}" Classes="category" Tag="{x:Type models:BaseItem}">
               <TreeViewItem.Header>
                 <TextBlock>
                   <Run Text="Base Items"/>
@@ -1158,7 +1158,7 @@
               </TreeViewItem.Header>
             </TreeViewItem>
             <TreeViewItem Header="Item Property Data" Classes="category nocontext">
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemProperties}" Classes="category" Tag="{x:Type models:ItemProperty}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemProperties}" Classes="category" Tag="{x:Type models:ItemProperty}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Item Properties"/>
@@ -1166,7 +1166,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemPropertyTables}" Classes="category" Tag="{x:Type tables:ItemPropertyTable}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemPropertyTables}" Classes="category" Tag="{x:Type tables:ItemPropertyTable}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Tables"/>
@@ -1174,7 +1174,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemPropertyCostTables}" Classes="category" Tag="{x:Type tables:ItemPropertyCostTable}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemPropertyCostTables}" Classes="category" Tag="{x:Type tables:ItemPropertyCostTable}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Cost Tables"/>
@@ -1182,7 +1182,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemPropertyParams}" Classes="category" Tag="{x:Type models:ItemPropertyParam}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemPropertyParams}" Classes="category" Tag="{x:Type models:ItemPropertyParam}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Param Tables"/>
@@ -1190,7 +1190,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemPropertySets}" Classes="category" Tag="{x:Type models:ItemPropertySet}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ItemPropertySets}" Classes="category" Tag="{x:Type models:ItemPropertySet}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Categories"/>
@@ -1200,7 +1200,7 @@
               </TreeViewItem>
             </TreeViewItem>
             <TreeViewItem Header="Damage Type Data" Classes="category nocontext">
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=DamageTypes}" Classes="category" Tag="{x:Type models:DamageType}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=DamageTypes}" Classes="category" Tag="{x:Type models:DamageType}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Damage Types"/>
@@ -1208,7 +1208,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=DamageTypeGroups}" Classes="category" Tag="{x:Type models:DamageTypeGroup}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=DamageTypeGroups}" Classes="category" Tag="{x:Type models:DamageTypeGroup}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Damage Type Groups"/>
@@ -1217,7 +1217,7 @@
                 </TreeViewItem.Header>
               </TreeViewItem>
             </TreeViewItem>
-            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Traps}" Classes="category" Tag="{x:Type models:Trap}">
+            <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Traps}" Classes="category" Tag="{x:Type models:Trap}">
               <TreeViewItem.Header>
                 <TextBlock>
                   <Run Text="Traps"/>
@@ -1225,7 +1225,7 @@
                 </TextBlock>
               </TreeViewItem.Header>
             </TreeViewItem>
-            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Companions}" Classes="category" Tag="{x:Type models:Companion}">
+            <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Companions}" Classes="category" Tag="{x:Type models:Companion}">
               <TreeViewItem.Header>
                 <TextBlock>
                   <Run Text="Companions"/>
@@ -1233,7 +1233,7 @@
                 </TextBlock>
               </TreeViewItem.Header>
             </TreeViewItem>
-            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Familiars}" Classes="category" Tag="{x:Type models:Familiar}">
+            <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Familiars}" Classes="category" Tag="{x:Type models:Familiar}">
               <TreeViewItem.Header>
                 <TextBlock>
                   <Run Text="Familiars"/>
@@ -1242,7 +1242,7 @@
               </TreeViewItem.Header>
             </TreeViewItem>
             <TreeViewItem Header="Appearance Data" Classes="category nocontext">
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Appearances}" Classes="category" Tag="{x:Type models:Appearance}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Appearances}" Classes="category" Tag="{x:Type models:Appearance}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Appearances"/>
@@ -1250,7 +1250,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=AppearanceSoundsets}" Classes="category" Tag="{x:Type models:AppearanceSoundset}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=AppearanceSoundsets}" Classes="category" Tag="{x:Type models:AppearanceSoundset}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Soundsets"/>
@@ -1259,7 +1259,7 @@
                 </TreeViewItem.Header>
               </TreeViewItem>
             </TreeViewItem>
-            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Polymorphs}" Classes="category" Tag="{x:Type models:Polymorph}">
+            <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Polymorphs}" Classes="category" Tag="{x:Type models:Polymorph}">
               <TreeViewItem.Header>
                 <TextBlock>
                   <Run Text="Polymorphs"/>
@@ -1267,7 +1267,7 @@
                 </TextBlock>
               </TreeViewItem.Header>
             </TreeViewItem>
-            <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=AreaEffects}" Classes="category" Tag="{x:Type models:AreaEffect}">
+            <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=AreaEffects}" Classes="category" Tag="{x:Type models:AreaEffect}">
               <TreeViewItem.Header>
                 <TextBlock>
                   <Run Text="Area Effects"/>
@@ -1276,7 +1276,7 @@
               </TreeViewItem.Header>
             </TreeViewItem>
             <TreeViewItem Header="Other" Classes="category nocontext">
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Soundsets}" Classes="category" Tag="{x:Type models:Soundset}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Soundsets}" Classes="category" Tag="{x:Type models:Soundset}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Soundsets"/>
@@ -1284,7 +1284,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=WeaponSounds}" Classes="category" Tag="{x:Type models:WeaponSound}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=WeaponSounds}" Classes="category" Tag="{x:Type models:WeaponSound}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Weapon Sounds"/>
@@ -1292,7 +1292,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=InventorySounds}" Classes="category" Tag="{x:Type models:InventorySound}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=InventorySounds}" Classes="category" Tag="{x:Type models:InventorySound}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Inventory Sounds"/>
@@ -1300,7 +1300,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Portraits}" Classes="category" Tag="{x:Type models:Portrait}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Portraits}" Classes="category" Tag="{x:Type models:Portrait}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Portraits"/>
@@ -1308,7 +1308,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=VisualEffects}" Classes="category" Tag="{x:Type models:VisualEffect}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=VisualEffects}" Classes="category" Tag="{x:Type models:VisualEffect}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Visual Effects"/>
@@ -1316,7 +1316,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ProgrammedEffects}" Classes="category" Tag="{x:Type models:ProgrammedEffect}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=ProgrammedEffects}" Classes="category" Tag="{x:Type models:ProgrammedEffect}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Programmed Effects"/>
@@ -1434,7 +1434,7 @@
                   </i:Interaction.Behaviors>
                 </TreeViewItem>
               </TreeViewItem>
-              <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomEnums}" Tag="{x:Type tables:CustomEnum}" Classes="category">
+              <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomEnums}" Tag="{x:Type tables:CustomEnum}" Classes="category">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Enums"/>
@@ -1442,7 +1442,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomObjects}" Tag="{x:Type tables:CustomObject}" Classes="category">
+              <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomObjects}" Tag="{x:Type tables:CustomObject}" Classes="category">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Objects"/>
@@ -1450,7 +1450,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomTables}" Tag="{x:Type tables:CustomTable}" Classes="category">
+              <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomTables}" Tag="{x:Type tables:CustomTable}" Classes="category">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Tables"/>
@@ -1458,7 +1458,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomDynamicTables}" Tag="{x:Type models:CustomDynamicTable}" Classes="category">
+              <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomDynamicTables}" Tag="{x:Type models:CustomDynamicTable}" Classes="category">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Dynamic Tables"/>
@@ -1545,9 +1545,9 @@
               </TreeDataTemplate>
             </TreeView.DataTemplates>
 
-            <TreeViewItem Header="Custom Objects" IsExpanded="True" Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomObjects}" Classes="category"/>
-            <TreeViewItem Header="Custom Tables" IsExpanded="True" Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomTables}" Classes="category"/>
-            <TreeViewItem Header="Dynamic Tables" IsExpanded="True" Items="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomDynamicTables}" Classes="category"/>
+            <TreeViewItem Header="Custom Objects" IsExpanded="True" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomObjects}" Classes="category"/>
+            <TreeViewItem Header="Custom Tables" IsExpanded="True" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomTables}" Classes="category"/>
+            <TreeViewItem Header="Dynamic Tables" IsExpanded="True" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=CustomDynamicTables}" Classes="category"/>
           </TreeView>
         </TabItem>
       </TabControl>
@@ -1555,7 +1555,7 @@
       <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="Transparent" />
 
       <TabControl x:Name="tcTabs" Grid.Column="2" Margin="0,3,5,5" Padding="0,0,0,1"
-                  Items="{Binding DetailViewList}" 
+                  ItemsSource="{Binding DetailViewList}" 
                   SelectedItem="{Binding CurrentView}" HorizontalContentAlignment="Stretch">
         <TabControl.Styles>
           <Style Selector="TabItem">

@@ -4,10 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="using:Eos.Views"
              xmlns:uc="using:Eos.Usercontrols"
+             xmlns:vm="using:Eos.ViewModels"
              xmlns:ext="using:Eos.Extensions"
              xmlns:types="using:Eos.Types"
              xmlns:config="using:Eos.Config"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
+             x:DataType="vm:ProgrammedEffectViewModel"
              x:Class="Eos.Views.ProgrammedEffectView"
              x:Name="page">
   <UserControl.Resources>
@@ -23,6 +25,7 @@
     <StyleInclude Source="/Assets/StyleResources.axaml"/>
   </local:LanguageAwarePage.Styles>
 
+  
   <TabControl TabStripPlacement="Left" BorderThickness="0,1,0,0" SelectedIndex="{Binding SelectedTabIndex}" Padding="0">
     <TabItem Header="Info" Width="120" Height="30" BorderThickness="0,0,0,1">
       <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
@@ -372,7 +375,7 @@
 
             <TextBlock Text="Extension Fields" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-            <ItemsRepeater Grid.Row="1" Grid.ColumnSpan="2" Items="{Binding Data.ExtensionValues}" ElementPrepared="ItemsRepeater_ElementPrepared">
+            <ItemsRepeater Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Data.ExtensionValues}" ElementPrepared="ItemsRepeater_ElementPrepared">
               <ItemsRepeater.Layout>
                 <UniformGridLayout ItemsStretch="Fill" Orientation="Horizontal" MaximumRowsOrColumns="2" MinItemHeight="25"/>
               </ItemsRepeater.Layout>

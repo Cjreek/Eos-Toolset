@@ -38,7 +38,7 @@
       <Button Content="OK" VerticalAlignment="Center" Width="100" Margin="3,0,0,0" Command="{Binding OKCommand}" CommandParameter="{Binding}"/>
     </StackPanel>
     
-    <DataGrid MinHeight="200" MinWidth="500" MaxHeight="1000" Items="{Binding SearchResult}" SelectedItem="{Binding ResultModel}" 
+    <DataGrid MinHeight="200" MinWidth="500" MaxHeight="1000" ItemsSource="{Binding SearchResult}" SelectedItem="{Binding ResultModel}" 
               FontSize="14" CanUserSortColumns="False" IsReadOnly="True">
       <i:Interaction.Behaviors>
         <ia:EventTriggerBehavior EventName="DoubleTapped">

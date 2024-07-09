@@ -99,7 +99,7 @@ namespace Eos.Views
 
         private void GrItems_LoadingRow(object? sender, DataGridRowEventArgs e)
         {
-            if (grItems.Items is Repository<ItemPropertyCostTableItem> itemRepo)
+            if (grItems.ItemsSource is Repository<ItemPropertyCostTableItem> itemRepo)
             {
                 var item = itemRepo[e.Row.GetIndex()];
                 e.Row.DataContext = item;

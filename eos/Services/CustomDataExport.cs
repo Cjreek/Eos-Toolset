@@ -2,6 +2,7 @@
 using Eos.Models;
 using Eos.Models.Tables;
 using Eos.Nwn;
+using Eos.Nwn.Bif;
 using Eos.Nwn.Erf;
 using Eos.Nwn.Ssf;
 using Eos.Nwn.Tlk;
@@ -32,6 +33,7 @@ namespace Eos.Services
             public TwoDimensionalArrayFile? Data { get; set; } = null;
         }
 
+        private BifCollection ovrBif = new BifCollection();
         private TlkCollection dialogTlk = new TlkCollection();
         private Dictionary<Guid, TableData> tableDataDict = new Dictionary<Guid, TableData>();
         private Dictionary<Guid, int> modelIndices = new Dictionary<Guid, int>();
@@ -78,7 +80,12 @@ namespace Eos.Services
         private TwoDimensionalArrayFile? Load2da(String name)
         {
             var filename = Path.Combine(EosConfig.NwnBasePath, "ovr", name + ".2da");
-            if (File.Exists(filename))
+            if (ovrBif.ContainsResource(name, NWNResourceType.TWODA))
+            {
+                var resource = ovrBif.ReadResource(name, NWNResourceType.TWODA);
+                return new TwoDimensionalArrayFile(resource.RawData);
+            }
+            else if (File.Exists(filename))
             {
                 using (var fs = File.OpenRead(filename))
                 {
@@ -468,7 +475,7 @@ namespace Eos.Services
             CollectTLKEntries(project);
 
             var tlkFile = new TlkFile();
-            if (project.Settings.Export.BaseTlkFile != "")
+            if ((project.Settings.Export.BaseTlkFile != "") && (File.Exists(project.Settings.Export.BaseTlkFile)))
                 tlkFile.Load(project.Settings.Export.BaseTlkFile, true);
             else
                 tlkFile.New(project.DefaultLanguage);
@@ -4146,6 +4153,8 @@ namespace Eos.Services
             Log.Info("Exporting project \"{0}\"...", project.Name);
             try
             {
+                if (File.Exists(Path.Combine(EosConfig.NwnBasePath, "data", "nwn_retail.key")))
+                    ovrBif.Load(EosConfig.NwnBasePath, Path.Combine("data", "nwn_retail.key"));
                 dialogTlk.Load(EosConfig.NwnBasePath);
 
                 tableDataDict.Clear();

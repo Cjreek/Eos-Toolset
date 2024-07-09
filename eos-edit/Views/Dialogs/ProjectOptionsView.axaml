@@ -115,7 +115,7 @@
                   </DockPanel>
                   <Button Grid.Row="0" Grid.Column="2" Margin="3,0,0,3" Content="Add Path" Command="{Binding AddExternalPathCommand}" CommandParameter="{Binding}"/>
 
-                  <ListBox Grid.Row="1" Grid.Column="1" Padding="0" Margin="2,0,0,0" Height="80" Grid.ColumnSpan="2" Items="{Binding SettingsCopy.ExternalFolders}" SelectedIndex="{Binding SelectedExternalPathIndex}">
+                  <ListBox Grid.Row="1" Grid.Column="1" Padding="0" Margin="2,0,0,0" Height="80" Grid.ColumnSpan="2" ItemsSource="{Binding SettingsCopy.ExternalFolders}" SelectedIndex="{Binding SelectedExternalPathIndex}">
                     <ListBox.ItemTemplate>
                       <DataTemplate>
                         <Grid Margin="0">

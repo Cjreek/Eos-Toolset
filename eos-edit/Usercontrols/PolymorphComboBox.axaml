@@ -20,7 +20,7 @@
       <ColumnDefinition Width="auto"/>
     </Grid.ColumnDefinitions>
 
-    <ComboBox x:Name="cbPolymorphs" Grid.Column="0" Items="{Binding Source={x:Static repo:MasterRepository.Polymorphs}}" SelectedItem="{Binding ElementName=ucPolymorphComboBox, Path=SelectedValue}">
+    <ComboBox x:Name="cbPolymorphs" Grid.Column="0" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Polymorphs}}" SelectedItem="{Binding ElementName=ucPolymorphComboBox, Path=SelectedValue}">
       <ComboBox.ItemsPanel>
         <ItemsPanelTemplate>
           <VirtualizingStackPanel/>

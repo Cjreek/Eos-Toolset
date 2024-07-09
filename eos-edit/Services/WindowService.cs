@@ -33,7 +33,7 @@ namespace Eos.Services
                 window.Content = viewModel;
                 window.DataContext = viewModel;
                 window.CanResize = viewModel.CanResize;
-                window.PlatformImpl?.ShowTaskbarIcon(false);
+                window.ShowInTaskbar = false;
             }
 
             return window;

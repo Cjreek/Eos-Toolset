@@ -40,17 +40,13 @@ namespace Eos.Views.Dialogs
         {
             if (value is MessageBoxIcon icon)
             {
-                var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
                 var assembly = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
-                if (assets != null)
+                switch (icon)
                 {
-                    switch (icon)
-                    {
-                        case MessageBoxIcon.Information: return new Bitmap(assets.Open(new Uri($"avares://{assembly}/Assets/Icons/info.png")));
-                        case MessageBoxIcon.Question: return new Bitmap(assets.Open(new Uri($"avares://{assembly}/Assets/Icons/question.png")));
-                        case MessageBoxIcon.Warning: return new Bitmap(assets.Open(new Uri($"avares://{assembly}/Assets/Icons/warning.png")));
-                        case MessageBoxIcon.Error: return new Bitmap(assets.Open(new Uri($"avares://{assembly}/Assets/Icons/error.png")));
-                    }
+                    case MessageBoxIcon.Information: return new Bitmap(AssetLoader.Open(new Uri($"avares://{assembly}/Assets/Icons/info.png")));
+                    case MessageBoxIcon.Question: return new Bitmap(AssetLoader.Open(new Uri($"avares://{assembly}/Assets/Icons/question.png")));
+                    case MessageBoxIcon.Warning: return new Bitmap(AssetLoader.Open(new Uri($"avares://{assembly}/Assets/Icons/warning.png")));
+                    case MessageBoxIcon.Error: return new Bitmap(AssetLoader.Open(new Uri($"avares://{assembly}/Assets/Icons/error.png")));
                 }
             }
 

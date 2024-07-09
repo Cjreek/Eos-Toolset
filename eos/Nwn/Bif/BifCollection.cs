@@ -35,10 +35,12 @@ namespace Eos.Nwn.Bif
             ClearCache();
         }
 
-        public void Load(String nwnBasePath)
+        public void Load(String nwnBasePath, String keyFile = "")
         {
+            if (keyFile == "")
+                keyFile = BASE_KEY_FILE;
             _nwnBasePath = Path.EndsInDirectorySeparator(nwnBasePath) ? nwnBasePath : nwnBasePath + Path.DirectorySeparatorChar;
-            _keyFile.Load(_nwnBasePath + BASE_KEY_FILE);
+            _keyFile.Load(_nwnBasePath + keyFile);
         }
 
         public bool ContainsResource(String? resRef, NWNResourceType type)

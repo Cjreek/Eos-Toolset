@@ -22,6 +22,7 @@ using Eos.ViewModels.Dialogs;
 using Eos.Models.Tables;
 using Eos.Views.Dialogs;
 using System.Threading;
+using Eos.Nwn.Mdl;
 
 namespace Eos.Views
 {
@@ -272,6 +273,10 @@ namespace Eos.Views
             
             if ((EosConfig.LastProject != "") && (File.Exists(EosConfig.LastProject)))
                 MessageDispatcher.Send(MessageType.OpenProject, EosConfig.LastProject);
+
+            // .................
+            //var stream = MasterRepository.Resources.GetRaw("d_div021", Nwn.NWNResourceType.MDL);
+            //var mdl = new MdlFile(stream ?? new MemoryStream());
         }
 
         private void miOpenProject_Click(object sender, RoutedEventArgs e)
