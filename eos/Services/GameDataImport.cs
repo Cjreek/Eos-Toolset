@@ -2403,7 +2403,19 @@ namespace Eos.Services
                 tmpAppearance.Index = i;
                 tmpAppearance.SourceLabel = appearance2da[i].AsString("LABEL");
 
-                if (!SetText(tmpAppearance.Name, appearance2da[i].AsInteger("STRING_REF"))) continue;
+                if (!SetText(tmpAppearance.Name, appearance2da[i].AsInteger("STRING_REF")))
+                {
+                    if ((tmpAppearance.SourceLabel != "") && (tmpAppearance.SourceLabel != null))
+                    {
+                        foreach (TLKLanguage lang in Enum.GetValues(typeof(TLKLanguage)))
+                        {
+                            tmpAppearance.Name[lang].Text = tmpAppearance.SourceLabel;
+                            tmpAppearance.Name[lang].TextF = tmpAppearance.SourceLabel;
+                        }
+                    }
+                    else
+                        continue;
+                }
                 tmpAppearance.RaceModel = appearance2da[i].AsString("RACE") ?? "";
                 tmpAppearance.EnvironmentMap = appearance2da[i].AsString("ENVMAP") ?? "";
                 tmpAppearance.BloodColor = Enum.Parse<BloodColor>(appearance2da[i].AsString("BLOODCOLR") ?? "R", true);
