@@ -50,8 +50,8 @@ namespace Eos.Models
         protected override void SetDefaultValues()
         {
             Name = "New Damage Type Group";
-            FeedbackText[MasterRepository.Project.DefaultLanguage].Text = "<Custom0> New Damage Type Group";
-            FeedbackText[MasterRepository.Project.DefaultLanguage].TextF = "<Custom0> New Damage Type Group";
+            FeedbackText[MasterRepository.Project.DefaultLanguage].Text = "<CUSTOM0> New Damage Type Group";
+            FeedbackText[MasterRepository.Project.DefaultLanguage].TextF = "<CUSTOM0> New Damage Type Group";
         }
 
         public override void FromJson(JsonObject json)
