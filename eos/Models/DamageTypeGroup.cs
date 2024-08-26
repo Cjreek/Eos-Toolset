@@ -13,7 +13,20 @@ namespace Eos.Models
 {
     public class DamageTypeGroup : BaseModel
     {
-        public string Name { get; set; } = "";
+        private String _name = "";
+        public String Name
+        {
+            get { return _name; }
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
         public TLKStringSet FeedbackText { get; set; } = new TLKStringSet();
         public uint? Color { get; set; }
 

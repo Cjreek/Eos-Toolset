@@ -1233,10 +1233,36 @@ namespace Eos.Services
             table.CustomColumn02.DataType = MasterRepository.GetDataTypeByType(typeof(int)); // ! iprp_visualfx --> PAIN
         }
 
+        private void ImportSaveElementsPTColumns(ItemPropertyTable table)
+        {
+            table.CustomColumn01.Label = "Cost";
+            table.CustomColumn01.Column = "Cost";
+            table.CustomColumn01.DataType = MasterRepository.GetDataTypeByType(typeof(double));
+
+            table.CustomColumn02.Label = "Savingthrow Type";
+            table.CustomColumn02.Column = "SavingThrowType";
+            table.CustomColumn02.DataType = MasterRepository.GetDataTypeByType(typeof(SavingthrowType));
+        }
+
         private void ImportDamageTypesPTValues(LineRecord record, ItemPropertyTableItem item)
         {
             item.CustomColumnValue01.Value = record.AsFloat("Cost");
             item.CustomColumnValue02.Value = record.AsInteger("VisualFX"); // ! iprp_visualfx --> PAIN
+        }
+
+        private void ImportSaveElementPTValues(LineRecord record, ItemPropertyTableItem item)
+        {
+            if (record.IsNull("Name") && !record.IsNull("NameString"))
+            {
+                foreach (TLKLanguage lang in Enum.GetValues(typeof(TLKLanguage)))
+                {
+                    item.Name[lang].Text = record.AsString("NameString") ?? "";
+                    item.Name[lang].TextF = record.AsString("NameString") ?? "";
+                }
+            }
+
+            item.CustomColumnValue01.Value = record.AsFloat("Cost");
+            item.CustomColumnValue02.Value = CreateRef<SavingthrowType>(record.AsInteger("SavingThrowType"));
         }
 
         private void ImportCostOnlyPTColumns(ItemPropertyTable table)
@@ -1404,9 +1430,11 @@ namespace Eos.Services
                 case "iprp_damagetype":
                     ImportDamageTypesPTColumns(iprpTable);
                     break;
+                case "iprp_saveelement":
+                    ImportSaveElementsPTColumns(iprpTable);
+                    break;
                 case "iprp_protection":
                 case "iprp_immunity":
-                case "iprp_saveelement":
                 case "iprp_traps":
                     ImportCostOnlyPTColumns(iprpTable);
                     break;
@@ -1455,9 +1483,11 @@ namespace Eos.Services
                     case "iprp_damagetype":
                         ImportDamageTypesPTValues(iprpTable2da[i], tmpItem);
                         break;
+                    case "iprp_saveelement":
+                        ImportSaveElementPTValues(iprpTable2da[i], tmpItem);
+                        break;
                     case "iprp_protection":
                     case "iprp_immunity":
-                    case "iprp_saveelement":
                     case "iprp_traps":
                         ImportCostOnlyPTValues(iprpTable2da[i], tmpItem);
                         break;
@@ -2801,8 +2831,10 @@ namespace Eos.Services
         private void ImportDamageTypes()
         {
             var damagetypes2da = Load2da("damagetypes");
+            var damagehitvisual2da = Load2da("damagehitvisual");
 
             Standard.DamageTypes.Clear();
+            Standard.RangedDamageTypes.Clear();
             for (int i = 0; i < damagetypes2da.Count; i++)
             {
                 var tmpDamageType = new DamageType();
@@ -2812,7 +2844,25 @@ namespace Eos.Services
 
                 if (!SetText(tmpDamageType.Name, damagetypes2da[i].AsInteger("CharsheetStrref"))) continue;
                 tmpDamageType.Group = CreateRef<DamageTypeGroup>(damagetypes2da[i].AsInteger("DamageTypeGroup"));
-               
+                
+                tmpDamageType.RangedDamageType = CreateRef<RangedDamageType>(damagetypes2da[i].AsInteger("DamageRangedProjectile"));
+                if (damagetypes2da[i].AsInteger("DamageRangedProjectile") > 0)
+                {
+                    var tmpRangedDamageType = new RangedDamageType();
+                    tmpRangedDamageType.ID = GenerateGuid("rangeddamagetypes", i);
+                    tmpRangedDamageType.Index = damagetypes2da[i].AsInteger("DamageRangedProjectile");
+                    tmpRangedDamageType.SourceLabel = damagetypes2da[i].AsString("Label");
+                    tmpRangedDamageType.Name = damagetypes2da[i].AsString("Label") ?? "";
+
+                    Standard.RangedDamageTypes.Add(tmpRangedDamageType);
+                }
+
+                if (i < damagehitvisual2da.Count)
+                {
+                    tmpDamageType.MeleeImpactVFX = CreateRef<VisualEffect>(damagehitvisual2da[i].AsInteger("VisualEffectID"));
+                    tmpDamageType.RangedImpactVFX = CreateRef<VisualEffect>(damagehitvisual2da[i].AsInteger("RangedEffectID"));
+                }
+
                 Standard.DamageTypes.Add(tmpDamageType);
             }
         }
@@ -2840,6 +2890,64 @@ namespace Eos.Services
                 }
 
                 Standard.DamageTypeGroups.Add(tmpDamageTypeGroup);
+            }
+        }
+
+        private void ImportSavingThrowTypes()
+        {
+            var savingthrowtypes2da = Load2da("savingthrowtypes");
+
+            Standard.SavingthrowTypes.Clear();
+            for (int i = 0; i < savingthrowtypes2da.Count; i++)
+            {
+                var tmpSavingthrowType = new SavingthrowType();
+                tmpSavingthrowType.ID = GenerateGuid("savingthrowtypes", i);
+                tmpSavingthrowType.Index = i;
+                tmpSavingthrowType.SourceLabel = savingthrowtypes2da[i].AsString("Label");
+
+                if (!SetText(tmpSavingthrowType.Name, savingthrowtypes2da[i].AsInteger("Strref")))
+                {
+                    if ((tmpSavingthrowType.SourceLabel != "") && (tmpSavingthrowType.SourceLabel != null))
+                    {
+                        foreach (TLKLanguage lang in Enum.GetValues(typeof(TLKLanguage)))
+                        {
+                            tmpSavingthrowType.Name[lang].Text = tmpSavingthrowType.SourceLabel;
+                            tmpSavingthrowType.Name[lang].TextF = tmpSavingthrowType.SourceLabel;
+                        }
+                    }
+                    else
+                        continue;
+                }
+                tmpSavingthrowType.Immunity = (ImmunityType?)savingthrowtypes2da[i].AsInteger("Immunity");
+                tmpSavingthrowType.ImmunityOnlyForSpells = savingthrowtypes2da[i].AsBoolean("ImmunityOnlyIfSpell");
+
+                Standard.SavingthrowTypes.Add(tmpSavingthrowType);
+            }
+        }
+
+        private void ImportAmmunition()
+        {
+            var ammunitiontypes2da = Load2da("ammunitiontypes");
+
+            Standard.Ammunitions.Clear();
+            for (int i = 0; i < ammunitiontypes2da.Count; i++)
+            {
+                var tmpAmmunition = new Ammunition();
+                tmpAmmunition.ID = GenerateGuid("ammunitiontypes", i);
+                tmpAmmunition.Index = i;
+                tmpAmmunition.SourceLabel = ammunitiontypes2da[i].AsString("Label");
+
+                tmpAmmunition.Name = ammunitiontypes2da[i].AsString("Label") ?? "";
+                tmpAmmunition.Model = ammunitiontypes2da[i].AsString("Model");
+                tmpAmmunition.ShotSound = ammunitiontypes2da[i].AsString("ShotSound");
+                tmpAmmunition.ImpactSound = ammunitiontypes2da[i].AsString("ImpactSound");
+                tmpAmmunition.AmmunitionType = (AmmunitionType?)ammunitiontypes2da[i].AsInteger("AmmunitionType") ?? AmmunitionType.Arrow;
+                if (ammunitiontypes2da[i].AsInteger("DamageRangedProjectile") > 0)
+                    tmpAmmunition.RangedDamageType = CreateRef<RangedDamageType>(ammunitiontypes2da[i].AsInteger("DamageRangedProjectile"));
+                else
+                    tmpAmmunition.RangedDamageType = null;
+
+                Standard.Ammunitions.Add(tmpAmmunition);
             }
         }
 
@@ -3169,6 +3277,16 @@ namespace Eos.Services
             {
                 if (damageType == null) continue;
                 damageType.Group = SolveInstance(damageType.Group, Standard.DamageTypeGroups);
+                damageType.RangedDamageType = SolveInstance(damageType.RangedDamageType, Standard.RangedDamageTypes);
+                damageType.MeleeImpactVFX = SolveInstance(damageType.MeleeImpactVFX, Standard.VisualEffects);
+                damageType.RangedImpactVFX = SolveInstance(damageType.RangedImpactVFX, Standard.VisualEffects);
+            }
+
+            // Ammunition
+            foreach (var ammunition in Standard.Ammunitions)
+            {
+                if (ammunition == null) continue;
+                ammunition.RangedDamageType = SolveInstance(ammunition.RangedDamageType, Standard.RangedDamageTypes);
             }
 
             // Item Properties
@@ -3274,6 +3392,9 @@ namespace Eos.Services
             Standard.ProgrammedEffects.SaveToFile(Constants.ProgrammedEffectsFilePath);
             Standard.DamageTypes.SaveToFile(Constants.DamageTypesFilePath);
             Standard.DamageTypeGroups.SaveToFile(Constants.DamageTypeGroupsFilePath);
+            Standard.RangedDamageTypes.SaveToFile(Constants.RangedDamageTypesFilePath);
+            Standard.SavingthrowTypes.SaveToFile(Constants.SavingThrowTypesFilePath);
+            Standard.Ammunitions.SaveToFile(Constants.AmmunitionsFilePath);
 
             Standard.AttackBonusTables.SaveToFile(Constants.AttackBonusTablesFilePath);
             Standard.BonusFeatTables.SaveToFile(Constants.BonusFeatTablesFilePath);
@@ -3385,6 +3506,8 @@ namespace Eos.Services
                 ImportProgrammedEffects();
                 ImportDamageTypes();
                 ImportDamageTypeGroups();
+                ImportSavingThrowTypes();
+                ImportAmmunition();
 
                 ImportText();
 

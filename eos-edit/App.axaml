@@ -94,6 +94,15 @@
       <DataTemplate DataType="{x:Type dialogVM:DamageTypeGroupSearchViewModel}">
         <dialogViews:ModelSearchView/>
       </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:RangedDamageTypeSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:SavingthrowTypeSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:AmmunitionSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
       <DataTemplate DataType="{x:Type dialogVM:CustomObjectInstanceSearchViewModel}">
         <dialogViews:ModelSearchView/>
       </DataTemplate>

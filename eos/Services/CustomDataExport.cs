@@ -354,6 +354,15 @@ namespace Eos.Services
                 }
             }
 
+            // Savingthrow Types
+            foreach (var savingthrowType in project.SavingthrowTypes)
+            {
+                if (savingthrowType != null)
+                {
+                    AddTLKString(savingthrowType.Name);
+                }
+            }
+
             // Item Properties
             foreach (var itemProp in project.ItemProperties)
             {
@@ -3182,9 +3191,11 @@ namespace Eos.Services
             Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "damagetypes.2da"));
 
             var damagetypes2da = Load2da("damagetypes");
-            if (damagetypes2da != null)
+            var damagehitvisual2da = Load2da("damagehitvisual");
+            if ((damagetypes2da != null) && (damagehitvisual2da != null))
             {
                 damagetypes2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+                damagehitvisual2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
 
                 AddExtensionColumns(damagetypes2da, project.DamageTypes.Extensions);
                 foreach (var damageType in project.DamageTypes.OrderBy(damageType => damageType?.Index))
@@ -3199,6 +3210,7 @@ namespace Eos.Services
                             while (project.DamageTypes.GetCustomDataStartIndex() + damageType.Index >= damagetypes2da.Count)
                             {
                                 damagetypes2da.AddRecord();
+                                damagehitvisual2da.AddRecord();
                             }
 
                             index = project.DamageTypes.GetCustomDataStartIndex() + (damageType.Index ?? 0);
@@ -3208,8 +3220,14 @@ namespace Eos.Services
                         record.Set("Label", MakeLabel(damageType.Name[project.DefaultLanguage].Text, ""));
                         record.Set("CharsheetStrref", GetTLKIndex(damageType.Name));
                         record.Set("DamageTypeGroup", project.DamageTypeGroups.Get2DAIndex(damageType.Group));
+                        record.Set("DamageRangedProjectile", project.RangedDamageTypes.Get2DAIndex(damageType.RangedDamageType) ?? 0);
 
                         WriteExtensionValues(record, damageType.ExtensionValues, project.Settings.Export.LowercaseFilenames);
+
+                        var dhvRecord = damagehitvisual2da[index];
+                        dhvRecord.Set("Label", MakeLabel(damageType.Name[project.DefaultLanguage].Text, ""));
+                        dhvRecord.Set("VisualEffectID", project.VisualEffects.Get2DAIndex(damageType.MeleeImpactVFX));
+                        dhvRecord.Set("RangedEffectID", project.VisualEffects.Get2DAIndex(damageType.RangedImpactVFX));
                     }
                 }
 
@@ -3217,6 +3235,11 @@ namespace Eos.Services
                 damagetypes2da.Save(filename, project.Settings.Export.Compress2DA);
 
                 AddHAKResource("damagetypes", NWNResourceType.TWODA, filename);
+
+                var dhvFilename = project.Settings.Export.TwoDAFolder + "damagehitvisual.2da";
+                damagehitvisual2da.Save(dhvFilename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("damagehitvisual", NWNResourceType.TWODA, dhvFilename);
             }
         }
 
@@ -3250,7 +3273,7 @@ namespace Eos.Services
                         }
 
                         var record = damagetypegroups2da[index];
-                        record.Set("Label", MakeLabel(damageTypeGroup.SourceLabel, ""));
+                        record.Set("Label", MakeLabel(damageTypeGroup.Name, ""));
                         record.Set("FeedbackStrref", GetTLKIndex(damageTypeGroup.FeedbackText));
                         if (damageTypeGroup.Color != null)
                         {
@@ -3270,6 +3293,100 @@ namespace Eos.Services
                 damagetypegroups2da.Save(filename, project.Settings.Export.Compress2DA);
 
                 AddHAKResource("damagetypegroups", NWNResourceType.TWODA, filename);
+            }
+        }
+
+        private void ExportSavingthrowTypes(EosProject project)
+        {
+            if (project.SavingthrowTypes.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "savingthrowtypes.2da"));
+
+            var savingthrowtypes2da = Load2da("savingthrowtypes");
+            if (savingthrowtypes2da != null)
+            {
+                savingthrowtypes2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
+                AddExtensionColumns(savingthrowtypes2da, project.SavingthrowTypes.Extensions);
+                foreach (var savingthrowType in project.SavingthrowTypes.OrderBy(savingthrowType => savingthrowType?.Index))
+                {
+                    if (savingthrowType != null)
+                    {
+                        var index = -1;
+                        if (savingthrowType.Overrides != null)
+                            index = MasterRepository.Standard.SavingthrowTypes.GetByID(savingthrowType.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.SavingthrowTypes.GetCustomDataStartIndex() + savingthrowType.Index >= savingthrowtypes2da.Count)
+                            {
+                                savingthrowtypes2da.AddRecord();
+                            }
+
+                            index = project.SavingthrowTypes.GetCustomDataStartIndex() + (savingthrowType.Index ?? 0);
+                        }
+
+                        var record = savingthrowtypes2da[index];
+                        record.Set("Label", MakeLabel(savingthrowType.Name[project.DefaultLanguage].Text, "_"));
+                        record.Set("Strref", GetTLKIndex(savingthrowType.Name));
+                        record.Set("Immunity", (int?)savingthrowType.Immunity);
+                        record.Set("ImmunityOnlyIfSpell", savingthrowType.ImmunityOnlyForSpells);
+
+                        WriteExtensionValues(record, savingthrowType.ExtensionValues, project.Settings.Export.LowercaseFilenames);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "savingthrowtypes.2da";
+                savingthrowtypes2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("savingthrowtypes", NWNResourceType.TWODA, filename);
+            }
+        }
+
+        private void ExportAmmunitions(EosProject project)
+        {
+            if (project.Ammunitions.Count == 0) return;
+
+            Log.Info("Exporting 2DA: \"{0}\"", Path.GetFullPath(project.Settings.Export.TwoDAFolder + "ammunitiontypes.2da"));
+
+            var ammunitiontypes2da = Load2da("ammunitiontypes");
+            if (ammunitiontypes2da != null)
+            {
+                ammunitiontypes2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
+
+                AddExtensionColumns(ammunitiontypes2da, project.Ammunitions.Extensions);
+                foreach (var ammunition in project.Ammunitions.OrderBy(ammunition => ammunition?.Index))
+                {
+                    if (ammunition != null)
+                    {
+                        var index = -1;
+                        if (ammunition.Overrides != null)
+                            index = MasterRepository.Standard.Ammunitions.GetByID(ammunition.Overrides ?? Guid.Empty)?.Index ?? -1;
+                        else
+                        {
+                            while (project.Ammunitions.GetCustomDataStartIndex() + ammunition.Index >= ammunitiontypes2da.Count)
+                            {
+                                ammunitiontypes2da.AddRecord();
+                            }
+
+                            index = project.Ammunitions.GetCustomDataStartIndex() + (ammunition.Index ?? 0);
+                        }
+
+                        var record = ammunitiontypes2da[index];
+                        record.Set("label", MakeLabel(ammunition.Name, "_"));
+                        record.Set("Model", ammunition.Model);
+                        record.Set("ShotSound", ammunition.ShotSound);
+                        record.Set("ImpactSound", ammunition.ImpactSound);
+                        record.Set("AmmunitionType", (int)ammunition.AmmunitionType);
+                        record.Set("DamageRangedProjectile", project.RangedDamageTypes.Get2DAIndex(ammunition.RangedDamageType) ?? 0);
+
+                        WriteExtensionValues(record, ammunition.ExtensionValues, project.Settings.Export.LowercaseFilenames);
+                    }
+                }
+
+                var filename = project.Settings.Export.TwoDAFolder + "ammunitiontypes.2da";
+                ammunitiontypes2da.Save(filename, project.Settings.Export.Compress2DA);
+
+                AddHAKResource("ammunitiontypes", NWNResourceType.TWODA, filename);
             }
         }
 
@@ -4080,6 +4197,20 @@ namespace Eos.Services
                 incFile.Add("");
             }
 
+            // Savingthrow Types
+            var customSavingthrowTypes = project.SavingthrowTypes.Where(save => save != null && save.Overrides == null);
+            if (customSavingthrowTypes.Any())
+            {
+                incFile.Add("// Savingthrow Types");
+                foreach (var saveType in customSavingthrowTypes)
+                {
+                    if (saveType == null) continue;
+                    var index = project.SavingthrowTypes.GetCustomDataStartIndex() + saveType.Index;
+                    incFile.Add("const int " + GetScriptConstant("SAVING_THROW_TYPE_", saveType) + " = " + index.ToString() + ";");
+                }
+                incFile.Add("");
+            }
+
             // VFX
             var customVFX = project.VisualEffects.Where(vfx => vfx != null && vfx.Overrides == null);
             if (customVFX.Any())
@@ -4213,6 +4344,8 @@ namespace Eos.Services
                 ExportItemPropertiyParams(project);
                 ExportDamageTypes(project);
                 ExportDamageTypeGroups(project);
+                ExportSavingthrowTypes(project);
+                ExportAmmunitions(project);
 
                 ExportCustomObjects(project);
                 ExportCustomTables(project);

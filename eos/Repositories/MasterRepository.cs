@@ -50,6 +50,7 @@ namespace Eos.Repositories
         private static readonly VirtualModelRepository<ItemPropertySet> itemPropertySetVirtualRepository;
         private static readonly VirtualModelRepository<ItemProperty> itemPropertyVirtualRepository;
 
+        private static readonly VirtualModelRepository<Ammunition> ammunitionVirtualRepository;
         private static readonly VirtualModelRepository<Appearance> appearanceVirtualRepository;
         private static readonly VirtualModelRepository<AppearanceSoundset> appearanceSoundsetVirtualRepository;
         private static readonly VirtualModelRepository<WeaponSound> weaponSoundVirtualRepository;
@@ -64,6 +65,8 @@ namespace Eos.Repositories
         private static readonly VirtualModelRepository<ProgrammedEffect> progFXVirtualRepository;
         private static readonly VirtualModelRepository<DamageType> damageTypeVirtualRepository;
         private static readonly VirtualModelRepository<DamageTypeGroup> damageTypeGroupVirtualRepository;
+        private static readonly VirtualModelRepository<RangedDamageType> rangedDamageTypeVirtualRepository;
+        private static readonly VirtualModelRepository<SavingthrowType> savingthrowTypeVirtualRepository;
 
         private static readonly VirtualModelRepository<AttackBonusTable> babTableVirtualRepository;
         private static readonly VirtualModelRepository<BonusFeatsTable> bonusFeatTableVirtualRepository;
@@ -124,6 +127,9 @@ namespace Eos.Repositories
             RepositoryFactory.RegisterRepositoryClass<VisualEffect>(typeof(VisualEffectRepository));
             RepositoryFactory.RegisterRepositoryClass<DamageType>(typeof(DamageTypeRepository));
             RepositoryFactory.RegisterRepositoryClass<DamageTypeGroup>(typeof(DamageTypeGroupRepository));
+            RepositoryFactory.RegisterRepositoryClass<RangedDamageType>(typeof(RangedDamageTypeRepository));
+            RepositoryFactory.RegisterRepositoryClass<SavingthrowType>(typeof(SavingthrowTypeRepository));
+            RepositoryFactory.RegisterRepositoryClass<Ammunition>(typeof(AmmunitionRepository));
 
             resources = new ResourceRepository();
 
@@ -146,6 +152,7 @@ namespace Eos.Repositories
             itemPropertySetVirtualRepository = new VirtualModelRepository<ItemPropertySet>(standardCategory.ItemPropertySets, project.ItemPropertySets);
             itemPropertyVirtualRepository = new VirtualModelRepository<ItemProperty>(standardCategory.ItemProperties, project.ItemProperties);
 
+            ammunitionVirtualRepository = new VirtualModelRepository<Ammunition>(standardCategory.Ammunitions, project.Ammunitions);
             appearanceVirtualRepository = new VirtualModelRepository<Appearance>(standardCategory.Appearances, project.Appearances);
             appearanceSoundsetVirtualRepository = new VirtualModelRepository<AppearanceSoundset>(standardCategory.AppearanceSoundsets, project.AppearanceSoundsets);
             weaponSoundVirtualRepository = new VirtualModelRepository<WeaponSound>(standardCategory.WeaponSounds, project.WeaponSounds);
@@ -160,6 +167,8 @@ namespace Eos.Repositories
             progFXVirtualRepository = new VirtualModelRepository<ProgrammedEffect>(standardCategory.ProgrammedEffects, project.ProgrammedEffects);
             damageTypeVirtualRepository = new VirtualModelRepository<DamageType>(standardCategory.DamageTypes, project.DamageTypes);
             damageTypeGroupVirtualRepository = new VirtualModelRepository<DamageTypeGroup>(standardCategory.DamageTypeGroups, project.DamageTypeGroups);
+            rangedDamageTypeVirtualRepository = new VirtualModelRepository<RangedDamageType>(standardCategory.RangedDamageTypes, project.RangedDamageTypes);
+            savingthrowTypeVirtualRepository = new VirtualModelRepository<SavingthrowType>(standardCategory.SavingthrowTypes, project.SavingthrowTypes);
 
             babTableVirtualRepository = new VirtualModelRepository<AttackBonusTable>(standardCategory.AttackBonusTables, project.AttackBonusTables);
             bonusFeatTableVirtualRepository = new VirtualModelRepository<BonusFeatsTable>(standardCategory.BonusFeatTables, project.BonusFeatTables);
@@ -228,6 +237,18 @@ namespace Eos.Repositories
                 return (o is TLKStringSet tlk) ? tlk2Index(tlk) : null;
             });
             tlkDataType.GetDefaultValue = () => new TLKStringSet();
+            //var tlkMultilineDataType = AddDataType(Guid.Parse("f105eaa5-96ca-48a2-8d6b-502c0eb4ec6f"), "TLK String (Multiline)", typeof(TLKStringSetMultiLine), o => ((TLKStringSetMultiLine?)o)?.ToJson(),
+            //json =>
+            //{
+            //    var tlkString = new TLKStringSetMultiLine();
+            //    tlkString.FromJson(json?.AsObject());
+            //    return tlkString;
+            //},
+            //(o, _, tlk2Index) =>
+            //{
+            //    return (o is TLKStringSetMultiLine tlk) ? tlk2Index(tlk) : null;
+            //});
+            //tlkMultilineDataType.GetDefaultValue = () => new TLKStringSetMultiLine();
 
             AddDataType(Guid.Parse("e4a815d7-78e1-4e12-84e8-129a69cbb951"), "Variant", typeof(VariantValue),
                 o =>
@@ -290,6 +311,9 @@ namespace Eos.Repositories
             AddDataType(Guid.Parse("c50c6360-4480-430e-9411-21eb03778d9e"), "Programmed Effect", typeof(ProgrammedEffect), modelToJson, json => JsonUtils.CreateRefFromJson<ProgrammedEffect>((JsonObject?)json), (o, _, _) => Project.ProgrammedEffects.Get2DAIndex((ProgrammedEffect?)o));
             AddDataType(Guid.Parse("1d68cd7c-500d-44c2-a948-b8e61d88958d"), "Damage Type", typeof(DamageType), modelToJson, json => JsonUtils.CreateRefFromJson<DamageType>((JsonObject?)json), (o, _, _) => Project.DamageTypes.Get2DAIndex((DamageType?)o));
             AddDataType(Guid.Parse("2f17a139-20e0-4c9e-b386-a62ede19d76b"), "Damage Type Group", typeof(DamageTypeGroup), modelToJson, json => JsonUtils.CreateRefFromJson<DamageTypeGroup>((JsonObject?)json), (o, _, _) => Project.DamageTypeGroups.Get2DAIndex((DamageTypeGroup?)o));
+            AddDataType(Guid.Parse("8b9331bd-c90f-4e5e-b121-f06a9751e8cc"), "RangedDamageType", typeof(RangedDamageType), modelToJson, json => JsonUtils.CreateRefFromJson<RangedDamageType>((JsonObject?)json), (o, _, _) => Project.RangedDamageTypes.Get2DAIndex((RangedDamageType?)o));
+            AddDataType(Guid.Parse("d1b9ab70-78ff-4f14-945d-f5c2fa1a2171"), "Savingthrow Type", typeof(SavingthrowType), modelToJson, json => JsonUtils.CreateRefFromJson<SavingthrowType>((JsonObject?)json), (o, _, _) => Project.SavingthrowTypes.Get2DAIndex((SavingthrowType?)o));
+            AddDataType(Guid.Parse("0b373241-2e2c-4e75-b100-9412f67b9954"), "Ammunition", typeof(Ammunition), modelToJson, json => JsonUtils.CreateRefFromJson<Ammunition>((JsonObject?)json), (o, _, _) => Project.Ammunitions.Get2DAIndex((Ammunition?)o));
 
             //AddDataType(Guid.Parse("6049191e-3cf5-44e8-9c5d-dc3c45136a3e"), "Item Property Param", typeof(ItemPropertyParam), modelToJson, json => JsonUtils.CreateRefFromJson<ItemPropertyParam>((JsonObject?)json), o => Project.ItemPropertyParams.Get2DAIndex((ItemPropertyParam?)o));
 
@@ -390,6 +414,7 @@ namespace Eos.Repositories
         public static VirtualModelRepository<ItemPropertySet> ItemPropertySets { get { return itemPropertySetVirtualRepository; } }
         public static VirtualModelRepository<ItemProperty> ItemProperties { get { return itemPropertyVirtualRepository; } }
 
+        public static VirtualModelRepository<Ammunition> Ammunitions { get { return ammunitionVirtualRepository; } }
         public static VirtualModelRepository<Appearance> Appearances { get { return appearanceVirtualRepository; } }
         public static VirtualModelRepository<AppearanceSoundset> AppearanceSoundsets { get { return appearanceSoundsetVirtualRepository; } }
         public static VirtualModelRepository<WeaponSound> WeaponSounds { get { return weaponSoundVirtualRepository; } }
@@ -404,6 +429,8 @@ namespace Eos.Repositories
         public static VirtualModelRepository<ProgrammedEffect> ProgrammedEffects { get { return progFXVirtualRepository; } }
         public static VirtualModelRepository<DamageType> DamageTypes { get { return damageTypeVirtualRepository; } }
         public static VirtualModelRepository<DamageTypeGroup> DamageTypeGroups { get { return damageTypeGroupVirtualRepository; } }
+        public static VirtualModelRepository<RangedDamageType> RangedDamageTypes { get { return rangedDamageTypeVirtualRepository; } }
+        public static VirtualModelRepository<SavingthrowType> SavingthrowTypes { get { return savingthrowTypeVirtualRepository; } }
 
         public static VirtualModelRepository<AttackBonusTable> AttackBonusTables { get { return babTableVirtualRepository; } }
         public static VirtualModelRepository<BonusFeatsTable> BonusFeatTables { get { return bonusFeatTableVirtualRepository; } }
@@ -468,6 +495,7 @@ namespace Eos.Repositories
                 Standard.ItemPropertySets.LoadFromFile(Constants.ItemPropertySetsFilePath);
                 Standard.ItemProperties.LoadFromFile(Constants.ItemPropertiesFilePath);
 
+                Standard.Ammunitions.LoadFromFile(Constants.AmmunitionsFilePath);
                 Standard.Appearances.LoadFromFile(Constants.AppearancesFilePath);
                 Standard.AppearanceSoundsets.LoadFromFile(Constants.AppearanceSoundsetsFilePath);
                 Standard.WeaponSounds.LoadFromFile(Constants.WeaponSoundsFilePath);
@@ -482,6 +510,8 @@ namespace Eos.Repositories
                 Standard.ProgrammedEffects.LoadFromFile(Constants.ProgrammedEffectsFilePath);
                 Standard.DamageTypes.LoadFromFile(Constants.DamageTypesFilePath);
                 Standard.DamageTypeGroups.LoadFromFile(Constants.DamageTypeGroupsFilePath);
+                Standard.RangedDamageTypes.LoadFromFile(Constants.RangedDamageTypesFilePath);
+                Standard.SavingthrowTypes.LoadFromFile(Constants.SavingThrowTypesFilePath);
 
                 Standard.AttackBonusTables.LoadFromFile(Constants.AttackBonusTablesFilePath);
                 Standard.BonusFeatTables.LoadFromFile(Constants.BonusFeatTablesFilePath);
@@ -518,6 +548,7 @@ namespace Eos.Repositories
                 Standard.ItemPropertySets.ResolveReferences();
                 Standard.ItemProperties.ResolveReferences();
 
+                Standard.Ammunitions.ResolveReferences();
                 Standard.Appearances.ResolveReferences();
                 Standard.AppearanceSoundsets.ResolveReferences();
                 Standard.WeaponSounds.ResolveReferences();
@@ -532,6 +563,8 @@ namespace Eos.Repositories
                 Standard.ProgrammedEffects.ResolveReferences();
                 Standard.DamageTypes.ResolveReferences();
                 Standard.DamageTypeGroups.ResolveReferences();
+                Standard.RangedDamageTypes.ResolveReferences();
+                Standard.SavingthrowTypes.ResolveReferences();
 
                 Standard.AttackBonusTables.ResolveReferences();
                 Standard.BonusFeatTables.ResolveReferences();

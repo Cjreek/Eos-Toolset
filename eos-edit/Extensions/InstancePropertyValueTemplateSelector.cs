@@ -24,6 +24,7 @@ namespace Eos.Extensions
         public DataTemplate? BoolTemplate { get; set; }
         public DataTemplate? StringTemplate { get; set; }
         public DataTemplate? TlkTemplate { get; set; }
+        public DataTemplate? TlkMultilineTemplate { get; set; }
         public DataTemplate? VariantTemplate { get; set; }
         public DataTemplate? RaceTemplate { get; set; }
         public DataTemplate? ClassTemplate { get; set; }
@@ -42,6 +43,8 @@ namespace Eos.Extensions
         public DataTemplate? DiseaseTemplate { get; set; }
         public DataTemplate? PoisonTemplate { get; set; }
         public DataTemplate? TrapTemplate { get; set; }
+        public DataTemplate? SavingthrowTypeTemplate { get; set; }
+        public DataTemplate? AmmunitionTemplate { get; set; }
         public DataTemplate? BaseItemTemplate { get; set; }
         public DataTemplate? ItemPropertyTemplate { get; set; }
         public DataTemplate? AppearanceSoundsetTemplate { get; set; }
@@ -90,7 +93,9 @@ namespace Eos.Extensions
                 if (dataTypeDef.Type == typeof(string))
                     return StringTemplate ?? ErrorTemplate;
                 if (dataTypeDef.Type == typeof(TLKStringSet))
-                    return TlkTemplate ?? ErrorTemplate;
+                    return TlkTemplate ?? TlkMultilineTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(TLKStringSetMultiLine))
+                    return TlkMultilineTemplate ?? TlkTemplate ?? ErrorTemplate;
                 if (dataTypeDef.Type == typeof(VariantValue))
                     return VariantTemplate ?? ErrorTemplate;
                 if (dataTypeDef.Type == typeof(Race))
@@ -147,6 +152,10 @@ namespace Eos.Extensions
                     return DamageTypeTemplate ?? ErrorTemplate;
                 if (dataTypeDef.Type == typeof(DamageTypeGroup))
                     return DamageTypeGroupTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(SavingthrowType))
+                    return SavingthrowTypeTemplate ?? ErrorTemplate;
+                if (dataTypeDef.Type == typeof(Ammunition))
+                    return AmmunitionTemplate ?? ErrorTemplate;
 
                 if (dataTypeDef.CustomType is CustomObject customObject)
                     return CustomObjectTemplate ?? ErrorTemplate;

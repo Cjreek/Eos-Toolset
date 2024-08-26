@@ -16,12 +16,33 @@ namespace Eos.Models
     public class DamageType : BaseModel
     {
         private DamageTypeGroup? _group;
+        private RangedDamageType? _rangedDamageType;
+        public VisualEffect? _meleeVFX;
+        public VisualEffect? _rangedVFX;
 
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public DamageTypeGroup? Group
         {
             get { return _group; }
             set { Set(ref _group, value); }
+        }
+
+        public RangedDamageType? RangedDamageType
+        {
+            get { return _rangedDamageType; }
+            set { Set(ref _rangedDamageType, value); }
+        }
+
+        public VisualEffect? MeleeImpactVFX
+        {
+            get { return _meleeVFX; }
+            set { Set(ref _meleeVFX, value); }
+        }
+
+        public VisualEffect? RangedImpactVFX
+        {
+            get { return _rangedVFX; }
+            set { Set(ref _rangedVFX, value); }
         }
 
         protected override void Initialize()
@@ -51,6 +72,9 @@ namespace Eos.Models
         {
             base.ResolveReferences();
             Group = Resolve(Group, MasterRepository.DamageTypeGroups);
+            RangedDamageType = Resolve(RangedDamageType, MasterRepository.RangedDamageTypes);
+            MeleeImpactVFX = Resolve(MeleeImpactVFX, MasterRepository.VisualEffects);
+            RangedImpactVFX = Resolve(RangedImpactVFX, MasterRepository.VisualEffects);
         }
 
         public override void FromJson(JsonObject json)
@@ -58,6 +82,9 @@ namespace Eos.Models
             base.FromJson(json);
             this.Name.FromJson(json["Name"]?.AsObject());
             this.Group = CreateRefFromJson<DamageTypeGroup>(json["Group"]?.AsObject());
+            this.RangedDamageType = CreateRefFromJson<RangedDamageType>(json["RangedDamageType"]?.AsObject());
+            this.MeleeImpactVFX = CreateRefFromJson<VisualEffect>(json["MeleeImpactVFX"]?.AsObject());
+            this.RangedImpactVFX = CreateRefFromJson<VisualEffect>(json["RangedImpactVFX"]?.AsObject());
         }
 
         public override JsonObject ToJson()
@@ -65,6 +92,9 @@ namespace Eos.Models
             var damageTypeJson = base.ToJson();
             damageTypeJson.Add("Name", this.Name.ToJson());
             damageTypeJson.Add("Group", CreateJsonRef(this.Group));
+            damageTypeJson.Add("RangedDamageType", CreateJsonRef(this.RangedDamageType));
+            damageTypeJson.Add("MeleeImpactVFX", CreateJsonRef(this.MeleeImpactVFX));
+            damageTypeJson.Add("RangedImpactVFX", CreateJsonRef(this.RangedImpactVFX));
 
             return damageTypeJson;
         }

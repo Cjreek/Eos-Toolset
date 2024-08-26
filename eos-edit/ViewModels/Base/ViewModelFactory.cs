@@ -79,6 +79,12 @@ namespace Eos.ViewModels.Base
                 return new DamageTypeViewModel(damageType);
             if (model is DamageTypeGroup damageTypeGroup)
                 return new DamageTypeGroupViewModel(damageTypeGroup);
+            if (model is RangedDamageType rangedDamageType)
+                return new RangedDamageTypeViewModel(rangedDamageType);
+            if (model is SavingthrowType savingthrowType)
+                return new SavingthrowTypeViewModel(savingthrowType);
+            if (model is Ammunition ammunition)
+                return new AmmunitionViewModel(ammunition);
 
             if (model is FeatsTable featsTable)
                 return new FeatsTableViewModel(featsTable);

@@ -43,6 +43,7 @@ namespace Eos.Types
         public static readonly String ItemPropertySetsFilename;
         public static readonly String ItemPropertiesFilename;
 
+        public static readonly String AmmunitionsFilename;
         public static readonly String AppearancesFilename;
         public static readonly String AppearanceSoundsetsFilename;
         public static readonly String WeaponSoundsFilename;
@@ -58,6 +59,8 @@ namespace Eos.Types
         public static readonly String ProgrammedEffectsFilename;
         public static readonly String DamageTypesFilename;
         public static readonly String DamageTypeGroupsFilename;
+        public static readonly String RangedDamageTypesFilename;
+        public static readonly String SavingThrowTypesFilename;
 
         public static readonly String AttackBonusTablesFilename;
         public static readonly String BonusFeatTablesFilename;
@@ -100,6 +103,7 @@ namespace Eos.Types
         public static readonly String ItemPropertySetsFilePath;
         public static readonly String ItemPropertiesFilePath;
 
+        public static readonly String AmmunitionsFilePath;
         public static readonly String AppearancesFilePath;
         public static readonly String AppearanceSoundsetsFilePath;
         public static readonly String WeaponSoundsFilePath;
@@ -115,6 +119,8 @@ namespace Eos.Types
         public static readonly String ProgrammedEffectsFilePath;
         public static readonly String DamageTypesFilePath;
         public static readonly String DamageTypeGroupsFilePath;
+        public static readonly String RangedDamageTypesFilePath;
+        public static readonly String SavingThrowTypesFilePath;
 
         public static readonly String AttackBonusTablesFilePath;
         public static readonly String BonusFeatTablesFilePath;
@@ -177,6 +183,7 @@ namespace Eos.Types
             ItemPropertySetsFilename = "itempropsets.json";
             ItemPropertiesFilename = "itemproperties.json";
 
+            AmmunitionsFilename = "ammunitiontypes.json";
             AppearancesFilename = "appearances.json";
             AppearanceSoundsetsFilename = "appearancesoundsets.json";
             WeaponSoundsFilename = "weaponsounds.json";
@@ -192,6 +199,8 @@ namespace Eos.Types
             ProgrammedEffectsFilename = "progfx.json";
             DamageTypesFilename = "damagetypes.json";
             DamageTypeGroupsFilename = "damagetypegroups.json";
+            RangedDamageTypesFilename = "rangeddamagetypes.json";
+            SavingThrowTypesFilename = "savingthrowtypes.json";
 
             AttackBonusTablesFilename = "tables_bab.json";
             BonusFeatTablesFilename = "tables_bonusfeats.json";
@@ -234,6 +243,7 @@ namespace Eos.Types
             ItemPropertySetsFilePath = BaseDataPath + ItemPropertySetsFilename;
             ItemPropertiesFilePath = BaseDataPath + ItemPropertiesFilename;
 
+            AmmunitionsFilePath = BaseDataPath + AmmunitionsFilename;
             AppearancesFilePath = BaseDataPath + AppearancesFilename;
             AppearanceSoundsetsFilePath = BaseDataPath + AppearanceSoundsetsFilename;
             WeaponSoundsFilePath = BaseDataPath + WeaponSoundsFilename;
@@ -249,6 +259,8 @@ namespace Eos.Types
             ProgrammedEffectsFilePath = BaseDataPath + ProgrammedEffectsFilename;
             DamageTypesFilePath = BaseDataPath + DamageTypesFilename;
             DamageTypeGroupsFilePath = BaseDataPath + DamageTypeGroupsFilename;
+            RangedDamageTypesFilePath = BaseDataPath + RangedDamageTypesFilename;
+            SavingThrowTypesFilePath = BaseDataPath + SavingThrowTypesFilename;
 
             AttackBonusTablesFilePath = BaseDataPath + AttackBonusTablesFilename;
             BonusFeatTablesFilePath = BaseDataPath + BonusFeatTablesFilename;

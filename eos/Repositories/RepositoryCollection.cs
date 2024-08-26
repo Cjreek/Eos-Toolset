@@ -1,5 +1,6 @@
 ﻿using Eos.Models;
 using Eos.Models.Tables;
+using Eos.Repositories.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -108,6 +109,7 @@ namespace Eos.Repositories
         private readonly ModelRepository<ItemPropertySet> itemPropertySetRepository;
         private readonly ModelRepository<ItemProperty> itemPropertyRepository;
 
+        private readonly ModelRepository<Ammunition> ammunitionRepository; 
         private readonly ModelRepository<Appearance> appearanceRepository;
         private readonly ModelRepository<AppearanceSoundset> appearanceSoundsetRepository;
         private readonly ModelRepository<WeaponSound> weaponSoundRepository;
@@ -123,6 +125,8 @@ namespace Eos.Repositories
         private readonly ModelRepository<ProgrammedEffect> progFXRepository;
         private readonly ModelRepository<DamageType> damageTypeRepository;
         private readonly ModelRepository<DamageTypeGroup> damageTypeGroupRepository;
+        private readonly ModelRepository<RangedDamageType> rangedDamageTypeRepository;
+        private readonly ModelRepository<SavingthrowType> savingthrowTypeRepository;
 
         private readonly ModelRepository<AttackBonusTable> attackBonusTableRepository;
         private readonly ModelRepository<BonusFeatsTable> bonusFeatTableRepository;
@@ -180,6 +184,7 @@ namespace Eos.Repositories
             InitRepository(out itemPropertySetRepository, nameof(ItemPropertySets));
             InitRepository(out itemPropertyRepository, nameof(ItemProperties));
 
+            InitRepository(out ammunitionRepository, nameof(Ammunitions));
             InitRepository(out appearanceRepository, nameof(Appearances));
             InitRepository(out appearanceSoundsetRepository, nameof(AppearanceSoundsets));
             InitRepository(out weaponSoundRepository, nameof(WeaponSounds));
@@ -195,6 +200,8 @@ namespace Eos.Repositories
             InitRepository(out progFXRepository, nameof(ProgrammedEffects));
             InitRepository(out damageTypeRepository, nameof(DamageTypes));
             InitRepository(out damageTypeGroupRepository, nameof(DamageTypeGroups));
+            InitRepository(out rangedDamageTypeRepository, nameof(RangedDamageTypes));
+            InitRepository(out savingthrowTypeRepository, nameof(SavingthrowTypes));
 
             InitRepository(out attackBonusTableRepository, nameof(AttackBonusTables));
             InitRepository(out bonusFeatTableRepository, nameof(BonusFeatTables));
@@ -238,6 +245,7 @@ namespace Eos.Repositories
         public ModelRepository<ItemPropertySet> ItemPropertySets { get { return itemPropertySetRepository; } }
         public ModelRepository<ItemProperty> ItemProperties { get { return itemPropertyRepository; } }
 
+        public ModelRepository<Ammunition> Ammunitions { get { return ammunitionRepository; } }
         public ModelRepository<Appearance> Appearances { get { return appearanceRepository; } }
         public ModelRepository<AppearanceSoundset> AppearanceSoundsets { get { return appearanceSoundsetRepository; } }
         public ModelRepository<WeaponSound> WeaponSounds { get { return weaponSoundRepository; } }
@@ -253,6 +261,9 @@ namespace Eos.Repositories
         public ModelRepository<ProgrammedEffect> ProgrammedEffects { get { return progFXRepository; } }
         public ModelRepository<DamageType> DamageTypes { get { return damageTypeRepository; } }
         public ModelRepository<DamageTypeGroup> DamageTypeGroups { get { return damageTypeGroupRepository; } }
+        public ModelRepository<RangedDamageType> RangedDamageTypes { get { return rangedDamageTypeRepository; } }
+        public ModelRepository<SavingthrowType> SavingthrowTypes { get { return savingthrowTypeRepository; } }
+
         public ModelRepository<AttackBonusTable> AttackBonusTables { get { return attackBonusTableRepository; } }
         public ModelRepository<BonusFeatsTable> BonusFeatTables { get { return bonusFeatTableRepository; } }
         public ModelRepository<FeatsTable> FeatTables { get { return featTableRepository; } }
@@ -430,6 +441,7 @@ namespace Eos.Repositories
             ItemPropertySets.Clear();
             ItemProperties.Clear();
 
+            Ammunitions.Clear();
             Appearances.Clear();
             AppearanceSoundsets.Clear();
             WeaponSounds.Clear();
@@ -444,6 +456,8 @@ namespace Eos.Repositories
             ProgrammedEffects.Clear();
             DamageTypes.Clear();
             DamageTypeGroups.Clear();
+            RangedDamageTypes.Clear();
+            SavingthrowTypes.Clear();
 
             AttackBonusTables.Clear();
             BonusFeatTables.Clear();

@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 
 namespace Eos.ViewModels
 {
-    public class DamageTypeGroupViewModel : DataDetailViewModel<DamageTypeGroup>
+    public class AmmunitionViewModel : DataDetailViewModel<Ammunition>
     {
-        public DamageTypeGroupViewModel() : base()
+        public AmmunitionViewModel() : base()
         {
         }
-        public DamageTypeGroupViewModel(DamageTypeGroup damageTypeGroup) : base(damageTypeGroup)
+
+        public AmmunitionViewModel(Ammunition ammunition) : base(ammunition)
         {
         }
 
@@ -25,7 +26,7 @@ namespace Eos.ViewModels
 
         protected override string GetHeader()
         {
-            return Data.Name ?? "";
+            return Data.Label;
         }
     }
 }

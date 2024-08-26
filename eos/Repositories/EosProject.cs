@@ -228,6 +228,7 @@ namespace Eos.Repositories
             }
         }
 
+        public ProjectSettingsCustomData Ammunitions { get; private set; } = new ProjectSettingsCustomData(36);
         public ProjectSettingsCustomData Appearances { get; private set; } = new ProjectSettingsCustomData(1000);
         public ProjectSettingsCustomData AppearanceSoundsets { get; private set; } = new ProjectSettingsCustomData(32);
         public ProjectSettingsCustomData AreaEffects { get; private set; } = new ProjectSettingsCustomData(47);
@@ -251,6 +252,8 @@ namespace Eos.Repositories
         public ProjectSettingsCustomData Portraits { get; private set; } = new ProjectSettingsCustomData(16001);
         public ProjectSettingsCustomData ProgrammedEffects { get; private set; } = new ProjectSettingsCustomData(1301);
         public ProjectSettingsCustomData Races { get; private set; } = new ProjectSettingsCustomData(30);
+        public ProjectSettingsCustomData RangedDamageTypes { get; private set; } = new ProjectSettingsCustomData(8);
+        public ProjectSettingsCustomData SavingthrowTypes { get; private set; } = new ProjectSettingsCustomData(21);
         public ProjectSettingsCustomData Skills { get; private set; } = new ProjectSettingsCustomData(28);
         public ProjectSettingsCustomData Soundsets { get; private set; } = new ProjectSettingsCustomData(5100);
         public ProjectSettingsCustomData Spellbooks { get; private set; } = new ProjectSettingsCustomData();
@@ -286,6 +289,7 @@ namespace Eos.Repositories
 
             clone.Export = this.Export.Clone();
 
+            clone.Ammunitions = this.Ammunitions.Clone();
             clone.Appearances = this.Appearances.Clone();
             clone.AppearanceSoundsets = this.AppearanceSoundsets.Clone();
             clone.WeaponSounds = this.WeaponSounds.Clone();
@@ -318,8 +322,10 @@ namespace Eos.Repositories
             clone.ProgrammedEffects = this.ProgrammedEffects.Clone();
             clone.PrerequisiteTables = this.PrerequisiteTables.Clone();
             clone.Races = this.Races.Clone();
+            clone.RangedDamageTypes = this.RangedDamageTypes.Clone();
             clone.RacialFeatsTables = this.RacialFeatsTables.Clone();
             clone.SavesTables = this.SavesTables.Clone();
+            clone.SavingthrowTypes = this.SavingthrowTypes.Clone();
             clone.Skills = this.Skills.Clone();
             clone.SkillsTables = this.SkillsTables.Clone();
             clone.Soundsets = this.Soundsets.Clone();
@@ -359,7 +365,6 @@ namespace Eos.Repositories
         public EosProject() : base(false)
         {
         }
-
         public ProjectSettings Settings { get; private set; } = new ProjectSettings();
 
         public bool UseNWNX
@@ -461,7 +466,6 @@ namespace Eos.Repositories
             Settings.Export.IncludeFolder = Constants.ExportIncludeFolder;
             Settings.Export.ErfFolder = Constants.ExportERFFolder;
             Settings.Export.IncludeFilename = Constants.IncludeFilename;
-
             try
             {
                 var fs = new FileStream(projectFilename, FileMode.Open, FileAccess.Read);
@@ -502,6 +506,7 @@ namespace Eos.Repositories
                         Settings.Export.LabelMaxLength = exportJson?["LabelMaxLength"]?.GetValue<int>() ?? -1;
 
                         var customDataJson = projectJson["CustomData"];
+                        LoadCustomDataSettings(Settings.Ammunitions, customDataJson?["Ammunitions"]);
                         LoadCustomDataSettings(Settings.Appearances, customDataJson?["Appearances"]);
                         LoadCustomDataSettings(Settings.AppearanceSoundsets, customDataJson?["AppearanceSoundsets"]);
                         LoadCustomDataSettings(Settings.AreaEffects, customDataJson?["AreaEffects"]);
@@ -524,6 +529,8 @@ namespace Eos.Repositories
                         LoadCustomDataSettings(Settings.Portraits, customDataJson?["Portraits"]);
                         LoadCustomDataSettings(Settings.ProgrammedEffects, customDataJson?["ProgrammedEffects"]);
                         LoadCustomDataSettings(Settings.Races, customDataJson?["Races"]);
+                        LoadCustomDataSettings(Settings.RangedDamageTypes, customDataJson?["RangedDamageTypes"]);
+                        LoadCustomDataSettings(Settings.SavingthrowTypes, customDataJson?["SavingThrowTypes"]);
                         LoadCustomDataSettings(Settings.Skills, customDataJson?["Skills"]);
                         LoadCustomDataSettings(Settings.Soundsets, customDataJson?["Soundsets"]);
                         LoadCustomDataSettings(Settings.Spellbooks, customDataJson?["Spellbooks"]);
@@ -614,6 +621,7 @@ namespace Eos.Repositories
                 projectFile.Add("Export", export);
 
                 var customDataSettings = new JsonObject();
+                SaveCustomDataSettings(Settings.Ammunitions, "Ammunitions", customDataSettings);
                 SaveCustomDataSettings(Settings.Appearances, "Appearances", customDataSettings);
                 SaveCustomDataSettings(Settings.AppearanceSoundsets, "AppearanceSoundsets", customDataSettings);
                 SaveCustomDataSettings(Settings.AreaEffects, "AreaEffects", customDataSettings);
@@ -636,6 +644,8 @@ namespace Eos.Repositories
                 SaveCustomDataSettings(Settings.Portraits, "Portraits", customDataSettings);
                 SaveCustomDataSettings(Settings.ProgrammedEffects, "ProgrammedEffects", customDataSettings);
                 SaveCustomDataSettings(Settings.Races, "Races", customDataSettings);
+                SaveCustomDataSettings(Settings.RangedDamageTypes, "RangedDamageTypes", customDataSettings);
+                SaveCustomDataSettings(Settings.SavingthrowTypes, "SavingThrowTypes", customDataSettings);
                 SaveCustomDataSettings(Settings.Skills, "Skills", customDataSettings);
                 SaveCustomDataSettings(Settings.Soundsets, "Soundsets", customDataSettings);
                 SaveCustomDataSettings(Settings.Spellbooks, "Spellbooks", customDataSettings);
@@ -722,6 +732,7 @@ namespace Eos.Repositories
                     AddZipEntry(zip, ProjectFolder + Constants.ItemPropertySetsFilename, Constants.ItemPropertySetsFilename);
                     AddZipEntry(zip, ProjectFolder + Constants.ItemPropertiesFilename, Constants.ItemPropertiesFilename);
 
+                    AddZipEntry(zip, ProjectFolder + Constants.AmmunitionsFilename, Constants.AmmunitionsFilename);
                     AddZipEntry(zip, ProjectFolder + Constants.AppearancesFilename, Constants.AppearancesFilename);
                     AddZipEntry(zip, ProjectFolder + Constants.AppearanceSoundsetsFilename, Constants.AppearanceSoundsetsFilename);
                     AddZipEntry(zip, ProjectFolder + Constants.WeaponSoundsFilename, Constants.WeaponSoundsFilename);
@@ -737,6 +748,8 @@ namespace Eos.Repositories
                     AddZipEntry(zip, ProjectFolder + Constants.ProgrammedEffectsFilename, Constants.ProgrammedEffectsFilename);
                     AddZipEntry(zip, ProjectFolder + Constants.DamageTypesFilename, Constants.DamageTypesFilename);
                     AddZipEntry(zip, ProjectFolder + Constants.DamageTypeGroupsFilename, Constants.DamageTypeGroupsFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.RangedDamageTypesFilename, Constants.RangedDamageTypesFilename);
+                    AddZipEntry(zip, ProjectFolder + Constants.SavingThrowTypesFilename, Constants.SavingThrowTypesFilename);
 
                     AddZipEntry(zip, ProjectFolder + Constants.AttackBonusTablesFilename, Constants.AttackBonusTablesFilename);
                     AddZipEntry(zip, ProjectFolder + Constants.BonusFeatTablesFilename, Constants.BonusFeatTablesFilename);
@@ -840,6 +853,7 @@ namespace Eos.Repositories
                 ItemPropertySets.LoadFromFile(ProjectFolder + Constants.ItemPropertySetsFilename);
                 ItemProperties.LoadFromFile(ProjectFolder + Constants.ItemPropertiesFilename);
 
+                Ammunitions.LoadFromFile(ProjectFolder + Constants.AmmunitionsFilename);
                 Appearances.LoadFromFile(ProjectFolder + Constants.AppearancesFilename);
                 AppearanceSoundsets.LoadFromFile(ProjectFolder + Constants.AppearanceSoundsetsFilename);
                 WeaponSounds.LoadFromFile(ProjectFolder + Constants.WeaponSoundsFilename);
@@ -854,6 +868,8 @@ namespace Eos.Repositories
                 ProgrammedEffects.LoadFromFile(ProjectFolder + Constants.ProgrammedEffectsFilename);
                 DamageTypes.LoadFromFile(ProjectFolder + Constants.DamageTypesFilename);
                 DamageTypeGroups.LoadFromFile(ProjectFolder + Constants.DamageTypeGroupsFilename);
+                RangedDamageTypes.LoadFromFile(ProjectFolder + Constants.RangedDamageTypesFilename);
+                SavingthrowTypes.LoadFromFile(ProjectFolder + Constants.SavingThrowTypesFilename);
 
                 AttackBonusTables.LoadFromFile(ProjectFolder + Constants.AttackBonusTablesFilename);
                 BonusFeatTables.LoadFromFile(ProjectFolder + Constants.BonusFeatTablesFilename);
@@ -907,6 +923,7 @@ namespace Eos.Repositories
                 ItemPropertySets.ResolveReferences();
                 ItemProperties.ResolveReferences();
 
+                Ammunitions.ResolveReferences();
                 Appearances.ResolveReferences();
                 AppearanceSoundsets.ResolveReferences();
                 WeaponSounds.ResolveReferences();
@@ -921,6 +938,8 @@ namespace Eos.Repositories
                 ProgrammedEffects.ResolveReferences();
                 DamageTypes.ResolveReferences();
                 DamageTypeGroups.ResolveReferences();
+                RangedDamageTypes.ResolveReferences();
+                SavingthrowTypes.ResolveReferences();
 
                 AttackBonusTables.ResolveReferences();
                 BonusFeatTables.ResolveReferences();
@@ -964,6 +983,7 @@ namespace Eos.Repositories
                 throw;
             }
 
+            if (Settings.Ammunitions.Sorted) Ammunitions.Sort(d => d?.Label);
             if (Settings.Appearances.Sorted) Appearances.Sort(d => d?.Name[DefaultLanguage].Text);
             if (Settings.AppearanceSoundsets.Sorted) AppearanceSoundsets.Sort(d => d?.Name);
             if (Settings.AreaEffects.Sorted) AreaEffects.Sort(d => d?.Name);
@@ -991,8 +1011,10 @@ namespace Eos.Repositories
             if (Settings.Portraits.Sorted) Portraits.Sort(d => d?.ResRef);
             if (Settings.ProgrammedEffects.Sorted) ProgrammedEffects.Sort(d => d?.Name);
             if (Settings.Races.Sorted) Races.Sort(d => d?.Name[DefaultLanguage].Text);
+            if (Settings.RangedDamageTypes.Sorted) RangedDamageTypes.Sort(d => d?.Label);
             if (Settings.RacialFeatsTables.Sorted) RacialFeatsTables.Sort(d => d?.Name);
             if (Settings.SavesTables.Sorted) SavingThrowTables.Sort(d => d?.Name);
+            if (Settings.SavingthrowTypes.Sorted) SavingthrowTypes.Sort(d => d?.Name[DefaultLanguage].Text);
             if (Settings.Skills.Sorted) Skills.Sort(d => d?.Name[DefaultLanguage].Text);
             if (Settings.SkillsTables.Sorted) SkillTables.Sort(d => d?.Name);
             if (Settings.Soundsets.Sorted) Soundsets.Sort(d => d?.Name[DefaultLanguage].Text);
@@ -1044,6 +1066,7 @@ namespace Eos.Repositories
                 ItemPropertySets.SaveToFile(ProjectFolder + Constants.ItemPropertySetsFilename, Settings.ItemPropertySets.FormatJson);
                 ItemProperties.SaveToFile(ProjectFolder + Constants.ItemPropertiesFilename, Settings.ItemProperties.FormatJson);
 
+                Ammunitions.SaveToFile(ProjectFolder + Constants.AmmunitionsFilename, Settings.Ammunitions.FormatJson);
                 Appearances.SaveToFile(ProjectFolder + Constants.AppearancesFilename, Settings.Appearances.FormatJson);
                 AppearanceSoundsets.SaveToFile(ProjectFolder + Constants.AppearanceSoundsetsFilename, Settings.AppearanceSoundsets.FormatJson);
                 WeaponSounds.SaveToFile(ProjectFolder + Constants.WeaponSoundsFilename, Settings.WeaponSounds.FormatJson);
@@ -1058,6 +1081,8 @@ namespace Eos.Repositories
                 ProgrammedEffects.SaveToFile(ProjectFolder + Constants.ProgrammedEffectsFilename, Settings.ProgrammedEffects.FormatJson);
                 DamageTypes.SaveToFile(ProjectFolder + Constants.DamageTypesFilename, Settings.DamageTypes.FormatJson);
                 DamageTypeGroups.SaveToFile(ProjectFolder + Constants.DamageTypeGroupsFilename, Settings.DamageTypeGroups.FormatJson);
+                RangedDamageTypes.SaveToFile(ProjectFolder + Constants.RangedDamageTypesFilename, Settings.RangedDamageTypes.FormatJson);
+                SavingthrowTypes.SaveToFile(ProjectFolder + Constants.SavingThrowTypesFilename, Settings.SavingthrowTypes.FormatJson);
 
                 AttackBonusTables.SaveToFile(ProjectFolder + Constants.AttackBonusTablesFilename, Settings.AttackBonusTables.FormatJson);
                 BonusFeatTables.SaveToFile(ProjectFolder + Constants.BonusFeatTablesFilename, Settings.BonusFeatTables.FormatJson);

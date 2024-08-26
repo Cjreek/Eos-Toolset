@@ -243,6 +243,38 @@
           <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
               <DockPanel LastChildFill="False" Margin="10">
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Ammunitions">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.Ammunitions.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.Ammunitions.FormatJson}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <DockPanel Grid.Row="2" Grid.Column="1" LastChildFill="True">
+                      <Button DockPanel.Dock="Right" Command="{Binding RestoreDefaultExportOffsetCommand}" CommandParameter="{Binding SettingsCopy.Ammunitions}" Width="23" Height="23" Margin="2,1,0,4" ToolTip.Tip="Restore Default">
+                        <Button.Content>
+                          <Image Source="/Assets/Icons/restore16.png"/>
+                        </Button.Content>
+                      </Button>
+                      <NumericUpDown Value="{Binding SettingsCopy.Ammunitions.ExportOffset}" Increment="1"/>
+                    </DockPanel>
+                  </Grid>
+                </HeaderedContentControl>
                 
                 <HeaderedContentControl DockPanel.Dock="Top" Header="Appearances">
                   <Grid>
@@ -965,6 +997,70 @@
                         </Button.Content>
                       </Button>
                       <NumericUpDown Value="{Binding SettingsCopy.Races.ExportOffset}" Increment="1"/>
+                    </DockPanel>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Ranged Damage Types">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.RangedDamageTypes.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.RangedDamageTypes.FormatJson}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <DockPanel Grid.Row="2" Grid.Column="1" LastChildFill="True">
+                      <Button DockPanel.Dock="Right" Command="{Binding RestoreDefaultExportOffsetCommand}" CommandParameter="{Binding SettingsCopy.RangedDamageTypes}" Width="23" Height="23" Margin="2,1,0,4" ToolTip.Tip="Restore Default">
+                        <Button.Content>
+                          <Image Source="/Assets/Icons/restore16.png"/>
+                        </Button.Content>
+                      </Button>
+                      <NumericUpDown Value="{Binding SettingsCopy.RangedDamageTypes.ExportOffset}" Increment="1"/>
+                    </DockPanel>
+                  </Grid>
+                </HeaderedContentControl>
+
+                <HeaderedContentControl DockPanel.Dock="Top" Header="Savingthrow Types">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="75"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="auto"/>
+                      <RowDefinition Height="25"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Sorted" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding SettingsCopy.SavingthrowTypes.Sorted}"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Format Json" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"/>
+                    <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding SettingsCopy.SavingthrowTypes.FormatJson}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="2DA Offset" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,3,5,0"/>
+                    <DockPanel Grid.Row="2" Grid.Column="1" LastChildFill="True">
+                      <Button DockPanel.Dock="Right" Command="{Binding RestoreDefaultExportOffsetCommand}" CommandParameter="{Binding SettingsCopy.SavingthrowTypes}" Width="23" Height="23" Margin="2,1,0,4" ToolTip.Tip="Restore Default">
+                        <Button.Content>
+                          <Image Source="/Assets/Icons/restore16.png"/>
+                        </Button.Content>
+                      </Button>
+                      <NumericUpDown Value="{Binding SettingsCopy.SavingthrowTypes.ExportOffset}" Increment="1"/>
                     </DockPanel>
                   </Grid>
                 </HeaderedContentControl>

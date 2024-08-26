@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
 using System.Resources;
 using System.Security.Cryptography;
@@ -238,11 +239,11 @@ namespace Eos.Services
             return tmpRacialFeatsTable;
         }
 
-        private bool ImportRecord<T>(int index, TwoDimensionalArrayFile import2DA, TwoDimensionalArrayFile origina2DA, out Guid recordId) where T : BaseModel
+        private bool ImportRecord<T>(int index, TwoDimensionalArrayFile import2DA, TwoDimensionalArrayFile original2DA, out Guid recordId) where T : BaseModel
         {
             recordId = Guid.Empty;
             var result = false;
-            if (index < origina2DA.Count)
+            if (index < original2DA.Count)
             {
                 if (_importOverrides)
                 {
@@ -251,7 +252,7 @@ namespace Eos.Services
                     if ((originalModel != null) && ((originalOverride == null) || (_replaceOverrides)))
                     {
                         var importRec = import2DA[index];
-                        var originalRec = origina2DA[index];
+                        var originalRec = original2DA[index];
 
                         if (!importRec.Equals(originalRec))
                         {
@@ -1912,6 +1913,29 @@ namespace Eos.Services
             }
         }
 
+        private bool ImportRangedDamageTypeRecord(int index, out Guid recordId)
+        {
+            recordId = Guid.Empty;
+            var result = false;
+            if (index <= 5)
+            {
+                if (_importOverrides)
+                {
+                    var originalModel = MasterRepository.Standard.GetByIndex(typeof(RangedDamageType), index);
+                    var originalOverride = MasterRepository.Project.GetOverride(originalModel);
+                    if ((originalModel != null) && ((originalOverride == null) || (_replaceOverrides)))
+                    {
+                        recordId = originalModel.ID;
+                        result = true;
+                    }
+                }
+            }
+            else
+                result = _importNewData;
+
+            return result;
+        }
+
         private void ImportDamageTypes()
         {
             if (customDataDict.TryGetValue("damagetypes", out var damagetypes2da))
@@ -1919,6 +1943,13 @@ namespace Eos.Services
                 customDataDict.Remove("damagetypes");
 
                 Log.Info("Importing 2DA: damagetypes.2da");
+
+                TwoDimensionalArrayFile? damagehitvisual2da = null;
+                if (customDataDict.TryGetValue("damagehitvisual", out damagehitvisual2da))
+                {
+                    customDataDict.Remove("damagehitvisual");
+                    Log.Info("Importing 2DA: damagehitvisual.2da");
+                }
 
                 var originalDamageTypes2da = LoadOriginal2da("damagetypes");
                 for (int i = 0; i < damagetypes2da.Count; i++)
@@ -1932,6 +1963,24 @@ namespace Eos.Services
 
                     if (!SetText(tmpDamageType.Name, damagetypes2da[i].AsInteger("CharsheetStrref"))) continue;
                     tmpDamageType.Group = CreateRef<DamageTypeGroup>(damagetypes2da[i].AsInteger("DamageTypeGroup"));
+                    tmpDamageType.RangedDamageType = CreateRef<RangedDamageType>(damagetypes2da[i].AsInteger("DamageRangedProjectile"));
+
+                    if (ImportRangedDamageTypeRecord(i, out var rangedRecordId))
+                    {
+                        var tmpRangedDamageType = new RangedDamageType();
+                        tmpRangedDamageType.ID = rangedRecordId;
+                        tmpRangedDamageType.Index = damagetypes2da[i].AsInteger("DamageRangedProjectile");
+                        tmpRangedDamageType.SourceLabel = damagetypes2da[i].AsString("Label");
+                        tmpRangedDamageType.Name = damagetypes2da[i].AsString("Label") ?? "";
+
+                        _importCollection.RangedDamageTypes.Add(tmpRangedDamageType);
+                    }
+
+                    if ((damagehitvisual2da != null) && (i < damagehitvisual2da.Count))
+                    {
+                        tmpDamageType.MeleeImpactVFX = CreateRef<VisualEffect>(damagehitvisual2da[i].AsInteger("VisualEffectID"));
+                        tmpDamageType.RangedImpactVFX = CreateRef<VisualEffect>(damagehitvisual2da[i].AsInteger("RangedEffectID"));
+                    }
 
                     _importCollection.DamageTypes.Add(tmpDamageType);
                 }
@@ -1967,6 +2016,78 @@ namespace Eos.Services
                     }
 
                     _importCollection.DamageTypeGroups.Add(tmpDamageTypeGroup);
+                }
+            }
+        }
+
+        private void ImportSavingThrowTypes()
+        {
+            if (customDataDict.TryGetValue("savingthrowtypes", out var savingthrowTypes2da))
+            {
+                customDataDict.Remove("savingthrowtypes");
+
+                Log.Info("Importing 2DA: savingthrowtypes.2da");
+
+                var originalSavingthrowTypes2da = LoadOriginal2da("savingthrowtypes");
+                for (int i = 0; i < savingthrowTypes2da.Count; i++)
+                {
+                    if (!ImportRecord<SavingthrowType>(i, savingthrowTypes2da, originalSavingthrowTypes2da, out var recordId)) continue;
+
+                    var tmpSavingthrowType = new SavingthrowType();
+                    tmpSavingthrowType.ID = recordId;
+                    tmpSavingthrowType.Index = i;
+                    tmpSavingthrowType.SourceLabel = savingthrowTypes2da[i].AsString("Label");
+
+                    if (!SetText(tmpSavingthrowType.Name, savingthrowTypes2da[i].AsInteger("Strref")))
+                    {
+                        if ((tmpSavingthrowType.SourceLabel != "") && (tmpSavingthrowType.SourceLabel != null))
+                        {
+                            foreach (TLKLanguage lang in Enum.GetValues(typeof(TLKLanguage)))
+                            {
+                                tmpSavingthrowType.Name[lang].Text = tmpSavingthrowType.SourceLabel;
+                                tmpSavingthrowType.Name[lang].TextF = tmpSavingthrowType.SourceLabel;
+                            }
+                        }
+                        else
+                            continue;
+                    }
+                    tmpSavingthrowType.Immunity = (ImmunityType?)savingthrowTypes2da[i].AsInteger("Immunity");
+                    tmpSavingthrowType.ImmunityOnlyForSpells = savingthrowTypes2da[i].AsBoolean("ImmunityOnlyIfSpell");
+
+                    _importCollection.SavingthrowTypes.Add(tmpSavingthrowType);
+                }
+            }
+        }
+
+        private void ImportAmmunition()
+        {
+            if (customDataDict.TryGetValue("ammunitiontypes", out var ammunitiontypes2da))
+            {
+                customDataDict.Remove("ammunitiontypes");
+
+                Log.Info("Importing 2DA: ammunitiontypes.2da");
+
+                var originalAmmunitiontypes2da = LoadOriginal2da("ammunitiontypes");
+                for (int i = 0; i < ammunitiontypes2da.Count; i++)
+                {
+                    if (!ImportRecord<Ammunition>(i, ammunitiontypes2da, originalAmmunitiontypes2da, out var recordId)) continue;
+
+                    var tmpAmmunition = new Ammunition();
+                    tmpAmmunition.ID = recordId;
+                    tmpAmmunition.Index = i;
+                    tmpAmmunition.SourceLabel = ammunitiontypes2da[i].AsString("Label");
+
+                    tmpAmmunition.Name = ammunitiontypes2da[i].AsString("Label") ?? "";
+                    tmpAmmunition.Model = ammunitiontypes2da[i].AsString("Model");
+                    tmpAmmunition.ShotSound = ammunitiontypes2da[i].AsString("ShotSound");
+                    tmpAmmunition.ImpactSound = ammunitiontypes2da[i].AsString("ImpactSound");
+                    tmpAmmunition.AmmunitionType = (AmmunitionType?)ammunitiontypes2da[i].AsInteger("AmmunitionType") ?? AmmunitionType.Arrow;
+                    if (ammunitiontypes2da[i].AsInteger("DamageRangedProjectile") > 0)
+                        tmpAmmunition.RangedDamageType = CreateRef<RangedDamageType>(ammunitiontypes2da[i].AsInteger("DamageRangedProjectile"));
+                    else
+                        tmpAmmunition.RangedDamageType = null;
+
+                    _importCollection.Ammunitions.Add(tmpAmmunition);
                 }
             }
         }
@@ -2316,6 +2437,16 @@ namespace Eos.Services
             {
                 if (damageType == null) continue;
                 damageType.Group = SolveInstance(damageType.Group);
+                damageType.RangedDamageType = SolveInstance(damageType.RangedDamageType);
+                damageType.MeleeImpactVFX = SolveInstance(damageType.MeleeImpactVFX);
+                damageType.RangedImpactVFX = SolveInstance(damageType.RangedImpactVFX);
+            }
+
+            // Ammunition
+            foreach (var ammunition in _importCollection.Ammunitions)
+            {
+                if (ammunition == null) continue;
+                ammunition.RangedDamageType = SolveInstance(ammunition.RangedDamageType);
             }
         }
 
@@ -2963,6 +3094,78 @@ namespace Eos.Services
                 MasterRepository.Project.Add(damageTypeGroup);
             }
 
+            // Ranged Damage Types
+            foreach (var rangedDamageType in _importCollection.RangedDamageTypes)
+            {
+                if (rangedDamageType == null) continue;
+
+                var standardRangedDamageType = MasterRepository.Standard.RangedDamageTypes.GetByID(rangedDamageType.ID);
+                if (standardRangedDamageType != null)
+                {
+                    rangedDamageType.ID = Guid.Empty;
+                    rangedDamageType.Overrides = standardRangedDamageType.ID;
+                    rangedDamageType.Index = -1;
+
+                    var projectOverrideRangedDamageType = MasterRepository.Project.GetOverride(standardRangedDamageType);
+                    if (projectOverrideRangedDamageType != null)
+                        MasterRepository.Project.RangedDamageTypes.Remove(projectOverrideRangedDamageType);
+                }
+                else
+                {
+                    rangedDamageType.Index = null;
+                }
+
+                MasterRepository.Project.Add(rangedDamageType);
+            }
+
+            // Savingthrow Types
+            foreach (var savingthrowType in _importCollection.SavingthrowTypes)
+            {
+                if (savingthrowType == null) continue;
+
+                var standardSavingthrowType = MasterRepository.Standard.SavingthrowTypes.GetByID(savingthrowType.ID);
+                if (standardSavingthrowType != null)
+                {
+                    savingthrowType.ID = Guid.Empty;
+                    savingthrowType.Overrides = standardSavingthrowType.ID;
+                    savingthrowType.Index = -1;
+
+                    var projectOverrideSavingthrowType = MasterRepository.Project.GetOverride(standardSavingthrowType);
+                    if (projectOverrideSavingthrowType != null)
+                        MasterRepository.Project.SavingthrowTypes.Remove(projectOverrideSavingthrowType);
+                }
+                else
+                {
+                    savingthrowType.Index = null;
+                }
+
+                MasterRepository.Project.Add(savingthrowType);
+            }
+
+            // Ammunition
+            foreach (var ammunition in _importCollection.Ammunitions)
+            {
+                if (ammunition == null) continue;
+
+                var standardAmmunition = MasterRepository.Standard.Ammunitions.GetByID(ammunition.ID);
+                if (standardAmmunition != null)
+                {
+                    ammunition.ID = Guid.Empty;
+                    ammunition.Overrides = standardAmmunition.ID;
+                    ammunition.Index = -1;
+
+                    var projectOverrideAmmunition = MasterRepository.Project.GetOverride(standardAmmunition);
+                    if (projectOverrideAmmunition != null)
+                        MasterRepository.Project.Ammunitions.Remove(projectOverrideAmmunition);
+                }
+                else
+                {
+                    ammunition.Index = null;
+                }
+
+                MasterRepository.Project.Add(ammunition);
+            }
+
             // Racial Feats
             foreach (var racialFeatsTable in _importCollection.RacialFeatsTables)
             {
@@ -3376,6 +3579,8 @@ namespace Eos.Services
                 ImportTraps();
                 ImportDamageTypes();
                 ImportDamageTypeGroups();
+                ImportSavingThrowTypes();
+                ImportAmmunition();
 
                 ImportText();
 

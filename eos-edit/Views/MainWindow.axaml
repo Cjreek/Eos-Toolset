@@ -20,7 +20,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Eos.Views.MainWindow" MinHeight="300" MinWidth="500"
         Height="700" Width="1100" Loaded="mainWindow_Loaded"
-        x:Name="mainWindow" Tag="Eos Toolset v0.75a" FontFamily="Segoe UI"
+        x:Name="mainWindow" Tag="Eos Toolset v0.76" FontFamily="Segoe UI"
         Closing="mainWindow_Closing"
         Icon="/Assets/Icons/Eos.ico">
   <Window.Title>
@@ -389,6 +389,21 @@
       <view:DamageTypeGroupView DataContext="{Binding}"/>
     </DataTemplate>
 
+    <!--Ranged Damage Type-->
+    <DataTemplate DataType="{x:Type vm:RangedDamageTypeViewModel}">
+      <view:RangedDamageTypeView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--SavingthrowType-->
+    <DataTemplate DataType="{x:Type vm:SavingthrowTypeViewModel}">
+      <view:SavingthrowTypeView DataContext="{Binding}"/>
+    </DataTemplate>
+
+    <!--Ammunition-->
+    <DataTemplate DataType="{x:Type vm:AmmunitionViewModel}">
+      <view:AmmunitionView DataContext="{Binding}"/>
+    </DataTemplate>
+
     <!--
     ******
     Custom Data
@@ -755,6 +770,8 @@
             <TreeViewItem Header="Damage Type Data" Classes="category">
               <TreeViewItem Header="Damage Types" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=DamageTypes}" Classes="category"/>
               <TreeViewItem Header="Damage Type Groups" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=DamageTypeGroups}" Classes="category"/>
+              <TreeViewItem Header="Ranged Damage Types" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=RangedDamageTypes}" Classes="category"/>
+              <TreeViewItem Header="Ammunition Types" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Ammunitions}" Classes="category"/>
             </TreeViewItem>
             <TreeViewItem Header="Traps" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Traps}" Classes="category"/>
             <TreeViewItem Header="Companions" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Companions}" Classes="category"/>
@@ -770,6 +787,7 @@
               <TreeViewItem Header="Weapon Sounds" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=WeaponSounds}" Classes="category"/>
               <TreeViewItem Header="Inventory Sounds" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=InventorySounds}" Classes="category"/>
               <TreeViewItem Header="Portraits" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=Portraits}" Classes="category"/>
+              <TreeViewItem Header="Savingthrow Types" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=SavingthrowTypes}" Classes="category"/>
               <TreeViewItem Header="Visual Effects" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=VisualEffects}" Classes="category"/>
               <TreeViewItem Header="Programmed Effects" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Standard}, Path=ProgrammedEffects}" Classes="category"/>
             </TreeViewItem>
@@ -1216,6 +1234,22 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=RangedDamageTypes}" Classes="category" Tag="{x:Type models:RangedDamageType}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Ranged Damage Types"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=RangedDamageTypes, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Ammunitions}" Classes="category" Tag="{x:Type models:Ammunition}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Ammunition Types"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Ammunitions, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
             </TreeViewItem>
             <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Traps}" Classes="category" Tag="{x:Type models:Trap}">
               <TreeViewItem.Header>
@@ -1305,6 +1339,14 @@
                   <TextBlock>
                     <Run Text="Portraits"/>
                     <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=Portraits, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
+                  </TextBlock>
+                </TreeViewItem.Header>
+              </TreeViewItem>
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SavingthrowTypes}" Classes="category" Tag="{x:Type models:SavingthrowType}">
+                <TreeViewItem.Header>
+                  <TextBlock>
+                    <Run Text="Savingthrow Types"/>
+                    <Run Text="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=SavingthrowTypes, Mode=OneWay, Converter={StaticResource itemCountConverter}}"/>
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>

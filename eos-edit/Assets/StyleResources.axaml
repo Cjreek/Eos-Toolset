@@ -380,6 +380,18 @@
     <Setter Property="Margin" Value="2,0,0,3"/>
   </Style>
 
+  <Style Selector="uc|SavingthrowTypeComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|RangedDamageTypeComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
+  <Style Selector="uc|AmmunitionComboBox">
+    <Setter Property="Margin" Value="2,0,0,3"/>
+  </Style>
+
   <Style Selector="uc|DataTypeComboBox">
     <Setter Property="Margin" Value="2,0,0,3"/>
   </Style>

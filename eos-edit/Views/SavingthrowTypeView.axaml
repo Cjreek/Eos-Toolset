@@ -4,40 +4,49 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="using:Eos.Views"
              xmlns:uc="using:Eos.Usercontrols"
-             xmlns:ext="using:Eos.Extensions"
+             xmlns:vm="using:Eos.ViewModels"
              xmlns:types="using:Eos.Types"
+             xmlns:ext="using:Eos.Extensions"
              xmlns:config="using:Eos.Config"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
-             x:Class="Eos.Views.DamageTypeView"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Views.SavingthrowTypeView"
              x:Name="page">
-  <UserControl.Resources>
+  <local:LanguageAwarePage.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
         <ResourceInclude Source="/Assets/CustomDataTemplateResources.axaml"/>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
-  </UserControl.Resources>
+  </local:LanguageAwarePage.Resources>
 
   <local:LanguageAwarePage.Styles>
-    <StyleInclude Source="/Assets/StyleResources.axaml"/>
+    <Styles>
+      <StyleInclude Source="/Assets/StyleResources.axaml"/>
+    </Styles>
   </local:LanguageAwarePage.Styles>
 
+  <Design.DataContext>
+    <vm:SavingthrowTypeViewModel/>
+  </Design.DataContext>
+
   <TabControl TabStripPlacement="Left" BorderThickness="0,1,0,0" SelectedIndex="{Binding SelectedTabIndex}" Padding="0">
-    <TabItem Header="Info" Width="120" Height="30" BorderThickness="0,0,0,1">
+    <TabItem Header="Info" Width="100" Height="30" BorderThickness="0,0,0,1">
       <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
           <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="125"/>
+              <ColumnDefinition Width="150"/>
               <ColumnDefinition Width="*" MinWidth="150"/>
-              <ColumnDefinition Width="135"/>
+              <ColumnDefinition Width="150"/>
               <ColumnDefinition Width="*" MinWidth="150"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
               <RowDefinition Height="auto" MinHeight="25"/>
               <RowDefinition Height="auto" MinHeight="25"/>
-              <RowDefinition Height="auto" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
+              <RowDefinition Height="25" MinHeight="25"/>
               <RowDefinition Height="25" MinHeight="25"/>
               <RowDefinition Height="25" MinHeight="25"/>
             </Grid.RowDefinitions>
@@ -51,7 +60,7 @@
                 </TextBlock.Text>
               </TextBlock>
 
-              <TextBlock Text=" (Damage Type ID:" FontSize="16" VerticalAlignment="Center"/>
+              <TextBlock Text=" (Savingthrow Type ID:" FontSize="16" VerticalAlignment="Center"/>
               <!--<uc:ResetIsEnabled>-->
               <TextBox Text="{Binding Data.CalculatedIndex, Mode=OneWay}" BorderThickness="0" FontSize="16" VerticalAlignment="Center" Margin="0" IsReadOnly="True"/>
               <!--</uc:ResetIsEnabled>-->
@@ -65,22 +74,16 @@
             <TextBlock Text="Hint" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
             <TextBox Text="{Binding Data.Hint}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
 
-            <TextBlock Text="Group" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
-            <uc:DamageTypeGroupComboBox SelectedValue="{Binding Data.Group}" Grid.Row="3" Grid.Column="1"/>
+            <TextBlock Text="Immunity" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+            <uc:EnumComboBox ItemsSource="{ext:EnumSource {x:Type types:ImmunityType}}" SelectedValue="{Binding Data.Immunity}" IsNullable="true" Grid.Row="3" Grid.Column="1"/>
 
-            <TextBlock Text="Ranged Damage Type" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
-            <uc:RangedDamageTypeComboBox SelectedValue="{Binding Data.RangedDamageType}" Grid.Row="3" Grid.Column="3"/>
-
-            <TextBlock Text="Melee Impact VFX" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
-            <uc:VisualEffectComboBox SelectedValue="{Binding Data.MeleeImpactVFX}" Grid.Row="4" Grid.Column="1"/>
-
-            <TextBlock Text="Ranged Impact VFX" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
-            <uc:VisualEffectComboBox SelectedValue="{Binding Data.RangedImpactVFX}" Grid.Row="4" Grid.Column="3"/>
+            <TextBlock Text="Immunity only for Spells" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+            <CheckBox Grid.Row="3" Grid.Column="3" IsChecked="{Binding Data.ImmunityOnlyForSpells}"/>
           </Grid>
         </Border>
       </ScrollViewer>
     </TabItem>
-    <TabItem Header="Extensions" Width="120" Height="30" BorderThickness="0,0,0,1" IsVisible="{Binding !Data.IsReadonly}">
+    <TabItem Header="Extensions" Width="100" Height="30" BorderThickness="0,0,0,1" IsVisible="{Binding !Data.IsReadonly}">
       <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
           <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
@@ -118,7 +121,7 @@
         </Border>
       </ScrollViewer>
     </TabItem>
-    <TabItem Header="Metadata" Width="120" Height="30" BorderThickness="0,0,0,1" IsVisible="{Binding !Data.IsReadonly}">
+    <TabItem Header="Metadata" Width="100" Height="30" BorderThickness="0,0,0,1" IsVisible="{Binding !Data.IsReadonly}">
       <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <Border BorderThickness="1,0,0,0" BorderBrush="Silver">
           <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
@@ -133,11 +136,11 @@
               <RowDefinition Height="25"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Damage Type Metadata" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+            <TextBlock Text="Savingthrow Type Metadata" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
             <TextBlock Text="Script Constant" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-            <DockPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3">
-              <TextBox Text="DAMAGE_TYPE_" BorderThickness="1,1,0,1" IsReadOnly="True" VerticalContentAlignment="Center" Margin="2,0,0,3"/>
+            <DockPanel Grid.Row="1" Grid.Column="1">
+              <TextBox Text="SAVING_THROW_TYPE_" BorderThickness="1,1,0,1" IsReadOnly="True" VerticalContentAlignment="Center" Margin="2,0,0,3"/>
               <TextBox Text="{Binding Data.ScriptConstant}" Margin="-2,0,0,3" BorderThickness="0,1,1,1" VerticalContentAlignment="Center" Watermark="*AUTOGENERATED*" TextChanging="ConstantTextbox_TextChanging"/>
             </DockPanel>
           </Grid>

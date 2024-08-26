@@ -19,6 +19,7 @@ namespace Eos.Services
         {
             new Update0630(),
             new Update0640(),
+            new Update0760(),
         };
 
         public bool NeedsGameDataUpdate => _needsGameDataUpdate;
