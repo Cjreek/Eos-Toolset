@@ -16,7 +16,7 @@ namespace Eos.Usercontrols
         public static readonly StyledProperty<CustomEnumItem?> SelectedValueProperty = AvaloniaProperty.Register<CustomEnumComboBox, CustomEnumItem?>("SelectedValue", null, false, Avalonia.Data.BindingMode.TwoWay);
         public static readonly StyledProperty<bool> IsNullableProperty = AvaloniaProperty.Register<CustomEnumComboBox, bool>("IsNullable");
 
-        public object? CustomEnum
+        public CustomEnum? CustomEnum
         {
             get { return GetValue(CustomEnumProperty); }
             set { SetValue(CustomEnumProperty, value); }

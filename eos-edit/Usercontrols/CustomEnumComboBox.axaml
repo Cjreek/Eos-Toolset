@@ -27,9 +27,9 @@
       <ColumnDefinition Width="auto"/>
     </Grid.ColumnDefinitions>
 
-    <ComboBox x:Name="cbEnum" Grid.Column="0" ItemsSource="{Binding Path=CustomEnum.Items}" SelectedItem="{Binding Path=SelectedValue, Mode=TwoWay}" DisplayMemberBinding="{Binding Label}"/>
+    <ComboBox x:Name="cbEnum" Grid.Column="0" ItemsSource="{Binding ElementName=ucCustomEnumComboBox, Path=CustomEnum.Items}" SelectedItem="{Binding ElementName=ucCustomEnumComboBox, Path=SelectedValue, Mode=TwoWay}" DisplayMemberBinding="{Binding Label}"/>
     <Button x:Name="btClear" Grid.Column="1" Content="🞪" Click="btClear_Click" Margin="2,0,0,0"
             Height="{Binding ElementName=cbEnum, Path=Bounds.Height}" Width="{Binding ElementName=cbEnum, Path=Bounds.Height}"
-            IsVisible="{Binding Path=IsNullable}"/>
+            IsVisible="{Binding ElementName=ucCustomEnumComboBox, Path=IsNullable}"/>
   </Grid>
 </UserControl>
