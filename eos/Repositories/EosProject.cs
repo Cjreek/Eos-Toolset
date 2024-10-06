@@ -709,94 +709,100 @@ namespace Eos.Repositories
 
         public void CreateBackup()
         {
-            var backupFilename = $"{Settings.BackupFolder}{Name}_v{Version}_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.zip";
-            Directory.CreateDirectory(Path.GetDirectoryName(backupFilename) ?? "");
-
-            Log.Info("Creating project backup: \"{0}\"", Path.GetFullPath(backupFilename));
-
-            using (var backupFileStream = new FileStream(ProjectFolder + backupFilename, FileMode.CreateNew))
+            try
             {
-                using (var zip = new ZipArchive(backupFileStream, ZipArchiveMode.Create))
+                var backupFilename = $"{Settings.BackupFolder}{Name}_v{Version}_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.zip";
+                Log.Info("Creating project backup: \"{0}\"", Path.GetFullPath(backupFilename));
+
+                Directory.CreateDirectory(Path.GetDirectoryName(backupFilename) ?? "");
+                using (var backupFileStream = new FileStream(ProjectFolder + backupFilename, FileMode.CreateNew))
                 {
-                    AddZipEntry(zip, _projectFilename, Path.GetFileName(_projectFilename));
-
-                    AddZipEntry(zip, ProjectFolder + Constants.RacesFilename, Constants.RacesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.ClassesFilename, Constants.ClassesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.DomainsFilename, Constants.DomainsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.SpellsFilename, Constants.SpellsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.FeatsFilename, Constants.FeatsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.SkillsFilename, Constants.SkillsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.DiseasesFilename, Constants.DiseasesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.PoisonsFilename, Constants.PoisonsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.SpellbooksFilename, Constants.SpellbooksFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.AreaEffectsFilename, Constants.AreaEffectsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.MasterFeatsFilename, Constants.MasterFeatsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.BaseItemsFilename, Constants.BaseItemsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.ItemPropertySetsFilename, Constants.ItemPropertySetsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.ItemPropertiesFilename, Constants.ItemPropertiesFilename);
-
-                    AddZipEntry(zip, ProjectFolder + Constants.AmmunitionsFilename, Constants.AmmunitionsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.AppearancesFilename, Constants.AppearancesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.AppearanceSoundsetsFilename, Constants.AppearanceSoundsetsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.WeaponSoundsFilename, Constants.WeaponSoundsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.InventorySoundsFilename, Constants.InventorySoundsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.PortraitsFilename, Constants.PortraitsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.VisualEffectsFilename, Constants.VisualEffectsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.ClassPackagesFilename, Constants.ClassPackagesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.SoundsetsFilename, Constants.SoundsetsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.PolymorphsFilename, Constants.PolymorphsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.CompanionsFilename, Constants.CompanionsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.FamiliarsFilename, Constants.FamiliarsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.TrapsFilename, Constants.TrapsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.ProgrammedEffectsFilename, Constants.ProgrammedEffectsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.DamageTypesFilename, Constants.DamageTypesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.DamageTypeGroupsFilename, Constants.DamageTypeGroupsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.RangedDamageTypesFilename, Constants.RangedDamageTypesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.SavingThrowTypesFilename, Constants.SavingThrowTypesFilename);
-
-                    AddZipEntry(zip, ProjectFolder + Constants.AttackBonusTablesFilename, Constants.AttackBonusTablesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.BonusFeatTablesFilename, Constants.BonusFeatTablesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.FeatTablesFilename, Constants.FeatTablesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.SavingThrowTablesFilename, Constants.SavingThrowTablesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.SkillTablesFilename, Constants.SkillTablesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.PrerequisiteTablesFilename, Constants.PrerequisiteTablesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.SpellSlotTablesFilename, Constants.SpellSlotTablesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.KnownSpellsTablesFilename, Constants.KnownSpellsTablesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.StatGainTablesFilename, Constants.StatGainTablesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.RacialFeatsTablesFilename, Constants.RacialFeatsTablesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.SpellPreferencesTablesFilename, Constants.SpellPreferencesTablesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.FeatPreferencesTablesFilename, Constants.FeatPreferencesTablesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.SkillPreferencesTablesFilename, Constants.SkillPreferencesTablesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.PackageEquipmentTablesFilename, Constants.PackageEquipmentTablesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.ItemPropertyTablesFilename, Constants.ItemPropertyTablesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.ItemPropertyCostTablesFilename, Constants.ItemPropertyCostTablesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.ItemPropertyParamsFilename, Constants.ItemPropertyParamsFilename);
-
-                    AddZipEntry(zip, ProjectFolder + Constants.CustomEnumsFilename, Constants.CustomEnumsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.CustomObjectsFilename, Constants.CustomObjectsFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.CustomTablesFilename, Constants.CustomTablesFilename);
-                    AddZipEntry(zip, ProjectFolder + Constants.CustomDynamicTablesFilename, Constants.CustomDynamicTablesFilename);
-
-                    foreach (var template in CustomObjects)
+                    using (var zip = new ZipArchive(backupFileStream, ZipArchiveMode.Create))
                     {
-                        if (template != null)
-                            AddZipEntry(zip, ProjectFolder + template.ResourceName + ".json", template.ResourceName + ".json");
-                    }
+                        AddZipEntry(zip, _projectFilename, Path.GetFileName(_projectFilename));
 
-                    foreach (var template in CustomTables)
-                    {
-                        if (template != null)
-                            AddZipEntry(zip, ProjectFolder + template.FileName + ".json", template.FileName + ".json");
-                    }
+                        AddZipEntry(zip, ProjectFolder + Constants.RacesFilename, Constants.RacesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.ClassesFilename, Constants.ClassesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.DomainsFilename, Constants.DomainsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.SpellsFilename, Constants.SpellsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.FeatsFilename, Constants.FeatsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.SkillsFilename, Constants.SkillsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.DiseasesFilename, Constants.DiseasesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.PoisonsFilename, Constants.PoisonsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.SpellbooksFilename, Constants.SpellbooksFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.AreaEffectsFilename, Constants.AreaEffectsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.MasterFeatsFilename, Constants.MasterFeatsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.BaseItemsFilename, Constants.BaseItemsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.ItemPropertySetsFilename, Constants.ItemPropertySetsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.ItemPropertiesFilename, Constants.ItemPropertiesFilename);
 
-                    foreach (var template in CustomDynamicTables)
-                    {
-                        if (template != null)
+                        AddZipEntry(zip, ProjectFolder + Constants.AmmunitionsFilename, Constants.AmmunitionsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.AppearancesFilename, Constants.AppearancesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.AppearanceSoundsetsFilename, Constants.AppearanceSoundsetsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.WeaponSoundsFilename, Constants.WeaponSoundsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.InventorySoundsFilename, Constants.InventorySoundsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.PortraitsFilename, Constants.PortraitsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.VisualEffectsFilename, Constants.VisualEffectsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.ClassPackagesFilename, Constants.ClassPackagesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.SoundsetsFilename, Constants.SoundsetsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.PolymorphsFilename, Constants.PolymorphsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.CompanionsFilename, Constants.CompanionsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.FamiliarsFilename, Constants.FamiliarsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.TrapsFilename, Constants.TrapsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.ProgrammedEffectsFilename, Constants.ProgrammedEffectsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.DamageTypesFilename, Constants.DamageTypesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.DamageTypeGroupsFilename, Constants.DamageTypeGroupsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.RangedDamageTypesFilename, Constants.RangedDamageTypesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.SavingThrowTypesFilename, Constants.SavingThrowTypesFilename);
+
+                        AddZipEntry(zip, ProjectFolder + Constants.AttackBonusTablesFilename, Constants.AttackBonusTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.BonusFeatTablesFilename, Constants.BonusFeatTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.FeatTablesFilename, Constants.FeatTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.SavingThrowTablesFilename, Constants.SavingThrowTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.SkillTablesFilename, Constants.SkillTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.PrerequisiteTablesFilename, Constants.PrerequisiteTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.SpellSlotTablesFilename, Constants.SpellSlotTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.KnownSpellsTablesFilename, Constants.KnownSpellsTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.StatGainTablesFilename, Constants.StatGainTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.RacialFeatsTablesFilename, Constants.RacialFeatsTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.SpellPreferencesTablesFilename, Constants.SpellPreferencesTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.FeatPreferencesTablesFilename, Constants.FeatPreferencesTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.SkillPreferencesTablesFilename, Constants.SkillPreferencesTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.PackageEquipmentTablesFilename, Constants.PackageEquipmentTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.ItemPropertyTablesFilename, Constants.ItemPropertyTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.ItemPropertyCostTablesFilename, Constants.ItemPropertyCostTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.ItemPropertyParamsFilename, Constants.ItemPropertyParamsFilename);
+
+                        AddZipEntry(zip, ProjectFolder + Constants.CustomEnumsFilename, Constants.CustomEnumsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.CustomObjectsFilename, Constants.CustomObjectsFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.CustomTablesFilename, Constants.CustomTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.CustomDynamicTablesFilename, Constants.CustomDynamicTablesFilename);
+
+                        foreach (var template in CustomObjects)
                         {
-                            AddZipEntry(zip, ProjectFolder + template.FileName + ".json", template.FileName + ".json");
+                            if (template != null)
+                                AddZipEntry(zip, ProjectFolder + template.ResourceName + ".json", template.ResourceName + ".json");
+                        }
+
+                        foreach (var template in CustomTables)
+                        {
+                            if (template != null)
+                                AddZipEntry(zip, ProjectFolder + template.FileName + ".json", template.FileName + ".json");
+                        }
+
+                        foreach (var template in CustomDynamicTables)
+                        {
+                            if (template != null)
+                            {
+                                AddZipEntry(zip, ProjectFolder + template.FileName + ".json", template.FileName + ".json");
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error creating project backup: {0}", e.Message);
             }
         }
 

@@ -3,6 +3,7 @@ using Eos.Repositories;
 using Eos.Updates;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -70,8 +71,16 @@ namespace Eos.Services
                 if (EosConfig.CurrentGameBuildDate < updateList[i].GameDataMinimumBuildDate)
                     break;
 
-                updateList[i].Apply(_project);
-                _project.Version = updateList[i].Version;
+                try
+                {
+                    updateList[i].Apply(_project);
+                    _project.Version = updateList[i].Version;
+                }
+                catch (Exception e)
+                {
+                    Log.Error("Error applying update for version {0}: {1}", updateList[i].Version, e.Message);
+                    return false;
+                }
             }
 
             return true;
