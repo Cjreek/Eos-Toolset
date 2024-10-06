@@ -10,6 +10,7 @@ using System.Text.Json.Nodes;
 using Eos.Models.Tables;
 using System.Text.Json;
 using Eos.Services;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Eos.Repositories
 {
@@ -235,6 +236,7 @@ namespace Eos.Repositories
 
                 var serializeOptions = new JsonSerializerOptions();
                 serializeOptions.WriteIndented = writeIndented;
+                serializeOptions.TypeInfoResolver = new DefaultJsonTypeInfoResolver();
                 File.WriteAllText(filename, jsonRepo.ToJsonString(serializeOptions));
             }
             catch (Exception e)

@@ -16,6 +16,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.IO.Compression;
 using Eos.Services;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Eos.Repositories
 {
@@ -675,7 +676,9 @@ namespace Eos.Repositories
                 SaveCustomDataSettings(Settings.CustomData, "Custom", customDataSettings);
                 projectFile.Add("CustomData", customDataSettings);
 
-                File.WriteAllText(projectFilename, projectFile.ToJsonString(new JsonSerializerOptions(JsonSerializerDefaults.General) { WriteIndented = true }));
+                var serializationOptions = new JsonSerializerOptions(JsonSerializerDefaults.General) { WriteIndented = true };
+                serializationOptions.TypeInfoResolver = new DefaultJsonTypeInfoResolver();
+                File.WriteAllText(projectFilename, projectFile.ToJsonString(serializationOptions));
             }
             catch (Exception e)
             {

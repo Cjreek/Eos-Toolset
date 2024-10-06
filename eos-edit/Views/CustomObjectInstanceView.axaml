@@ -73,7 +73,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0" HorizontalAlignment="Right" Margin="0,3,5,0" Text="{Binding Property.Label}"/>
-                <ContentPresenter Grid.Column="1" Content="{Binding}" ContentTemplate="{StaticResource templateSelector}"/>
+                <ContentControl Grid.Column="1" Content="{Binding}" ContentTemplate="{StaticResource templateSelector}"/>
               </Grid>
             </DataTemplate>
           </ItemsRepeater.ItemTemplate>

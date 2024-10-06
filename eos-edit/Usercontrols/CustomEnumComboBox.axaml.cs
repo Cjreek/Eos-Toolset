@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Eos.Models;
 using Eos.Models.Tables;
 
 namespace Eos.Usercontrols
@@ -22,7 +23,7 @@ namespace Eos.Usercontrols
             set { SetValue(CustomEnumProperty, value); }
         }
 
-        public object? SelectedValue
+        public CustomEnumItem? SelectedValue
         {
             get { return GetValue(SelectedValueProperty); }
             set { SetValue(SelectedValueProperty, value); }
