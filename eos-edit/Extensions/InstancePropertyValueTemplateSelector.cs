@@ -94,8 +94,6 @@ namespace Eos.Extensions
                     return StringTemplate ?? ErrorTemplate;
                 if (dataTypeDef.Type == typeof(TLKStringSet))
                     return TlkTemplate ?? TlkMultilineTemplate ?? ErrorTemplate;
-                if (dataTypeDef.Type == typeof(TLKStringSetMultiLine))
-                    return TlkMultilineTemplate ?? TlkTemplate ?? ErrorTemplate;
                 if (dataTypeDef.Type == typeof(VariantValue))
                     return VariantTemplate ?? ErrorTemplate;
                 if (dataTypeDef.Type == typeof(Race))

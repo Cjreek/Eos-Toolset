@@ -318,7 +318,7 @@ namespace Eos.ViewModels
                                         var canUpdate = true;
                                         if (updateService.NeedsGameDataUpdate)
                                         {
-                                            canUpdate = EosConfig.CurrentGameBuildDate > EosConfig.BaseGameDataBuildDate;
+                                            canUpdate = EosConfig.CurrentGameBuildDate >= EosConfig.BaseGameDataBuildDate;
                                             if (canUpdate)
                                             {
                                                 var gduQuery = DoQuery("Game Data Import", "Before applying the project update(s) the base game data has to be updated\nContinue?", ViewModelQueryType.Question);

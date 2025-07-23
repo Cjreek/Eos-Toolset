@@ -15,12 +15,11 @@
         xmlns:tlk="using:Eos.Nwn.Tlk"
         xmlns:uc="using:Eos.Usercontrols"
         xmlns:config="using:Eos.Config"
-        xmlns:cp="clr-namespace:ThemeEditor.Controls.ColorPicker;assembly=ThemeEditor.Controls.ColorPicker"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Eos.Views.MainWindow" MinHeight="300" MinWidth="500"
         Height="700" Width="1100" Loaded="mainWindow_Loaded"
-        x:Name="mainWindow" Tag="Eos Toolset v0.76a" FontFamily="Segoe UI"
+        x:Name="mainWindow" Tag="Eos Toolset v0.76b" FontFamily="Segoe UI"
         Closing="mainWindow_Closing"
         Icon="/Assets/Icons/Eos.ico">
   <Window.Title>
@@ -29,6 +28,8 @@
         <Binding Source="{x:Static repo:MasterRepository.Project}" Path="Name"/>
     </MultiBinding>
   </Window.Title>
+  
+  <!-- xmlns:cp="clr-namespace:ThemeEditor.Controls.ColorPicker;assembly=ThemeEditor.Controls.ColorPicker" -->
   
   <Window.KeyBindings>
     <KeyBinding Command="{Binding Path=DataContext.CloseDetailCommand, ElementName=mainWindow}" CommandParameter="{Binding ElementName=mainWindow, Path=DataContext.CurrentView.Data}" Gesture="Ctrl+W"/>
@@ -838,7 +839,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               </TreeViewItem>
-              <TreeViewItem Header="Feats" ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=FeatTables}" Classes="category" Tag="{x:Type tables:FeatsTable}">
+              <TreeViewItem ItemsSource="{CompiledBinding Source={x:Static repo:MasterRepository.Project}, Path=FeatTables}" Classes="category" Tag="{x:Type tables:FeatsTable}">
                 <TreeViewItem.Header>
                   <TextBlock>
                     <Run Text="Feats"/>
@@ -970,7 +971,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
 
-                <TreeViewItem Header="General" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.GeneralSpells}" Classes="category" Tag="{x:Type models:Spell}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Spells.GeneralSpells}" Classes="category" Tag="{x:Type models:Spell}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="General"/>
@@ -1085,7 +1086,7 @@
                   </TextBlock>
                 </TreeViewItem.Header>
               
-                <TreeViewItem Header="Class/Racial" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.ClassOrRacial}" Classes="category" Tag="{x:Type models:Feat}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.ClassOrRacial}" Classes="category" Tag="{x:Type models:Feat}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Class/Racial"/>
@@ -1109,7 +1110,7 @@
                     </TextBlock>
                   </TreeViewItem.Header>
                 </TreeViewItem>
-                <TreeViewItem Header="Defensive" ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Defensive}" Classes="category" Tag="{x:Type models:Feat}">
+                <TreeViewItem ItemsSource="{Binding Source={x:Static repo:MasterRepository.Project}, Path=Feats.Defensive}" Classes="category" Tag="{x:Type models:Feat}">
                   <TreeViewItem.Header>
                     <TextBlock>
                       <Run Text="Defensive"/>

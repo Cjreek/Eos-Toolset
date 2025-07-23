@@ -22,7 +22,6 @@ using Eos.ViewModels.Dialogs;
 using Eos.Models.Tables;
 using Eos.Views.Dialogs;
 using System.Threading;
-using Eos.Nwn.Mdl;
 
 namespace Eos.Views
 {

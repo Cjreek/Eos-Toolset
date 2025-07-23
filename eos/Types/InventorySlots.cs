@@ -31,5 +31,7 @@ namespace Eos.Types
         [DisplayName("Right Claw")]
         RightClaw = 0x008000,
         Bite      = 0x010000,
+        [DisplayName("Creature Armor")]
+        CArmor    = 0x020000,
     }
 }

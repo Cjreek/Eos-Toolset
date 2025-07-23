@@ -21,6 +21,7 @@ namespace Eos.Services
             new Update0630(),
             new Update0640(),
             new Update0760(),
+            new Update0761(),
         };
 
         public bool NeedsGameDataUpdate => _needsGameDataUpdate;
@@ -39,7 +40,7 @@ namespace Eos.Services
             {
                 if (updateList[i].Version > _project.Version)
                 {
-                    if (EosConfig.BaseGameDataBuildDate < updateList[i].GameDataMinimumBuildDate)
+                    if ((EosConfig.BaseGameDataBuildDate < updateList[i].GameDataMinimumBuildDate) || (updateList[i].ForceGameDataUpdate))
                     {
                         if (updateList[i].GameDataMinimumBuildDate > EosConfig.CurrentGameBuildDate) // Needs higher version than available
                             break;
