@@ -462,8 +462,8 @@ namespace Eos.Repositories
             Settings.Export.TwoDAFolder = Constants.Export2DAFolder;
             Settings.Export.SsfFolder = Constants.ExportSSFFolder;
             Settings.Export.HakFolder = Constants.ExportHAKFolder;
-            Settings.Export.HakFilename = Constants.ExportHAKFilename;
-            Settings.Export.TlkFilename = Constants.ExportTLKFilename;
+            Settings.Export.HakFilename = Name.Replace(" ", "_") + ".hak";
+            Settings.Export.TlkFilename = Name.Replace(" ", "_") + ".tlk";
             Settings.Export.TlkFolder = Constants.ExportTLKFolder;
             Settings.Export.ErfFolder = Constants.ExportERFFolder;
             Settings.Export.IncludeFolder = Constants.ExportIncludeFolder;
@@ -493,14 +493,16 @@ namespace Eos.Repositories
             _projectFilename = projectFilename;
             ProjectFolder = Path.GetDirectoryName(projectFilename) ?? "";
 
+            var projectName = Path.GetFileNameWithoutExtension(projectFilename);
+
             Settings.ExternalFolders.Clear();
 
             Settings.BackupFolder = Constants.BackupFolder;
 
             Settings.Export.HakFolder = Constants.ExportHAKFolder;
-            Settings.Export.HakFilename = Constants.ExportHAKFilename;
+            Settings.Export.HakFilename = projectName + ".hak";
             Settings.Export.TlkFolder = Constants.ExportTLKFolder;
-            Settings.Export.TlkFilename = Constants.ExportTLKFilename;
+            Settings.Export.TlkFilename = projectName + ".tlk";
             Settings.Export.TwoDAFolder = Constants.Export2DAFolder;
             Settings.Export.IncludeFolder = Constants.ExportIncludeFolder;
             Settings.Export.ErfFolder = Constants.ExportERFFolder;
@@ -533,10 +535,10 @@ namespace Eos.Repositories
                         var exportJson = projectJson["Export"];
                         Settings.Export.LowercaseFilenames = exportJson?["LowercaseFilenames"]?.GetValue<bool>() ?? false;
                         Settings.Export.HakFolder = exportJson?["HakFolder"]?.GetValue<string>() ?? Constants.ExportHAKFolder;
-                        Settings.Export.HakFilename = exportJson?["HakFilename"]?.GetValue<string>() ?? Constants.ExportHAKFilename;
+                        Settings.Export.HakFilename = exportJson?["HakFilename"]?.GetValue<string>() ?? projectName + ".hak";
                         Settings.Export.ErfFolder = exportJson?["ErfFolder"]?.GetValue<string>() ?? Constants.ExportERFFolder;
                         Settings.Export.TlkFolder = exportJson?["TlkFolder"]?.GetValue<string>() ?? Constants.ExportTLKFolder;
-                        Settings.Export.TlkFilename = exportJson?["TlkFilename"]?.GetValue<string>() ?? Constants.ExportTLKFilename;
+                        Settings.Export.TlkFilename = exportJson?["TlkFilename"]?.GetValue<string>() ?? projectName + ".tlk";
                         Settings.Export.TwoDAFolder = exportJson?["TwoDAFolder"]?.GetValue<string>() ?? Constants.Export2DAFolder;
                         Settings.Export.SsfFolder = exportJson?["SsfFolder"]?.GetValue<string>() ?? Constants.ExportSSFFolder;
                         Settings.Export.IncludeFolder = exportJson?["IncludeFolder"]?.GetValue<string>() ?? Constants.ExportIncludeFolder;
