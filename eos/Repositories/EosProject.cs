@@ -73,6 +73,8 @@ namespace Eos.Repositories
         private string _erfFolder = "";
         private string _baseTlk = "";
         private string _incFilename = "";
+        private string _tlkFilename = "";
+        private string _hakFilename = "";
 
         public bool Compress2DA { get; set; } = false;
         public int LabelMaxLength { get; set; } = -1;
@@ -187,6 +189,38 @@ namespace Eos.Repositories
                     if (_incFilename.EndsWith(".nss", StringComparison.OrdinalIgnoreCase))
                         _incFilename = _incFilename.Substring(0, _incFilename.Length - ".nss".Length);
                     _incFilename = _incFilename.Substring(0, Math.Min(16, _incFilename.Length));
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public string TlkFilename
+        {
+            get { return _tlkFilename; }
+            set
+            {
+                if (_tlkFilename != value)
+                {
+                    _tlkFilename = value;
+                    if (_tlkFilename.EndsWith(".tlk", StringComparison.OrdinalIgnoreCase))
+                        _tlkFilename = _tlkFilename.Substring(0, _tlkFilename.Length - ".tlk".Length);
+                    _tlkFilename = _tlkFilename.Substring(0, Math.Min(16, _tlkFilename.Length));
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+
+        public string HakFilename
+        {
+            get { return _hakFilename; }
+            set
+            {
+                if (_hakFilename != value)
+                {
+                    _hakFilename = value;
+                    if (_hakFilename.EndsWith(".hak", StringComparison.OrdinalIgnoreCase))
+                        _hakFilename = _hakFilename.Substring(0, _hakFilename.Length - ".hak".Length);
+                    _hakFilename = _hakFilename.Substring(0, Math.Min(16, _hakFilename.Length));
                     NotifyPropertyChanged();
                 }
             }
@@ -428,6 +462,8 @@ namespace Eos.Repositories
             Settings.Export.TwoDAFolder = Constants.Export2DAFolder;
             Settings.Export.SsfFolder = Constants.ExportSSFFolder;
             Settings.Export.HakFolder = Constants.ExportHAKFolder;
+            Settings.Export.HakFilename = Constants.ExportHAKFilename;
+            Settings.Export.TlkFilename = Constants.ExportTLKFilename;
             Settings.Export.TlkFolder = Constants.ExportTLKFolder;
             Settings.Export.ErfFolder = Constants.ExportERFFolder;
             Settings.Export.IncludeFolder = Constants.ExportIncludeFolder;
@@ -462,7 +498,9 @@ namespace Eos.Repositories
             Settings.BackupFolder = Constants.BackupFolder;
 
             Settings.Export.HakFolder = Constants.ExportHAKFolder;
+            Settings.Export.HakFilename = Constants.ExportHAKFilename;
             Settings.Export.TlkFolder = Constants.ExportTLKFolder;
+            Settings.Export.TlkFilename = Constants.ExportTLKFilename;
             Settings.Export.TwoDAFolder = Constants.Export2DAFolder;
             Settings.Export.IncludeFolder = Constants.ExportIncludeFolder;
             Settings.Export.ErfFolder = Constants.ExportERFFolder;
@@ -495,8 +533,10 @@ namespace Eos.Repositories
                         var exportJson = projectJson["Export"];
                         Settings.Export.LowercaseFilenames = exportJson?["LowercaseFilenames"]?.GetValue<bool>() ?? false;
                         Settings.Export.HakFolder = exportJson?["HakFolder"]?.GetValue<string>() ?? Constants.ExportHAKFolder;
+                        Settings.Export.HakFilename = exportJson?["HakFilename"]?.GetValue<string>() ?? Constants.ExportHAKFilename;
                         Settings.Export.ErfFolder = exportJson?["ErfFolder"]?.GetValue<string>() ?? Constants.ExportERFFolder;
                         Settings.Export.TlkFolder = exportJson?["TlkFolder"]?.GetValue<string>() ?? Constants.ExportTLKFolder;
+                        Settings.Export.TlkFilename = exportJson?["TlkFilename"]?.GetValue<string>() ?? Constants.ExportTLKFilename;
                         Settings.Export.TwoDAFolder = exportJson?["TwoDAFolder"]?.GetValue<string>() ?? Constants.Export2DAFolder;
                         Settings.Export.SsfFolder = exportJson?["SsfFolder"]?.GetValue<string>() ?? Constants.ExportSSFFolder;
                         Settings.Export.IncludeFolder = exportJson?["IncludeFolder"]?.GetValue<string>() ?? Constants.ExportIncludeFolder;
@@ -609,10 +649,12 @@ namespace Eos.Repositories
                 var export = new JsonObject();
                 export.Add("LowercaseFilenames", Settings.Export.LowercaseFilenames);
                 export.Add("HakFolder", Settings.Export.HakFolder);
+                export.Add("HakFilename", Settings.Export.HakFilename);
                 export.Add("ErfFolder", Settings.Export.ErfFolder);
                 export.Add("TwoDAFolder", Settings.Export.TwoDAFolder);
                 export.Add("SsfFolder", Settings.Export.SsfFolder);
                 export.Add("TlkFolder", Settings.Export.TlkFolder);
+                export.Add("TlkFilename", Settings.Export.TlkFilename);
                 export.Add("IncludeFolder", Settings.Export.IncludeFolder);
                 export.Add("BaseTlkFile", Settings.Export.BaseTlkFile);
                 export.Add("TlkOffset", Settings.Export.TlkOffset);

@@ -479,7 +479,7 @@ namespace Eos.Services
 
         private void ExportTLKs(EosProject project)
         {
-            Log.Info("Exporting TLK: \"{0}\"", Path.GetFullPath(project.Settings.Export.TlkFolder + project.Name.ToLower().Replace(' ', '_') + ".tlk"));
+            Log.Info("Exporting TLK: \"{0}\"", Path.GetFullPath(project.Settings.Export.TlkFolder + project.Settings.Export.TlkFilename.Replace(' ', '_') + ".tlk"));
 
             CollectTLKEntries(project);
 
@@ -494,7 +494,7 @@ namespace Eos.Services
             foreach (var tlk in customTLKIndices.Keys)
                 customTLKIndices[tlk] = tlkFile.AddText(tlk[project.DefaultLanguage].Text.ReplaceLineEndings("\n"));
 
-            tlkFile.Save(project.Settings.Export.TlkFolder + project.Name.ToLower().Replace(' ', '_') + ".tlk");
+            tlkFile.Save(project.Settings.Export.TlkFolder + project.Settings.Export.TlkFilename.Replace(' ', '_') + ".tlk");
         }
 
         private void ExportAttackBonusTables(EosProject project)
@@ -4238,7 +4238,7 @@ namespace Eos.Services
 
         private void CreateHAK(EosProject project)
         {
-            Log.Info("Exporting HAK file: \"{0}\"", Path.GetFullPath(project.Settings.Export.HakFolder + CleanString(project.Name, false).ToLower() + ".hak"));
+            Log.Info("Exporting HAK file: \"{0}\"", Path.GetFullPath(project.Settings.Export.HakFolder + CleanString(project.Settings.Export.HakFilename, false).ToLower() + ".hak"));
 
             var hak = new ErfFile();
             hak.Description[project.DefaultLanguage].Text = project.Name + "\n\n";
@@ -4253,7 +4253,7 @@ namespace Eos.Services
             }
 
             Directory.CreateDirectory(project.Settings.Export.HakFolder);
-            hak.Save(project.Settings.Export.HakFolder + CleanString(project.Name, false).ToLower() + ".hak");
+            hak.Save(project.Settings.Export.HakFolder + CleanString(project.Settings.Export.HakFilename, false).ToLower() + ".hak");
         }
 
         private void CreateERF(EosProject project)
