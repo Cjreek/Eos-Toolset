@@ -462,8 +462,8 @@ namespace Eos.Repositories
             Settings.Export.TwoDAFolder = Constants.Export2DAFolder;
             Settings.Export.SsfFolder = Constants.ExportSSFFolder;
             Settings.Export.HakFolder = Constants.ExportHAKFolder;
-            Settings.Export.HakFilename = Name.Replace(" ", "_") + ".hak";
-            Settings.Export.TlkFilename = Name.Replace(" ", "_") + ".tlk";
+            Settings.Export.HakFilename = Name.Replace(" ", "_").ToLower() + ".hak";
+            Settings.Export.TlkFilename = Name.Replace(" ", "_").ToLower() + ".tlk";
             Settings.Export.TlkFolder = Constants.ExportTLKFolder;
             Settings.Export.ErfFolder = Constants.ExportERFFolder;
             Settings.Export.IncludeFolder = Constants.ExportIncludeFolder;
@@ -493,7 +493,9 @@ namespace Eos.Repositories
             _projectFilename = projectFilename;
             ProjectFolder = Path.GetDirectoryName(projectFilename) ?? "";
 
-            var projectName = Path.GetFileNameWithoutExtension(projectFilename);
+            var projectName = Path.GetFileNameWithoutExtension(projectFilename)
+                .Replace(" ", "_")
+                .ToLower();
 
             Settings.ExternalFolders.Clear();
 

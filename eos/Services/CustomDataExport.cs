@@ -479,7 +479,7 @@ namespace Eos.Services
 
         private void ExportTLKs(EosProject project)
         {
-            Log.Info("Exporting TLK: \"{0}\"", Path.GetFullPath(project.Settings.Export.TlkFolder + project.Settings.Export.TlkFilename.Replace(' ', '_') + ".tlk"));
+            Log.Info("Exporting TLK: \"{0}\"", Path.GetFullPath(project.Settings.Export.TlkFolder + project.Settings.Export.TlkFilename.Replace(' ', '_').ToLower() + ".tlk"));
 
             CollectTLKEntries(project);
 
@@ -494,7 +494,7 @@ namespace Eos.Services
             foreach (var tlk in customTLKIndices.Keys)
                 customTLKIndices[tlk] = tlkFile.AddText(tlk[project.DefaultLanguage].Text.ReplaceLineEndings("\n"));
 
-            tlkFile.Save(project.Settings.Export.TlkFolder + project.Settings.Export.TlkFilename.Replace(' ', '_') + ".tlk");
+            tlkFile.Save(project.Settings.Export.TlkFolder + project.Settings.Export.TlkFilename.Replace(' ', '_').ToLower() + ".tlk");
         }
 
         private void ExportAttackBonusTables(EosProject project)
