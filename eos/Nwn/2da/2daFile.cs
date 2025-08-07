@@ -263,6 +263,7 @@ namespace Eos.Nwn.TwoDimensionalArray
         private List<String> columnList;
         private Dictionary<String, int> columnLookup = new Dictionary<String, int>();
         private Dictionary<int, bool> writeHexDict = new Dictionary<int, bool>();
+        private Dictionary<int, bool> hexPaddingDict = new Dictionary<int, bool>();
         private Dictionary<int, bool> writeLowerCaseDict = new Dictionary<int, bool>();
         private Dictionary<int, int> columnMaxLengthDict = new Dictionary<int, int>();
 
@@ -273,6 +274,7 @@ namespace Eos.Nwn.TwoDimensionalArray
             {
                 columnLookup[columnList[i].ToLower()] = i;
                 writeHexDict[i] = false;
+                hexPaddingDict[i] = false;
                 writeLowerCaseDict[i] = false;
                 columnMaxLengthDict[i] = -1;
             }
@@ -329,11 +331,21 @@ namespace Eos.Nwn.TwoDimensionalArray
             return IsHex(IndexOf(columnName));
         }
 
-        public void SetHex(String columnName, bool writeHex = true)
+        public void SetHex(String columnName, bool writeHex = true, bool padToTwoDigits = true)
         {
             var index = IndexOf(columnName);
             if (index >= 0)
+            {
                 writeHexDict[index] = writeHex;
+                hexPaddingDict[index] = padToTwoDigits;
+            }
+        }
+
+        public bool GetHexPadding(int columnIndex)
+        {
+            if (hexPaddingDict.ContainsKey(columnIndex))
+                return hexPaddingDict[columnIndex];
+            return true; // Default to 2-digit padding
         }
 
         public bool IsLowercase(int columnIndex)
@@ -509,9 +521,13 @@ namespace Eos.Nwn.TwoDimensionalArray
             return 0;
         }
 
-        private String ValueToStr(object? value, bool isHex, bool isLowercase, int maxLength)
+        private String ValueToStr(object? value, int columnIndex)
         {
             string result = "";
+            bool isHex = Columns.IsHex(columnIndex);
+            bool isLowercase = Columns.IsLowercase(columnIndex);
+            int maxLength = Columns.GetMaxLength(columnIndex);
+            bool hexPadding = Columns.GetHexPadding(columnIndex);
 
             if (value == null) return "****";
             if (value is String str)
@@ -525,7 +541,7 @@ namespace Eos.Nwn.TwoDimensionalArray
             else if (value is decimal decValue)
                 result = decValue.ToString("0.####", floatFormat);
             else if ((value is int intValue) && (isHex))
-                result = "0x" + intValue.ToString("x2");
+                result = "0x" + intValue.ToString(hexPadding ? "x2" : "x");
   
             if (result == "")
                 result = isLowercase ? value.ToString()?.ToLower() ?? "****" : value.ToString() ?? "****";
@@ -553,7 +569,7 @@ namespace Eos.Nwn.TwoDimensionalArray
                 {
                     line = i.ToString() + " ";
                     for (int j = 0; j < Columns.Count; j++)
-                        line += ValueToStr(records[i][j], Columns.IsHex(j), Columns.IsLowercase(j), Columns.GetMaxLength(j)) + " ";
+                        line += ValueToStr(records[i][j], j) + " ";
                     writer.WriteLine(line.Trim());
                 }
             }
@@ -583,7 +599,7 @@ namespace Eos.Nwn.TwoDimensionalArray
                 {
                     line = String.Format("{0,-" + columnWidths[0].ToString() + "}", i);
                     for (int j = 0; j < Columns.Count; j++)
-                        line += String.Format("{0,-" + columnWidths[j + 1].ToString() + "}", ValueToStr(records[i][j], Columns.IsHex(j), Columns.IsLowercase(j), Columns.GetMaxLength(j)));
+                        line += String.Format("{0,-" + columnWidths[j + 1].ToString() + "}", ValueToStr(records[i][j], j));
                     writer.WriteLine(line.Trim());
                 }
             }
