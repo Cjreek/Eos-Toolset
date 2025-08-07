@@ -1100,7 +1100,7 @@ namespace Eos.Services
                 classes2da.Columns.AddColumn("Short");
                 classes2da.Columns.AddColumn("SkipSpellSelection");
                 classes2da.Columns.SetHex("AlignRestrict");
-                classes2da.Columns.SetHex("AlignRstrctType");
+                classes2da.Columns.SetHex("AlignRstrctType", padToTwoDigits: false);
 
                 if (project.Settings.Export.LowercaseFilenames)
                 {
