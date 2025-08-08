@@ -2589,7 +2589,7 @@ namespace Eos.Services
                         record.Set("ProgFX_Duration", project.ProgrammedEffects.Get2DAIndex(vfx.DurationProgFX));
                         record.Set("SoundDuration", vfx.DurationSound);
                         record.Set("ProgFX_Cessation", project.ProgrammedEffects.Get2DAIndex(vfx.CessationProgFX));
-                        record.Set("SoundCessation", vfx.CessationSound);
+                        record.Set("SoundCessastion", vfx.CessationSound);
                         record.Set("ShakeType", vfx.ShakeType == VFXShakeType.None ? null : (int)vfx.ShakeType);
                         record.Set("ShakeDelay", vfx.ShakeDelay);
                         record.Set("ShakeDuration", vfx.ShakeDuration);

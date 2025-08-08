@@ -1954,17 +1954,20 @@ namespace Eos.Services
 
                     if (!SetText(tmpDamageType.Name, damagetypes2da[i].AsInteger("CharsheetStrref"))) continue;
                     tmpDamageType.Group = CreateRef<DamageTypeGroup>(damagetypes2da[i].AsInteger("DamageTypeGroup"));
-                    tmpDamageType.RangedDamageType = CreateRef<RangedDamageType>(damagetypes2da[i].AsInteger("DamageRangedProjectile"));
-
-                    if (ImportRangedDamageTypeRecord(i, out var rangedRecordId))
+                    if (damagetypes2da.Columns.IndexOf("DamageRangedProjectile") >= 0)
                     {
-                        var tmpRangedDamageType = new RangedDamageType();
-                        tmpRangedDamageType.ID = rangedRecordId;
-                        tmpRangedDamageType.Index = damagetypes2da[i].AsInteger("DamageRangedProjectile");
-                        tmpRangedDamageType.SourceLabel = damagetypes2da[i].AsString("Label");
-                        tmpRangedDamageType.Name = damagetypes2da[i].AsString("Label") ?? "";
+                        tmpDamageType.RangedDamageType = CreateRef<RangedDamageType>(damagetypes2da[i].AsInteger("DamageRangedProjectile"));
 
-                        _importCollection.RangedDamageTypes.Add(tmpRangedDamageType);
+                        if (ImportRangedDamageTypeRecord(i, out var rangedRecordId))
+                        {
+                            var tmpRangedDamageType = new RangedDamageType();
+                            tmpRangedDamageType.ID = rangedRecordId;
+                            tmpRangedDamageType.Index = damagetypes2da[i].AsInteger("DamageRangedProjectile");
+                            tmpRangedDamageType.SourceLabel = damagetypes2da[i].AsString("Label");
+                            tmpRangedDamageType.Name = damagetypes2da[i].AsString("Label") ?? "";
+
+                            _importCollection.RangedDamageTypes.Add(tmpRangedDamageType);
+                        }
                     }
 
                     if ((damagehitvisual2da != null) && (i < damagehitvisual2da.Count))
@@ -2072,10 +2075,20 @@ namespace Eos.Services
                     tmpAmmunition.Model = ammunitiontypes2da[i].AsString("Model");
                     tmpAmmunition.ShotSound = ammunitiontypes2da[i].AsString("ShotSound");
                     tmpAmmunition.ImpactSound = ammunitiontypes2da[i].AsString("ImpactSound");
-                    tmpAmmunition.AmmunitionType = (AmmunitionType?)ammunitiontypes2da[i].AsInteger("AmmunitionType") ?? AmmunitionType.Arrow;
-                    if (ammunitiontypes2da[i].AsInteger("DamageRangedProjectile") > 0)
-                        tmpAmmunition.RangedDamageType = CreateRef<RangedDamageType>(ammunitiontypes2da[i].AsInteger("DamageRangedProjectile"));
+                    if (ammunitiontypes2da.Columns.IndexOf("AmmunitionType") >= 0)
+                        tmpAmmunition.AmmunitionType = (AmmunitionType?)ammunitiontypes2da[i].AsInteger("AmmunitionType") ?? AmmunitionType.Arrow;
                     else
+                        tmpAmmunition.AmmunitionType = AmmunitionType.Arrow;
+
+                    if (ammunitiontypes2da.Columns.IndexOf("DamageRangedProjectile") >= 0)
+                    {
+                        if (ammunitiontypes2da[i].AsInteger("DamageRangedProjectile") > 0)
+                            tmpAmmunition.RangedDamageType =
+                                CreateRef<RangedDamageType>(ammunitiontypes2da[i].AsInteger("DamageRangedProjectile"));
+                        else
+                            tmpAmmunition.RangedDamageType = null;
+                    }
+                    else 
                         tmpAmmunition.RangedDamageType = null;
 
                     _importCollection.Ammunitions.Add(tmpAmmunition);
