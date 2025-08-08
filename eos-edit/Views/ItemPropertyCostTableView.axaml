@@ -146,6 +146,14 @@
 
           <DataGrid x:Name="grItems" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Data.Items}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" Margin="2,0,0,0">
               <DataGrid.Columns>
+                <DataGridTemplateColumn Header="ID" Width="45">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding Index}" Margin="4,4,0,0"/>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
                 <DataGridTemplateColumn Header="Name" Width="200">
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>

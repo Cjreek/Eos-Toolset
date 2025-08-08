@@ -1184,9 +1184,6 @@ namespace Eos.Services
                     tmpBaseItem.ModelType = (ItemModelType)Enum.ToObject(typeof(ItemModelType), baseitems2da[i].AsInteger("ModelType") ?? 0);
                     tmpBaseItem.ItemModel = baseitems2da[i].AsString("ItemClass") ?? "";
                     tmpBaseItem.GenderSpecific = baseitems2da[i].AsBoolean("GenderSpecific");
-                    tmpBaseItem.Part1Alpha = baseitems2da[i].IsNull("Part1EnvMap") ? null : (AlphaChannelUsageType)Enum.ToObject(typeof(AlphaChannelUsageType), baseitems2da[i].AsInteger("Part1EnvMap") ?? 0);
-                    tmpBaseItem.Part2Alpha = baseitems2da[i].IsNull("Part2EnvMap") ? null : (AlphaChannelUsageType)Enum.ToObject(typeof(AlphaChannelUsageType), baseitems2da[i].AsInteger("Part2EnvMap") ?? 0);
-                    tmpBaseItem.Part3Alpha = baseitems2da[i].IsNull("Part3EnvMap") ? null : (AlphaChannelUsageType)Enum.ToObject(typeof(AlphaChannelUsageType), baseitems2da[i].AsInteger("Part3EnvMap") ?? 0);
                     tmpBaseItem.DefaultModel = baseitems2da[i].AsString("DefaultModel") ?? "";
                     tmpBaseItem.IsContainer = baseitems2da[i].AsBoolean("Container");
                     tmpBaseItem.WeaponWieldType = (WeaponWieldType)Enum.ToObject(typeof(WeaponWieldType), baseitems2da[i].AsInteger("WeaponWield") ?? 0);
@@ -1468,12 +1465,6 @@ namespace Eos.Services
                     tmpVfx.DurationSound = vfx2da[i].AsString("SoundDuration");
                     tmpVfx.CessationProgFX = CreateRef<ProgrammedEffect>(vfx2da[i].AsInteger("ProgFX_Cessation"));
                     tmpVfx.CessationSound = vfx2da[i].AsString("SoundCessastion");
-                    tmpVfx.CessationHeadEffect = vfx2da[i].AsString("Ces_HeadCon_Node");
-                    tmpVfx.CessationImpactEffect = vfx2da[i].AsString("Ces_Impact_Node");
-                    tmpVfx.CessationRootSmallEffect = vfx2da[i].AsString("Ces_Root_S_Node");
-                    tmpVfx.CessationRootMediumEffect = vfx2da[i].AsString("Ces_Root_M_Node");
-                    tmpVfx.CessationRootLargeEffect = vfx2da[i].AsString("Ces_Root_L_Node");
-                    tmpVfx.CessationRootHugeEffect = vfx2da[i].AsString("Ces_Root_H_Node");
                     tmpVfx.ShakeType = (VFXShakeType)Enum.ToObject(typeof(VFXShakeType), vfx2da[i].AsInteger("ShakeType") ?? (int)VFXShakeType.None);
                     tmpVfx.ShakeDelay = vfx2da[i].AsFloat("ShakeDelay");
                     tmpVfx.ShakeDuration = vfx2da[i].AsFloat("ShakeDuration");
@@ -2472,7 +2463,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    race.Index = null;
+                    race.Index -= MasterRepository.Project.Settings.Races.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(race);
@@ -2496,7 +2487,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    cls.Index = null;
+                    cls.Index -= MasterRepository.Project.Settings.Classes.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(cls);
@@ -2520,7 +2511,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    package.Index = null;
+                    package.Index -= MasterRepository.Project.Settings.Packages.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(package);
@@ -2544,7 +2535,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    domain.Index = null;
+                    domain.Index -= MasterRepository.Project.Settings.Domains.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(domain);
@@ -2584,7 +2575,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    spell.Index = null;
+                    spell.Index -= MasterRepository.Project.Settings.Spells.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(spell);
@@ -2608,7 +2599,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    masterFeat.Index = null;
+                    masterFeat.Index -= MasterRepository.Project.Settings.MasterFeats.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(masterFeat);
@@ -2632,7 +2623,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    feat.Index = null;
+                    feat.Index -= MasterRepository.Project.Settings.Feats.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(feat);
@@ -2656,7 +2647,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    skill.Index = null;
+                    skill.Index -= MasterRepository.Project.Settings.Skills.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(skill);
@@ -2680,7 +2671,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    disease.Index = null;
+                    disease.Index -= MasterRepository.Project.Settings.Diseases.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(disease);
@@ -2704,7 +2695,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    poison.Index = null;
+                    poison.Index -= MasterRepository.Project.Settings.Poisons.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(poison);
@@ -2728,7 +2719,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    baseItem.Index = null;
+                    baseItem.Index -= MasterRepository.Project.Settings.BaseItems.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(baseItem);
@@ -2752,7 +2743,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    aoe.Index = null;
+                    aoe.Index -= MasterRepository.Project.Settings.AreaEffects.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(aoe);
@@ -2776,7 +2767,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    polymorph.Index = null;
+                    polymorph.Index -= MasterRepository.Project.Settings.Polymorphs.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(polymorph);
@@ -2800,7 +2791,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    companion.Index = null;
+                    companion.Index -= MasterRepository.Project.Settings.Companions.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(companion);
@@ -2824,7 +2815,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    familiar.Index = null;
+                    familiar.Index -= MasterRepository.Project.Settings.Familiars.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(familiar);
@@ -2848,7 +2839,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    trap.Index = null;
+                    trap.Index -= MasterRepository.Project.Settings.Traps.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(trap);
@@ -2872,7 +2863,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    soundset.Index = null;
+                    soundset.Index -= MasterRepository.Project.Settings.Soundsets.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(soundset);
@@ -2896,7 +2887,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    vfx.Index = null;
+                    vfx.Index -= MasterRepository.Project.Settings.VisualEffects.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(vfx);
@@ -2920,7 +2911,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    appearance.Index = null;
+                    appearance.Index -= MasterRepository.Project.Settings.Appearances.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(appearance);
@@ -2944,7 +2935,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    appearanceSoundset.Index = null;
+                    appearanceSoundset.Index -= MasterRepository.Project.Settings.AppearanceSoundsets.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(appearanceSoundset);
@@ -2968,7 +2959,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    weaponSound.Index = null;
+                    weaponSound.Index -= MasterRepository.Project.Settings.WeaponSounds.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(weaponSound);
@@ -2992,7 +2983,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    inventorySound.Index = null;
+                    inventorySound.Index -= MasterRepository.Project.Settings.InventorySounds.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(inventorySound);
@@ -3016,7 +3007,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    portrait.Index = null;
+                    portrait.Index -= MasterRepository.Project.Settings.Portraits.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(portrait);
@@ -3040,7 +3031,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    progFX.Index = null;
+                    progFX.Index -= MasterRepository.Project.Settings.ProgrammedEffects.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(progFX);
@@ -3064,7 +3055,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    damageType.Index = null;
+                    damageType.Index -= MasterRepository.Project.Settings.DamageTypes.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(damageType);
@@ -3088,7 +3079,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    damageTypeGroup.Index = null;
+                    damageTypeGroup.Index -= MasterRepository.Project.Settings.DamageTypeGroups.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(damageTypeGroup);
@@ -3112,7 +3103,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    rangedDamageType.Index = null;
+                    rangedDamageType.Index -= MasterRepository.Project.Settings.RangedDamageTypes.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(rangedDamageType);
@@ -3136,7 +3127,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    savingthrowType.Index = null;
+                    savingthrowType.Index -= MasterRepository.Project.Settings.SavingthrowTypes.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(savingthrowType);
@@ -3160,7 +3151,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    ammunition.Index = null;
+                    ammunition.Index -= MasterRepository.Project.Settings.Ammunitions.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(ammunition);
@@ -3184,7 +3175,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    racialFeatsTable.Index = null;
+                    racialFeatsTable.Index -= MasterRepository.Project.Settings.RacialFeatsTables.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(racialFeatsTable);
@@ -3208,7 +3199,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    featsTable.Index = null;
+                    featsTable.Index -= MasterRepository.Project.Settings.FeatTables.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(featsTable);
@@ -3232,7 +3223,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    bfeatsTable.Index = null;
+                    bfeatsTable.Index -= MasterRepository.Project.Settings.BonusFeatTables.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(bfeatsTable);
@@ -3256,7 +3247,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    skillTable.Index = null;
+                    skillTable.Index -= MasterRepository.Project.Settings.SkillsTables.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(skillTable);
@@ -3280,7 +3271,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    attackTable.Index = null;
+                    attackTable.Index -= MasterRepository.Project.Settings.AttackBonusTables.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(attackTable);
@@ -3304,7 +3295,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    savesTable.Index = null;
+                    savesTable.Index -= MasterRepository.Project.Settings.SavesTables.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(savesTable);
@@ -3328,7 +3319,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    requTable.Index = null;
+                    requTable.Index -= MasterRepository.Project.Settings.PrerequisiteTables.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(requTable);
@@ -3352,7 +3343,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    statGainTable.Index = null;
+                    statGainTable.Index -= MasterRepository.Project.Settings.StatGainTables.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(statGainTable);
@@ -3376,7 +3367,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    spellSlotTable.Index = null;
+                    spellSlotTable.Index -= MasterRepository.Project.Settings.SpellSlotTables.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(spellSlotTable);
@@ -3400,7 +3391,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    knownSpellsTable.Index = null;
+                    knownSpellsTable.Index -= MasterRepository.Project.Settings.KnownSpellsTables.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(knownSpellsTable);
@@ -3424,7 +3415,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    spellPrefTable.Index = null;
+                    spellPrefTable.Index -= MasterRepository.Project.Settings.PackageSpellPreferencesTables.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(spellPrefTable);
@@ -3448,7 +3439,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    featPrefTable.Index = null;
+                    featPrefTable.Index -= MasterRepository.Project.Settings.PackageFeatPreferencesTables.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(featPrefTable);
@@ -3472,7 +3463,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    skillPrefTable.Index = null;
+                    skillPrefTable.Index -= MasterRepository.Project.Settings.PackageSkillPreferencesTables.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(skillPrefTable);
@@ -3496,7 +3487,7 @@ namespace Eos.Services
                 }
                 else
                 {
-                    equipmentTable.Index = null;
+                    equipmentTable.Index -= MasterRepository.Project.Settings.PackageEquipmentTables.ExportOffset;
                 }
 
                 MasterRepository.Project.Add(equipmentTable);

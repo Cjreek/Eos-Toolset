@@ -76,7 +76,7 @@ namespace Eos.Models
 
         protected override void SetDefaultValues()
         {
-            Name = "VFX_PER_NEW";
+            Name = "VFX_NEW";
         }
 
         public override void ResolveReferences()

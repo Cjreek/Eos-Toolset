@@ -60,16 +60,12 @@ namespace Eos.ViewModels
 
         private void MoveUp(CustomDynamicTableInstanceItem item)
         {
-            var index = Data.Items.IndexOf(item);
-            if (index > 0)
-                Data.Items.Move(index, index - 1);
+            Data.MoveUp(item);
         }
 
         private void MoveDown(CustomDynamicTableInstanceItem item)
         {
-            var index = Data.Items.IndexOf(item);
-            if (index < Data.Items.Count - 1)
-                Data.Items.Move(index, index + 1);
+            Data.MoveDown(item);
         }
 
         public ReactiveCommand<CustomDynamicTableInstanceItem, Unit> DeleteCustomDynTableItemCommand { get; private set; }

@@ -2303,9 +2303,6 @@ namespace Eos.Services
                         record.Set("ModelType", (int)baseItem.ModelType);
                         record.Set("ItemClass", baseItem.ItemModel);
                         record.Set("GenderSpecific", baseItem.GenderSpecific);
-                        record.Set("Part1EnvMap", (int?)baseItem.Part1Alpha);
-                        record.Set("Part2EnvMap", (int?)baseItem.Part2Alpha);
-                        record.Set("Part3EnvMap", (int?)baseItem.Part3Alpha);
                         record.Set("DefaultModel", baseItem.DefaultModel);
                         record.Set("DefaultIcon", baseItem.Icon);
                         record.Set("Container", baseItem.IsContainer);
@@ -2552,16 +2549,11 @@ namespace Eos.Services
                     vfx2da.Columns.SetLowercase("SoundImpact");
                     vfx2da.Columns.SetLowercase("SoundDuration");
                     vfx2da.Columns.SetLowercase("SoundCessastion");
-                    vfx2da.Columns.SetLowercase("Ces_HeadCon_Node");
-                    vfx2da.Columns.SetLowercase("Ces_Impact_Node");
-                    vfx2da.Columns.SetLowercase("Ces_Root_S_Node");
-                    vfx2da.Columns.SetLowercase("Ces_Root_M_Node");
-                    vfx2da.Columns.SetLowercase("Ces_Root_L_Node");
-                    vfx2da.Columns.SetLowercase("Ces_Root_H_Node");
                     vfx2da.Columns.SetLowercase("LowViolence");
                     vfx2da.Columns.SetLowercase("LowQuality");
                 }
-
+                
+                // vfx2da.Columns.RenameColumn("SoundCessastion", "SoundCessation"); // Fix, but would make bad sounds, so keept it for now
                 vfx2da.Columns.SetMaxLength("Label", project.Settings.Export.LabelMaxLength);
 
                 AddExtensionColumns(vfx2da, project.VisualEffects.Extensions);
@@ -2597,13 +2589,7 @@ namespace Eos.Services
                         record.Set("ProgFX_Duration", project.ProgrammedEffects.Get2DAIndex(vfx.DurationProgFX));
                         record.Set("SoundDuration", vfx.DurationSound);
                         record.Set("ProgFX_Cessation", project.ProgrammedEffects.Get2DAIndex(vfx.CessationProgFX));
-                        record.Set("SoundCessastion", vfx.CessationSound);
-                        record.Set("Ces_HeadCon_Node", vfx.CessationHeadEffect);
-                        record.Set("Ces_Impact_Node", vfx.CessationImpactEffect);
-                        record.Set("Ces_Root_S_Node", vfx.CessationRootSmallEffect);
-                        record.Set("Ces_Root_M_Node", vfx.CessationRootMediumEffect);
-                        record.Set("Ces_Root_L_Node", vfx.CessationRootLargeEffect);
-                        record.Set("Ces_Root_H_Node", vfx.CessationRootHugeEffect);
+                        record.Set("SoundCessation", vfx.CessationSound);
                         record.Set("ShakeType", vfx.ShakeType == VFXShakeType.None ? null : (int)vfx.ShakeType);
                         record.Set("ShakeDelay", vfx.ShakeDelay);
                         record.Set("ShakeDuration", vfx.ShakeDuration);
@@ -3851,7 +3837,7 @@ namespace Eos.Services
             return result;
         }
 
-        private String GetScriptConstant(String prefix, BaseModel? model)
+        private String GetScriptConstant(String prefix, BaseModel? model, String namePrefix = "")
         {
             if (model == null) return "";
 
@@ -3868,6 +3854,8 @@ namespace Eos.Services
                     var name = model.TlkDisplayName ?? model.GetLabel();
                     if (name.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
                         name = name.Substring(prefix.Length);
+                    if (name.StartsWith(namePrefix, StringComparison.OrdinalIgnoreCase))
+                        name = name.Substring(namePrefix.Length);
                     result = prefix + CleanString(name);
                 }
 
@@ -4080,7 +4068,7 @@ namespace Eos.Services
                 {
                     if (aoe == null) continue;
                     var index = project.AreaEffects.GetCustomDataStartIndex() + aoe.Index;
-                    incFile.Add("const int " + GetScriptConstant("AOE_PER_", aoe) + " = " + index.ToString() + ";");
+                    incFile.Add("const int " + GetScriptConstant("AOE_", aoe, "VFX_") + " = " + index.ToString() + ";");
                 }
                 incFile.Add("");
             }
