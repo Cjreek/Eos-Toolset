@@ -171,30 +171,21 @@
             
             <TextBlock Text="Max. Model Count" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
             <NumericUpDown Grid.Row="4" Grid.Column="3" Value="{Binding Data.MaximumModelCount}" Increment="1"/>
+            
+            <TextBlock Text="Left Slash Anim%" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+            <NumericUpDown Grid.Row="5" Grid.Column="1" Value="{Binding Data.LeftSlashAnimationPercent}" Increment="1"/>
 
-            <TextBlock Text="Part 1 Alpha" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
-            <uc:EnumComboBox Grid.Row="5" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:AlphaChannelUsageType}}" SelectedValue="{Binding Data.Part1Alpha}" IsNullable="True"/>
+            <TextBlock Text="Right Slash Anim%" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
+            <NumericUpDown Grid.Row="5" Grid.Column="3" Value="{Binding Data.RightSlashAnimationPercent}" Increment="1"/>
 
-            <TextBlock Text="Part 2 Alpha" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="2"/>
-            <uc:EnumComboBox Grid.Row="5" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type types:AlphaChannelUsageType}}" SelectedValue="{Binding Data.Part2Alpha}" IsNullable="True"/>
+            <TextBlock Text="Straight Slash Anim%" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
+            <NumericUpDown Grid.Row="6" Grid.Column="1" Value="{Binding Data.StraightSlashAnimationPercent}" Increment="1"/>
 
-            <TextBlock Text="Part 3 Alpha" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
-            <uc:EnumComboBox Grid.Row="6" Grid.Column="1" ItemsSource="{ext:EnumSource {x:Type types:AlphaChannelUsageType}}" SelectedValue="{Binding Data.Part3Alpha}" IsNullable="True"/>
+            <TextBlock Text="Inventory Sound" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
+            <uc:InventorySoundComboBox SelectedValue="{Binding Data.InventorySound}" Grid.Row="7" Grid.Column="1"/>
 
-            <TextBlock Text="Left Slash Anim%" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="0"/>
-            <NumericUpDown Grid.Row="7" Grid.Column="1" Value="{Binding Data.LeftSlashAnimationPercent}" Increment="1"/>
-
-            <TextBlock Text="Right Slash Anim%" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="2"/>
-            <NumericUpDown Grid.Row="7" Grid.Column="3" Value="{Binding Data.RightSlashAnimationPercent}" Increment="1"/>
-
-            <TextBlock Text="Straight Slash Anim%" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="8" Grid.Column="0"/>
-            <NumericUpDown Grid.Row="8" Grid.Column="1" Value="{Binding Data.StraightSlashAnimationPercent}" Increment="1"/>
-
-            <TextBlock Text="Inventory Sound" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0"/>
-            <uc:InventorySoundComboBox SelectedValue="{Binding Data.InventorySound}" Grid.Row="9" Grid.Column="1"/>
-
-            <TextBlock Text="Ground Rotation" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="2"/>
-            <uc:EnumComboBox Grid.Row="9" Grid.Column="9" ItemsSource="{ext:EnumSource {x:Type types:ItemModelRotation}}" SelectedValue="{Binding Data.GroundModelRotation}" IsNullable="True"/>
+            <TextBlock Text="Ground Rotation" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="7" Grid.Column="2"/>
+            <uc:EnumComboBox Grid.Row="7" Grid.Column="3" ItemsSource="{ext:EnumSource {x:Type types:ItemModelRotation}}" SelectedValue="{Binding Data.GroundModelRotation}" IsNullable="True"/>
           </Grid>
         </Border>
       </ScrollViewer>

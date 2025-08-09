@@ -44,6 +44,9 @@ namespace Eos.ViewModels.Dialogs
         public IEnumerable<T?> SearchResult => _searchResult;
         public T? ResultModel { get; set; }
 
+        public int IconHeight { get; set; } = 24;
+        public int IconWidth { get; set; } = 24;
+
         protected abstract TLKStringSet? GetModelText(T? model);
 
         private bool Filter(T? model, String searchText)
@@ -51,9 +54,12 @@ namespace Eos.ViewModels.Dialogs
             //if ((model == null) || (model.Overrides != null)) return false;
             if ((model == null) || (MasterRepository.Project.HasOverride(model))) return false;
 
+            int searchNumber = -1;
+            int.TryParse(searchText, out searchNumber);
+            
             var tlk = GetModelText(model);
             if (tlk == null) return false;
-            return tlk[MasterRepository.Project.DefaultLanguage].Text.ToLower().Contains(searchText);
+            return tlk[MasterRepository.Project.DefaultLanguage].Text.ToLower().Contains(searchText) || (model.CalculatedIndex == searchNumber);
         }
 
         protected IEnumerable<T?> Search(String searchText)

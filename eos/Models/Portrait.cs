@@ -26,6 +26,7 @@ namespace Eos.Models
                 if (_resRef != value)
                 {
                     _resRef = value;
+                    Icon =  $"po_{_resRef}s";
                     NotifyPropertyChanged();
                 }
             }

@@ -360,6 +360,14 @@ namespace Eos.Nwn.TwoDimensionalArray
             return IsLowercase(IndexOf(columnName));
         }
 
+        public void RenameColumn(String columnName, String newColumnName)
+        {
+            int oldIndex = IndexOf(columnName);
+            columnList[oldIndex] = newColumnName;
+            columnLookup.Remove(columnName.ToLower());
+            columnLookup.Add(newColumnName.ToLower(), oldIndex);
+        }
+        
         public void SetLowercase(String columnName, bool writeLowercase = true)
         {
             var index = IndexOf(columnName);

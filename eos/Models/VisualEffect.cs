@@ -45,12 +45,6 @@ namespace Eos.Models
             set { Set(ref _cessationProgFX, value); }
         }
         public string? CessationSound { get; set; }
-        public string? CessationHeadEffect { get; set; }
-        public string? CessationImpactEffect { get; set; }
-        public string? CessationRootSmallEffect { get; set; }
-        public string? CessationRootMediumEffect { get; set; }
-        public string? CessationRootLargeEffect { get; set; }
-        public string? CessationRootHugeEffect { get; set; }
         public VFXShakeType ShakeType { get; set; }
         public double? ShakeDelay { get; set; }
         public double? ShakeDuration { get; set; }
@@ -66,6 +60,11 @@ namespace Eos.Models
         protected override string GetTypeName()
         {
             return "Visual Effect";
+        }
+        
+        protected override void SetDefaultValues()
+        {
+            Name = "VFX_NEW";
         }
 
         public override void ResolveReferences()
@@ -94,12 +93,6 @@ namespace Eos.Models
             this.DurationSound = json["DurationSound"]?.GetValue<string>();
             this.CessationProgFX = CreateRefFromJson<ProgrammedEffect>(json["CessationProgFX"]?.AsObject());
             this.CessationSound = json["CessationSound"]?.GetValue<string>();
-            this.CessationHeadEffect = json["CessationHeadEffect"]?.GetValue<string>();
-            this.CessationImpactEffect = json["CessationImpactEffect"]?.GetValue<string>();
-            this.CessationRootSmallEffect = json["CessationRootSmallEffect"]?.GetValue<string>();
-            this.CessationRootMediumEffect = json["CessationRootMediumEffect"]?.GetValue<string>();
-            this.CessationRootLargeEffect = json["CessationRootLargeEffect"]?.GetValue<string>();
-            this.CessationRootHugeEffect = json["CessationRootHugeEffect"]?.GetValue<string>();
             this.ShakeType = JsonToEnum<VFXShakeType>(json["ShakeType"]) ?? VFXShakeType.None;
             this.ShakeDelay = json["ShakeDelay"]?.GetValue<double>();
             this.ShakeDuration = json["ShakeDuration"]?.GetValue<double>();
@@ -126,12 +119,6 @@ namespace Eos.Models
             vfxJson.Add("DurationSound", this.DurationSound);
             vfxJson.Add("CessationProgFX", CreateJsonRef(this.CessationProgFX));
             vfxJson.Add("CessationSound", this.CessationSound);
-            vfxJson.Add("CessationHeadEffect", this.CessationHeadEffect);
-            vfxJson.Add("CessationImpactEffect", this.CessationImpactEffect);
-            vfxJson.Add("CessationRootSmallEffect", this.CessationRootSmallEffect);
-            vfxJson.Add("CessationRootMediumEffect", this.CessationRootMediumEffect);
-            vfxJson.Add("CessationRootLargeEffect", this.CessationRootLargeEffect);
-            vfxJson.Add("CessationRootHugeEffect", this.CessationRootHugeEffect);
             vfxJson.Add("ShakeType", EnumToJson(this.ShakeType));
             vfxJson.Add("ShakeDelay", this.ShakeDelay);
             vfxJson.Add("ShakeDuration", this.ShakeDuration);

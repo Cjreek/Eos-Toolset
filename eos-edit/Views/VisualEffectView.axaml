@@ -142,30 +142,12 @@
             <TextBox Text="{Binding Data.DurationSound}" Grid.Row="16" Grid.Column="3"/>
 
             <TextBlock Grid.Row="18" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Cessation" Margin="0,0,-100,10" FontWeight="Bold" FontSize="16"/>
-
-            <TextBlock Text="Head Effect" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="19" Grid.Column="0"/>
-            <uc:ModelResourceTextbox ResRef="{Binding Data.CessationHeadEffect}" Grid.Row="19" Grid.Column="1"/>
-
-            <TextBlock Text="Impact Effect" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="19" Grid.Column="2"/>
-            <uc:ModelResourceTextbox ResRef="{Binding Data.CessationImpactEffect}" Grid.Row="19" Grid.Column="3"/>
-
-            <TextBlock Text="Root (Small) Effect" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="20" Grid.Column="0"/>
-            <uc:ModelResourceTextbox ResRef="{Binding Data.CessationRootSmallEffect}" Grid.Row="20" Grid.Column="1"/>
-
-            <TextBlock Text="Root (Medium) Effect" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="20" Grid.Column="2"/>
-            <uc:ModelResourceTextbox ResRef="{Binding Data.CessationRootMediumEffect}" Grid.Row="20" Grid.Column="3"/>
-
-            <TextBlock Text="Root (Large) Effect" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="21" Grid.Column="0"/>
-            <uc:ModelResourceTextbox ResRef="{Binding Data.CessationRootLargeEffect}" Grid.Row="21" Grid.Column="1"/>
-
-            <TextBlock Text="Root (Huge) Effect" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="21" Grid.Column="2"/>
-            <uc:ModelResourceTextbox ResRef="{Binding Data.CessationRootHugeEffect}" Grid.Row="21" Grid.Column="3"/>
             
-            <TextBlock Text="Programmed Effect" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="22" Grid.Column="0"/>
-            <uc:ProgrammedEffectComboBox SelectedValue="{Binding Data.CessationProgFX}" Grid.Row="22" Grid.Column="1"/>
+            <TextBlock Text="Programmed Effect" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="19" Grid.Column="0"/>
+            <uc:ProgrammedEffectComboBox SelectedValue="{Binding Data.CessationProgFX}" Grid.Row="19" Grid.Column="1"/>
 
-            <TextBlock Text="Sound" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="22" Grid.Column="2"/>
-            <TextBox Text="{Binding Data.CessationSound}" Grid.Row="22" Grid.Column="3"/>
+            <TextBlock Text="Sound" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="19" Grid.Column="2"/>
+            <TextBox Text="{Binding Data.CessationSound}" Grid.Row="19" Grid.Column="3"/>
           </Grid>
         </Border>
       </ScrollViewer>

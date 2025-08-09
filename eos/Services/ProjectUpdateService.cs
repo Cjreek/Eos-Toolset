@@ -22,6 +22,7 @@ namespace Eos.Services
             new Update0640(),
             new Update0760(),
             new Update0761(),
+            new Update0770(),
         };
 
         public bool NeedsGameDataUpdate => _needsGameDataUpdate;
@@ -92,10 +93,11 @@ namespace Eos.Services
             var result = 0;
             for (int i = updateList.Count - 1; i >= 0; i--)
             {
-                if (EosConfig.BaseGameDataBuildDate < updateList[i].GameDataMinimumBuildDate)
+                if (EosConfig.BaseGameDataBuildDate >= updateList[i].GameDataMinimumBuildDate)
+                {
+                    result = updateList[i].Version;
                     break;
-
-                result = updateList[i].Version;
+                }
             }
 
             return result;
