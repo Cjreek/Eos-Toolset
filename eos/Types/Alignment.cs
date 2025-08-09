@@ -56,12 +56,30 @@ namespace Eos.Types
         static Alignments()
         {
             alignmentLookup.Clear();
-            for (int flag=0; flag <= 0x1F; flag++)
+            
+            // First pass: populate with non-inverted alignments
+            for (int flag = 0; flag <= 0x1F; flag++)
             {
-                for (int axis=0x00; axis <= 0x03; axis++)
+                for (int axis = 0x00; axis <= 0x03; axis++)
                 {
-                    alignmentLookup[Create(flag, axis, false)] = new AlignmentTuple(flag, axis, false);
-                    alignmentLookup[Create(flag, axis, true)] = new AlignmentTuple(flag, axis, true);
+                    var alignment = Create(flag, axis, false);
+                    if (!alignmentLookup.ContainsKey(alignment))
+                    {
+                        alignmentLookup[alignment] = new AlignmentTuple(flag, axis, false);
+                    }
+                }
+            }
+            
+            // Second pass: populate with inverted alignments only if not already present
+            for (int flag = 0; flag <= 0x1F; flag++)
+            {
+                for (int axis = 0x00; axis <= 0x03; axis++)
+                {
+                    var alignment = Create(flag, axis, true);
+                    if (!alignmentLookup.ContainsKey(alignment))
+                    {
+                        alignmentLookup[alignment] = new AlignmentTuple(flag, axis, true);
+                    }
                 }
             }
         }
@@ -80,40 +98,50 @@ namespace Eos.Types
 
         public static Alignment Create(int flags, int axis, bool invert)
         {
-            bool done;
+            bool isRestricted;
             int nAlignRestrict = flags;
             int nAlignRestrictType = axis;
 
             Alignment result = (Alignment)0;
             foreach (var alignment in Enum.GetValues<Alignment>())
             {
-                done = false;
+                isRestricted = false;
+                
+                // Check law-chaos axis restrictions
                 if ((nAlignRestrictType & AXIS_LC) != 0)
                 {
                     if ((Alignments.Lawful.HasFlag(alignment) && ((nAlignRestrict & ALIGN_LAWFUL) != 0)) ||
                         (Alignments.NeutralLC.HasFlag(alignment) && ((nAlignRestrict & ALIGN_NEUTRAL) != 0)) ||
                         (Alignments.Chaotic.HasFlag(alignment) && ((nAlignRestrict & ALIGN_CHAOTIC) != 0)))
                     {
-                        if (invert)
-                            result |= alignment;
-                        done = true;
+                        isRestricted = true;
                     }
                 }
 
-                if (((nAlignRestrictType & AXIS_GE) != 0) && (!done))
+                // Check good-evil axis restrictions
+                if ((nAlignRestrictType & AXIS_GE) != 0)
                 {
                     if ((Alignments.Good.HasFlag(alignment) && ((nAlignRestrict & ALIGN_GOOD) != 0)) ||
                         (Alignments.NeutralGE.HasFlag(alignment) && ((nAlignRestrict & ALIGN_NEUTRAL) != 0)) ||
                         (Alignments.Evil.HasFlag(alignment) && ((nAlignRestrict & ALIGN_EVIL) != 0)))
                     {
-                        if (invert)
-                            result |= alignment;
-                        done = true;
+                        isRestricted = true;
                     }
                 }
 
-                if (!done && !invert)
-                    result |= alignment;
+                // Add alignment to result based on restriction status and invert flag
+                if (invert)
+                {
+                    // When inverted, include only restricted alignments
+                    if (isRestricted)
+                        result |= alignment;
+                }
+                else
+                {
+                    // When not inverted, include only non-restricted alignments
+                    if (!isRestricted)
+                        result |= alignment;
+                }
             }
 
             return result;
