@@ -57,16 +57,12 @@ namespace Eos.ViewModels
 
         private void MoveUp(ItemPropertyTableItem item)
         {
-            var index = Data.Items.IndexOf(item);
-            if (index > 0)
-                Data.Items.Move(index, index - 1);
+            Data.MoveUp(item);
         }
 
         private void MoveDown(ItemPropertyTableItem item)
         {
-            var index = Data.Items.IndexOf(item);
-            if (index < Data.Items.Count - 1)
-                Data.Items.Move(index, index + 1);
+            Data.MoveDown(item);
         }
 
         public ReactiveCommand<ItemPropertyTableItem, Unit> DeleteItemPropertyTableItemCommand { get; private set; }

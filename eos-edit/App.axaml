@@ -55,10 +55,16 @@
       <DataTemplate DataType="{x:Type dialogVM:WeaponSoundSearchViewModel}">
         <dialogViews:ModelSearchView/>
       </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:VisualEffectSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
       <DataTemplate DataType="{x:Type dialogVM:DiseaseSearchViewModel}">
         <dialogViews:ModelSearchView/>
       </DataTemplate>
       <DataTemplate DataType="{x:Type dialogVM:PoisonSearchViewModel}">
+        <dialogViews:ModelSearchView/>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type dialogVM:PortraitSearchViewModel}">
         <dialogViews:ModelSearchView/>
       </DataTemplate>
       <DataTemplate DataType="{x:Type dialogVM:TrapSearchViewModel}">

@@ -87,12 +87,35 @@ namespace Eos.Models.Tables
                 item.ParentTable = this;
                 OnItemAdd(item);
                 _items.Add(item);
+                item.Index = _items.Count - 1;
             }
         }
 
         protected virtual void OnItemAdd(T item)
         {
 
+        }
+        
+        public void MoveUp(T item)
+        {
+            var index = Items.IndexOf(item);
+            if (index > 0)
+            {
+                Items.Move(index, index - 1);
+                item.Index = index - 1;
+                Items[index].Index = index;
+            }
+        }
+        
+        public void MoveDown(T item)
+        {
+            var index = Items.IndexOf(item);
+            if (index < Items.Count - 1)
+            {
+                Items.Move(index, index + 1);
+                item.Index = index + 1;
+                Items[index].Index = index;
+            }
         }
 
         public void Remove(T item)
@@ -104,6 +127,11 @@ namespace Eos.Models.Tables
         public bool Contains(T item)
         {
             return _items.Contains(item);
+        }
+
+        public int IndexOf(T item)
+        {
+            return _items.IndexOf(item);
         }
 
         public void Clear()

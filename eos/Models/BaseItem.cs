@@ -44,9 +44,6 @@ namespace Eos.Models
         public ItemModelType ModelType { get; set; } = ItemModelType.Simple;
         public string ItemModel { get; set; } = "";
         public bool GenderSpecific { get; set; }
-        public AlphaChannelUsageType? Part1Alpha { get; set; }
-        public AlphaChannelUsageType? Part2Alpha { get; set; }
-        public AlphaChannelUsageType? Part3Alpha { get; set; }
         public string DefaultModel { get; set; } = "";
         public bool IsContainer { get; set; } = false;
         public WeaponWieldType WeaponWieldType { get; set; }
@@ -237,9 +234,6 @@ namespace Eos.Models
             this.ModelType = JsonToEnum<ItemModelType>(json["ModelType"]) ?? ItemModelType.Simple;
             this.ItemModel = json["ItemModel"]?.GetValue<string>() ?? "";
             this.GenderSpecific = json["GenderSpecific"]?.GetValue<bool>() ?? false;
-            this.Part1Alpha = JsonToEnum<AlphaChannelUsageType>(json["Part1Alpha"]);
-            this.Part2Alpha = JsonToEnum<AlphaChannelUsageType>(json["Part2Alpha"]);
-            this.Part3Alpha = JsonToEnum<AlphaChannelUsageType>(json["Part3Alpha"]);
             this.DefaultModel = json["DefaultModel"]?.GetValue<string>() ?? "";
             this.IsContainer = json["IsContainer"]?.GetValue<bool>() ?? false;
             this.WeaponWieldType = JsonToEnum<WeaponWieldType>(json["WeaponWieldType"]) ?? WeaponWieldType.Standard;
@@ -308,9 +302,6 @@ namespace Eos.Models
             baseItemJson.Add("ModelType", EnumToJson(this.ModelType));
             baseItemJson.Add("ItemModel", this.ItemModel);
             baseItemJson.Add("GenderSpecific", this.GenderSpecific);
-            baseItemJson.Add("Part1Alpha", EnumToJson(this.Part1Alpha));
-            baseItemJson.Add("Part2Alpha", EnumToJson(this.Part2Alpha));
-            baseItemJson.Add("Part3Alpha", EnumToJson(this.Part3Alpha));
             baseItemJson.Add("DefaultModel", this.DefaultModel);
             baseItemJson.Add("IsContainer", this.IsContainer);
             baseItemJson.Add("WeaponWieldType", EnumToJson(this.WeaponWieldType));

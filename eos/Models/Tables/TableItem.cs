@@ -12,13 +12,33 @@ namespace Eos.Models.Tables
 {
     public class TableItem : INotifyPropertyChanged
     {
+        private int _index;
+        
         public BaseModel? ParentTable { get; set; }
         public string SourceLabel { get; set; } = "";
+
+        public int Index
+        {
+            get
+            {
+                return _index;
+            }
+
+            set
+            {
+                if (_index != value)
+                {
+                    _index = value;
+                    NotifyPropertyChanged();
+                }
+            }
+        }
+        
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public TableItem()
         {
-
+            
         }
 
         public TableItem(BaseModel? parentTable)

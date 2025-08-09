@@ -70,16 +70,12 @@ namespace Eos.ViewModels
 
         private void MoveUp(CustomObjectProperty item)
         {
-            var index = Data.Items.IndexOf(item);
-            if (index > 0)
-                Data.Items.Move(index, index - 1);
+            Data.MoveUp(item);
         }
 
         private void MoveDown(CustomObjectProperty item)
         {
-            var index = Data.Items.IndexOf(item);
-            if (index < Data.Items.Count - 1)
-                Data.Items.Move(index, index + 1);
+            Data.MoveDown(item);
         }
 
         public ReactiveCommand<CustomObjectProperty, Unit> DeleteObjectPropertyCommand { get; private set; }

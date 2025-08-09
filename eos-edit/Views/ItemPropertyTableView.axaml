@@ -138,10 +138,18 @@
             <RowDefinition Height="auto"/>
           </Grid.RowDefinitions>
 
-          <TextBlock Text="{Binding Data.Name}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+          <TextBlock Text="{Binding Data.Name}" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
 
-          <DataGrid x:Name="grItems" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Data.Items}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" Margin="2,0,0,0">
+          <DataGrid x:Name="grItems" Grid.Row="1" ItemsSource="{Binding Data.Items}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" Margin="2,0,0,0">
               <DataGrid.Columns>
+                <DataGridTemplateColumn Header="ID" Width="45">
+                  <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding Index}" Margin="4,4,0,0"/>
+                    </DataTemplate>
+                  </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
                 <DataGridTemplateColumn Header="Name" Width="200">
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>

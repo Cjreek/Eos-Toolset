@@ -1075,6 +1075,52 @@ namespace Eos.Services
             }
         }
 
+        private void EnrichCutBaseItem(BaseItem tmpBaseItem, int index)
+        {
+            switch (index)
+            {
+                case 23: // Small Box
+                    tmpBaseItem.Name[TLKLanguage.English].Text = "Small Box";
+                    tmpBaseItem.Name[TLKLanguage.English].TextF = tmpBaseItem.Name[TLKLanguage.English].Text;
+                    tmpBaseItem.Hint = "Cut";
+                    tmpBaseItem.Icon = "iit_sbox_001";
+                    break;
+                
+                case 30: // Repeater Crossbow
+                    tmpBaseItem.Name[TLKLanguage.English].Text = "Repeater Crossbow";
+                    tmpBaseItem.Name[TLKLanguage.English].TextF = tmpBaseItem.Name[TLKLanguage.English].Text;
+                    tmpBaseItem.Hint = "Cut";
+                    tmpBaseItem.Icon = "iwbwxr";
+                    break;
+                
+                case 48: // Nunchaku
+                    tmpBaseItem.Name[TLKLanguage.English].Text = "Nunchaku";
+                    tmpBaseItem.Name[TLKLanguage.English].TextF = tmpBaseItem.Name[TLKLanguage.English].Text;
+                    tmpBaseItem.Hint = "Cut";
+                    break;
+                
+                case 54: // Divine Spell Scroll
+                    tmpBaseItem.Name[TLKLanguage.English].Text = "Divine Spell Scroll";
+                    tmpBaseItem.Name[TLKLanguage.English].TextF = tmpBaseItem.Name[TLKLanguage.English].Text;
+                    tmpBaseItem.Icon = "iit_spscroll_000";
+                    tmpBaseItem.Hint = "Cut";
+                    break;
+                
+                case 67: // Bag
+                    tmpBaseItem.Name[TLKLanguage.English].Text = "Bag";
+                    tmpBaseItem.Name[TLKLanguage.English].TextF = tmpBaseItem.Name[TLKLanguage.English].Text;
+                    tmpBaseItem.Icon = "iit_bag_001";
+                    tmpBaseItem.Hint = "Cut";
+                    break;
+            }
+        }
+        
+        private bool IsCutBaseItem(int index)
+        {
+            int[] cutItemIndices = [23, 30, 48, 54, 67];
+            return cutItemIndices.Contains(index);
+        }
+
         private void ImportBaseItems()
         {
             var baseitems2da = Load2da("baseitems");
@@ -1082,12 +1128,17 @@ namespace Eos.Services
             Standard.BaseItems.Clear();
             for (int i = 0; i < baseitems2da.Count; i++)
             {
+                var isCut = false;
                 var tmpBaseItem = new BaseItem();
                 tmpBaseItem.ID = GenerateGuid("baseitems", i);
                 tmpBaseItem.Index = i;
                 tmpBaseItem.SourceLabel = baseitems2da[i].AsString("label");
 
-                if (!SetText(tmpBaseItem.Name, baseitems2da[i].AsInteger("Name"))) continue;
+                if (!SetText(tmpBaseItem.Name, baseitems2da[i].AsInteger("Name")))
+                {
+                    isCut = IsCutBaseItem(i);
+                    if (!isCut) continue;
+                }
                 SetText(tmpBaseItem.Description, baseitems2da[i].AsInteger("Description"));
                 SetText(tmpBaseItem.StatsText, baseitems2da[i].AsInteger("BaseItemStatRef"));
                 tmpBaseItem.Icon = AddIconResource(baseitems2da[i].AsString("DefaultIcon"));
@@ -1098,9 +1149,6 @@ namespace Eos.Services
                 tmpBaseItem.ModelType = (ItemModelType)Enum.ToObject(typeof(ItemModelType), baseitems2da[i].AsInteger("ModelType") ?? 0);
                 tmpBaseItem.ItemModel = baseitems2da[i].AsString("ItemClass") ?? "";
                 tmpBaseItem.GenderSpecific = baseitems2da[i].AsBoolean("GenderSpecific");
-                tmpBaseItem.Part1Alpha = baseitems2da[i].IsNull("Part1EnvMap") ? null : (AlphaChannelUsageType)Enum.ToObject(typeof(AlphaChannelUsageType), baseitems2da[i].AsInteger("Part1EnvMap") ?? 0);
-                tmpBaseItem.Part2Alpha = baseitems2da[i].IsNull("Part2EnvMap") ? null : (AlphaChannelUsageType)Enum.ToObject(typeof(AlphaChannelUsageType), baseitems2da[i].AsInteger("Part2EnvMap") ?? 0);
-                tmpBaseItem.Part3Alpha = baseitems2da[i].IsNull("Part3EnvMap") ? null : (AlphaChannelUsageType)Enum.ToObject(typeof(AlphaChannelUsageType), baseitems2da[i].AsInteger("Part3EnvMap") ?? 0);
                 tmpBaseItem.DefaultModel = baseitems2da[i].AsString("DefaultModel") ?? "";
                 tmpBaseItem.IsContainer = baseitems2da[i].AsBoolean("Container");
                 tmpBaseItem.WeaponWieldType = (WeaponWieldType)Enum.ToObject(typeof(WeaponWieldType), baseitems2da[i].AsInteger("WeaponWield") ?? 0);
@@ -1154,6 +1202,8 @@ namespace Eos.Services
                 tmpBaseItem.IsMonkWeapon = baseitems2da[i].AsBoolean("IsMonkWeapon");
                 tmpBaseItem.WeaponFinesseMinimumCreatureSize = baseitems2da[i].IsNull("WeaponFinesseMinimumCreatureSize") ? null : (SizeCategory)Enum.ToObject(typeof(SizeCategory), baseitems2da[i].AsInteger("WeaponFinesseMinimumCreatureSize") ?? 0);
 
+                if (isCut) EnrichCutBaseItem(tmpBaseItem, i);
+                
                 Standard.BaseItems.Add(tmpBaseItem);
             }
         }
@@ -2610,12 +2660,6 @@ namespace Eos.Services
                 tmpVfx.DurationSound = vfx2da[i].AsString("SoundDuration");
                 tmpVfx.CessationProgFX = CreateRef<ProgrammedEffect>(vfx2da[i].AsInteger("ProgFX_Cessation"));
                 tmpVfx.CessationSound = vfx2da[i].AsString("SoundCessastion");
-                tmpVfx.CessationHeadEffect = vfx2da[i].AsString("Ces_HeadCon_Node");
-                tmpVfx.CessationImpactEffect = vfx2da[i].AsString("Ces_Impact_Node");
-                tmpVfx.CessationRootSmallEffect = vfx2da[i].AsString("Ces_Root_S_Node");
-                tmpVfx.CessationRootMediumEffect = vfx2da[i].AsString("Ces_Root_M_Node");
-                tmpVfx.CessationRootLargeEffect = vfx2da[i].AsString("Ces_Root_L_Node");
-                tmpVfx.CessationRootHugeEffect = vfx2da[i].AsString("Ces_Root_H_Node");
                 tmpVfx.ShakeType = (VFXShakeType)Enum.ToObject(typeof(VFXShakeType), vfx2da[i].AsInteger("ShakeType") ?? (int)VFXShakeType.None);
                 tmpVfx.ShakeDelay = vfx2da[i].AsFloat("ShakeDelay");
                 tmpVfx.ShakeDuration = vfx2da[i].AsFloat("ShakeDuration");

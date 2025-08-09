@@ -46,9 +46,12 @@ namespace Eos.ViewModels.Dialogs
         {
             if ((model == null) || (MasterRepository.Project.HasOverride(model))) return false;
 
+            int searchNumber = -1;
+            int.TryParse(searchText, out searchNumber);
+            
             var tlk = model.TlkDisplayName;
-            if (tlk != null) return tlk[MasterRepository.Project.DefaultLanguage].Text.ToLower().Contains(searchText);
-            return model.GetLabel().ToLower().Contains(searchText);
+            if (tlk != null) return tlk[MasterRepository.Project.DefaultLanguage].Text.ToLower().Contains(searchText) || (model.CalculatedIndex == searchNumber);
+            return model.GetLabel().ToLower().Contains(searchText) || (model.CalculatedIndex == searchNumber);
         }
 
         protected IEnumerable<BaseModel?> Search(String searchText)
