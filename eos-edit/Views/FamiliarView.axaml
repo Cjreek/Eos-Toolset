@@ -67,7 +67,7 @@
 
             <!--Description-->
             <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,3,5,0" Grid.Row="3" Grid.Column="0"/>
-            <uc:TLKTextbox Grid.Row="3" Grid.Column="1" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
+            <uc:TLKTextbox Grid.Row="3" Grid.Column="1" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" AcceptsReturn="True" Height="240" IsReadonly="{Binding Data.IsReadonly}"/>
 
             <TextBlock Text="Template" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
             <TextBox Text="{Binding Data.Template}" Grid.Row="4" Grid.Column="1"/>

@@ -59,7 +59,7 @@
 
             <Grid Grid.Row="1" Grid.Column="0">
               <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="110"/>
                 <ColumnDefinition Width="*" MinWidth="300"/>
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
@@ -90,7 +90,7 @@
 
               <!--Description-->
               <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,3,5,0" Grid.Row="5" Grid.Column="0"/>
-              <uc:TLKTextbox Grid.Row="5" Grid.Column="1" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
+              <uc:TLKTextbox Grid.Row="5" Grid.Column="1" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" AcceptsReturn="True" Height="220" IsReadonly="{Binding Data.IsReadonly}"/>
             </Grid>
 
             <!--Icon-->

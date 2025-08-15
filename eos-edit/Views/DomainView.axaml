@@ -79,7 +79,7 @@
               <!--Description-->
               <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,3,5,0" Grid.Row="3" Grid.Column="0"/>
               <!--<uc:ResetIsEnabled Grid.Row="3" Grid.Column="1">-->
-              <uc:TLKTextbox Grid.Row="3" Grid.Column="1" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
+              <uc:TLKTextbox Grid.Row="3" Grid.Column="1" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" AcceptsReturn="True" Height="200" IsReadonly="{Binding Data.IsReadonly}"/>
               <!--</uc:ResetIsEnabled>-->
 
               <!--Granted Feat-->
@@ -87,7 +87,7 @@
               <uc:FeatComboBox SelectedValue="{Binding Data.GrantedFeat}" IsNullable="False" Grid.Row="4" Grid.Column="1"/>
 
               <!--Granted Feat is active-->
-              <TextBlock Text="Granted Feat is castable" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
+              <TextBlock Text="Feat is castable" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="5" Grid.Column="0"/>
               <CheckBox IsChecked="{Binding Data.FeatIsActive}" Grid.Row="5" Grid.Column="1"/>
 
               <TextBlock Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Text="Granted Spells" Margin="0,0,-100,10" FontWeight="Bold" FontSize="16"/>
