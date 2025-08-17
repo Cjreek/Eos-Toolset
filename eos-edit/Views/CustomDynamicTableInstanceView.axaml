@@ -3,10 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="using:Eos.Views"
-             xmlns:vm="using:Eos.ViewModels"
              xmlns:uc="using:Eos.Usercontrols"
-             xmlns:tables="using:Eos.Models.Tables"
-             xmlns:config="using:Eos.Config"
+             xmlns:models="using:Eos.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Eos.Views.CustomDynamicTableInstanceView"
              x:Name="page">
@@ -144,7 +142,7 @@
                 <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn01.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn01.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                      <ContentPresenter x:DataType="tables:CustomDynamicTableInstanceItem" Content="{CompiledBinding CustomColumnValue01}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                      <ContentPresenter DataContext="{Binding CustomColumnValue01}" x:DataType="models:CustomValueInstance" Content="{CompiledBinding}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -152,71 +150,71 @@
                 <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn02.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn02.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                      <ContentPresenter x:DataType="tables:CustomDynamicTableInstanceItem" Content="{CompiledBinding CustomColumnValue02}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                      <ContentPresenter DataContext="{Binding CustomColumnValue02}" x:DataType="models:CustomValueInstance" Content="{CompiledBinding}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
+                
                 <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn03.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn03.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                      <ContentPresenter x:DataType="tables:CustomDynamicTableInstanceItem" Content="{CompiledBinding CustomColumnValue03}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                      <ContentPresenter DataContext="{Binding CustomColumnValue03}" x:DataType="models:CustomValueInstance" Content="{CompiledBinding}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
+                
                 <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn04.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn04.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                      <ContentPresenter x:DataType="tables:CustomDynamicTableInstanceItem" Content="{CompiledBinding CustomColumnValue04}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                      <ContentPresenter DataContext="{Binding CustomColumnValue04}" x:DataType="models:CustomValueInstance" Content="{CompiledBinding}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
+                
                 <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn05.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn05.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                      <ContentPresenter x:DataType="tables:CustomDynamicTableInstanceItem" Content="{CompiledBinding CustomColumnValue05}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                      <ContentPresenter DataContext="{Binding CustomColumnValue05}" x:DataType="models:CustomValueInstance" Content="{CompiledBinding}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
+                
                 <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn06.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn06.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                      <ContentPresenter x:DataType="tables:CustomDynamicTableInstanceItem" Content="{CompiledBinding CustomColumnValue06}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                      <ContentPresenter DataContext="{Binding CustomColumnValue06}" x:DataType="models:CustomValueInstance" Content="{CompiledBinding}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
+                
                 <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn07.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn07.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                      <ContentPresenter x:DataType="tables:CustomDynamicTableInstanceItem" Content="{CompiledBinding CustomColumnValue07}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                      <ContentPresenter DataContext="{Binding CustomColumnValue07}" x:DataType="models:CustomValueInstance" Content="{CompiledBinding}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
+                
                 <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn08.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn08.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                      <ContentPresenter x:DataType="tables:CustomDynamicTableInstanceItem" Content="{CompiledBinding CustomColumnValue08}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                      <ContentPresenter DataContext="{Binding CustomColumnValue08}" x:DataType="models:CustomValueInstance" Content="{CompiledBinding}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
+                
                 <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn09.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn09.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                      <ContentPresenter x:DataType="tables:CustomDynamicTableInstanceItem" Content="{CompiledBinding CustomColumnValue09}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                      <ContentPresenter DataContext="{Binding CustomColumnValue09}" x:DataType="models:CustomValueInstance" Content="{CompiledBinding}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
+                
                 <DataGridTemplateColumn Header="{Binding ElementName=page, Path=DataContext.Data.CustomColumn10.Label}" Width="150" IsVisible="{Binding ElementName=page, Path=DataContext.Data.CustomColumn10.Column, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
                   <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                      <ContentPresenter x:DataType="tables:CustomDynamicTableInstanceItem" Content="{CompiledBinding CustomColumnValue10}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
+                      <ContentPresenter DataContext="{Binding CustomColumnValue10}" x:DataType="models:CustomValueInstance" Content="{CompiledBinding}" ContentTemplate="{StaticResource templateSelector}" Height="25" IsEnabled="{Binding ElementName=page, Path=!DataContext.Data.IsReadonly}"/>
                     </DataTemplate>
                   </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
