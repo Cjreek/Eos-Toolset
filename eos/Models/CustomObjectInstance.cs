@@ -179,6 +179,8 @@ namespace Eos.Models
                 {
                     if ((varModel is CustomObjectInstance coInstance) && (varValue.DataType?.CustomType is CustomObject template))
                         varValue.Value = MasterRepository.Project.CustomObjectRepositories[template].GetByID(coInstance.ID);
+                    else if ((varModel is CustomTableInstance ctInstance) && (varValue.DataType?.CustomType is CustomTable tableTemplate))
+                        varValue.Value = MasterRepository.Project.CustomTableRepositories[tableTemplate].GetByID(ctInstance.ID);
                     else
                         varValue.Value = ResolveByType(varModel.GetType(), varModel.ID);
                 }
@@ -186,6 +188,8 @@ namespace Eos.Models
                 {
                     if ((model is CustomObjectInstance coInstance) && (prop.DataType?.CustomType is CustomObject template))
                         valueDict[prop].Value = MasterRepository.Project.CustomObjectRepositories[template].GetByID(coInstance.ID);
+                    else if ((model is CustomTableInstance ctInstance) && (prop.DataType?.CustomType is CustomTable tableTemplate))
+                        valueDict[prop].Value = MasterRepository.Project.CustomTableRepositories[tableTemplate].GetByID(ctInstance.ID);
                     else
                         valueDict[prop].Value = ResolveByType(model.GetType(), model.ID);
                 }

@@ -848,7 +848,7 @@ namespace Eos.Services
                     tmpFeat.MaxLevel = feat2da[i].AsInteger("MaxLevel");
                     tmpFeat.MinFortitudeSave = feat2da[i].AsInteger("MinFortSave");
                     tmpFeat.RequiresEpic = feat2da[i].AsBoolean("PreReqEpic");
-                    tmpFeat.UseActionQueue = feat2da[i].AsBoolean("ReqAction");
+                    tmpFeat.UseActionQueue = feat2da[i].IsNull("ReqAction") || feat2da[i].AsBoolean("ReqAction");
 
                     _importCollection.Feats.Add(tmpFeat);
                 }
