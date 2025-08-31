@@ -60,8 +60,21 @@ namespace Eos.Types
             {
                 for (int axis=0x00; axis <= 0x03; axis++)
                 {
-                    alignmentLookup[Create(flag, axis, false)] = new AlignmentTuple(flag, axis, false);
-                    alignmentLookup[Create(flag, axis, true)] = new AlignmentTuple(flag, axis, true);
+                    Alignment alignNormal = Create(flag, axis, false);
+                    Alignment alignInverted = Create(flag, axis, true);
+                    
+                    // Add if alignment doesn't exist or overwrite if existing alignment tuple is inverted (Prioritize non-inverted)
+                    if (alignmentLookup.TryGetValue(alignNormal, out AlignmentTuple existingAlign))
+                    {
+                        if (existingAlign.Inverted) 
+                            alignmentLookup[alignNormal] = new AlignmentTuple(flag, axis, false);
+                    }
+                    else
+                        alignmentLookup[alignNormal] = new AlignmentTuple(flag, axis, false);
+                    
+                    // Only add inverted alignment if combination doesn't exist yet
+                    if (!alignmentLookup.ContainsKey(alignInverted))
+                        alignmentLookup[alignInverted] = new AlignmentTuple(flag, axis, true);
                 }
             }
         }

@@ -3396,22 +3396,22 @@ namespace Eos.Services
         private int GetSubFeatId(Spell subSpell)
         {
             if (subSpell.ParentSpell == null) return -1;
-
-            if (subSpell.ParentSpell.SubSpell1 == subSpell)
+            
+            if ((subSpell.ParentSpell.SubSpell1 == subSpell) || (MasterRepository.Project.GetOverride(subSpell.ParentSpell.SubSpell1) == subSpell))
                 return 1;
-            if (subSpell.ParentSpell.SubSpell2 == subSpell)
+            if ((subSpell.ParentSpell.SubSpell2 == subSpell) || (MasterRepository.Project.GetOverride(subSpell.ParentSpell.SubSpell2) == subSpell))
                 return 2;
-            if (subSpell.ParentSpell.SubSpell3 == subSpell)
+            if ((subSpell.ParentSpell.SubSpell3 == subSpell) || (MasterRepository.Project.GetOverride(subSpell.ParentSpell.SubSpell3) == subSpell))
                 return 3;
-            if (subSpell.ParentSpell.SubSpell4 == subSpell)
+            if ((subSpell.ParentSpell.SubSpell4 == subSpell) || (MasterRepository.Project.GetOverride(subSpell.ParentSpell.SubSpell4) == subSpell))
                 return 4;
-            if (subSpell.ParentSpell.SubSpell5 == subSpell)
+            if ((subSpell.ParentSpell.SubSpell5 == subSpell) || (MasterRepository.Project.GetOverride(subSpell.ParentSpell.SubSpell5) == subSpell))
                 return 5;
-            if (subSpell.ParentSpell.SubSpell6 == subSpell)
+            if ((subSpell.ParentSpell.SubSpell6 == subSpell) || (MasterRepository.Project.GetOverride(subSpell.ParentSpell.SubSpell6) == subSpell))
                 return 6;
-            if (subSpell.ParentSpell.SubSpell7 == subSpell)
+            if ((subSpell.ParentSpell.SubSpell7 == subSpell) || (MasterRepository.Project.GetOverride(subSpell.ParentSpell.SubSpell7) == subSpell))
                 return 7;
-            if (subSpell.ParentSpell.SubSpell8 == subSpell)
+            if ((subSpell.ParentSpell.SubSpell8 == subSpell) || (MasterRepository.Project.GetOverride(subSpell.ParentSpell.SubSpell8) == subSpell))
                 return 8;
 
             return -1;
@@ -3421,7 +3421,7 @@ namespace Eos.Services
         {
             foreach (var feat in MasterRepository.Feats)
             {
-                if ((feat != null) && (feat.OnUseEffect == spell))
+                if ((feat != null) && ((feat.OnUseEffect == spell) || (MasterRepository.Project.GetOverride(feat.OnUseEffect) == spell)))
                     return feat;
             }
 

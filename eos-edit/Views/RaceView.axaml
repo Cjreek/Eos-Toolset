@@ -62,7 +62,7 @@
 
             <Grid Grid.Row="1" Grid.Column="0">
               <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="130"/>
                 <ColumnDefinition Width="*" MinWidth="300"/>
               </Grid.ColumnDefinitions>
               <Grid.RowDefinitions>
@@ -101,7 +101,7 @@
               <!--Description-->
               <TextBlock Text="Description" HorizontalAlignment="Right" Margin="0,3,5,0" Grid.Row="5" Grid.Column="0"/>
               <!--<uc:ResetIsEnabled >-->
-              <uc:TLKTextbox Grid.Row="5" Grid.Column="1" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
+              <uc:TLKTextbox Grid.Row="5" Grid.Column="1" TLKStrings="{Binding Data.Description}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" AcceptsReturn="True" Height="180" IsReadonly="{Binding Data.IsReadonly}"/>
               <!--</uc:ResetIsEnabled>-->
 
               <TextBlock Text="Appearance" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="6" Grid.Column="0"/>
@@ -123,7 +123,7 @@
               <!--Biography-->
               <TextBlock Text="Biography" HorizontalAlignment="Right" Margin="0,3,5,0" Grid.Row="12" Grid.Column="0"/>
               <!--<uc:ResetIsEnabled >-->
-              <uc:TLKTextbox Grid.Row="12" Grid.Column="1" TLKStrings="{Binding Data.Biography}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" AcceptsReturn="True" Height="120" IsReadonly="{Binding Data.IsReadonly}"/>
+              <uc:TLKTextbox Grid.Row="12" Grid.Column="1" TLKStrings="{Binding Data.Biography}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}" AcceptsReturn="True" Height="70" IsReadonly="{Binding Data.IsReadonly}"/>
               <!--</uc:ResetIsEnabled>-->
             </Grid>
 

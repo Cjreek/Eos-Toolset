@@ -2032,7 +2032,7 @@ namespace Eos.Services
                 tmpFeat.MaxLevel = feat2da[i].AsInteger("MaxLevel");
                 tmpFeat.MinFortitudeSave = feat2da[i].AsInteger("MinFortSave");
                 tmpFeat.RequiresEpic = feat2da[i].AsBoolean("PreReqEpic");
-                tmpFeat.UseActionQueue = feat2da[i].AsBoolean("ReqAction");
+                tmpFeat.UseActionQueue = feat2da[i].IsNull("ReqAction") || feat2da[i].AsBoolean("ReqAction");
 
                 Standard.Feats.Add(tmpFeat);
             }
@@ -2526,7 +2526,7 @@ namespace Eos.Services
                 tmpAppearance.HasLegs = appearance2da[i].AsBoolean("HASLEGS");
                 tmpAppearance.HasArms = appearance2da[i].AsBoolean("HASARMS");
                 tmpAppearance.Portrait = appearance2da[i].AsString("PORTRAIT");
-                tmpAppearance.SizeCategory = !appearance2da[i].IsNull("SIZECATEGORY") ? (SizeCategory)Enum.ToObject(typeof(SoundsetType), appearance2da[i].AsInteger("SIZECATEGORY") ?? 0) : SizeCategory.Medium;
+                tmpAppearance.SizeCategory = !appearance2da[i].IsNull("SIZECATEGORY") ? (SizeCategory)Enum.ToObject(typeof(SizeCategory), appearance2da[i].AsInteger("SIZECATEGORY") ?? 0) : SizeCategory.Medium;
                 tmpAppearance.PerceptionRange = !appearance2da[i].IsNull("PERCEPTIONDIST") ? (PerceptionDistance)Enum.ToObject(typeof(PerceptionDistance), appearance2da[i].AsInteger("PERCEPTIONDIST") ?? 0) : PerceptionDistance.Medium;
                 tmpAppearance.FootstepSound = !appearance2da[i].IsNull("FOOTSTEPTYPE") ? (FootstepSound)Enum.ToObject(typeof(FootstepSound), appearance2da[i].AsInteger("FOOTSTEPTYPE") ?? 0) : FootstepSound.Normal;
                 tmpAppearance.AppearanceSoundset = CreateRef<AppearanceSoundset>(appearance2da[i].AsInteger("SOUNDAPPTYPE"));
