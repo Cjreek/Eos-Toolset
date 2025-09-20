@@ -28,7 +28,8 @@ namespace Eos.ViewModels.Base
 
         OpenGlobalSearch,
         OpenProjectSettings,
-        OpenDataImport
+        OpenDataImport,
+        OpenTlkEditor
     }
 
     public delegate void MessageHandler(MessageType type, object? message, object? param);

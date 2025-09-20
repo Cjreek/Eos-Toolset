@@ -159,6 +159,11 @@ namespace Eos.ViewModels.Base
         {
             MessageDispatcher.Send(MessageType.OpenGlobalSearch, null);
         });
+        
+        public ReactiveCommand<Unit, Unit> GlobalEditTlkCommand { get; private set; } = ReactiveCommand.Create(() =>
+        {
+            MessageDispatcher.Send(MessageType.OpenTlkEditor, null);
+        });
 
         public ReactiveCommand<Unit, Unit> OpenDataImportCommand { get; private set; } = ReactiveCommand.Create(() =>
         {

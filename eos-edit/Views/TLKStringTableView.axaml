@@ -1,0 +1,92 @@
+<local:LanguageAwarePage xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="using:Eos.Views"
+             xmlns:vm="using:Eos.ViewModels"
+             xmlns:repo="using:Eos.Repositories"
+             xmlns:uc="using:Eos.Usercontrols"
+             xmlns:types="using:Eos.Types"
+             xmlns:config="using:Eos.Config"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Eos.Views.TLKStringTableView"
+             x:Name="page">
+  <Design.DataContext>
+    <vm:TlkStringTableViewModel/>
+  </Design.DataContext>
+
+  <local:LanguageAwarePage.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Assets/ConverterResources.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </local:LanguageAwarePage.Resources>
+
+  <local:LanguageAwarePage.Styles>
+    <Styles>
+      <StyleInclude Source="/Assets/StyleResources.axaml"/>
+    </Styles>
+  </local:LanguageAwarePage.Styles>
+
+  <Border BorderThickness="0,1,0,0" BorderBrush="Silver">
+    <Grid Margin="10" IsEnabled="{Binding !Data.IsReadonly}">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="auto"/>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <TextBlock HorizontalAlignment="Center" Text="Custom TLK Strings" Grid.Row="0" Grid.Column="0" FontSize="22" Margin="0,0,0,10" FontWeight="Bold"/>
+
+      <DataGrid Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Data.Items}" FontSize="14" CanUserSortColumns="False" IsReadOnly="True" VerticalAlignment="Stretch" Margin="2,0,0,0">
+        <DataGrid.Columns>
+          <DataGridTemplateColumn Header="Text" Width="400">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <uc:TLKTextbox TLKStrings="{Binding Text}" TLKLanguage="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentLanguage}" Gender="{Binding Source={x:Static config:EosConfig.RuntimeConfig}, Path=CurrentGender}"/>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+
+          <DataGridTemplateColumn Header="Constant" Width="300">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <TextBox Text="{Binding Constant}" VerticalContentAlignment="Center" Height="22" Margin="2,0,0,3"/>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          
+          <DataGridTemplateColumn Header="" Width="40">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <Grid Margin="2,0,0,3">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+
+                  <Button Grid.Column="0" Content="🡅" FontSize="14" Height="24" Margin="0,0,0,0" Command="{Binding ElementName=page, Path=DataContext.MoveTlkStringUpCommand}" CommandParameter="{Binding}"/>
+                  <Button Grid.Column="1" Content="🡇" FontSize="14" Height="24" Margin="1,0,0,0" Command="{Binding ElementName=page, Path=DataContext.MoveTlkStringDownCommand}" CommandParameter="{Binding}"/>
+                </Grid>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+
+          <DataGridTemplateColumn Header="" Width="30">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <uc:DeleteButton Command="{Binding ElementName=page, Path=DataContext.DeleteTlkStringCommand}" CommandParameter="{Binding}" Margin="2,0,0,3"/>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+        </DataGrid.Columns>
+      </DataGrid>
+
+      <Button Grid.Row="2" Grid.Column="0" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}" Content="Add String" Width="150" Margin="2,5,0,0" HorizontalAlignment="Left" Command="{Binding AddTlkStringCommand}"/>
+    </Grid>
+  </Border>
+</local:LanguageAwarePage>

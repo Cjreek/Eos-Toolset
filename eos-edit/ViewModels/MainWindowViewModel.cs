@@ -360,6 +360,10 @@ namespace Eos.ViewModels
                     case MessageType.DoGameDataImport:
                         DoGameDataImport((bool?)message ?? true);
                         break;
+                    
+                    case MessageType.OpenTlkEditor:
+                        OpenDetail(MasterRepository.Project.CustomTlkStrings, false, true);
+                        break;
                 }
             }
         }
@@ -389,6 +393,7 @@ namespace Eos.ViewModels
             MessageDispatcher.Subscribe(MessageType.ChangeLanguage, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.DoGameDataImport, MessageHandler);
             MessageDispatcher.Subscribe(MessageType.OpenGlobalSearch, MessageHandler);
+            MessageDispatcher.Subscribe(MessageType.OpenTlkEditor, MessageHandler);
         }
 
         ~MainWindowViewModel()
@@ -416,6 +421,7 @@ namespace Eos.ViewModels
             MessageDispatcher.Unsubscribe(MessageType.ChangeLanguage, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.DoGameDataImport, MessageHandler);
             MessageDispatcher.Unsubscribe(MessageType.OpenGlobalSearch, MessageHandler);
+            MessageDispatcher.Unsubscribe(MessageType.OpenTlkEditor, MessageHandler);
         }
     }
 }

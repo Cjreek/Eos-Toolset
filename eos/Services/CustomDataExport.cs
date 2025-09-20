@@ -154,6 +154,13 @@ namespace Eos.Services
         {
             customTLKIndices.Clear();
 
+            // Custom TLK Strings
+            for (var i=0; i < project.CustomTlkStrings.Count; i++)
+            {
+                if (project.CustomTlkStrings[i] == null) continue;
+                AddTLKString(project.CustomTlkStrings[i].Text);
+            }
+            
             // Races
             foreach (var race in project.Races)
             {
@@ -443,6 +450,32 @@ namespace Eos.Services
                             if (val.Value is TLKStringSet tlk)
                                 AddTLKString(tlk);
                         }
+                    }
+                }
+            }
+            
+            // Custom Tables
+            foreach (var ct in project.CustomTables)
+            {
+                if (ct != null)
+                {
+                    var repo = project.CustomTableRepositories[ct];
+                    foreach (var table in repo)
+                    {
+                        if (table == null) continue;
+
+                        for (int i = 0; i < table.Count; i++)
+                        {
+                            var row = table[i];
+                            if (row == null) continue;
+                            
+                            foreach (var val in row.Values)
+                            {
+                                if (val.Value is TLKStringSet tlk)
+                                    AddTLKString(tlk);
+                            }
+                        }
+                        
                     }
                 }
             }
@@ -1528,7 +1561,7 @@ namespace Eos.Services
                         record.Set("Constant", GetScriptConstant("FEAT_", feat));
                         record.Set("TOOLSCATEGORIES", (int)feat.ToolsetCategory);
                         record.Set("HostileFeat", feat.OnUseEffect != null ? feat.IsHostile : null);
-                        record.Set("MinLevel", feat.MinLevel > 1 ? feat.MinLevel : null);
+                        record.Set("MinLevel", feat.MinLevel > 0 ? feat.MinLevel : null);
                         record.Set("MinLevelClass", project.Classes.Get2DAIndex(feat.MinLevelClass));
                         record.Set("MaxLevel", feat.MaxLevel > 0 ? feat.MaxLevel : null);
                         record.Set("MinFortSave", feat.MinFortitudeSave > 0 ? feat.MinFortitudeSave : null);
@@ -3907,6 +3940,23 @@ namespace Eos.Services
             Log.Info("Exporting include file: \"{0}\"", Path.GetFullPath(project.Settings.Export.IncludeFolder + project.Settings.Export.IncludeFilename + ".nss"));
 
             var incFile = new List<String>();
+
+            // Custom TLK strings
+            if (project.CustomTlkStrings.Count > 0)
+            {
+                incFile.Add("// TLK Strings");
+                foreach (var item in project.CustomTlkStrings.Items)
+                {
+                    if (item == null) continue;
+                    
+                    if (item.Constant.Trim() != "")
+                    {
+                        incFile.Add("const int " + item.Constant + " = 0x" + (GetTLKIndex(item.Text) ?? 0).ToString("X8") + ";");
+                    }
+                    
+                }
+                incFile.Add("");
+            }
 
             // Races
             var customRaces = project.Races.Where(race => race != null && race.Overrides == null);

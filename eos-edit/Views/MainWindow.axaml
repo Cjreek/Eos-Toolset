@@ -19,7 +19,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Eos.Views.MainWindow" MinHeight="300" MinWidth="500"
         Height="700" Width="1100" Loaded="mainWindow_Loaded"
-        x:Name="mainWindow" Tag="Eos Toolset v0.77d" FontFamily="Segoe UI"
+        x:Name="mainWindow" Tag="Eos Toolset v0.78" FontFamily="Segoe UI"
         Closing="mainWindow_Closing"
         Icon="/Assets/Icons/Eos.ico">
   <Window.Title>
@@ -28,8 +28,6 @@
         <Binding Source="{x:Static repo:MasterRepository.Project}" Path="Name"/>
     </MultiBinding>
   </Window.Title>
-  
-  <!-- xmlns:cp="clr-namespace:ThemeEditor.Controls.ColorPicker;assembly=ThemeEditor.Controls.ColorPicker" -->
   
   <Window.KeyBindings>
     <KeyBinding Command="{Binding Path=DataContext.CloseDetailCommand, ElementName=mainWindow}" CommandParameter="{Binding ElementName=mainWindow, Path=DataContext.CurrentView.Data}" Gesture="Ctrl+W"/>
@@ -513,6 +511,11 @@
     <DataTemplate DataType="{x:Type vm:CustomDynamicTableInstanceViewModel}">
       <view:CustomDynamicTableInstanceView DataContext="{Binding}"/>
     </DataTemplate>
+    
+    <!--ModelExtensions-->
+    <DataTemplate DataType="{x:Type vm:TlkStringTableViewModel}">
+      <view:TLKStringTableView DataContext="{Binding}"/>
+    </DataTemplate>
   </Window.DataTemplates>
   
   <DockPanel>
@@ -605,6 +608,9 @@
           </Button>
           <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" ToolTip.Tip="Search (Ctrl+F)" Command="{Binding ElementName=mainWindow, Path=DataContext.GlobalSearchCommand}">
             <Image Source="/Assets/Icons/search32.png"/>
+          </Button>
+          <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" FontWeight="Bold" ToolTip.Tip="Edit TLK" Command="{Binding ElementName=mainWindow, Path=DataContext.GlobalEditTlkCommand}">
+            <Button.Content>TLK</Button.Content>
           </Button>
           <Button DockPanel.Dock="Left" Margin="10,3,0,3" Width="32" ToolTip.Tip="Backup Project" Click="miBackupProject_Click" IsEnabled="{Binding Source={x:Static repo:MasterRepository.Project}, Path=IsLoaded}">
             <Image Source="/Assets/Icons/backup32.png"/>

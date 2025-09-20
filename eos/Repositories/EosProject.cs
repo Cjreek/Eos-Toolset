@@ -374,6 +374,8 @@ namespace Eos.Repositories
             set { _useNWNX = value; }
         }
 
+        public TlkStringTable CustomTlkStrings { get; } = new TlkStringTable();
+
         public bool IsLoaded
         {
             get { return _isLoaded; }
@@ -777,6 +779,7 @@ namespace Eos.Repositories
                         AddZipEntry(zip, ProjectFolder + Constants.CustomObjectsFilename, Constants.CustomObjectsFilename);
                         AddZipEntry(zip, ProjectFolder + Constants.CustomTablesFilename, Constants.CustomTablesFilename);
                         AddZipEntry(zip, ProjectFolder + Constants.CustomDynamicTablesFilename, Constants.CustomDynamicTablesFilename);
+                        AddZipEntry(zip, ProjectFolder + Constants.CustomTlkStringsFilename, Constants.CustomTlkStringsFilename);
 
                         foreach (var template in CustomObjects)
                         {
@@ -803,6 +806,35 @@ namespace Eos.Repositories
             catch (Exception e)
             {
                 Log.Error("Error creating project backup: {0}", e.Message);
+            }
+        }
+
+        private void LoadCustomTlkStrings(String filename)
+        {
+            try
+            {
+                if (File.Exists(filename))
+                {
+                    Log.Info("Loading \"{0}\"", filename);
+                    var fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    try
+                    {
+                        if (JsonNode.Parse(fs) is JsonObject tlkStringTable)
+                        {
+                            CustomTlkStrings.Clear();
+                            CustomTlkStrings.FromJson(tlkStringTable);
+                        }
+                    }
+                    finally
+                    {
+                        fs.Close();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+                throw;
             }
         }
 
@@ -898,6 +930,8 @@ namespace Eos.Repositories
                 ItemPropertyCostTables.LoadFromFile(ProjectFolder + Constants.ItemPropertyCostTablesFilename);
                 ItemPropertyParams.LoadFromFile(ProjectFolder + Constants.ItemPropertyParamsFilename);
 
+                LoadCustomTlkStrings(ProjectFolder + Constants.CustomTlkStringsFilename);
+                
                 foreach (var template in CustomObjects)
                 {
                     if (template != null)
@@ -1047,6 +1081,15 @@ namespace Eos.Repositories
 
             Log.Info("Project \"{0}\" loaded successfully!", Name);
         }
+        
+        private void SaveCustomTlkStrings(String filename)
+        {
+            JsonNode json = CustomTlkStrings.ToJson();
+            var serializeOptions = new JsonSerializerOptions();
+            serializeOptions.WriteIndented = true;
+            serializeOptions.TypeInfoResolver = new DefaultJsonTypeInfoResolver();
+            File.WriteAllText(filename, json.ToJsonString(serializeOptions));
+        }
 
         public void Save()
         {
@@ -1116,6 +1159,8 @@ namespace Eos.Repositories
                 CustomTables.SaveToFile(ProjectFolder + Constants.CustomTablesFilename, Settings.CustomData.FormatJson);
                 CustomDynamicTables.SaveToFile(ProjectFolder + Constants.CustomDynamicTablesFilename, Settings.CustomData.FormatJson);
 
+                SaveCustomTlkStrings(ProjectFolder + Constants.CustomTlkStringsFilename);
+                
                 foreach (var template in CustomObjects)
                 {
                     if (template != null)
