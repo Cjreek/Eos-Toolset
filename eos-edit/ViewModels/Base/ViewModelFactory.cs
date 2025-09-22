@@ -132,6 +132,9 @@ namespace Eos.ViewModels.Base
 
             if (model is ModelExtension extension)
                 return new ModelExtensionViewModel(extension);
+            
+            if (model is TlkStringTable tlkStringTable)
+                return new TlkStringTableViewModel(tlkStringTable);
 
             else
                 throw new ArgumentException("No viewmodel found", "model");

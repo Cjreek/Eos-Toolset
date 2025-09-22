@@ -84,6 +84,7 @@ namespace Eos.Types
         public static readonly String CustomObjectsFilename;
         public static readonly String CustomTablesFilename;
         public static readonly String CustomDynamicTablesFilename;
+        public static readonly String CustomTlkStringsFilename;
 
         public static readonly String IconResourcesFolder;
         public static readonly String ExternalFilesPath;
@@ -224,6 +225,7 @@ namespace Eos.Types
             CustomObjectsFilename = "customobjects.json";
             CustomTablesFilename = "customtables.json";
             CustomDynamicTablesFilename = "customdyntables.json";
+            CustomTlkStringsFilename = "tlk.json";
 
             IconResourcesFolder = @"icons" + Path.DirectorySeparatorChar;
             ExternalFilesPath = @"external" + Path.DirectorySeparatorChar;

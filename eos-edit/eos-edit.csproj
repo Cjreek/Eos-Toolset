@@ -344,6 +344,10 @@
     <Compile Update="Views\AppearanceView.axaml.cs">
       <DependentUpon>AppearanceView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\TLKStringTableView.axaml.cs">
+      <DependentUpon>TLKStringTableView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <!--<ItemGroup>
     <Compile Update="Views\Dialogs\ViewWindow.axaml.cs">
