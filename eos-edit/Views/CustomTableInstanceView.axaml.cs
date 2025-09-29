@@ -68,6 +68,15 @@ namespace Eos.Views
                     column.CellTemplate = new CustomTableColumnDataTemplate(templateColumn, templateSelector);
                     grValues.Columns.Add(column);
                 }
+                
+                if ((Resources.TryGetResource("upDownTemplate", null, out var upDownTemplateRes)) && (upDownTemplateRes is IDataTemplate upDownTemplate))
+                {
+                    var column = new DataGridTemplateColumn();
+                    column.Header = "";
+                    column.Width = new DataGridLength(40);
+                    column.CellTemplate = upDownTemplate;
+                    grValues.Columns.Add(column);
+                }
 
                 if ((Resources.TryGetResource("deleteButtonTemplate", null, out var deleteButtonTemplateRes)) && (deleteButtonTemplateRes is IDataTemplate deleteButtonTemplate))
                 {

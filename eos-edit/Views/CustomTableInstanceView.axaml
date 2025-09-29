@@ -21,6 +21,18 @@
           <DataTemplate x:Key="deleteButtonTemplate">
             <uc:DeleteButton Command="{Binding ElementName=page, Path=DataContext.DeleteItemCommand}" CommandParameter="{Binding}" Margin="0,1,0,1"/>
           </DataTemplate>
+          
+          <DataTemplate x:Key="upDownTemplate">
+            <Grid Margin="2,0,0,3">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+
+              <Button Grid.Column="0" Content="🡅" FontSize="14" Foreground="#505050" Height="24" Margin="0,0,0,0" Command="{Binding ElementName=page, Path=DataContext.MoveItemUpCommand}" CommandParameter="{Binding}"/>
+              <Button Grid.Column="1" Content="🡇" FontSize="14" Foreground="#505050" Height="24" Margin="1,0,0,0" Command="{Binding ElementName=page, Path=DataContext.MoveItemDownCommand}" CommandParameter="{Binding}"/>
+            </Grid>
+          </DataTemplate>
         </ResourceDictionary>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
