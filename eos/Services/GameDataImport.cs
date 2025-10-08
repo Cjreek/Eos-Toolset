@@ -1900,7 +1900,9 @@ namespace Eos.Services
                         tmpItem.SourceLabel = costPropTable2da[j].AsString("Label") ?? "";
 
                     SetText(tmpItem.Name, costPropTable2da[j].AsInteger("Name"));
-                    tmpItem.Cost = costPropTable2da[j].AsFloat("Cost") ?? 1.0;
+                    if (costPropTable2da.Columns.IndexOf("Cost") > -1)
+                        tmpItem.Cost = costPropTable2da[j].AsFloat("Cost") ?? 1.0;
+                    
                     switch (tmpCostTable.Name.ToLower())
                     {
                         case "iprp_bonuscost":
