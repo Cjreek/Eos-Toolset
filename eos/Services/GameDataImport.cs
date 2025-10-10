@@ -1576,6 +1576,7 @@ namespace Eos.Services
         private void ImportItemProperties()
         {
             var itemprops2da = Load2da("itemprops");
+            var itempropdef2da = Load2da("itempropdef");
 
             Standard.ItemPropertySets.Clear();
             for (int i = 0; i < itemprops2da.Columns.Count; i++)
@@ -1592,7 +1593,7 @@ namespace Eos.Services
 
                     for (int j = 0; j < itemprops2da.Count; j++)
                     {
-                        if (itemprops2da[j].AsBoolean(i))
+                        if (itemprops2da[j].AsBoolean(i) && (!itempropdef2da[j].IsNull("Name")))
                         {
                             var item = new ItemPropertySetEntry(tmpItemPropertySet);
                             item.ItemProperty = CreateRef<ItemProperty>(j);
@@ -1604,8 +1605,7 @@ namespace Eos.Services
                     Standard.ItemPropertySets.Add(tmpItemPropertySet);
                 }
             }
-
-            var itempropdef2da = Load2da("itempropdef");
+            
             Standard.ItemProperties.Clear();
             for (int i = 0; i < itempropdef2da.Count; i++)
             {
