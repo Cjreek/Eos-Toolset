@@ -61,6 +61,159 @@ namespace Nwn.Tga
             }
         }
 
+        // RGB24 RLE
+        private List<byte[]>? LoadImageType10Rows(TargaHeader header, BinaryReader reader, int bytesPerPixel, bool force32Bit)
+        {
+            // Skip palette
+            reader.ReadBytes(header.PaletteLength * (header.PaletteColorDepth / 8)); // Calc palette bytes per pixel
+            
+            var rows = new List<byte[]>();
+            var row = new List<byte>();
+
+            var bytesRead = 0;
+            var rowBytesRead = 0;
+            while (bytesRead < ImageSize)
+            {
+                var rlePacket = reader.ReadByte();
+                var rleType = (rlePacket & 0x80) >> 7;
+                var rleCount = (rlePacket & 0x7F) + 1;
+
+                if (rleType == 0) // Raw
+                {
+                    for (int i = 0; i < rleCount; i++)
+                    {
+                        row.AddRange(reader.ReadBytes(bytesPerPixel));
+                        if ((bytesPerPixel == 3) && (force32Bit))
+                            row.Add(0xFF);
+
+                        bytesRead += bytesPerPixel;
+                        rowBytesRead += bytesPerPixel;
+                        if (rowBytesRead >= StrideSize)
+                        {
+                            rows.Add(row.ToArray());
+                            row = new List<byte>();
+                            rowBytesRead = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    var rlePixel = reader.ReadBytes(bytesPerPixel);
+                    for (int i = 0; i < rleCount; i++)
+                    {
+                        row.AddRange(rlePixel);
+                        if ((bytesPerPixel == 3) && (force32Bit))
+                            row.Add(0xFF);
+
+                        bytesRead += bytesPerPixel;
+                        rowBytesRead += bytesPerPixel;
+                        if (rowBytesRead >= StrideSize)
+                        {
+                            rows.Add(row.ToArray());
+                            row = new List<byte>();
+                            rowBytesRead = 0;
+                        }
+                    }
+                }
+            }
+
+            return rows;
+        }
+
+        // Uncompressed 24/32 Bit colors
+        private List<byte[]>? LoadImageType2Rows(TargaHeader header, BinaryReader reader, int bytesPerPixel, bool force32Bit)
+        {
+            // Skip palette
+            reader.ReadBytes(header.PaletteLength * (header.PaletteColorDepth / 8)); // Calc palette bytes per pixel
+            
+            var rows = new List<byte[]>();
+            
+            if ((BitsPerPixel == 32) || (!force32Bit))
+            {
+                for (int y = 0; y < Height; y++)
+                    rows.Add(reader.ReadBytes(StrideSize));
+            }
+            else // Convert 24-Bit Data to 32 bits
+            {
+                var buffer = reader.ReadBytes(ImageSize);
+                var rowData = new byte[header.ImageWidth * 4];
+                var rowDataIndex = 0;
+                for (int i = 0; i < buffer.Length; i++)
+                {
+                    if (rowDataIndex == header.ImageWidth * 4)
+                    {
+                        rows.Add(rowData);
+                        rowData = new byte[header.ImageWidth * 4];
+                        rowDataIndex = 0;
+                    }
+
+                    rowData[rowDataIndex] = buffer[i];
+                    if (i % 3 == 2)
+                    {
+                        rowDataIndex++;
+                        rowData[rowDataIndex] = 0xFF;
+                    }
+
+                    rowDataIndex++;
+                }
+
+                rows.Add(rowData);
+            }
+            
+            return rows;
+        }
+
+        // Palette colors
+        private List<byte[]>? LoadImageType1Rows(TargaHeader header, BinaryReader reader, int bytesPerPixel, bool force32Bit)
+        {
+            if (header.PaletteColorDepth == 16)
+            {
+                return null;
+            }
+            
+            var paletteColors = new List<byte[]>();
+            for (var i = 0; i < header.PaletteLength; i++)
+            {
+                byte[] color = new byte[4];
+                if (header.PaletteColorDepth == 32)
+                {
+                    color = reader.ReadBytes(4);
+                }
+                else // 24
+                {
+                    color[0] = reader.ReadByte();
+                    color[1] = reader.ReadByte();
+                    color[2] = reader.ReadByte();
+                    color[3] = 0;
+                }
+                
+                paletteColors.Add(color);
+            }
+
+            var rows = new List<byte[]>();
+            for (int y = 0; y < Height; y++)
+            {
+                var rowData = new byte[header.ImageWidth * 4];
+                for (int x = 0; x < Width; x++)
+                {
+                    ushort index = 0;
+                    if (header.BitsPerPixel == 8)
+                        index = reader.ReadByte();
+                    else
+                        index = reader.ReadUInt16();
+
+                    rowData[x * 4 + 0] = paletteColors[index][0];
+                    rowData[x * 4 + 1] = paletteColors[index][1];
+                    rowData[x * 4 + 2] = paletteColors[index][2];
+                    rowData[x * 4 + 3] = paletteColors[index][3];
+                }
+
+                rows.Add(rowData);
+            }
+
+            return rows;
+        }
+
         public void Load(Stream stream, bool force32Bit)
         {
             var reader = new BinaryReader(stream);
@@ -75,94 +228,26 @@ namespace Nwn.Tga
             ImageSize = StrideSize * header.ImageHeight;
 
             reader.ReadBytes(header.ImageIdLength);
-            reader.ReadBytes(header.PaletteLength * (header.PaletteColorDepth / 8)); // Calc palette bytes per pixel
-
-            var rows = new List<byte[]>();
-            var row = new List<byte>();
+            
+            List<byte[]>? rows = null;
             if (header.ImageType == 10) // RGB24 RLE
             {
-                var bytesRead = 0;
-                var rowBytesRead = 0;
-                while (bytesRead < ImageSize)
-                {
-                    var rlePacket = reader.ReadByte();
-                    var rleType = (rlePacket & 0x80) >> 7;
-                    var rleCount = (rlePacket & 0x7F) + 1;
-
-                    if (rleType == 0) // Raw
-                    {
-                        for (int i = 0; i < rleCount; i++)
-                        {
-                            row.AddRange(reader.ReadBytes(bytesPerPixel));
-                            if ((bytesPerPixel == 3) && (force32Bit))
-                                row.Add(0xFF);
-
-                            bytesRead += bytesPerPixel;
-                            rowBytesRead += bytesPerPixel;
-                            if (rowBytesRead >= StrideSize)
-                            {
-                                rows.Add(row.ToArray());
-                                row = new List<byte>();
-                                rowBytesRead = 0;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        var rlePixel = reader.ReadBytes(bytesPerPixel);
-                        for (int i = 0; i < rleCount; i++)
-                        {
-                            row.AddRange(rlePixel);
-                            if ((bytesPerPixel == 3) && (force32Bit))
-                                row.Add(0xFF);
-
-                            bytesRead += bytesPerPixel;
-                            rowBytesRead += bytesPerPixel;
-                            if (rowBytesRead >= StrideSize)
-                            {
-                                rows.Add(row.ToArray());
-                                row = new List<byte>();
-                                rowBytesRead = 0;
-                            }
-                        }
-                    }
-                }
+               rows = LoadImageType10Rows(header, reader, bytesPerPixel, force32Bit);
             }
             else if (header.ImageType == 2) // RGB24/32
             {
-                if ((BitsPerPixel == 32) || (!force32Bit))
-                {
-                    for (int y = 0; y < Height; y++)
-                        rows.Add(reader.ReadBytes(StrideSize));
-                }
-                else // Convert 24-Bit Data to 32 bits
-                {
-                    var buffer = reader.ReadBytes(ImageSize);
-                    var rowData = new byte[header.ImageWidth * 4];
-                    var rowDataIndex = 0;
-                    for (int i = 0; i < buffer.Length; i++)
-                    {
-                        if (rowDataIndex == header.ImageWidth * 4)
-                        {
-                            rows.Add(rowData);
-                            rowData = new byte[header.ImageWidth * 4];
-                            rowDataIndex = 0;
-                        }
-
-                        rowData[rowDataIndex] = buffer[i];
-                        if (i % 3 == 2)
-                        {
-                            rowDataIndex++;
-                            rowData[rowDataIndex] = 0xFF;
-                        }
-
-                        rowDataIndex++;
-                    }
-
-                    rows.Add(rowData);
-                }
+                rows = LoadImageType2Rows(header, reader, bytesPerPixel, force32Bit);
+            } 
+            else if (header.ImageType == 1) // Palette
+            {
+                rows = LoadImageType1Rows(header, reader, bytesPerPixel, force32Bit);
             }
 
+            if (rows == null)
+            {
+                return;
+            }
+ 
             if (force32Bit)
             {
                 BitsPerPixel = 32;
@@ -171,7 +256,7 @@ namespace Nwn.Tga
                 ImageSize = StrideSize * header.ImageHeight;
             }
 
-            if (header.OriginY == 0) rows.Reverse();
+            if ((header.OriginY == 0) && (header.ImageType != 1)) rows.Reverse(); // Workaround: don't unflip palette images, otherwise they turn out flipped
             if (header.OriginX == 1)
             {
                 for (int y = 0; y < rows.Count; y++)
