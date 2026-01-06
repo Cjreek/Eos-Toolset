@@ -194,13 +194,13 @@
             <NumericUpDown Value="{Binding Data.RecommendedInt}" Grid.Row="17" Grid.Column="3" Increment="1"/>
 
             <TextBlock Text="Dexterity" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="18" Grid.Column="0"/>
-            <NumericUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="18" Grid.Column="1" Increment="1"/>
+            <NumericUpDown Value="{Binding Data.RecommendedDex}" Grid.Row="18" Grid.Column="1" Increment="1"/>
 
             <TextBlock Text="Wisdom" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="18" Grid.Column="2"/>
             <NumericUpDown Value="{Binding Data.RecommendedWis}" Grid.Row="18" Grid.Column="3" Increment="1"/>
 
             <TextBlock Text="Constitution" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="19" Grid.Column="0"/>
-            <NumericUpDown Value="{Binding Data.RecommendedStr}" Grid.Row="19" Grid.Column="1" Increment="1"/>
+            <NumericUpDown Value="{Binding Data.RecommendedCon}" Grid.Row="19" Grid.Column="1" Increment="1"/>
 
             <TextBlock Text="Charisma" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="19" Grid.Column="2"/>
             <NumericUpDown Value="{Binding Data.RecommendedCha}" Grid.Row="19" Grid.Column="3" Increment="1"/>
