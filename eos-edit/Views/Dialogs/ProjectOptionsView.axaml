@@ -5,6 +5,7 @@
              xmlns:uc="using:Eos.Usercontrols"
              xmlns:tlk="using:Eos.Nwn.Tlk"
              xmlns:ext="using:Eos.Extensions"
+             xmlns:dialogs="clr-namespace:Eos.ViewModels.Dialogs"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="700"
              Background="{DynamicResource ThemeControlMidBrush}"
              x:Class="Eos.Views.Dialogs.ProjectOptionsView"
@@ -115,7 +116,7 @@
                   </DockPanel>
                   <Button Grid.Row="0" Grid.Column="2" Margin="3,0,0,3" Content="Add Path" Command="{Binding AddExternalPathCommand}" CommandParameter="{Binding}"/>
 
-                  <ListBox Grid.Row="1" Grid.Column="1" Padding="0" Margin="2,0,0,0" Height="80" Grid.ColumnSpan="2" ItemsSource="{Binding SettingsCopy.ExternalFolders}" SelectedIndex="{Binding SelectedExternalPathIndex}">
+                  <ListBox Grid.Row="1" Grid.Column="1" Padding="0" Margin="2,0,0,0" Height="50" Grid.ColumnSpan="2" ItemsSource="{Binding SettingsCopy.ExternalFolders}" SelectedIndex="{Binding SelectedExternalPathIndex}">
                     <ListBox.ItemTemplate>
                       <DataTemplate>
                         <Grid Margin="0">
@@ -147,6 +148,8 @@
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
                   </Grid.RowDefinitions>
 
                   <TextBlock Text="2DA Folder" Grid.Row="0" Grid.Column="0" Margin="0,3,5,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
@@ -167,26 +170,32 @@
                     <TextBox x:Name="tbHakFolder" Margin="0,0,0,3" Text="{Binding SettingsCopy.Export.HakFolder}" HorizontalAlignment="Stretch"/>
                   </DockPanel>
 
-                  <TextBlock Text="ERF Folder" Grid.Row="3" Grid.Column="0" Margin="0,3,5,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                  <DockPanel Grid.Row="3" Grid.Column="1" LastChildFill="True">
+                  <TextBlock Text="HAK Filename" Grid.Row="3" Grid.Column="0" Margin="0,3,5,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                  <TextBox Text="{Binding SettingsCopy.Export.HakFilename}" Grid.Row="3" Grid.Column="1" MaxLength="16" Margin="0,0,0,3"/>
+
+                  <TextBlock Text="ERF Folder" Grid.Row="4" Grid.Column="0" Margin="0,3,5,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                  <DockPanel Grid.Row="4" Grid.Column="1" LastChildFill="True">
                     <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbErfFolder, Path=Bounds.Height}" Height="{Binding ElementName=tbErfFolder, Path=Bounds.Height}" VerticalAlignment="Top" Click="btOpenDlg_Click" Tag="ERF"/>
                     <TextBox x:Name="tbErfFolder" Margin="0,0,0,3" Text="{Binding SettingsCopy.Export.ErfFolder}" HorizontalAlignment="Stretch"/>
                   </DockPanel>
 
-                  <TextBlock Text="TLK Folder" Grid.Row="4" Grid.Column="0" Margin="0,3,5,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                  <DockPanel Grid.Row="4" Grid.Column="1" LastChildFill="True">
+                  <TextBlock Text="TLK Folder" Grid.Row="5" Grid.Column="0" Margin="0,3,5,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                  <DockPanel Grid.Row="5" Grid.Column="1" LastChildFill="True">
                     <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbTlkFolder, Path=Bounds.Height}" Height="{Binding ElementName=tbTlkFolder, Path=Bounds.Height}" VerticalAlignment="Top" Click="btOpenDlg_Click" Tag="TLK"/>
                     <TextBox x:Name="tbTlkFolder" Margin="0,0,0,3" Text="{Binding SettingsCopy.Export.TlkFolder}" HorizontalAlignment="Stretch"/>
                   </DockPanel>
 
-                  <TextBlock Text="Include Folder" Grid.Row="5" Grid.Column="0" Margin="0,3,5,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                  <DockPanel Grid.Row="5" Grid.Column="1" LastChildFill="True">
+                  <TextBlock Text="TLK Filename" Grid.Row="6" Grid.Column="0" Margin="0,3,5,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                  <TextBox Text="{Binding SettingsCopy.Export.TlkFilename}" Grid.Row="6" Grid.Column="1" MaxLength="16" Margin="0,0,0,3"/>
+
+                  <TextBlock Text="Include Folder" Grid.Row="7" Grid.Column="0" Margin="0,3,5,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                  <DockPanel Grid.Row="7" Grid.Column="1" LastChildFill="True">
                     <Button DockPanel.Dock="Right" Margin="3,0,0,0" Content="..." Width="{Binding ElementName=tbIncFolder, Path=Bounds.Height}" Height="{Binding ElementName=tbIncFolder, Path=Bounds.Height}" VerticalAlignment="Top" Click="btOpenDlg_Click" Tag="INC"/>
                     <TextBox x:Name="tbIncFolder" Margin="0,0,0,3" Text="{Binding SettingsCopy.Export.IncludeFolder}" HorizontalAlignment="Stretch"/>
                   </DockPanel>
 
-                  <TextBlock Text="Include Filename" Grid.Row="6" Grid.Column="0" Margin="0,3,5,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                  <TextBox Text="{Binding SettingsCopy.Export.IncludeFilename}" Grid.Row="6" Grid.Column="1" MaxLength="16" Margin="0,0,0,3"/>
+                  <TextBlock Text="Include Filename" Grid.Row="8" Grid.Column="0" Margin="0,3,5,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                  <TextBox Text="{Binding SettingsCopy.Export.IncludeFilename}" Grid.Row="8" Grid.Column="1" MaxLength="16" Margin="0,0,0,3"/>
                 </Grid>
               </HeaderedContentControl>
 

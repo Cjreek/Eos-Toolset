@@ -199,7 +199,7 @@
                                               CustomEnumTemplate="{StaticResource customEnumVariantTemplate}"/>
 
   <DataTemplate x:Key="variantTemplate">
-    <Grid DataContextChanged="">
+    <Grid>
       <Grid.Styles>
         <Style Selector="ContentPresenter">
           <Setter Property="(i:Interaction.Behaviors)">
