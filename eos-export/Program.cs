@@ -1,4 +1,5 @@
-﻿using Eos.Config;
+﻿using System.Text;
+using Eos.Config;
 using Eos.Repositories;
 using Eos.Services;
 
@@ -20,6 +21,8 @@ class Program
             Console.WriteLine("Invalid file path: " + args[0]);
             return;
         }
+        
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
         EosConfig.Load();
         MasterRepository.Initialize(EosConfig.NwnBasePath);
