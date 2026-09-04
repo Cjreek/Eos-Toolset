@@ -94,10 +94,10 @@ namespace Eos.ViewModels.Dialogs
 
         public ReactiveCommand<ModelSearchViewModel<T>, Unit> OKCommand { get; private set; } = ReactiveCommand.Create<ModelSearchViewModel<T>>(vm =>
         {
-            if (vm.ResultModel?.Overrides != null)
-            {
-                vm.ResultModel = (T?)MasterRepository.Standard.GetByID(typeof(T), vm.ResultModel?.Overrides ?? Guid.Empty);
-            }
+            // if (vm.ResultModel?.Overrides != null)
+            // {
+            //     vm.ResultModel = (T?)MasterRepository.Standard.GetByID(typeof(T), vm.ResultModel?.Overrides ?? Guid.Empty);
+            // }
 
             WindowService.Close(vm);
         });
