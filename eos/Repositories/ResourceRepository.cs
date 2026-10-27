@@ -1,4 +1,4 @@
-﻿using Eos.Nwn;
+using Eos.Nwn;
 using Eos.Nwn.Bif;
 using Nwn.Tga;
 using System;
@@ -296,6 +296,12 @@ namespace Eos.Repositories
                                 resource.Data = loadResource(new MemoryStream(resBytes));
                                 resource.IsLoaded = true;
                             }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error("Failed to load resource {0}.{1}: {2}", resource.ResRef ?? "", resource.Type, ex.Message);
+                            resource.Data = null;
+                            resource.IsLoaded = true; // don't retry forever
                         }
                         finally
                         {

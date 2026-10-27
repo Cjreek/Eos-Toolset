@@ -1,4 +1,4 @@
-﻿using Eos.Nwn.Ssf;
+using Eos.Nwn.Ssf;
 using Eos.Nwn;
 using System;
 using System.Collections.Generic;
@@ -66,130 +66,109 @@ namespace Nwn.Tga
             var reader = new BinaryReader(stream);
             var header = BinaryHelper.Read<TargaHeader>(reader);
 
+            // 2 = true-color, 3 = grayscale, 10/11 = their RLE variants
+            var isRle = header.ImageType == 10 || header.ImageType == 11;
+            var baseType = isRle ? header.ImageType - 8 : header.ImageType;
+            if (baseType != 2 && baseType != 3)
+                throw new NotSupportedException($"Unsupported TGA image type {header.ImageType}");
+            if (header.BitsPerPixel != 8 && header.BitsPerPixel != 16 && header.BitsPerPixel != 24 && header.BitsPerPixel != 32)
+                throw new NotSupportedException($"Unsupported TGA bit depth {header.BitsPerPixel}");
+
             Width = header.ImageWidth;
             Height = header.ImageHeight;
             BitsPerPixel = header.BitsPerPixel;
 
-            var bytesPerPixel = (header.BitsPerPixel + 7) / 8;
-            StrideSize = bytesPerPixel * header.ImageWidth;
-            ImageSize = StrideSize * header.ImageHeight;
+            var srcBpp = (header.BitsPerPixel + 7) / 8;
+            var pixelCount = Width * Height;
 
             reader.ReadBytes(header.ImageIdLength);
-            reader.ReadBytes(header.PaletteLength * (header.PaletteColorDepth / 8)); // Calc palette bytes per pixel
+            reader.ReadBytes(header.PaletteLength * ((header.PaletteColorDepth + 7) / 8));
 
-            var rows = new List<byte[]>();
-            var row = new List<byte>();
-            if (header.ImageType == 10) // RGB24 RLE
+            // Decode to a flat buffer of source pixels (missing data in truncated files stays zero)
+            var src = new byte[pixelCount * srcBpp];
+            if (isRle)
             {
-                var bytesRead = 0;
-                var rowBytesRead = 0;
-                while (bytesRead < ImageSize)
+                var pos = 0;
+                try
                 {
-                    var rlePacket = reader.ReadByte();
-                    var rleType = (rlePacket & 0x80) >> 7;
-                    var rleCount = (rlePacket & 0x7F) + 1;
-
-                    if (rleType == 0) // Raw
+                    while (pos < src.Length)
                     {
-                        for (int i = 0; i < rleCount; i++)
+                        var packet = reader.ReadByte();
+                        var count = (packet & 0x7F) + 1;
+                        if ((packet & 0x80) != 0)
                         {
-                            row.AddRange(reader.ReadBytes(bytesPerPixel));
-                            if ((bytesPerPixel == 3) && (force32Bit))
-                                row.Add(0xFF);
-
-                            bytesRead += bytesPerPixel;
-                            rowBytesRead += bytesPerPixel;
-                            if (rowBytesRead >= StrideSize)
-                            {
-                                rows.Add(row.ToArray());
-                                row = new List<byte>();
-                                rowBytesRead = 0;
-                            }
+                            var pixel = reader.ReadBytes(srcBpp);
+                            for (int i = 0; i < count && pos < src.Length; i++, pos += srcBpp)
+                                Array.Copy(pixel, 0, src, pos, Math.Min(pixel.Length, srcBpp));
                         }
-                    }
-                    else
-                    {
-                        var rlePixel = reader.ReadBytes(bytesPerPixel);
-                        for (int i = 0; i < rleCount; i++)
+                        else
                         {
-                            row.AddRange(rlePixel);
-                            if ((bytesPerPixel == 3) && (force32Bit))
-                                row.Add(0xFF);
-
-                            bytesRead += bytesPerPixel;
-                            rowBytesRead += bytesPerPixel;
-                            if (rowBytesRead >= StrideSize)
-                            {
-                                rows.Add(row.ToArray());
-                                row = new List<byte>();
-                                rowBytesRead = 0;
-                            }
+                            var data = reader.ReadBytes(count * srcBpp);
+                            var n = Math.Min(data.Length, src.Length - pos);
+                            Array.Copy(data, 0, src, pos, n);
+                            pos += count * srcBpp;
                         }
                     }
                 }
+                catch (EndOfStreamException) { }
             }
-            else if (header.ImageType == 2) // RGB24/32
+            else
             {
-                if ((BitsPerPixel == 32) || (!force32Bit))
-                {
-                    for (int y = 0; y < Height; y++)
-                        rows.Add(reader.ReadBytes(StrideSize));
-                }
-                else // Convert 24-Bit Data to 32 bits
-                {
-                    var buffer = reader.ReadBytes(ImageSize);
-                    var rowData = new byte[header.ImageWidth * 4];
-                    var rowDataIndex = 0;
-                    for (int i = 0; i < buffer.Length; i++)
-                    {
-                        if (rowDataIndex == header.ImageWidth * 4)
-                        {
-                            rows.Add(rowData);
-                            rowData = new byte[header.ImageWidth * 4];
-                            rowDataIndex = 0;
-                        }
-
-                        rowData[rowDataIndex] = buffer[i];
-                        if (i % 3 == 2)
-                        {
-                            rowDataIndex++;
-                            rowData[rowDataIndex] = 0xFF;
-                        }
-
-                        rowDataIndex++;
-                    }
-
-                    rows.Add(rowData);
-                }
+                var data = reader.ReadBytes(src.Length);
+                Array.Copy(data, src, data.Length);
             }
 
-            if (force32Bit)
+            // Convert to output format
+            var dstBpp = force32Bit ? 4 : srcBpp;
+            byte[] dst;
+            if (!force32Bit || srcBpp == 4)
+                dst = src;
+            else
             {
+                dst = new byte[pixelCount * 4];
+                for (int i = 0, s = 0, d = 0; i < pixelCount; i++, s += srcBpp, d += 4)
+                {
+                    switch (srcBpp)
+                    {
+                        case 1: // Grayscale
+                            dst[d] = dst[d + 1] = dst[d + 2] = src[s];
+                            dst[d + 3] = 0xFF;
+                            break;
+                        case 2: // A1R5G5B5
+                            var v = src[s] | (src[s + 1] << 8);
+                            dst[d] = (byte)((v & 0x1F) * 255 / 31);
+                            dst[d + 1] = (byte)(((v >> 5) & 0x1F) * 255 / 31);
+                            dst[d + 2] = (byte)(((v >> 10) & 0x1F) * 255 / 31);
+                            dst[d + 3] = 0xFF;
+                            break;
+                        case 3: // BGR24
+                            dst[d] = src[s];
+                            dst[d + 1] = src[s + 1];
+                            dst[d + 2] = src[s + 2];
+                            dst[d + 3] = 0xFF;
+                            break;
+                    }
+                }
                 BitsPerPixel = 32;
-                bytesPerPixel = 4;
-                StrideSize = bytesPerPixel * header.ImageWidth;
-                ImageSize = StrideSize * header.ImageHeight;
             }
 
-            if (header.OriginY == 0) rows.Reverse();
-            if (header.OriginX == 1)
-            {
-                for (int y = 0; y < rows.Count; y++)
-                {
-                    var list = new List<byte>();
-                    for (int x = 0; x < header.ImageWidth; x++)
-                    {
-                        var pixel = rows[y].Take(new Range(x * bytesPerPixel, x * bytesPerPixel + bytesPerPixel));
-                        list.InsertRange(0, pixel);
-                    }
+            StrideSize = dstBpp * Width;
+            ImageSize = StrideSize * Height;
 
-                    rows[y] = list.ToArray();
-                }
-            }
+            // Orientation: attribute bit 5 = top-to-bottom, bit 4 = right-to-left
+            var topToBottom = (header.Attributes & 0x20) != 0;
+            var rightToLeft = (header.Attributes & 0x10) != 0;
 
             ImageData = new byte[ImageSize];
             for (int y = 0; y < Height; y++)
-                Array.Copy(rows[y], 0, ImageData, StrideSize * y, StrideSize);
+            {
+                var srcRow = topToBottom ? y : Height - 1 - y;
+                if (!rightToLeft)
+                    Array.Copy(dst, srcRow * StrideSize, ImageData, y * StrideSize, StrideSize);
+                else
+                    for (int x = 0; x < Width; x++)
+                        Array.Copy(dst, srcRow * StrideSize + (Width - 1 - x) * dstBpp, ImageData, y * StrideSize + x * dstBpp, dstBpp);
+            }
         }
     }
 }
