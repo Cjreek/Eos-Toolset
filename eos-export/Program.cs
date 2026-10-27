@@ -1,6 +1,7 @@
 ﻿using Eos.Config;
 using Eos.Repositories;
 using Eos.Services;
+using System.Text;
 
 namespace Eos;
 
@@ -8,6 +9,8 @@ class Program
 {
     static void Main(string[] args)
     {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
         if (args.Length == 0)
         {
             Console.WriteLine("Usage: eos-export <path-to-eos-project-file>");

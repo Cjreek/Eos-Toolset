@@ -456,6 +456,7 @@ namespace Eos.Repositories
 
         private void LoadProjectFile(string projectFilename)
         {
+            projectFilename = Path.GetFullPath(projectFilename);
             _projectFilename = projectFilename;
             ProjectFolder = Path.GetDirectoryName(projectFilename) ?? "";
 
