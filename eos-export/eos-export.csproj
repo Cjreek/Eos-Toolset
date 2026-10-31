@@ -8,6 +8,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Eos</RootNamespace>
     <ApplicationIcon>Eos.ico</ApplicationIcon>
+    <Version>0.80</Version>
   </PropertyGroup>
 
   <ItemGroup>
