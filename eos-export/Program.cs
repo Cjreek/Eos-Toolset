@@ -2,7 +2,6 @@
 using Eos.Config;
 using Eos.Repositories;
 using Eos.Services;
-using System.Text;
 
 namespace Eos;
 

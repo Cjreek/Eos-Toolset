@@ -254,6 +254,12 @@ namespace Eos.Nwn.TwoDimensionalArray
 
             return false;
         }
+
+        // Included for warning CS0659 since Equals is overriden
+        public override int GetHashCode()
+        {
+            return GetHashCode();
+        }
     }
 
     internal delegate void ColumnAddedEvent(int index, object? defaultValue = null);

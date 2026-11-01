@@ -84,19 +84,25 @@ namespace Eos.Config
 
         private static String FindSteamPathByRegistry()
         {
-            // TODO: Linux/GoG/Beamdog/etc
-            var nwnEEKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 704450", false);
-            if (nwnEEKey != null)
-                return (String?)nwnEEKey.GetValue("InstallLocation") ?? "";
-
+            if (OperatingSystem.IsWindows())
+            {
+                // TODO: Linux/GoG/Beamdog/etc
+                var nwnEEKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 704450", false);
+                if (nwnEEKey != null)
+                    return (String?)nwnEEKey.GetValue("InstallLocation") ?? "";
+            }
+            
             return "";
         }
 
         private static String FindGOGPathByRegistry()
         {
-            var gogKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\GOG.com\Games\1097893768", false);
-            if (gogKey != null)
-                return (String?)gogKey.GetValue("path") ?? "";
+            if (OperatingSystem.IsWindows())
+            {
+                var gogKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\WOW6432Node\GOG.com\Games\1097893768", false);
+                if (gogKey != null)
+                    return (String?)gogKey.GetValue("path") ?? "";
+            }
 
             return "";
         }
@@ -114,7 +120,7 @@ namespace Eos.Config
 
             // Steam
             var steamPath = Path.Combine("Steam", "steamapps", "common", "Neverwinter Nights");
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            if (OperatingSystem.IsWindows())
             {
                 path = FindSteamPathByRegistry();
                 if (path == "")
@@ -126,7 +132,7 @@ namespace Eos.Config
                     return path;
                 }
             }
-            else if (Environment.OSVersion.Platform == PlatformID.Unix)
+            else if (OperatingSystem.IsLinux())
             {
                 var home = Environment.GetEnvironmentVariable("HOME") ?? "";
                 path = Path.Combine(home, ".local", "share", steamPath);
@@ -137,7 +143,7 @@ namespace Eos.Config
                     return path;
                 }
             }
-            else if (Environment.OSVersion.Platform == PlatformID.Other)
+            else if (OperatingSystem.IsMacOS())
             {
                 var home = Environment.GetEnvironmentVariable("HOME") ?? "";
                 path = Path.Combine(home, "Library", "Application Support", steamPath);
@@ -152,17 +158,17 @@ namespace Eos.Config
             // Beamdog
             var beamdogSettings = Path.Combine("Beamdog Client", "settings.json");
             var settingsFile = "";
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            if (OperatingSystem.IsWindows())
             {
                 var home = Environment.GetEnvironmentVariable("APPDATA") ?? "";
                 settingsFile = Path.Combine(home, beamdogSettings);
             }
-            else if (Environment.OSVersion.Platform == PlatformID.Unix)
+            else if (OperatingSystem.IsLinux())
             {
                 var home = Environment.GetEnvironmentVariable("HOME") ?? "";
                 settingsFile = Path.Combine(home, ".config", beamdogSettings);
             }
-            else if (Environment.OSVersion.Platform == PlatformID.Other)
+            else if (OperatingSystem.IsMacOS())
             {
                 var home = Environment.GetEnvironmentVariable("HOME") ?? "";
                 settingsFile = Path.Combine(home, "Library", "Application Support", beamdogSettings);
@@ -208,7 +214,7 @@ namespace Eos.Config
             }
 
             // GOG
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            if (OperatingSystem.IsWindows())
             {
                 path = FindGOGPathByRegistry();
                 if (path == "")
