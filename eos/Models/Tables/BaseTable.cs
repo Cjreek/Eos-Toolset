@@ -103,7 +103,7 @@ namespace Eos.Models.Tables
             {
                 Items.Move(index, index - 1);
                 item.Index = index - 1;
-                Items[index].Index = index;
+                Items[index]?.Index = index;
             }
         }
         
@@ -114,7 +114,7 @@ namespace Eos.Models.Tables
             {
                 Items.Move(index, index + 1);
                 item.Index = index + 1;
-                Items[index].Index = index;
+                Items[index]?.Index = index;
             }
         }
 
