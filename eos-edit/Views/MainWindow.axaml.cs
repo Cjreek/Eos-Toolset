@@ -1,6 +1,5 @@
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Eos.Config;
 using Eos.Repositories;
@@ -16,12 +15,10 @@ using Avalonia;
 using Eos.Models;
 using System.ComponentModel;
 using Avalonia.Controls.ApplicationLifetimes;
-using System.Threading.Tasks;
 using Avalonia.Threading;
 using Eos.ViewModels.Dialogs;
 using Eos.Models.Tables;
-using Eos.Views.Dialogs;
-using System.Threading;
+using Avalonia.Platform.Storage;
 
 namespace Eos.Views
 {
@@ -131,6 +128,8 @@ namespace Eos.Views
             {
                 foreach (var subItem in item.Items)
                 {
+                    if (subItem == null) continue;
+
                     var tmpResult = item.ContainerFromItem(subItem) as TreeViewItem;
                     if (data != subItem)
                     {
@@ -152,10 +151,12 @@ namespace Eos.Views
             {
                 if ((model is CustomObjectInstance) || (model is CustomDynamicTableInstance) || (model is CustomTableInstance))
                 {
-                    if (tvAdditional.Items != null)
+                    if (tvAdditional.ItemCount >= 1)
                     {
                         foreach (var itemData in tvAdditional.Items)
                         {
+                            if (itemData == null) continue;
+
                             TreeViewItem? container = tvCustom.TreeContainerFromItem(itemData) as TreeViewItem;
                             if (itemData != model) container = GetDataContainer(container, model);
 
@@ -182,10 +183,12 @@ namespace Eos.Views
                 }
                 else if (!model.IsReadonly)
                 {
-                    if (tvCustom.Items != null)
+                    if (tvCustom.ItemCount >= 1)
                     {
                         foreach (var itemData in tvCustom.Items)
                         {
+                            if (itemData == null) continue;
+
                             TreeViewItem? container = tvCustom.TreeContainerFromItem(itemData) as TreeViewItem;
                             if (itemData != model) container = GetDataContainer(container, model);
 
@@ -212,10 +215,12 @@ namespace Eos.Views
                 }
                 else
                 {
-                    if (tvStandard.Items != null)
+                    if (tvStandard.ItemCount >= 1)
                     {
                         foreach (var itemData in tvStandard.Items)
                         {
+                            if (itemData == null) continue;
+
                             TreeViewItem? container = tvStandard.TreeContainerFromItem(itemData) as TreeViewItem;
                             if (itemData != model) container = GetDataContainer(container, model);
 
@@ -278,18 +283,25 @@ namespace Eos.Views
             //var mdl = new MdlFile(stream ?? new MemoryStream());
         }
 
-        private void miOpenProject_Click(object sender, RoutedEventArgs e)
+        private async void miOpenProject_Click(object sender, RoutedEventArgs e)
         {
             if ((Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime app) && (app.MainWindow != null))
             {
-                var dlg = new OpenFileDialog();
-                dlg.AllowMultiple = false;
-                dlg.Filters?.Add(new FileDialogFilter() { Name = "Eos Project File (*.eosproj)", Extensions = { "eosproj" } });
-                dlg.ShowAsync(app.MainWindow).ContinueWith(t =>
+                var result = await app.MainWindow.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
                 {
-                    if ((t.Result != null) && (t.Result.Any()))
-                        MessageDispatcher.Send(MessageType.OpenProject, t.Result.First());
-                }, TaskScheduler.FromCurrentSynchronizationContext());
+                    Title = "Select Eos Project File",
+                    AllowMultiple = false,
+                    FileTypeFilter = new FilePickerFileType[]
+                    {
+                        new ("Eos Project File (*.eosproj)") { Patterns = new[] { "*.eosproj" } }
+                    }
+                });
+                if (result.Count >= 1)
+                {
+                    var path = result[0].TryGetLocalPath() ?? "";
+                    if (path != "")
+                        MessageDispatcher.Send(MessageType.OpenProject, path);
+                }
             }
         }
 

@@ -14,9 +14,9 @@ using System.Reflection;
 
 namespace Eos.Usercontrols
 {
-    public class EnabledButton : Button, IStyleable
+    public class EnabledButton : Button
     {
-        Type IStyleable.StyleKey => typeof(Button);
+        protected override Type StyleKeyOverride => typeof(Button);
 
         static EnabledButton()
         {

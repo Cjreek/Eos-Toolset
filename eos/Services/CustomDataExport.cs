@@ -157,10 +157,12 @@ namespace Eos.Services
             // Custom TLK Strings
             for (var i=0; i < project.CustomTlkStrings.Count; i++)
             {
-                if (project.CustomTlkStrings[i] == null) continue;
-                AddTLKString(project.CustomTlkStrings[i].Text);
+                if (project.CustomTlkStrings[i] != null)
+                {
+                    AddTLKString(project.CustomTlkStrings[i]!.Text);
+                }
             }
-            
+
             // Races
             foreach (var race in project.Races)
             {
@@ -2997,7 +2999,7 @@ namespace Eos.Services
                                 if (custValues[i].Value is TLKStringSet tlkValue)
                                     rec.Set(custColumns[i].Column.Trim(), GetTLKIndex(tlkValue));
                                 else
-                                    rec.Set(custColumns[i].Column.Trim(), custColumns[i].DataType?.To2DA(custValues[i].Value, project.Settings.Export.LowercaseFilenames, GetTLKIndex));
+                                    rec.Set(custColumns[i].Column.Trim(), custColumns[i].DataType?.To2DA!(custValues[i].Value, project.Settings.Export.LowercaseFilenames, GetTLKIndex));
                             }
                         }
                     }
@@ -3136,7 +3138,7 @@ namespace Eos.Services
                                 if (custValues[i].Value is TLKStringSet tlkValue)
                                     rec.Set(custColumns[i].Column.Trim(), GetTLKIndex(tlkValue));
                                 else
-                                    rec.Set(custColumns[i].Column.Trim(), custColumns[i].DataType?.To2DA(custValues[i].Value, project.Settings.Export.LowercaseFilenames, GetTLKIndex));
+                                    rec.Set(custColumns[i].Column.Trim(), custColumns[i].DataType?.To2DA!(custValues[i].Value, project.Settings.Export.LowercaseFilenames, GetTLKIndex));
                             }
                         }
                     }
@@ -3841,7 +3843,7 @@ namespace Eos.Services
                                 if (custValues[i].Value is TLKStringSet tlkValue)
                                     rec.Set(custColumns[i].Column.Trim(), GetTLKIndex(tlkValue));
                                 else
-                                    rec.Set(custColumns[i].Column.Trim(), custColumns[i].DataType?.To2DA(custValues[i].Value, project.Settings.Export.LowercaseFilenames, GetTLKIndex));
+                                    rec.Set(custColumns[i].Column.Trim(), custColumns[i].DataType?.To2DA!(custValues[i].Value, project.Settings.Export.LowercaseFilenames, GetTLKIndex));
                             }
                         }
                     }

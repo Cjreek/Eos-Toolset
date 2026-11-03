@@ -2,13 +2,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
-using Avalonia.Media;
 using Eos.Repositories;
 using Eos.ViewModels.Dialogs;
 using System;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using Avalonia.Platform.Storage;
 
 namespace Eos.Views.Dialogs
 {
@@ -19,50 +17,58 @@ namespace Eos.Views.Dialogs
             InitializeComponent();
         }
 
-        private void btOpenDlg_Click(object sender, RoutedEventArgs e)
+        private async void btOpenDlg_Click(object sender, RoutedEventArgs e)
         {
             if (DataContext is ProjectOptionsViewModel vm)
             {
                 if ((Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime app) && (app.MainWindow != null))
                 {
                     var target = (String?)((Button)sender)?.Tag;
-
-                    var dlg = new OpenFolderDialog();
+                    
+                    var directory = "";
                     switch (target)
                     {
                         case "BACKUP":
-                            dlg.Directory = Path.GetFullPath(vm.SettingsCopy.BackupFolder, MasterRepository.Project.ProjectFolder);
+                            directory = Path.GetFullPath(vm.SettingsCopy.BackupFolder, MasterRepository.Project.ProjectFolder);
                             break;
                         case "2DA":
-                            dlg.Directory = Path.GetFullPath(vm.SettingsCopy.Export.TwoDAFolder, MasterRepository.Project.ProjectFolder);
+                            directory = Path.GetFullPath(vm.SettingsCopy.Export.TwoDAFolder, MasterRepository.Project.ProjectFolder);
                             break;
                         case "SSF":
-                            dlg.Directory = Path.GetFullPath(vm.SettingsCopy.Export.SsfFolder, MasterRepository.Project.ProjectFolder);
+                            directory = Path.GetFullPath(vm.SettingsCopy.Export.SsfFolder, MasterRepository.Project.ProjectFolder);
                             break;
                         case "HAK":
-                            dlg.Directory = Path.GetFullPath(vm.SettingsCopy.Export.HakFolder, MasterRepository.Project.ProjectFolder);
+                            directory = Path.GetFullPath(vm.SettingsCopy.Export.HakFolder, MasterRepository.Project.ProjectFolder);
                             break;
                         case "ERF":
-                            dlg.Directory = Path.GetFullPath(vm.SettingsCopy.Export.ErfFolder, MasterRepository.Project.ProjectFolder);
+                            directory = Path.GetFullPath(vm.SettingsCopy.Export.ErfFolder, MasterRepository.Project.ProjectFolder);
                             break;
                         case "TLK":
-                            dlg.Directory = Path.GetFullPath(vm.SettingsCopy.Export.TlkFolder, MasterRepository.Project.ProjectFolder);
+                            directory = Path.GetFullPath(vm.SettingsCopy.Export.TlkFolder, MasterRepository.Project.ProjectFolder);
                             break;
                         case "INC":
-                            dlg.Directory = Path.GetFullPath(vm.SettingsCopy.Export.IncludeFolder, MasterRepository.Project.ProjectFolder);
+                            directory = Path.GetFullPath(vm.SettingsCopy.Export.IncludeFolder, MasterRepository.Project.ProjectFolder);
                             break;
                         case "EXT":
-                            dlg.Directory = Path.GetFullPath(vm.ExternalPathToAdd, MasterRepository.Project.ProjectFolder);
+                            directory = Path.GetFullPath(vm.ExternalPathToAdd, MasterRepository.Project.ProjectFolder);
                             break;
                     }
-
-                    dlg.ShowAsync(app.MainWindow).ContinueWith(t =>
+                    
+                    var result = await app.MainWindow.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
                     {
-                        if (t.Result != null)
+                        Title = "Select base folder for where to save this new project",
+                        AllowMultiple = false,
+                        SuggestedStartLocation = await app.MainWindow.StorageProvider.TryGetFolderFromPathAsync(directory)
+                    });
+                    if (result.Count >= 1)
+                    {
+                        var path = result[0].TryGetLocalPath() ?? "";
+                        if (path != "")
                         {
-                            var resultPath = Path.GetRelativePath(MasterRepository.Project.ProjectFolder, t.Result);
-                            if (resultPath.Contains($"..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..")) // 3+ back? Just use the absolute path
-                                resultPath = t.Result;
+                            var resultPath = Path.GetRelativePath(MasterRepository.Project.ProjectFolder, path);
+                            if (resultPath.Contains(
+                                    $"..{Path.DirectorySeparatorChar}..{Path.DirectorySeparatorChar}..")) // 3+ back? Just use the absolute path
+                                resultPath = path;
                             switch (target)
                             {
                                 case "BACKUP":
@@ -91,27 +97,32 @@ namespace Eos.Views.Dialogs
                                     break;
                             }
                         }
-                    }, TaskScheduler.FromCurrentSynchronizationContext());
+                    }
                 }
             }
         }
 
-        private void btOpenTlk_Click(object sender, RoutedEventArgs e)
+        private async void btOpenTlk_Click(object sender, RoutedEventArgs e)
         {
             if (DataContext is ProjectOptionsViewModel vm)
             {
                 if ((Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime app) && (app.MainWindow != null))
                 {
-                    var dlg = new OpenFileDialog();
-                    dlg.AllowMultiple = false;
-                    dlg.Filters?.Add(new FileDialogFilter() { Name = "Talk Table File (*.tlk)", Extensions = { "tlk" } });
-                    dlg.ShowAsync(app.MainWindow).ContinueWith(t =>
+                    var result = await app.MainWindow.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
                     {
-                        if ((t.Result != null) && (t.Result.Any()))
+                        Title = "Select Base Talk Table File",
+                        AllowMultiple = false,
+                        FileTypeFilter = new FilePickerFileType[]
                         {
-                            vm.SettingsCopy.Export.BaseTlkFile = t.Result.First();
+                            new ("Talk Table File (*.tlk)") { Patterns = new[] { "*.tlk" } }
                         }
-                    }, TaskScheduler.FromCurrentSynchronizationContext());
+                    });
+                    if (result.Count >= 1)
+                    {
+                        var path = result[0].TryGetLocalPath() ?? "";
+                        if (path != "")
+                            vm.SettingsCopy.Export.BaseTlkFile = path;
+                    }
                 }
             }
         }

@@ -1,12 +1,11 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Dialogs;
 using Avalonia.Interactivity;
 using Eos.Services;
 using Eos.ViewModels.Base;
 using Eos.ViewModels.Dialogs;
-using System.Threading.Tasks;
+using Avalonia.Platform.Storage;
 
 namespace Eos.Views.Dialogs
 {
@@ -29,18 +28,23 @@ namespace Eos.Views.Dialogs
             WindowService.ShowMessage(args.Message, "Error", MessageBoxButtons.Ok, MessageBoxIcon.Warning);
         }
 
-        private void btOpenDlg_Click(object sender, RoutedEventArgs e)
+        private async void btOpenDlg_Click(object sender, RoutedEventArgs e)
         {
             if (DataContext is InputBasePathDialogViewModel vm)
             {
                 if ((Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime app) && (app.MainWindow != null))
                 {
-                    var dlg = new OpenFolderDialog();
-                    dlg.ShowAsync(app.MainWindow).ContinueWith(t =>
+                    var result = await app.MainWindow.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions()
                     {
-                        if (t.Result != null)
-                            vm.BasePath = t.Result;
-                    }, TaskScheduler.FromCurrentSynchronizationContext());
+                        Title = "Open Base Folder of NWN",
+                        AllowMultiple = false
+                    });
+                    if (result.Count >= 1)
+                    {
+                        var path = result[0].TryGetLocalPath() ?? "";
+                        if (path != "")
+                            vm.BasePath = path;
+                    }
                 }
             }
         }
