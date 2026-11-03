@@ -101,7 +101,7 @@ namespace Eos.Views
         {
             if (grItems.ItemsSource is Repository<CustomDynamicTableInstanceItem> itemRepo)
             {
-                var item = itemRepo[e.Row.GetIndex()];
+                var item = itemRepo[e.Row.Index];
                 e.Row.DataContext = item;
                 UpdateContentPresenters(item, e.Row);
             }
