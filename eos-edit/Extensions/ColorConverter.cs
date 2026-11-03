@@ -21,7 +21,7 @@ namespace Eos.Extensions
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is Avalonia.Media.Color color)
-                return color.ToUint32() & 0x00FFFFFF;
+                return color.ToUInt32() & 0x00FFFFFF;
 
             return null;
         }
