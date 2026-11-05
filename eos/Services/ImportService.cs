@@ -739,7 +739,6 @@ namespace Eos.Services
                     SetText(tmpDomain.Description, domains2da[i].AsInteger("Description"));
 
                     tmpDomain.Icon = AddIconResource(domains2da[i].AsString("Icon"));
-                    tmpDomain.Level0Spell = CreateRef<Spell>(domains2da[i].AsInteger("Level_0", -1));
                     tmpDomain.Level1Spell = CreateRef<Spell>(domains2da[i].AsInteger("Level_1"));
                     tmpDomain.Level2Spell = CreateRef<Spell>(domains2da[i].AsInteger("Level_2"));
                     tmpDomain.Level3Spell = CreateRef<Spell>(domains2da[i].AsInteger("Level_3"));
@@ -2169,7 +2168,6 @@ namespace Eos.Services
             foreach (var domain in _importCollection.Domains)
             {
                 if (domain == null) continue;
-                domain.Level0Spell = SolveInstance(domain.Level0Spell);
                 domain.Level1Spell = SolveInstance(domain.Level1Spell);
                 domain.Level2Spell = SolveInstance(domain.Level2Spell);
                 domain.Level3Spell = SolveInstance(domain.Level3Spell);
