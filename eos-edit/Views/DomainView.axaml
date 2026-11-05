@@ -107,35 +107,33 @@
                 </Grid.RowDefinitions>
 
                 <!--Granted Feat-->
-                <TextBlock Text="Spell (Level 0)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level0Spell}" Grid.Row="0" Grid.Column="1"/>
 
-                <TextBlock Text="Spell (Level 1)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level1Spell}" Grid.Row="1" Grid.Column="1"/>
+                <TextBlock Text="Spell (Level 1)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.Level1Spell}" Grid.Row="0" Grid.Column="1"/>
 
-                <TextBlock Text="Spell (Level 2)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level2Spell}" Grid.Row="2" Grid.Column="1"/>
+                <TextBlock Text="Spell (Level 2)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.Level2Spell}" Grid.Row="1" Grid.Column="1"/>
 
-                <TextBlock Text="Spell (Level 3)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level3Spell}" Grid.Row="3" Grid.Column="1"/>
+                <TextBlock Text="Spell (Level 3)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.Level3Spell}" Grid.Row="2" Grid.Column="1"/>
 
-                <TextBlock Text="Spell (Level 4)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level4Spell}" Grid.Row="4" Grid.Column="1"/>
+                <TextBlock Text="Spell (Level 4)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.Level4Spell}" Grid.Row="3" Grid.Column="1"/>
 
-                <TextBlock Text="Spell (Level 5)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level5Spell}" Grid.Row="0" Grid.Column="3"/>
+                <TextBlock Text="Spell (Level 5)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.Level5Spell}" Grid.Row="4" Grid.Column="1"/>
 
-                <TextBlock Text="Spell (Level 6)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level6Spell}" Grid.Row="1" Grid.Column="3"/>
+                <TextBlock Text="Spell (Level 6)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.Level6Spell}" Grid.Row="0" Grid.Column="3"/>
 
-                <TextBlock Text="Spell (Level 7)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level7Spell}" Grid.Row="2" Grid.Column="3"/>
+                <TextBlock Text="Spell (Level 7)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="2"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.Level7Spell}" Grid.Row="1" Grid.Column="3"/>
 
-                <TextBlock Text="Spell (Level 8)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level8Spell}" Grid.Row="3" Grid.Column="3"/>
+                <TextBlock Text="Spell (Level 8)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="2"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.Level8Spell}" Grid.Row="2" Grid.Column="3"/>
 
-                <TextBlock Text="Spell (Level 9)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="2"/>
-                <uc:SpellComboBox SelectedValue="{Binding Data.Level9Spell}" Grid.Row="4" Grid.Column="3"/>
+                <TextBlock Text="Spell (Level 9)" Margin="0,3,5,0" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="2"/>
+                <uc:SpellComboBox SelectedValue="{Binding Data.Level9Spell}" Grid.Row="3" Grid.Column="3"/>
               </Grid>
             </Grid>
 

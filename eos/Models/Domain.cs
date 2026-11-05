@@ -15,7 +15,6 @@ namespace Eos.Models
 {
     public class Domain : BaseModel
     {
-        private Spell? _level0Spell;
         private Spell? _level1Spell;
         private Spell? _level2Spell;
         private Spell? _level3Spell;
@@ -29,12 +28,6 @@ namespace Eos.Models
 
         public TLKStringSet Name { get; set; } = new TLKStringSet();
         public TLKStringSet Description { get; set; } = new TLKStringSet();
-
-        public Spell? Level0Spell
-        {
-            get { return _level0Spell; }
-            set { Set(ref _level0Spell, value); }
-        }
 
         public Spell? Level1Spell
         {
@@ -124,7 +117,6 @@ namespace Eos.Models
         public override void ResolveReferences()
         {
             base.ResolveReferences();
-            Level0Spell = Resolve(Level0Spell, MasterRepository.Spells);
             Level1Spell = Resolve(Level1Spell, MasterRepository.Spells);
             Level2Spell = Resolve(Level2Spell, MasterRepository.Spells);
             Level3Spell = Resolve(Level3Spell, MasterRepository.Spells);
@@ -143,7 +135,6 @@ namespace Eos.Models
             this.Name.FromJson(json["Name"]?.AsObject());
             this.Description.FromJson(json["Description"]?.AsObject());
             this.Icon = json["Icon"]?.GetValue<String>();
-            this.Level0Spell = CreateRefFromJson<Spell>(json["Level0Spell"]?.AsObject());
             this.Level1Spell = CreateRefFromJson<Spell>(json["Level1Spell"]?.AsObject());
             this.Level2Spell = CreateRefFromJson<Spell>(json["Level2Spell"]?.AsObject());
             this.Level3Spell = CreateRefFromJson<Spell>(json["Level3Spell"]?.AsObject());
@@ -163,7 +154,6 @@ namespace Eos.Models
             domainJson.Add("Name", this.Name.ToJson());
             domainJson.Add("Description", this.Description.ToJson());
             domainJson.Add("Icon", this.Icon);
-            domainJson.Add("Level0Spell", CreateJsonRef(this.Level0Spell));
             domainJson.Add("Level1Spell", CreateJsonRef(this.Level1Spell));
             domainJson.Add("Level2Spell", CreateJsonRef(this.Level2Spell));
             domainJson.Add("Level3Spell", CreateJsonRef(this.Level3Spell));

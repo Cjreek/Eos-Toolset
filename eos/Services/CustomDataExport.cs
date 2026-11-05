@@ -1386,8 +1386,6 @@ namespace Eos.Services
             var domains2da = Load2da("domains");
             if (domains2da != null)
             {
-                domains2da.Columns.AddColumn("Level_0");
-
                 if (project.Settings.Export.LowercaseFilenames)
                 {
                     domains2da.Columns.SetLowercase("Icon");
@@ -1418,7 +1416,6 @@ namespace Eos.Services
                         record.Set("Name", GetTLKIndex(domain.Name));
                         record.Set("Description", GetTLKIndex(domain.Description));
                         record.Set("Icon", domain.Icon);
-                        record.Set("Level_0", project.Spells.Get2DAIndex(domain.Level0Spell));
                         record.Set("Level_1", project.Spells.Get2DAIndex(domain.Level1Spell));
                         record.Set("Level_2", project.Spells.Get2DAIndex(domain.Level2Spell));
                         record.Set("Level_3", project.Spells.Get2DAIndex(domain.Level3Spell));
